@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -76,7 +77,7 @@ public class TestView extends AbstractView {
 
     VisScrollPane scrollPane;
 
-    protected void createIconTable() {
+    private void createIconTable() {
         this.clear();
         VisTable contentTable = new VisTable();
 
@@ -85,6 +86,42 @@ public class TestView extends AbstractView {
 
         scrollPane = new VisScrollPane(contentTable);
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
+
+
+        {// test ScrollLabel
+
+            VisLabel label3 = new VisLabel("Scroll Label");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+
+            Label.LabelStyle style = new Label.LabelStyle(VisUI.getSkin().get(Label.LabelStyle.class));
+            style.background = VisUI.getSkin().get(EditTextStyle.class).background;
+
+            String text = "123456789";
+            String textLong = "123456789 123456789 123456789 123456789";
+            String textSuperLong = "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 " +
+                    "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 " +
+                    "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 " +
+                    "123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 ";
+
+            contentTable.add(new ScrollLabel(text, style)).width(new Value.Fixed(contentWidth)).pad(4);
+            contentTable.row();
+
+            contentTable.add(new ScrollLabel(textLong, style)).width(new Value.Fixed(contentWidth)).pad(4);
+            contentTable.row();
+
+            contentTable.add(new ScrollLabel(textSuperLong, style)).width(new Value.Fixed(contentWidth)).pad(4);
+            contentTable.row();
+
+
+        }
+
 
         {// testSensor record
 

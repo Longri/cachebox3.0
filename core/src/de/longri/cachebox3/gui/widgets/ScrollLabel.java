@@ -15,12 +15,12 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -36,15 +36,21 @@ public class ScrollLabel extends Label {
     static private final Color tempColor = new Color();
 
     private final Rectangle scissorRec = new Rectangle();
-    private final Rectangle localRec = new Rectangle();
-    private LabelStyle style;
+    private final LabelStyle style;
     private final AnimationActor animationActor = new AnimationActor();
+    private final Vector2 stagePos = new Vector2();
 
     private RepeatAction animationSequens;
 
-    public ScrollLabel(CharSequence text, LabelStyle style) {
+    public ScrollLabel(final CharSequence text, LabelStyle style) {
         super(text, style);
         this.style = style;
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                ScrollLabel.this.setText(text);
+            }
+        });
     }
 
     @Override
@@ -62,62 +68,67 @@ public class ScrollLabel extends Label {
         cache.tint(color);
         cache.setPosition(getX() + scrollPosition, getY());
 
-        getStage().calculateScissors(localRec, scissorRec);
-        ScissorStack.pushScissors(scissorRec);
-        cache.draw(batch);
-        batch.flush();
-        try {
+        stagePos.x = 0;
+        stagePos.y = 0;
+
+        this.localToStageCoordinates(stagePos);
+        scissorRec.x = stagePos.x + 1;
+        scissorRec.y = stagePos.y + 1;
+        if (ScissorStack.pushScissors(scissorRec)) {
+            cache.draw(batch);
+            batch.flush();
             ScissorStack.popScissors();
-        } catch (Exception e) {
+        } else {
+            cache.draw(batch);
         }
+
     }
 
 
     @Override
     protected void positionChanged() {
-        localRec.setPosition(getX(), getY());
+        scissorRec.setPosition(getX() + 1, getY() + 1);
     }
 
     @Override
     protected void sizeChanged() {
-        localRec.setSize(getWidth(), getHeight());
+        if (scissorRec == null) return;
+        scissorRec.setSize(getWidth() - 2, getHeight() - 2);
     }
 
     public void setText(CharSequence newText) {
+        CB.assertGlThread();
         super.setText(newText);
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
+        ScrollLabel.this.layout();
 
-                ScrollLabel.this.layout();
+        //remove maybe running animations
+        animationActor.removeAction(animationSequens);
 
-                //remove maybe running animations
-                animationActor.removeAction(animationSequens);
+        GlyphLayout layout = ScrollLabel.this.getGlyphLayout();
+        if (layout.width > ScrollLabel.this.getWidth()) {
+            ScrollLabel.this.getParent().addActor(animationActor);
+            ScrollLabel.this.setAlignment(Align.left);
 
-                GlyphLayout layout = ScrollLabel.this.getGlyphLayout();
-                if (layout.width > ScrollLabel.this.getWidth()) {
-                    ScrollLabel.this.getParent().addActor(animationActor);
-                    ScrollLabel.this.setAlignment(Align.left);
+            float lastGlyphWidth = layout.runs.peek().glyphs.peek().width;
 
-                    float animationWidth = layout.width - ScrollLabel.this.getWidth();
-                    float animationTime = CB.getScaledFloat(0.03f) * animationWidth;
+            float animationWidth = (layout.width + lastGlyphWidth) - ScrollLabel.this.getWidth();
+            float animationTime = CB.getScaledFloat(0.03f) * animationWidth;
 
-                    animationSequens = Actions.forever(Actions.sequence(
-                            Actions.moveTo(0, 0),
-                            Actions.delay(1),
-                            Actions.moveTo(-animationWidth, 0, animationTime),
-                            Actions.delay(1)));
+            animationSequens = Actions.forever(Actions.sequence(
+                    Actions.moveTo(0, 0),
+                    Actions.delay(2),
+                    Actions.moveTo(-animationWidth, 0, animationTime),
+                    Actions.delay(2)));
 
-                    animationActor.addAction(animationSequens);
-                } else {
-                    ScrollLabel.this.getParent().removeActor(animationActor);
-                    ScrollLabel.this.setAlignment(Align.center);
-                }
+            animationActor.addAction(animationSequens);
+        } else {
+            if (ScrollLabel.this.getParent() != null)
+                ScrollLabel.this.getParent().removeActor(animationActor);
+            ScrollLabel.this.setAlignment(Align.center);
+        }
 
-                // reset last scroll position
-                scrollPosition = 0;
-            }
-        });
+        // reset last scroll position
+        scrollPosition = 0;
     }
 
     private float scrollPosition = 0;
