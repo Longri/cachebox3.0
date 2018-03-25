@@ -174,31 +174,26 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected void _runOnBackGround(Runnable backgroundTask) {
-        restartBackgroundTask(backgroundTask);
-    }
-
-    private void restartBackgroundTask(final Runnable backgroundTask) {
         long bgTaskId = ios_launcher.application.beginBackgroundTask("BackgroundTask", new Runnable() {
             @Override
             public void run() {
                 log.debug("End BGTask");
                 ios_launcher.application.endBackgroundTask(bgTask.get());
-
-                log.debug("restart BGTask");
-                restartBackgroundTask(backgroundTask);
             }
         });
-
         bgTask.set(bgTaskId);
-
-        DispatchQueue globalQueue = DispatchQueue.getGlobalQueue(PRIORITY_BACKGROUND, 0);
-        globalQueue.async(backgroundTask);
+        DispatchQueue.getGlobalQueue(PRIORITY_BACKGROUND, 0).async(backgroundTask);
     }
 
     @Override
-    protected void _playNotifySound(FileHandle soundFileHandle) {
-        IOS_BackgroundSound sound = new IOS_BackgroundSound(soundFileHandle);
-        sound.play();
+    protected void _playNotifySound(final FileHandle soundFileHandle) {
+        DispatchQueue.getMainQueue().sync(new Runnable() {
+            @Override
+            public void run() {
+                IOS_BackgroundSound sound = new IOS_BackgroundSound(soundFileHandle);
+                sound.play();
+            }
+        });
     }
 
     @Override
