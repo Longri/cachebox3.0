@@ -112,7 +112,7 @@ public class ScrollLabel extends Label {
             float lastGlyphWidth = layout.runs.peek().glyphs.peek().width;
 
             float animationWidth = (layout.width + lastGlyphWidth) - ScrollLabel.this.getWidth();
-            float animationTime = CB.getScaledFloat(0.03f) * animationWidth;
+            float animationTime = animationWidth / CB.getScaledFloat(40.0f);
 
             animationSequens = Actions.forever(Actions.sequence(
                     Actions.moveTo(0, 0),
