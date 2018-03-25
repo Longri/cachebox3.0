@@ -35,6 +35,8 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable edit;
     public Drawable fileTransfer;
     public Drawable favPoint;
+    public Drawable theme;
+    public Drawable themeStyle;
 
 
     @Override

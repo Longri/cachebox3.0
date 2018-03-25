@@ -137,6 +137,7 @@ public class DatabaseSchema {
             "    Value      NVARCHAR (255),\n" +
             "    LongString NTEXT,\n" +
             "    desired    NTEXT\n" +
+            "    blob    BLOB\n" +
             ");";
 
     public final String CATEGORY_TABLE = "CREATE TABLE Category (\n" +

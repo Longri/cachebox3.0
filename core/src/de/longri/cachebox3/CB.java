@@ -36,6 +36,8 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.map.MapMode;
+import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
+import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -56,6 +58,8 @@ import org.oscim.backend.Platform;
 import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.theme.IRenderTheme;
 import org.oscim.theme.ThemeFile;
+import org.oscim.theme.ThemeLoader;
+import org.oscim.theme.VtmThemes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -661,6 +665,34 @@ public class CB {
                 });
             }
         });
+    }
+
+    public static boolean loadThemeFile(ThemeFile themeFile) {
+        log.debug("load new Theme: {}", CB.actTheme);
+
+        //store theme on config
+        String path;
+        if (themeFile instanceof NamedExternalRenderTheme) {
+            path = ((NamedExternalRenderTheme) themeFile).path;
+        } else if (themeFile instanceof VtmThemes) {
+            path = "VTM:" + ((VtmThemes) themeFile).name();
+        } else {
+            log.warn("Cant store Theme instanceOf: {}", themeFile.getClass().getName());
+            return false;
+        }
+        if (!Config.nightMode.getValue()) {
+            Config.MapsforgeDayTheme.setValue(path);
+        } else {
+            Config.MapsforgeNightTheme.setValue(path);
+        }
+
+        // before we load the theme, we must set the MenuCallback
+        themeFile.setMenuCallback(new ThemeMenuCallback(path));
+
+        CB.actTheme = ThemeLoader.load(themeFile);
+        CB.actThemeFile = themeFile;
+        Config.AcceptChanges();
+        return true;
     }
 }
 

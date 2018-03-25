@@ -47,6 +47,7 @@ public class ListView extends Catch_WidgetGroup {
     private final static Logger log = LoggerFactory.getLogger(ListView.class);
 
     private final ListViewType type;
+    private final boolean canDisposeItems;
     final VisScrollPane scrollPane;
     private final ListViewStyle style;
     private final ListViewItemLinkedList itemList;
@@ -63,17 +64,28 @@ public class ListView extends Catch_WidgetGroup {
 
 
     public ListView(ListViewType type) {
-        this(type, VisUI.getSkin().get("default", ListViewStyle.class));
+        this(type, VisUI.getSkin().get("default", ListViewStyle.class), true);
     }
 
     public ListView(ListViewType type, ListViewStyle style) {
+        this(type, style, true);
+    }
+
+
+    public ListView(ListViewType type, boolean canDisposeItems) {
+        this(type, VisUI.getSkin().get("default", ListViewStyle.class), canDisposeItems);
+    }
+
+    public ListView(ListViewType type, ListViewStyle style, boolean canDisposeItems) {
+        this.canDisposeItems = canDisposeItems;
         this.type = type;
         this.style = style;
         this.itemList = new ListViewItemLinkedList(type, style,
                 CB.getScaledFloat(style.pad > 0 ? style.pad : style.padLeft),
                 CB.getScaledFloat(style.pad > 0 ? style.pad : style.padRight),
                 CB.getScaledFloat(style.pad > 0 ? style.pad : style.padTop),
-                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom)) {
+                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom),
+                this.canDisposeItems) {
             @Override
             public void sizeChanged() {
                 CB.postOnNextGlThread(new Runnable() {

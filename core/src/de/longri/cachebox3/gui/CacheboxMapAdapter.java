@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,10 @@ package de.longri.cachebox3.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.AbstractVectorLayer;
+import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.EQUALS;
@@ -35,13 +37,12 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Map;
-import org.oscim.theme.ThemeFile;
-import org.oscim.theme.ThemeLoader;
-import org.oscim.theme.VtmThemes;
+import org.oscim.theme.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.AbstractList;
+import java.util.Set;
 
 /**
  * Created by Longri on 08.09.2016.
@@ -201,7 +202,12 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
                 vectorTileLayer.setTileSource(((AbstractVectorLayer) baseMap).getVectorTileSource());
             }
             tileLayer = this.setBaseMap(vectorTileLayer);
-            this.setTheme(VtmThemes.OSMARENDER);
+
+            if (CB.actThemeFile == null) {
+                this.setTheme(VtmThemes.OSMARENDER);
+            } else {
+                this.setTheme(CB.actThemeFile);
+            }
 
             ((AbstractList) this.layers()).add(2, new BuildingLabelLayer(this, vectorTileLayer));
 
@@ -235,13 +241,14 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     }
 
     public void setTheme(ThemeFile themeFile) {
-
+        if (themeFile == null) {
+            log.warn("Can't set Theme, is NULL");
+            return;
+        }
         if (CB.actThemeFile != null && EQUALS.is(CB.actThemeFile, themeFile)) {
             log.debug("set cached Theme");
         } else {
-            log.debug("load new Theme");
-            CB.actTheme = ThemeLoader.load(themeFile);
-            CB.actThemeFile = themeFile;
+            if (!CB.loadThemeFile(themeFile)) return;
         }
         setTheme(CB.actTheme, false);
     }

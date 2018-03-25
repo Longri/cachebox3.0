@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -35,19 +36,18 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.actions.Action_Add_WP;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
+import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.BaseMapManager;
 import de.longri.cachebox3.gui.map.baseMap.MapsforgeSingleMap;
 import de.longri.cachebox3.gui.map.baseMap.OSciMap;
 import de.longri.cachebox3.gui.map.layer.*;
-import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.menu.*;
 import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
@@ -64,6 +64,7 @@ import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.settings.types.SettingBool;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.utils.EQUALS;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
@@ -89,6 +90,9 @@ import org.oscim.renderer.bucket.TextItem;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
+import org.oscim.theme.IRenderTheme;
+import org.oscim.theme.VtmThemes;
+import org.oscim.theme.XmlRenderThemeStyleLayer;
 import org.oscim.utils.FastMath;
 import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.Logger;
@@ -602,7 +606,7 @@ public class MapView extends AbstractView {
 //        mapOrientationButton.setMode(align ? MapOrientationMode.NORTH : MapOrientationMode.COMPASS);
     }
 
-    public void setNewSettings() {
+    private void setNewSettings() {
         //TODO
     }
 
@@ -627,9 +631,19 @@ public class MapView extends AbstractView {
         Menu icm = new Menu("menu_mapviewgl");
 
         icm.addItem(MenuID.MI_LAYER, "Layer", CB.getSkin().getMenuIcon.mapLayer);
+        icm.addItem(MenuID.MI_MAPVIEW_THEME, "Renderthemes", CB.getSkin().getMenuIcon.theme);
+
+
+        //if actual Theme styleable, show style menu point
+        ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
+        if (callback != null && callback.hasStyleMenu()) {
+            icm.addItem(MenuID.MI_MAPVIEW_THEME_STYLE, "Styles", CB.getSkin().getMenuIcon.themeStyle);
+        }
+
         //ISSUE (#110 add MapView Overlays) icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
-        icm.addItem(MenuID.MI_CENTER_WP, "CenterWP",CB.getSkin().getMenuIcon.addWp);
+        icm.addItem(MenuID.MI_CENTER_WP, "CenterWP", CB.getSkin().getMenuIcon.addWp);
         icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view", CB.getSkin().getMenuIcon.viewSettings);
+
         //ISSUE (#112 Record Track)   icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
         //ISSUE (#113 Add Map download)   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
 
@@ -765,8 +779,6 @@ public class MapView extends AbstractView {
 
     private void showMapViewLayerMenu() {
         Menu icm = new Menu("MapViewShowLayerContextMenu");
-
-
         icm.addCheckableItem(MenuID.MI_HIDE_FINDS, "HideFinds", Settings_Map.MapHideMyFinds.getValue());
         icm.addCheckableItem(MenuID.MI_MAP_SHOW_COMPASS, "MapShowCompass", Settings_Map.MapShowCompass.getValue());
         icm.addCheckableItem(MenuID.MI_SHOW_ALL_WAYPOINTS, "ShowAllWaypoints", Settings_Map.ShowAllWaypoints.getValue());
@@ -776,9 +788,126 @@ public class MapView extends AbstractView {
         icm.addCheckableItem(MenuID.MI_SHOW_DIRECT_LINE, "ShowDirectLine", Settings_Map.ShowDirektLine.getValue());
         icm.addCheckableItem(MenuID.MI_SHOW_ACCURACY_CIRCLE, "MenuTextShowAccuracyCircle", Settings_Map.ShowAccuracyCircle.getValue());
         icm.addCheckableItem(MenuID.MI_SHOW_CENTERCROSS, "ShowCenterCross", Settings_Map.ShowMapCenterCross.getValue());
-
         icm.setOnItemClickListener(onItemClickListener);
         icm.show();
+    }
+
+    private void showMapViewThemeMenu() {
+        Menu icm = new Menu("MapViewThemeMenu");
+
+        //add default themes
+        int id = 0;
+        for (VtmThemes vtmTheme : VtmThemes.values()) {
+            icm.addCheckableItem(id++, vtmTheme.name(), EQUALS.is(CB.actThemeFile, vtmTheme), true);
+        }
+
+        final Array<NamedExternalRenderTheme> themes = new Array<>();
+
+        // search themes on repository/maps/themes (recursive)
+        FileHandle folder = Gdx.files.absolute(CB.WorkPath + "/repository/maps/themes");
+        searchThemes(folder, themes);
+
+        // search themes on User map folder
+        folder = Gdx.files.absolute(Config.MapPackFolder.getValue());
+        searchThemes(folder, themes);
+
+        for (NamedExternalRenderTheme themFile : themes) {
+            icm.addCheckableItem(id++, themFile.name, EQUALS.is(CB.actThemeFile, themFile), true);
+        }
+
+        icm.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public boolean onItemClick(MenuItem item) {
+                if (item.getMenuItemId() < VtmThemes.values().length) {
+                    VtmThemes theme = VtmThemes.values()[item.getMenuItemId()];
+                    map.setTheme(theme);
+                } else {
+                    NamedExternalRenderTheme theme = themes.get(item.getListIndex() - VtmThemes.values().length);
+                    map.setTheme(theme);
+                }
+                return true;
+            }
+        });
+        icm.show();
+    }
+
+    private void showMapViewThemeStyleMenu() {
+        OptionMenu icm = new OptionMenu("MapViewThemeStyleMenu");
+
+        ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
+        Array<XmlRenderThemeStyleLayer> overlays = callback.getOverlays();
+        int id = 0;
+        String lang = "de";
+        for (XmlRenderThemeStyleLayer overlay : overlays) {
+
+            if (overlay.getCategories().size() > 1) {
+                MenuItem menuItem = icm.addItem(id, overlay.getTitle(lang), true);
+                OptionMenu moreMenu = new OptionMenu(overlay.getTitle(lang));
+                for (String cat : overlay.getCategories()) {
+                    ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
+                    moreMenu.addCheckableItem(id++, cat, allCategories.get(cat), true).setData(cat);
+                }
+                moreMenu.setOnItemClickListener(styleItemClickListener);
+                menuItem.setMoreMenu(moreMenu);
+            } else {
+                //get cat name
+                String cat = "";
+                for (String str : overlay.getCategories()) {
+                    cat = str;
+                    break;
+                }
+                icm.addCheckableItem(id++, overlay.getTitle(lang), callback.getAllCategories().get(cat), true).setData(cat);
+            }
+        }
+        icm.setOnItemClickListener(styleItemClickListener);
+        icm.setWindowCloseListener(closeStyleMenuListener);
+        icm.show();
+    }
+
+    private final Window.WindowCloseListener closeStyleMenuListener = new Window.WindowCloseListener() {
+        @Override
+        public void windowClosed() {
+            ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
+            if (callback != null)
+                callback.storeChanges();
+            CB.actThemeFile.setMenuCallback(callback);
+            CB.loadThemeFile(CB.actThemeFile);
+            map.setTheme(CB.actThemeFile);
+        }
+    };
+
+
+    private final OnItemClickListener styleItemClickListener = new OnItemClickListener() {
+        @Override
+        public boolean onItemClick(MenuItem item) {
+            String cat = (String) item.getData();
+            if (cat.isEmpty()) return true;
+            ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
+            ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
+            boolean newValue = !allCategories.get(cat);
+            item.setChecked(newValue);
+            allCategories.put(cat, newValue);
+            return true;
+        }
+    };
+
+
+    private void searchThemes(FileHandle folder, Array<NamedExternalRenderTheme> themes) {
+        if (!folder.isDirectory()) return;
+        for (FileHandle handle : folder.list()) {
+            if (handle.isDirectory()) {
+                searchThemes(handle, themes);
+            } else if (handle.extension().equals("xml")) {
+                try {
+                    NamedExternalRenderTheme extTheme = new NamedExternalRenderTheme(handle.nameWithoutExtension(),
+                            handle.file().getAbsolutePath());
+                    themes.add(extTheme);
+                } catch (IRenderTheme.ThemeException e) {
+                    // is invalid Theme File
+                    log.warn("Found invalid Theme file: {}", handle.file().getAbsolutePath());
+                }
+            }
+        }
     }
 
     private final OnItemClickListener onItemClickListener = new OnItemClickListener() {
@@ -795,6 +924,12 @@ public class MapView extends AbstractView {
                     return true;
                 case MenuID.MI_MAPVIEW_VIEW:
                     showMapViewLayerMenu();
+                    return true;
+                case MenuID.MI_MAPVIEW_THEME:
+                    showMapViewThemeMenu();
+                    return true;
+                case MenuID.MI_MAPVIEW_THEME_STYLE:
+                    showMapViewThemeStyleMenu();
                     return true;
                 case MenuID.MI_SHOW_ALL_WAYPOINTS:
                     toggleSetting(Settings_Map.ShowAllWaypoints);
@@ -837,6 +972,7 @@ public class MapView extends AbstractView {
             }
         }
     };
+
 
     private void createWaypointAtCenter() {
         //show EditWaypoint dialog;

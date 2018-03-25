@@ -1,5 +1,5 @@
-/* 
- * Copyright (C) 2011-2017 team-cachebox.de
+/*
+ * Copyright (C) 2011-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ public class SettingFile extends SettingLongString {
     }
 
     @Override
-    public void setValue(String value){
-        super.setValue(value.replace(CB.WorkPath,"?"));
+    public void setValue(String value) {
+        super.setValue(value.replace(CB.WorkPath, "?"));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SettingFile extends SettingLongString {
 
     private String replacePathSeparator(String rep) {
         if (rep.startsWith("?")) {
-            rep = CB.WorkPath + System.getProperty("file.separator") + "Repositories" + rep.substring(1);
+            rep = CB.WorkPath + rep.substring(1);
         }
         rep = rep.replace("\\", System.getProperty("file.separator"));
         rep = rep.replace("/", System.getProperty("file.separator"));

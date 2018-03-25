@@ -404,6 +404,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         return StageManager.isTop(stage);
     }
 
+
     // Toast pop up
     public enum ToastLength {
         SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f), WAIT(true);

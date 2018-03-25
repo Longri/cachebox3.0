@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 team-cachebox.de
+ * Copyright (C) 2014-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.settings;
 
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.types.*;
 
 /**
@@ -61,6 +60,9 @@ public class Settings_Map extends Settings_Const {
     public static final SettingFolder TileCacheFolder = (SettingFolder) Config.settingsList.addSetting(new SettingFolder("TileCacheFolder", SettingCategory.Folder, NEVER, "?/repository/cache", SettingStoreType.Global, SettingUsage.ALL, true));
     public static final SettingFolder TileCacheFolderLocal = (SettingFolder) Config.settingsList.addSetting(new SettingFolder("TileCacheFolderLocal", SettingCategory.Folder, NEVER, "", SettingStoreType.Local, SettingUsage.ALL, true));
 
+    public static final SettingFile MapsforgeDayTheme = (SettingFile) Config.settingsList.addSetting(new SettingFile("MapsforgeDayTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
+    public static final SettingFile MapsforgeNightTheme = (SettingFile) Config.settingsList.addSetting(new SettingFile("MapsforgeNightTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
+
 
 //    public static final SettingIntArray ZoomCross = (SettingIntArray) Config.settingsList.addSetting(new SettingIntArray("ZoomCross", SettingCategory.Map, NORMAL, 16, SettingStoreType.Global, SettingUsage.ACB, CrossLevel));
 //    public static final SettingString CurrentMapOverlayLayer = (SettingString) Config.settingsList.addSetting(new SettingString("CurrentMapOverlayLayer", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB));
@@ -72,9 +74,7 @@ public class Settings_Map extends Settings_Const {
 //    public static final SettingIntArray CompassMapMaxZommLevel = (SettingIntArray) Config.settingsList.addSetting(new SettingIntArray("CompassMapMaxZommLevel", SettingCategory.Map, EXPERT, 20, SettingStoreType.Global, SettingUsage.ACB, Level));
 //
 //    public static final SettingFolder RenderThemesFolder = (SettingFolder) Config.settingsList.addSetting(new SettingFolder("RenderThemesFolder", SettingCategory.Map, NORMAL, "", SettingStoreType.Global, SettingUsage.ALL, false));
-//    public static final SettingFile MapsforgeDayTheme = (SettingFile) Config.settingsList.addSetting(new SettingFile("MapsforgeDayTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
-//    public static final SettingFile MapsforgeNightTheme = (SettingFile) Config.settingsList.addSetting(new SettingFile("MapsforgeNightTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
-//    public static final SettingFile MapsforgeCarDayTheme = (SettingFile) Config.settingsList.addSetting(new SettingFile("MapsforgeCarDayTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
+//     public static final SettingFile MapsforgeCarDayTheme = (SettingFile) Config.settingsList.addSetting(new SettingFile("MapsforgeCarDayTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
 //    public static final SettingFile MapsforgeCarNightTheme = (SettingFile) Config.settingsList.addSetting(new SettingFile("MapsforgeCarNightTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
 //    public static final SettingBool MoveMapCenterWithSpeed = (SettingBool) Config.settingsList.addSetting(new SettingBool("MoveMapCenterWithSpeed", SettingCategory.CarMode, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool DEBUG_MapGrid = (SettingBool) Config.settingsList.addSetting(new SettingBool("DEBUG_MapGrid", SettingCategory.Debug, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
