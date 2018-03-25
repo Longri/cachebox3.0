@@ -1572,6 +1572,10 @@
       "path": "svg/map_theme.svg",
       "scale": 0.18
     },
+    "map_theme_setting": {
+      "path": "svg/map_theme_setting.svg",
+      "scale": 0.185
+    },
     "mega": {
       "path": "svg/mega.svg",
       "scale": 0.2
@@ -2767,6 +2771,7 @@
       "fileTransfer": "fileTransfer",
       "favPoint": "favpointFilter",
       "theme": "map_theme",
+      "themeStyle": "map_theme_setting",
       "favorit": "favIcon",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
