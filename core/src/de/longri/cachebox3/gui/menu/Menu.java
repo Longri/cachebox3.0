@@ -330,7 +330,7 @@ public class Menu extends Window {
 
         this.addActor(titleGroup);
         this.reorganizeListIndexes();
-        listView = new ListView(VERTICAL);
+        listView = new ListView(VERTICAL, false);
         CB.postOnNextGlThread(new Runnable() {
             @Override
             public void run() {

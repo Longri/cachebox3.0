@@ -37,6 +37,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     final static int OVERLOAD = 5;
 
     private final ListViewType type;
+    private final boolean canDisposeItems;
     ListViewItemInterface first;
 
     private ListViewItemInterface firstVisibleItem;
@@ -56,7 +57,8 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
 
     ListViewItemLinkedList(ListViewType type, ListViewStyle style, float padLeft,
-                           float padRight, float padTop, float padBottom) {
+                           float padRight, float padTop, float padBottom, boolean canDisposeItems) {
+        this.canDisposeItems = canDisposeItems;
         this.type = type;
         this.style = style;
         this.padLeft = padLeft;
@@ -283,7 +285,9 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                     dummy.setHeight(old.getHeight());
                     dummy.setVisible(old.isVisible());
                     itemArray[idx] = dummy;
-                    old.dispose();
+
+                    if (canDisposeItems)
+                        old.dispose();
                 }
 
 
