@@ -21,11 +21,16 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
+import de.longri.cachebox3.events.location.OrientationChangedEvent;
+import de.longri.cachebox3.events.location.OrientationChangedListener;
+import de.longri.cachebox3.events.location.PositionChangedEvent;
+import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.activities.ProjectionCoordinate;
@@ -62,7 +67,7 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 /**
  * Created by Longri on 14.09.2016.
  */
-public class WaypointView extends AbstractView {
+public class WaypointView extends AbstractView implements PositionChangedListener, OrientationChangedListener {
 
     private static final Logger log = LoggerFactory.getLogger(WaypointView.class);
     private AbstractCache actAbstractCache;
@@ -76,8 +81,19 @@ public class WaypointView extends AbstractView {
 
     @Override
     public void onShow() {
-        Gdx.graphics.requestRendering();
+        super.onShow();
         log.debug("onShow");
+        //register as positionChanged eventListener
+        EventHandler.add(this);
+        Gdx.graphics.requestRendering();
+    }
+
+    @Override
+    public void onHide() {
+        super.onHide();
+        log.debug("onShow");
+        EventHandler.remove(this);
+        CB.requestRendering();
     }
 
     @Override
@@ -216,7 +232,7 @@ public class WaypointView extends AbstractView {
 
                 } else {
                     CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
-                    AbstractCache cache =  Database.Data.Query.getCacheById(selectedItem.getId());
+                    AbstractCache cache = Database.Data.Query.getCacheById(selectedItem.getId());
                     log.debug("Cache selection changed to: " + cache.toString());
                     //set selected Cache global
                     EventHandler.fire(new SelectedCacheChangedEvent(cache));
@@ -399,6 +415,33 @@ public class WaypointView extends AbstractView {
         });
     }
 
+    @Override
+    public void positionChanged(PositionChangedEvent event) {
+        setChangedFlagToAllItems();
+    }
+
+    @Override
+    public void orientationChanged(OrientationChangedEvent event) {
+        setChangedFlagToAllItems();
+    }
+
+
+    private void setChangedFlagToAllItems() {
+        if (listView == null) return;
+        SnapshotArray<Actor> allItems = listView.items();
+        Object[] actors = allItems.begin();
+        for (int i = 0, n = allItems.size; i < n; i++) {
+            if (actors[i] instanceof CacheListItem) {
+                CacheListItem item = (CacheListItem) actors[i];
+                item.posOrBearingChanged();
+            } else if (actors[i] instanceof WayPointListItem) {
+                WayPointListItem item = (WayPointListItem) actors[i];
+                item.posOrBearingChanged();
+            }
+        }
+        allItems.end();
+        CB.requestRendering();
+    }
 
     //################### Context menu implementation ####################################
     @Override
@@ -454,4 +497,5 @@ public class WaypointView extends AbstractView {
 
         return cm;
     }
+
 }

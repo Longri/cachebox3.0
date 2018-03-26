@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
+import de.longri.cachebox3.events.location.OrientationChangedEvent;
+import de.longri.cachebox3.events.location.OrientationChangedListener;
+import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.actions.ShowImportMenu;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
@@ -57,7 +61,7 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 /**
  * Created by Longri on 24.07.16.
  */
-public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedListener, de.longri.cachebox3.events.location.OrientationChangedListener {
+public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedListener, OrientationChangedListener {
     private final static Logger log = LoggerFactory.getLogger(CacheListView.class);
     private ListView listView;
     private final float result[] = new float[4];
@@ -273,7 +277,6 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     private void setChangedFlagToAllItems() {
-
         if (listView == null) return;
         SnapshotArray<Actor> allItems = listView.items();
         Object[] actors = allItems.begin();
@@ -301,12 +304,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     @Override
-    public void positionChanged(de.longri.cachebox3.events.location.PositionChangedEvent event) {
+    public void positionChanged(PositionChangedEvent event) {
         setChangedFlagToAllItems();
     }
 
     @Override
-    public void orientationChanged(de.longri.cachebox3.events.location.OrientationChangedEvent event) {
+    public void orientationChanged(OrientationChangedEvent event) {
         setChangedFlagToAllItems();
     }
 

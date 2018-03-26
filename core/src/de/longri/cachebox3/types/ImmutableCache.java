@@ -295,6 +295,8 @@ public class ImmutableCache extends AbstractCache {
     @Override
     public Date getDateHidden(Database database) {
         String dateString = getStringFromDB(database, "SELECT DateHidden FROM CacheInfo WHERE Id=?");
+        if (dateString == null || dateString.isEmpty()) return new Date();
+
         try {
             return iso8601Format.parse(dateString);
         } catch (ParseException e) {

@@ -33,7 +33,6 @@ public class CacheListItem extends ListViewItem implements Disposable {
     public static ListViewItem getListItem(int listIndex, final AbstractCache abstractCache) {
         if (abstractCache == null) return null;
 
-
         LogTypes left = null;
         LogTypes right = null;
         boolean isAvailable = true;
@@ -50,7 +49,6 @@ public class CacheListItem extends ListViewItem implements Disposable {
             right = LogTypes.archived;
             isAvailable = false;
         }
-
 
         ListViewItem listViewItem = new CacheListItem(listIndex, abstractCache.getId(), abstractCache.getType(), abstractCache.getName(),
                 (int) (abstractCache.getDifficulty() * 2), (int) (abstractCache.getTerrain() * 2),
