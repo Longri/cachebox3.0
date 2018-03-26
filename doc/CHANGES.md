@@ -1,4 +1,5 @@
 [3.2.x]
+- 🌟 add: Mapsforge Theme Style's
 - 🌟 add: Draft's (FieldNotes)
 - 🌟 add: File transfer over own App
 - 🌟 add: Sounds for Approach, Resort, lose GPS ...

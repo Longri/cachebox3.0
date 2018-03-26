@@ -292,7 +292,7 @@ task compositeReadme {
         def change = file('doc/CHANGES.md').getText("UTF-8")
 
         // save the combined build info into assets/build.info file
-        def result_line = header + "\n\n" + desc + "\n\n####changes:\n\n" + change
+        def result_line = header + "\n\n" + desc + "\n\n### changes:\n\n" + change
 
 
         Writer out = new BufferedWriter(new OutputStreamWriter(
