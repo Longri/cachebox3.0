@@ -23,6 +23,8 @@ import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 /**
  * Created by Longri on 26.03.2018.
  */
@@ -41,13 +43,14 @@ class PocketQueryTest {
 
         Array<PocketQuery.PQ> pqList = new Array<>();
 
-
         PocketQuery pq = new PocketQuery(apiKey, null, pqList);
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
+        final ApiResultState[] state = new ApiResultState[1];
         pq.post(new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
+                state[0] = value;
                 WAIT.set(false);
             }
         });
@@ -55,5 +58,8 @@ class PocketQueryTest {
         while (WAIT.get()) {
             Thread.sleep(100);
         }
+
+        assertThat("Result state should be IO", state[0] == ApiResultState.IO);
+        assertThat("PQ list size should >0", pqList.size > 0);
     }
 }

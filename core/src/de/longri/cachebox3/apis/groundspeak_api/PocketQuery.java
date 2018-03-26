@@ -17,11 +17,13 @@ package de.longri.cachebox3.apis.groundspeak_api;
 
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.PqListParser;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -39,7 +41,6 @@ public class PocketQuery extends GetRequest {
         public boolean downloadAvailable = false;
     }
 
-
     private final Array<PQ> pqList;
 
     public PocketQuery(String gcApiKey, ICancel iCancel, Array<PQ> pqList) {
@@ -49,13 +50,12 @@ public class PocketQuery extends GetRequest {
 
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
-
         //parse stream and put PQ to pqList
-
-        String resultAsString = httpResponse.getResultAsString();
-
-
-        readyCallBack.callBack(ApiResultState.IO);
+        // for debug: String resultAsString = httpResponse.getResultAsString();
+        InputStream stream = httpResponse.getResultAsStream();
+        PqListParser parser = new PqListParser(this.iCancel);
+        ApiResultState state = parser.parsePqList(stream, this.pqList);
+        readyCallBack.callBack(state);
     }
 
     @Override

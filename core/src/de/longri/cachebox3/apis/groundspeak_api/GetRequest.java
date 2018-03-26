@@ -36,7 +36,7 @@ public abstract class GetRequest {
     final static String GS_LIVE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
     final static String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
 
-    private final ICancel iCancel;
+    protected final ICancel iCancel;
     protected final String gcApiKey;
     protected boolean waitLimit = true;
 
