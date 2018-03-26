@@ -42,7 +42,6 @@ class PocketQueryTest {
         if (isDummy) return;
 
         Array<PocketQuery.PQ> pqList = new Array<>();
-
         PocketQuery pq = new PocketQuery(apiKey, null, pqList);
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);

@@ -484,4 +484,8 @@ public class ListView extends Catch_WidgetGroup {
             }
         });
     }
+
+    public void showWorkAnimationToSetAdapter() {
+        //TODO handle
+    }
 }
