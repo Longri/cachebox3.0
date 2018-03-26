@@ -81,7 +81,7 @@ class AlterCachebox3DBTest {
 
         long start = System.currentTimeMillis();
         cb3Database.startUp(copyDbFileHandle);
-        assertThat("Converted DB version must be 1029", cb3Database.getDatabaseSchemeVersion() == 1029);
+        assertThat("Converted DB version must be 1030", cb3Database.getDatabaseSchemeVersion() == 1030);
 
         System.out.println("DB converted in " + (System.currentTimeMillis() - start) + " ms");
     }

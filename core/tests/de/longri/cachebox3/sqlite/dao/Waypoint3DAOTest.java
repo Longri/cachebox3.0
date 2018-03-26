@@ -64,6 +64,11 @@ class Waypoint3DAOTest {
     @AfterAll
     static void cleanUpRecources() {
         cb3Database.close();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         assertThat("TestDB must be deleted after cleanup", copyDbFileHandle.delete());
     }
 
