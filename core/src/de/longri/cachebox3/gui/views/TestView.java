@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -39,6 +38,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
+import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.activities.FileChooser;
@@ -49,9 +49,14 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.*;
+import de.longri.cachebox3.gui.widgets.list_view.DefaultListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.types.IntProperty;
+import de.longri.cachebox3.types.LogTypes;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +91,51 @@ public class TestView extends AbstractView {
 
         scrollPane = new VisScrollPane(contentTable);
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
+
+
+        {// test ListView scissor
+
+            VisLabel label3 = new VisLabel("List View Scissor");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            ListView emptyListView = new ListView(ListViewType.VERTICAL, false);
+            emptyListView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
+            emptyListView.setEmptyString("EMPTY LISTVIEW EMPTY LISTVIEW EMPTY LISTVIEW ");
+            emptyListView.setAdapter(null);
+            contentTable.add(emptyListView).width(new Value.Fixed(contentWidth)).height(new Value.Fixed(contentWidth / 2)).pad(4);
+            contentTable.row();
+
+
+            final ListView listView = new ListView(ListViewType.VERTICAL, false);
+            listView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
+            listView.setEmptyString("EMPTY LISTVIEW EMPTY LISTVIEW EMPTY LISTVIEW ");
+            contentTable.add(listView).width(new Value.Fixed(contentWidth)).height(new Value.Fixed(contentWidth)).pad(4);
+            contentTable.row();
+
+            int itemCount = 10;
+            final DefaultListViewAdapter items = new DefaultListViewAdapter();
+            for (int i = 0; i < itemCount; i++) {
+                MenuItem item = new MenuItem(i, i, "ITEM " + Integer.toString(i), null);
+                item.setTitle(item.getName());
+                item.pack();
+                items.add(item);
+            }
+
+            listView.showWorkAnimationUntilSetAdapter();
+
+            CB.postOnGLThreadDelayed(5000, new NamedRunnable("") {
+                @Override
+                public void run() {
+                    listView.setAdapter(items);
+                }
+            });
+        }
 
 
         {// test ScrollLabel
@@ -123,108 +173,108 @@ public class TestView extends AbstractView {
         }
 
 
-        {// testSensor record
+//        {// testSensor record
+//
+//            VisLabel label3 = new VisLabel("Sensor record");
+//            Table lineTable = new Table();
+//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+//            lineTable = new Table();
+//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+//            lineTable.add(label3);
+//            contentTable.add(lineTable).left().expandX().fillX();
+//            contentTable.row();
+//
+//
+//            final VisTextButton recBtn = new VisTextButton(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
+//            recBtn.addListener(new ClickLongClickListener() {
+//                @Override
+//                public boolean clicked(InputEvent event, float x, float y) {
+//
+//                    if (CB.sensoerIO.isRecord()) {
+//                        CB.sensoerIO.stop();
+//                    } else {
+//                        CB.sensoerIO.start();
+//                    }
+//                    recBtn.setText(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
+//                    return true;
+//                }
+//
+//                @Override
+//                public boolean longClicked(Actor actor, float x, float y) {
+//                    return false;
+//                }
+//            });
+//
+//            final VisTextButton playBtn = new VisTextButton(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
+//            playBtn.addListener(new ClickLongClickListener() {
+//                @Override
+//                public boolean clicked(InputEvent event, float x, float y) {
+//                    if (CB.sensoerIO.isPlay()) {
+//                        CB.sensoerIO.stopPlay();
+//                    } else {
+//                        fileChooser.setDirectory(Gdx.files.absolute(CB.WorkPath));
+//                        fileChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
+//                            @Override
+//                            public void selected(FileHandle fileHandle) {
+//                                if (fileHandle != null) {
+//                                    CB.sensoerIO.play(fileHandle);
+//                                }
+//                            }
+//                        });
+//                        fileChooser.show();
+//                    }
+//                    playBtn.setText(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
+//                    return true;
+//                }
+//
+//                @Override
+//                public boolean longClicked(Actor actor, float x, float y) {
+//                    return false;
+//                }
+//            });
+//
+//            contentTable.add(recBtn);
+//            contentTable.row();
+//            contentTable.add(playBtn);
+//            contentTable.row();
+//
+//        }
 
-            VisLabel label3 = new VisLabel("Sensor record");
-            Table lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable.add(label3);
-            contentTable.add(lineTable).left().expandX().fillX();
-            contentTable.row();
 
-
-            final VisTextButton recBtn = new VisTextButton(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
-            recBtn.addListener(new ClickLongClickListener() {
-                @Override
-                public boolean clicked(InputEvent event, float x, float y) {
-
-                    if (CB.sensoerIO.isRecord()) {
-                        CB.sensoerIO.stop();
-                    } else {
-                        CB.sensoerIO.start();
-                    }
-                    recBtn.setText(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
-                    return true;
-                }
-
-                @Override
-                public boolean longClicked(Actor actor, float x, float y) {
-                    return false;
-                }
-            });
-
-            final VisTextButton playBtn = new VisTextButton(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
-            playBtn.addListener(new ClickLongClickListener() {
-                @Override
-                public boolean clicked(InputEvent event, float x, float y) {
-                    if (CB.sensoerIO.isPlay()) {
-                        CB.sensoerIO.stopPlay();
-                    } else {
-                        fileChooser.setDirectory(Gdx.files.absolute(CB.WorkPath));
-                        fileChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
-                            @Override
-                            public void selected(FileHandle fileHandle) {
-                                if (fileHandle != null) {
-                                    CB.sensoerIO.play(fileHandle);
-                                }
-                            }
-                        });
-                        fileChooser.show();
-                    }
-                    playBtn.setText(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
-                    return true;
-                }
-
-                @Override
-                public boolean longClicked(Actor actor, float x, float y) {
-                    return false;
-                }
-            });
-
-            contentTable.add(recBtn);
-            contentTable.row();
-            contentTable.add(playBtn);
-            contentTable.row();
-
-        }
-
-
-        {// test Map Info Bubble
-
-            AbstractCache cache = new MutableCache(0, 0);
-            cache.setSize(CacheSizes.regular);
-            cache.setType(CacheTypes.Traditional);
-            cache.setName("CacheName CacheName CacheName CacheName");
-            cache.setOwner("CacheOwner");
-            cache.setFavoritePoints(1345); //TODO debug!
-            cache.setFavorite(true);
-            cache.setNumTravelbugs(12);
-            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
-
-            ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
-
-            cacheListItem.setBackground(style.firstItem);
-
-            MapBubble mapBubble = new MapBubble(cache);
-            mapBubble.layout();
-            VisLabel label3 = new VisLabel("Map Info Bubble");
-            Table lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable.add(label3);
-            contentTable.add(lineTable).left().expandX().fillX();
-            contentTable.row();
-
-            contentTable.add(cacheListItem).width(new Value.Fixed(contentWidth * 1.2f)).pad(5);
-            contentTable.row();
-
-            contentTable.add(mapBubble).pad(20).height(new Value.Fixed(mapBubble.getHeight()));
-            contentTable.row();
-
-        }
+//        {// test Map Info Bubble
+//
+//            AbstractCache cache = new MutableCache(0, 0);
+//            cache.setSize(CacheSizes.regular);
+//            cache.setType(CacheTypes.Traditional);
+//            cache.setName("CacheName CacheName CacheName CacheName");
+//            cache.setOwner("CacheOwner");
+//            cache.setFavoritePoints(1345); //TODO debug!
+//            cache.setFavorite(true);
+//            cache.setNumTravelbugs(12);
+//            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
+//
+//            ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
+//
+//            cacheListItem.setBackground(style.firstItem);
+//
+//            MapBubble mapBubble = new MapBubble(cache);
+//            mapBubble.layout();
+//            VisLabel label3 = new VisLabel("Map Info Bubble");
+//            Table lineTable = new Table();
+//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+//            lineTable = new Table();
+//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+//            lineTable.add(label3);
+//            contentTable.add(lineTable).left().expandX().fillX();
+//            contentTable.row();
+//
+//            contentTable.add(cacheListItem).width(new Value.Fixed(contentWidth * 1.2f)).pad(5);
+//            contentTable.row();
+//
+//            contentTable.add(mapBubble).pad(20).height(new Value.Fixed(mapBubble.getHeight()));
+//            contentTable.row();
+//
+//        }
 
 
         {// test FloatControl
@@ -289,11 +339,53 @@ public class TestView extends AbstractView {
         }
 
 
+        {
+            VisLabel label3 = new VisLabel("ProgressBar SvgNinePatch");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            final ProgressBar progress1 = new ProgressBar(0, 100, 1, false, "default");
+            contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+
+            CB.postAsync(new NamedRunnable("TestView:Progress") {
+                float value = 0;
+
+                @Override
+                public void run() {
+                    while (showing.get()) {
+                        value += 1f;
+                        if (value >= 200) value = 0;
+                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                        CB.postOnGlThread(new NamedRunnable("TestView") {
+                            @Override
+                            public void run() {
+                                progress1.setValue(progressValue);
+                            }
+                        });
+                        Gdx.graphics.requestRendering();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2 * 2));
+            contentTable.row();
+        }
+
         {// test Circle Drawable Widget
 
             final CircularProgressWidget circPro = new CircularProgressWidget();
 
-            VisLabel label3 = new VisLabel("CircularProgress Test");
+            VisLabel label3 = new VisLabel("Progress Test");
             Table lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             lineTable = new Table();
@@ -349,11 +441,11 @@ public class TestView extends AbstractView {
                     while (showing.get()) {
                         value += 1f;
                         if (value >= 200) value = 0;
-                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                        final float progressValue = value < 50 ? -1 : value > 150 ? 100 : value - 50;
                         CB.postOnGlThread(new NamedRunnable("TestView") {
                             @Override
                             public void run() {
-                                circPro.setProgressMax(progressValue == 0 ? -1 : 100);
+                                circPro.setProgressMax(progressValue >= 0 ? 100 : -1);
                                 circPro.setProgress((int) progressValue);
                             }
                         });
@@ -526,7 +618,7 @@ public class TestView extends AbstractView {
                 if (iconWidth == 0) {
                     iconWidth = CB.getScaledFloat(47);//attDrawable.getMinWidth();
                     iconHeight = CB.getScaledFloat(47);// attDrawable.getMinHeight();
-                    lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
+                    lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx2) * 1.5f));
                     lineTable = new Table();
                     lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                 }
@@ -569,7 +661,7 @@ public class TestView extends AbstractView {
                 if (iconWidth == 0) {
                     iconWidth = drawable.getMinWidth();
                     iconHeight = drawable.getMinHeight();
-                    lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
+                    lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx2) * 1.5f));
                     lineTable = new Table();
                     lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                 }
@@ -613,7 +705,7 @@ public class TestView extends AbstractView {
                         if (iconWidth == 0) {
                             iconWidth = drawable.getMinWidth();
                             iconHeight = drawable.getMinHeight();
-                            lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
+                            lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx2) * 1.5f));
                             lineTable = new Table();
                             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                         }
@@ -641,51 +733,10 @@ public class TestView extends AbstractView {
             contentTable.add(lineTable).left();
             contentTable.row();
         }
-        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 5));
+        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2 * 5));
         contentTable.row();
 
 
-        {
-            VisLabel label3 = new VisLabel("ProgressBar SvgNinePatch");
-            Table lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable.add(label3);
-            contentTable.add(lineTable).left().expandX().fillX();
-            contentTable.row();
-
-            final ProgressBar progress1 = new ProgressBar(0, 100, 1, false, "default");
-            contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
-            contentTable.row();
-
-            CB.postAsync(new NamedRunnable("TestView:Progress") {
-                float value = 0;
-
-                @Override
-                public void run() {
-                    while (showing.get()) {
-                        value += 1f;
-                        if (value >= 200) value = 0;
-                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                        CB.postOnGlThread(new NamedRunnable("TestView") {
-                            @Override
-                            public void run() {
-                                progress1.setValue(progressValue);
-                            }
-                        });
-                        Gdx.graphics.requestRendering();
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-        }
-        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 2));
-        contentTable.row();
         {
             CharSequence Msg = Translation.get("QuitReally");
             CharSequence Title = Translation.get("Quit?");

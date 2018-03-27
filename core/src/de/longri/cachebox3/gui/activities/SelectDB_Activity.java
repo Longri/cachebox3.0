@@ -451,7 +451,7 @@ public class SelectDB_Activity extends ActivityBase {
     Timer updateTimer;
 
     private void showSelectionMenu() {
-        final CharSequence[] cs = new String[6];
+        final CharSequence[] cs = new CharSequence[6];
         cs[0] = Translation.get("StartWithoutSelection");
         cs[1] = Translation.get("AutoStartDisabled");
         cs[2] = Translation.get("AutoStartTime", "5");

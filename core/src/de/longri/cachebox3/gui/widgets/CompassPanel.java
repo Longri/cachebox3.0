@@ -66,7 +66,7 @@ public class CompassPanel extends Catch_WidgetGroup {
         float height = distanceLabel.getPrefHeight();
         float yPos = this.getHeight() - (height /*+ CB.scaledSizes.MARGIN*/);
 
-        compass.setBounds(0, CB.scaledSizes.MARGINx4, this.getWidth(), this.getHeight() - height + CB.scaledSizes.MARGINx2);
+        compass.setBounds(0, CB.scaledSizes.MARGINx2, this.getWidth(), this.getHeight() - height + CB.scaledSizes.MARGINx2);
         distanceLabel.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
         accurateLabel.setBounds(CB.scaledSizes.MARGIN, yPos, this.getWidth() - CB.scaledSizes.MARGINx2, height);
 
@@ -87,6 +87,6 @@ public class CompassPanel extends Catch_WidgetGroup {
     }
 
     public float getMinHeight() {
-        return compass.getMinHeight() + distanceLabel.getMinHeight() - CB.scaledSizes.MARGINx4;
+        return compass.getMinHeight() + distanceLabel.getMinHeight() - CB.scaledSizes.MARGINx2;
     }
 }

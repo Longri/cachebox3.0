@@ -266,7 +266,7 @@ public class Slider extends Catch_WidgetGroup {
 
         @Override
         protected void sizeChanged() {
-            nameLabel.setBounds(CB.scaledSizes.MARGINx2, 0, this.getWidth() - CB.scaledSizes.MARGINx4, getHeight());
+            nameLabel.setBounds(CB.scaledSizes.MARGIN, 0, this.getWidth() - CB.scaledSizes.MARGINx2, getHeight());
         }
     }
 

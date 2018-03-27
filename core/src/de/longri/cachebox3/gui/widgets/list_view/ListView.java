@@ -23,13 +23,16 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.Logger;
@@ -61,6 +64,8 @@ public class ListView extends Catch_WidgetGroup {
     private float lastFiredScrollX = 0;
     private float lastFiredScrollY = 0;
     private long frameID = Long.MIN_VALUE;
+    private VisLabel emptyLabel;
+    CircularProgressWidget circPro;
 
 
     public ListView(ListViewType type) {
@@ -158,11 +163,18 @@ public class ListView extends Catch_WidgetGroup {
             @Override
             public void sizeChanged() {
                 super.sizeChanged();
-
                 if (ListView.this.type == VERTICAL) {
-                    itemList.setWidth(ListView.this.getWidth());
+                    float width = ListView.this.getWidth();
+                    if (ListView.this.backgroundDrawable != null) {
+                        width -= ListView.this.backgroundDrawable.getLeftWidth() + ListView.this.backgroundDrawable.getRightWidth();
+                    }
+                    itemList.setWidth(width);
                 } else {
-                    itemList.setHeight(ListView.this.getHeight());
+                    float height = ListView.this.getHeight();
+                    if (ListView.this.backgroundDrawable != null) {
+                        height -= ListView.this.backgroundDrawable.getTopHeight() + ListView.this.backgroundDrawable.getBottomHeight();
+                    }
+                    itemList.setHeight(height);
                 }
             }
         };
@@ -232,15 +244,23 @@ public class ListView extends Catch_WidgetGroup {
         scrollPane.setCancelTouchFocus(true);
         scrollPane.setupFadeScrollBars(1f, 0.5f);
 
-        this.addActor(scrollPane);
-
     }
 
     public void setAdapter(ListViewAdapter adapter) {
         frameID = Gdx.graphics == null ? frameID++ : Gdx.graphics.getFrameId();
         this.adapter = adapter;
-        itemList.setAdapter(adapter);
-        setScrollPaneBounds();
+
+        if (this.adapter == null || this.adapter.getCount() <= 0) {
+            this.removeActor(scrollPane);
+            if (emptyLabel != null) this.addActor(emptyLabel);
+        } else {
+            if (circPro != null) this.removeActor(circPro);
+            circPro = null;
+            if (emptyLabel != null) this.removeActor(emptyLabel);
+            this.addActor(scrollPane);
+            itemList.setAdapter(adapter);
+            setScrollPaneBounds();
+        }
     }
 
     @Override
@@ -262,25 +282,49 @@ public class ListView extends Catch_WidgetGroup {
             maxScrollChange = type == VERTICAL ? this.getHeight() / 4 : this.getWidth() / 4;
             setScrollPaneBounds();
         } else {
-//            if (emptyLabel != null) {
-//                emptyLabel.setBounds(0, 0, getWidth(), getHeight());
-//                return;
-//            }
             invalidate();
             layout();
         }
     }
 
     private void setScrollPaneBounds() {
+        if (circPro != null) {
+            float x = (this.getWidth() - circPro.getWidth()) / 2;
+            float y = (this.getHeight() - circPro.getHeight()) / 2;
+            circPro.setPosition(x, y);
+        }
+
+        if (emptyLabel != null) {
+            float labelHeight = this.getHeight();
+            float labelWidth = this.getWidth();
+            float labelX = 0, labelY = 0;
+
+            if (this.backgroundDrawable != null) {
+                labelWidth -= this.backgroundDrawable.getLeftWidth() + this.backgroundDrawable.getRightWidth();
+                labelHeight -= this.backgroundDrawable.getBottomHeight() + this.backgroundDrawable.getTopHeight();
+                labelX = this.backgroundDrawable.getLeftWidth();
+                labelY = this.backgroundDrawable.getBottomHeight();
+            }
+            emptyLabel.setBounds(labelX, labelY, labelWidth, labelHeight);
+        }
+
         float paneHeight = this.getHeight();
-        float paneYPos = 0;
+        float paneWidth = this.getWidth();
+
+        if (this.backgroundDrawable != null) {
+            paneWidth -= this.backgroundDrawable.getLeftWidth() + this.backgroundDrawable.getRightWidth();
+            paneHeight -= this.backgroundDrawable.getBottomHeight() + this.backgroundDrawable.getTopHeight();
+        }
+        float paneYPos = this.backgroundDrawable != null ? this.backgroundDrawable.getTopHeight() : 0;
         float completeSize = itemList.getCompleteSize();
         if (this.getHeight() > completeSize) {
             //set on Top
             paneHeight = completeSize;
             paneYPos = this.getHeight() - completeSize;
         }
-        scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
+
+        scrollPane.setBounds(this.backgroundDrawable != null ? this.backgroundDrawable.getLeftWidth() : 0, paneYPos,
+                paneWidth, paneHeight);
         scrollPane.layout();
         setItemVisibleBounds();
     }
@@ -465,7 +509,15 @@ public class ListView extends Catch_WidgetGroup {
     }
 
     public void setEmptyString(CharSequence emptyString) {
-        //TODO implement
+        if (emptyString == null || emptyString.length() == 0) {
+            this.removeActor(this.emptyLabel);
+            this.emptyLabel = null;
+            return;
+        }
+        CB.assertGlThread();
+        this.emptyLabel = new VisLabel(emptyString);
+        emptyLabel.setWrap(true);
+        emptyLabel.setAlignment(Align.center);
     }
 
     public SnapshotArray<Actor> items() {
@@ -485,7 +537,9 @@ public class ListView extends Catch_WidgetGroup {
         });
     }
 
-    public void showWorkAnimationToSetAdapter() {
-        //TODO handle
+    public void showWorkAnimationUntilSetAdapter() {
+        circPro = new CircularProgressWidget();
+        circPro.setProgress(-1);
+        this.addActor(circPro);
     }
 }

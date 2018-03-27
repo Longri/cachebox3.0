@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -55,15 +55,6 @@ public class MenuItem extends ListViewItem {
 
     private Menu moreMenu;
     private final Menu parentMenu;
-
-
-    public MenuItem(SizeF size, int Index, int ID, String name, Menu parentMenu) {
-        super(Index);
-        this.name = name;
-        mID = ID;
-        this.parentMenu = parentMenu;
-        setDefaultStyle();
-    }
 
     public MenuItem(int Index, int ID, String name, Menu parentMenu) {
         super(Index);

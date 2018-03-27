@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018  team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
@@ -39,6 +38,7 @@ import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.ProgressBar;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -64,7 +64,7 @@ public class ReloadCacheActivity extends ActivityBase {
     private boolean importRuns = false;
     private boolean needLayout = true;
     private final Image workAnimation;
-    private final VisProgressBar progressBar;
+    private final ProgressBar progressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
 
     public ReloadCacheActivity() {
@@ -77,7 +77,7 @@ public class ReloadCacheActivity extends ActivityBase {
         lblTitle.setStyle(style);
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);
-        progressBar = new VisProgressBar(0, 100, 1, false, "default");
+        progressBar = new ProgressBar(0, 100, 1, false, "default");
 
         createOkCancelBtn();
         setWorkAnimationVisible(false);
