@@ -100,7 +100,7 @@ public class ImportPQ extends ActivityBase {
     }
 
     private void refreshPQList() {
-        pqList.showWorkAnimationToSetAdapter();
+        pqList.showWorkAnimationUntilSetAdapter();
 
         CB.postAsync(new NamedRunnable("refreshPQList") {
             @Override
