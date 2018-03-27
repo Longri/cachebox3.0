@@ -104,6 +104,7 @@ public class TestView extends AbstractView {
             ListView emptyListView = new ListView(ListViewType.VERTICAL, false);
             emptyListView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
             emptyListView.setEmptyString("EMPTY LISTVIEW EMPTY LISTVIEW EMPTY LISTVIEW ");
+            emptyListView.setAdapter(null);
             contentTable.add(emptyListView).width(new Value.Fixed(contentWidth)).height(new Value.Fixed(contentWidth / 2)).pad(4);
             contentTable.row();
 

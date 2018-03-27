@@ -23,9 +23,11 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
@@ -61,6 +63,7 @@ public class ListView extends Catch_WidgetGroup {
     private float lastFiredScrollX = 0;
     private float lastFiredScrollY = 0;
     private long frameID = Long.MIN_VALUE;
+    private VisLabel emptyLabel;
 
 
     public ListView(ListViewType type) {
@@ -239,15 +242,21 @@ public class ListView extends Catch_WidgetGroup {
         scrollPane.setCancelTouchFocus(true);
         scrollPane.setupFadeScrollBars(1f, 0.5f);
 
-        this.addActor(scrollPane);
-
     }
 
     public void setAdapter(ListViewAdapter adapter) {
         frameID = Gdx.graphics == null ? frameID++ : Gdx.graphics.getFrameId();
         this.adapter = adapter;
-        itemList.setAdapter(adapter);
-        setScrollPaneBounds();
+
+        if (this.adapter == null || this.adapter.getCount() <= 0) {
+            this.removeActor(scrollPane);
+            if (emptyLabel != null) this.addActor(emptyLabel);
+        } else {
+            if (emptyLabel != null) this.removeActor(emptyLabel);
+            this.addActor(scrollPane);
+            itemList.setAdapter(adapter);
+            setScrollPaneBounds();
+        }
     }
 
     @Override
@@ -269,10 +278,6 @@ public class ListView extends Catch_WidgetGroup {
             maxScrollChange = type == VERTICAL ? this.getHeight() / 4 : this.getWidth() / 4;
             setScrollPaneBounds();
         } else {
-//            if (emptyLabel != null) {
-//                emptyLabel.setBounds(0, 0, getWidth(), getHeight());
-//                return;
-//            }
             invalidate();
             layout();
         }
@@ -280,6 +285,19 @@ public class ListView extends Catch_WidgetGroup {
 
     private void setScrollPaneBounds() {
 
+        if (emptyLabel != null) {
+            float labelHeight = this.getHeight();
+            float labelWidth = this.getWidth();
+            float labelX = 0, labelY = 0;
+
+            if (this.backgroundDrawable != null) {
+                labelWidth -= this.backgroundDrawable.getLeftWidth() + this.backgroundDrawable.getRightWidth();
+                labelHeight -= this.backgroundDrawable.getBottomHeight() + this.backgroundDrawable.getTopHeight();
+                labelX = this.backgroundDrawable.getLeftWidth();
+                labelY = this.backgroundDrawable.getBottomHeight();
+            }
+            emptyLabel.setBounds(labelX, labelY, labelWidth, labelHeight);
+        }
 
         float paneHeight = this.getHeight();
         float paneWidth = this.getWidth();
@@ -295,7 +313,6 @@ public class ListView extends Catch_WidgetGroup {
             paneHeight = completeSize;
             paneYPos = this.getHeight() - completeSize;
         }
-
 
         scrollPane.setBounds(this.backgroundDrawable != null ? this.backgroundDrawable.getLeftWidth() : 0, paneYPos,
                 paneWidth, paneHeight);
@@ -483,7 +500,15 @@ public class ListView extends Catch_WidgetGroup {
     }
 
     public void setEmptyString(CharSequence emptyString) {
-        //TODO implement
+        if (emptyString == null || emptyString.length() == 0) {
+            this.removeActor(this.emptyLabel);
+            this.emptyLabel = null;
+            return;
+        }
+        CB.assertGlThread();
+        this.emptyLabel = new VisLabel(emptyString);
+        emptyLabel.setWrap(true);
+        emptyLabel.setAlignment(Align.center);
     }
 
     public SnapshotArray<Actor> items() {
