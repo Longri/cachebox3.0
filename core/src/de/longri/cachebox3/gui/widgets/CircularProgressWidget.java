@@ -154,12 +154,10 @@ public class CircularProgressWidget extends Widget {
                 circSeg.setAngles(startAngle, 90, true);
                 progressDrawable.setDirty();
             }
-
-
-            fontCache.setText(Integer.toString(progress) + "%",
-                    getX() + CB.scaledSizes.MARGIN + (radius / 2) - (textWidth / 2),
-                    getY() + (radius / 2) + (textHeight / 2));
             lastProgress = progress;
+            fontCache.setText(Integer.toString(progress) + "%",
+                    CB.scaledSizes.MARGIN + (radius / 2) - (textWidth / 2),
+                    (radius / 2) + (textHeight / 2));
         }
 
 
@@ -168,8 +166,8 @@ public class CircularProgressWidget extends Widget {
         progressDrawable.draw(batch, getX(), getY(), getWidth(), getHeight());
         valueBorder.draw(batch, getX() + textCenter, getY() + textCenter, textRadius, textRadius);
         valueBackground.draw(batch, getX() + textCenter, getY() + textCenter, textRadius, textRadius);
+        fontCache.setPosition(getX(), getY());
         fontCache.draw(batch);
-
     }
 
     private GeometryDrawable unknownDrawable;
