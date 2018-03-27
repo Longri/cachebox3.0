@@ -32,12 +32,18 @@ import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -57,6 +63,7 @@ public class ImportPQ extends ActivityBase {
             return canceled.get();
         }
     };
+    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public ImportPQ() {
         super("ImportPQ");
@@ -100,6 +107,7 @@ public class ImportPQ extends ActivityBase {
     }
 
     private void refreshPQList() {
+        pqList.setEmptyString(Translation.get("EmptyPqList"));
         pqList.showWorkAnimationUntilSetAdapter();
 
         CB.postAsync(new NamedRunnable("refreshPQList") {
@@ -128,6 +136,18 @@ public class ImportPQ extends ActivityBase {
 
                 int idx = 0;
                 for (PocketQuery.PQ pq : list) {
+                    //Check last import
+                    GdxSqliteCursor cursor = Database.Data.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        String dateTimeString = cursor.getString(2);
+                        try {
+                            Date date = iso8601Format.parse(dateTimeString);
+                            pq.lastImported = date;
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     itemArray.add(new PqListItem(idx++, pq));
                 }
                 CB.postOnGlThread(new NamedRunnable("SetAdapter") {

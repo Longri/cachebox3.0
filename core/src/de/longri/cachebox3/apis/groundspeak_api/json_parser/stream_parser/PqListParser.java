@@ -52,7 +52,7 @@ public class PqListParser {
             public String guid;
             public int cacheCount;
             public Date lastGenerated;
-            public double sizeMB;
+            public double sizeB;
             public boolean downloadAvailable = false;
 
 
@@ -80,7 +80,7 @@ public class PqListParser {
                         newPQ.guid = guid;
                         newPQ.cacheCount = cacheCount;
                         newPQ.lastGenerated = lastGenerated;
-                        newPQ.sizeMB = sizeMB;
+                        newPQ.sizeMB = sizeB / 1048576.0;
                         newPQ.downloadAvailable = downloadAvailable;
                         pqList.add(newPQ);
                     }
@@ -117,7 +117,7 @@ public class PqListParser {
                 super.number(name, value, stringValue);
                 if (pocketQueryList) {
                     if (name.equals("FileSizeInBytes")) {
-                        this.sizeMB = value;
+                        this.sizeB = value;
                     } else if (name.equals("PQCount")) {
                         this.cacheCount = (int) value;
                     }

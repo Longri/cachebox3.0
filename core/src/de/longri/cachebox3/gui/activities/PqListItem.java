@@ -15,21 +15,90 @@
  */
 package de.longri.cachebox3.gui.activities;
 
-import com.kotcrab.vis.ui.widget.VisLabel;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
+import de.longri.cachebox3.gui.drawables.ColorDrawable;
+import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
+import de.longri.cachebox3.gui.widgets.AligmentLabel;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
+import de.longri.cachebox3.translation.Translation;
+
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Longri on 26.03.2018.
  */
 public class PqListItem extends ListViewItem {
     private final PocketQuery.PQ pq;
+    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd");
+    private final static DecimalFormat decimalFormat = new DecimalFormat("###.##");
+    private final PqListItemStyle style;
 
     public PqListItem(int index, PocketQuery.PQ pq) {
         super(index);
+
+        this.setDebug(true);
+
+        style = VisUI.getSkin().get(PqListItemStyle.class);
         this.pq = pq;
 
-        VisLabel label = new VisLabel(pq.name);
-        this.add(label).expandX().fillX();
+        Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
+        nameLabelStyle.font = style.nameFont;
+        nameLabelStyle.fontColor = style.nameFontColor;
+
+        Label.LabelStyle infoLabelStyle = new Label.LabelStyle();
+        infoLabelStyle.font = style.infoFont;
+        infoLabelStyle.fontColor = style.infoFontColor;
+
+        AligmentLabel label = new AligmentLabel(pq.name, nameLabelStyle, Align.center);
+        this.add(label).colspan(3).expandX().fillX();
+        this.row();
+
+        this.add(new AligmentLabel(Translation.get("PQcreationDate"), infoLabelStyle, Align.left)).expandX().fillX();
+        this.add(new AligmentLabel(iso8601Format.format(pq.lastGenerated), infoLabelStyle, Align.left)).expandX().fillX();
+        this.add().expandX().fillX();
+        this.row();
+
+        this.add(new AligmentLabel(Translation.get("PQsize"), infoLabelStyle, Align.left)).expandX().fillX();
+        this.add(new AligmentLabel(decimalFormat.format(pq.sizeMB) + " MB", infoLabelStyle, Align.left)).expandX().fillX();
+        this.add().expandX().fillX();
+        this.row();
+
+        this.add(new AligmentLabel(Translation.get("PQcount"), infoLabelStyle, Align.left)).expandX().fillX();
+        this.add(new AligmentLabel(Integer.toString(pq.cacheCount), infoLabelStyle, Align.left)).expandX().fillX();
+        this.add().expandX().fillX();
+        this.row();
+
+        this.add(new AligmentLabel(Translation.get("PQlastImport"), infoLabelStyle, Align.left)).expandX().fillX();
+        if (pq.lastImported != null) {
+            this.add(new AligmentLabel(iso8601Format.format(pq.lastImported), infoLabelStyle, Align.left)).expandX().fillX();
+            if (pq.lastImported.after(pq.lastGenerated)) {
+                Label.LabelStyle colorLabelStyle = new Label.LabelStyle(infoLabelStyle);
+                if (style.readyFontColor != null) colorLabelStyle.fontColor = style.readyFontColor;
+                if (style.redyBackgroundColor != null)
+                    colorLabelStyle.background = new ColorDrawable(style.redyBackgroundColor);
+                this.add(new AligmentLabel(Translation.get("PQreadyImported"), colorLabelStyle, Align.left)).expandX().fillX();
+            } else {
+                Label.LabelStyle colorLabelStyle = new Label.LabelStyle(infoLabelStyle);
+                if (style.newFontColor != null) colorLabelStyle.fontColor = style.newFontColor;
+                if (style.newBackgroundColor != null)
+                    colorLabelStyle.background = new ColorDrawable(style.newBackgroundColor);
+                this.add(new AligmentLabel(Translation.get("PQnew"), colorLabelStyle, Align.left)).expandX().fillX();
+            }
+        } else {
+            Label.LabelStyle colorLabelStyle = new Label.LabelStyle(infoLabelStyle);
+            if (style.neverFontColor != null) colorLabelStyle.fontColor = style.neverFontColor;
+            if (style.neverBackgroundColor != null)
+                colorLabelStyle.background = new ColorDrawable(style.neverBackgroundColor);
+            this.add().expandX().fillX();
+            this.add(new AligmentLabel(Translation.get("never"), colorLabelStyle, Align.left));
+
+        }
+        this.row();
+
     }
 }

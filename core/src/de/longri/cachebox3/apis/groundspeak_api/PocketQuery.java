@@ -37,6 +37,7 @@ public class PocketQuery extends GetRequest {
         public String guid;
         public int cacheCount;
         public Date lastGenerated;
+        public Date lastImported;
         public double sizeMB;
         public boolean downloadAvailable = false;
     }

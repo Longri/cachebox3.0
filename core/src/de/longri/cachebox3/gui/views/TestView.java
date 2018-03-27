@@ -140,7 +140,7 @@ public class TestView extends AbstractView {
 
         {// test ScrollLabel
 
-            VisLabel label3 = new VisLabel("Scroll Label");
+            VisLabel label3 = new VisLabel("Scroll AligmentLabel");
             Table lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             lineTable = new Table();
@@ -415,7 +415,7 @@ public class TestView extends AbstractView {
                                 value += 1f;
                                 final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
                                 EventHandler.fire(new IncrementProgressEvent((int) progressValue,
-                                        "Progress Test Label", progressValue == 0 ? -1 : 100));
+                                        "Progress Test AligmentLabel", progressValue == 0 ? -1 : 100));
                                 try {
                                     Thread.sleep(50);
                                 } catch (InterruptedException e) {
