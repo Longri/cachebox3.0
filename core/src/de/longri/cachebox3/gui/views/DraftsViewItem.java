@@ -69,7 +69,7 @@ public class DraftsViewItem extends ListViewItem {
         headerTable = new VisTable();
         headerTable.add(new Image(this.entry.type.getDrawable(style.typeStyle)));
         if (entry.uploaded) headerTable.add(new Image(style.uploadedIcon));
-        headerTable.add((Actor) null).left().padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
+        headerTable.add((Actor) null).left().padLeft(CB.scaledSizes.MARGINx2).expandX().fillX();
 
         String foundNumber = "";
         if (entry.foundNumber > 0) {
@@ -77,12 +77,12 @@ public class DraftsViewItem extends ListViewItem {
         }
 
         VisLabel dateLabel = new VisLabel(foundNumber + postFormatter.format(entry.timestamp), headerLabelStyle);
-        headerTable.add(dateLabel).padRight(CB.scaledSizes.MARGINx4).right();
+        headerTable.add(dateLabel).padRight(CB.scaledSizes.MARGINx2).right();
         headerTable.pack();
         headerTable.layout();
         this.add(headerTable).left().expandX().fillX();
 
-        this.row().padTop(CB.scaledSizes.MARGINx4);
+        this.row().padTop(CB.scaledSizes.MARGINx2);
 
         VisTable entryTable = new VisTable();
 
@@ -94,7 +94,7 @@ public class DraftsViewItem extends ListViewItem {
         iconTable.pack();
         iconTable.layout();
 
-        cacheTable.add(iconTable).left().padRight(CB.scaledSizes.MARGINx4);
+        cacheTable.add(iconTable).left().padRight(CB.scaledSizes.MARGINx2);
 
         VisLabel nameLabel = new VisLabel(entry.CacheName, headerLabelStyle);
         nameLabel.setWrap(true);
@@ -102,7 +102,7 @@ public class DraftsViewItem extends ListViewItem {
 
         cacheTable.row();
 
-        cacheTable.add((Actor) null).left().padRight(CB.scaledSizes.MARGINx4);
+        cacheTable.add((Actor) null).left().padRight(CB.scaledSizes.MARGINx2);
 
         VisLabel gcLabel = new VisLabel(entry.gcCode, headerLabelStyle);
         gcLabel.setWrap(true);
@@ -110,7 +110,7 @@ public class DraftsViewItem extends ListViewItem {
 
 
         entryTable.add(cacheTable).top().expandX().fillX();
-        entryTable.row().padTop(CB.scaledSizes.MARGINx4);
+        entryTable.row().padTop(CB.scaledSizes.MARGINx2);
 
 
         VisLabel commentLabel = new VisLabel(entry.comment, commentLabelStyle);

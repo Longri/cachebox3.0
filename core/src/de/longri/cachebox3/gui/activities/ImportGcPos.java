@@ -144,7 +144,7 @@ public class ImportGcPos extends ActivityBase {
         this.add(gsLogo).colspan(2).center();
         this.row().padTop(new Value.Fixed(CB.scaledSizes.MARGINx2 * 2));
         this.add(lblRadius);
-        this.add(textAreaRadius).height(new Value.Fixed((textAreaRadius.getStyle().font.getLineHeight() + CB.scaledSizes.MARGINx4) * 1.3f));
+        this.add(textAreaRadius).height(new Value.Fixed((textAreaRadius.getStyle().font.getLineHeight() + CB.scaledSizes.MARGINx2) * 1.3f));
         this.add(lblRadiusUnit).left();
         this.add(btnMinus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));
         this.add(btnPlus).width(new Value.Fixed(textAreaRadius.getPrefHeight()));

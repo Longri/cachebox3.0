@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -100,8 +100,8 @@ public class FileTransfer_Activity extends ActivityBase {
 
         closeButton.setPosition(x, y);
 
-        float width = this.getWidth() - CB.scaledSizes.MARGINx4;
-        float height = this.getHeight() - (y + CB.scaledSizes.MARGINx4);
+        float width = this.getWidth() - CB.scaledSizes.MARGINx2;
+        float height = this.getHeight() - (y + CB.scaledSizes.MARGINx2);
         y += closeButton.getHeight() + CB.scaledSizes.MARGINx2;
         x = CB.scaledSizes.MARGINx2;
 

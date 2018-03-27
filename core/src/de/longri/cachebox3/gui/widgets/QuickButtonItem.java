@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ public class QuickButtonItem extends ListViewItem {
         if (needsLayout || super.needsLayout()) {
             if (spriteDrawable != null) {
                 float ratio = spriteDrawable.getMinWidth() / spriteDrawable.getMinHeight();
-                float imageHeight = getHeight() - CB.scaledSizes.MARGINx4;
+                float imageHeight = getHeight() - CB.scaledSizes.MARGINx2;
                 float imageWidth = imageHeight * ratio;
                 float x = (getWidth() - imageWidth) / 2;
                 float y = (getHeight() - imageHeight) / 2;

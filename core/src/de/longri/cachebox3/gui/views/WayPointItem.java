@@ -78,7 +78,7 @@ public class WayPointItem extends VisTable implements Disposable {
             iconTable.add(type.getCacheWidget(style.typeStyle, null, null, null, null));
             iconTable.pack();
             iconTable.layout();
-            this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGINx4);
+            this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGINx2);
         }
 
         Table contentTable = new Table();

@@ -231,7 +231,7 @@ public class EditDrafts extends ActivityBase {
         iconTable.pack();
         iconTable.layout();
 
-        cacheTable.add(iconTable).left().padRight(CB.scaledSizes.MARGINx4);
+        cacheTable.add(iconTable).left().padRight(CB.scaledSizes.MARGINx2);
 
         VisLabel nameLabel = new VisLabel(actDraft.CacheName, headerLabelStyle);
         nameLabel.setWrap(true);
@@ -239,7 +239,7 @@ public class EditDrafts extends ActivityBase {
 
         cacheTable.row();
 
-        cacheTable.add((Actor) null).left().padRight(CB.scaledSizes.MARGINx4);
+        cacheTable.add((Actor) null).left().padRight(CB.scaledSizes.MARGINx2);
 
         VisLabel gcLabel = new VisLabel(actDraft.gcCode, headerLabelStyle);
         gcLabel.setWrap(true);
@@ -267,7 +267,7 @@ public class EditDrafts extends ActivityBase {
 
 
         VisTable optionTable = new VisTable();
-        optionTable.defaults().pad(CB.scaledSizes.MARGINx4);
+        optionTable.defaults().pad(CB.scaledSizes.MARGINx2);
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
         buttonStyle.checked = CB.getSkin().getDrawable("option_1");
         buttonStyle.up = CB.getSkin().getDrawable("option_0");
@@ -301,7 +301,7 @@ public class EditDrafts extends ActivityBase {
         contentTable.defaults().pad(CB.scaledSizes.MARGIN);
 
         contentTable.add(cacheTable).expandX().fillX();
-        contentTable.row().padBottom(CB.scaledSizes.MARGINx4);
+        contentTable.row().padBottom(CB.scaledSizes.MARGINx2);
         contentTable.add(foundRow).expandX().fillX();
         contentTable.row();
         contentTable.add(dateRow).right().expandX().fillX();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
@@ -285,7 +284,7 @@ public class ButtonDialog extends Window {
 //        float maxButtonWidth = 0;
 //        VisTextButton.VisTextButtonStyle buttonStyle = VisUI.getSkin().get(VisTextButton.VisTextButtonStyle.class);
 //        BitmapFont font = buttonStyle.font;
-//        float minButtonWidth = (buttonStyle.up.getMinWidth() + CB.scaledSizes.MARGINx4) * 4;
+//        float minButtonWidth = (buttonStyle.up.getMinWidth() + CB.scaledSizes.MARGINx2) * 4;
 //        if (buttons == MessageBoxButtons.YesNoRetry) {
 //            String alltext = Translation.get("yes") + Translation.get("no") + Translation.get("retry");
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
@@ -312,7 +311,7 @@ public class ButtonDialog extends Window {
 //            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (2 * CB.scaledSizes.MARGIN) + (minButtonWidth);
 //        }
 //
-//        return Math.min(Math.max(min, maxButtonWidth), Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4);
+//        return Math.min(Math.max(min, maxButtonWidth), Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2);
 //    }
 
     @Override

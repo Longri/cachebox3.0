@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -50,10 +49,14 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.*;
-import de.longri.cachebox3.gui.widgets.list_view.*;
+import de.longri.cachebox3.gui.widgets.list_view.DefaultListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.types.IntProperty;
+import de.longri.cachebox3.types.LogTypes;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -573,7 +576,7 @@ public class TestView extends AbstractView {
                 if (iconWidth == 0) {
                     iconWidth = CB.getScaledFloat(47);//attDrawable.getMinWidth();
                     iconHeight = CB.getScaledFloat(47);// attDrawable.getMinHeight();
-                    lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
+                    lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx2) * 1.5f));
                     lineTable = new Table();
                     lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                 }
@@ -616,7 +619,7 @@ public class TestView extends AbstractView {
                 if (iconWidth == 0) {
                     iconWidth = drawable.getMinWidth();
                     iconHeight = drawable.getMinHeight();
-                    lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
+                    lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx2) * 1.5f));
                     lineTable = new Table();
                     lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                 }
@@ -660,7 +663,7 @@ public class TestView extends AbstractView {
                         if (iconWidth == 0) {
                             iconWidth = drawable.getMinWidth();
                             iconHeight = drawable.getMinHeight();
-                            lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx4) * 1.5f));
+                            lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + (CB.scaledSizes.MARGINx2) * 1.5f));
                             lineTable = new Table();
                             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
                         }
@@ -688,7 +691,7 @@ public class TestView extends AbstractView {
             contentTable.add(lineTable).left();
             contentTable.row();
         }
-        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 5));
+        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2 * 5));
         contentTable.row();
 
 
@@ -731,7 +734,7 @@ public class TestView extends AbstractView {
                 }
             });
         }
-        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4 * 2));
+        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2 * 2));
         contentTable.row();
         {
             CharSequence Msg = Translation.get("QuitReally");

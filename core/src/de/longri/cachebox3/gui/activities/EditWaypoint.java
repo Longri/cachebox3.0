@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -216,7 +216,7 @@ public class EditWaypoint extends ActivityBase {
         x = CB.scaledSizes.MARGIN;
         y += CB.scaledSizes.MARGIN + btnCancel.getHeight();
 
-        float maxWidth = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4;
+        float maxWidth = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2;
         titleTextArea.setMaxWidth(maxWidth);
         descriptionTextArea.setMaxWidth(maxWidth);
         clueTextArea.setMaxWidth(maxWidth);

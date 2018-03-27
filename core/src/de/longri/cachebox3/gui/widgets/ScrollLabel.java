@@ -36,6 +36,7 @@ public class ScrollLabel extends Label {
     static private final Color tempColor = new Color();
 
     private final Rectangle scissorRec = new Rectangle();
+    private final Rectangle localRec = new Rectangle();
     private final LabelStyle style;
     private final AnimationActor animationActor = new AnimationActor();
     private final Vector2 stagePos = new Vector2();
@@ -60,20 +61,24 @@ public class ScrollLabel extends Label {
         validate();
         Color color = tempColor.set(getColor());
         color.a *= parentAlpha;
+
+        localRec.x = getX();
+        localRec.y = getY();
+
         if (style.background != null) {
             batch.setColor(color.r, color.g, color.b, color.a);
             style.background.draw(batch, getX(), getY(), getWidth(), getHeight());
+            localRec.x += style.background.getLeftWidth();
+            localRec.y += style.background.getBottomHeight();
+            batch.flush();
         }
         if (style.fontColor != null) color.mul(style.fontColor);
         cache.tint(color);
         cache.setPosition(getX() + scrollPosition, getY());
 
-        stagePos.x = 0;
-        stagePos.y = 0;
 
-        this.localToStageCoordinates(stagePos);
-        scissorRec.x = stagePos.x + 1;
-        scissorRec.y = stagePos.y + 1;
+        getStage().calculateScissors(localRec, scissorRec);
+
         if (ScissorStack.pushScissors(scissorRec)) {
             cache.draw(batch);
             batch.flush();
@@ -87,13 +92,19 @@ public class ScrollLabel extends Label {
 
     @Override
     protected void positionChanged() {
-        scissorRec.setPosition(getX() + 1, getY() + 1);
+        localRec.setPosition(getX() + 1, getY() + 1);
     }
 
     @Override
     protected void sizeChanged() {
-        if (scissorRec == null) return;
-        scissorRec.setSize(getWidth() - 2, getHeight() - 2);
+        if (localRec == null) return;
+        float width = getWidth();
+        float height = getHeight();
+        if (style.background != null) {
+            width -= style.background.getLeftWidth() + style.background.getRightWidth();
+            height -= style.background.getTopHeight() + style.background.getBottomHeight();
+        }
+        localRec.setSize(width, height);
     }
 
     public void setText(CharSequence newText) {

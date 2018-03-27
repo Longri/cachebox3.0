@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -53,13 +53,13 @@ public class LogListViewItem extends ListViewItem {
         nameLabelStyle.fontColor = this.style.headerFontColor;
         VisLabel nameLabel = new VisLabel(this.logEntry.Finder, nameLabelStyle);
         nameLabel.setWrap(true);
-        headerTable.add(nameLabel).left().padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
+        headerTable.add(nameLabel).left().padLeft(CB.scaledSizes.MARGINx2).expandX().fillX();
 
         //TODO replace with formatter from localisation settings
         SimpleDateFormat postFormater = new SimpleDateFormat("dd.MM.yyyy");
         String dateString = postFormater.format(logEntry.Timestamp);
         VisLabel dateLabel = new VisLabel(dateString, nameLabelStyle);
-        headerTable.add(dateLabel).padRight(CB.scaledSizes.MARGINx4).right();
+        headerTable.add(dateLabel).padRight(CB.scaledSizes.MARGINx2).right();
 
         //TODO set Background for header over style
 
@@ -67,7 +67,7 @@ public class LogListViewItem extends ListViewItem {
         headerTable.layout();
         this.add(headerTable).left().expandX().fillX();
 
-        this.row().padTop(CB.scaledSizes.MARGINx4);
+        this.row().padTop(CB.scaledSizes.MARGINx2);
 
         Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
         commentLabelStyle.font = this.style.descriptionFont;

@@ -57,7 +57,7 @@ public class BlockUiProgress_Activity extends ActivityBase implements IncrementP
         msgLabel.setStyle(newStyle);
         msgLabel.setAlignment(Align.center);
 
-        this.add(msgLabel).expandX().fillX().pad(CB.scaledSizes.MARGINx4);
+        this.add(msgLabel).expandX().fillX().pad(CB.scaledSizes.MARGINx2);
         this.row();
         this.add(progress);
         this.setBackground((Drawable) null);

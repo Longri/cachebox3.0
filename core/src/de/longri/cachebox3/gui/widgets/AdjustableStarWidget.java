@@ -78,16 +78,16 @@ public class AdjustableStarWidget extends Catch_Table {
         valueLabel = new VisLabel(Double.toString(value.getInt() / 2));
         if (type == Type.SIZE) {
             line.add((Actor) null).expandX().fillX();
-            line.add(valueLabel).padRight(CB.scaledSizes.MARGINx4);
+            line.add(valueLabel).padRight(CB.scaledSizes.MARGINx2);
         } else {
             line.add((Actor) null).expandX().fillX();
         }
 
         centerTable.add(line).left().expandX().fillX();
 
-        this.add(minusBtn).left().padRight(new Value.Fixed(CB.scaledSizes.MARGINx4));
+        this.add(minusBtn).left().padRight(new Value.Fixed(CB.scaledSizes.MARGINx2));
         this.add(centerTable).left().expandX().fillX().padRight(new Value.Fixed(CB.scaledSizes.MARGIN));
-        if (type == Type.STAR) this.add(valueLabel).right().padRight(new Value.Fixed(CB.scaledSizes.MARGINx4));
+        if (type == Type.STAR) this.add(valueLabel).right().padRight(new Value.Fixed(CB.scaledSizes.MARGINx2));
         this.add(plusBtn).right();
 
         plusBtn.addListener(new ClickListener() {
