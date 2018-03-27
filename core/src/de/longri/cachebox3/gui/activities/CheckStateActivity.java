@@ -28,7 +28,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
@@ -45,6 +44,7 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.ProgressBar;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -76,7 +76,7 @@ public class CheckStateActivity extends ActivityBase {
     private boolean importRuns = false;
     private boolean needLayout = true;
     private final Image workAnimation;
-    private final VisProgressBar progressBar;
+    private final ProgressBar progressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
     private final boolean withFavPoi;
 
@@ -94,7 +94,7 @@ public class CheckStateActivity extends ActivityBase {
         lblTitle.setStyle(style);
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);
-        progressBar = new VisProgressBar(0, 100, 1, false, "default");
+        progressBar = new ProgressBar(0, 100, 1, false, "default");
 
         createOkCancelBtn();
         setWorkAnimationVisible(false);

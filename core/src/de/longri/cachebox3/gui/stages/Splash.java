@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 team-cachebox.de
+ * Copyright (C) 2016-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,12 @@ import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.graphics.g2d.freetype.SkinFont;
+import de.longri.cachebox3.gui.widgets.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkinUtil;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
@@ -68,7 +67,7 @@ public class Splash extends NamedStage {
     final LoadReady loadReadyHandler;
 
 
-    VisProgressBar progress;
+    ProgressBar progress;
     Label workLabel;
     Image OSM_Logo, Route_Logo, Mapsforge_Logo, LibGdx_Logo, GC_Logo;
 
@@ -120,7 +119,7 @@ public class Splash extends NamedStage {
                 , Utils.getTextureRegion(Gdx.files.internal("progress_foreground.svg").read()));
 
 
-        progress = new VisProgressBar(0f, 100f, 1f, false, style);
+        progress = new ProgressBar(0f, 100f, 1f, false, style);
         float margin = 40 * (CanvasAdapter.dpi / 240);
         float progressWidth = Gdx.graphics.getWidth() - (margin * 2);
 

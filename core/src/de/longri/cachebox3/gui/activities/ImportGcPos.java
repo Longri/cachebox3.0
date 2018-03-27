@@ -25,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisProgressBar;
 import com.kotcrab.vis.ui.widget.VisTextArea;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
@@ -43,6 +42,7 @@ import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
+import de.longri.cachebox3.gui.widgets.ProgressBar;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
@@ -77,7 +77,7 @@ public class ImportGcPos extends ActivityBase {
     private boolean importRuns = false;
     private boolean needLayout = true;
     private final Image workAnimation;
-    private final VisProgressBar progressBar;
+    private final ProgressBar progressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
 
     /**
@@ -110,7 +110,7 @@ public class ImportGcPos extends ActivityBase {
 
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);
-        progressBar = new VisProgressBar(0, 100, 1, false, "default");
+        progressBar = new ProgressBar(0, 100, 1, false, "default");
 
 
         createOkCancelBtn();

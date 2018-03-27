@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -160,14 +160,19 @@ public class CircularProgressWidget extends Widget {
                     (radius / 2) + (textHeight / 2));
         }
 
+        if (backgroundDrawable != null) backgroundDrawable.draw(batch, getX(), getY(), getWidth(), getHeight());
+        if (progressDrawableBorder != null) progressDrawableBorder.draw(batch, getX(), getY(), getWidth(), getHeight());
+        if (progressDrawable != null) progressDrawable.draw(batch, getX(), getY(), getWidth(), getHeight());
+        if (valueBorder != null)
+            valueBorder.draw(batch, getX() + textCenter, getY() + textCenter, textRadius, textRadius);
+        if (valueBackground != null)
+            valueBackground.draw(batch, getX() + textCenter, getY() + textCenter, textRadius, textRadius);
 
-        backgroundDrawable.draw(batch, getX(), getY(), getWidth(), getHeight());
-        progressDrawableBorder.draw(batch, getX(), getY(), getWidth(), getHeight());
-        progressDrawable.draw(batch, getX(), getY(), getWidth(), getHeight());
-        valueBorder.draw(batch, getX() + textCenter, getY() + textCenter, textRadius, textRadius);
-        valueBackground.draw(batch, getX() + textCenter, getY() + textCenter, textRadius, textRadius);
-        fontCache.setPosition(getX(), getY());
-        fontCache.draw(batch);
+        if (fontCache != null) {
+            fontCache.setPosition(getX(), getY());
+            fontCache.draw(batch);
+        }
+
     }
 
     private GeometryDrawable unknownDrawable;

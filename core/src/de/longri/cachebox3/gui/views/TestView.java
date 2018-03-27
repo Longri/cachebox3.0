@@ -339,11 +339,53 @@ public class TestView extends AbstractView {
         }
 
 
+        {
+            VisLabel label3 = new VisLabel("ProgressBar SvgNinePatch");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            final ProgressBar progress1 = new ProgressBar(0, 100, 1, false, "default");
+            contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
+            contentTable.row();
+
+            CB.postAsync(new NamedRunnable("TestView:Progress") {
+                float value = 0;
+
+                @Override
+                public void run() {
+                    while (showing.get()) {
+                        value += 1f;
+                        if (value >= 200) value = 0;
+                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                        CB.postOnGlThread(new NamedRunnable("TestView") {
+                            @Override
+                            public void run() {
+                                progress1.setValue(progressValue);
+                            }
+                        });
+                        Gdx.graphics.requestRendering();
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2 * 2));
+            contentTable.row();
+        }
+
         {// test Circle Drawable Widget
 
             final CircularProgressWidget circPro = new CircularProgressWidget();
 
-            VisLabel label3 = new VisLabel("CircularProgress Test");
+            VisLabel label3 = new VisLabel("Progress Test");
             Table lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             lineTable = new Table();
@@ -399,11 +441,11 @@ public class TestView extends AbstractView {
                     while (showing.get()) {
                         value += 1f;
                         if (value >= 200) value = 0;
-                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
+                        final float progressValue = value < 50 ? -1 : value > 150 ? 100 : value - 50;
                         CB.postOnGlThread(new NamedRunnable("TestView") {
                             @Override
                             public void run() {
-                                circPro.setProgressMax(progressValue == 0 ? -1 : 100);
+                                circPro.setProgressMax(progressValue >= 0 ? 100 : -1);
                                 circPro.setProgress((int) progressValue);
                             }
                         });
@@ -695,47 +737,6 @@ public class TestView extends AbstractView {
         contentTable.row();
 
 
-        {
-            VisLabel label3 = new VisLabel("ProgressBar SvgNinePatch");
-            Table lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable.add(label3);
-            contentTable.add(lineTable).left().expandX().fillX();
-            contentTable.row();
-
-            final ProgressBar progress1 = new ProgressBar(0, 100, 1, false, "default");
-            contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
-            contentTable.row();
-
-            CB.postAsync(new NamedRunnable("TestView:Progress") {
-                float value = 0;
-
-                @Override
-                public void run() {
-                    while (showing.get()) {
-                        value += 1f;
-                        if (value >= 200) value = 0;
-                        final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                        CB.postOnGlThread(new NamedRunnable("TestView") {
-                            @Override
-                            public void run() {
-                                progress1.setValue(progressValue);
-                            }
-                        });
-                        Gdx.graphics.requestRendering();
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-        }
-        contentTable.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2 * 2));
-        contentTable.row();
         {
             CharSequence Msg = Translation.get("QuitReally");
             CharSequence Title = Translation.get("Quit?");
