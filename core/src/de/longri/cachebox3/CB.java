@@ -648,6 +648,16 @@ public class CB {
         new Timer().schedule(task, delay);
     }
 
+    public static void postOnGLThreadDelayed(int delay, final NamedRunnable runnable) {
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                postOnGlThread(runnable);
+            }
+        };
+        new Timer().schedule(task, delay);
+    }
+
     public static void postOnMainThread(NamedRunnable runnable) {
         PlatformConnector.postOnMainThread(runnable);
     }

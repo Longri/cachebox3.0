@@ -32,6 +32,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.Logger;
@@ -64,6 +65,7 @@ public class ListView extends Catch_WidgetGroup {
     private float lastFiredScrollY = 0;
     private long frameID = Long.MIN_VALUE;
     private VisLabel emptyLabel;
+    CircularProgressWidget circPro;
 
 
     public ListView(ListViewType type) {
@@ -252,6 +254,8 @@ public class ListView extends Catch_WidgetGroup {
             this.removeActor(scrollPane);
             if (emptyLabel != null) this.addActor(emptyLabel);
         } else {
+            if (circPro != null) this.removeActor(circPro);
+            circPro = null;
             if (emptyLabel != null) this.removeActor(emptyLabel);
             this.addActor(scrollPane);
             itemList.setAdapter(adapter);
@@ -284,6 +288,11 @@ public class ListView extends Catch_WidgetGroup {
     }
 
     private void setScrollPaneBounds() {
+        if (circPro != null) {
+            float x = (this.getWidth() - circPro.getWidth()) / 2;
+            float y = (this.getHeight() - circPro.getHeight()) / 2;
+            circPro.setPosition(x, y);
+        }
 
         if (emptyLabel != null) {
             float labelHeight = this.getHeight();
@@ -526,5 +535,11 @@ public class ListView extends Catch_WidgetGroup {
                 setAdapter(ListView.this.adapter);
             }
         });
+    }
+
+    public void showWorkAnimationUntilSetAdapter() {
+        circPro = new CircularProgressWidget();
+        circPro.setProgress(-1);
+        this.addActor(circPro);
     }
 }

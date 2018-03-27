@@ -109,14 +109,14 @@ public class TestView extends AbstractView {
             contentTable.row();
 
 
-            ListView listView = new ListView(ListViewType.VERTICAL, false);
+            final ListView listView = new ListView(ListViewType.VERTICAL, false);
             listView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
             listView.setEmptyString("EMPTY LISTVIEW EMPTY LISTVIEW EMPTY LISTVIEW ");
             contentTable.add(listView).width(new Value.Fixed(contentWidth)).height(new Value.Fixed(contentWidth)).pad(4);
             contentTable.row();
 
             int itemCount = 10;
-            DefaultListViewAdapter items = new DefaultListViewAdapter();
+            final DefaultListViewAdapter items = new DefaultListViewAdapter();
             for (int i = 0; i < itemCount; i++) {
                 MenuItem item = new MenuItem(i, i, "ITEM " + Integer.toString(i), null);
                 item.setTitle(item.getName());
@@ -124,8 +124,14 @@ public class TestView extends AbstractView {
                 items.add(item);
             }
 
-            listView.setAdapter(items);
+            listView.showWorkAnimationUntilSetAdapter();
 
+            CB.postOnGLThreadDelayed(5000, new NamedRunnable("") {
+                @Override
+                public void run() {
+                    listView.setAdapter(items);
+                }
+            });
         }
 
 
