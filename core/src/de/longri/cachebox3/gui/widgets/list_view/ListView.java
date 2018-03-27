@@ -158,11 +158,18 @@ public class ListView extends Catch_WidgetGroup {
             @Override
             public void sizeChanged() {
                 super.sizeChanged();
-
                 if (ListView.this.type == VERTICAL) {
-                    itemList.setWidth(ListView.this.getWidth());
+                    float width = ListView.this.getWidth();
+                    if (ListView.this.backgroundDrawable != null) {
+                        width -= ListView.this.backgroundDrawable.getLeftWidth() + ListView.this.backgroundDrawable.getRightWidth();
+                    }
+                    itemList.setWidth(width);
                 } else {
-                    itemList.setHeight(ListView.this.getHeight());
+                    float height = ListView.this.getHeight();
+                    if (ListView.this.backgroundDrawable != null) {
+                        height -= ListView.this.backgroundDrawable.getTopHeight() + ListView.this.backgroundDrawable.getBottomHeight();
+                    }
+                    itemList.setHeight(height);
                 }
             }
         };
@@ -272,15 +279,26 @@ public class ListView extends Catch_WidgetGroup {
     }
 
     private void setScrollPaneBounds() {
+
+
         float paneHeight = this.getHeight();
-        float paneYPos = 0;
+        float paneWidth = this.getWidth();
+
+        if (this.backgroundDrawable != null) {
+            paneWidth -= this.backgroundDrawable.getLeftWidth() + this.backgroundDrawable.getRightWidth();
+            paneHeight -= this.backgroundDrawable.getBottomHeight() + this.backgroundDrawable.getTopHeight();
+        }
+        float paneYPos = this.backgroundDrawable != null ? this.backgroundDrawable.getTopHeight() : 0;
         float completeSize = itemList.getCompleteSize();
         if (this.getHeight() > completeSize) {
             //set on Top
             paneHeight = completeSize;
             paneYPos = this.getHeight() - completeSize;
         }
-        scrollPane.setBounds(0, paneYPos, this.getWidth(), paneHeight);
+
+
+        scrollPane.setBounds(this.backgroundDrawable != null ? this.backgroundDrawable.getLeftWidth() : 0, paneYPos,
+                paneWidth, paneHeight);
         scrollPane.layout();
         setItemVisibleBounds();
     }

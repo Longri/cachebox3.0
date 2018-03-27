@@ -39,6 +39,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
+import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.activities.FileChooser;
@@ -49,6 +50,7 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.*;
+import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
@@ -88,6 +90,44 @@ public class TestView extends AbstractView {
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);
 
 
+        {// test ListView scissor
+
+            VisLabel label3 = new VisLabel("List View Scissor");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            ListView emptyListView = new ListView(ListViewType.VERTICAL, false);
+            emptyListView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
+            emptyListView.setEmptyString("EMPTY LISTVIEW EMPTY LISTVIEW EMPTY LISTVIEW ");
+            contentTable.add(emptyListView).width(new Value.Fixed(contentWidth)).height(new Value.Fixed(contentWidth / 2)).pad(4);
+            contentTable.row();
+
+
+            ListView listView = new ListView(ListViewType.VERTICAL, false);
+            listView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
+            listView.setEmptyString("EMPTY LISTVIEW EMPTY LISTVIEW EMPTY LISTVIEW ");
+            contentTable.add(listView).width(new Value.Fixed(contentWidth)).height(new Value.Fixed(contentWidth)).pad(4);
+            contentTable.row();
+
+            int itemCount = 10;
+            DefaultListViewAdapter items = new DefaultListViewAdapter();
+            for (int i = 0; i < itemCount; i++) {
+                MenuItem item = new MenuItem(i, i, "ITEM " + Integer.toString(i), null);
+                item.setTitle(item.getName());
+                item.pack();
+                items.add(item);
+            }
+
+            listView.setAdapter(items);
+
+        }
+
+
         {// test ScrollLabel
 
             VisLabel label3 = new VisLabel("Scroll Label");
@@ -123,108 +163,108 @@ public class TestView extends AbstractView {
         }
 
 
-        {// testSensor record
+//        {// testSensor record
+//
+//            VisLabel label3 = new VisLabel("Sensor record");
+//            Table lineTable = new Table();
+//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+//            lineTable = new Table();
+//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+//            lineTable.add(label3);
+//            contentTable.add(lineTable).left().expandX().fillX();
+//            contentTable.row();
+//
+//
+//            final VisTextButton recBtn = new VisTextButton(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
+//            recBtn.addListener(new ClickLongClickListener() {
+//                @Override
+//                public boolean clicked(InputEvent event, float x, float y) {
+//
+//                    if (CB.sensoerIO.isRecord()) {
+//                        CB.sensoerIO.stop();
+//                    } else {
+//                        CB.sensoerIO.start();
+//                    }
+//                    recBtn.setText(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
+//                    return true;
+//                }
+//
+//                @Override
+//                public boolean longClicked(Actor actor, float x, float y) {
+//                    return false;
+//                }
+//            });
+//
+//            final VisTextButton playBtn = new VisTextButton(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
+//            playBtn.addListener(new ClickLongClickListener() {
+//                @Override
+//                public boolean clicked(InputEvent event, float x, float y) {
+//                    if (CB.sensoerIO.isPlay()) {
+//                        CB.sensoerIO.stopPlay();
+//                    } else {
+//                        fileChooser.setDirectory(Gdx.files.absolute(CB.WorkPath));
+//                        fileChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
+//                            @Override
+//                            public void selected(FileHandle fileHandle) {
+//                                if (fileHandle != null) {
+//                                    CB.sensoerIO.play(fileHandle);
+//                                }
+//                            }
+//                        });
+//                        fileChooser.show();
+//                    }
+//                    playBtn.setText(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
+//                    return true;
+//                }
+//
+//                @Override
+//                public boolean longClicked(Actor actor, float x, float y) {
+//                    return false;
+//                }
+//            });
+//
+//            contentTable.add(recBtn);
+//            contentTable.row();
+//            contentTable.add(playBtn);
+//            contentTable.row();
+//
+//        }
 
-            VisLabel label3 = new VisLabel("Sensor record");
-            Table lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable.add(label3);
-            contentTable.add(lineTable).left().expandX().fillX();
-            contentTable.row();
 
-
-            final VisTextButton recBtn = new VisTextButton(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
-            recBtn.addListener(new ClickLongClickListener() {
-                @Override
-                public boolean clicked(InputEvent event, float x, float y) {
-
-                    if (CB.sensoerIO.isRecord()) {
-                        CB.sensoerIO.stop();
-                    } else {
-                        CB.sensoerIO.start();
-                    }
-                    recBtn.setText(CB.sensoerIO.isRecord() ? " Stop Record" : "Start Record");
-                    return true;
-                }
-
-                @Override
-                public boolean longClicked(Actor actor, float x, float y) {
-                    return false;
-                }
-            });
-
-            final VisTextButton playBtn = new VisTextButton(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
-            playBtn.addListener(new ClickLongClickListener() {
-                @Override
-                public boolean clicked(InputEvent event, float x, float y) {
-                    if (CB.sensoerIO.isPlay()) {
-                        CB.sensoerIO.stopPlay();
-                    } else {
-                        fileChooser.setDirectory(Gdx.files.absolute(CB.WorkPath));
-                        fileChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
-                            @Override
-                            public void selected(FileHandle fileHandle) {
-                                if (fileHandle != null) {
-                                    CB.sensoerIO.play(fileHandle);
-                                }
-                            }
-                        });
-                        fileChooser.show();
-                    }
-                    playBtn.setText(CB.sensoerIO.isPlay() ? "Stop play" : "Start play");
-                    return true;
-                }
-
-                @Override
-                public boolean longClicked(Actor actor, float x, float y) {
-                    return false;
-                }
-            });
-
-            contentTable.add(recBtn);
-            contentTable.row();
-            contentTable.add(playBtn);
-            contentTable.row();
-
-        }
-
-
-        {// test Map Info Bubble
-
-            AbstractCache cache = new MutableCache(0, 0);
-            cache.setSize(CacheSizes.regular);
-            cache.setType(CacheTypes.Traditional);
-            cache.setName("CacheName CacheName CacheName CacheName");
-            cache.setOwner("CacheOwner");
-            cache.setFavoritePoints(1345); //TODO debug!
-            cache.setFavorite(true);
-            cache.setNumTravelbugs(12);
-            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
-
-            ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
-
-            cacheListItem.setBackground(style.firstItem);
-
-            MapBubble mapBubble = new MapBubble(cache);
-            mapBubble.layout();
-            VisLabel label3 = new VisLabel("Map Info Bubble");
-            Table lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable = new Table();
-            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-            lineTable.add(label3);
-            contentTable.add(lineTable).left().expandX().fillX();
-            contentTable.row();
-
-            contentTable.add(cacheListItem).width(new Value.Fixed(contentWidth * 1.2f)).pad(5);
-            contentTable.row();
-
-            contentTable.add(mapBubble).pad(20).height(new Value.Fixed(mapBubble.getHeight()));
-            contentTable.row();
-
-        }
+//        {// test Map Info Bubble
+//
+//            AbstractCache cache = new MutableCache(0, 0);
+//            cache.setSize(CacheSizes.regular);
+//            cache.setType(CacheTypes.Traditional);
+//            cache.setName("CacheName CacheName CacheName CacheName");
+//            cache.setOwner("CacheOwner");
+//            cache.setFavoritePoints(1345); //TODO debug!
+//            cache.setFavorite(true);
+//            cache.setNumTravelbugs(12);
+//            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
+//
+//            ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
+//
+//            cacheListItem.setBackground(style.firstItem);
+//
+//            MapBubble mapBubble = new MapBubble(cache);
+//            mapBubble.layout();
+//            VisLabel label3 = new VisLabel("Map Info Bubble");
+//            Table lineTable = new Table();
+//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+//            lineTable = new Table();
+//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+//            lineTable.add(label3);
+//            contentTable.add(lineTable).left().expandX().fillX();
+//            contentTable.row();
+//
+//            contentTable.add(cacheListItem).width(new Value.Fixed(contentWidth * 1.2f)).pad(5);
+//            contentTable.row();
+//
+//            contentTable.add(mapBubble).pad(20).height(new Value.Fixed(mapBubble.getHeight()));
+//            contentTable.row();
+//
+//        }
 
 
         {// test FloatControl
