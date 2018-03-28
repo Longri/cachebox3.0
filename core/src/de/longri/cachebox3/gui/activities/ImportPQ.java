@@ -17,21 +17,23 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
+import de.longri.cachebox3.gui.widgets.AligmentLabel;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.list_view.ListView;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
+import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.ICancel;
@@ -64,32 +66,50 @@ public class ImportPQ extends ActivityBase {
         }
     };
     private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final PqListItemStyle itemStyle;
 
     public ImportPQ() {
         super("ImportPQ");
-        bOK = new CharSequenceButton(Translation.get("import"));
-        bCancel = new CharSequenceButton(Translation.get("cancel"));
-
-        bCancel.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                canceled.set(true);
-                ImportPQ.this.finish();
-            }
-        });
+        this.itemStyle = VisUI.getSkin().get(PqListItemStyle.class);
 
         float contentWidth = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4;
         float listHeight = Gdx.graphics.getHeight() / 2;
 
         pqList.setBackground(this.style.background);
-
         this.add(pqList).width(new Value.Fixed(contentWidth)).height(new Value.Fixed(listHeight));
         this.row();
+
+        // line for selected PQ's
+        Label.LabelStyle selectedLabelStyle = new Label.LabelStyle();
+        selectedLabelStyle.font = itemStyle.infoFont;
+        selectedLabelStyle.fontColor = itemStyle.infoFontColor;
+        final AligmentLabel selectedLabel = new AligmentLabel(Translation.get("PQnoSelection"), selectedLabelStyle, Align.left);
+        pqList.addSelectionChangedEventListner(new SelectionChangedEvent() {
+            @Override
+            public void selectionChanged() {
+                Array<ListViewItemInterface> selectedItems = pqList.getSelectedItems();
+                if (selectedItems == null) {
+                    selectedLabel.setText(Translation.get("PQnoSelection"));
+                } else {
+                    selectedLabel.setText(Translation.get("PQSelectionCount", Integer.toString(selectedItems.size)));
+                }
+            }
+        });
+        this.add(selectedLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
 
 
         // fill and add Buttons
         this.row().expandY().fillY().bottom();
         this.add();
         this.row();
+        bOK = new CharSequenceButton(Translation.get("import"));
+        bCancel = new CharSequenceButton(Translation.get("cancel"));
+        bCancel.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                canceled.set(true);
+                ImportPQ.this.finish();
+            }
+        });
         Table nestedTable2 = new Table();
         nestedTable2.defaults().pad(CB.scaledSizes.MARGIN).bottom();
         nestedTable2.add(bOK).bottom();
@@ -148,7 +168,7 @@ public class ImportPQ extends ActivityBase {
                             e.printStackTrace();
                         }
                     }
-                    itemArray.add(new PqListItem(idx++, pq));
+                    itemArray.add(new PqListItem(idx++, pq, itemStyle));
                 }
                 CB.postOnGlThread(new NamedRunnable("SetAdapter") {
                     @Override

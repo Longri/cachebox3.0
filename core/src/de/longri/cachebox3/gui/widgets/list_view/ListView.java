@@ -434,6 +434,11 @@ public class ListView extends Catch_WidgetGroup {
         return this.selectedItemList.first();
     }
 
+    public Array<ListViewItemInterface> getSelectedItems() {
+        if (this.selectedItemList.size == 0) return null;
+        return this.selectedItemList;
+    }
+
     public void setSelectedItemVisible(boolean withScroll) {
 
         if (scrollPane == null) return;

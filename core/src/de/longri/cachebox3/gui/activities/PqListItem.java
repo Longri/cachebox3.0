@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
@@ -36,14 +35,13 @@ public class PqListItem extends ListViewItem {
     private final PocketQuery.PQ pq;
     private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd");
     private final static DecimalFormat decimalFormat = new DecimalFormat("###.##");
-    private final PqListItemStyle style;
 
-    public PqListItem(int index, PocketQuery.PQ pq) {
+
+    public PqListItem(int index, PocketQuery.PQ pq, PqListItemStyle style) {
         super(index);
 
         this.setDebug(true);
 
-        style = VisUI.getSkin().get(PqListItemStyle.class);
         this.pq = pq;
 
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
@@ -63,12 +61,12 @@ public class PqListItem extends ListViewItem {
         this.add().expandX().fillX();
         this.row();
 
-        this.add(new AligmentLabel(Translation.get("PQsize"), infoLabelStyle, Align.left)).expandX().fillX();
+        this.add(new AligmentLabel(Translation.get("size"), infoLabelStyle, Align.left)).expandX().fillX();
         this.add(new AligmentLabel(decimalFormat.format(pq.sizeMB) + " MB", infoLabelStyle, Align.left)).expandX().fillX();
         this.add().expandX().fillX();
         this.row();
 
-        this.add(new AligmentLabel(Translation.get("PQcount"), infoLabelStyle, Align.left)).expandX().fillX();
+        this.add(new AligmentLabel(Translation.get("count"), infoLabelStyle, Align.left)).expandX().fillX();
         this.add(new AligmentLabel(Integer.toString(pq.cacheCount), infoLabelStyle, Align.left)).expandX().fillX();
         this.add().expandX().fillX();
         this.row();
@@ -81,13 +79,13 @@ public class PqListItem extends ListViewItem {
                 if (style.readyFontColor != null) colorLabelStyle.fontColor = style.readyFontColor;
                 if (style.redyBackgroundColor != null)
                     colorLabelStyle.background = new ColorDrawable(style.redyBackgroundColor);
-                this.add(new AligmentLabel(Translation.get("PQreadyImported"), colorLabelStyle, Align.left)).expandX().fillX();
+                this.add(new AligmentLabel(Translation.get("ready"), colorLabelStyle, Align.left)).expandX().fillX();
             } else {
                 Label.LabelStyle colorLabelStyle = new Label.LabelStyle(infoLabelStyle);
                 if (style.newFontColor != null) colorLabelStyle.fontColor = style.newFontColor;
                 if (style.newBackgroundColor != null)
                     colorLabelStyle.background = new ColorDrawable(style.newBackgroundColor);
-                this.add(new AligmentLabel(Translation.get("PQnew"), colorLabelStyle, Align.left)).expandX().fillX();
+                this.add(new AligmentLabel(Translation.get("new"), colorLabelStyle, Align.left)).expandX().fillX();
             }
         } else {
             Label.LabelStyle colorLabelStyle = new Label.LabelStyle(infoLabelStyle);
