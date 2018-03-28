@@ -37,12 +37,9 @@ public abstract class GetRequest {
     final static String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
 
     protected final ICancel iCancel;
-    protected final String gcApiKey;
     protected boolean waitLimit = true;
 
-    public GetRequest(String gcApiKey, ICancel iCancel) {
-        if (gcApiKey == null || gcApiKey.isEmpty()) throw new RuntimeException("ApiKey is empty, can't get any result");
-        this.gcApiKey = gcApiKey;
+    public GetRequest( ICancel iCancel) {
         this.iCancel = iCancel;
     }
 

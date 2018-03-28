@@ -1,9 +1,25 @@
+/*
+ * Copyright (C) 2018 team-cachebox.de
+ *
+ * Licensed under the : GNU General Public License (GPL);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.gnu.org/licenses/gpl.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser;
 
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GetPocketQueryList;
+import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -22,7 +38,7 @@ class PqListParserTest {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPqListResult.json");
         PqListParser parser = new PqListParser(null);
 
-        Array<GetPocketQueryList.PQ> pqList = new Array<>();
+        Array<PocketQuery> pqList = new Array<>();
 
         ApiResultState result = parser.parsePqList(stream, pqList);
 
@@ -30,7 +46,7 @@ class PqListParserTest {
         assertThat("PocketQuery List count must be 6", pqList.size == 6);
 
         for (int i = 0; i < pqList.size; i++) {
-            GetPocketQueryList.PQ pq = pqList.get(i);
+            PocketQuery pq = pqList.get(i);
             switch (i) {
                 case 0:
                     assertThat("wrong value", pq.guid.equals("a1244aab-f585-4648-8dea-f9b979b533be"));

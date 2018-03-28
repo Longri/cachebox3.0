@@ -16,43 +16,50 @@
 package de.longri.cachebox3.apis.groundspeak_api;
 
 import com.badlogic.gdx.Net;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.GetPqParser;
 import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.PqListParser;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.ICancel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 
 /**
- * Created by Longri on 26.03.2018.
+ * Created by Longri on 28.03.2018.
  */
-public class GetPocketQueryList extends GetRequest {
-    final static Logger log = LoggerFactory.getLogger(GetPocketQueryList.class);
+public class GetPocketQuery extends GetRequest {
 
-    private final Array<PocketQuery> pqList;
     private final String gcApiKey;
+    private final String guid;
+    private final FileHandle localFile;
+    private final PocketQuery.IncrementProgressBytesListener listener;
 
-    public GetPocketQueryList(String gcApiKey, ICancel iCancel, Array<PocketQuery> pqList) {
+    GetPocketQuery(String gcApiKey, String guid, FileHandle localFile,
+                   PocketQuery.IncrementProgressBytesListener listener, ICancel iCancel) {
         super(iCancel);
-        this.pqList = pqList;
         this.gcApiKey = gcApiKey;
+        this.guid = guid;
+        this.localFile = localFile;
+        this.listener = listener;
     }
 
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
-        //parse stream and put PocketQuery to pqList
-        // for debug: String resultAsString = httpResponse.getResultAsString();
+
+        // for debug:
+        String resultAsString = httpResponse.getResultAsString();
         InputStream stream = httpResponse.getResultAsStream();
-        PqListParser parser = new PqListParser(this.iCancel);
-        ApiResultState state = parser.parsePqList(stream, this.pqList);
+        GetPqParser parser = new GetPqParser(this.iCancel);
+        ApiResultState state = parser.parse(stream, this.localFile,this.listener);
         readyCallBack.callBack(state);
     }
 
     @Override
     protected String getCallUrl() {
-        return "GetPocketQueryList?AccessToken=" + this.gcApiKey + "&format=json";
+        return "GetPocketQueryZippedFile?accessToken="
+                + this.gcApiKey
+                + "&pocketQueryGuid="
+                + this.guid
+                + "&format=json";
     }
-
 }

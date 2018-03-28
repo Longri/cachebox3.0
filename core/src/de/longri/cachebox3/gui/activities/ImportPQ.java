@@ -208,7 +208,7 @@ public class ImportPQ extends ActivityBase {
             public void run() {
                 for (ListViewItemInterface item : selectedItems) {
                     PqListItem pqListItem = (PqListItem) item;
-                    FileHandle downloadedFile = pqListItem.getPocketQuery().download(pqFolder, new PocketQuery.IncrementProgressBytesListener() {
+                    FileHandle downloadedFile = pqListItem.getPocketQuery().download(pqFolder, iCancel, new PocketQuery.IncrementProgressBytesListener() {
                         @Override
                         public void increment(int bytes) {
                             downloadProgress.setValue(readyDownloadBytes.addAndGet(bytes));
