@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api;
 
+import com.badlogic.gdx.files.FileHandle;
+
 import java.util.Date;
 
 /**
@@ -28,4 +30,14 @@ public class PocketQuery {
     public Date lastImported;
     public double sizeMB;
     public boolean downloadAvailable = false;
+
+
+    public interface IncrementProgressBytesListener {
+        void increment(int bytes);
+    }
+
+
+    public FileHandle download(FileHandle folder, final IncrementProgressBytesListener listener) {
+        return null;
+    }
 }

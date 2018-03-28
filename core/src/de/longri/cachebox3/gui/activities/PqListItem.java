@@ -116,4 +116,8 @@ class PqListItem extends ListViewItem {
     public int getCount() {
         return this.pq.cacheCount;
     }
+
+    public PocketQuery getPocketQuery() {
+        return this.pq;
+    }
 }

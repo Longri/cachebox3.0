@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -33,6 +34,7 @@ import de.longri.cachebox3.gui.widgets.AligmentLabel;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.ProgressBar;
 import de.longri.cachebox3.gui.widgets.list_view.*;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.ICancel;
@@ -46,6 +48,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -170,28 +173,61 @@ public class ImportPQ extends ActivityBase {
 
     private void importNow() {
         // get import information
-        int downloadPqCount = 0, downloadedPqs = 0, extractedPQs = 0, downloadBytes = 0, readyDownloadBytes = 0,
-                importCache = 0, readyImportedCaches = 0, corrected = 0, mysteries = 0;
+        final AtomicInteger downloadPqCount = new AtomicInteger(0),
+                downloadedPqs = new AtomicInteger(0), extractedPQs = new AtomicInteger(0),
+                downloadBytes = new AtomicInteger(0), readyDownloadBytes = new AtomicInteger(0),
+                importCache = new AtomicInteger(0), readyImportedCaches = new AtomicInteger(0),
+                corrected = new AtomicInteger(0), mysteries = new AtomicInteger(0);
 
-        Array<ListViewItemInterface> selectedItems = pqList.getSelectedItems();
+        final Array<ListViewItemInterface> selectedItems = pqList.getSelectedItems();
         for (ListViewItemInterface item : selectedItems) {
             PqListItem pqListItem = (PqListItem) item;
-            downloadPqCount++;
-            downloadBytes += pqListItem.getSize() * 1048576.0;
-            importCache += pqListItem.getCount();
+            downloadPqCount.incrementAndGet();
+            downloadBytes.addAndGet((int) (pqListItem.getSize() * 1048576.0));
+            importCache.addAndGet(pqListItem.getCount());
         }
 
         //set initial progress values
-        downloadLabel.setText(Translation.get("downloaded", "0", Integer.toString(downloadPqCount)));
-        downloadProgress.setRange(0, downloadBytes);
+        downloadLabel.setText(Translation.get("downloaded", "0", Integer.toString(downloadPqCount.get())));
+        downloadProgress.setRange(0, downloadBytes.get());
 
-        extractLabel.setText(Translation.get("extracted", "0", Integer.toString(downloadPqCount)));
-        extractProgress.setRange(0, downloadPqCount);
+        extractLabel.setText(Translation.get("extracted", "0", Integer.toString(downloadPqCount.get())));
+        extractProgress.setRange(0, downloadPqCount.get());
 
-        importLabel.setText(Translation.get("imported", "0", Integer.toString(importCache)));
-        importProgress.setRange(0, importCache);
+        importLabel.setText(Translation.get("imported", "0", Integer.toString(importCache.get())));
+        importProgress.setRange(0, importCache.get());
 
         correctedLabel.setText(Translation.get("correctedCoords", "0", "0"));
+
+
+        //start download async
+        final FileHandle pqFolder = Gdx.files.absolute(Config.PocketQueryFolder.getValue());
+        final Array<FileHandle> downloadedFiles = new Array<>();
+        CB.postAsync(new NamedRunnable("Download PQs") {
+            @Override
+            public void run() {
+                for (ListViewItemInterface item : selectedItems) {
+                    PqListItem pqListItem = (PqListItem) item;
+                    FileHandle downloadedFile = pqListItem.getPocketQuery().download(pqFolder, new PocketQuery.IncrementProgressBytesListener() {
+                        @Override
+                        public void increment(int bytes) {
+                            downloadProgress.setValue(readyDownloadBytes.addAndGet(bytes));
+                        }
+                    });
+                    if (downloadedFile != null) {
+                        downloadedFiles.add(downloadedFile);
+
+                        //update progress message
+                        downloadLabel.setText(Translation.get("downloaded",
+                                Integer.toString(downloadedPqs.incrementAndGet()),
+                                Integer.toString(downloadPqCount.get())));
+
+                    }
+                }
+            }
+        });
+
+
     }
 
     @Override
