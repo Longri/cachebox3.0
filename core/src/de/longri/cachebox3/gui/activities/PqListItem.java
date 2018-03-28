@@ -27,23 +27,21 @@ import de.longri.cachebox3.translation.Translation;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Longri on 26.03.2018.
  */
-public class PqListItem extends ListViewItem {
+class PqListItem extends ListViewItem {
     private final PocketQuery.PQ pq;
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd");
+    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private final static DecimalFormat decimalFormat = new DecimalFormat("###.##");
 
-
-    public PqListItem(int index, PocketQuery.PQ pq, PqListItemStyle style) {
+    PqListItem(int index, PocketQuery.PQ pq, PqListItemStyle style) {
         super(index);
 
-        this.setDebug(true);
-
         this.pq = pq;
-
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
         nameLabelStyle.font = style.nameFont;
         nameLabelStyle.fontColor = style.nameFontColor;
@@ -97,6 +95,25 @@ public class PqListItem extends ListViewItem {
 
         }
         this.row();
+    }
 
+    public Date getCreationDate() {
+        return this.pq.lastGenerated;
+    }
+
+    public String getName() {
+        return this.pq.name;
+    }
+
+    public String getUID() {
+        return this.pq.guid;
+    }
+
+    public double getSize() {
+        return this.pq.sizeMB;
+    }
+
+    public int getCount() {
+        return this.pq.cacheCount;
     }
 }

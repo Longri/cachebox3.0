@@ -57,7 +57,7 @@ public class ImportPQ extends ActivityBase {
     private final static Logger log = LoggerFactory.getLogger(ImportPQ.class);
     private final ListView pqList = new ListView(ListViewType.VERTICAL, false);
     private final CharSequenceButton bOK, bCancel;
-    private final Array<PqListItem> itemArray = new Array();
+    private final DefaultListViewAdapter itemArray = new DefaultListViewAdapter();
     private final AtomicBoolean canceled = new AtomicBoolean(false);
     private final ICancel iCancel = new ICancel() {
         @Override
@@ -90,8 +90,10 @@ public class ImportPQ extends ActivityBase {
                 Array<ListViewItemInterface> selectedItems = pqList.getSelectedItems();
                 if (selectedItems == null) {
                     selectedLabel.setText(Translation.get("PQnoSelection"));
+                    bOK.setDisabled(true);
                 } else {
                     selectedLabel.setText(Translation.get("PQSelectionCount", Integer.toString(selectedItems.size)));
+                    bOK.setDisabled(false);
                 }
             }
         });
@@ -104,6 +106,7 @@ public class ImportPQ extends ActivityBase {
         this.row();
         bOK = new CharSequenceButton(Translation.get("import"));
         bCancel = new CharSequenceButton(Translation.get("cancel"));
+        bOK.setDisabled(true);
         bCancel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 canceled.set(true);
@@ -168,28 +171,16 @@ public class ImportPQ extends ActivityBase {
                             e.printStackTrace();
                         }
                     }
-                    itemArray.add(new PqListItem(idx++, pq, itemStyle));
+
+                    //add only PQ's their download available
+                    if (pq.downloadAvailable)
+                        itemArray.add(new PqListItem(idx++, pq, itemStyle));
                 }
                 CB.postOnGlThread(new NamedRunnable("SetAdapter") {
                     @Override
                     public void run() {
                         if (canceled.get()) return;
-                        pqList.setAdapter(new ListViewAdapter() {
-                            @Override
-                            public int getCount() {
-                                return itemArray.size;
-                            }
-
-                            @Override
-                            public ListViewItem getView(int index) {
-                                return itemArray.get(index);
-                            }
-
-                            @Override
-                            public void update(ListViewItem view) {
-                                //do nothing
-                            }
-                        });
+                        pqList.setAdapter(itemArray);
                     }
                 });
             }
