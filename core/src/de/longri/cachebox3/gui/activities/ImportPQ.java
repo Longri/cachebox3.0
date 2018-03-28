@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -69,13 +68,13 @@ public class ImportPQ extends ActivityBase {
     };
     private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     private final PqListItemStyle itemStyle;
-    final AligmentLabel downloadLabel;
-    final ProgressBar downloadProgress;
-    final AligmentLabel extractLabel;
-    final ProgressBar extractProgress;
-    final AligmentLabel importLabel;
-    final ProgressBar importProgress;
-    final AligmentLabel correctedLabel;
+    private final AligmentLabel downloadLabel;
+    private final ProgressBar downloadProgress;
+    private final AligmentLabel extractLabel;
+    private final ProgressBar extractProgress;
+    private final AligmentLabel importLabel;
+    private final ProgressBar importProgress;
+    private final AligmentLabel correctedLabel;
 
     public ImportPQ() {
         super("ImportPQ");
@@ -111,7 +110,7 @@ public class ImportPQ extends ActivityBase {
         this.row();
 
         //download progress
-        downloadLabel = new AligmentLabel(Translation.get("downloaded", "?","?"), selectedLabelStyle, Align.left);
+        downloadLabel = new AligmentLabel(Translation.get("downloaded", "?", "?"), selectedLabelStyle, Align.left);
         downloadProgress = new ProgressBar(0, 0, 1, false, "default");
         this.add(downloadLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
         this.row();
@@ -121,7 +120,7 @@ public class ImportPQ extends ActivityBase {
         this.row();
 
         //extract progress
-        extractLabel = new AligmentLabel(Translation.get("extracted", "?","?"), selectedLabelStyle, Align.left);
+        extractLabel = new AligmentLabel(Translation.get("extracted", "?", "?"), selectedLabelStyle, Align.left);
         extractProgress = new ProgressBar(0, 0, 1, false, "default");
         this.add(extractLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
         this.row();
@@ -131,7 +130,7 @@ public class ImportPQ extends ActivityBase {
         this.row();
 
         //import progress
-        importLabel = new AligmentLabel(Translation.get("imported", "?","?"), selectedLabelStyle, Align.left);
+        importLabel = new AligmentLabel(Translation.get("imported", "?", "?"), selectedLabelStyle, Align.left);
         importProgress = new ProgressBar(0, 0, 1, false, "default");
         this.add(importLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
         this.row();
@@ -141,7 +140,7 @@ public class ImportPQ extends ActivityBase {
         this.row();
 
         //corrected progress
-        correctedLabel = new AligmentLabel(Translation.get("correctedCoords", "?","?"), selectedLabelStyle, Align.left);
+        correctedLabel = new AligmentLabel(Translation.get("correctedCoords", "?", "?"), selectedLabelStyle, Align.left);
         this.add(correctedLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
         this.row();
         this.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4));
@@ -150,6 +149,12 @@ public class ImportPQ extends ActivityBase {
         // fill and add Buttons
         this.row();
         bOK = new CharSequenceButton(Translation.get("import"));
+        bOK.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                bOK.setDisabled(true);
+                importNow();
+            }
+        });
         bCancel = new CharSequenceButton(Translation.get("cancel"));
         bOK.setDisabled(true);
         bCancel.addListener(new ClickListener() {
@@ -163,6 +168,32 @@ public class ImportPQ extends ActivityBase {
         nestedTable2.add(bOK).bottom();
         nestedTable2.add(bCancel).bottom();
         this.add(nestedTable2).colspan(5);
+    }
+
+    private void importNow() {
+        // get import information
+        int downloadPqCount = 0, downloadedPqs = 0, extractedPQs = 0, downloadBytes = 0, readyDownloadBytes = 0,
+                importCache = 0, readyImportedCaches = 0, corrected = 0, mysteries = 0;
+
+        Array<ListViewItemInterface> selectedItems = pqList.getSelectedItems();
+        for (ListViewItemInterface item : selectedItems) {
+            PqListItem pqListItem = (PqListItem) item;
+            downloadPqCount++;
+            downloadBytes += pqListItem.getSize() * 1048576.0;
+            importCache += pqListItem.getCount();
+        }
+
+        //set initial progress values
+        downloadLabel.setText(Translation.get("downloaded", "0", Integer.toString(downloadPqCount)));
+        downloadProgress.setRange(0, downloadBytes);
+
+        extractLabel.setText(Translation.get("extracted", "0", Integer.toString(downloadPqCount)));
+        extractProgress.setRange(0, downloadPqCount);
+
+        importLabel.setText(Translation.get("imported", "0", Integer.toString(importCache)));
+        importProgress.setRange(0, importCache);
+
+        correctedLabel.setText(Translation.get("correctedCoords", "0", "0"));
     }
 
     @Override
