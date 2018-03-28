@@ -25,9 +25,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
-import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
+import de.longri.cachebox3.apis.groundspeak_api.*;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
@@ -86,7 +84,7 @@ public class ImportPQ extends ActivityBase {
         this.add(pqList).width(new Value.Fixed(contentWidth)).expandY().fillY();
         this.row();
 
-        // line for selected PQ's
+        // line for selected PocketQuery's
         Label.LabelStyle selectedLabelStyle = new Label.LabelStyle();
         selectedLabelStyle.font = itemStyle.infoFont;
         selectedLabelStyle.fontColor = itemStyle.infoFontColor;
@@ -213,8 +211,8 @@ public class ImportPQ extends ActivityBase {
             @Override
             public void run() {
                 itemArray.clear();
-                Array<PocketQuery.PQ> list = new Array<>();
-                PocketQuery pocketQuery = new PocketQuery(GroundspeakAPI.getAccessToken(true), iCancel, list);
+                Array<PocketQuery> list = new Array<>();
+                GetPocketQueryList pocketQuery = new GetPocketQueryList(GroundspeakAPI.getAccessToken(true), iCancel, list);
 
                 final AtomicBoolean WAIT = new AtomicBoolean(true);
                 final ApiResultState[] state = new ApiResultState[1];
@@ -234,7 +232,7 @@ public class ImportPQ extends ActivityBase {
                 if (canceled.get()) return;
 
                 int idx = 0;
-                for (PocketQuery.PQ pq : list) {
+                for (PocketQuery pq : list) {
                     //Check last import
                     GdxSqliteCursor cursor = Database.Data.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
                     if (cursor != null) {
@@ -247,7 +245,7 @@ public class ImportPQ extends ActivityBase {
                         }
                     }
 
-                    //add only PQ's their download available
+                    //add only PocketQuery's their download available
                     if (pq.downloadAvailable)
                         itemArray.add(new PqListItem(idx++, pq, itemStyle));
                 }

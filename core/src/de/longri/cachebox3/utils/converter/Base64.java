@@ -1155,7 +1155,7 @@ public class Base64 {
     } // end decode
 
     /*
-     * This reads the bytes from an InputStream and writes the result directly to a file Only for API-PQ-Download!!!
+     * This reads the bytes from an InputStream and writes the result directly to a file Only for API-PocketQuery-Download!!!
      */
     public static boolean decodeToStream(String data, int firstPos, int lastPos, BufferedOutputStream os) throws java.io.IOException {
         if (os == null) {
@@ -1216,7 +1216,7 @@ public class Base64 {
     } // end decode
 
     /*
-     * This reads the bytes from an InputStream and writes the result directly to a file Only for API-PQ-Download!!! buff : Buffer fuer das
+     * This reads the bytes from an InputStream and writes the result directly to a file Only for API-PocketQuery-Download!!! buff : Buffer fuer das
      * Einlesen buffLen : Max. Anzahl an Bytes im Buffer buffCount : Aktuell im Buffer enthaltene g�ltige Bytes buffPos : Aktuelle Position
      * im Buffer
      */

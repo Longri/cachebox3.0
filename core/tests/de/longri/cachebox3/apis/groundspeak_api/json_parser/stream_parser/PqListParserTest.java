@@ -3,7 +3,7 @@ package de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
+import de.longri.cachebox3.apis.groundspeak_api.GetPocketQueryList;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -22,15 +22,15 @@ class PqListParserTest {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPqListResult.json");
         PqListParser parser = new PqListParser(null);
 
-        Array<PocketQuery.PQ> pqList = new Array<>();
+        Array<GetPocketQueryList.PQ> pqList = new Array<>();
 
         ApiResultState result = parser.parsePqList(stream, pqList);
 
         assertThat("Result must be ApiResultState.IO", result == ApiResultState.IO);
-        assertThat("PQ List count must be 6", pqList.size == 6);
+        assertThat("PocketQuery List count must be 6", pqList.size == 6);
 
         for (int i = 0; i < pqList.size; i++) {
-            PocketQuery.PQ pq = pqList.get(i);
+            GetPocketQueryList.PQ pq = pqList.get(i);
             switch (i) {
                 case 0:
                     assertThat("wrong value", pq.guid.equals("a1244aab-f585-4648-8dea-f9b979b533be"));

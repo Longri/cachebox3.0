@@ -41,8 +41,8 @@ class PocketQueryTest {
     void getPqListOnlineTest() throws InterruptedException {
         if (isDummy) return;
 
-        Array<PocketQuery.PQ> pqList = new Array<>();
-        PocketQuery pq = new PocketQuery(apiKey, null, pqList);
+        Array<GetPocketQueryList.PQ> pqList = new Array<>();
+        GetPocketQueryList pq = new GetPocketQueryList(apiKey, null, pqList);
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
         final ApiResultState[] state = new ApiResultState[1];
@@ -59,6 +59,6 @@ class PocketQueryTest {
         }
 
         assertThat("Result state should be IO", state[0] == ApiResultState.IO);
-        assertThat("PQ list size should >0", pqList.size > 0);
+        assertThat("PocketQuery list size should >0", pqList.size > 0);
     }
 }

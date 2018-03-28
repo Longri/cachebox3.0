@@ -86,7 +86,7 @@ public class Category extends ArrayList<GpxFilename> implements Comparable<Categ
     }
 
     public String GpxFilenameWoNumber() {
-        // Nummer der PQ weglassen, wenn dahinter noch eine Bezeichnung kommt.
+        // Nummer der PocketQuery weglassen, wenn dahinter noch eine Bezeichnung kommt.
         String name = GpxFilename;
         int pos = name.indexOf('_');
         if (pos < 0) return name;

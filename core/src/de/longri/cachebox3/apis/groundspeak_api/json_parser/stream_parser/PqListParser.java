@@ -42,7 +42,7 @@ public class PqListParser {
 
     private boolean pocketQueryList = false;
 
-    public ApiResultState parsePqList(InputStream stream, final Array<PocketQuery.PQ> pqList) {
+    public ApiResultState parsePqList(InputStream stream, final Array<PocketQuery> pqList) {
         final ApiResultState[] resultState = {ApiResultState.IO};
 
         // Parse JSON Result
@@ -73,9 +73,9 @@ public class PqListParser {
             @Override
             public void pop() {
                 if (pocketQueryList) {
-                    // new PQ
+                    // new PocketQuery
                     if (name != null) {
-                        PocketQuery.PQ newPQ = new PocketQuery.PQ();
+                        PocketQuery newPQ = new PocketQuery();
                         newPQ.name = name;
                         newPQ.guid = guid;
                         newPQ.cacheCount = cacheCount;
