@@ -33,6 +33,7 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.ProgressBar;
 import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -46,6 +47,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -65,18 +67,24 @@ public class ImportPQ extends ActivityBase {
             return canceled.get();
         }
     };
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     private final PqListItemStyle itemStyle;
+    final AligmentLabel downloadLabel;
+    final ProgressBar downloadProgress;
+    final AligmentLabel extractLabel;
+    final ProgressBar extractProgress;
+    final AligmentLabel importLabel;
+    final ProgressBar importProgress;
+    final AligmentLabel correctedLabel;
 
     public ImportPQ() {
         super("ImportPQ");
         this.itemStyle = VisUI.getSkin().get(PqListItemStyle.class);
 
         float contentWidth = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4;
-        float listHeight = Gdx.graphics.getHeight() / 2;
 
         pqList.setBackground(this.style.background);
-        this.add(pqList).width(new Value.Fixed(contentWidth)).height(new Value.Fixed(listHeight));
+        this.add(pqList).width(new Value.Fixed(contentWidth)).expandY().fillY();
         this.row();
 
         // line for selected PQ's
@@ -98,11 +106,48 @@ public class ImportPQ extends ActivityBase {
             }
         });
         this.add(selectedLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
+        this.row();
+        this.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4));
+        this.row();
 
+        //download progress
+        downloadLabel = new AligmentLabel(Translation.get("downloaded", "?","?"), selectedLabelStyle, Align.left);
+        downloadProgress = new ProgressBar(0, 0, 1, false, "default");
+        this.add(downloadLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
+        this.row();
+        this.add(downloadProgress).expandX().fillX();
+        this.row();
+        this.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2));
+        this.row();
+
+        //extract progress
+        extractLabel = new AligmentLabel(Translation.get("extracted", "?","?"), selectedLabelStyle, Align.left);
+        extractProgress = new ProgressBar(0, 0, 1, false, "default");
+        this.add(extractLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
+        this.row();
+        this.add(extractProgress).expandX().fillX();
+        this.row();
+        this.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2));
+        this.row();
+
+        //import progress
+        importLabel = new AligmentLabel(Translation.get("imported", "?","?"), selectedLabelStyle, Align.left);
+        importProgress = new ProgressBar(0, 0, 1, false, "default");
+        this.add(importLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
+        this.row();
+        this.add(importProgress).expandX().fillX();
+        this.row();
+        this.add().height(new Value.Fixed(CB.scaledSizes.MARGINx2));
+        this.row();
+
+        //corrected progress
+        correctedLabel = new AligmentLabel(Translation.get("correctedCoords", "?","?"), selectedLabelStyle, Align.left);
+        this.add(correctedLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
+        this.row();
+        this.add().height(new Value.Fixed(CB.scaledSizes.MARGINx4));
+        this.row();
 
         // fill and add Buttons
-        this.row().expandY().fillY().bottom();
-        this.add();
         this.row();
         bOK = new CharSequenceButton(Translation.get("import"));
         bCancel = new CharSequenceButton(Translation.get("cancel"));
@@ -165,8 +210,7 @@ public class ImportPQ extends ActivityBase {
                         cursor.moveToFirst();
                         String dateTimeString = cursor.getString(2);
                         try {
-                            Date date = iso8601Format.parse(dateTimeString);
-                            pq.lastImported = date;
+                            pq.lastImported = iso8601Format.parse(dateTimeString);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }

@@ -121,43 +121,45 @@ public class ProgressBar extends VisProgressBar {
                 positionHeight -= bgTopHeight + bg.getBottomHeight();
             }
 
-            float knobHeightHalf = 0;
-            if (min != max) {
-                if (knob == null) {
-                    knobHeightHalf = knobBefore == null ? 0 : getKnobMinHeight(knobBefore) * 0.5f;
-                    position = (positionHeight - knobHeightHalf) * percent;
-                    position = Math.min(positionHeight - knobHeightHalf, position);
-                } else {
-                    knobHeightHalf = knobHeight * 0.5f;
-                    position = (positionHeight - knobHeight) * percent;
-                    position = Math.min(positionHeight - knobHeight, position) + bg.getBottomHeight();
+            if (this.getMinValue() != this.getMaxValue()) {
+                float knobHeightHalf = 0;
+                if (min != max) {
+                    if (knob == null) {
+                        knobHeightHalf = knobBefore == null ? 0 : getKnobMinHeight(knobBefore) * 0.5f;
+                        position = (positionHeight - knobHeightHalf) * percent;
+                        position = Math.min(positionHeight - knobHeightHalf, position);
+                    } else {
+                        knobHeightHalf = knobHeight * 0.5f;
+                        position = (positionHeight - knobHeight) * percent;
+                        position = Math.min(positionHeight - knobHeight, position) + bg.getBottomHeight();
+                    }
+                    position = Math.max(0, position);
                 }
-                position = Math.max(0, position);
-            }
 
-            if (knobBefore != null) {
-                float offset = 0;
-                if (bg != null) offset = bgTopHeight;
-                if (round)
-                    knobBefore.draw(batch, Math.round(x + (width - getDrawableMinWidth(knobBefore)) * 0.5f), Math.round(y + offset), Math.round(getDrawableMinWidth(knobBefore)),
-                            Math.round(position + knobHeightHalf));
-                else
-                    knobBefore.draw(batch, x + (width - getDrawableMinWidth(knobBefore)) * 0.5f, y + offset, getDrawableMinWidth(knobBefore),
-                            position + knobHeightHalf);
-            }
-            if (knobAfter != null) {
-                if (round)
-                    knobAfter.draw(batch, Math.round(x + (width - getDrawableMinWidth(knobAfter)) * 0.5f), Math.round(y + position + knobHeightHalf),
-                            Math.round(getDrawableMinWidth(knobAfter)), Math.round(height - position - knobHeightHalf));
-                else
-                    knobAfter.draw(batch, x + (width - getDrawableMinWidth(knobAfter)) * 0.5f, y + position + knobHeightHalf,
-                            getDrawableMinWidth(knobAfter), height - position - knobHeightHalf);
-            }
-            if (knob != null) {
-                if (round)
-                    knob.draw(batch, Math.round(x + (width - knobWidth) * 0.5f), Math.round(y + position), Math.round(knobWidth), Math.round(knobHeight));
-                else
-                    knob.draw(batch, x + (width - knobWidth) * 0.5f, y + position, knobWidth, knobHeight);
+                if (knobBefore != null) {
+                    float offset = 0;
+                    if (bg != null) offset = bgTopHeight;
+                    if (round)
+                        knobBefore.draw(batch, Math.round(x + (width - getDrawableMinWidth(knobBefore)) * 0.5f), Math.round(y + offset), Math.round(getDrawableMinWidth(knobBefore)),
+                                Math.round(position + knobHeightHalf));
+                    else
+                        knobBefore.draw(batch, x + (width - getDrawableMinWidth(knobBefore)) * 0.5f, y + offset, getDrawableMinWidth(knobBefore),
+                                position + knobHeightHalf);
+                }
+                if (knobAfter != null) {
+                    if (round)
+                        knobAfter.draw(batch, Math.round(x + (width - getDrawableMinWidth(knobAfter)) * 0.5f), Math.round(y + position + knobHeightHalf),
+                                Math.round(getDrawableMinWidth(knobAfter)), Math.round(height - position - knobHeightHalf));
+                    else
+                        knobAfter.draw(batch, x + (width - getDrawableMinWidth(knobAfter)) * 0.5f, y + position + knobHeightHalf,
+                                getDrawableMinWidth(knobAfter), height - position - knobHeightHalf);
+                }
+                if (knob != null) {
+                    if (round)
+                        knob.draw(batch, Math.round(x + (width - knobWidth) * 0.5f), Math.round(y + position), Math.round(knobWidth), Math.round(knobHeight));
+                    else
+                        knob.draw(batch, x + (width - knobWidth) * 0.5f, y + position, knobWidth, knobHeight);
+                }
             }
         } else {
             float positionWidth = width;
@@ -172,43 +174,45 @@ public class ProgressBar extends VisProgressBar {
                 positionWidth -= bgLeftWidth + bg.getRightWidth();
             }
 
-            float knobWidthHalf = 0;
-            if (min != max) {
-                if (knob == null) {
-                    knobWidthHalf = knobBefore == null ? 0 : getDrawableMinWidth(knobBefore) /** 0.5f*/;
-                    position = (positionWidth - knobWidthHalf) * percent;
-                    position = Math.min(positionWidth - knobWidthHalf, position);
-                } else {
-                    knobWidthHalf = knobWidth * 0.5f;
-                    position = (positionWidth - knobWidth) * percent;
-                    position = Math.min(positionWidth - knobWidth, position) + bgLeftWidth;
+            if (this.getMinValue() != this.getMaxValue()) {
+                float knobWidthHalf = 0;
+                if (min != max) {
+                    if (knob == null) {
+                        knobWidthHalf = knobBefore == null ? 0 : getDrawableMinWidth(knobBefore) /** 0.5f*/;
+                        position = (positionWidth - knobWidthHalf) * percent;
+                        position = Math.min(positionWidth - knobWidthHalf, position);
+                    } else {
+                        knobWidthHalf = knobWidth * 0.5f;
+                        position = (positionWidth - knobWidth) * percent;
+                        position = Math.min(positionWidth - knobWidth, position) + bgLeftWidth;
+                    }
+                    position = Math.max(0, position);
                 }
-                position = Math.max(0, position);
-            }
 
-            if (knobBefore != null) {
-                float offset = 0;
-                if (bg != null) offset = bgLeftWidth;
-                if (round)
-                    knobBefore.draw(batch, Math.round(x + offset), Math.round(y + (height - getKnobMinHeight(knobBefore)) * 0.5f),
-                            Math.round(position + knobWidthHalf), Math.round(getKnobMinHeight(knobBefore)));
-                else
-                    knobBefore.draw(batch, x + offset, y + (height - getKnobMinHeight(knobBefore)) * 0.5f,
-                            position + knobWidthHalf, getKnobMinHeight(knobBefore));
-            }
-            if (knobAfter != null) {
-                if (round)
-                    knobAfter.draw(batch, Math.round(x + position + knobWidthHalf), Math.round(y + (height - getKnobMinHeight(knobAfter)) * 0.5f),
-                            Math.round(width - position - knobWidthHalf), Math.round(getKnobMinHeight(knobAfter)));
-                else
-                    knobAfter.draw(batch, x + position + knobWidthHalf, y + (height - getKnobMinHeight(knobAfter)) * 0.5f,
-                            width - position - knobWidthHalf, getKnobMinHeight(knobAfter));
-            }
-            if (knob != null) {
-                if (round)
-                    knob.draw(batch, Math.round(x + position), Math.round(y + (height - knobHeight) * 0.5f), Math.round(knobWidth), Math.round(knobHeight));
-                else
-                    knob.draw(batch, x + position, y + (height - knobHeight) * 0.5f, knobWidth, knobHeight);
+                if (knobBefore != null) {
+                    float offset = 0;
+                    if (bg != null) offset = bgLeftWidth;
+                    if (round)
+                        knobBefore.draw(batch, Math.round(x + offset), Math.round(y + (height - getKnobMinHeight(knobBefore)) * 0.5f),
+                                Math.round(position + knobWidthHalf), Math.round(getKnobMinHeight(knobBefore)));
+                    else
+                        knobBefore.draw(batch, x + offset, y + (height - getKnobMinHeight(knobBefore)) * 0.5f,
+                                position + knobWidthHalf, getKnobMinHeight(knobBefore));
+                }
+                if (knobAfter != null) {
+                    if (round)
+                        knobAfter.draw(batch, Math.round(x + position + knobWidthHalf), Math.round(y + (height - getKnobMinHeight(knobAfter)) * 0.5f),
+                                Math.round(width - position - knobWidthHalf), Math.round(getKnobMinHeight(knobAfter)));
+                    else
+                        knobAfter.draw(batch, x + position + knobWidthHalf, y + (height - getKnobMinHeight(knobAfter)) * 0.5f,
+                                width - position - knobWidthHalf, getKnobMinHeight(knobAfter));
+                }
+                if (knob != null) {
+                    if (round)
+                        knob.draw(batch, Math.round(x + position), Math.round(y + (height - knobHeight) * 0.5f), Math.round(knobWidth), Math.round(knobHeight));
+                    else
+                        knob.draw(batch, x + position, y + (height - knobHeight) * 0.5f, knobWidth, knobHeight);
+                }
             }
         }
     }
