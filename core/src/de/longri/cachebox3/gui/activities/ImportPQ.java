@@ -290,7 +290,53 @@ public class ImportPQ extends ActivityBase {
             }
         });
 
+        final Array<String> mysterieCodes = new Array<>();
 
+        CB.postAsync(new NamedRunnable("Import extracted gpx files") {
+            @Override
+            public void run() {
+
+                while (!extractReady.get() || extractedfolder.size > 0) {
+
+                    if (extractedfolder.size > 0) {
+                        FileHandle gpxFolder = extractedfolder.pop();
+                    } else {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                log.debug("import ready");
+                importReady.set(true);
+            }
+        });
+
+        CB.postAsync(new NamedRunnable("Check corrected Coordinates") {
+            @Override
+            public void run() {
+                while (!importReady.get() || mysterieCodes.size > 0) {
+
+                }
+                correctReady.set(true);
+            }
+        });
+
+        CB.postAsync(new NamedRunnable("Wait for finish") {
+            @Override
+            public void run() {
+                while (!correctReady.get()) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                log.debug("PocketQuery ready imported, close Activity");
+                ImportPQ.this.finish();
+            }
+        });
     }
 
     @Override
