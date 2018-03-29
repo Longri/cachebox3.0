@@ -26,7 +26,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.*;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
+import de.longri.cachebox3.apis.groundspeak_api.GetPocketQueryList;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
@@ -39,10 +42,12 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.cachebox3.utils.UnZip;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -203,6 +208,11 @@ public class ImportPQ extends ActivityBase {
         //start download async
         final FileHandle pqFolder = Gdx.files.absolute(Config.PocketQueryFolder.getValue());
         final Array<FileHandle> downloadedFiles = new Array<>();
+        final Array<FileHandle> extractedfolder = new Array<>();
+        final AtomicBoolean downloadReady = new AtomicBoolean(false);
+        final AtomicBoolean extractReady = new AtomicBoolean(false);
+        final AtomicBoolean importReady = new AtomicBoolean(false);
+        final AtomicBoolean correctReady = new AtomicBoolean(false);
         CB.postAsync(new NamedRunnable("Download PQs") {
             @Override
             public void run() {
@@ -229,6 +239,54 @@ public class ImportPQ extends ActivityBase {
                         });
                     }
                 }
+                log.debug("Download ready");
+                downloadReady.set(true);
+            }
+        });
+
+        CB.postAsync(new NamedRunnable("Extract Zips") {
+            @Override
+            public void run() {
+                final UnZip unZip = new UnZip();
+                while (!downloadReady.get() || downloadedFiles.size > 0) {
+
+                    if (downloadedFiles.size > 0) {
+                        FileHandle zipFile = downloadedFiles.pop();
+                        FileHandle targetFolder = null;
+                        try {
+                            targetFolder = unZip.extractFolder(zipFile);
+                        } catch (IOException e) {
+                            log.error("Extract zipFile", e);
+                        }
+                        if (targetFolder != null) {
+                            extractedfolder.add(targetFolder);
+
+                            //delete source zip file
+                            zipFile.delete();
+
+                            CB.postOnGlThread(new NamedRunnable("Update progress label") {
+                                @Override
+                                public void run() {
+                                    // update progress Label
+                                    int progressValue = extractedPQs.incrementAndGet();
+                                    extractLabel.setText(Translation.get("extracted",
+                                            Integer.toString(progressValue),
+                                            Integer.toString(downloadPqCount.get())));
+                                    extractProgress.setValue(progressValue);
+                                    CB.requestRendering();
+                                }
+                            });
+                        }
+                    } else {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                log.debug("Extract ready");
+                extractReady.set(true);
             }
         });
 
