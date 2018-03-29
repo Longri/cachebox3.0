@@ -17,6 +17,7 @@ package de.longri.cachebox3.sqlite.dao;
 
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.GdxSqlite;
 
 /**
  * Created by Longri on 20.10.2017.
@@ -32,4 +33,6 @@ public abstract class AbstractCacheDAO {
     public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID, boolean withWaypoints);
 
     public abstract void writeCacheBooleanStore(Database data, int newBooleanStore, long id);
+
+    public abstract void getFromDbByGcCode(GdxSqlite myDB, String gcCode, boolean withWaypoints);
 }

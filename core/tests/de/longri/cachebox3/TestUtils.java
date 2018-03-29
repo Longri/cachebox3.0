@@ -22,6 +22,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
+import com.sun.xml.internal.bind.v2.TODO;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
@@ -173,7 +174,10 @@ public class TestUtils {
 
     static int dbCount = 0;
 
-    public static Database getTestDB() {
+    public static Database getTestDB(boolean inMemory) {
+
+        //TODO handle inMemory
+
 
         FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++));
 
@@ -185,4 +189,6 @@ public class TestUtils {
 
         return database;
     }
+
+
 }

@@ -23,6 +23,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.types.*;
 import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
@@ -173,6 +174,14 @@ public class Database {
 
     public FileHandle getFileHandle() {
         return databasePath;
+    }
+
+    public AbstractCache getFromDbByGcCode(String gcCode, boolean withWaypoints) {
+        if(this.databaseType!=DatabaseType.CacheBox3) throw new RuntimeException("Is now Cachebox Data DB");
+        DaoFactory.CACHE_DAO.getFromDbByGcCode(this.myDB, gcCode, withWaypoints);
+
+
+        return null;
     }
 
 

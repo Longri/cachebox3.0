@@ -20,6 +20,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -228,5 +229,10 @@ public class Cache3DAO extends AbstractCacheDAO {
         if (database.update("CacheCoreInfo", args, " Id=?", new String[]{Long.toString(id)}) <= 0) {
             log.error("Can't update booleanStore");
         }
+    }
+
+    @Override
+    public void getFromDbByGcCode(GdxSqlite myDB, String gcCode, boolean withWaypoints) {
+        throw new RuntimeException("Must implement");
     }
 }
