@@ -18,10 +18,10 @@ package de.longri.cachebox3.apis.groundspeak_api;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.GetPqParser;
-import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.PqListParser;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.ICancel;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -46,11 +46,15 @@ public class GetPocketQuery extends GetRequest {
     @Override
     protected void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
 
-        // for debug:
-        String resultAsString = httpResponse.getResultAsString();
+        // for debug: String resultAsString = httpResponse.getResultAsString();
         InputStream stream = httpResponse.getResultAsStream();
         GetPqParser parser = new GetPqParser(this.iCancel);
-        ApiResultState state = parser.parse(stream, this.localFile,this.listener);
+        ApiResultState state = null;
+        try {
+            state = parser.parse(stream, this.localFile, this.listener);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         readyCallBack.callBack(state);
     }
 

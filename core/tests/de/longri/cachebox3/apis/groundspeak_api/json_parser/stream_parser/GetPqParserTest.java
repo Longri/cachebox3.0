@@ -19,38 +19,96 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
+import de.longri.cachebox3.utils.ICancel;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 28.03.2018.
  */
 class GetPqParserTest {
 
+    static {
+        TestUtils.initialGdx();
+    }
+
     @Test
-    void parse() throws FileNotFoundException {
+    void parseTest() throws FileNotFoundException {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPQResult.json");
         GetPqParser parser = new GetPqParser(null);
 
         FileHandle targetFile = Gdx.files.local("testsResources/streamedPq.zip");
 
+        if (targetFile.exists()) {
+            assertThat("Target file must deleted", targetFile.delete());
+        }
+
+
         final AtomicInteger streamedBytes = new AtomicInteger(0);
-        parser.parse(stream, targetFile, new PocketQuery.IncrementProgressBytesListener() {
-                    @Override
-                    public void increment(int bytes) {
-                        streamedBytes.addAndGet(bytes);
+        try {
+            parser.parse(stream, targetFile, new PocketQuery.IncrementProgressBytesListener() {
+                        @Override
+                        public void increment(int bytes) {
+                            streamedBytes.addAndGet(bytes);
+                        }
                     }
-                }
-        );
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         assertThat("File must exist", targetFile.exists());
         assertThat("File size must equals", targetFile.length() == streamedBytes.get());
-        
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertThat("Target file must deleted", targetFile.delete());
+    }
+
+    @Test
+    void parseCancelTest() throws FileNotFoundException {
+        InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPQResult.json");
+        final AtomicBoolean cancel = new AtomicBoolean(false);
+        GetPqParser parser = new GetPqParser(new ICancel() {
+            @Override
+            public boolean cancel() {
+                return cancel.get();
+            }
+        });
+
+        FileHandle targetFile = Gdx.files.local("testsResources/streamedPqCancel.zip");
+
+        if (targetFile.exists()) {
+            assertThat("Target file must deleted", targetFile.delete());
+        }
+
+
+        final AtomicInteger streamedBytes = new AtomicInteger(0);
+        try {
+            parser.parse(stream, targetFile, new PocketQuery.IncrementProgressBytesListener() {
+                        @Override
+                        public void increment(int bytes) {
+                            if (streamedBytes.addAndGet(bytes) > 1000) {
+                                cancel.set(true);
+                            }
+                        }
+                    }
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertThat("File must not exist", !targetFile.exists());
+
     }
 }

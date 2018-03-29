@@ -212,16 +212,21 @@ public class ImportPQ extends ActivityBase {
                         @Override
                         public void increment(int bytes) {
                             downloadProgress.setValue(readyDownloadBytes.addAndGet(bytes));
+                            CB.requestRendering();
                         }
                     });
                     if (downloadedFile != null) {
                         downloadedFiles.add(downloadedFile);
-
-                        //update progress message
-                        downloadLabel.setText(Translation.get("downloaded",
-                                Integer.toString(downloadedPqs.incrementAndGet()),
-                                Integer.toString(downloadPqCount.get())));
-
+                        CB.postOnGlThread(new NamedRunnable("Update progress label") {
+                            @Override
+                            public void run() {
+                                //update progress message
+                                downloadLabel.setText(Translation.get("downloaded",
+                                        Integer.toString(downloadedPqs.incrementAndGet()),
+                                        Integer.toString(downloadPqCount.get())));
+                                CB.requestRendering();
+                            }
+                        });
                     }
                 }
             }

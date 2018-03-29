@@ -16,6 +16,7 @@
 package de.longri.cachebox3.apis.groundspeak_api;
 
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 28.03.2018.
@@ -60,15 +62,17 @@ public class PocketQuery {
             }
         }
 
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
         GetPocketQuery getPocketQuery = new GetPocketQuery(GroundspeakAPI.getAccessToken(true),
                 this.guid, localFile, listener, iCancel);
         getPocketQuery.post(new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
-
+                WAIT.set(false);
             }
         });
-
+        CB.wait(WAIT);
+        if (localFile.exists()) return localFile;
         return null;
     }
 }

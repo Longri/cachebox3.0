@@ -41,7 +41,7 @@ class PocketQueryTest {
     void getPqListOnlineTest() throws InterruptedException {
         if (isDummy) return;
 
-        Array<GetPocketQueryList.PQ> pqList = new Array<>();
+        Array<PocketQuery> pqList = new Array<>();
         GetPocketQueryList pq = new GetPocketQueryList(apiKey, null, pqList);
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
