@@ -66,7 +66,7 @@ class SearchGcOwnerTest {
                 isDummy ? null : apiKey);
 
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
-        Database testDB = TestUtils.getTestDB();
+        Database testDB = TestUtils.getTestDB(false);
         SearchGCOwner searchGC = new SearchGCOwner(testDB, apiKey, 30, searchCoord, 50000, "bros", (byte) 2);
 
         StringWriter writer = new StringWriter();
@@ -86,7 +86,7 @@ class SearchGcOwnerTest {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGcOwner_result.txt");
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
 
-        final Database testDB = TestUtils.getTestDB();
+        final Database testDB = TestUtils.getTestDB(false);
         final SearchGCOwner searchGC = new SearchGCOwner(testDB, apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
 
         };
@@ -267,7 +267,7 @@ class SearchGcOwnerTest {
         if (isDummy) return;
         Coordinate searchCoord = new CoordinateGPS(52.616667, 13.366667);
 
-        final Database testDB = TestUtils.getTestDB();
+        final Database testDB = TestUtils.getTestDB(false);
         final SearchGCOwner searchGC = new SearchGCOwner(testDB, apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
 
         };

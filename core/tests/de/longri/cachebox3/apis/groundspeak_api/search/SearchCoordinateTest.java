@@ -59,7 +59,7 @@ class SearchCoordinateTest {
             apiState = 1;
         }
 
-        Database testDB = TestUtils.getTestDB();
+        Database testDB = TestUtils.getTestDB(false);
         SearchCoordinate searchCoordinate = new SearchCoordinate(testDB, apiKey, 50
                 , LONGRI_HOME_COORDS, 50000, apiState);
 

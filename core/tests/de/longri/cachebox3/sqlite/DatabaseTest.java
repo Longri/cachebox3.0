@@ -74,4 +74,33 @@ class DatabaseTest {
 
     }
 
+    @Test
+    void createNewInMemoryDB() {
+        // test for issue #165
+
+        Database testDb = new Database(Database.DatabaseType.CacheBox3);
+        Database.createNewInMemoryDB(testDb,"createNewDB");
+
+        assertThat("Database schema version must be last version", testDb.getDatabaseSchemeVersion() == DatabaseVersions.LatestDatabaseChange);
+
+
+        //check all tables
+        String[] tableNames = new String[]{"Config", "Category", "GPXFilenames", "Images",
+                "Logs", "PocketQueries", "Replication", "TbLogs", "Trackable", "CacheCoreInfo",
+                "Attributes", "CacheText", "CacheInfo", "Waypoints", "WaypointsText"};
+        for (String tableName : tableNames) {
+
+            boolean exist = false;
+            try {
+                exist = testDb.isTableExists(tableName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            assertThat("Table '" + tableName + "' must exist", exist);
+
+        }
+
+    }
+
 }

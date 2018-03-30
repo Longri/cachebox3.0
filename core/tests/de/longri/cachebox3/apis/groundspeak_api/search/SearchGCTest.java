@@ -60,7 +60,7 @@ class SearchGCTest {
         String expected = TestUtils.getResourceRequestString("testsResources/SearchGc_request.txt",
                 isDummy ? null : apiKey);
 
-        Database testDB = TestUtils.getTestDB();
+        Database testDB = TestUtils.getTestDB(false);
 
         SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T");
 
@@ -80,7 +80,7 @@ class SearchGCTest {
     @Test
     void parseJsonResult() throws IOException {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGc_result.txt");
-        final Database testDB = TestUtils.getTestDB();
+        final Database testDB = TestUtils.getTestDB(false);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
 
         };
@@ -226,7 +226,7 @@ class SearchGCTest {
         final CB_List<AbstractCache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
-        Database testDB = TestUtils.getTestDB();
+        Database testDB = TestUtils.getTestDB(false);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
             protected void writeLogToDB(final LogEntry logEntry) {
                 logList.add(logEntry);
@@ -302,7 +302,7 @@ class SearchGCTest {
     @Test
     void testOnline() {
         if (isDummy) return;
-        final Database testDB = TestUtils.getTestDB();
+        final Database testDB = TestUtils.getTestDB(false);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
         };
 
@@ -395,7 +395,7 @@ class SearchGCTest {
     public void testOnlineLite() {
         if (isDummy) return;
 
-        final Database testDB = TestUtils.getTestDB();
+        final Database testDB = TestUtils.getTestDB(false);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
 
         };

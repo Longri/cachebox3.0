@@ -44,7 +44,7 @@ class CheckCacheStateParserTest {
 
     @Test
     public void parseCacheStateStream() throws FileNotFoundException {
-        Database testDB = TestUtils.getTestDB();
+        Database testDB = TestUtils.getTestDB(false);
 
 
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
@@ -226,7 +226,7 @@ class CheckCacheStateParserTest {
     @Test
     public void parseCacheStateStreamCanceld() throws FileNotFoundException {
 
-        Database testDB = TestUtils.getTestDB();
+        Database testDB = TestUtils.getTestDB(false);
 
 
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
