@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
-import com.sun.xml.internal.bind.v2.TODO;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
@@ -176,19 +175,23 @@ public class TestUtils {
 
     public static Database getTestDB(boolean inMemory) {
 
-        //TODO handle inMemory
+        if (inMemory) {
+            Database database = new Database(Database.DatabaseType.CacheBox3);
+            database.startUp();
+
+            return database;
+        } else {
+            FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++));
+
+            //delete if exist
+            dbFiileHandle.delete();
+
+            Database database = new Database(Database.DatabaseType.CacheBox3);
+            database.startUp(dbFiileHandle);
+
+            return database;
+        }
 
 
-        FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++));
-
-        //delete if exist
-        dbFiileHandle.delete();
-
-        Database database = new Database(Database.DatabaseType.CacheBox3);
-        database.startUp(dbFiileHandle);
-
-        return database;
     }
-
-
 }

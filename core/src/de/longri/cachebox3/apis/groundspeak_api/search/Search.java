@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 - 2017 team-cachebox.de
+ * Copyright (C) 2014 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,9 @@ package de.longri.cachebox3.apis.groundspeak_api.search;
 
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.DataBuffer;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonStreamParser;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
-import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
 import de.longri.cachebox3.callbacks.GenericCallBack;
@@ -29,7 +27,10 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.*;
+import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
+import de.longri.cachebox3.sqlite.dao.ImageDAO;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
+import de.longri.cachebox3.sqlite.dao.TrackableDao;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import org.slf4j.Logger;
@@ -473,10 +474,12 @@ public abstract class Search extends PostRequest {
                             // break reading and set ApiResultState
                             resultState[0] = ApiResultState.EXPIRED_API_KEY;
                             this.cancel();
+                            readyCallBack.callBack(ApiResultState.EXPIRED_API_KEY);
                         } else if (name.equals("StatusMessage") && value.contains("download limit")) {
                             // break reading and set ApiResultState
                             resultState[0] = ApiResultState.API_DOWNLOAD_LIMIT;
                             this.cancel();
+                            readyCallBack.callBack(ApiResultState.API_DOWNLOAD_LIMIT);
                         } else {
                             SWITCH = 0;
                         }

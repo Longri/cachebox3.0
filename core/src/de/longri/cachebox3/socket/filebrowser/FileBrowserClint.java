@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -288,25 +288,25 @@ public class FileBrowserClint {
                         long received = 0;
 
 
-                        // create target File
-                        File targetFile = new File(target, serverFile.getName());
-
-
-                        if (targetFile.exists()) {
-                            if (!targetFile.delete()) {
-                                log.error("can't override TargetFile: {}", targetFile.getAbsolutePath());
+                        if (target.exists()) {
+                            if (!target.delete()) {
+                                log.error("can't override TargetFile: {}", target.getAbsolutePath());
                                 progressHandler.success();
+                                WAIT.set(false);
                                 return;
                             }
                         }
 
-                        if (!targetFile.createNewFile()) {
-                            log.error("can't write TargetFile: {}", targetFile.getAbsolutePath());
+                        target.getParentFile().mkdirs();
+
+                        if (!target.createNewFile()) {
+                            log.error("can't write TargetFile: {}", target.getAbsolutePath());
                             progressHandler.success();
+                            WAIT.set(false);
                             return;
                         }
 
-                        FileOutputStream fos = new FileOutputStream(targetFile);
+                        FileOutputStream fos = new FileOutputStream(target);
                         BufferedOutputStream fbos = new BufferedOutputStream(fos);
                         for (int j = 0; j < fileLength; j++) {
                             fbos.write(bis.read());
@@ -322,12 +322,14 @@ public class FileBrowserClint {
                     log.debug("got server message: " + response);
 
                 } catch (NotImplementedException e) {
-                    log.error("can't store ServerFile");
+                    log.error("can't store ServerFile", e);
                     progressHandler.success();
+                    WAIT.set(false);
                     return;
                 } catch (IOException e) {
-                    log.error("can't receive ServerFile");
+                    log.error("can't receive ServerFile", e);
                     progressHandler.success();
+                    WAIT.set(false);
                     return;
                 }
 

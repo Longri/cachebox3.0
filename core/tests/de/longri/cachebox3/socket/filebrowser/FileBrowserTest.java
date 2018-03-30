@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -128,7 +127,7 @@ class FileBrowserTest {
         ServerFile serverFilePankowMap = root.getChild("pankow.map");
         assertThat("name must be 'pankow.map'", serverFilePankowMap != null && serverFilePankowMap.getName().equals("pankow.map"));
 
-        File target = File.createTempFile("pankow", "map");
+        File target = File.createTempFile("pankow", ".map");
         if (target.exists()) {
             target.delete();
         }
@@ -195,16 +194,7 @@ class FileBrowserTest {
         assertThat("File must exist", deleteTestFile.exists());
 
 
-        //try to delete a open File must fail
-
-        InputStream openInputStream = deleteTestFile.read();
         boolean success = clint.delete(serverFileDeleteTest);
-        assertThat("Server response must be delete ServerFile==false", !success);
-
-        openInputStream.close();
-
-
-        success = clint.delete(serverFileDeleteTest);
         assertThat("Server response must be delete ServerFile==true", success);
         assertThat("File must not exist", !deleteTestFile.exists());
     }

@@ -48,6 +48,7 @@ public class Database {
     public static Database Settings;
     public GdxSqlite myDB;
     public final CacheList Query;
+    private String inMemoryName;
 
     public Database(GdxSqlite db) {
         Query = new CacheList();
@@ -177,13 +178,9 @@ public class Database {
     }
 
     public AbstractCache getFromDbByGcCode(String gcCode, boolean withWaypoints) {
-        if(this.databaseType!=DatabaseType.CacheBox3) throw new RuntimeException("Is now Cachebox Data DB");
-        DaoFactory.CACHE_DAO.getFromDbByGcCode(this.myDB, gcCode, withWaypoints);
-
-
-        return null;
+        if (this.databaseType != DatabaseType.CacheBox3) throw new RuntimeException("Is now Cachebox Data DB");
+        return DaoFactory.CACHE_DAO.getFromDbByGcCode(this, gcCode, withWaypoints);
     }
-
 
     public enum DatabaseType {
         CacheBox3, Drafts, Settings
@@ -231,6 +228,57 @@ public class Database {
     public long DatabaseId = 0; // for Database replication with WinCachebox
     public long MasterDatabaseId = 0;
     protected int latestDatabaseChange = 0;
+
+    public void startUp() {
+        //open in memory DB
+
+        log = LoggerFactory.getLogger("DB:" + inMemoryName);
+
+
+        //reset version
+        shemaVersion.set(-1);
+
+        log.debug("startUp Database: " + inMemoryName);
+        if (myDB != null) {
+            log.debug("Database is open ");
+
+            log.debug("Database is the same");
+            if (!myDB.isOpen()) {
+                log.debug("Database was close so open now");
+                myDB.openOrCreateDatabase();
+            }
+
+            // is open
+            return;
+        }
+
+        log.debug("Initial database: " + inMemoryName);
+        initialize();
+
+//        endTransaction();
+        int databaseSchemeVersion = getDatabaseSchemeVersion();
+        log.debug("DatabaseSchemeVersion: " + databaseSchemeVersion);
+        if (databaseSchemeVersion < latestDatabaseChange) {
+            log.debug("Alter Database to SchemeVersion: " + latestDatabaseChange);
+            alterDatabase(databaseSchemeVersion);
+            SetDatabaseSchemeVersion();
+        }
+
+
+        if (databaseType == DatabaseType.CacheBox3) { // create or load DatabaseId for each
+            DatabaseId = readConfigLong("DatabaseId");
+            if (DatabaseId <= 0) {
+                DatabaseId = new Date().getTime();
+                writeConfigLong("DatabaseId", DatabaseId);
+            }
+            // Read MasterDatabaseId. If MasterDatabaseId > 0 -> This database
+            // is connected to the Replications Master of WinCB
+            // In this case changes of Waypoints, Solvertext, Notes must be
+            // noted in the Table Replication...
+            MasterDatabaseId = readConfigLong("MasterDatabaseId");
+        }
+        return;
+    }
 
 
     public boolean startUp(FileHandle databasePath) throws SQLiteGdxException {
@@ -810,16 +858,26 @@ public class Database {
 
     public void initialize() {
         if (myDB == null) {
-            if (!databasePath.exists())
-                reset();
 
-            try {
-                log.debug("open data base: " + databasePath);
-                myDB = new GdxSqlite(databasePath);
-                myDB.openOrCreateDatabase();
-            } catch (Exception exc) {
-                log.error("Can't open Database", exc);
-                return;
+            if (inMemoryName != null) {
+                try {
+                    log.debug("open data base: " + inMemoryName);
+                    myDB = new GdxSqlite();
+                    myDB.openOrCreateDatabase();
+                } catch (Exception exc) {
+                    log.error("Can't open Database", exc);
+                }
+            } else {
+                if (!databasePath.exists())
+                    reset();
+
+                try {
+                    log.debug("open data base: " + databasePath);
+                    myDB = new GdxSqlite(databasePath);
+                    myDB.openOrCreateDatabase();
+                } catch (Exception exc) {
+                    log.error("Can't open Database", exc);
+                }
             }
         }
     }
@@ -1214,4 +1272,20 @@ public class Database {
         }
         return false;
     }
+
+    public static void createNewInMemoryDB(Database database, String dbName) {
+        final Logger logger = LoggerFactory.getLogger("CREATE NEW DB");
+
+        if (CB.viewmanager != null) CB.viewmanager.setNewFilter(FilterInstances.ALL); // in case of JUnit
+
+        database.inMemoryName = dbName;
+
+        try {
+            database.close();
+            database.startUp();
+        } catch (SQLiteGdxException e) {
+            logger.error("Create new DB", e);
+        }
+    }
+
 }

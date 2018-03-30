@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,23 @@ public class ApiLimitParser {
 
         // Parse JSON Result
         final JsonStreamParser parser = new JsonStreamParser() {
+
+//
+
+            @Override
+            public void string(String name, String value) {
+                if (name.equals("StatusMessage") && value.contains("expired")) {
+                    resultCalls.set(-6);
+                    cancel();
+                }
+            }
+
+
             public void number(String name, long value, String stringValue) {
                 super.number(name, value, stringValue);
                 if (MAXCALLSBYIPIN1MINUTE.equals(name)) {
                     resultCalls.set((int) value);
                     cancel();
-
                 }
             }
         };
