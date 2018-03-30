@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
-import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractCache;
 
 /**
  * Created by Longri on 20.10.2017.
@@ -32,4 +32,8 @@ public abstract class AbstractCacheDAO {
     public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID, boolean withWaypoints);
 
     public abstract void writeCacheBooleanStore(Database data, int newBooleanStore, long id);
+
+    public AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints) {
+        return DaoFactory.CACHE_DAO.getFromDbByGcCode(database, gcCode, withWaypoints);
+    }
 }

@@ -23,6 +23,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.types.*;
 import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
@@ -177,11 +178,8 @@ public class Database {
     }
 
     public AbstractCache getFromDbByGcCode(String gcCode, boolean withWaypoints) {
-        if(this.databaseType!=DatabaseType.CacheBox3) throw new RuntimeException("Is now Cachebox Data DB");
-        DaoFactory.CACHE_DAO.getFromDbByGcCode(this.myDB, gcCode, withWaypoints);
-
-
-        return null;
+        if (this.databaseType != DatabaseType.CacheBox3) throw new RuntimeException("Is now Cachebox Data DB");
+        return DaoFactory.CACHE_DAO.getFromDbByGcCode(this, gcCode, withWaypoints);
     }
 
     public enum DatabaseType {
@@ -231,7 +229,7 @@ public class Database {
     public long MasterDatabaseId = 0;
     protected int latestDatabaseChange = 0;
 
-    private void startUp() {
+    public void startUp() {
         //open in memory DB
 
         log = LoggerFactory.getLogger("DB:" + inMemoryName);
@@ -244,14 +242,14 @@ public class Database {
         if (myDB != null) {
             log.debug("Database is open ");
 
-                log.debug("Database is the same");
-                if (!myDB.isOpen()) {
-                    log.debug("Database was close so open now");
-                    myDB.openOrCreateDatabase();
-                }
+            log.debug("Database is the same");
+            if (!myDB.isOpen()) {
+                log.debug("Database was close so open now");
+                myDB.openOrCreateDatabase();
+            }
 
-                // is open
-                return ;
+            // is open
+            return;
         }
 
         log.debug("Initial database: " + inMemoryName);
@@ -861,7 +859,7 @@ public class Database {
     public void initialize() {
         if (myDB == null) {
 
-            if(inMemoryName!=null){
+            if (inMemoryName != null) {
                 try {
                     log.debug("open data base: " + inMemoryName);
                     myDB = new GdxSqlite();
@@ -869,7 +867,7 @@ public class Database {
                 } catch (Exception exc) {
                     log.error("Can't open Database", exc);
                 }
-            }else{
+            } else {
                 if (!databasePath.exists())
                     reset();
 
@@ -1280,7 +1278,7 @@ public class Database {
 
         if (CB.viewmanager != null) CB.viewmanager.setNewFilter(FilterInstances.ALL); // in case of JUnit
 
-        database.inMemoryName=dbName;
+        database.inMemoryName = dbName;
 
         try {
             database.close();

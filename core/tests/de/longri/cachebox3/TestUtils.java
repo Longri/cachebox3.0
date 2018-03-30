@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -173,16 +173,25 @@ public class TestUtils {
 
     static int dbCount = 0;
 
-    public static Database getTestDB() {
+    public static Database getTestDB(boolean inMemory) {
 
-        FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++));
+        if (inMemory) {
+            Database database = new Database(Database.DatabaseType.CacheBox3);
+            database.startUp();
 
-        //delete if exist
-        dbFiileHandle.delete();
+            return database;
+        } else {
+            FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++));
 
-        Database database = new Database(Database.DatabaseType.CacheBox3);
-        database.startUp(dbFiileHandle);
+            //delete if exist
+            dbFiileHandle.delete();
 
-        return database;
+            Database database = new Database(Database.DatabaseType.CacheBox3);
+            database.startUp(dbFiileHandle);
+
+            return database;
+        }
+
+
     }
 }

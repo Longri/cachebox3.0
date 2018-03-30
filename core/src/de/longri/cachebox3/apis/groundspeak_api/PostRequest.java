@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -59,9 +59,16 @@ public abstract class PostRequest {
         CB.postAsync(new NamedRunnable("PostRequest") {
             @Override
             public void run() {
-                if (waitLimit && waitApiCallLimit(iCancel) == -1) {
-                    readyCallBack.callBack(ApiResultState.API_ERROR);
-                    return;
+
+                if (waitLimit) {
+                    int callsPerMinute = waitApiCallLimit(iCancel);
+                    if (callsPerMinute == -6) {
+                        readyCallBack.callBack(ApiResultState.EXPIRED_API_KEY);
+                        return;
+                    } else if (callsPerMinute < 0) {
+                        readyCallBack.callBack(ApiResultState.API_ERROR);
+                        return;
+                    }
                 }
 
                 if (iCancel != null && iCancel.cancel()) readyCallBack.callBack(ApiResultState.CANCELED);

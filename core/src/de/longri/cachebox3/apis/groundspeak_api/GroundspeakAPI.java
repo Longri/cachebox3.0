@@ -277,9 +277,9 @@ public class GroundspeakAPI {
                 // get api limits from groundspeak
                 int callsPerMinute = GetApiLimits.getLimit();
 
-                if (callsPerMinute == -1) {
-                    // connection error, call cancel and give feedback
-                    return -1;
+                if (callsPerMinute < 0) {
+                    // API error, call cancel and give feedback
+                    return callsPerMinute;
                 }
 
                 Calendar cal = Calendar.getInstance();
