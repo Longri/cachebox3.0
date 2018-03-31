@@ -42,7 +42,7 @@ class GpxFileImporterTest {
         ImportHandler importHandler = new ImportHandler() {
         };
 
-        new GpxFileImporter(TEST_DB, importHandler).doImport(gpxFile);
+        new GroundspeakGpxFileImporter(TEST_DB, importHandler).doImport(gpxFile);
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
         AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2T9RW", false);
         TEST_CACHES.GC2T9RW.assertCache(cache);
@@ -57,7 +57,7 @@ class GpxFileImporterTest {
         ImportHandler importHandler = new ImportHandler() {
         };
 
-        new GpxFileImporter(TEST_DB, importHandler).doImport(gpxFile);
+        new GroundspeakGpxFileImporter(TEST_DB, importHandler).doImport(gpxFile);
 
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
 

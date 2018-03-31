@@ -40,8 +40,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 29.03.2018.
  */
-public class GpxFileImporter extends XmlStreamEventParser {
-    private final static Logger log = LoggerFactory.getLogger(GpxFileImporter.class);
+public class GroundspeakGpxFileImporter extends XmlStreamEventParser {
+    private final static Logger log = LoggerFactory.getLogger(GroundspeakGpxFileImporter.class);
 
     // QNames
     private final QName WPT = new QName("wpt");
@@ -68,7 +68,7 @@ public class GpxFileImporter extends XmlStreamEventParser {
     private final AtomicBoolean CONFLICT_READY = new AtomicBoolean(true);
 
 
-    public GpxFileImporter(Database database, ImportHandler importHandler) {
+    public GroundspeakGpxFileImporter(Database database, ImportHandler importHandler) {
         super();
         this.database = database;
 
