@@ -44,7 +44,7 @@ class GetPqParserTest {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPQResult.json");
         GetPqParser parser = new GetPqParser(null);
 
-        FileHandle targetFile = Gdx.files.local("testsResources/streamedPq.zip");
+        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/streamedPq.zip");
 
         if (targetFile.exists()) {
             assertThat("Target file must deleted", targetFile.delete());

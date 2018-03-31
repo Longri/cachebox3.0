@@ -33,7 +33,5 @@ public abstract class AbstractCacheDAO {
 
     public abstract void writeCacheBooleanStore(Database data, int newBooleanStore, long id);
 
-    public AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints) {
-        return DaoFactory.CACHE_DAO.getFromDbByGcCode(database, gcCode, withWaypoints);
-    }
+    public abstract AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints);
 }

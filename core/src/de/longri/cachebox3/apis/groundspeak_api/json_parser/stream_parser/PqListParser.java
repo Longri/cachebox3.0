@@ -109,7 +109,12 @@ public class PqListParser {
                     // break reading and set ApiResultState
                     resultState[0] = ApiResultState.EXPIRED_API_KEY;
                     this.cancel();
+                } else if (name.equals("StatusMessage") && value.contains("AccessToken provided is not valid")) {
+                    // break reading and set ApiResultState
+                    resultState[0] = ApiResultState.MEMBERSHIP_TYPE_INVALID;
+                    this.cancel();
                 }
+
             }
 
             @Override

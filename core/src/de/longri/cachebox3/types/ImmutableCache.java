@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -145,10 +145,22 @@ public class ImmutableCache extends AbstractCache {
         this.numTravelbugs = cursor.getShort(8);
 
         this.gcCode = new CharSequenceArray(cursor.getString(9));
-        this.name = new CharSequenceArray(cursor.getString(10).trim());
-        this.placedBy = new CharSequenceArray(cursor.getString(11));
-        this.owner = new CharSequenceArray(cursor.getString(12));
-        this.gcId = new CharSequenceArray(cursor.getString(13));
+
+        String nameString = cursor.getString(10);
+        if (nameString != null) this.name = new CharSequenceArray(nameString.trim());
+        else this.name = null;
+
+        String placedByString = cursor.getString(11);
+        if (placedByString != null) this.placedBy = new CharSequenceArray(placedByString);
+        else this.placedBy = null;
+
+        String ownerString = cursor.getString(12);
+        if (ownerString != null) this.owner = new CharSequenceArray(ownerString);
+        else this.owner = null;
+
+        String gcIdString = cursor.getString(13);
+        if (gcIdString != null) this.gcId = new CharSequenceArray(gcIdString);
+        else this.gcId = null;
 
         this.booleanStore = cursor.getShort(14);
         this.favPoints = cursor.getInt(15);

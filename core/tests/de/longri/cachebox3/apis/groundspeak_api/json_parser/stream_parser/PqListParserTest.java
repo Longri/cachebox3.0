@@ -53,7 +53,7 @@ class PqListParserTest {
                     assertThat("wrong value", pq.name.equals("Birkenwerder"));
                     assertThat("wrong value", pq.lastGenerated.equals(new Date(1521969736000L)));
                     assertThat("wrong value", pq.downloadAvailable == false);
-                    assertThat("wrong value", pq.sizeMB == 1899174);
+                    assertThat("wrong value", pq.sizeMB == 1899174/ 1048576.0);
                     assertThat("wrong value", pq.cacheCount == 1000);
                     break;
                 case 1:
@@ -61,7 +61,7 @@ class PqListParserTest {
                     assertThat("wrong value", pq.name.equals("H&#246;now"));
                     assertThat("wrong value", pq.lastGenerated.equals(new Date(1521971482000L)));
                     assertThat("wrong value", pq.downloadAvailable == true);
-                    assertThat("wrong value", pq.sizeMB == 1753293);
+                    assertThat("wrong value", pq.sizeMB == 1753293/ 1048576.0);
                     assertThat("wrong value", pq.cacheCount == 1000);
                     break;
                 case 5:
@@ -69,7 +69,7 @@ class PqListParserTest {
                     assertThat("wrong value", pq.name.equals("Wandlitz"));
                     assertThat("wrong value", pq.lastGenerated.equals(new Date(1522049839000L)));
                     assertThat("wrong value", pq.downloadAvailable == true);
-                    assertThat("wrong value", pq.sizeMB == 1847508);
+                    assertThat("wrong value", pq.sizeMB == 1847508/ 1048576.0);
                     assertThat("wrong value", pq.cacheCount == 1000);
             }
         }

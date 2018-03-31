@@ -42,7 +42,7 @@ class PocketQueryTest {
         if (isDummy) return;
 
         Array<PocketQuery> pqList = new Array<>();
-        GetPocketQueryList pq = new GetPocketQueryList(apiKey, null, pqList);
+        GetPocketQueryList pq = new GetPocketQueryList(GroundspeakAPI.getUrlCodiert(apiKey), null, pqList);
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
         final ApiResultState[] state = new ApiResultState[1];

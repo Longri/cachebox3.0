@@ -18,10 +18,11 @@ package de.longri.cachebox3.gpx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.Import.GPXFileImporter;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.test_caches.TEST_CACHES;
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -41,13 +42,11 @@ class GpxFileImporterTest {
         ImportHandler importHandler = new ImportHandler() {
         };
 
-        GPXFileImporter importer = new GPXFileImporter(TEST_DB, gpxFile, importHandler);
-        importer.doImport(importHandler, 0);
-
-//  TODO      CacheTest.assertCache_GC2T9RW_with_details(true);
-
+        new GpxFileImporter(TEST_DB, importHandler).doImport(gpxFile);
+        assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
+        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2T9RW", false);
+        TEST_CACHES.GC2T9RW.assertCache(cache);
         TEST_DB.close();
-        TEST_DB.getFileHandle().delete();
     }
 
     @Test
@@ -58,10 +57,13 @@ class GpxFileImporterTest {
         ImportHandler importHandler = new ImportHandler() {
         };
 
-        GPXFileImporter importer = new GPXFileImporter(TEST_DB, gpxFile, importHandler);
-        importer.doImport(importHandler, 0);
+        new GpxFileImporter(TEST_DB, importHandler).doImport(gpxFile);
+
+        assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
+
 
         AbstractCache cache = TEST_DB.getFromDbByGcCode("GC52BKF", false);
+        assertThat("Cache can't be NULL", cache != null);
         assertEquals("", cache.getLongDescription(TEST_DB));
 
         String sd = "<p>Drive In. Eine nette Zusatzeule. Bewohner ist informiert. Dennoch oft ï¿½muggelig. Das Grundstï¿½ck muss nicht betreten werden!ï¿½<img alt=\"enlightened\" src=\"http://www.geocaching.com/static/js/CKEditor/4.1.2/plugins/smiley/images/lightbulb.gif\" title=\"enlightened\" style=\"height:20px;width:20px;\" /></p>";

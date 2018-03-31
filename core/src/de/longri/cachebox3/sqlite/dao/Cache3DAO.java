@@ -61,7 +61,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         if (!update) args.put("Id", abstractCache.getId());
         args.put("Latitude", abstractCache.getLatitude());
         args.put("Longitude", abstractCache.getLongitude());
-        args.put("Size", abstractCache.getSize().ordinal());
+        args.put("Size", abstractCache.getSize() != null ? abstractCache.getSize().ordinal() : 0);
         args.put("Difficulty", (int) (abstractCache.getDifficulty() * 2));
         args.put("Terrain", (int) (abstractCache.getTerrain() * 2));
         args.put("Type", abstractCache.getType().ordinal());
@@ -232,7 +232,21 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public void getFromDbByGcCode(GdxSqlite myDB, String gcCode, boolean withWaypoints) {
-        throw new RuntimeException("Must implement");
+    public AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints) {
+        String statement = "SELECT * from CacheCoreInfo WHERE GcCode=?";
+        GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(gcCode)});
+        if (cursor == null) return null;
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+            AbstractCache cache = new ImmutableCache(cursor);
+            if (withWaypoints) {
+                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cache.getId(), true));
+            }
+            cursor.close();
+            return cache;
+        }
+        cursor.close();
+        return null;
     }
+
 }

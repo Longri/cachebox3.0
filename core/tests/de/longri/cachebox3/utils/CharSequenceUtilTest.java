@@ -24,7 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Created by Longri on 27.10.2017.
  */
-class CharSequenceUtilTest {
+public class CharSequenceUtilTest {
 
     static CharArray buffer = new CharArray();
 
@@ -87,7 +87,7 @@ class CharSequenceUtilTest {
     //# Helper
     //##################################################################
 
-    private boolean equals(CharSequence s1, CharSequence s2) {
+    public static boolean equals(CharSequence s1, CharSequence s2) {
         if (s1.length() != s2.length()) return false;
         int n = s1.length();
         while (n-- > 0) {

@@ -412,9 +412,9 @@ public class CB {
                     runningRunnables.removeValue(runnable.name, false);
                     log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
                 } catch (final Exception e) {
+                    log.error("postAsync:" + runnable.name, e);
                     StageManager.indicateException(EXCEPTION_COLOR_POST);
                     executeCount.decrementAndGet();
-                    log.error("postAsync:" + runnable.name, e);
                 }
                 return null;
             }
