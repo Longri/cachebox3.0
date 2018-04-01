@@ -13,25 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.types.test_caches;
+package de.longri.cachebox3.utils;
 
-import de.longri.cachebox3.types.CacheTypes;
+import javax.xml.namespace.QName;
 
 /**
- * Created by Longri on 31.03.18.
+ * Created by Longri on 01.04.18.
  */
-public class TestCache_GC2T9RW extends AbstractTestCache {
-    public TestCache_GC2T9RW() {
-        this.latitude = 49.349817;
-        this.longitude = 8.62925;
-        this.cacheType = CacheTypes.Traditional;
-        this.gcCode = "GC2T9RW";
-        this.name = "der Hampir - T5 -";
-        this.id = 2190117L;
-        this.available = true;
-        this.archived = false;
-        this.placed_by = "Team Rabbits";
-        this.owner = "Team Rabbits";
+public class ActiveQName extends QName {
+
+    private boolean active = false;
+
+    public ActiveQName(String localPart) {
+        super(localPart);
     }
 
+    public void setActive() {
+        active = true;
+    }
+
+    public void setInActive() {
+        active = false;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
 }

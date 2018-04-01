@@ -16,7 +16,9 @@
 package de.longri.cachebox3.utils;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -29,6 +31,9 @@ import java.io.FileReader;
  */
 public abstract class XmlStreamEventParser {
 
+
+    private final Array<QName> qNames = new Array<>();
+    private final Array<QName> qNameHerachie = new Array<>();
 
     public XmlStreamEventParser() {
 
@@ -83,11 +88,72 @@ public abstract class XmlStreamEventParser {
         return Double.parseDouble(attribute.getValue());
     }
 
-    protected abstract void startElement(StartElement element);
+    public int parseInteger(Attribute attribute) {
+        return Integer.parseInt(attribute.getValue());
+    }
 
-    protected abstract void endElement(EndElement element);
+    public long parseLong(Attribute attribute) {
+        return Long.parseLong(attribute.getValue());
+    }
 
-    protected abstract void data(Characters element);
+    public boolean parseBool(Attribute attribute) {
+        return Boolean.parseBoolean(attribute.getValue());
+    }
 
 
+    protected ActiveQName registerName(String name) {
+        ActiveQName qName = new ActiveQName(name);
+        qNames.add(qName);
+        return qName;
+    }
+
+
+    protected void startElement(StartElement element) {
+
+        QName name = element.getName();
+        qNameHerachie.add(name);
+        // get registered
+        ActiveQName registeredName = getRegisterdName(element.getName());
+        if (registeredName != null) {
+            registeredName.setActive();
+            startElement(registeredName, element);
+        }
+    }
+
+
+    protected void endElement(EndElement element) {
+
+        QName name = qNameHerachie.pop();
+
+        // get registered
+        ActiveQName registeredName = getRegisterdName(name);
+        if (registeredName != null) {
+            endElement(registeredName, element);
+            registeredName.setInActive();
+        }
+    }
+
+    protected void data(Characters element) {
+        QName name = qNameHerachie.peek();
+
+        // get registered
+        ActiveQName registeredName = getRegisterdName(name);
+        if (registeredName != null) {
+            data(registeredName, element);
+        }
+
+    }
+
+
+    private ActiveQName getRegisterdName(QName name) {
+        int idx = qNames.indexOf(name, false);
+        if (idx >= 0) return (ActiveQName) qNames.get(idx);
+        return null;
+    }
+
+    protected abstract void startElement(ActiveQName name, StartElement element);
+
+    protected abstract void endElement(ActiveQName name, EndElement element);
+
+    protected abstract void data(ActiveQName name, Characters element);
 }

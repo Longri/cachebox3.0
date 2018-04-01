@@ -29,6 +29,12 @@ public abstract class AbstractTestCache {
     double latitude;
     CacheTypes cacheType;
     String gcCode;
+    String name;
+    long id;
+    boolean available;
+    boolean archived;
+    String placed_by;
+    String owner;
 
     public void assertCache(AbstractCache other) {
         assertThat("Cache must not be NULL", other != null);
@@ -36,5 +42,12 @@ public abstract class AbstractTestCache {
         assertThat("Longitude must be " + longitude + " but was :" + other.longitude, longitude == other.longitude);
         assertThat("Cache type must be " + cacheType + " but was :" + other.getType(), cacheType == other.getType());
         assertThat("GcCode must be " + gcCode + " but was :" + other.getGcCode(), CharSequenceUtilTest.equals(gcCode, other.getGcCode()));
+        assertThat("Cache name must be " + name + " but was :" + other.getName(), CharSequenceUtilTest.equals(name, other.getName()));
+        assertThat("Cache id must be " + id + " but was :" + other.getId(), id == other.getId());
+        assertThat("Cache available must be " + available + " but was :" + other.isAvailable(), available == other.isAvailable());
+        assertThat("Cache archived must be " + archived + " but was :" + other.isArchived(), archived == other.isArchived());
+        assertThat("Placed by must be " + placed_by + " but was :" + other.getPlacedBy(), CharSequenceUtilTest.equals(placed_by, other.getPlacedBy()));
+        assertThat("Owner must be " + owner + " but was :" + other.getOwner(), CharSequenceUtilTest.equals(owner, other.getOwner()));
+
     }
 }
