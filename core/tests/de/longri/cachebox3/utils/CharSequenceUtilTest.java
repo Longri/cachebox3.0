@@ -84,7 +84,7 @@ public class CharSequenceUtilTest {
     }
 
 
-    char[] PARSE_ARRAY = " 49.349817 219011721901171232  3810940 ".toCharArray();
+    char[] PARSE_ARRAY = " 49.349817 219011721901171232  3810940 TRUE False".toCharArray();
 
     @Test
     void parseDouble() {
@@ -110,6 +110,15 @@ public class CharSequenceUtilTest {
     void parseLong() {
         long l = CharSequenceUtil.parseLong(PARSE_ARRAY, 11, 18);
         assertThat("Value should be 219011721901171232", l == 219011721901171232L);
+    }
+
+    @Test
+    void parseBoolean() {
+        boolean b = CharSequenceUtil.parseBoolean(PARSE_ARRAY, 39, 4);
+        assertThat("Value should be true", b == true);
+
+        b = CharSequenceUtil.parseBoolean(PARSE_ARRAY, 44, 5);
+        assertThat("Value should be false", b == false);
     }
 
 

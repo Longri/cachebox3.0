@@ -251,6 +251,24 @@ public class CharSequenceUtil {
         return isNegative ? ip * -1 : ip;
     }
 
+    public static boolean parseBoolean(char[] data, int offset, int length) {
+        if (data == null || length == 0)
+            throw new NumberFormatException("Number cannot be null/empty.");
+
+        // TRUE.length=4 / FALSE.length=5
+        if (length == 4) {
+            if (data[offset] == 'T' || data[offset] == 't') {
+                return true;
+            }
+        } else if (length == 5) {
+            if (data[offset] == 'F' || data[offset] == 'f') {
+                return false;
+            }
+        }
+        throw new NumberFormatException("Number is malformed: " + new String(data, offset, length));
+    }
+
+
     private static boolean isNumeric(char[] data, int offset) {
         return '0' <= data[offset] && data[offset] <= '9';
     }

@@ -33,6 +33,11 @@ class XmlStreamParserTest {
     private final char[] ATTRIBUTE8 = "Climbing gear".toCharArray();
     private final char[] ATTRIBUTE9 = "Ticks".toCharArray();
     private final char[] ATTRIBUTE10 = "Dogs".toCharArray();
+    private long id;
+    private boolean available;
+    private boolean archived;
+    private double lat;
+    private double lon;
 
 
     @Test
@@ -107,15 +112,44 @@ class XmlStreamParserTest {
             @Override
             public void handleValue(char[] valueName, char[] data, int offset, int length) {
                 if (CharSequenceUtil.equals(MIN_LAT, valueName)) {
-                    double lat = CharSequenceUtil.parseDouble(data, offset, length);
-                    assertThat("Value should be 49.349817", lat == 49.349817);
+                    lat = CharSequenceUtil.parseDouble(data, offset, length);
+
+                } else if (CharSequenceUtil.equals(MAX_LAT, valueName)) {
+                    lon = CharSequenceUtil.parseDouble(data, offset, length);
+
                 }
 
             }
         }, MIN_LAT, MAX_LAT);
 
 
+        final char[] ID = "id".toCharArray();
+        final char[] AVAILABLE = "available".toCharArray();
+        final char[] ARCHIVED = "archived".toCharArray();
+        parser.registerValueHandler("/gpx/wpt/groundspeak:cache", new XmlStreamParser.ValueHandler() {
+            @Override
+            public void handleValue(char[] valueName, char[] data, int offset, int length) {
+                if (CharSequenceUtil.equals(ID, valueName)) {
+                    id = CharSequenceUtil.parseLong(data, offset, length);
+
+                } else if (CharSequenceUtil.equals(AVAILABLE, valueName)) {
+                    available = CharSequenceUtil.parseBoolean(data, offset, length);
+
+                } else if (CharSequenceUtil.equals(ARCHIVED, valueName)) {
+                    archived = CharSequenceUtil.parseBoolean(data, offset, length);
+
+                }
+            }
+        }, ID, AVAILABLE, ARCHIVED);
+
         parser.parse(testFile);
+
+        assertThat("Value should be 49.349817", lat == 49.349817);
+        assertThat("Value should be 49.351283", lon == 49.351283);
+
+        assertThat("Value should be 2190117", id == 2190117L);
+        assertThat("Value should be true", available == true);
+        assertThat("Value should be false", archived == false);
 
     }
 }

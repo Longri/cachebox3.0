@@ -32,10 +32,10 @@ public class XmlStreamParser extends AbstractStreamParser {
         void handleData(char[] data, int offset, int length);
     }
 
-    public interface ValueHandler {
+    public static abstract class ValueHandler {
         Array<char[]> valueList = new Array<>();
 
-        void handleValue(char[] valueName, char[] data, int offset, int length);
+        abstract void handleValue(char[] valueName, char[] data, int offset, int length);
     }
 
     private final CharArray activeNameTags = new CharArray() {
@@ -162,7 +162,7 @@ public class XmlStreamParser extends AbstractStreamParser {
                                         handler.handleValue(valueName, data, valueStart, valueEnd);
 
                                     } else {
-                                        log.warn("Value not found");
+                                        log.warn("Value " + new String(valueName) + " not found");
                                     }
 
                                 }
