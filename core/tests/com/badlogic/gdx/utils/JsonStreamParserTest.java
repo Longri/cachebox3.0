@@ -142,7 +142,6 @@ class JsonStreamParserTest {
 
 
             public void endArray(String name) {
-                super.endArray(name);
                 if (!isExclude.get()) {
                     sb.appendLine("endArray " + name);
                 }
@@ -150,7 +149,6 @@ class JsonStreamParserTest {
                     isExclude.set(false);
                 }
                 ex.pop();
-
             }
 
             public void startObject(String name) {
