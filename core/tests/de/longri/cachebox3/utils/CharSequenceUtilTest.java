@@ -94,13 +94,21 @@ public class CharSequenceUtilTest {
 
     @Test
     void parseInteger() {
-        int i = CharSequenceUtil.parseInteger(PARSE_ARRAY, 1, 7);
+        int i = CharSequenceUtil.parseInteger(PARSE_ARRAY, 31, 7);
         assertThat("Value should be 3810940", i == 3810940);
+
+        boolean throwedException = false;
+        try {
+            int j = CharSequenceUtil.parseInteger(PARSE_ARRAY, 11, 18);
+        } catch (ArithmeticException e) {
+            throwedException = true;
+        }
+        assertThat("must throw exception", throwedException);
     }
 
     @Test
     void parseLong() {
-        long l = CharSequenceUtil.parseLong(PARSE_ARRAY, 1, 9);
+        long l = CharSequenceUtil.parseLong(PARSE_ARRAY, 11, 18);
         assertThat("Value should be 219011721901171232", l == 219011721901171232L);
     }
 

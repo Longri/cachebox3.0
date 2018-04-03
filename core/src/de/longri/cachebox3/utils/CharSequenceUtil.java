@@ -131,14 +131,128 @@ public class CharSequenceUtil {
     }
 
     public static double parseDouble(char[] data, int offset, int length) {
-        return 0;
+        if (data == null || length == 0)
+            throw new NumberFormatException("Number cannot be null/empty.");
+
+        boolean isNegative = false;
+        boolean hasDecimal = false;
+
+        // check for operators
+        switch (data[offset]) {
+            case '+':
+                offset++;
+                break;
+
+            case '-':
+                offset++;
+                isNegative = true;
+                break;
+
+            case '.':
+                offset++;
+                hasDecimal = true;
+                break;
+        }
+
+        double ip = 0.0, dp = 0.0;
+        double fd = 1.0;
+
+        for (int i = offset, n = length + offset; i < n; i++) {
+            int digit = data[i] - '0';
+
+            if (isNumeric(data, i) && digit != '0') {
+                if (!hasDecimal) {
+                    ip *= 10;
+                    ip += digit;
+                } else {
+                    dp *= 10;
+                    dp += digit;
+                    fd *= 10;
+                }
+            } else if (data[i] == '.') {
+                if (hasDecimal)
+                    throw new NumberFormatException("Number is malformed: " + new String(data, offset, length));
+                hasDecimal = true;
+            } else {
+                throw new NumberFormatException("Number is malformed: " + new String(data, offset, length));
+            }
+        }
+        dp = dp / fd;
+        return isNegative ? (ip + dp) * -1 : ip + dp;
     }
 
     public static int parseInteger(char[] data, int offset, int length) {
-        return 0;
+        if (data == null || length == 0)
+            throw new NumberFormatException("Number cannot be null/empty.");
+
+        boolean isNegative = false;
+
+        // check for operators
+        switch (data[offset]) {
+            case '+':
+                offset++;
+                break;
+
+            case '-':
+                offset++;
+                isNegative = true;
+                break;
+        }
+
+
+        int ip = 0, lastIp = 0;
+        for (int i = offset, n = length + offset; i < n; i++) {
+            if (!isNumeric(data, i))
+                throw new NumberFormatException("Number is malformed: " + new String(data, offset, length));
+            int digit = data[i] - '0';
+            ip *= 10;
+            ip += digit;
+
+            if (ip < lastIp)
+                throw new ArithmeticException("Number is overflow: " + new String(data, offset, length));
+
+            lastIp = ip;
+        }
+        return isNegative ? ip * -1 : ip;
     }
 
     public static long parseLong(char[] data, int offset, int length) {
-        return 0;
+        if (data == null || length == 0)
+            throw new NumberFormatException("Number cannot be null/empty.");
+
+        boolean isNegative = false;
+
+        // check for operators
+        switch (data[offset]) {
+            case '+':
+                offset++;
+                break;
+
+            case '-':
+                offset++;
+                isNegative = true;
+                break;
+        }
+
+
+        long ip = 0, lastIp = 0;
+        for (int i = offset, n = length + offset; i < n; i++) {
+            if (!isNumeric(data, i))
+                throw new NumberFormatException("Number is malformed: " + new String(data, offset, length));
+            int digit = data[i] - '0';
+            ip *= 10;
+            ip += digit;
+
+            if (ip < lastIp)
+                throw new ArithmeticException("Number is overflow: " + new String(data, offset, length));
+
+            lastIp = ip;
+        }
+        return isNegative ? ip * -1 : ip;
     }
+
+    private static boolean isNumeric(char[] data, int offset) {
+        return '0' <= data[offset] && data[offset] <= '9';
+    }
+
 }
