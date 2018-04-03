@@ -40,8 +40,8 @@ class XmlStreamParserTest {
 
         final Logger log = LoggerFactory.getLogger(XmlStreamParserTest.class);
 
-        FileHandle testFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx");
-        XmlStreamParser parser = new XmlStreamParser();
+        final FileHandle testFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx");
+        final XmlStreamParser parser = new XmlStreamParser();
         parser.registerDataHandler("/gpx/name", new XmlStreamParser.DataHandler() {
             @Override
             public void handleData(char[] data, int offset, int length) {
@@ -99,6 +99,21 @@ class XmlStreamParserTest {
                 assertThat("Value should be " + new String(expected), index == 0);
             }
         });
+
+
+        final char[] MIN_LAT = "minlat".toCharArray();
+        final char[] MAX_LAT = "maxlat".toCharArray();
+        parser.registerValueHandler("/gpx/bounds", new XmlStreamParser.ValueHandler() {
+            @Override
+            public void handleValue(char[] valueName, char[] data, int offset, int length) {
+                if (CharSequenceUtil.equals(MIN_LAT, valueName)) {
+                    double lat = CharSequenceUtil.parseDouble(data, offset, length);
+                    assertThat("Value should be 49.349817", lat == 49.349817);
+                }
+
+            }
+        }, MIN_LAT, MAX_LAT);
+
 
         parser.parse(testFile);
 

@@ -83,6 +83,28 @@ public class CharSequenceUtilTest {
         assertThat("Index of 'TestStringAdded' must be 0", CharSequenceUtil.indexOf(m1, "TestStringAdded") == 0);
     }
 
+
+    char[] PARSE_ARRAY = " 49.349817 219011721901171232  3810940 ".toCharArray();
+
+    @Test
+    void parseDouble() {
+        double d = CharSequenceUtil.parseDouble(PARSE_ARRAY, 1, 9);
+        assertThat("Value should be 49.349817", d == 49.349817);
+    }
+
+    @Test
+    void parseInteger() {
+        int i = CharSequenceUtil.parseInteger(PARSE_ARRAY, 1, 7);
+        assertThat("Value should be 3810940", i == 3810940);
+    }
+
+    @Test
+    void parseLong() {
+        long l = CharSequenceUtil.parseLong(PARSE_ARRAY, 1, 9);
+        assertThat("Value should be 219011721901171232", l == 219011721901171232L);
+    }
+
+
     //##################################################################
     //# Helper
     //##################################################################

@@ -17,6 +17,7 @@ package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,17 @@ import org.slf4j.LoggerFactory;
 public class XmlStreamParser extends AbstractStreamParser {
 
     private final Logger log = LoggerFactory.getLogger(XmlStreamParser.class);
+
+    public interface DataHandler {
+        void handleData(char[] data, int offset, int length);
+    }
+
+    public interface ValueHandler {
+        Array<char[]> valueList = new Array<>();
+
+        void handleValue(char[] valueName, char[] data, int offset, int length);
+    }
+
     private final CharArray activeNameTags = new CharArray() {
 
         @Override
@@ -42,6 +54,8 @@ public class XmlStreamParser extends AbstractStreamParser {
         }
     };
     private final ObjectMap<char[], DataHandler> dataHandlerMap = new ObjectMap<>();
+    private final ObjectMap<char[], ValueHandler> valueHandlerMap = new ObjectMap<>();
+    private final char[] QUOTE = new char[]{'"'};
     private int lastStartPeek;
     private DataHandler lastHandler;
 
@@ -52,9 +66,19 @@ public class XmlStreamParser extends AbstractStreamParser {
         dataHandlerMap.put(locationPath.toCharArray(), dataHandler);
     }
 
+    public void registerValueHandler(String locationPath, ValueHandler valueHandler, char[]... valueNames) {
+        // remove '/'
+        locationPath = locationPath.replaceAll("/", "");
 
-    public interface DataHandler {
-        void handleData(char[] data, int offset, int length);
+        char[] path = locationPath.toCharArray();
+
+        ValueHandler contains = valueHandlerMap.get(path);
+        if (contains != null) {
+            contains.valueList.addAll(valueNames);
+        } else {
+            valueHandler.valueList.addAll(valueNames);
+            valueHandlerMap.put(path, valueHandler);
+        }
     }
 
 
@@ -113,6 +137,43 @@ public class XmlStreamParser extends AbstractStreamParser {
                     int space = searchSpace(data, peek);
 
                     if (data[endPeek - 1] == '/') {
+
+
+                        // add to activeNameTags
+                        activeNameTags.addAll(data, peek + 1, space - peek - 1);
+                        //check if DataHandler registered
+                        for (ObjectMap.Entry<char[], ValueHandler> entry : valueHandlerMap.entries()) {
+                            if (activeNameTags.equals(entry.key)) {
+                                int valuesStart = space;
+                                int valueslength = endPeek - space;
+
+                                // handled valueNames
+                                ValueHandler handler = entry.value;
+                                for (char[] valueName : handler.valueList) {
+                                    // check value exist
+                                    int valueStart = CharSequenceUtil.indexOf(data, valuesStart, valueslength, valueName, 0, valueName.length, 0);
+                                    if (valueStart >= 0) {
+                                        valueStart += valuesStart; //add offset (valuesStart)
+                                        valueStart += valueName.length + 2; // add name and ="
+
+                                        //search value end ( next ")
+                                        int valueEnd = CharSequenceUtil.indexOf(data, valueStart, valueslength - (valueStart - valuesStart), QUOTE, 0, QUOTE.length, 0);
+
+                                        handler.handleValue(valueName, data, valueStart, valueEnd);
+
+                                    } else {
+                                        log.warn("Value not found");
+                                    }
+
+                                }
+
+                                log.debug("ValueHandler found");
+                            }
+                        }
+
+                        // remove from activeNameTags
+                        activeNameTags.size -= space - peek - 1;
+
                         if (true) {
                             String name = new String(data, peek + 1, space - peek - 1);
                             log.debug("Name End Tag found: " + name + "   Names: {}", activeNameTags.toString(""));
@@ -167,4 +228,5 @@ public class XmlStreamParser extends AbstractStreamParser {
         }
         return -1;
     }
+
 }

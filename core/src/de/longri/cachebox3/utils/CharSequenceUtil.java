@@ -122,4 +122,23 @@ public class CharSequenceUtil {
         return true;
     }
 
+    public static boolean equals(char[] s1, char[] s2) {
+        if (s1 == s2) return true;
+        if (s1.length != s2.length) return false;
+        for (int i = 0; i < s1.length; i++)
+            if (s1[i] != s2[i]) return false;
+        return true;
+    }
+
+    public static double parseDouble(char[] data, int offset, int length) {
+        return 0;
+    }
+
+    public static int parseInteger(char[] data, int offset, int length) {
+        return 0;
+    }
+
+    public static long parseLong(char[] data, int offset, int length) {
+        return 0;
+    }
 }
