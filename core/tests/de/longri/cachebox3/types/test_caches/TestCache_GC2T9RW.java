@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.types.test_caches;
 
+import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 
 /**
@@ -32,6 +34,19 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         this.archived = false;
         this.placed_by = "Team Rabbits";
         this.owner = "Team Rabbits";
+        this.container = CacheSizes.small;
+
+        this.positiveList.add(Attributes.Bicycles);
+        this.positiveList.add(Attributes.Available_at_all_times);
+        this.positiveList.add(Attributes.Public_restrooms_nearby);
+        this.positiveList.add(Attributes.Parking_available);
+        this.positiveList.add(Attributes.Fuel_Nearby);
+        this.positiveList.add(Attributes.Hunting);
+        this.positiveList.add(Attributes.Short_hike);
+        this.positiveList.add(Attributes.Climbing_gear);
+        this.positiveList.add(Attributes.Ticks);
+        this.positiveList.add(Attributes.Dogs);
+
     }
 
 }

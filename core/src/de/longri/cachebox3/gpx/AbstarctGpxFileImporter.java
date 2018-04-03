@@ -20,10 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.MutableCache;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ActiveQName;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.XmlStreamEventParser;
@@ -63,6 +60,9 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
     boolean archived;
     String placed_by;
     String owner;
+    CacheSizes container;
+    Array<Attributes> positiveAttributes = new Array<>();
+    Array<Attributes> negativeAttributes = new Array<>();
 
     public AbstarctGpxFileImporter(Database database, ImportHandler importHandler) {
         super();
@@ -108,7 +108,7 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
     protected void resetValues() {
         latitude = 0;
         longitude = 0;
-        type = CacheTypes.Undefined;
+        type = null;
         gcCode = null;
         title = null;
         id = 0;
@@ -116,6 +116,9 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
         archived = false;
         placed_by = null;
         owner = null;
+        container = null;
+        positiveAttributes.clear();
+        negativeAttributes.clear();
     }
 
     protected void createNewWPT() {
@@ -133,6 +136,13 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
         cache.setAvailable(this.available);
         cache.setPlacedBy(this.placed_by);
         cache.setOwner(this.owner);
+        cache.setSize(this.container);
+
+        for (Attributes att : positiveAttributes)
+            cache.addAttributePositive(att);
+
+        for (Attributes att : negativeAttributes)
+            cache.addAttributeNegative(att);
 
 
         resolveCacheConflicts.add(cache);
