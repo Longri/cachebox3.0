@@ -18,7 +18,6 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 
-import javax.naming.directory.Attribute;
 import java.util.Date;
 
 /**
@@ -68,11 +67,11 @@ public class MutableCache extends AbstractCache {
         this.latitude = cache.getLatitude();
         this.longitude = cache.getLongitude();
         this.attributes = cache.getAttributes(database);
-        this.name = cache.getName().toString();
-        this.gcCode = cache.getGcCode().toString();
-        this.placedBy = cache.getPlacedBy().toString();
-        this.owner = cache.getOwner().toString();
-        this.gcId = cache.getGcId().toString();
+        if (cache.getName() != null) this.name = cache.getName().toString();
+        if (cache.getGcCode() != null) this.gcCode = cache.getGcCode().toString();
+        if (cache.getPlacedBy() != null) this.placedBy = cache.getPlacedBy().toString();
+        if (cache.getOwner() != null) this.owner = cache.getOwner().toString();
+        if (cache.getGcId() != null) this.gcId = cache.getGcId().toString();
         this.rating = (short) (cache.getRating() * 2);
         this.favPoints = cache.getFavoritePoints();
         this.id = cache.getId();

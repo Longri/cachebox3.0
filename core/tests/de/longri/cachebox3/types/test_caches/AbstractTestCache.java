@@ -67,11 +67,11 @@ public abstract class AbstractTestCache {
         Iterator<Attributes> positiveIterator = positiveList.iterator();
         Iterator<Attributes> negativeIterator = negativeList.iterator();
 
-//        Array<Attributes> attributes = abstractCache.getAttributes(database);
-//TODO DEBUG
+        abstractCache = abstractCache.getMutable(database);
 
         while (positiveIterator.hasNext()) {
-            assertThat("Attribute wrong", abstractCache.isAttributePositiveSet((Attributes) positiveIterator.next()));
+            Attributes att = positiveIterator.next();
+            assertThat("positive Attribute "+att+" wrong", abstractCache.isAttributePositiveSet(att));
         }
 
         while (negativeIterator.hasNext()) {
@@ -107,8 +107,8 @@ public abstract class AbstractTestCache {
 
         while (RestInterator.hasNext()) {
             Attributes attr = (Attributes) RestInterator.next();
-            assertThat(attr.name() + "Attribute wrong", !abstractCache.isAttributePositiveSet(attr));
-            assertThat(attr.name() + "Attribute wrong", !abstractCache.isAttributeNegativeSet(attr));
+            assertThat(attr.name() + " Attribute wrong", !abstractCache.isAttributePositiveSet(attr));
+            assertThat(attr.name() + " Attribute wrong", !abstractCache.isAttributeNegativeSet(attr));
         }
     }
 }
