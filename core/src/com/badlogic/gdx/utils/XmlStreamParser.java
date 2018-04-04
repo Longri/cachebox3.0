@@ -62,7 +62,7 @@ public class XmlStreamParser extends AbstractStreamParser {
     private final IntMap<ObjectMap<char[], DataHandler>> dataHandlerMap = new IntMap<>();
     private final IntMap<ObjectMap<char[], ValueHandler>> valueHandlerMap = new IntMap<>();
     private final char[] QUOTE = new char[]{'"'};
-    
+
     private int lastStartPeek;
     private DataHandler lastHandler;
 

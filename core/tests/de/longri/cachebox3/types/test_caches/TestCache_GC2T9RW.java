@@ -35,6 +35,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         this.placed_by = "Team Rabbits";
         this.owner = "Team Rabbits";
         this.container = CacheSizes.small;
+        this.url="http://www.geocaching.com/seek/cache_details.aspx?guid=f26f18bd-9aaa-4499-944b-3e8cb62e41a7";
 
         this.positiveList.add(Attributes.Bicycles);
         this.positiveList.add(Attributes.Available_at_all_times);

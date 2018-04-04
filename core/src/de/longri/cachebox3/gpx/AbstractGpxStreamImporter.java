@@ -63,7 +63,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected CacheSizes container;
     protected Array<Attributes> positiveAttributes = new Array<>();
     protected Array<Attributes> negativeAttributes = new Array<>();
-    protected WptTypes wptType = WptTypes.UNKNOWN;
+    protected String url;
 
 
     public AbstractGpxStreamImporter(Database database, ImportHandler importHandler) {
@@ -118,7 +118,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         container = null;
         positiveAttributes.clear();
         negativeAttributes.clear();
-        wptType = WptTypes.UNKNOWN;
+        url = null;
     }
 
     protected void createNewWPT() {
@@ -137,6 +137,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setPlacedBy(this.placed_by);
         cache.setOwner(this.owner);
         cache.setSize(this.container);
+        cache.setUrl(this.url);
 
         for (Attributes att : positiveAttributes)
             cache.addAttributePositive(att);

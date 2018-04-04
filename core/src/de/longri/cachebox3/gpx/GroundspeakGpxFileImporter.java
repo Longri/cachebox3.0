@@ -40,6 +40,7 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
     private final ActiveQName LON = this.registerName("lon");
     private final ActiveQName TYPE = this.registerName("type");
     private final ActiveQName NAME = this.registerName("name");
+    private final ActiveQName URL = this.registerName("url");
     private final ActiveQName GS_CACHE = this.registerName("groundspeak:cache");
     private final ActiveQName TITLE = this.registerName("groundspeak:name");
     private final ActiveQName ID = this.registerName("id");
@@ -104,6 +105,8 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
                 type = CacheTypes.parseString(element.getData());
             } else if (NAME.isActive()) {
                 gcCode = element.getData();
+            } else if (URL.isActive()) {
+                url = element.getData();
             } else if (GS_CACHE.isActive()) {
                 if (TITLE.isActive() && !GS_TRAVELBUGS.isActive()) {
                     title = element.getData();

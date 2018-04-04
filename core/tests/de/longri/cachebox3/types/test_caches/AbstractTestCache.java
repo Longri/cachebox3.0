@@ -45,6 +45,7 @@ public abstract class AbstractTestCache {
     CacheSizes container;
     ArrayList<Attributes> positiveList = new ArrayList<>();
     ArrayList<Attributes> negativeList = new ArrayList<>();
+    public String url;
 
     public void assertCache(AbstractCache other, Database database) {
         assertThat("Cache must not be NULL", other != null);
@@ -60,6 +61,7 @@ public abstract class AbstractTestCache {
         assertThat("Owner must be " + owner + " but was :" + other.getOwner(), CharSequenceUtilTest.equals(owner, other.getOwner()));
         assertThat("Container must be " + container + " but was :" + other.getSize(), container == other.getSize());
         assetCacheAttributes(other, database);
+        assertThat("Cache Url must be " + url + " but was :" + other.getUrl(database), CharSequenceUtilTest.equals(url, other.getUrl(database)));
 
     }
 
