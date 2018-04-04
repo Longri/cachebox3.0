@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.ImmutableCache;
-import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +97,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("FirstImported", iso8601Format.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
-        args.put("state", abstractCache.getState());
+        args.put("state", abstractCache.getState(database));
         args.put("country", abstractCache.getCountry(database));
         args.put("ApiStatus", abstractCache.getApiState(database));
 

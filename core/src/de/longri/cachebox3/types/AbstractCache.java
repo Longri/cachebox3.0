@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -209,6 +209,8 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setPlacedBy(String value);
 
+    public abstract String getState(Database database);
+
     public abstract Date getDateHidden(Database database);
 
     public abstract void setDateHidden(Date date);
@@ -240,8 +242,6 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract String getCountry(Database database);
 
     public abstract void setCountry(String value);
-
-    public abstract String getState();
 
     public abstract void setState(String value);
 

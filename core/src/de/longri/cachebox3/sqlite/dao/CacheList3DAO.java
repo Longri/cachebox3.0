@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -245,7 +245,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                         ca.getTourName(),
                         ca.getGPXFilename_ID(),
                         null, //todo handle listing checksum
-                        ca.getState(),
+                        ca.getState(database),
                         ca.getCountry(database),
                         ca.getApiState(database)
                 ).commit().reset();

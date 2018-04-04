@@ -19,6 +19,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,10 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
     private final ActiveQName GS_CONTAINER = this.registerName("groundspeak:container");
     private final ActiveQName GS_ATTRIBUTE = this.registerName("groundspeak:attribute");
     private final ActiveQName GS_ATTRIBUTE_INC = this.registerName("inc");
+    private final ActiveQName GS_DIFFICULTY = this.registerName("groundspeak:difficulty");
+    private final ActiveQName GS_TERRAIN = this.registerName("groundspeak:terrain");
+    private final ActiveQName GS_COUNTRY = this.registerName("groundspeak:country");
+    private final ActiveQName GS_STATE = this.registerName("groundspeak:state");
 
 
     public GroundspeakGpxFileImporter(Database database, ImportHandler importHandler) {
@@ -116,6 +121,16 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
                     owner = element.getData();
                 } else if (GS_CONTAINER.isActive()) {
                     container = CacheSizes.parseString(element.getData());
+                } else if (GS_DIFFICULTY.isActive()) {
+                    int dif = Integer.parseInt(element.getData());
+                    difficulty = (float) (dif / 2.0);
+                } else if (GS_TERRAIN.isActive()) {
+                    int ter = Integer.parseInt(element.getData());
+                    terrain = (float) (ter / 2.0);
+                } else if (GS_COUNTRY.isActive()) {
+                    country = element.getData();
+                } else if (GS_STATE.isActive()) {
+                    state = element.getData();
                 }
             }
         }

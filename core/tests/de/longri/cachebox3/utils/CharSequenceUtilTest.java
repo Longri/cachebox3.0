@@ -127,6 +127,7 @@ public class CharSequenceUtilTest {
     //##################################################################
 
     public static boolean equals(CharSequence s1, CharSequence s2) {
+        if (s1 == null || s2 == null) return false;
         if (s1.length() != s2.length()) return false;
         int n = s1.length();
         while (n-- > 0) {

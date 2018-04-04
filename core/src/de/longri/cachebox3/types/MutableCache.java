@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@ public class MutableCache extends AbstractCache {
         this.hint = cache.getHint(database).toString();
         this.url = cache.getUrl(database);
         this.dateHidden = cache.getDateHidden(database);
-        this.state = cache.getState();
+        this.state = cache.getState(database);
         this.country = cache.getCountry(database);
         this.apiState = cache.getApiState(database);
     }
@@ -489,7 +489,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getState() {
+    public String getState(Database database) {
         return this.state;
     }
 

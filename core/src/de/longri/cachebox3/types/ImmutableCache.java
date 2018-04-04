@@ -302,6 +302,11 @@ public class ImmutableCache extends AbstractCache {
         return getStringFromDB(database, "SELECT country FROM CacheInfo WHERE Id=?");
     }
 
+    @Override
+    public String getState(Database database) {
+        return getStringFromDB(database, "SELECT state FROM CacheInfo WHERE Id=?");
+    }
+
     private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
@@ -451,7 +456,6 @@ public class ImmutableCache extends AbstractCache {
         throwNotChangeable("HasHint");
     }
 
-
     @Override
     public void setShortDescription(Database database, String value) {
         throwNotChangeable("ShortDescription");
@@ -482,12 +486,15 @@ public class ImmutableCache extends AbstractCache {
         throwNotChangeable("Longitude");
     }
 
-
     @Override
     public void setUrl(String value) {
         throwNotChangeable("Url");
     }
 
+    @Override
+    public void setState(String value) {
+        throwNotChangeable("State");
+    }
 
     @Override
     public void setCountry(String value) {
@@ -683,18 +690,6 @@ public class ImmutableCache extends AbstractCache {
     public void setTmpSolver(String value) {
 
     }
-
-
-    @Override
-    public String getState() {
-        return null;
-    }
-
-    @Override
-    public void setState(String value) {
-
-    }
-
 
     @Override
     public void addAttributeNegative(Attributes attribute) {

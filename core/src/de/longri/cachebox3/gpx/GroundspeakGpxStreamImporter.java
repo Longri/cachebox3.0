@@ -138,6 +138,36 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
             }
         });
 
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:difficulty", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                int dif = CharSequenceUtil.parseInteger(data, offset, length);
+                difficulty = (float) (dif / 2.0);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:terrain", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                int ter = CharSequenceUtil.parseInteger(data, offset, length);
+                terrain = (float) (ter / 2.0);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:country", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                country = new String(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:state", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                state = new String(data, offset, length);
+            }
+        });
+
         this.registerEndTagHandler("/gpx/wpt", new EndTagHandler() {
             @Override
             protected void handleEndTag() {

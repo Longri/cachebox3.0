@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.types.test_caches;
 
-import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
@@ -45,7 +44,11 @@ public abstract class AbstractTestCache {
     CacheSizes container;
     ArrayList<Attributes> positiveList = new ArrayList<>();
     ArrayList<Attributes> negativeList = new ArrayList<>();
-    public String url;
+    String url;
+    float difficulty;
+    float terrain;
+    String country;
+    String state;
 
     public void assertCache(AbstractCache other, Database database) {
         assertThat("Cache must not be NULL", other != null);
@@ -62,7 +65,10 @@ public abstract class AbstractTestCache {
         assertThat("Container must be " + container + " but was :" + other.getSize(), container == other.getSize());
         assetCacheAttributes(other, database);
         assertThat("Cache Url must be " + url + " but was :" + other.getUrl(database), CharSequenceUtilTest.equals(url, other.getUrl(database)));
-
+        assertThat("Country must be " + country + " but was :" + other.getCountry(database), CharSequenceUtilTest.equals(country, other.getCountry(database)));
+        assertThat("State must be " + state + " but was :" + other.getState(database), CharSequenceUtilTest.equals(state, other.getState(database)));
+        assertThat("Cache difficulty must be " + difficulty + " but was :" + other.getDifficulty(), difficulty == other.getDifficulty());
+        assertThat("Cache terrain must be " + terrain + " but was :" + other.getTerrain(), terrain == other.getTerrain());
     }
 
     private void assetCacheAttributes(AbstractCache abstractCache, Database database) {
@@ -73,7 +79,7 @@ public abstract class AbstractTestCache {
 
         while (positiveIterator.hasNext()) {
             Attributes att = positiveIterator.next();
-            assertThat("positive Attribute "+att+" wrong", abstractCache.isAttributePositiveSet(att));
+            assertThat("positive Attribute " + att + " wrong", abstractCache.isAttributePositiveSet(att));
         }
 
         while (negativeIterator.hasNext()) {
