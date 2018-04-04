@@ -57,37 +57,60 @@ public class XmlStreamParser extends AbstractStreamParser {
             return super.equals(object);
         }
     };
-    private final ObjectMap<char[], EndTagHandler> endTagHandlerMap = new ObjectMap<>();
-    private final ObjectMap<char[], DataHandler> dataHandlerMap = new ObjectMap<>();
-    private final ObjectMap<char[], ValueHandler> valueHandlerMap = new ObjectMap<>();
+
+    private final IntMap<ObjectMap<char[], EndTagHandler>> endTagHandlerMap = new IntMap<>();
+    private final IntMap<ObjectMap<char[], DataHandler>> dataHandlerMap = new IntMap<>();
+    private final IntMap<ObjectMap<char[], ValueHandler>> valueHandlerMap = new IntMap<>();
     private final char[] QUOTE = new char[]{'"'};
+    
     private int lastStartPeek;
     private DataHandler lastHandler;
 
     public void registerEndTagHandler(String locationPath, EndTagHandler handler) {
         // remove '/'
         locationPath = locationPath.replaceAll("/", "");
-        endTagHandlerMap.put(locationPath.toCharArray(), handler);
+
+        ObjectMap<char[], EndTagHandler> handlerMap = endTagHandlerMap.get(locationPath.length());
+        if (handlerMap == null) {
+            handlerMap = new ObjectMap<>();
+            handlerMap.put(locationPath.toCharArray(), handler);
+            endTagHandlerMap.put(locationPath.length(), handlerMap);
+        } else {
+            handlerMap.put(locationPath.toCharArray(), handler);
+        }
     }
 
     public void registerDataHandler(String locationPath, DataHandler dataHandler) {
         // remove '/'
         locationPath = locationPath.replaceAll("/", "");
-        dataHandlerMap.put(locationPath.toCharArray(), dataHandler);
+        ObjectMap<char[], DataHandler> handlerMap = dataHandlerMap.get(locationPath.length());
+        if (handlerMap == null) {
+            handlerMap = new ObjectMap<>();
+            handlerMap.put(locationPath.toCharArray(), dataHandler);
+            dataHandlerMap.put(locationPath.length(), handlerMap);
+        } else {
+            handlerMap.put(locationPath.toCharArray(), dataHandler);
+        }
     }
 
     public void registerValueHandler(String locationPath, ValueHandler valueHandler, char[]... valueNames) {
         // remove '/'
         locationPath = locationPath.replaceAll("/", "");
-
         char[] path = locationPath.toCharArray();
-
-        ValueHandler contains = valueHandlerMap.get(path);
-        if (contains != null) {
-            contains.valueList.addAll(valueNames);
-        } else {
+        ObjectMap<char[], ValueHandler> handlerMap = valueHandlerMap.get(locationPath.length());
+        if (handlerMap == null) {
+            handlerMap = new ObjectMap<>();
+            handlerMap.put(path, valueHandler);
             valueHandler.valueList.addAll(valueNames);
-            valueHandlerMap.put(path, valueHandler);
+            valueHandlerMap.put(locationPath.length(), handlerMap);
+        } else {
+            ValueHandler contains = handlerMap.get(path);
+            if (contains != null) {
+                contains.valueList.addAll(valueNames);
+            } else {
+                valueHandler.valueList.addAll(valueNames);
+                handlerMap.put(path, valueHandler);
+            }
         }
     }
 
@@ -123,9 +146,12 @@ public class XmlStreamParser extends AbstractStreamParser {
                 // check if </
                 if (data[peek + 1] == '/') {
                     //search for endTagHandler
-                    for (ObjectMap.Entry<char[], EndTagHandler> entry : endTagHandlerMap.entries()) {
-                        if (activeNameTags.equals(entry.key)) {
-                            entry.value.handleEndTag();
+                    ObjectMap<char[], EndTagHandler> handlerMap = endTagHandlerMap.get(activeNameTags.size);
+                    if (handlerMap != null) {
+                        for (ObjectMap.Entry<char[], EndTagHandler> entry : handlerMap.entries()) {
+                            if (activeNameTags.equals(entry.key)) {
+                                entry.value.handleEndTag();
+                            }
                         }
                     }
 
@@ -156,38 +182,44 @@ public class XmlStreamParser extends AbstractStreamParser {
                         //check if DataHandler registered
                         int valuesStart = space;
                         int valuesLength = endPeek - space;
-                        for (ObjectMap.Entry<char[], ValueHandler> entry : valueHandlerMap.entries()) {
-                            if (activeNameTags.equals(entry.key)) {
+                        ObjectMap<char[], ValueHandler> handlerMap = valueHandlerMap.get(activeNameTags.size);
+                        if (handlerMap != null) {
+                            for (ObjectMap.Entry<char[], ValueHandler> entry : handlerMap.entries()) {
+                                if (activeNameTags.equals(entry.key)) {
 
 
-                                // handled valueNames
-                                ValueHandler handler = entry.value;
-                                for (char[] valueName : handler.valueList) {
-                                    // check value exist
-                                    int valueStart = CharSequenceUtil.indexOf(data, valuesStart, valuesLength, valueName, 0, valueName.length, 0);
-                                    if (valueStart >= 0) {
-                                        valueStart += valuesStart; //add offset (valuesStart)
-                                        valueStart += valueName.length + 2; // add name and ="
+                                    // handled valueNames
+                                    ValueHandler handler = entry.value;
+                                    for (char[] valueName : handler.valueList) {
+                                        // check value exist
+                                        int valueStart = CharSequenceUtil.indexOf(data, valuesStart, valuesLength, valueName, 0, valueName.length, 0);
+                                        if (valueStart >= 0) {
+                                            valueStart += valuesStart; //add offset (valuesStart)
+                                            valueStart += valueName.length + 2; // add name and ="
 
-                                        //search value end ( next ")
-                                        int valueEnd = CharSequenceUtil.indexOf(data, valueStart, valuesLength - (valueStart - valuesStart), QUOTE, 0, QUOTE.length, 0);
+                                            //search value end ( next ")
+                                            int valueEnd = CharSequenceUtil.indexOf(data, valueStart, valuesLength - (valueStart - valuesStart), QUOTE, 0, QUOTE.length, 0);
 
-                                        handler.handleValue(valueName, data, valueStart, valueEnd);
+                                            handler.handleValue(valueName, data, valueStart, valueEnd);
 
-                                    } else {
-                                        log.warn("Value " + new String(valueName) + " not found");
+                                        } else {
+                                            log.warn("Value " + new String(valueName) + " not found");
+                                        }
+
                                     }
 
+                                    if (DEBUG) log.debug("ValueHandler found");
                                 }
-
-                                if (DEBUG) log.debug("ValueHandler found");
                             }
                         }
 
                         //search for endTagHandler
-                        for (ObjectMap.Entry<char[], EndTagHandler> entry : endTagHandlerMap.entries()) {
-                            if (activeNameTags.equals(entry.key)) {
-                                entry.value.handleEndTag();
+                        ObjectMap<char[], EndTagHandler> endHandlerMap = endTagHandlerMap.get(activeNameTags.size);
+                        if (endHandlerMap != null) {
+                            for (ObjectMap.Entry<char[], EndTagHandler> entry : endHandlerMap.entries()) {
+                                if (activeNameTags.equals(entry.key)) {
+                                    entry.value.handleEndTag();
+                                }
                             }
                         }
 
@@ -204,36 +236,42 @@ public class XmlStreamParser extends AbstractStreamParser {
                     } else {
                         activeNameTags.addAll(data, peek + 1, space - peek - 1);
                         //check if DataHandler registered
-                        for (ObjectMap.Entry<char[], DataHandler> entry : dataHandlerMap.entries()) {
-                            if (activeNameTags.equals(entry.key)) {
-                                lastStartPeek = endPeek + 1;
-                                lastHandler = entry.value;
+                        ObjectMap<char[], DataHandler> handlerMap = dataHandlerMap.get(activeNameTags.size);
+                        if (handlerMap != null) {
+                            for (ObjectMap.Entry<char[], DataHandler> entry : handlerMap.entries()) {
+                                if (activeNameTags.equals(entry.key)) {
+                                    lastStartPeek = endPeek + 1;
+                                    lastHandler = entry.value;
+                                }
                             }
                         }
 
                         //check if ValueHandler registered
                         int valuesStart = peek;
                         int valuesLength = endPeek - peek;
-                        for (ObjectMap.Entry<char[], ValueHandler> entry : valueHandlerMap.entries()) {
-                            if (activeNameTags.equals(entry.key)) {
-                                // handled valueNames
-                                ValueHandler handler = entry.value;
-                                for (char[] valueName : handler.valueList) {
-                                    // check value exist
-                                    int valueStart = CharSequenceUtil.indexOf(data, valuesStart, valuesLength, valueName, 0, valueName.length, 0);
-                                    if (valueStart >= 0) {
-                                        valueStart += valuesStart; //add offset (valuesStart)
-                                        valueStart += valueName.length + 2; // add name and ="
+                        ObjectMap<char[], ValueHandler> vHandlerMap = valueHandlerMap.get(activeNameTags.size);
+                        if (vHandlerMap != null) {
+                            for (ObjectMap.Entry<char[], ValueHandler> entry : vHandlerMap.entries()) {
+                                if (activeNameTags.equals(entry.key)) {
+                                    // handled valueNames
+                                    ValueHandler handler = entry.value;
+                                    for (char[] valueName : handler.valueList) {
+                                        // check value exist
+                                        int valueStart = CharSequenceUtil.indexOf(data, valuesStart, valuesLength, valueName, 0, valueName.length, 0);
+                                        if (valueStart >= 0) {
+                                            valueStart += valuesStart; //add offset (valuesStart)
+                                            valueStart += valueName.length + 2; // add name and ="
 
-                                        //search value end ( next ")
-                                        int valueEnd = CharSequenceUtil.indexOf(data, valueStart, valuesLength - (valueStart - valuesStart), QUOTE, 0, QUOTE.length, 0);
+                                            //search value end ( next ")
+                                            int valueEnd = CharSequenceUtil.indexOf(data, valueStart, valuesLength - (valueStart - valuesStart), QUOTE, 0, QUOTE.length, 0);
 
-                                        handler.handleValue(valueName, data, valueStart, valueEnd);
+                                            handler.handleValue(valueName, data, valueStart, valueEnd);
 
-                                    } else {
-                                        log.warn("Value " + new String(valueName) + " not found");
+                                        } else {
+                                            log.warn("Value " + new String(valueName) + " not found");
+                                        }
+
                                     }
-
                                 }
                             }
                         }
