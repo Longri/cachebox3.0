@@ -69,7 +69,7 @@ class GpxFileImporterTest {
         TEST_DB.close();
 
         long elapseTime = System.currentTimeMillis() - start;
-        System.out.println("Gpx import time: " + elapseTime + "ms");
+        System.out.println("Gpx Stream import time: " + elapseTime + "ms");
     }
 
     @Test

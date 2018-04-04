@@ -22,8 +22,8 @@ import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.utils.CharSequenceUtilTest;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Created by Longri on 31.03.18.
  */
 public abstract class AbstractTestCache {
+    final SimpleDateFormat DATE_PATTERN = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+
+    public AbstractTestCache() {
+        DATE_PATTERN.setTimeZone(TimeZone.getTimeZone("EST"));
+    }
+
     double longitude;
     double latitude;
     CacheTypes cacheType;
@@ -54,6 +60,7 @@ public abstract class AbstractTestCache {
     String longDescription;
     String hint;
     boolean found;
+    Date dateHidden;
 
     public void assertCache(AbstractCache other, Database database) {
         assertThat("Cache must not be NULL", other != null);
@@ -78,6 +85,10 @@ public abstract class AbstractTestCache {
         assertEquals(shortDescription, other.getShortDescription(database).replaceAll("\r\n", "\n"), "Short description should be equals");
         assertEquals(longDescription, other.getLongDescription(database).replaceAll("\r\n", "\n"), "Long description should be equals");
         assertEquals(hint, other.getHint(database).toString().replaceAll("\r\n", "\n"), "Hint should be equals");
+
+        String expectedDate = DATE_PATTERN.format(this.dateHidden);
+        String actualDate = DATE_PATTERN.format(other.getDateHidden(database));
+        assertEquals(expectedDate, actualDate, "HiddenDate should be equals");
     }
 
     private void assetCacheAttributes(AbstractCache abstractCache, Database database) {

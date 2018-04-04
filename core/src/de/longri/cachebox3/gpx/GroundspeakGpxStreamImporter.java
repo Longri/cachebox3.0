@@ -197,6 +197,13 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
             }
         });
 
+        this.registerDataHandler("/gpx/wpt/time", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                dateHidden = new String(data, offset, length);
+            }
+        });
+
         this.registerEndTagHandler("/gpx/wpt", new EndTagHandler() {
             @Override
             protected void handleEndTag() {

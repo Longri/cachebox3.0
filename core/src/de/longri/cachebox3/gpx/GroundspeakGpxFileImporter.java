@@ -61,6 +61,7 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
     private final ActiveQName GS_LONG_DESCRIPTION = this.registerName("groundspeak:long_description");
     private final ActiveQName GS_HINT = this.registerName("groundspeak:encoded_hints");
     private final ActiveQName SYM = this.registerName("sym");
+    private final ActiveQName TIME = this.registerName("time");
 
 
     public GroundspeakGpxFileImporter(Database database, ImportHandler importHandler) {
@@ -118,6 +119,8 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
                 url = element.getData();
             } else if (SYM.isActive()) {
                 found = element.getData().equals("Geocache Found");
+            } else if (TIME.isActive()) {
+                dateHidden = element.getData();
             } else if (GS_CACHE.isActive()) {
                 if (TITLE.isActive() && !GS_TRAVELBUGS.isActive()) {
                     title = element.getData();

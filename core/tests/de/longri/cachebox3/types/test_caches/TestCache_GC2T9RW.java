@@ -19,11 +19,15 @@ import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 
+import java.text.ParseException;
+
 /**
  * Created by Longri on 31.03.18.
  */
 public class TestCache_GC2T9RW extends AbstractTestCache {
+
     public TestCache_GC2T9RW() {
+        super();
         this.latitude = 49.349817;
         this.longitude = 8.62925;
         this.cacheType = CacheTypes.Traditional;
@@ -40,6 +44,12 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         this.terrain = 2.5f;// half int value(5)
         this.country = "Germany";
         this.state = "Baden-Württemberg";
+        this.found = true;
+        try {
+            this.dateHidden = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         this.positiveList.add(Attributes.Bicycles);
         this.positiveList.add(Attributes.Available_at_all_times);
@@ -51,8 +61,6 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         this.positiveList.add(Attributes.Climbing_gear);
         this.positiveList.add(Attributes.Ticks);
         this.positiveList.add(Attributes.Dogs);
-
-        this.found = true;
 
         this.hint = "wenn du ihn nicht findest, findet er dich!!";
         this.shortDescription = "&lt;font face=\"tahoma\" size=\"3\" color=\"#330033\"&gt;&lt;br /&gt;\n" +
