@@ -16,7 +16,6 @@
 package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.files.FileHandle;
-import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,14 +80,12 @@ public class XmlStreamParser extends AbstractStreamParser {
         }
     }
 
-
     public void parse(FileHandle xmlFileHandle) {
         this.parse(xmlFileHandle.read());
     }
 
     @Override
     protected int parse(char[] data) {
-
         int offset = 0;
         lastStartPeek = 0;
 
@@ -98,18 +95,15 @@ public class XmlStreamParser extends AbstractStreamParser {
 
             if (data[peek] == '<') {
                 int endPeek = searchPeek(data, peek + 1);
-                if (endPeek < 0) {
+                if (endPeek < 0)
                     return offset;
-                }
-
 
                 // check if <?
                 if (data[peek + 1] == '?') {
                     // search for end
-
                     if (data[endPeek - 1] == '?') {
                         // xml version from peek to endPeek
-                        log.debug("XML version found");
+                        if (DEBUG) log.debug("XML version found");
                     }
                     offset = endPeek + 1;
                     continue;
@@ -127,7 +121,8 @@ public class XmlStreamParser extends AbstractStreamParser {
                         lastHandler = null;
                     }
 
-                    log.debug("Name END Tag found: " + new String(data, peek + 2, nameLength) + "   Names: {}", activeNameTags.toString(""));
+                    if (DEBUG)
+                        log.debug("Name END Tag found: " + new String(data, peek + 2, nameLength) + "   Names: {}", activeNameTags.toString(""));
                     offset = space + 1;
                     continue;
                 }
@@ -137,27 +132,27 @@ public class XmlStreamParser extends AbstractStreamParser {
                     int space = searchSpace(data, peek);
 
                     if (data[endPeek - 1] == '/') {
-
-
                         // add to activeNameTags
                         activeNameTags.addAll(data, peek + 1, space - peek - 1);
+
                         //check if DataHandler registered
+                        int valuesStart = space;
+                        int valuesLength = endPeek - space;
                         for (ObjectMap.Entry<char[], ValueHandler> entry : valueHandlerMap.entries()) {
                             if (activeNameTags.equals(entry.key)) {
-                                int valuesStart = space;
-                                int valueslength = endPeek - space;
+
 
                                 // handled valueNames
                                 ValueHandler handler = entry.value;
                                 for (char[] valueName : handler.valueList) {
                                     // check value exist
-                                    int valueStart = CharSequenceUtil.indexOf(data, valuesStart, valueslength, valueName, 0, valueName.length, 0);
+                                    int valueStart = CharSequenceUtil.indexOf(data, valuesStart, valuesLength, valueName, 0, valueName.length, 0);
                                     if (valueStart >= 0) {
                                         valueStart += valuesStart; //add offset (valuesStart)
                                         valueStart += valueName.length + 2; // add name and ="
 
                                         //search value end ( next ")
-                                        int valueEnd = CharSequenceUtil.indexOf(data, valueStart, valueslength - (valueStart - valuesStart), QUOTE, 0, QUOTE.length, 0);
+                                        int valueEnd = CharSequenceUtil.indexOf(data, valueStart, valuesLength - (valueStart - valuesStart), QUOTE, 0, QUOTE.length, 0);
 
                                         handler.handleValue(valueName, data, valueStart, valueEnd);
 
@@ -167,14 +162,14 @@ public class XmlStreamParser extends AbstractStreamParser {
 
                                 }
 
-                                log.debug("ValueHandler found");
+                                if (DEBUG) log.debug("ValueHandler found");
                             }
                         }
 
                         // remove from activeNameTags
                         activeNameTags.size -= space - peek - 1;
 
-                        if (true) {
+                        if (DEBUG) {
                             String name = new String(data, peek + 1, space - peek - 1);
                             log.debug("Name End Tag found: " + name + "   Names: {}", activeNameTags.toString(""));
                         }
@@ -190,7 +185,34 @@ public class XmlStreamParser extends AbstractStreamParser {
                             }
                         }
 
-                        if (true) {
+                        //check if ValueHandler registered
+                        int valuesStart = peek;
+                        int valuesLength = endPeek - peek;
+                        for (ObjectMap.Entry<char[], ValueHandler> entry : valueHandlerMap.entries()) {
+                            if (activeNameTags.equals(entry.key)) {
+                                // handled valueNames
+                                ValueHandler handler = entry.value;
+                                for (char[] valueName : handler.valueList) {
+                                    // check value exist
+                                    int valueStart = CharSequenceUtil.indexOf(data, valuesStart, valuesLength, valueName, 0, valueName.length, 0);
+                                    if (valueStart >= 0) {
+                                        valueStart += valuesStart; //add offset (valuesStart)
+                                        valueStart += valueName.length + 2; // add name and ="
+
+                                        //search value end ( next ")
+                                        int valueEnd = CharSequenceUtil.indexOf(data, valueStart, valuesLength - (valueStart - valuesStart), QUOTE, 0, QUOTE.length, 0);
+
+                                        handler.handleValue(valueName, data, valueStart, valueEnd);
+
+                                    } else {
+                                        log.warn("Value " + new String(valueName) + " not found");
+                                    }
+
+                                }
+                            }
+                        }
+
+                        if (DEBUG) {
                             String name = new String(data, peek + 1, space - peek - 1);
                             log.debug("Name Tag found: " + name + "   Names: {}", activeNameTags.toString(""));
                         }
@@ -198,8 +220,6 @@ public class XmlStreamParser extends AbstractStreamParser {
                         offset = endPeek + 1;
                         continue;
                     }
-
-
                 }
             }
             offset = peek + 1;

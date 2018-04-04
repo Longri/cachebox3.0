@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 03.04.2018.
@@ -38,6 +39,7 @@ class XmlStreamParserTest {
     private boolean archived;
     private double lat;
     private double lon;
+    private String longDescription;
 
 
     @Test
@@ -142,6 +144,14 @@ class XmlStreamParserTest {
             }
         }, ID, AVAILABLE, ARCHIVED);
 
+        parser.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:long_description", new XmlStreamParser.DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                longDescription = new String(data, offset, length);
+            }
+        });
+
+
         parser.parse(testFile);
 
         assertThat("Value should be 49.349817", lat == 49.349817);
@@ -151,5 +161,61 @@ class XmlStreamParserTest {
         assertThat("Value should be true", available == true);
         assertThat("Value should be false", archived == false);
 
+
+        longDescription = longDescription.replaceAll("\r\n", "\n");
+        assertEquals(expectedLongDescription, longDescription, "Description Wrong");
+
     }
+
+    private final String expectedLongDescription = "&lt;br /&gt;\n" +
+            "&lt;center&gt;&lt;img src=\n" +
+            "\"http://img.geocaching.com/cache/9b0334c7-c419-41c8-b883-8bb0adf20ac3.jpg\" /&gt;&lt;br /&gt;\n" +
+            "\n" +
+            "&lt;br /&gt;\n" +
+            "&lt;font face=\"tahoma\" size=\"3\" color=\"#330033\"&gt;&lt;br /&gt;\n" +
+            "&lt;br /&gt;\n" +
+            "Der Hampir, so sagt man, optisch ein liebes zartes Wesen&lt;br /&gt;\n" +
+            "im dunklen Hardtwald treibt er seine Spesen.&lt;br /&gt;\n" +
+            "So süß, so flauschig sogleich&lt;br /&gt;\n" +
+            "auch sein Fell so samtig und weich!&lt;br /&gt;\n" +
+            "Deshalb lass dich blos nicht blenden,&lt;br /&gt;\n" +
+            "sonst könnte es sehr böse für dich enden!&lt;br /&gt;\n" +
+            "&lt;br /&gt;\n" +
+            "Aaaaaber wenn du ihn entdeckst,&lt;br /&gt;\n" +
+            "so achte dich vor ihm, die Gefahr besteht dass du vergisst&lt;br /&gt;\n" +
+            "und vor lauter Kummer und Sorgen ihm tief in die Augen\n" +
+            "erblickst!!&lt;br /&gt;\n" +
+            "&lt;br /&gt;\n" +
+            "Es ist dann zu spät!&lt;br /&gt;\n" +
+            "Dann hat dich der Hampir bereits erspäht!!&lt;br /&gt;\n" +
+            "Der Hampir, so sagt man erschallt sein Gelächter&lt;br /&gt;\n" +
+            "wenn es Beute vor sich hat, so schaurig so grell,&lt;br /&gt;\n" +
+            "rette dich wenn du kannst schneller als schnell!&lt;br /&gt;\n" +
+            "&lt;br /&gt;\n" +
+            "Und wage dich nicht in den Wald&lt;br /&gt;\n" +
+            "in der Nacht beim Vollmond ist es dort bitterkalt!&lt;br /&gt;\n" +
+            "Nebelschwaden dort, aber die schaurige Gestalten&lt;br /&gt;\n" +
+            "verstecken sich im dunkeln mit dem Gedanken,&lt;br /&gt;\n" +
+            "ihre Beute noch schneller zu jagen als der Hampir!&lt;br /&gt;\n" +
+            "Dennoch willst du in den Wald?! Überlege es dir!!&lt;br /&gt;\n" +
+            "&lt;br /&gt;\n" +
+            "Du meinst, ach was... Hampire... die gibt es doch nicht?!&lt;br /&gt;\n" +
+            "Die Hasen die warnen: HIER wartet er auf dich!!!&lt;br /&gt;\n" +
+            "&lt;br /&gt;&lt;/font&gt;&lt;/center&gt;\n" +
+            "&lt;font face=\"tahoma\" size=\"3\" color=\"#330033\"&gt;&lt;br /&gt;\n" +
+            "&lt;br /&gt;\n" +
+            "Fotos dürft Ihr gerne machen &lt;img src=\n" +
+            "'http://www.geocaching.com/images/icons/icon_smile_big.gif' border=\n" +
+            "\"0\" align=\"middle\" /&gt;&lt;br /&gt;\n" +
+            "&lt;br /&gt;\n" +
+            "&lt;br /&gt;\n" +
+            "ein besonderer Dank an Monas Cacherteam, für die handwerkliche\n" +
+            "Meisterleistung!!&lt;br /&gt;\n" +
+            "Es ist genau so geworden, wie es sich die Hasen vorgestellt\n" +
+            "haben!!&lt;br /&gt;\n" +
+            "&lt;br /&gt;&lt;/font&gt;&lt;br /&gt;\n" +
+            "&lt;a href=\"http://www.andyhoppe.com/\" title=\n" +
+            "\"Counter/Zähler\"&gt;&lt;img src=\"http://c.andyhoppe.com/1302990447\"\n" +
+            "style=\"border:none\" alt=\"Counter/Zähler\" /&gt;&lt;/a&gt;&lt;p&gt;Additional Hidden Waypoints&lt;/p&gt;PK2T9RW - GC2T9RW Parking&lt;br /&gt;N 49° 21.077 E 008° 37.840&lt;br /&gt;Raststätte Hardtwald West.\n" +
+            "Und für Ortskundige: einfach Richtung ADAC Übungsgelände. Dann müsst Ihr nicht auf die Autobahn.&lt;br /&gt;";
 }
