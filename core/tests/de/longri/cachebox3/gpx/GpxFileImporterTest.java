@@ -87,9 +87,10 @@ class GpxFileImporterTest {
 
         AbstractCache cache = TEST_DB.getFromDbByGcCode("GC52BKF", false);
         assertThat("Cache can't be NULL", cache != null);
-        assertEquals("", cache.getLongDescription(TEST_DB));
+        assertEquals("\n", cache.getLongDescription(TEST_DB));
 
-        String sd = "<p>Drive In. Eine nette Zusatzeule. Bewohner ist informiert. Dennoch oft ï¿½muggelig. Das Grundstï¿½ck muss nicht betreten werden!ï¿½<img alt=\"enlightened\" src=\"http://www.geocaching.com/static/js/CKEditor/4.1.2/plugins/smiley/images/lightbulb.gif\" title=\"enlightened\" style=\"height:20px;width:20px;\" /></p>";
+        String sd = "&lt;p&gt;Drive In. Eine nette Zusatzeule. Bewohner ist informiert. Dennoch oft  muggelig. Das Grundstück muss nicht betreten werden! &lt;img alt=\"enlightened\" src=\"http://www.geocaching.com/static/js/CKEditor/4.1.2/plugins/smiley/images/lightbulb.gif\" title=\"enlightened\" style=\"height:20px;width:20px;\" /&gt;&lt;/p&gt;\n" +
+                "\n";
         assertEquals(sd, cache.getShortDescription(TEST_DB));
 
     }

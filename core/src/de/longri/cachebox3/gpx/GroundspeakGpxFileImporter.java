@@ -60,6 +60,7 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
     private final ActiveQName GS_SHORT_DESCRIPTION = this.registerName("groundspeak:short_description");
     private final ActiveQName GS_LONG_DESCRIPTION = this.registerName("groundspeak:long_description");
     private final ActiveQName GS_HINT = this.registerName("groundspeak:encoded_hints");
+    private final ActiveQName SYM = this.registerName("sym");
 
 
     public GroundspeakGpxFileImporter(Database database, ImportHandler importHandler) {
@@ -115,6 +116,8 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
                 gcCode = element.getData();
             } else if (URL.isActive()) {
                 url = element.getData();
+            } else if (SYM.isActive()) {
+                found = element.getData().equals("Geocache Found");
             } else if (GS_CACHE.isActive()) {
                 if (TITLE.isActive() && !GS_TRAVELBUGS.isActive()) {
                     title = element.getData();
@@ -135,19 +138,29 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
                 } else if (GS_STATE.isActive()) {
                     state = element.getData();
                 } else if (GS_SHORT_DESCRIPTION.isActive()) {
+                    String data = replace(element.getData());
                     if (shortDescription != null) {
-                        shortDescription += element.getData();
+                        shortDescription += data;
                     } else {
-                        shortDescription = element.getData();
+                        shortDescription = data;
                     }
                 } else if (GS_LONG_DESCRIPTION.isActive()) {
-                    longDescription = element.getData();
+                    String data = replace(element.getData());
+                    if (longDescription != null) {
+                        longDescription += data;
+                    } else {
+                        longDescription = data;
+                    }
                 } else if (GS_HINT.isActive()) {
                     hint = element.getData();
                 }
             }
         }
 
+    }
+
+    private String replace(String data) {
+        return data.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
     }
 
 

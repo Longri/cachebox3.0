@@ -33,6 +33,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
     private final char[] INC = "inc".toCharArray();
     private final char[] AVAILABLE = "available".toCharArray();
     private final char[] ARCHIEVED = "archived".toCharArray();
+    private final char[] CACHES_FOUND = "Geocache Found".toCharArray();
 
 
     public GroundspeakGpxStreamImporter(Database database, ImportHandler importHandler) {
@@ -186,6 +187,13 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
             @Override
             protected void handleData(char[] data, int offset, int length) {
                 shortDescription = new String(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/sym", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                found = CharSequenceUtil.equals(data, offset, length, CACHES_FOUND, 0, CACHES_FOUND.length);
             }
         });
 

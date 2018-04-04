@@ -71,6 +71,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected String shortDescription;
     protected String longDescription;
     protected String hint;
+    protected boolean found;
 
 
     public AbstractGpxStreamImporter(Database database, ImportHandler importHandler) {
@@ -133,6 +134,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         shortDescription = null;
         longDescription = null;
         hint = null;
+        found = false;
     }
 
     protected void createNewWPT() {
@@ -159,6 +161,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setHint(database, this.hint);
         cache.setLongDescription(database, this.longDescription);
         cache.setShortDescription(database, this.shortDescription);
+        cache.setFound(this.found);
 
         for (Attributes att : positiveAttributes)
             cache.addAttributePositive(att);

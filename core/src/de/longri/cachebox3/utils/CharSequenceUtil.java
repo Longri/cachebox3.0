@@ -130,6 +130,14 @@ public class CharSequenceUtil {
         return true;
     }
 
+    public static boolean equals(char[] s1, int offset1, int length1, char[] s2, int offset2, int length2) {
+        if (length1 != length2) return false;
+        int j = offset2;
+        for (int i = offset1, n = offset1 + length1; i < n; i++)
+            if (s1[i] != s2[j++]) return false;
+        return true;
+    }
+
     public static double parseDouble(char[] data, int offset, int length) {
         if (data == null || length == 0)
             throw new NumberFormatException("Number cannot be null/empty.");

@@ -52,6 +52,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         this.positiveList.add(Attributes.Ticks);
         this.positiveList.add(Attributes.Dogs);
 
+        this.found = true;
 
         this.hint = "wenn du ihn nicht findest, findet er dich!!";
         this.shortDescription = "&lt;font face=\"tahoma\" size=\"3\" color=\"#330033\"&gt;&lt;br /&gt;\n" +
