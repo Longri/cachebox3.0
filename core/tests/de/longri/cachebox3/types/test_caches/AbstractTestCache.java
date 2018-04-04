@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 31.03.18.
@@ -49,6 +50,9 @@ public abstract class AbstractTestCache {
     float terrain;
     String country;
     String state;
+    String shortDescription;
+    String longDescription;
+    String hint;
 
     public void assertCache(AbstractCache other, Database database) {
         assertThat("Cache must not be NULL", other != null);
@@ -69,6 +73,10 @@ public abstract class AbstractTestCache {
         assertThat("State must be " + state + " but was :" + other.getState(database), CharSequenceUtilTest.equals(state, other.getState(database)));
         assertThat("Cache difficulty must be " + difficulty + " but was :" + other.getDifficulty(), difficulty == other.getDifficulty());
         assertThat("Cache terrain must be " + terrain + " but was :" + other.getTerrain(), terrain == other.getTerrain());
+
+        assertEquals(shortDescription, other.getShortDescription(database).replaceAll("\r\n", "\n"), "Short description should be equals");
+        assertEquals(longDescription, other.getLongDescription(database).replaceAll("\r\n", "\n"), "Long description should be equals");
+        assertEquals(hint, other.getHint(database).toString().replaceAll("\r\n", "\n"), "Hint should be equals");
     }
 
     private void assetCacheAttributes(AbstractCache abstractCache, Database database) {
@@ -119,4 +127,6 @@ public abstract class AbstractTestCache {
             assertThat(attr.name() + " Attribute wrong", !abstractCache.isAttributeNegativeSet(attr));
         }
     }
+
+
 }

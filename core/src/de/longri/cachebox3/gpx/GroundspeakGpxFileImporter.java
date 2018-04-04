@@ -57,6 +57,9 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
     private final ActiveQName GS_TERRAIN = this.registerName("groundspeak:terrain");
     private final ActiveQName GS_COUNTRY = this.registerName("groundspeak:country");
     private final ActiveQName GS_STATE = this.registerName("groundspeak:state");
+    private final ActiveQName GS_SHORT_DESCRIPTION = this.registerName("groundspeak:short_description");
+    private final ActiveQName GS_LONG_DESCRIPTION = this.registerName("groundspeak:long_description");
+    private final ActiveQName GS_HINT = this.registerName("groundspeak:encoded_hints");
 
 
     public GroundspeakGpxFileImporter(Database database, ImportHandler importHandler) {
@@ -131,6 +134,16 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
                     country = element.getData();
                 } else if (GS_STATE.isActive()) {
                     state = element.getData();
+                } else if (GS_SHORT_DESCRIPTION.isActive()) {
+                    if (shortDescription != null) {
+                        shortDescription += element.getData();
+                    } else {
+                        shortDescription = element.getData();
+                    }
+                } else if (GS_LONG_DESCRIPTION.isActive()) {
+                    longDescription = element.getData();
+                } else if (GS_HINT.isActive()) {
+                    hint = element.getData();
                 }
             }
         }

@@ -168,6 +168,27 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
             }
         });
 
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:encoded_hints", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                hint = new String(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:long_description", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                longDescription = new String(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:short_description", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                shortDescription = new String(data, offset, length);
+            }
+        });
+
         this.registerEndTagHandler("/gpx/wpt", new EndTagHandler() {
             @Override
             protected void handleEndTag() {
