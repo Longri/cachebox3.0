@@ -36,6 +36,7 @@ class GpxFileImporterTest {
 
     @Test
     public void testGpxImport() throws Exception {
+        long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
         FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx");
@@ -47,6 +48,28 @@ class GpxFileImporterTest {
         AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2T9RW", false);
         TEST_CACHES.GC2T9RW.assertCache(cache, TEST_DB);
         TEST_DB.close();
+
+        long elapseTime = System.currentTimeMillis() - start;
+        System.out.println("Gpx import time: " + elapseTime + "ms");
+    }
+
+    @Test
+    public void testGpxStreamImport() throws Exception {
+        long start = System.currentTimeMillis();
+
+        Database TEST_DB = TestUtils.getTestDB(true);
+        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx");
+        ImportHandler importHandler = new ImportHandler() {
+        };
+
+        new GroundspeakGpxStreamImporter(TEST_DB, importHandler).doImport(gpxFile);
+        assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
+        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2T9RW", false);
+        TEST_CACHES.GC2T9RW.assertCache(cache, TEST_DB);
+        TEST_DB.close();
+
+        long elapseTime = System.currentTimeMillis() - start;
+        System.out.println("Gpx import time: " + elapseTime + "ms");
     }
 
     @Test

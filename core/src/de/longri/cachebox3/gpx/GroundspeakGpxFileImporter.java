@@ -74,13 +74,14 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
             int id = parseInteger(element.getAttributeByName(ID));
             int inc = parseInteger(element.getAttributeByName(GS_ATTRIBUTE_INC));
             Attributes att = Attributes.getAttributeEnumByGcComId(id);
-            if (att != null && att != Attributes.Default && inc > 0) {
-                positiveAttributes.add(att);
-            } else {
-                negativeAttributes.add(att);
+            if (att != null && att != Attributes.Default) {
+                if (inc > 0) {
+                    positiveAttributes.add(att);
+                } else {
+                    negativeAttributes.add(att);
+                }
             }
         }
-
     }
 
 

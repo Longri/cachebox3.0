@@ -27,14 +27,19 @@ public class XmlStreamParser extends AbstractStreamParser {
 
     private final Logger log = LoggerFactory.getLogger(XmlStreamParser.class);
 
-    public interface DataHandler {
-        void handleData(char[] data, int offset, int length);
+
+    public static abstract class EndTagHandler {
+        protected abstract void handleEndTag();
+    }
+
+    public static abstract class DataHandler {
+        protected abstract void handleData(char[] data, int offset, int length);
     }
 
     public static abstract class ValueHandler {
         Array<char[]> valueList = new Array<>();
 
-        abstract void handleValue(char[] valueName, char[] data, int offset, int length);
+        protected abstract void handleValue(char[] valueName, char[] data, int offset, int length);
     }
 
     private final CharArray activeNameTags = new CharArray() {
@@ -52,12 +57,18 @@ public class XmlStreamParser extends AbstractStreamParser {
             return super.equals(object);
         }
     };
+    private final ObjectMap<char[], EndTagHandler> endTagHandlerMap = new ObjectMap<>();
     private final ObjectMap<char[], DataHandler> dataHandlerMap = new ObjectMap<>();
     private final ObjectMap<char[], ValueHandler> valueHandlerMap = new ObjectMap<>();
     private final char[] QUOTE = new char[]{'"'};
     private int lastStartPeek;
     private DataHandler lastHandler;
 
+    public void registerEndTagHandler(String locationPath, EndTagHandler handler) {
+        // remove '/'
+        locationPath = locationPath.replaceAll("/", "");
+        endTagHandlerMap.put(locationPath.toCharArray(), handler);
+    }
 
     public void registerDataHandler(String locationPath, DataHandler dataHandler) {
         // remove '/'
@@ -80,7 +91,7 @@ public class XmlStreamParser extends AbstractStreamParser {
         }
     }
 
-    public void parse(FileHandle xmlFileHandle) {
+    public void parse(FileHandle xmlFileHandle) throws GdxRuntimeException {
         this.parse(xmlFileHandle.read());
     }
 
@@ -111,6 +122,13 @@ public class XmlStreamParser extends AbstractStreamParser {
 
                 // check if </
                 if (data[peek + 1] == '/') {
+                    //search for endTagHandler
+                    for (ObjectMap.Entry<char[], EndTagHandler> entry : endTagHandlerMap.entries()) {
+                        if (activeNameTags.equals(entry.key)) {
+                            entry.value.handleEndTag();
+                        }
+                    }
+
                     // search for end
                     int space = searchSpace(data, peek);
                     int nameLength = space - peek - 2;
@@ -165,6 +183,14 @@ public class XmlStreamParser extends AbstractStreamParser {
                                 if (DEBUG) log.debug("ValueHandler found");
                             }
                         }
+
+                        //search for endTagHandler
+                        for (ObjectMap.Entry<char[], EndTagHandler> entry : endTagHandlerMap.entries()) {
+                            if (activeNameTags.equals(entry.key)) {
+                                entry.value.handleEndTag();
+                            }
+                        }
+
 
                         // remove from activeNameTags
                         activeNameTags.size -= space - peek - 1;
