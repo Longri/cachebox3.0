@@ -19,7 +19,13 @@ import com.badlogic.gdx.utils.CharArray;
 import de.longri.cachebox3.translation.word.MutableString;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 27.10.2017.
@@ -121,6 +127,65 @@ public class CharSequenceUtilTest {
         assertThat("Value should be false", b == false);
     }
 
+
+    char[] PARSE_DATE_ARRAY = " 49.349817 219011721901171232 2011-07-05T12:54:02.308107Z 3810940 2011-04-16T07:00:00Z TRUE 2011-04-17T03:39:24.4 False".toCharArray();
+    private final Locale locale = Locale.getDefault();
+    private final String STRING_PATTERN1 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private final String STRING_PATTERN2 = "yyyy-MM-dd'T'HH:mm:ss";
+    private final String STRING_PATTERN3 = "yyyy-MM-dd'T'HH:mm:ss.S";
+
+    private final SimpleDateFormat DATE_PATTERN_1 = new SimpleDateFormat(STRING_PATTERN1, locale);
+    private final SimpleDateFormat DATE_PATTERN_2 = new SimpleDateFormat(STRING_PATTERN2, locale);
+    private final SimpleDateFormat DATE_PATTERN_3 = new SimpleDateFormat(STRING_PATTERN3, locale);
+
+    @Test
+    void parseDate() throws ParseException {
+        Date expected = DATE_PATTERN_3.parse("2011-07-05T12:54:02.308107Z");
+        Date actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 30, 27, STRING_PATTERN3.toCharArray());
+        assertThat("Date should not NULL", actual != null);
+
+        String expectedString = DATE_PATTERN_3.format(expected);
+        String actualString = DATE_PATTERN_3.format(actual);
+
+        assertEquals(expectedString, actualString, "Date String should be equals");
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        expected = DATE_PATTERN_2.parse("2011-04-16T07:00:00Z");
+        actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 66, 20, STRING_PATTERN2.toCharArray());
+        assertThat("Date should not NULL", actual != null);
+
+        expectedString = DATE_PATTERN_3.format(expected);
+        actualString = DATE_PATTERN_3.format(actual);
+
+        assertEquals(expectedString, actualString, "Date String should be equals");
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+
+        // is unparseable date, return dat must be null
+        actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 66, 20, STRING_PATTERN3.toCharArray());
+        assertThat("Date should not NULL", actual == null);
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        expected = DATE_PATTERN_2.parse("2011-04-17T03:39:24.4");
+        actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 92, 21, STRING_PATTERN2.toCharArray());
+        assertThat("Date should not NULL", actual != null);
+
+        expectedString = DATE_PATTERN_3.format(expected);
+        actualString = DATE_PATTERN_3.format(actual);
+
+        assertEquals(expectedString, actualString, "Date String should be equals");
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        expected = DATE_PATTERN_3.parse("2011-04-17T03:39:24.4");
+        actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 92, 21, STRING_PATTERN3.toCharArray());
+        assertThat("Date should not NULL", actual != null);
+
+        expectedString = DATE_PATTERN_3.format(expected);
+        actualString = DATE_PATTERN_3.format(actual);
+
+        assertEquals(expectedString, actualString, "Date String should be equals");
+
+    }
 
     //##################################################################
     //# Helper

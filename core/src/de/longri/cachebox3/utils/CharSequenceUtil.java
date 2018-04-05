@@ -15,6 +15,11 @@
  */
 package de.longri.cachebox3.utils;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 /**
  * Created by Longri on 27.10.2017.
  */
@@ -190,7 +195,7 @@ public class CharSequenceUtil {
     }
 
     public static int parseInteger(char[] data, int offset, int length) {
-        if (data == null || length == 0)
+        if (data == null || length <= 0)
             throw new NumberFormatException("Number cannot be null/empty.");
 
         boolean isNegative = false;
@@ -276,9 +281,169 @@ public class CharSequenceUtil {
         throw new NumberFormatException("Number is malformed: " + new String(data, offset, length));
     }
 
-
     private static boolean isNumeric(char[] data, int offset) {
         return '0' <= data[offset] && data[offset] <= '9';
     }
+
+
+    /**
+     * see https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+     * <p>
+     * Letter	Date or Time Component	Presentation	Examples
+     * G		Era designator				Text			AD
+     * y		Year						Year		1996; 96
+     * Y		Week year					Year		2009; 09
+     * M		Month in year				Month	July; Jul; 07
+     * w		Week in year				Number		27
+     * W		Week in month				Number		2
+     * D		Day in year				Number	189
+     * d		Day in month				Number	10
+     * F		Day of week in month			Number	2
+     * E		Day name in week			Text		Tuesday; Tue
+     * u		Day number of week 			Number	1
+     * a		Am/pm marker				Text		PM
+     * H		Hour in day (0-23)			Number	0
+     * k		Hour in day (1-24)			Number	24
+     * K		Hour in am/pm (0-11)		Number	0
+     * h		Hour in am/pm (1-12)		Number	12
+     * m		Minute in hour				Number	30
+     * s		Second in minute			Number	55
+     * S		Millisecond					Number	978
+     * z		Time zone	General time zone	Pacific Standard Time; PST; GMT-08:00
+     * Z		Time zone	RFC 822 time zone	-0800
+     * X		Time zone	ISO 8601 time zone	-08; -0800; -08:00
+     *
+     * @param locale
+     * @param data
+     * @param offset
+     * @param length
+     * @param patterns
+     * @return
+     */
+    public static Date parseDate(Locale locale, char[] data, int offset, int length, char[]... patterns) {
+
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault(), locale);
+
+        int year = 0, yearEnd = 0, yearStart = -1;
+        int month = 0, monthEnd = 0, monthStart = -1;
+        int day = 0, dayEnd = 0, dayStart = -1;
+        int hour = 0, hourEnd = 0, hourStart = -1;
+        int minute = 0, minuteEnd = 0, minuteStart = -1;
+        int second = 0, secondEnd = 0, secondStart = -1;
+        int millisecond = 0, startMillisecond = -1;
+
+        boolean dayInYear = false;
+        boolean amPmMarker = false;
+        boolean pm = false;
+        boolean hourZeroIndex = false;
+        boolean unescape = false;
+        int unescapeIndex = 0;
+        int parseLength = 0;
+
+        for (char[] pattern : patterns) {
+            for (int i = 0; i < pattern.length; i++) {
+
+                if (unescape) {
+                    if (pattern[i] == '\'') {
+                        unescape = false;
+                        unescapeIndex++;
+                    }
+                    continue;
+                }
+
+                switch (pattern[i]) {
+                    case 'y':
+                    case 'Y':
+                        if (yearStart == -1) yearStart = i - unescapeIndex;
+                        else yearEnd = i - unescapeIndex + 1;
+                        break;
+                    case 'M':
+                        if (monthStart == -1) monthStart = i - unescapeIndex;
+                        else monthEnd = i - unescapeIndex + 1;
+                        break;
+                    case 'D':
+                        dayInYear = true;
+                    case 'd':
+                        if (dayStart == -1) dayStart = i - unescapeIndex;
+                        else dayEnd = i - unescapeIndex + 1;
+                        break;
+                    case 'a':
+                        if (!amPmMarker) amPmMarker = true;
+                        else if (true/*TODO*/) pm = true;
+                        break;
+                    case 'H':
+                    case 'K':
+                        hourZeroIndex = true;
+                    case 'k':
+                    case 'h':
+                        if (hourStart == -1) hourStart = i - unescapeIndex;
+                        else hourEnd = i - unescapeIndex + 1;
+                        break;
+                    case 'm':
+                        if (minuteStart == -1) minuteStart = i - unescapeIndex;
+                        else minuteEnd = i - unescapeIndex + 1;
+                        break;
+                    case 's':
+                        if (secondStart == -1) secondStart = i - unescapeIndex;
+                        else secondEnd = i - unescapeIndex + 1;
+                        break;
+                    case '\'':
+                        unescape = true;
+                        unescapeIndex++;
+                        break;
+                    case 'S':
+                        startMillisecond = i - unescapeIndex;
+                        break;
+                }
+            }
+            try {
+                year = parseInteger(data, offset + yearStart, yearEnd - yearStart);
+                month = parseInteger(data, offset + monthStart, monthEnd - monthStart);
+                day = parseInteger(data, offset + dayStart, dayEnd - dayStart);
+                hour = parseInteger(data, offset + hourStart, hourEnd - hourStart);
+                minute = parseInteger(data, offset + minuteStart, minuteEnd - minuteStart);
+                second = parseInteger(data, offset + secondStart, secondEnd - secondStart);
+
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, month - 1);
+                if (dayInYear) {
+                    cal.set(Calendar.DAY_OF_YEAR, day);
+                } else {
+                    cal.set(Calendar.DAY_OF_MONTH, day);
+                }
+                if (amPmMarker) {
+                    if (!hourZeroIndex) hour++;
+                    cal.set(Calendar.AM, hour);
+                    cal.set(Calendar.PM, hour);
+                } else {
+                    if (!hourZeroIndex) hour++;
+                    cal.set(Calendar.HOUR_OF_DAY, hour);
+                }
+                cal.set(Calendar.MINUTE, minute);
+                cal.set(Calendar.SECOND, second);
+
+                if (startMillisecond >= 0) {
+                    // search end of millisecond
+                    int i = startMillisecond + offset;
+                    while (isNumeric(data, i)) {
+                        i++;
+                    }
+                    parseLength = i - (offset + startMillisecond);
+                    if (parseLength <= 0) return null; // unparsable milliseconds
+                    millisecond = parseInteger(data, offset + startMillisecond, parseLength);
+                    cal.set(Calendar.MILLISECOND, millisecond);
+                } else {
+                    cal.set(Calendar.MILLISECOND, 0);
+                }
+
+                return cal.getTime();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return null;
+    }
+
 
 }
