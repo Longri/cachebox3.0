@@ -21,6 +21,8 @@ import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 
+import java.util.Locale;
+
 /**
  * Created by Longri on 04.04.2018.
  */
@@ -200,7 +202,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/time", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                dateHidden = new String(data, offset, length);
+                dateHidden = parseDate(data, offset, length);
             }
         });
 

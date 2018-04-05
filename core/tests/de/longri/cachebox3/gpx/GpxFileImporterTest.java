@@ -38,7 +38,7 @@ class GpxFileImporterTest {
     public void testGpxImport() throws Exception {
         long start = System.currentTimeMillis();
 
-        Database TEST_DB = TestUtils.getTestDB(true);
+        Database TEST_DB = TestUtils.getTestDB(false);
         FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx");
         ImportHandler importHandler = new ImportHandler() {
         };
@@ -57,7 +57,7 @@ class GpxFileImporterTest {
     public void testGpxStreamImport() throws Exception {
         long start = System.currentTimeMillis();
 
-        Database TEST_DB = TestUtils.getTestDB(true);
+        Database TEST_DB = TestUtils.getTestDB(false);
         FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx");
         ImportHandler importHandler = new ImportHandler() {
         };

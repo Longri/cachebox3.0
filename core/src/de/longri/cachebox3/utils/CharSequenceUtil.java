@@ -15,6 +15,9 @@
  */
 package de.longri.cachebox3.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -24,6 +27,8 @@ import java.util.TimeZone;
  * Created by Longri on 27.10.2017.
  */
 public class CharSequenceUtil {
+
+    private final static Logger log = LoggerFactory.getLogger(CharSequenceUtil.class);
 
     public static boolean contains(CharSequence sorce, CharSequence target) {
         return indexOf(sorce, 0, sorce.length(),
@@ -341,6 +346,22 @@ public class CharSequenceUtil {
         int parseLength = 0;
 
         for (char[] pattern : patterns) {
+            yearStart = -1;
+            monthStart = -1;
+            dayStart = -1;
+            hourStart = -1;
+            minuteStart = -1;
+            secondStart = -1;
+            startMillisecond = -1;
+
+            dayInYear = false;
+            amPmMarker = false;
+            pm = false;
+            hourZeroIndex = false;
+            unescape = false;
+            unescapeIndex = 0;
+            parseLength = 0;
+
             for (int i = 0; i < pattern.length; i++) {
 
                 if (unescape) {
@@ -429,7 +450,7 @@ public class CharSequenceUtil {
                         i++;
                     }
                     parseLength = i - (offset + startMillisecond);
-                    if (parseLength <= 0) return null; // unparsable milliseconds
+                    if (parseLength <= 0) continue; // unparsable milliseconds
                     millisecond = parseInteger(data, offset + startMillisecond, parseLength);
                     cal.set(Calendar.MILLISECOND, millisecond);
                 } else {
@@ -438,10 +459,12 @@ public class CharSequenceUtil {
 
                 return cal.getTime();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.warn("Can't parse Date: {} with DatePattern {}", new String(data, offset, length), new String(pattern));
             }
 
         }
+        log.error("Can't parse Date: {} with given DatePattern");
+
         return null;
     }
 
