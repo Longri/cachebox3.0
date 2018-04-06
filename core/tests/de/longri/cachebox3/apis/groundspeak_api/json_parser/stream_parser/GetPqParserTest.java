@@ -20,6 +20,7 @@ import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.utils.ICancel;
 import org.junit.jupiter.api.Test;
+import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,8 +39,12 @@ class GetPqParserTest {
         TestUtils.initialGdx();
     }
 
+    final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;
+    final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
+
     @Test
     void parseTest() throws FileNotFoundException {
+        if (isDummy) return;
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPQResult.json");
         GetPqParser parser = new GetPqParser(null);
 
