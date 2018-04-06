@@ -63,6 +63,12 @@ class GetPqParserTest {
             e.printStackTrace();
         }
 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         assertThat("File must exist", targetFile.exists());
         assertThat("File size must equals", targetFile.length() == streamedBytes.get());
 
@@ -104,6 +110,12 @@ class GetPqParserTest {
                     }
             );
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
