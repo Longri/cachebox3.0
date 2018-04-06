@@ -49,7 +49,6 @@ import java.util.Date;
 public class CacheList3DAO extends AbstractCacheListDAO {
 
     private final Logger log = LoggerFactory.getLogger(CacheList3DAO.class);
-    private final DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void readCacheList(final Database database, final CacheList cacheList, String statement, boolean fullDetails, boolean loadAllWaypoints) {
@@ -240,8 +239,8 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
                 REPLACE_INFO.bind(
                         ca.getId(),
-                        iso8601Format.format(ca.getDateHidden(database) == null ? new Date() : ca.getDateHidden(database)),
-                        iso8601Format.format(new Date()),
+                        Database.cbDbFormat.format(ca.getDateHidden(database) == null ? new Date() : ca.getDateHidden(database)),
+                        Database.cbDbFormat.format(new Date()),
                         ca.getTourName(),
                         ca.getGPXFilename_ID(),
                         null, //todo handle listing checksum

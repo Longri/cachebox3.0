@@ -34,7 +34,7 @@ import java.util.Date;
 public class Cache3DAO extends AbstractCacheDAO {
 
     private final static Logger log = LoggerFactory.getLogger(Cache3DAO.class);
-    private final DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     @Override
     public AbstractWaypointDAO getWaypointDAO() {
@@ -93,8 +93,13 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to CacheInfo table
         args.clear();
         if (!update) args.put("Id", abstractCache.getId());
-        args.put("DateHidden", iso8601Format.format(abstractCache.getDateHidden(database) == null ? new Date() : abstractCache.getDateHidden(database)));
-        args.put("FirstImported", iso8601Format.format(new Date()));
+
+        Date dateHidden = abstractCache.getDateHidden(database);
+        if (dateHidden == null) dateHidden = new Date();
+        String dateString = Database.cbDbFormat.format(dateHidden);
+
+        args.put("DateHidden", dateString);
+        args.put("FirstImported", Database.cbDbFormat.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
         args.put("state", abstractCache.getState(database));

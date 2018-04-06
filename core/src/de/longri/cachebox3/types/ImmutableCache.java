@@ -307,7 +307,6 @@ public class ImmutableCache extends AbstractCache {
         return getStringFromDB(database, "SELECT state FROM CacheInfo WHERE Id=?");
     }
 
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public Date getDateHidden(Database database) {
@@ -315,7 +314,7 @@ public class ImmutableCache extends AbstractCache {
         if (dateString == null || dateString.isEmpty()) return new Date();
 
         try {
-            return iso8601Format.parse(dateString);
+            return Database.cbDbFormat.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }

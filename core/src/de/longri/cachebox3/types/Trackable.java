@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.UnitFormatter;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.LoggerFactory;
@@ -101,9 +102,8 @@ public class Trackable implements Comparable<Trackable> {
             }
             String sDate = reader.getString(6);
             if (sDate != null && !sDate.isEmpty()) {
-                DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 try {
-                    DateCreated = iso8601Format.parse(sDate);
+                    DateCreated = Database.cbDbFormat.parse(sDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

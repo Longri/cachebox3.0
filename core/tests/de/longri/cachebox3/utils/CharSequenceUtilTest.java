@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.CharArray;
 import de.longri.cachebox3.translation.word.MutableString;
 import org.junit.jupiter.api.Test;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -138,14 +139,17 @@ public class CharSequenceUtilTest {
     private final SimpleDateFormat DATE_PATTERN_2 = new SimpleDateFormat(STRING_PATTERN2, locale);
     private final SimpleDateFormat DATE_PATTERN_3 = new SimpleDateFormat(STRING_PATTERN3, locale);
 
+    private final DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
     @Test
     void parseDate() throws ParseException {
         Date expected = DATE_PATTERN_3.parse("2011-07-05T12:54:02.308107Z");
         Date actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 30, 27, STRING_PATTERN3.toCharArray());
         assertThat("Date should not NULL", actual != null);
 
-        String expectedString = DATE_PATTERN_3.format(expected);
-        String actualString = DATE_PATTERN_3.format(actual);
+        String expectedString = iso8601Format.format(expected);
+        String actualString = iso8601Format.format(actual);
 
         assertEquals(expectedString, actualString, "Date String should be equals");
 
@@ -154,8 +158,8 @@ public class CharSequenceUtilTest {
         actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 66, 20, STRING_PATTERN2.toCharArray());
         assertThat("Date should not NULL", actual != null);
 
-        expectedString = DATE_PATTERN_3.format(expected);
-        actualString = DATE_PATTERN_3.format(actual);
+        expectedString = iso8601Format.format(expected);
+        actualString = iso8601Format.format(actual);
 
         assertEquals(expectedString, actualString, "Date String should be equals");
 
@@ -170,8 +174,8 @@ public class CharSequenceUtilTest {
         actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 92, 21, STRING_PATTERN2.toCharArray());
         assertThat("Date should not NULL", actual != null);
 
-        expectedString = DATE_PATTERN_3.format(expected);
-        actualString = DATE_PATTERN_3.format(actual);
+        expectedString = iso8601Format.format(expected);
+        actualString = iso8601Format.format(actual);
 
         assertEquals(expectedString, actualString, "Date String should be equals");
 
@@ -180,8 +184,8 @@ public class CharSequenceUtilTest {
         actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 92, 21, STRING_PATTERN3.toCharArray());
         assertThat("Date should not NULL", actual != null);
 
-        expectedString = DATE_PATTERN_3.format(expected);
-        actualString = DATE_PATTERN_3.format(actual);
+        expectedString = iso8601Format.format(expected);
+        actualString = iso8601Format.format(actual);
 
         assertEquals(expectedString, actualString, "Date String should be equals");
 

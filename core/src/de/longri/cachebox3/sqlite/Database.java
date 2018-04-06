@@ -42,6 +42,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Database {
 
 
+    public final static DateFormat cbDbFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
     private Logger log;
     public static Database Data;
     public static Database Drafts;
@@ -129,9 +132,8 @@ public class Database {
         LogEntry retLogEntry = new LogEntry();
         retLogEntry.CacheId = reader.getLong(0);
         String sDate = reader.getString(1);
-        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            retLogEntry.Timestamp = iso8601Format.parse(sDate);
+            retLogEntry.Timestamp = Database.cbDbFormat.parse(sDate);
         } catch (ParseException e) {
         }
         retLogEntry.Finder = reader.getString(2);

@@ -82,9 +82,6 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
         super();
         this.database = database;
         this.importHandler = importHandler;
-        DATE_PATTERN_1.setTimeZone(TimeZone.getTimeZone("EST"));
-        DATE_PATTERN_2.setTimeZone(TimeZone.getTimeZone("EST"));
-        DATE_PATTERN_3.setTimeZone(TimeZone.getTimeZone("EST"));
     }
 
     public void doImport(FileHandle gpxFile) {

@@ -29,7 +29,6 @@ import java.util.Iterator;
 
 public class LogDAO {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(ImageDAO.class);
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     public synchronized void WriteToDatabase(LogEntry logEntry) {
@@ -38,8 +37,7 @@ public class LogDAO {
         args.put("Finder", logEntry.Finder);
         args.put("Type", logEntry.Type.ordinal());
         args.put("Comment", logEntry.Comment);
-        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String stimestamp = iso8601Format.format(logEntry.Timestamp);
+        String stimestamp = Database.cbDbFormat.format(logEntry.Timestamp);
         args.put("Timestamp", stimestamp);
         args.put("CacheId", logEntry.CacheId);
         try {
@@ -94,7 +92,7 @@ public class LogDAO {
                 REPLACE_LOGS.bind(
                         entry.Id,
                         entry.CacheId,
-                        iso8601Format.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                        Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
                         entry.Finder,
                         entry.Type,
                         entry.Comment

@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.io.Serializable;
@@ -25,8 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LogEntry implements Serializable {
-
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * Benutzername des Loggers
@@ -64,7 +63,7 @@ public class LogEntry implements Serializable {
         this.CacheId = cursor.getLong(1);
 
         try {
-            this.Timestamp = iso8601Format.parse(cursor.getString(2));
+            this.Timestamp = Database.cbDbFormat.parse(cursor.getString(2));
         } catch (ParseException e) {
             e.printStackTrace();
         }

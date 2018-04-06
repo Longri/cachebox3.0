@@ -34,10 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public abstract class AbstractTestCache {
     final SimpleDateFormat DATE_PATTERN = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
 
-    public AbstractTestCache() {
-        DATE_PATTERN.setTimeZone(TimeZone.getTimeZone("EST"));
-    }
-
     double longitude;
     double latitude;
     CacheTypes cacheType;

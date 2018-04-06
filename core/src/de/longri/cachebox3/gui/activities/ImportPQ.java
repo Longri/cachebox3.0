@@ -72,7 +72,6 @@ public class ImportPQ extends ActivityBase {
             return canceled.get();
         }
     };
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     private final PqListItemStyle itemStyle;
     private final AligmentLabel downloadLabel;
     private final ProgressBar downloadProgress;
@@ -384,7 +383,7 @@ public class ImportPQ extends ActivityBase {
                         cursor.moveToFirst();
                         String dateTimeString = cursor.getString(2);
                         try {
-                            pq.lastImported = iso8601Format.parse(dateTimeString);
+                            pq.lastImported = Database.cbDbFormat.parse(dateTimeString);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
