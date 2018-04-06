@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
@@ -44,7 +43,7 @@ class GetPqParserTest {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPQResult.json");
         GetPqParser parser = new GetPqParser(null);
 
-        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/streamedPq.zip");
+        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/streamedPq.zipTest");
 
         if (targetFile.exists()) {
             assertThat("Target file must deleted", targetFile.delete());
@@ -86,7 +85,7 @@ class GetPqParserTest {
             }
         });
 
-        FileHandle targetFile = Gdx.files.local("testsResources/streamedPqCancel.zip");
+        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/streamedPqCancel.zipTest");
 
         if (targetFile.exists()) {
             assertThat("Target file must deleted", targetFile.delete());

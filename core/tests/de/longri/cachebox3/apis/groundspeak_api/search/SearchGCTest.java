@@ -61,7 +61,7 @@ class SearchGCTest {
         String expected = TestUtils.getResourceRequestString("testsResources/SearchGc_request.txt",
                 isDummy ? null : apiKey);
 
-        Database testDB = TestUtils.getTestDB(false);
+        Database testDB = TestUtils.getTestDB(true);
 
         SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T");
 
@@ -74,14 +74,14 @@ class SearchGCTest {
         assertEquals(expected, actual, "Should be equals");
 
         testDB.close();
-        testDB.getFileHandle().delete();
+        if (!testDB.isInMemory()) testDB.getFileHandle().delete();
     }
 
 
     @Test
     void parseJsonResult() throws IOException {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGc_result.txt");
-        final Database testDB = TestUtils.getTestDB(false);
+        final Database testDB = TestUtils.getTestDB(true);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
 
         };
@@ -217,7 +217,7 @@ class SearchGCTest {
         }
 
         testDB.close();
-        testDB.getFileHandle().delete();
+        if (!testDB.isInMemory()) testDB.getFileHandle().delete();
     }
 
 
@@ -227,7 +227,7 @@ class SearchGCTest {
         final CB_List<AbstractCache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
         final CB_List<ImageEntry> imageList = new CB_List<>();
-        Database testDB = TestUtils.getTestDB(false);
+        Database testDB = TestUtils.getTestDB(true);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
             protected void writeLogToDB(final LogEntry logEntry) {
                 logList.add(logEntry);
@@ -296,14 +296,14 @@ class SearchGCTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        testDB.getFileHandle().delete();
+        if (!testDB.isInMemory()) testDB.getFileHandle().delete();
     }
 
 
     @Test
     void testOnline() {
         if (isDummy) return;
-        final Database testDB = TestUtils.getTestDB(false);
+        final Database testDB = TestUtils.getTestDB(true);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
         };
 
@@ -392,14 +392,14 @@ class SearchGCTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        testDB.getFileHandle().delete();
+        if (!testDB.isInMemory()) testDB.getFileHandle().delete();
     }
 
     @Test
     public void testOnlineLite() {
         if (isDummy) return;
 
-        final Database testDB = TestUtils.getTestDB(false);
+        final Database testDB = TestUtils.getTestDB(true);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
 
         };
@@ -478,7 +478,7 @@ class SearchGCTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        testDB.getFileHandle().delete();
+        if (!testDB.isInMemory()) testDB.getFileHandle().delete();
     }
 
 

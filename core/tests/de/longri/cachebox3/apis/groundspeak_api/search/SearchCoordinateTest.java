@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ class SearchCoordinateTest {
             apiState = 1;
         }
 
-        Database testDB = TestUtils.getTestDB(false);
+        Database testDB = TestUtils.getTestDB(true);
         SearchCoordinate searchCoordinate = new SearchCoordinate(testDB, apiKey, 50
                 , LONGRI_HOME_COORDS, 50000, apiState);
 
@@ -77,7 +77,7 @@ class SearchCoordinateTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        testDB.getFileHandle().delete();
+        if (!testDB.isInMemory()) testDB.getFileHandle().delete();
 
     }
 

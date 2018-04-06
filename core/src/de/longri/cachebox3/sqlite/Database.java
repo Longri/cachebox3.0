@@ -1191,6 +1191,9 @@ public class Database {
         }
     }
 
+    public boolean isInMemory() {
+        return inMemoryName != null;
+    }
 
     // Static methods ##############################################################################################
 

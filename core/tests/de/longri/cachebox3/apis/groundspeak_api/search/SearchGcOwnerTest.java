@@ -64,7 +64,7 @@ class SearchGcOwnerTest {
                 isDummy ? null : apiKey);
 
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
-        Database testDB = TestUtils.getTestDB(false);
+        Database testDB = TestUtils.getTestDB(true);
         SearchGCOwner searchGC = new SearchGCOwner(testDB, apiKey, 30, searchCoord, 50000, "bros", (byte) 2);
 
         StringWriter writer = new StringWriter();
@@ -75,7 +75,7 @@ class SearchGcOwnerTest {
         String actual = writer.toString();
         assertEquals(expected, actual);
         testDB.close();
-        testDB.getFileHandle().delete();
+        if (!testDB.isInMemory()) testDB.getFileHandle().delete();
     }
 
 
@@ -84,7 +84,7 @@ class SearchGcOwnerTest {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGcOwner_result.txt");
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
 
-        final Database testDB = TestUtils.getTestDB(false);
+        final Database testDB = TestUtils.getTestDB(true);
         final SearchGCOwner searchGC = new SearchGCOwner(testDB, apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
 
         };
@@ -256,7 +256,7 @@ class SearchGcOwnerTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        testDB.getFileHandle().delete();
+        if (!testDB.isInMemory()) testDB.getFileHandle().delete();
     }
 
 
@@ -265,7 +265,7 @@ class SearchGcOwnerTest {
         if (isDummy) return;
         Coordinate searchCoord = new CoordinateGPS(52.616667, 13.366667);
 
-        final Database testDB = TestUtils.getTestDB(false);
+        final Database testDB = TestUtils.getTestDB(true);
         final SearchGCOwner searchGC = new SearchGCOwner(testDB, apiKey, 30, searchCoord, 50000, "bros", (byte) 2) {
 
         };
@@ -381,7 +381,7 @@ class SearchGcOwnerTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        testDB.getFileHandle().delete();
+        if (!testDB.isInMemory()) testDB.getFileHandle().delete();
     }
 
 }

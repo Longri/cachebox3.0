@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ class CheckCacheStateParserTest {
 
     @Test
     public void parseCacheStateStream() throws FileNotFoundException {
-        Database testDB = TestUtils.getTestDB(false);
+        Database testDB = TestUtils.getTestDB(true);
 
 
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
@@ -226,7 +226,7 @@ class CheckCacheStateParserTest {
     @Test
     public void parseCacheStateStreamCanceld() throws FileNotFoundException {
 
-        Database testDB = TestUtils.getTestDB(false);
+        Database testDB = TestUtils.getTestDB(true);
 
 
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/CheckCacheStateResult.json");
