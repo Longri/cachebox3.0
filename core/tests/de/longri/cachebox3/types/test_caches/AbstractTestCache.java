@@ -20,6 +20,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.CharSequenceUtilTest;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,16 +36,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public abstract class AbstractTestCache {
     final SimpleDateFormat DATE_PATTERN = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
 
+    private final boolean testWaypoints, testLogs;
 
     protected AbstractTestCache() {
         setValues();
         this.id = AbstractCache.GenerateCacheId(this.gcCode);
-        addWaypoints();
+        testWaypoints = addWaypoints();
+        boolean lt = false;
+        try {
+            lt = addLogs();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            lt = false;
+        }
+        testLogs = lt;
     }
 
     protected abstract void setValues();
 
-    protected abstract void addWaypoints();
+    protected abstract boolean addWaypoints();
+
+    protected abstract boolean addLogs() throws ParseException;
 
 
     double longitude;
@@ -52,7 +64,7 @@ public abstract class AbstractTestCache {
     CacheTypes cacheType;
     String gcCode;
     String name;
-    private long id;
+    long id;
     boolean available;
     boolean archived;
     String placed_by;
@@ -71,6 +83,7 @@ public abstract class AbstractTestCache {
     boolean found;
     Date dateHidden;
     Array<AbstractWaypoint> waypoints = new Array<>();
+    Array<LogEntry> logEntries = new Array<>();
 
 
     public void assertCache(AbstractCache other, Database database) {
@@ -101,7 +114,41 @@ public abstract class AbstractTestCache {
         String actualDate = DATE_PATTERN.format(other.getDateHidden(database));
         assertEquals(expectedDate, actualDate, "HiddenDate should be equals");
 
-        assertWaypoints(other, database);
+        if (testWaypoints) assertWaypoints(other, database);
+
+        if (testLogs) assertLogs(database);
+    }
+
+    private void assertLogs(Database database) {
+        Array<LogEntry> otherLogEntries = database.getLogs(this.id);
+
+        assertThat("LogEntries size must be " + logEntries.size + " but was :" + otherLogEntries.size, logEntries.size == otherLogEntries.size);
+
+
+        if (logEntries.size == 0) return;
+
+
+        for (LogEntry otherLog : otherLogEntries) {
+            boolean found = false;
+            for (LogEntry thisLog : logEntries) {
+                if (fullLogEntryEquals(thisLog, otherLog, database)) {
+                    found = true;
+                    break;
+                }
+            }
+            assertThat("Wp not found", found);
+        }
+
+        for (LogEntry otherLog : logEntries) {
+            boolean found = false;
+            for (LogEntry thisLog : otherLogEntries) {
+                if (fullLogEntryEquals(thisLog, otherLog, database)) {
+                    found = true;
+                    break;
+                }
+            }
+            assertThat("Wp not found", found);
+        }
     }
 
     private void assetCacheAttributes(AbstractCache abstractCache, Database database) {
@@ -222,5 +269,28 @@ public abstract class AbstractTestCache {
 
         return true;
     }
+
+    protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) {
+        if (!log1.equals(log2)) return false; // check GcCode
+
+        assertThat("LogEntry Type of " + log1.Id + " are wrong! " +
+                "was " + log1.Type + " instead of " + log2.Type, log1.Type == log2.Type);
+
+        assertThat("LogEntry Finder of " + log1.Id + " are wrong! " +
+                "was " + log1.Finder + " instead of " + log2.Finder, log1.Finder.equals(log2.Finder));
+
+        assertThat("LogEntry CacheId of " + log1.Id + " are wrong! " +
+                "was " + log1.CacheId + " instead of " + log2.CacheId, log1.CacheId == log2.CacheId);
+
+        assertThat("LogEntry Comment of " + log1.Id + " are wrong! " +
+                "was " + log1.Comment + " instead of " + log2.Comment, log1.Comment.equals(log2.Comment));
+
+        String expectedDate = DATE_PATTERN.format(log1.Timestamp);
+        String actualDate = DATE_PATTERN.format(log2.Timestamp);
+        assertEquals(expectedDate, actualDate, "Timestamp of LogEntry " + log1.Id + " should be equals");
+
+        return true;
+    }
+
 
 }

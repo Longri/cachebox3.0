@@ -92,6 +92,17 @@ public class LogEntry implements Serializable {
         Timestamp = null;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+
+        // return true, if the id are equals
+        if (other instanceof LogEntry) {
+            if (((LogEntry) other).Id != this.Id) return false;
+        }
+        return false;
+    }
+
     public LogEntry copy() {
         LogEntry ret = new LogEntry();
         ret.Finder = Finder;

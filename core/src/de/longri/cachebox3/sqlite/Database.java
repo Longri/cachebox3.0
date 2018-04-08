@@ -102,17 +102,21 @@ public class Database {
         return false;
     }
 
-    public static Array<LogEntry> getLogs(AbstractCache abstractCache) {
-        Array<LogEntry> result = new Array<LogEntry>();
+    public Array<LogEntry> getLogs(AbstractCache abstractCache) {
         if (abstractCache == null) // if no cache is selected!
-            return result;
+            return new Array<>();
+        return getLogs(abstractCache.getId());
+    }
 
-        GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", (String[]) null);
+    public Array<LogEntry> getLogs(long id) {
+        Array<LogEntry> result = new Array<LogEntry>();
+
+        GdxSqliteCursor reader = this.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(id) + "\"", (String[]) null);
         if (reader != null) {
             try {
                 reader.moveToFirst();
                 while (!reader.isAfterLast()) {
-                    LogEntry logent = getLogEntry(abstractCache, reader, true);
+                    LogEntry logent = getLogEntry(reader, true);
                     if (logent != null)
                         result.add(logent);
                     reader.moveToNext();
@@ -124,7 +128,7 @@ public class Database {
         return result;
     }
 
-    private static LogEntry getLogEntry(AbstractCache abstractCache, GdxSqliteCursor reader, boolean filterBbCode) {
+    private static LogEntry getLogEntry(GdxSqliteCursor reader, boolean filterBbCode) {
         int intLogType = reader.getInt(3);
         if (intLogType < 0 || intLogType > 13)
             return null;
