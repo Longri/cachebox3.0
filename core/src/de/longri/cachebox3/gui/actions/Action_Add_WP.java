@@ -89,7 +89,7 @@ public class Action_Add_WP extends AbstractAction {
                         //which is defined as starting point !!!
                         DaoFactory.WAYPOINT_DAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
                     }
-                    DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value);
+                    DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value,true);
 
                     // add WP to Cache
                     EventHandler.getSelectedCache().getWaypoints().add(value);

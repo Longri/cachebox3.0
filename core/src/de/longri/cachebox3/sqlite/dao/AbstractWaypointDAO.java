@@ -25,7 +25,7 @@ import de.longri.cachebox3.types.AbstractWaypoint;
  */
 public abstract class AbstractWaypointDAO {
 
-    public abstract boolean updateDatabase(Database database, AbstractWaypoint WP);
+    public abstract boolean updateDatabase(Database database, AbstractWaypoint WP, boolean fireChangedEvent);
 
     // Hier wird überprüft, ob für diesen Cache ein Start-Waypoint existiert und dieser in diesem Fall zurückgesetzt
     // Damit kann bei der Definition eines neuen Start-Waypoints vorher der alte entfernt werden damit sichergestellt ist dass ein Cache nur
@@ -41,7 +41,7 @@ public abstract class AbstractWaypointDAO {
      */
     public abstract Array<AbstractWaypoint> getWaypointsFromCacheID(Database database, Long CacheID, boolean Full);
 
-    public abstract void delete(Database database, AbstractWaypoint waypoint);
+    public abstract void delete(Database database, AbstractWaypoint waypoint, boolean fireChangedEvent);
 
-    public abstract void writeToDatabase(Database database, AbstractWaypoint wp);
+    public abstract void writeToDatabase(Database database, AbstractWaypoint wp, boolean fireChangedEvent);
 }

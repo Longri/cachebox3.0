@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gpx;
 
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
@@ -62,6 +63,7 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
     private final ActiveQName GS_HINT = this.registerName("groundspeak:encoded_hints");
     private final ActiveQName SYM = this.registerName("sym");
     private final ActiveQName TIME = this.registerName("time");
+    private final ActiveQName CMT = this.registerName("cmt");
 
 
     public GroundspeakGpxFileImporter(Database database, ImportHandler importHandler) {
@@ -76,8 +78,7 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
             latitude = parseDouble(element.getAttributeByName(LAT));
             longitude = parseDouble(element.getAttributeByName(LON));
         } else if (WPT.isActive() && name.equals(GS_CACHE)) {
-            // get id and available flags
-            id = parseLong(element.getAttributeByName(ID));
+            // get available flags
             archived = parseBool(element.getAttributeByName(ARCHIVED));
             available = parseBool(element.getAttributeByName(AVAIABLE));
         } else if (GS_CACHE.isActive() && name.equals(GS_ATTRIBUTE)) {
@@ -115,12 +116,15 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
                 type = CacheTypes.parseString(element.getData());
             } else if (NAME.isActive()) {
                 gcCode = element.getData();
+                id = AbstractCache.GenerateCacheId(gcCode);
             } else if (URL.isActive()) {
                 url = element.getData();
             } else if (SYM.isActive()) {
                 found = element.getData().equals("Geocache Found");
             } else if (TIME.isActive()) {
                 dateHidden = element.getData();
+            } else if (CMT.isActive()) {
+                shortDescription = element.getData();
             } else if (GS_CACHE.isActive()) {
                 if (TITLE.isActive() && !GS_TRAVELBUGS.isActive()) {
                     title = element.getData();

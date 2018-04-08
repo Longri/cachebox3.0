@@ -77,6 +77,7 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
     String hint;
     boolean found;
     String dateHidden;
+    String gsakParent;
 
     public AbstarctGpxFileImporter(Database database, ImportHandler importHandler) {
         super();
@@ -143,6 +144,7 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
         hint = null;
         found = false;
         dateHidden = null;
+        gsakParent = null;
     }
 
     protected void createNewWPT() {
@@ -176,7 +178,7 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
                 Date hidden = parseDate(this.dateHidden);
                 cache.setDateHidden(hidden);
             } catch (Exception e) {
-                log.error("Parse hidden date string", e);
+                log.error("Parse hidden wptDate string", e);
             }
         }
 
@@ -191,7 +193,21 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
     }
 
     protected void createWaypoint() {
+        long cacheId;
 
+        if (gsakParent != null) {
+            cacheId = AbstractCache.GenerateCacheId(gsakParent);
+        } else {
+            cacheId = AbstractCache.GenerateCacheId("GC" + this.gcCode.substring(2, this.gcCode.length()));
+        }
+
+        AbstractWaypoint waypoint = new MutableWaypoint(this.latitude, this.longitude, cacheId);
+        waypoint.setDescription(this.shortDescription);
+        waypoint.setType(this.type);
+        waypoint.setGcCode(this.gcCode);
+
+        resolveWaypoitConflicts.add(waypoint);
+        resetValues();
     }
 
     protected void handleConflictsAndStoreToDB() {
@@ -204,12 +220,12 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
                         AbstractCache cache = resolveCacheConflicts.pop();
 
                         //TODO handle cache conflict
-                        DaoFactory.CACHE_DAO.writeToDatabase(database, cache);
+                        DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
                     } else if (resolveWaypoitConflicts.size > 0) {
                         AbstractWaypoint waypoint = resolveWaypoitConflicts.pop();
 
                         //TODO handle waypoint conflict
-                        DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint);
+                        DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint, false);
                     } else {
                         try {
                             Thread.sleep(250);
@@ -237,7 +253,7 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
                 if (date != null) {
                     return date;
                 } else {
-                    throw new ParseException("Illegal date format", 0);
+                    throw new ParseException("Illegal wptDate format", 0);
                 }
             }
         }

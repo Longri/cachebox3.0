@@ -388,7 +388,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
                         selectedCache.setFavorite(!selectedCache.isFavorite());
 
-                        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache);
+                        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache,true);
 
                         // Update Query
                         Database.Data.Query.removeValue(EventHandler.getSelectedCache(), true);

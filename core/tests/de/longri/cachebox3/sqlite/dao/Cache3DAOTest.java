@@ -358,7 +358,7 @@ class Cache3DAOTest {
         assertCache("MutableCache", cache);
 
         AbstractCacheDAO DAO = new Cache3DAO();
-        DAO.writeToDatabase(cb3Database, cache);
+        DAO.writeToDatabase(cb3Database, cache, false);
 
         AbstractCache storedCache = DAO.getFromDbByCacheId(cb3Database, should_id, true);
         assertCache("StoredCache", storedCache);

@@ -25,9 +25,9 @@ public abstract class AbstractCacheDAO {
 
     public abstract AbstractWaypointDAO getWaypointDAO();
 
-    public abstract void writeToDatabase(Database database, AbstractCache abstractCache);
+    public abstract void writeToDatabase(Database database, AbstractCache abstractCache,boolean fireChangedEvent);
 
-    public abstract boolean updateDatabase(Database database, AbstractCache abstractCache);
+    public abstract boolean updateDatabase(Database database, AbstractCache abstractCache,boolean fireChangedEvent);
 
     public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID, boolean withWaypoints);
 

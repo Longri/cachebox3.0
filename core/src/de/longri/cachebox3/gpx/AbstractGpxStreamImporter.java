@@ -27,11 +27,8 @@ import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -81,7 +78,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected String longDescription;
     protected String hint;
     protected boolean found;
-    protected Date dateHidden;
+    protected Date wptDate;
+    protected String gsakParent;
 
 
     public AbstractGpxStreamImporter(Database database, ImportHandler importHandler) {
@@ -145,7 +143,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         longDescription = null;
         hint = null;
         found = false;
-        dateHidden = null;
+        wptDate = null;
+        gsakParent = null;
     }
 
     protected void createNewWPT() {
@@ -173,8 +172,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setLongDescription(database, this.longDescription);
         cache.setShortDescription(database, this.shortDescription);
         cache.setFound(this.found);
-        if (this.dateHidden != null) {
-            cache.setDateHidden(this.dateHidden);
+        if (this.wptDate != null) {
+            cache.setDateHidden(this.wptDate);
         }
 
         for (Attributes att : positiveAttributes)
@@ -189,7 +188,21 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     }
 
     private void createWaypoint() {
-        //TODO
+
+        long cacheId;
+
+        if (gsakParent != null) {
+            cacheId = AbstractCache.GenerateCacheId(gsakParent);
+        } else {
+            cacheId = AbstractCache.GenerateCacheId("GC" + this.gcCode.substring(2, this.gcCode.length()));
+        }
+
+        AbstractWaypoint waypoint = new MutableWaypoint(this.latitude, this.longitude, cacheId);
+        waypoint.setDescription(this.shortDescription);
+        waypoint.setType(this.type);
+        waypoint.setGcCode(this.gcCode);
+
+        resolveWaypoitConflicts.add(waypoint);
         resetValues();
     }
 
@@ -203,12 +216,12 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                         AbstractCache cache = resolveCacheConflicts.pop();
 
                         //TODO handle cache conflict
-                        DaoFactory.CACHE_DAO.writeToDatabase(database, cache);
+                        DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
                     } else if (resolveWaypoitConflicts.size > 0) {
                         AbstractWaypoint waypoint = resolveWaypoitConflicts.pop();
 
                         //TODO handle waypoint conflict
-                        DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint);
+                        DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint, false);
                     } else {
                         try {
                             Thread.sleep(250);

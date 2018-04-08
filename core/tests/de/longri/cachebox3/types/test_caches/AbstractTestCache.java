@@ -15,15 +15,16 @@
  */
 package de.longri.cachebox3.types.test_caches;
 
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.CacheSizes;
-import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.CharSequenceUtilTest;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Locale;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,12 +35,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public abstract class AbstractTestCache {
     final SimpleDateFormat DATE_PATTERN = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
 
+
+    protected AbstractTestCache() {
+        setValues();
+        this.id = AbstractCache.GenerateCacheId(this.gcCode);
+        addWaypoints();
+    }
+
+    protected abstract void setValues();
+
+    protected abstract void addWaypoints();
+
+
     double longitude;
     double latitude;
     CacheTypes cacheType;
     String gcCode;
     String name;
-    long id;
+    private long id;
     boolean available;
     boolean archived;
     String placed_by;
@@ -57,6 +70,8 @@ public abstract class AbstractTestCache {
     String hint;
     boolean found;
     Date dateHidden;
+    Array<AbstractWaypoint> waypoints = new Array<>();
+
 
     public void assertCache(AbstractCache other, Database database) {
         assertThat("Cache must not be NULL", other != null);
@@ -85,6 +100,8 @@ public abstract class AbstractTestCache {
         String expectedDate = DATE_PATTERN.format(this.dateHidden);
         String actualDate = DATE_PATTERN.format(other.getDateHidden(database));
         assertEquals(expectedDate, actualDate, "HiddenDate should be equals");
+
+        assertWaypoints(other, database);
     }
 
     private void assetCacheAttributes(AbstractCache abstractCache, Database database) {
@@ -136,5 +153,74 @@ public abstract class AbstractTestCache {
         }
     }
 
+    private void assertWaypoints(AbstractCache other, Database database) {
+        int wpSize = other.getWaypoints() != null ? other.getWaypoints().size : 0;
+        assertThat("Waypoint size must be " + waypoints.size + " but was :" + wpSize, waypoints.size == wpSize);
+
+
+        if (waypoints.size == 0) return;
+
+        Array<AbstractWaypoint> otherWaypoints = other.getWaypoints();
+
+        for (AbstractWaypoint otherWp : otherWaypoints) {
+            boolean found = false;
+            for (AbstractWaypoint thisWp : waypoints) {
+                if (fullWaypointEquals(thisWp, otherWp, database)) {
+                    found = true;
+                    break;
+                }
+            }
+            assertThat("Wp not found", found);
+        }
+
+        for (AbstractWaypoint thisWp : waypoints) {
+            boolean found = false;
+            for (AbstractWaypoint otherWp : otherWaypoints) {
+                if (fullWaypointEquals(thisWp, otherWp, database)) {
+                    found = true;
+                    break;
+                }
+            }
+            assertThat("Wp not found", found);
+        }
+
+    }
+
+    private boolean fullWaypointEquals(AbstractWaypoint wp1, AbstractWaypoint wp2, Database database) {
+        if (!wp1.equals(wp2)) return false; // check GcCode
+
+
+        assertThat("Waypoint Type of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getType() + " instead of " + wp2.getType(), wp1.getType() == wp2.getType());
+
+        assertThat("Waypoint Cache id of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getCacheId() + " instead of " + wp2.getCacheId(), wp1.getCacheId() == wp2.getCacheId());
+
+        assertThat("Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getClue(database) + " instead of " + wp2.getClue(database), CharSequenceUtilTest.equals(wp1.getClue(database), wp2.getClue(database)));
+
+        assertThat("Waypoint Description of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getDescription(database) + " instead of " + wp2.getDescription(database), CharSequenceUtilTest.equals(wp1.getDescription(database), wp2.getDescription(database)));
+
+        assertThat("Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getClue(database) + " instead of " + wp2.getClue(database), CharSequenceUtilTest.equals(wp1.getClue(database), wp2.getClue(database)));
+
+        assertThat("Waypoint Title of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getTitle() + " instead of " + wp2.getTitle(), CharSequenceUtilTest.equals(wp1.getTitle(), wp2.getTitle()));
+
+        assertThat("Waypoint Latitude of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getLatitude() + " instead of " + wp2.getLatitude(), wp1.getLatitude() == wp2.getLatitude());
+
+        assertThat("Waypoint Longitude of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getLongitude() + " instead of " + wp2.getLongitude(), wp1.getLongitude() == wp2.getLongitude());
+
+        assertThat("Waypoint is Start of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.isStart() + " instead of " + wp2.isStart(), wp1.isStart() == wp2.isStart());
+
+        assertThat("Waypoint is UserWaypoint of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.isUserWaypoint() + " instead of " + wp2.isUserWaypoint(), wp1.isUserWaypoint() == wp2.isUserWaypoint());
+
+        return true;
+    }
 
 }

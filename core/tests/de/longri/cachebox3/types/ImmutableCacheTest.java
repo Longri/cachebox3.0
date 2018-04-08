@@ -56,7 +56,7 @@ class ImmutableCacheTest {
         mutableCache.setId(123456789l);
 
         mutableCache.setUrl(url);
-        DaoFactory.CACHE_DAO.writeToDatabase(cb3Database, mutableCache);
+        DaoFactory.CACHE_DAO.writeToDatabase(cb3Database, mutableCache,false);
 
 
         cache = (ImmutableCache) DaoFactory.CACHE_DAO.getFromDbByCacheId(cb3Database, 123456789l, false);

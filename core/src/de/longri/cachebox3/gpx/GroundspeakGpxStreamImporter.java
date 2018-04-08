@@ -16,12 +16,11 @@
 package de.longri.cachebox3.gpx;
 
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.utils.CharSequenceUtil;
-
-import java.util.Locale;
 
 /**
  * Created by Longri on 04.04.2018.
@@ -60,15 +59,13 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
                 new ValueHandler() {
                     @Override
                     protected void handleValue(char[] valueName, char[] data, int offset, int length) {
-                        if (CharSequenceUtil.equals(ID, valueName)) {
-                            id = CharSequenceUtil.parseInteger(data, offset, length);
-                        } else if (CharSequenceUtil.equals(AVAILABLE, valueName)) {
+                        if (CharSequenceUtil.equals(AVAILABLE, valueName)) {
                             available = CharSequenceUtil.parseBoolean(data, offset, length);
                         } else if (CharSequenceUtil.equals(ARCHIEVED, valueName)) {
                             archived = CharSequenceUtil.parseBoolean(data, offset, length);
                         }
                     }
-                }, ID, AVAILABLE, ARCHIEVED);
+                }, AVAILABLE, ARCHIEVED);
 
         this.registerValueHandler("/gpx/wpt/groundspeak:cache/groundspeak:attributes/groundspeak:attribute",
                 new ValueHandler() {
@@ -103,6 +100,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
             @Override
             public void handleData(char[] data, int offset, int length) {
                 gcCode = new String(data, offset, length);
+                id = AbstractCache.GenerateCacheId(gcCode);
             }
         });
 
@@ -195,14 +193,28 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/sym", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                found = CharSequenceUtil.equals(data, offset, length, CACHES_FOUND, 0, CACHES_FOUND.length);
+
+                if (gcCode.startsWith("GC")) {
+                    //for Cache
+                    found = CharSequenceUtil.equals(data, offset, length, CACHES_FOUND, 0, CACHES_FOUND.length);
+                } else {
+                    //for Waypoint
+                    type = CacheTypes.parseString(new String(data, offset, length));
+                }
             }
         });
 
         this.registerDataHandler("/gpx/wpt/time", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                dateHidden = parseDate(data, offset, length);
+                wptDate = parseDate(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/cmt", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                shortDescription = new String(data, offset, length);
             }
         });
 

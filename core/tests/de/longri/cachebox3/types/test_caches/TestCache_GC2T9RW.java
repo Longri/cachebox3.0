@@ -15,9 +15,7 @@
  */
 package de.longri.cachebox3.types.test_caches;
 
-import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.CacheSizes;
-import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.*;
 
 import java.text.ParseException;
 
@@ -26,14 +24,13 @@ import java.text.ParseException;
  */
 public class TestCache_GC2T9RW extends AbstractTestCache {
 
-    public TestCache_GC2T9RW() {
-        super();
+    @Override
+    protected void setValues() {
         this.latitude = 49.349817;
         this.longitude = 8.62925;
         this.cacheType = CacheTypes.Traditional;
         this.gcCode = "GC2T9RW";
         this.name = "der Hampir - T5 -";
-        this.id = 2190117L;
         this.available = true;
         this.archived = false;
         this.placed_by = "Team Rabbits";
@@ -61,6 +58,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         this.positiveList.add(Attributes.Climbing_gear);
         this.positiveList.add(Attributes.Ticks);
         this.positiveList.add(Attributes.Dogs);
+
 
         this.hint = "wenn du ihn nicht findest, findet er dich!!";
         this.shortDescription = "&lt;font face=\"tahoma\" size=\"3\" color=\"#330033\"&gt;&lt;br /&gt;\n" +
@@ -124,6 +122,23 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 "\"Counter/Zähler\"&gt;&lt;img src=\"http://c.andyhoppe.com/1302990447\"\n" +
                 "style=\"border:none\" alt=\"Counter/Zähler\" /&gt;&lt;/a&gt;&lt;p&gt;Additional Hidden Waypoints&lt;/p&gt;PK2T9RW - GC2T9RW Parking&lt;br /&gt;N 49° 21.077 E 008° 37.840&lt;br /&gt;Raststätte Hardtwald West.\n" +
                 "Und für Ortskundige: einfach Richtung ADAC Übungsgelände. Dann müsst Ihr nicht auf die Autobahn.&lt;br /&gt;";
+
+    }
+
+    @Override
+    protected void addWaypoints() {
+        AbstractWaypoint wp1 = new MutableWaypoint(49.351283, 8.630667, 24578729153020743L);
+        wp1.setGcCode("PK2T9RW");
+        wp1.setType(CacheTypes.ParkingArea);
+        wp1.setDescription("Raststätte Hardtwald West.\n" +
+                "Und für Ortskundige: einfach Richtung ADAC Übungsgelände. Dann müsst Ihr nicht auf die Autobahn.");
+
+        wp1.setClue("");
+        wp1.setUserWaypoint(false);
+        wp1.setStart(false);
+
+        this.waypoints.add(wp1);
+
     }
 
 }
