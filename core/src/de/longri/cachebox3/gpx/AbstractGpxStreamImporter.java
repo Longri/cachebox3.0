@@ -80,6 +80,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected String longDescription;
     protected String hint;
     protected boolean found;
+    protected int tbCount;
     protected Date wpDate;
     protected Date logDate;
     protected String gsakParent;
@@ -154,6 +155,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         gsakParent = null;
         logId = 0;
         wpDate = null;
+        tbCount = 0;
         resetLogValues();
     }
 
@@ -191,6 +193,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setLongDescription(database, this.longDescription);
         cache.setShortDescription(database, this.shortDescription);
         cache.setFound(this.found);
+        cache.setNumTravelbugs(this.tbCount);
         if (this.wpDate != null) {
             cache.setDateHidden(this.wpDate);
         }

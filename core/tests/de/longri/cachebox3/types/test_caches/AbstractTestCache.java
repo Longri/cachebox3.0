@@ -84,6 +84,7 @@ public abstract class AbstractTestCache {
     Date dateHidden;
     Array<AbstractWaypoint> waypoints = new Array<>();
     Array<LogEntry> logEntries = new Array<>();
+    int tbCount;
 
 
     public void assertCache(AbstractCache other, Database database) {
@@ -109,6 +110,7 @@ public abstract class AbstractTestCache {
         assertEquals(shortDescription, other.getShortDescription(database).replaceAll("\r\n", "\n"), "Short description should be equals");
         assertEquals(longDescription, other.getLongDescription(database).replaceAll("\r\n", "\n"), "Long description should be equals");
         assertEquals(hint, other.getHint(database).toString().replaceAll("\r\n", "\n"), "Hint should be equals");
+        assertThat("Cache Tb count must be " + tbCount + " but was :" + other.getNumTravelbugs(), tbCount == other.getNumTravelbugs());
 
         String expectedDate = DATE_PATTERN.format(this.dateHidden);
         String actualDate = DATE_PATTERN.format(other.getDateHidden(database));
@@ -282,7 +284,7 @@ public abstract class AbstractTestCache {
         assertThat("LogEntry CacheId of " + log1.Id + " are wrong! " +
                 "was " + log1.CacheId + " instead of " + log2.CacheId, log1.CacheId == log2.CacheId);
 
-        assertEquals(  log1.Comment,log2.Comment,"LogEntry Comment of " + log1.Id + " are wrong! ");
+        assertEquals(log1.Comment, log2.Comment, "LogEntry Comment of " + log1.Id + " are wrong! ");
 
         String expectedDate = DATE_PATTERN.format(log1.Timestamp);
         String actualDate = DATE_PATTERN.format(log2.Timestamp);

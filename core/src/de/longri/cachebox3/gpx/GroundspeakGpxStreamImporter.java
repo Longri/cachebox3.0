@@ -215,6 +215,14 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
             }
         });
 
+        this.registerEndTagHandler("/gpx/wpt/groundspeak:cache/groundspeak:travelbugs/groundspeak:travelbug", new EndTagHandler() {
+            @Override
+            protected void handleEndTag() {
+                tbCount++;
+            }
+
+        });
+
         this.registerEndTagHandler("/gpx/wpt", new EndTagHandler() {
             @Override
             protected void handleEndTag() {
