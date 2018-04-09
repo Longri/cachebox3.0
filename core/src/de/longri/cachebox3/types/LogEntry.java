@@ -35,7 +35,7 @@ public class LogEntry {
     /**
      * Logtyp, z.B. "Found it!"
      */
-    public LogTypes Type=LogTypes.unknown;
+    public LogTypes Type = LogTypes.unknown;
 
 
     /**
@@ -117,6 +117,7 @@ public class LogEntry {
     }
 
     public static String filterBBCode(String string) {
+        if (string == null) return null;
         int lIndex;
         while ((lIndex = string.indexOf('[')) >= 0) {
             int rIndex = string.indexOf(']', lIndex);

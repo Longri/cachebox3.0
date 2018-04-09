@@ -82,10 +82,11 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected boolean found;
     protected int tbCount;
     protected Date wpDate;
-    protected Date logDate;
+
     protected String gsakParent;
 
     protected long logId;
+    protected Date logDate;
     protected String logFinder;
     protected String logComment;
     protected LogTypes logType;

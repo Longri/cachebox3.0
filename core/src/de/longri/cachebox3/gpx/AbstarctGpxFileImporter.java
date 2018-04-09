@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.XmlStreamEventParser;
@@ -48,6 +49,7 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
 
     private final Array<AbstractCache> resolveCacheConflicts = new Array<>();
     private final Array<AbstractWaypoint> resolveWaypoitConflicts = new Array<>();
+    private final Array<LogEntry> storeLogEntry = new Array<>();
     private final AtomicBoolean PARSE_READY = new AtomicBoolean(true);
     private final AtomicBoolean CONFLICT_READY = new AtomicBoolean(true);
     private final Database database;
@@ -78,6 +80,13 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
     boolean found;
     String dateHidden;
     String gsakParent;
+    int tbCount;
+
+    int logId;
+    String logDate;
+    String logFinder;
+    String logComment;
+    LogTypes logType;
 
     public AbstarctGpxFileImporter(Database database, ImportHandler importHandler) {
         super();
@@ -145,6 +154,17 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
         found = false;
         dateHidden = null;
         gsakParent = null;
+        tbCount = 0;
+
+        resetLogValues();
+    }
+
+    private void resetLogValues() {
+        logId = 0;
+        logDate = null;
+        logFinder = null;
+        logComment = null;
+        logType = LogTypes.unknown;
     }
 
     protected void createNewWPT() {
@@ -172,6 +192,7 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
         cache.setLongDescription(database, this.longDescription);
         cache.setShortDescription(database, this.shortDescription);
         cache.setFound(this.found);
+        cache.setNumTravelbugs(this.tbCount);
         if (this.dateHidden != null) {
             // try to parse
             try {
@@ -210,23 +231,61 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
         resetValues();
     }
 
-    protected void handleConflictsAndStoreToDB() {
+    protected void createNewLogEntry() {
+        LogEntry newLogEntry = new LogEntry();
+        newLogEntry.CacheId = this.id;
+        newLogEntry.Id = this.logId;
+        newLogEntry.Finder = this.logFinder;
+        newLogEntry.Comment = this.logComment;
+        newLogEntry.Type = this.logType;
+        if (this.logDate != null) {
+            // try to parse
+            try {
+                Date date = parseDate(this.logDate);
+                newLogEntry.Timestamp = date;
+            } catch (Exception e) {
+                log.error("Parse hidden wptDate string", e);
+            }
+        }
+        storeLogEntry.add(newLogEntry);
+        resetLogValues();
+    }
+
+    private void handleConflictsAndStoreToDB() {
         CB.postAsync(new NamedRunnable("Import Conflict handler") {
             @Override
             public void run() {
-                while (!PARSE_READY.get() || resolveCacheConflicts.size > 0 || resolveWaypoitConflicts.size > 0) {
+                while (!PARSE_READY.get() || resolveCacheConflicts.size > 0
+                        || resolveWaypoitConflicts.size > 0
+                        || storeLogEntry.size > 0) {
+
+                    boolean sleep = true;
 
                     if (resolveCacheConflicts.size > 0) {
+                        sleep = false;
                         AbstractCache cache = resolveCacheConflicts.pop();
 
                         //TODO handle cache conflict
                         DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
-                    } else if (resolveWaypoitConflicts.size > 0) {
+                    }
+                    if (resolveWaypoitConflicts.size > 0) {
+                        sleep = false;
                         AbstractWaypoint waypoint = resolveWaypoitConflicts.pop();
 
                         //TODO handle waypoint conflict
                         DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint, false);
-                    } else {
+                    }
+
+                    if (storeLogEntry.size > 0) {
+                        sleep = false;
+                        LogDAO dao = new LogDAO();
+                        Array<LogEntry> writeList = new Array<>();
+                        while (storeLogEntry.size > 0)
+                            writeList.add(storeLogEntry.pop());
+                        dao.writeToDB(database, writeList);
+                    }
+
+                    if (sleep) {
                         try {
                             Thread.sleep(250);
                         } catch (InterruptedException e) {

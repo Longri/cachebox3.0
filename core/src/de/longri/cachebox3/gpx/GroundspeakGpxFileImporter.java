@@ -16,10 +16,7 @@
 package de.longri.cachebox3.gpx;
 
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.CacheSizes;
-import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +61,13 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
     private final ActiveQName SYM = this.registerName("sym");
     private final ActiveQName TIME = this.registerName("time");
     private final ActiveQName CMT = this.registerName("cmt");
+    private final ActiveQName TRAVELBUG = this.registerName("groundspeak:travelbug");
+    private final ActiveQName LOGS = this.registerName("groundspeak:logs");
+    private final ActiveQName LOG = this.registerName("groundspeak:log");
+    private final ActiveQName LOG_TYPE = this.registerName("groundspeak:type");
+    private final ActiveQName LOG_FINDER = this.registerName("groundspeak:finder");
+    private final ActiveQName LOG_COMMENT = this.registerName("groundspeak:text");
+    private final ActiveQName LOG_Date = this.registerName("groundspeak:date");
 
 
     public GroundspeakGpxFileImporter(Database database, ImportHandler importHandler) {
@@ -93,6 +97,10 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
                     negativeAttributes.add(att);
                 }
             }
+        } else if (name.equals(TRAVELBUG)) {
+            tbCount++;
+        } else if (LOGS.isActive() && name.equals(LOG)) {
+            logId = parseInteger(element.getAttributeByName(ID));
         }
     }
 
@@ -105,7 +113,8 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
 
             // clear values for next entry
             resetValues();
-
+        } else if (LOGS.isActive() && name.equals(LOG)) {
+            createNewLogEntry();
         }
     }
 
@@ -126,7 +135,22 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
             } else if (CMT.isActive()) {
                 shortDescription = element.getData();
             } else if (GS_CACHE.isActive()) {
-                if (TITLE.isActive() && !GS_TRAVELBUGS.isActive()) {
+                if (LOG.isActive()) {
+                    if (LOG_TYPE.isActive()) {
+                        logType = LogTypes.parseString(element.getData());
+                    } else if (LOG_FINDER.isActive()) {
+                        logFinder = element.getData();
+                    } else if (LOG_COMMENT.isActive()) {
+                        String data = replace(element.getData());
+                        if ( logComment != null) {
+                            logComment += data;
+                        } else {
+                            logComment = data;
+                        }
+                    } else if (LOG_Date.isActive()) {
+                        logDate = element.getData();
+                    }
+                } else if (TITLE.isActive() && !GS_TRAVELBUGS.isActive()) {
                     title = element.getData();
                 } else if (GS_PLACED_BY.isActive()) {
                     placed_by = element.getData();
