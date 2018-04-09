@@ -224,6 +224,24 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
                 createNewWPT();
             }
         });
+
+        this.registerValueHandler("/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log",
+                new ValueHandler() {
+                    @Override
+                    protected void handleValue(char[] valueName, char[] data, int offset, int length) {
+                        if (CharSequenceUtil.equals(ID, valueName)) {
+                            logId = CharSequenceUtil.parseLong(data, offset, length);
+                        }
+                    }
+                }, ID);
+
+        this.registerEndTagHandler("/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log", new EndTagHandler() {
+            @Override
+            protected void handleEndTag() {
+                createNewLogEntry();
+            }
+
+        });
     }
 
 }

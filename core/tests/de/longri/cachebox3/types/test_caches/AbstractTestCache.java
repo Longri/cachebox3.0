@@ -136,7 +136,7 @@ public abstract class AbstractTestCache {
                     break;
                 }
             }
-            assertThat("Wp not found", found);
+            assertThat("LogEntry not found", found);
         }
 
         for (LogEntry otherLog : logEntries) {
@@ -147,7 +147,7 @@ public abstract class AbstractTestCache {
                     break;
                 }
             }
-            assertThat("Wp not found", found);
+            assertThat("LogEntry not found", found);
         }
     }
 

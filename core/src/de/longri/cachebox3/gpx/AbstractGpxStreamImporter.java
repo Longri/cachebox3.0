@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.XmlStreamParser;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -50,6 +51,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
     private final Array<AbstractCache> resolveCacheConflicts = new Array<>();
     private final Array<AbstractWaypoint> resolveWaypoitConflicts = new Array<>();
+    private final Array<LogEntry> storeLogEntry = new Array<>();
     private final AtomicBoolean PARSE_READY = new AtomicBoolean(true);
     private final AtomicBoolean CONFLICT_READY = new AtomicBoolean(true);
     private final Database database;
@@ -80,6 +82,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected boolean found;
     protected Date wptDate;
     protected String gsakParent;
+
+    protected long logId;
 
 
     public AbstractGpxStreamImporter(Database database, ImportHandler importHandler) {
@@ -145,6 +149,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         found = false;
         wptDate = null;
         gsakParent = null;
+
+        logId = 0;
     }
 
     protected void createNewWPT() {
@@ -206,23 +212,51 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         resetValues();
     }
 
+    protected void createNewLogEntry() {
+        LogEntry newLogEntry = new LogEntry();
+        newLogEntry.CacheId = this.id;
+        newLogEntry.Id = this.logId;
+
+
+        storeLogEntry.add(newLogEntry);
+    }
+
+
     private void handleConflictsAndStoreToDB() {
         CB.postAsync(new NamedRunnable("Import Conflict handler") {
             @Override
             public void run() {
-                while (!PARSE_READY.get() || resolveCacheConflicts.size > 0 || resolveWaypoitConflicts.size > 0) {
+                while (!PARSE_READY.get() || resolveCacheConflicts.size > 0
+                        || resolveWaypoitConflicts.size > 0
+                        || storeLogEntry.size > 0) {
+
+                    boolean sleep = true;
 
                     if (resolveCacheConflicts.size > 0) {
+                        sleep = false;
                         AbstractCache cache = resolveCacheConflicts.pop();
 
                         //TODO handle cache conflict
                         DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
-                    } else if (resolveWaypoitConflicts.size > 0) {
+                    }
+                    if (resolveWaypoitConflicts.size > 0) {
+                        sleep = false;
                         AbstractWaypoint waypoint = resolveWaypoitConflicts.pop();
 
                         //TODO handle waypoint conflict
                         DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint, false);
-                    } else {
+                    }
+
+                    if (storeLogEntry.size > 0) {
+                        sleep = false;
+                        LogDAO dao = new LogDAO();
+                        Array<LogEntry> writeList = new Array<>();
+                        while (storeLogEntry.size > 0)
+                            writeList.add(storeLogEntry.pop());
+                        dao.writeToDB(database, writeList);
+                    }
+
+                    if (sleep) {
                         try {
                             Thread.sleep(250);
                         } catch (InterruptedException e) {
@@ -235,6 +269,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
             }
         });
     }
+
 
     protected Date parseDate(char[] data, int offset, int length) {
         return CharSequenceUtil.parseDate(this.locale, data, offset, length, DATE_PATTERN1, DATE_PATTERN2, DATE_PATTERN3);

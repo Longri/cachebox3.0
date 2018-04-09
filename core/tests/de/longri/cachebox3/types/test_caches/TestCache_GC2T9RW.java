@@ -161,7 +161,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 "\n" +
                 "T5 #255";
         logEntry1.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry1.Id = 165483338;
+        logEntry1.Id = 170855167L;
         this.logEntries.add(logEntry1);
 
         LogEntry logEntry2 = new LogEntry();
@@ -170,7 +170,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry2.Type = LogTypes.found;
         logEntry2.Comment = "";
         logEntry2.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry2.Id = -1;
+        logEntry2.Id = 165483338L;
         this.logEntries.add(logEntry2);
 
         LogEntry logEntry3 = new LogEntry();
@@ -179,7 +179,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry3.Type = LogTypes.found;
         logEntry3.Comment = "";
         logEntry3.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry3.Id = -1;
+        logEntry3.Id = 165457525L;
         this.logEntries.add(logEntry3);
 
         LogEntry logEntry4 = new LogEntry();
@@ -188,7 +188,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry4.Type = LogTypes.found;
         logEntry4.Comment = "";
         logEntry4.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry4.Id = -1;
+        logEntry4.Id = 164390256L;
         this.logEntries.add(logEntry4);
 
         LogEntry logEntry5 = new LogEntry();
@@ -197,7 +197,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry5.Type = LogTypes.found;
         logEntry5.Comment = "";
         logEntry5.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry5.Id = -1;
+        logEntry5.Id = 164266702L;
         this.logEntries.add(logEntry5);
 
         LogEntry logEntry6 = new LogEntry();
@@ -206,7 +206,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry6.Type = LogTypes.found;
         logEntry6.Comment = "";
         logEntry6.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry6.Id = -1;
+        logEntry6.Id = 163987510L;
         this.logEntries.add(logEntry6);
 
         LogEntry logEntry7 = new LogEntry();
@@ -215,7 +215,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry7.Type = LogTypes.found;
         logEntry7.Comment = "";
         logEntry7.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry7.Id = -1;
+        logEntry7.Id = 163965795L;
         this.logEntries.add(logEntry7);
 
         LogEntry logEntry8 = new LogEntry();
@@ -224,7 +224,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry8.Type = LogTypes.found;
         logEntry8.Comment = "";
         logEntry8.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry8.Id = -1;
+        logEntry8.Id = 163926440L;
         this.logEntries.add(logEntry8);
 
         LogEntry logEntry9 = new LogEntry();
@@ -233,7 +233,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry9.Type = LogTypes.found;
         logEntry9.Comment = "";
         logEntry9.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry9.Id = -1;
+        logEntry9.Id = 163871656L;
         this.logEntries.add(logEntry9);
 
         LogEntry logEntry10 = new LogEntry();
@@ -242,7 +242,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry10.Type = LogTypes.found;
         logEntry10.Comment = "";
         logEntry10.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry10.Id = -1;
+        logEntry10.Id = 163870090L;
         this.logEntries.add(logEntry10);
 
         LogEntry logEntry11 = new LogEntry();
@@ -251,7 +251,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry11.Type = LogTypes.found;
         logEntry11.Comment = "";
         logEntry11.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry11.Id = -1;
+        logEntry11.Id = 163722750L;
         this.logEntries.add(logEntry11);
 
         LogEntry logEntry12 = new LogEntry();
@@ -260,7 +260,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry12.Type = LogTypes.found;
         logEntry12.Comment = "";
         logEntry12.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry12.Id = -1;
+        logEntry12.Id = 163450672L;
         this.logEntries.add(logEntry12);
 
         LogEntry logEntry13 = new LogEntry();
@@ -269,7 +269,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry13.Type = LogTypes.found;
         logEntry13.Comment = "";
         logEntry13.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry13.Id = -1;
+        logEntry13.Id = 163700211L;
         this.logEntries.add(logEntry13);
 
         LogEntry logEntry14 = new LogEntry();
@@ -278,7 +278,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry14.Type = LogTypes.found;
         logEntry14.Comment = "";
         logEntry14.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry14.Id = -1;
+        logEntry14.Id = 163338659L;
         this.logEntries.add(logEntry14);
 
         LogEntry logEntry15 = new LogEntry();
@@ -287,7 +287,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry15.Type = LogTypes.found;
         logEntry15.Comment = "";
         logEntry15.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry15.Id = -1;
+        logEntry15.Id = 163338340L;
         this.logEntries.add(logEntry15);
 
         LogEntry logEntry16 = new LogEntry();
@@ -296,7 +296,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry16.Type = LogTypes.found;
         logEntry16.Comment = "";
         logEntry16.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry16.Id = -1;
+        logEntry16.Id = 163213651L;
         this.logEntries.add(logEntry16);
 
         LogEntry logEntry17 = new LogEntry();
@@ -305,7 +305,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry17.Type = LogTypes.found;
         logEntry17.Comment = "";
         logEntry17.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry17.Id = -1;
+        logEntry17.Id = 163152743L;
         this.logEntries.add(logEntry17);
 
         LogEntry logEntry18 = new LogEntry();
@@ -314,7 +314,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry18.Type = LogTypes.found;
         logEntry18.Comment = "";
         logEntry18.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry18.Id = -1;
+        logEntry18.Id = 163136663L;
         this.logEntries.add(logEntry18);
 
         LogEntry logEntry19 = new LogEntry();
@@ -323,7 +323,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry19.Type = LogTypes.found;
         logEntry19.Comment = "";
         logEntry19.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry19.Id = -1;
+        logEntry19.Id = 163673347L;
         this.logEntries.add(logEntry19);
 
         LogEntry logEntry20 = new LogEntry();
@@ -332,7 +332,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry20.Type = LogTypes.found;
         logEntry20.Comment = "";
         logEntry20.Timestamp = DATE_PATTERN.parse("2011-04-16T07:00:00Z");
-        logEntry20.Id = -1;
+        logEntry20.Id = 163319268L;
         this.logEntries.add(logEntry20);
 
         return true;
