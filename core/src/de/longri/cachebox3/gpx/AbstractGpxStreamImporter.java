@@ -242,7 +242,6 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         resetLogValues();
     }
 
-
     private void handleConflictsAndStoreToDB() {
         CB.postAsync(new NamedRunnable("Import Conflict handler") {
             @Override
@@ -259,6 +258,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
                         //TODO handle cache conflict
                         DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
+                        if (importHandler != null) importHandler.incrementCaches();
                     }
                     if (resolveWaypoitConflicts.size > 0) {
                         sleep = false;
@@ -266,15 +266,19 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
                         //TODO handle waypoint conflict
                         DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint, false);
+                        if (importHandler != null) importHandler.incrementWaypoints();
                     }
 
                     if (storeLogEntry.size > 0) {
                         sleep = false;
                         LogDAO dao = new LogDAO();
                         Array<LogEntry> writeList = new Array<>();
-                        while (storeLogEntry.size > 0)
+                        while (storeLogEntry.size > 0) {
                             writeList.add(storeLogEntry.pop());
+                            if (importHandler != null) importHandler.incrementLogs();
+                        }
                         dao.writeToDB(database, writeList);
+
                     }
 
                     if (sleep) {
@@ -290,7 +294,6 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
             }
         });
     }
-
 
     protected Date parseDate(char[] data, int offset, int length) {
         return CharSequenceUtil.parseDate(this.locale, data, offset, length, DATE_PATTERN1, DATE_PATTERN2, DATE_PATTERN3);

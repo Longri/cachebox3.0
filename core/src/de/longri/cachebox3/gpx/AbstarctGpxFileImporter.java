@@ -267,6 +267,7 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
 
                         //TODO handle cache conflict
                         DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
+                        if (importHandler != null) importHandler.incrementCaches();
                     }
                     if (resolveWaypoitConflicts.size > 0) {
                         sleep = false;
@@ -274,15 +275,19 @@ public abstract class AbstarctGpxFileImporter extends XmlStreamEventParser {
 
                         //TODO handle waypoint conflict
                         DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint, false);
+                        if (importHandler != null) importHandler.incrementWaypoints();
                     }
 
                     if (storeLogEntry.size > 0) {
                         sleep = false;
                         LogDAO dao = new LogDAO();
                         Array<LogEntry> writeList = new Array<>();
-                        while (storeLogEntry.size > 0)
+                        while (storeLogEntry.size > 0) {
                             writeList.add(storeLogEntry.pop());
+                            if (importHandler != null) importHandler.incrementLogs();
+                        }
                         dao.writeToDB(database, writeList);
+
                     }
 
                     if (sleep) {

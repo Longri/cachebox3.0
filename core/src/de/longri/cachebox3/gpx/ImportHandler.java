@@ -19,4 +19,11 @@ package de.longri.cachebox3.gpx;
  * Created by Longri on 29.03.2018.
  */
 public interface ImportHandler {
+
+    void incrementCaches();
+
+    void incrementWaypoints();
+
+    void incrementLogs();
+
 }
