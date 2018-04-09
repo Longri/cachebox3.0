@@ -163,5 +163,178 @@ class GpxFileImporterTest {
 
     }
 
+    @Test
+    public void testGpxImport_GC52BKF() throws Exception {
+        long start = System.currentTimeMillis();
 
+        Database TEST_DB = TestUtils.getTestDB(true);
+        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC52BKF.gpx");
+        final AtomicInteger cacheCount = new AtomicInteger();
+        final AtomicInteger waypointCount = new AtomicInteger();
+        final AtomicInteger logCount = new AtomicInteger();
+        ImportHandler importHandler = new ImportHandler() {
+            @Override
+            public void incrementCaches() {
+                cacheCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementWaypoints() {
+                waypointCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementLogs() {
+                logCount.incrementAndGet();
+            }
+        };
+
+        new GroundspeakGpxFileImporter(TEST_DB, importHandler).doImport(gpxFile);
+        assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
+        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC52BKF", true);
+        TEST_CACHES.GC52BKF.assertCache(cache, TEST_DB);
+
+        TEST_DB.close();
+
+        assertThat("Imported Cache count should be 1", cacheCount.get() == 1);
+        assertThat("Imported Waypoint count should be 1", waypointCount.get() == 0);
+        assertThat("Imported Log count should be 1", logCount.get() == 20);
+
+        long elapseTime = System.currentTimeMillis() - start;
+        System.out.println("Gpx Stream import time: " + elapseTime + "ms");
+    }
+
+    @Test
+    public void testGpxStreamImport_GC52BKF() throws Exception {
+        long start = System.currentTimeMillis();
+
+        Database TEST_DB = TestUtils.getTestDB(true);
+        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC52BKF.gpx");
+        final AtomicInteger cacheCount = new AtomicInteger();
+        final AtomicInteger waypointCount = new AtomicInteger();
+        final AtomicInteger logCount = new AtomicInteger();
+        ImportHandler importHandler = new ImportHandler() {
+            @Override
+            public void incrementCaches() {
+                cacheCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementWaypoints() {
+                waypointCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementLogs() {
+                logCount.incrementAndGet();
+            }
+        };
+
+        new GroundspeakGpxStreamImporter(TEST_DB, importHandler).doImport(gpxFile);
+        assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
+        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC52BKF", true);
+        TEST_CACHES.GC52BKF.assertCache(cache, TEST_DB);
+
+        TEST_DB.close();
+
+        assertThat("Imported Cache count should be 1", cacheCount.get() == 1);
+        assertThat("Imported Waypoint count should be 1", waypointCount.get() == 0);
+        assertThat("Imported Log count should be 1", logCount.get() == 20);
+
+        long elapseTime = System.currentTimeMillis() - start;
+        System.out.println("Gpx Stream import time: " + elapseTime + "ms");
+    }
+
+
+    @Test
+    public void testPqFileImport() throws Exception {
+        long start = System.currentTimeMillis();
+
+        Database TEST_DB = TestUtils.getTestDB(true);
+        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ/6004539_HomeZone.gpx");
+        FileHandle gpxFile2 = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ/6004539_HomeZone-wpts.gpx");
+        final AtomicInteger cacheCount = new AtomicInteger();
+        final AtomicInteger waypointCount = new AtomicInteger();
+        final AtomicInteger logCount = new AtomicInteger();
+        ImportHandler importHandler = new ImportHandler() {
+            @Override
+            public void incrementCaches() {
+                cacheCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementWaypoints() {
+                waypointCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementLogs() {
+                logCount.incrementAndGet();
+            }
+        };
+
+        GroundspeakGpxFileImporter importer = new GroundspeakGpxFileImporter(TEST_DB, importHandler);
+        importer.doImport(gpxFile);
+        importer.doImport(gpxFile2);
+
+
+        assertThat("Cache count must be 500", TEST_DB.getCacheCountOnThisDB() == 500);
+        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2TNPV", true);
+        TEST_CACHES.GC2TNPV.assertCache(cache, TEST_DB);
+
+        TEST_DB.close();
+
+        assertThat("Imported Cache count should be 500", cacheCount.get() == 500);
+        assertThat("Imported Waypoint count should be 1", waypointCount.get() == 183);
+        assertThat("Imported Log count should be 2534", logCount.get() == 2534);
+
+        long elapseTime = System.currentTimeMillis() - start;
+        System.out.println("Pq file import time: " + elapseTime + "ms");
+    }
+
+    @Test
+    public void testPqStreamImport() throws Exception {
+        long start = System.currentTimeMillis();
+
+        Database TEST_DB = TestUtils.getTestDB(true);
+        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ/6004539_HomeZone.gpx");
+        FileHandle gpxFile2 = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ/6004539_HomeZone-wpts.gpx");
+        final AtomicInteger cacheCount = new AtomicInteger();
+        final AtomicInteger waypointCount = new AtomicInteger();
+        final AtomicInteger logCount = new AtomicInteger();
+        ImportHandler importHandler = new ImportHandler() {
+            @Override
+            public void incrementCaches() {
+                cacheCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementWaypoints() {
+                waypointCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementLogs() {
+                logCount.incrementAndGet();
+            }
+        };
+
+        GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(TEST_DB, importHandler);
+        importer.doImport(gpxFile);
+        importer.doImport(gpxFile2);
+
+
+        assertThat("Cache count must be 500", TEST_DB.getCacheCountOnThisDB() == 500);
+        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2TNPV", true);
+        TEST_CACHES.GC2TNPV.assertCache(cache, TEST_DB);
+
+        TEST_DB.close();
+
+        assertThat("Imported Cache count should be 500", cacheCount.get() == 500);
+        assertThat("Imported Waypoint count should be 1", waypointCount.get() == 183);
+        assertThat("Imported Log count should be 2534", logCount.get() == 2534);
+
+        long elapseTime = System.currentTimeMillis() - start;
+        System.out.println("PQ Stream import time: " + elapseTime + "ms");
+    }
 }

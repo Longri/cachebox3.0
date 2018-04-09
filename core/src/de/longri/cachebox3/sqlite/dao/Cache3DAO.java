@@ -42,16 +42,18 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public boolean updateDatabase(Database database, AbstractCache abstractCache,boolean fireChangedEvent) {
-        return writeOrUpdate(true, database, abstractCache,fireChangedEvent);
+    public boolean updateDatabase(Database database, AbstractCache abstractCache, boolean fireChangedEvent) {
+        return writeOrUpdate(true, database, abstractCache, fireChangedEvent);
     }
 
     @Override
-    public void writeToDatabase(Database database, AbstractCache abstractCache,boolean fireChangedEvent) {
-        writeOrUpdate(false, database, abstractCache,fireChangedEvent);
+    public void writeToDatabase(Database database, AbstractCache abstractCache, boolean fireChangedEvent) {
+        writeOrUpdate(false, database, abstractCache, fireChangedEvent);
     }
 
-    private boolean writeOrUpdate(boolean update, Database database, AbstractCache abstractCache,boolean fireChangedEvent) {
+    private boolean writeOrUpdate(boolean update, Database database, AbstractCache abstractCache, boolean fireChangedEvent) {
+
+        if (database == null || abstractCache == null) return false;
 
         boolean noError = true;
 
@@ -196,11 +198,11 @@ public class Cache3DAO extends AbstractCacheDAO {
             while (n-- > 0) {
                 AbstractWaypoint wp = waypoints.get(n);
                 if (update) {
-                    if (!WDAO.updateDatabase(database, wp,fireChangedEvent)) {
-                        WDAO.writeToDatabase(database, wp,fireChangedEvent);
+                    if (!WDAO.updateDatabase(database, wp, fireChangedEvent)) {
+                        WDAO.writeToDatabase(database, wp, fireChangedEvent);
                     }
                 } else {
-                    WDAO.writeToDatabase(database, wp,fireChangedEvent);
+                    WDAO.writeToDatabase(database, wp, fireChangedEvent);
                 }
 
             }

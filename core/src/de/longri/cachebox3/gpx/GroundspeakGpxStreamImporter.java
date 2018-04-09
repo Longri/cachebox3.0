@@ -139,16 +139,16 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:difficulty", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                int dif = CharSequenceUtil.parseInteger(data, offset, length);
-                difficulty = (float) (dif / 2.0);
+                double dif = CharSequenceUtil.parseDouble(data, offset, length);
+                difficulty = (float) (dif);
             }
         });
 
         this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:terrain", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                int ter = CharSequenceUtil.parseInteger(data, offset, length);
-                terrain = (float) (ter / 2.0);
+                double ter = CharSequenceUtil.parseDouble(data, offset, length);
+                terrain = (float) (ter);
             }
         });
 

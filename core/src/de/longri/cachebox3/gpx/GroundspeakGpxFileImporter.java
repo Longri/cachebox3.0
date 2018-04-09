@@ -153,17 +153,20 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
                 } else if (TITLE.isActive() && !GS_TRAVELBUGS.isActive()) {
                     title = element.getData();
                 } else if (GS_PLACED_BY.isActive()) {
-                    placed_by = element.getData();
+                    String data = replace(element.getData());
+                    if (placed_by != null) {
+                        placed_by += data;
+                    } else {
+                        placed_by = data;
+                    }
                 } else if (GS_OWNER.isActive()) {
                     owner = element.getData();
                 } else if (GS_CONTAINER.isActive()) {
                     container = CacheSizes.parseString(element.getData());
                 } else if (GS_DIFFICULTY.isActive()) {
-                    int dif = Integer.parseInt(element.getData());
-                    difficulty = (float) (dif / 2.0);
+                    difficulty = (float) Double.parseDouble(element.getData());
                 } else if (GS_TERRAIN.isActive()) {
-                    int ter = Integer.parseInt(element.getData());
-                    terrain = (float) (ter / 2.0);
+                    terrain = (float) Double.parseDouble(element.getData());
                 } else if (GS_COUNTRY.isActive()) {
                     country = element.getData();
                 } else if (GS_STATE.isActive()) {
@@ -191,7 +194,7 @@ public class GroundspeakGpxFileImporter extends AbstarctGpxFileImporter {
     }
 
     private String replace(String data) {
-        return data.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        return data.replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("&","&amp;");
     }
 
 

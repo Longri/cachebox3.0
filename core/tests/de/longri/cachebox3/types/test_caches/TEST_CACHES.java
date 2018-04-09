@@ -22,4 +22,6 @@ public class TEST_CACHES {
 
     public final static AbstractTestCache GC2T9RW = new TestCache_GC2T9RW();
 
+    public final static AbstractTestCache GC52BKF= new TestCache_GC52BKF_without_logs();
+    public static AbstractTestCache GC2TNPV = new TestCache_GC2TNPV();
 }
