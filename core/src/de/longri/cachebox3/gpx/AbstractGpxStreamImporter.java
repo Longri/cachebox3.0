@@ -80,10 +80,14 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected String longDescription;
     protected String hint;
     protected boolean found;
-    protected Date wptDate;
+    protected Date wpDate;
+    protected Date logDate;
     protected String gsakParent;
 
     protected long logId;
+    protected String logFinder;
+    protected String logComment;
+    protected LogTypes logType;
 
 
     public AbstractGpxStreamImporter(Database database, ImportHandler importHandler) {
@@ -147,11 +151,20 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         longDescription = null;
         hint = null;
         found = false;
-        wptDate = null;
         gsakParent = null;
-
         logId = 0;
+        wpDate = null;
+        resetLogValues();
     }
+
+    private void resetLogValues() {
+        logId = 0;
+        logDate = null;
+        logFinder = null;
+        logComment = null;
+        logType = LogTypes.unknown;
+    }
+
 
     protected void createNewWPT() {
         if (type.isCache()) createCache();
@@ -178,8 +191,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setLongDescription(database, this.longDescription);
         cache.setShortDescription(database, this.shortDescription);
         cache.setFound(this.found);
-        if (this.wptDate != null) {
-            cache.setDateHidden(this.wptDate);
+        if (this.wpDate != null) {
+            cache.setDateHidden(this.wpDate);
         }
 
         for (Attributes att : positiveAttributes)
@@ -216,9 +229,13 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         LogEntry newLogEntry = new LogEntry();
         newLogEntry.CacheId = this.id;
         newLogEntry.Id = this.logId;
-
+        newLogEntry.Timestamp = this.logDate;
+        newLogEntry.Finder = this.logFinder;
+        newLogEntry.Comment = this.logComment;
+        newLogEntry.Type = this.logType;
 
         storeLogEntry.add(newLogEntry);
+        resetLogValues();
     }
 
 

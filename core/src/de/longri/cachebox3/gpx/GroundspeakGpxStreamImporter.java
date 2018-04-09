@@ -16,10 +16,7 @@
 package de.longri.cachebox3.gpx;
 
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.CacheSizes;
-import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 
 /**
@@ -172,14 +169,14 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:encoded_hints", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                hint = new String(data, offset, length);
+                hint = new String(data, offset, length).replace("\r\n", "\n");
             }
         });
 
         this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:long_description", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                longDescription = new String(data, offset, length);
+                longDescription = new String(data, offset, length).replace("\r\n", "\n");
             }
         });
 
@@ -207,14 +204,14 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/time", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                wptDate = parseDate(data, offset, length);
+                wpDate = parseDate(data, offset, length);
             }
         });
 
         this.registerDataHandler("/gpx/wpt/cmt", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                shortDescription = new String(data, offset, length);
+                shortDescription = new String(data, offset, length).replace("\r\n", "\n");
             }
         });
 
@@ -234,6 +231,34 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
                         }
                     }
                 }, ID);
+
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                logDate = parseDate(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:finder", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                logFinder = new String(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:text", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                logComment = new String(data, offset, length).replace("\r\n", "\n");
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", new DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                logType = LogTypes.parseString(new String(data, offset, length));
+            }
+        });
 
         this.registerEndTagHandler("/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log", new EndTagHandler() {
             @Override

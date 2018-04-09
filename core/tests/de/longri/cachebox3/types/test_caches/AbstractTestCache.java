@@ -282,8 +282,7 @@ public abstract class AbstractTestCache {
         assertThat("LogEntry CacheId of " + log1.Id + " are wrong! " +
                 "was " + log1.CacheId + " instead of " + log2.CacheId, log1.CacheId == log2.CacheId);
 
-        assertThat("LogEntry Comment of " + log1.Id + " are wrong! " +
-                "was " + log1.Comment + " instead of " + log2.Comment, log1.Comment.equals(log2.Comment));
+        assertEquals(  log1.Comment,log2.Comment,"LogEntry Comment of " + log1.Id + " are wrong! ");
 
         String expectedDate = DATE_PATTERN.format(log1.Timestamp);
         String actualDate = DATE_PATTERN.format(log2.Timestamp);

@@ -129,10 +129,6 @@ public class Database {
     }
 
     private static LogEntry getLogEntry(GdxSqliteCursor reader, boolean filterBbCode) {
-        int intLogType = reader.getInt(3);
-        if (intLogType < 0 || intLogType > 13)
-            return null;
-
         LogEntry retLogEntry = new LogEntry();
         retLogEntry.CacheId = reader.getLong(0);
         String sDate = reader.getString(1);
@@ -147,13 +143,7 @@ public class Database {
         retLogEntry.Id = reader.getLong(5);
 
         if (filterBbCode) {
-            int lIndex;
-            while ((lIndex = retLogEntry.Comment.indexOf('[')) >= 0) {
-                int rIndex = retLogEntry.Comment.indexOf(']', lIndex);
-                if (rIndex == -1)
-                    break;
-                retLogEntry.Comment = retLogEntry.Comment.substring(0, lIndex) + retLogEntry.Comment.substring(rIndex + 1);
-            }
+            retLogEntry.Comment = LogEntry.filterBBCode(retLogEntry.Comment);
         }
         return retLogEntry;
     }

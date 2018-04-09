@@ -48,7 +48,8 @@ public enum LogTypes implements SelectBoxItem {
     move_to_inventory, // 23
     announcement, // 24
     visited, // 25
-    ownFavorite;
+    ownFavorite,
+    unknown;
 
     /**
      * Returns True if the log type a TB Log

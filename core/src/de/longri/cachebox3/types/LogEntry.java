@@ -25,7 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class LogEntry implements Serializable {
+public class LogEntry {
 
     /**
      * Benutzername des Loggers
@@ -35,7 +35,7 @@ public class LogEntry implements Serializable {
     /**
      * Logtyp, z.B. "Found it!"
      */
-    public LogTypes Type;
+    public LogTypes Type=LogTypes.unknown;
 
 
     /**
@@ -93,14 +93,16 @@ public class LogEntry implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return "ID:" + Id;
+    }
+
+
+    @Override
     public boolean equals(Object other) {
         if (other == null) return false;
-
         // return true, if the id are equals
-        if (other instanceof LogEntry) {
-            if (((LogEntry) other).Id != this.Id) return false;
-        }
-        return false;
+        return other instanceof LogEntry && ((LogEntry) other).Id == this.Id;
     }
 
     public LogEntry copy() {
@@ -112,5 +114,16 @@ public class LogEntry implements Serializable {
         ret.CacheId = CacheId;
         ret.Id = Id;
         return ret;
+    }
+
+    public static String filterBBCode(String string) {
+        int lIndex;
+        while ((lIndex = string.indexOf('[')) >= 0) {
+            int rIndex = string.indexOf(']', lIndex);
+            if (rIndex == -1)
+                break;
+            string = string.substring(0, lIndex) + string.substring(rIndex + 1);
+        }
+        return string;
     }
 }
