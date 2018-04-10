@@ -258,7 +258,9 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
                         //TODO handle cache conflict
                         DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
-                        if (importHandler != null) importHandler.incrementCaches();
+                        if (importHandler != null) {
+                            importHandler.incrementCaches(cache.getType() == CacheTypes.Mystery ? cache.getGcCode().toString() : null);
+                        }
                     } else if (resolveWaypoitConflicts.size > 0) {
                         sleep = false;
                         AbstractWaypoint waypoint = resolveWaypoitConflicts.pop();

@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gpx;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
@@ -45,10 +46,12 @@ class GpxFileImporterTest {
         final AtomicInteger cacheCount = new AtomicInteger();
         final AtomicInteger waypointCount = new AtomicInteger();
         final AtomicInteger logCount = new AtomicInteger();
+        final Array<String> mysteryList = new Array<>();
         ImportHandler importHandler = new ImportHandler() {
             @Override
-            public void incrementCaches() {
+            public void incrementCaches(String mysteryGcCode) {
                 cacheCount.incrementAndGet();
+                if (mysteryGcCode != null) mysteryList.add(mysteryGcCode);
             }
 
             @Override
@@ -72,6 +75,7 @@ class GpxFileImporterTest {
         assertThat("Imported Cache count should be 1", cacheCount.get() == 1);
         assertThat("Imported Waypoint count should be 1", waypointCount.get() == 1);
         assertThat("Imported Log count should be 1", logCount.get() == 20);
+        assertThat("Imported Mystery count should be 0", mysteryList.size == 0);
 
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("Gpx Stream import time: " + elapseTime + "ms");
@@ -86,10 +90,12 @@ class GpxFileImporterTest {
         final AtomicInteger cacheCount = new AtomicInteger();
         final AtomicInteger waypointCount = new AtomicInteger();
         final AtomicInteger logCount = new AtomicInteger();
+        final Array<String> mysteryList = new Array<>();
         ImportHandler importHandler = new ImportHandler() {
             @Override
-            public void incrementCaches() {
+            public void incrementCaches(String mysteryGcCode) {
                 cacheCount.incrementAndGet();
+                if (mysteryGcCode != null) mysteryList.add(mysteryGcCode);
             }
 
             @Override
@@ -113,6 +119,7 @@ class GpxFileImporterTest {
         assertThat("Imported Cache count should be 1", cacheCount.get() == 1);
         assertThat("Imported Waypoint count should be 1", waypointCount.get() == 0);
         assertThat("Imported Log count should be 1", logCount.get() == 20);
+        assertThat("Imported Mystery count should be 0", mysteryList.size == 0);
 
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("Gpx Stream import time: " + elapseTime + "ms");
@@ -128,10 +135,12 @@ class GpxFileImporterTest {
         final AtomicInteger cacheCount = new AtomicInteger();
         final AtomicInteger waypointCount = new AtomicInteger();
         final AtomicInteger logCount = new AtomicInteger();
+        final Array<String> mysteryList = new Array<>();
         ImportHandler importHandler = new ImportHandler() {
             @Override
-            public void incrementCaches() {
+            public void incrementCaches(String mysteryGcCode) {
                 cacheCount.incrementAndGet();
+                if (mysteryGcCode != null) mysteryList.add(mysteryGcCode);
             }
 
             @Override
@@ -159,6 +168,7 @@ class GpxFileImporterTest {
         assertThat("Imported Cache count should be 500", cacheCount.get() == 500);
         assertThat("Imported Waypoint count should be 1", waypointCount.get() == 183);
         assertThat("Imported Log count should be 2534", logCount.get() == 2534);
+        assertThat("Imported Mystery count should be 0", mysteryList.size == 167);
 
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("PQ Stream import time: " + elapseTime + "ms");

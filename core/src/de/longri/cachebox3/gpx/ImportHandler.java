@@ -20,7 +20,7 @@ package de.longri.cachebox3.gpx;
  */
 public interface ImportHandler {
 
-    void incrementCaches();
+    void incrementCaches(String mysteryGcCode);
 
     void incrementWaypoints();
 
