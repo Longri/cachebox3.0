@@ -25,12 +25,16 @@ import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static de.longri.cachebox3.types.ImmutableCache.MASK_FAVORITE;
+import static de.longri.cachebox3.types.ImmutableCache.MASK_FOUND;
 
 /**
  * Created by Longri on 04.04.2018.
@@ -191,7 +195,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setHint(database, this.hint);
         cache.setLongDescription(database, this.longDescription);
         cache.setShortDescription(database, this.shortDescription);
-        cache.setFound(this.found);
+        cache.setFound(database, this.found);
         cache.setNumTravelbugs(this.tbCount);
         if (this.wpDate != null) {
             cache.setDateHidden(this.wpDate);
@@ -255,8 +259,28 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                         sleep = false;
                         AbstractCache cache = resolveCacheConflicts.pop();
 
-                        //TODO handle cache conflict
-                        DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
+                        //get boolean store from Cache and check Favorite nad Found
+                        GdxSqliteCursor cursor = database.rawQuery("SELECT BooleanStore FROM CacheCoreInfo WHERE id=" + cache.getId());
+                        boolean update = false;
+                        if (cursor != null) {
+                            update = true;
+                            cursor.moveToFirst();
+                            short booleanStore = cursor.getShort(0);
+                            cursor.close();
+
+                            boolean inDbFavorite = ImmutableCache.getMaskValue(MASK_FOUND, booleanStore);
+                            boolean inDbFound = ImmutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
+                            cache.setFavorite(database, inDbFavorite);
+                            if (inDbFound) {
+                                cache.setFound(database, true);
+                            }
+                        }
+
+                        if (update) {
+                            DaoFactory.CACHE_DAO.updateDatabase(database, cache, false);
+                        } else {
+                            DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
+                        }
                         if (importHandler != null) {
                             importHandler.incrementCaches(cache.getType() == CacheTypes.Mystery ? cache.getGcCode().toString() : null);
                         }

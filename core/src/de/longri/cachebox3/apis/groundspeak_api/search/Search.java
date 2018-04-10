@@ -604,7 +604,7 @@ public abstract class Search extends PostRequest {
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (FOUND.equals(name)) {
-                            actCache.setFound(value);
+                            actCache.setFound(null, value);
                         } else if (ARCHIVED.equals(name)) {
                             actCache.setArchived(value);
                         } else if (AVAILABLE.equals(name)) {

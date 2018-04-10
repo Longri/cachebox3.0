@@ -126,7 +126,7 @@ public class ImmutableCache extends AbstractCache {
     private final static Logger log = LoggerFactory.getLogger(ImmutableCache.class);
 
     private final CharSequence name, gcCode, placedBy, owner, gcId;
-    private final short rating, numTravelbugs, booleanStore;
+    private short rating, numTravelbugs, booleanStore;
     private final int favPoints;
     private final long id;
     private final CacheTypes type;
@@ -411,11 +411,6 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFavorite(boolean favorite) {
-        throwNotChangeable("Favorite");
-    }
-
-    @Override
     public void setLatLon(double latitude, double longitude) {
         throwNotChangeable("LatLon");
     }
@@ -558,10 +553,17 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFound(boolean found) {
+    public void setFound(Database database, boolean found) {
         //write direct to DB
-        int newBooleanStore = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, found, booleanStore);
-        DaoFactory.CACHE_DAO.writeCacheBooleanStore(Database.Data, newBooleanStore, getId());
+        booleanStore = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, found, booleanStore);
+        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
+    }
+
+    @Override
+    public void setFavorite(Database database, boolean favorite) {
+        //write direct to DB
+        booleanStore = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, favorite, booleanStore);
+        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
     }
 
 

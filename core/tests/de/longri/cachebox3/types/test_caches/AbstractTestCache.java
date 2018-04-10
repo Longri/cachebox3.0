@@ -86,7 +86,8 @@ public abstract class AbstractTestCache {
     String shortDescription;
     String longDescription;
     String hint;
-    boolean found;
+    protected boolean found;
+    protected boolean favorite;
     Date dateHidden;
     Array<AbstractWaypoint> waypoints = new Array<>();
     Array<LogEntry> logEntries = new Array<>();
@@ -117,6 +118,7 @@ public abstract class AbstractTestCache {
         assertEquals(longDescription, other.getLongDescription(database).replaceAll("\r\n", "\n"), "Long description should be equals");
         assertEquals(hint, other.getHint(database).toString().replaceAll("\r\n", "\n"), "Hint should be equals");
         assertThat("Cache Tb count must be " + tbCount + " but was :" + other.getNumTravelbugs(), tbCount == other.getNumTravelbugs());
+        assertThat("Cache Favorite must be " + favorite + " but was :" + other.isFavorite(), favorite == other.isFavorite());
 
         String expectedDate = DATE_PATTERN.format(this.dateHidden);
         String actualDate = DATE_PATTERN.format(other.getDateHidden(database));

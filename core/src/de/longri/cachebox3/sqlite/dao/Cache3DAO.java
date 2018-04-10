@@ -48,7 +48,17 @@ public class Cache3DAO extends AbstractCacheDAO {
 
     @Override
     public void writeToDatabase(Database database, AbstractCache abstractCache, boolean fireChangedEvent) {
-        writeOrUpdate(false, database, abstractCache, fireChangedEvent);
+
+        if (database == null || abstractCache == null) return;
+
+        //check for update
+        GdxSqliteCursor cousor = database.rawQuery("SELECT id FROM CacheCoreInfo WHERE id=" + abstractCache.getId());
+        boolean update = false;
+        if (cousor != null) {
+            update = true;
+            cousor.close();
+        }
+        writeOrUpdate(update, database, abstractCache, fireChangedEvent);
     }
 
     private boolean writeOrUpdate(boolean update, Database database, AbstractCache abstractCache, boolean fireChangedEvent) {

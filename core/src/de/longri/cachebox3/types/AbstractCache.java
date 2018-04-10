@@ -179,7 +179,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract boolean isFavorite();
 
-    public abstract void setFavorite(boolean favorite);
+    public abstract void setFavorite(Database database, boolean favorite);
 
     public abstract float getDifficulty();
 
@@ -191,7 +191,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract boolean isFound();
 
-    public abstract void setFound(boolean found);
+    public abstract void setFound(Database database, boolean found);
 
     public abstract boolean isLive();
 

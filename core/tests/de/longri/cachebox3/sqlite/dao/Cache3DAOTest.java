@@ -346,8 +346,8 @@ class Cache3DAOTest {
         cache.setCorrectedCoordinates(should_correctedCoordinates);
         cache.setArchived(should_archived);
         cache.setAvailable(should_available);
-        cache.setFavorite(should_favorite);
-        cache.setFound(should_found);
+        cache.setFavorite(cb3Database, should_favorite);
+        cache.setFound(cb3Database, should_found);
         cache.setHasUserData(should_userData);
         cache.setListingChanged(should_listingChanged);
         cache.setWaypoints(should_waypoints);

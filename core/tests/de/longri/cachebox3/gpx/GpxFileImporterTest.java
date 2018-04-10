@@ -20,7 +20,9 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.test_caches.AbstractTestCache;
 import de.longri.cachebox3.types.test_caches.TEST_CACHES;
+import de.longri.cachebox3.types.test_caches.TestCache_GC52BKF_without_logs;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -38,7 +40,7 @@ class GpxFileImporterTest {
     }
 
     @Test
-    public void testGpxStreamImport() throws Exception {
+    public void testGpxStreamImport_GC2T9RW() throws Exception {
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
@@ -70,12 +72,13 @@ class GpxFileImporterTest {
         AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2T9RW", true);
         TEST_CACHES.GC2T9RW.assertCache(cache, TEST_DB);
 
-        TEST_DB.close();
-
         assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
         assertEquals(waypointCount.get(), 1, "Imported Waypoint count is wrong");
         assertEquals(logCount.get(), 20, "Imported Log count is wrong");
         assertEquals(mysteryList.size, 0, "Imported Mystery count is Wrong");
+
+
+        TEST_DB.close();
 
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("Gpx Stream import time: " + elapseTime + "ms");
@@ -114,19 +117,42 @@ class GpxFileImporterTest {
         AbstractCache cache = TEST_DB.getFromDbByGcCode("GC52BKF", true);
         TEST_CACHES.GC52BKF.assertCache(cache, TEST_DB);
 
-        TEST_DB.close();
-
         assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
         assertEquals(waypointCount.get(), 0, "Imported Waypoint count is wrong");
         assertEquals(logCount.get(), 20, "Imported Log count is wrong");
         assertEquals(mysteryList.size, 0, "Imported Mystery count is Wrong");
 
+// set Favorite and Found! check Conflict handling with reimport
+        AbstractTestCache CHANGED_FAV_FOUND = new TestCache_GC52BKF_without_logs() {
+            protected void setValues() {
+                super.setValues();
+                this.found = true;
+                this.favorite = true;
+            }
+        };
+
+        //store changed
+        cache.setFound(TEST_DB, true);
+        cache.setFavorite(TEST_DB, true);
+
+        //check if changes stored in DB
+        cache = TEST_DB.getFromDbByGcCode("GC52BKF", true);
+        CHANGED_FAV_FOUND.assertCache(cache, TEST_DB);
+
+        //reimport
+        new GroundspeakGpxStreamImporter(TEST_DB, importHandler).doImport(gpxFile);
+        assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
+        cache = TEST_DB.getFromDbByGcCode("GC52BKF", true);
+        CHANGED_FAV_FOUND.assertCache(cache, TEST_DB);
+
+
+        TEST_DB.close();
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("Gpx Stream import time: " + elapseTime + "ms");
     }
 
     @Test
-    public void testPqStreamImport() throws Exception {
+    public void testGpxStreamImport_PQ() throws Exception {
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);

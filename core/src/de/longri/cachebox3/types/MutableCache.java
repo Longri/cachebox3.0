@@ -334,7 +334,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFavorite(boolean favorite) {
+    public void setFavorite(Database databse, boolean favorite) {
         this.favorite = favorite;
     }
 
@@ -364,7 +364,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFound(boolean found) {
+    public void setFound(Database databse, boolean found) {
         this.found = found;
     }
 
