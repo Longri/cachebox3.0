@@ -249,6 +249,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         CB.postAsync(new NamedRunnable("Import Conflict handler") {
             @Override
             public void run() {
+                database.beginTransaction();
                 while (!PARSE_READY.get() || resolveCacheConflicts.size > 0
                         || resolveWaypoitConflicts.size > 0
                         || storeLogEntry.size > 0) {
@@ -313,6 +314,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
                 }
                 CONFLICT_READY.set(true);
+                database.endTransaction();
             }
         });
     }

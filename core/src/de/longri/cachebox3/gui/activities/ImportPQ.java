@@ -31,6 +31,8 @@ import de.longri.cachebox3.apis.groundspeak_api.GetPocketQueryList;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.gpx.GroundspeakGpxStreamImporter;
+import de.longri.cachebox3.gpx.ImportHandler;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
@@ -48,10 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -292,13 +291,48 @@ public class ImportPQ extends ActivityBase {
         final Array<String> mysterieCodes = new Array<>();
 
         CB.postAsync(new NamedRunnable("Import extracted gpx files") {
+            final ImportHandler importHandler = new ImportHandler() {
+                @Override
+                public void incrementCaches(String mysteryGcCode) {
+                    CB.postOnGlThread(new NamedRunnable("Update progress label") {
+                        @Override
+                        public void run() {
+                            // update progress Label
+                            int progressValue = readyImportedCaches.incrementAndGet();
+                            importLabel.setText(Translation.get("imported",
+                                    Integer.toString(progressValue),
+                                    Integer.toString(importCache.get())));
+                            extractProgress.setValue(progressValue);
+                            CB.requestRendering();
+                        }
+                    });
+                }
+
+                @Override
+                public void incrementWaypoints() {
+
+                }
+
+                @Override
+                public void incrementLogs() {
+
+                }
+            };
+            final GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(Database.Data, importHandler);
+
+
             @Override
             public void run() {
 
                 while (!extractReady.get() || extractedfolder.size > 0) {
-
                     if (extractedfolder.size > 0) {
                         FileHandle gpxFolder = extractedfolder.pop();
+
+                        if (gpxFolder.exists() && gpxFolder.isDirectory()) {
+                            for (FileHandle gpxFile : gpxFolder.list(".gpx")) {
+                                importer.doImport(gpxFile);
+                            }
+                        }
                     } else {
                         try {
                             Thread.sleep(100);

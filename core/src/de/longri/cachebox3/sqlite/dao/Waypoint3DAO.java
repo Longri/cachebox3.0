@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -100,7 +100,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             database.insert("WaypointsText", args2);
         }
         checkUserWaypointFlag(database, wp);
-        waypointListChanged(database, wp, true, fireChangedEvent);
+        waypointListChanged(database, wp, false, fireChangedEvent);
         return updated;
     }
 
@@ -163,20 +163,20 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
     private void waypointListChanged(Database database, AbstractWaypoint wp, boolean delete, boolean fireChangedEvent) {
         AbstractCache cache = database.Query.getCacheById(wp.getCacheId());
-        if (cache != null) {
+        if (cache != null && cache.getWaypoints() != null) {
             if (delete) {
                 cache.getWaypoints().removeValue(wp, false);
             } else {
                 cache.getWaypoints().add(wp);
             }
-        }
-        if (fireChangedEvent) {
-            CB.postAsyncDelayd(100, new NamedRunnable("Call CacheListChanged Event") {
-                @Override
-                public void run() {
-                    CacheListChangedEventList.Call();
-                }
-            });
+            if (fireChangedEvent) {
+                CB.postAsyncDelayd(100, new NamedRunnable("Call CacheListChanged Event") {
+                    @Override
+                    public void run() {
+                        CacheListChangedEventList.Call();
+                    }
+                });
+            }
         }
     }
 }
