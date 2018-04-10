@@ -256,8 +256,7 @@ project(":core") {
 
         compile "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
         compile "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
-
-        compile group: 'javax.xml.stream', name: 'stax-api', version: '1.0-2'
+        
 
         //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
