@@ -49,6 +49,12 @@ public abstract class AbstractTestCache {
             e.printStackTrace();
             lt = false;
         }
+        if (lt) {
+            // BBCODE are filtered with read from DB
+            for (LogEntry entry : logEntries) {
+                entry.Comment = LogEntry.filterBBCode(entry.Comment);
+            }
+        }
         testLogs = lt;
     }
 

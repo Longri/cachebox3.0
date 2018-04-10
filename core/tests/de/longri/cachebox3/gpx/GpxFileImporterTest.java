@@ -72,10 +72,10 @@ class GpxFileImporterTest {
 
         TEST_DB.close();
 
-        assertThat("Imported Cache count should be 1", cacheCount.get() == 1);
-        assertThat("Imported Waypoint count should be 1", waypointCount.get() == 1);
-        assertThat("Imported Log count should be 1", logCount.get() == 20);
-        assertThat("Imported Mystery count should be 0", mysteryList.size == 0);
+        assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
+        assertEquals(waypointCount.get(), 1, "Imported Waypoint count is wrong");
+        assertEquals(logCount.get(), 20, "Imported Log count is wrong");
+        assertEquals(mysteryList.size, 0, "Imported Mystery count is Wrong");
 
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("Gpx Stream import time: " + elapseTime + "ms");
@@ -116,10 +116,10 @@ class GpxFileImporterTest {
 
         TEST_DB.close();
 
-        assertThat("Imported Cache count should be 1", cacheCount.get() == 1);
-        assertThat("Imported Waypoint count should be 1", waypointCount.get() == 0);
-        assertThat("Imported Log count should be 1", logCount.get() == 20);
-        assertThat("Imported Mystery count should be 0", mysteryList.size == 0);
+        assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
+        assertEquals(waypointCount.get(), 0, "Imported Waypoint count is wrong");
+        assertEquals(logCount.get(), 20, "Imported Log count is wrong");
+        assertEquals(mysteryList.size, 0, "Imported Mystery count is Wrong");
 
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("Gpx Stream import time: " + elapseTime + "ms");
@@ -163,12 +163,16 @@ class GpxFileImporterTest {
         AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2TNPV", true);
         TEST_CACHES.GC2TNPV.assertCache(cache, TEST_DB);
 
+        cache = TEST_DB.getFromDbByGcCode("GCV272", true);
+        TEST_CACHES.GCV272.assertCache(cache, TEST_DB);
+
+
         TEST_DB.close();
 
-        assertThat("Imported Cache count should be 500", cacheCount.get() == 500);
-        assertThat("Imported Waypoint count should be 1", waypointCount.get() == 183);
-        assertThat("Imported Log count should be 2534", logCount.get() == 2534);
-        assertThat("Imported Mystery count should be 0", mysteryList.size == 167);
+        assertEquals(cacheCount.get(), 500, "Imported Cache count is wrong");
+        assertEquals(waypointCount.get(), 183, "Imported Waypoint count is wrong");
+        assertEquals(logCount.get(), 2534, "Imported Log count is wrong");
+        assertEquals(mysteryList.size, 167, "Imported Mystery count is Wrong");
 
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("PQ Stream import time: " + elapseTime + "ms");

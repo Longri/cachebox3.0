@@ -93,6 +93,13 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
             }
         });
 
+        this.registerDataHandler("/gpx/wpt/desc", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                wpTitle = new String(data, offset, length);
+            }
+        });
+
         this.registerDataHandler("/gpx/wpt/name", new DataHandler() {
             @Override
             public void handleData(char[] data, int offset, int length) {

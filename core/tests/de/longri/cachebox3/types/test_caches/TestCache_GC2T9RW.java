@@ -131,13 +131,13 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         AbstractWaypoint wp1 = new MutableWaypoint(49.351283, 8.630667, 24578729153020743L);
         wp1.setGcCode("PK2T9RW");
         wp1.setType(CacheTypes.ParkingArea);
+        wp1.setTitle("GC2T9RW Parking");
         wp1.setDescription("Raststätte Hardtwald West.\n" +
                 "Und für Ortskundige: einfach Richtung ADAC Übungsgelände. Dann müsst Ihr nicht auf die Autobahn.");
 
         wp1.setClue("");
         wp1.setUserWaypoint(false);
         wp1.setStart(false);
-
         this.waypoints.add(wp1);
         return true;
     }
@@ -441,12 +441,6 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         logEntry20.Timestamp = DATE_PATTERN.parse("2011-05-27T19:00:00Z");
         logEntry20.Id = 163319268L;
         this.logEntries.add(logEntry20);
-
-
-        // BBCODE are filtered with read from DB
-        for (LogEntry entry : logEntries) {
-            entry.Comment = LogEntry.filterBBCode(entry.Comment);
-        }
 
         return true;
     }

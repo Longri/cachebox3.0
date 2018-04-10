@@ -39,10 +39,6 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
     private final Logger log = LoggerFactory.getLogger(AbstractGpxStreamImporter.class);
 
-    protected enum WptTypes {
-        Cache, Waypoint, UNKNOWN
-    }
-
     private final Locale locale = Locale.getDefault();
 
     private final char[] DATE_PATTERN1 = "yyyy-MM-dd'T'HH:mm:ss.S".toCharArray();
@@ -82,6 +78,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected boolean found;
     protected int tbCount;
     protected Date wpDate;
+    protected String wpTitle;
 
     protected String gsakParent;
 
@@ -157,6 +154,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         logId = 0;
         wpDate = null;
         tbCount = 0;
+        wpTitle = null;
         resetLogValues();
     }
 
@@ -224,6 +222,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         waypoint.setDescription(this.shortDescription);
         waypoint.setType(this.type);
         waypoint.setGcCode(this.gcCode);
+        waypoint.setTitle(this.wpTitle);
 
         resolveWaypoitConflicts.add(waypoint);
         resetValues();
