@@ -49,6 +49,7 @@ public class TestCache_ACWP003 extends AbstractTestCache {
         this.hint = "Final: Im Loch";
         this.favoritePoints = 0;
         this.note = "";
+        this.solver = "";
         try {
             this.dateHidden = DATE_PATTERN.parse("2014-06-24T08:00:00Z");
         } catch (ParseException e) {

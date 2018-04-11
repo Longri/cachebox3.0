@@ -55,6 +55,7 @@ public class MutableCache extends AbstractCache {
     private byte apiState;
     private String state;
     private String note;
+    private String solver;
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
@@ -97,6 +98,8 @@ public class MutableCache extends AbstractCache {
         this.state = cache.getState(database);
         this.country = cache.getCountry(database);
         this.apiState = cache.getApiState(database);
+        this.note = cache.getTmpNote(database);
+        this.solver = cache.getTmpSolver(database);
     }
 
     public MutableCache(MutableCache cache) {
@@ -135,6 +138,8 @@ public class MutableCache extends AbstractCache {
         this.attributes = cache.attributes;
         this.attributesNegative = cache.attributesNegative;
         this.attributesPositive = cache.attributesPositive;
+        this.note = cache.note;
+        this.solver = cache.solver;
     }
 
     public MutableCache(double latitude, double longitude, String name, CacheTypes type, String gcCode) {
@@ -459,13 +464,13 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getTmpSolver() {
-        return null;
+    public String getTmpSolver(Database database) {
+        return this.solver;
     }
 
     @Override
-    public void setTmpSolver(String value) {
-
+    public void setTmpSolver(Database database, String value) {
+        this.solver = value;
     }
 
     @Override

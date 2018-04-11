@@ -94,6 +94,7 @@ public abstract class AbstractTestCache {
     int tbCount;
     int favoritePoints;
     String note;
+    String solver;
 
 
     public void assertCache(AbstractCache other, Database database) {
@@ -102,7 +103,6 @@ public abstract class AbstractTestCache {
         assertThat("Longitude must be " + longitude + " but was :" + other.longitude, longitude == other.longitude);
         assertThat("Cache type must be " + cacheType + " but was :" + other.getType(), cacheType == other.getType());
         assertThat("GcCode must be " + gcCode + " but was :" + other.getGcCode(), CharSequenceUtilTest.equals(gcCode, other.getGcCode()));
-        assertThat("Cache name must be " + name + " but was :" + other.getName(), CharSequenceUtilTest.equals(name, other.getName()));
         assertThat("Cache id must be " + id + " but was :" + other.getId(), id == other.getId());
         assertThat("Cache available must be " + available + " but was :" + other.isAvailable(), available == other.isAvailable());
         assertThat("Cache archived must be " + archived + " but was :" + other.isArchived(), archived == other.isArchived());
@@ -123,6 +123,8 @@ public abstract class AbstractTestCache {
         assertThat("Cache Favorite must be " + favorite + " but was :" + other.isFavorite(), favorite == other.isFavorite());
         assertThat("Cache FavoritePoints count must be " + favoritePoints + " but was :" + other.getFavoritePoints(), favoritePoints == other.getFavoritePoints());
         assertEquals(note, other.getTmpNote(database) != null ? other.getTmpNote(database).replaceAll("\r\n", "\n") : null, "Cache note should be equals");
+        assertEquals(solver, other.getTmpSolver(database) != null ? other.getTmpSolver(database).replaceAll("\r\n", "\n") : null, "Cache solver should be equals");
+        assertEquals(name, other.getName().toString(), "Cache name should be equals");
 
         String expectedDate = DATE_PATTERN.format(this.dateHidden);
         String actualDate = DATE_PATTERN.format(other.getDateHidden(database));

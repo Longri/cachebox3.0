@@ -45,6 +45,7 @@ public class TestCache_GC250Q2 extends AbstractTestCache {
         this.hint = "";
         this.favoritePoints = 31;
         this.note = "Gc Note";
+        this.solver = "";
         try {
             this.dateHidden = DATE_PATTERN.parse("2010-03-14T08:00:00Z");
         } catch (ParseException e) {

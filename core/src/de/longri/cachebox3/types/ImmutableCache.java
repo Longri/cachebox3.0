@@ -326,6 +326,11 @@ public class ImmutableCache extends AbstractCache {
         return getStringFromDB(database, "SELECT Notes FROM CacheText WHERE Id=?");
     }
 
+    @Override
+    public String getTmpSolver(Database database) {
+        return getStringFromDB(database, "SELECT Solver FROM CacheText WHERE Id=?");
+    }
+
 
     @Override
     public void setWaypoints(Array<AbstractWaypoint> waypoints) {
@@ -505,6 +510,12 @@ public class ImmutableCache extends AbstractCache {
     public void setTmpNote(String value) {
         throwNotChangeable("TempNote");
     }
+
+    @Override
+    public void setTmpSolver(Database database,String value) {
+            throwNotChangeable("TempSolver");
+    }
+
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB
     ///###############################################################################
@@ -681,16 +692,6 @@ public class ImmutableCache extends AbstractCache {
 
     @Override
     public void setSolverChecksum(int value) {
-
-    }
-
-    @Override
-    public String getTmpSolver() {
-        return null;
-    }
-
-    @Override
-    public void setTmpSolver(String value) {
 
     }
 

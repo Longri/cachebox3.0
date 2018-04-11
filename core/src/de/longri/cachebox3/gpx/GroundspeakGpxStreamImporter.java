@@ -288,6 +288,33 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
 
     @Override
     protected void registerCacheboxHandler() {
+        registerGroundspeakHandler();
+        this.registerDataHandler("/gpx/wpt/cachebox-extension/Parent", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                gsakParent = new String(data, offset, length);
+            }
+        });
+        this.registerDataHandler("/gpx/wpt/cachebox-extension/clue", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                wpClue = new String(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/cachebox-extension/note", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                note = new String(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/cachebox-extension/solver", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                solver = new String(data, offset, length);
+            }
+        });
 
     }
 

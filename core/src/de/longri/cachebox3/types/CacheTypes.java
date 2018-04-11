@@ -138,6 +138,8 @@ public enum CacheTypes implements SelectBoxItem {
                 return MultiStage;
             if (string.toLowerCase().contains("mega"))
                 return MegaEvent;
+            if (string.toLowerCase().contains("letterbox"))
+                return Letterbox;
             if (string.toLowerCase().contains("virtual"))
                 return MultiQuestion; // Import Virtual Stage as Question of a Multi
             if (string.toLowerCase().contains("physical"))

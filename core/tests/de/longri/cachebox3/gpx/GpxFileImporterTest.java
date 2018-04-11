@@ -309,4 +309,52 @@ class GpxFileImporterTest {
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("Gpx Stream import time: " + elapseTime + "ms");
     }
+
+    @Test
+    public void testGpxStreamImport_cachebox_extension() throws Exception {
+        long start = System.currentTimeMillis();
+
+        Database TEST_DB = TestUtils.getTestDB(true);
+        final AtomicInteger cacheCount = new AtomicInteger();
+        final AtomicInteger waypointCount = new AtomicInteger();
+        final AtomicInteger logCount = new AtomicInteger();
+        final Array<String> mysteryList = new Array<>();
+        ImportHandler importHandler = new ImportHandler() {
+            @Override
+            public void incrementCaches(String mysteryGcCode) {
+                cacheCount.incrementAndGet();
+                if (mysteryGcCode != null) mysteryList.add(mysteryGcCode);
+            }
+
+            @Override
+            public void incrementWaypoints() {
+                waypointCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementLogs() {
+                logCount.incrementAndGet();
+            }
+        };
+
+        GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(TEST_DB, importHandler);
+        AbstractCache cache;
+
+        //=================================================================================
+        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/acb_export.gpx"));
+        assertThat("Cache count must be 350", TEST_DB.getCacheCountOnThisDB() == 350);
+        cache = TEST_DB.getFromDbByGcCode("GC2V0NP", true);
+        TEST_CACHES.GC2V0NP.assertCache(cache, TEST_DB);
+        assertEquals(cacheCount.get(), 350, "Imported Cache count is wrong");
+        assertEquals(waypointCount.get(), 435, "Imported Waypoint count is wrong");
+        assertEquals(logCount.get(), 1460, "Imported Log count is wrong");
+        assertEquals(mysteryList.size, 137, "Imported Mystery count is Wrong");
+        //=================================================================================
+
+
+        TEST_DB.close();
+
+        long elapseTime = System.currentTimeMillis() - start;
+        System.out.println("Gpx Stream import time: " + elapseTime + "ms");
+    }
 }

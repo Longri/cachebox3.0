@@ -144,7 +144,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("Hint", abstractCache.getHint(database));
         args.put("Description", abstractCache.getLongDescription(database));
         args.put("Notes", abstractCache.getTmpNote(database));
-        args.put("Solver", abstractCache.getTmpSolver());
+        args.put("Solver", abstractCache.getTmpSolver(database));
         args.put("ShortDescription", abstractCache.getShortDescription(database));
 
         if (args.size() > 0) {

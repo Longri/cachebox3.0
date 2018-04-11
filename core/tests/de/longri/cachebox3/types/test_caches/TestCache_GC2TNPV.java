@@ -46,6 +46,7 @@ public class TestCache_GC2TNPV extends AbstractTestCache {
         this.tbCount = 0;
         this.hint = "Anziehend! ;-)";
         this.note = "";
+        this.solver = "";
         try {
             this.dateHidden = DATE_PATTERN.parse("2011-04-22T07:00:00Z");
         } catch (ParseException e) {

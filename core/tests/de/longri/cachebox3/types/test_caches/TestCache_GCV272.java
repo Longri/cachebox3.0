@@ -44,6 +44,7 @@ public class TestCache_GCV272 extends AbstractTestCache {
         this.tbCount = 0;
         this.hint = "\n      ";
         this.note = "";
+        this.solver = "";
         try {
             this.dateHidden = DATE_PATTERN.parse("2006-03-25T08:00:00Z");
         } catch (ParseException e) {

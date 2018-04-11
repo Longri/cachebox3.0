@@ -103,6 +103,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected double correctedLongitude;
     protected String note;
     protected int favPoints;
+    protected String solver;
+    protected String wpClue;
 
 
     public AbstractGpxStreamImporter(Database database, ImportHandler importHandler) {
@@ -271,8 +273,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setShortDescription(database, this.shortDescription);
         cache.setFound(database, this.found);
         cache.setNumTravelbugs(this.tbCount);
-
         cache.setTmpNote(note);
+        cache.setTmpSolver(database, solver);
         if (favPoints >= 0) cache.setFavoritePoints(favPoints);
 
 
@@ -331,6 +333,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         waypoint.setType(this.type);
         waypoint.setGcCode(this.gcCode);
         waypoint.setTitle(this.wpTitle);
+        waypoint.setClue(this.wpClue);
 
         resolveWaypoitConflicts.add(waypoint);
         resetValues();
