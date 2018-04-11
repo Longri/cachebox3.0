@@ -30,9 +30,15 @@ public class CharSequenceUtil {
 
     private final static Logger log = LoggerFactory.getLogger(CharSequenceUtil.class);
 
-    public static boolean contains(CharSequence sorce, CharSequence target) {
-        return indexOf(sorce, 0, sorce.length(),
+    public static boolean contains(CharSequence source, CharSequence target) {
+        return indexOf(source, 0, source.length(),
                 target, 0, target.length(), 0) >= 0;
+    }
+
+    public static boolean contains(char[] source, int sourceOffset, int sourceCount,
+                                   char[] target, int targetOffset, int targetCount) {
+        return indexOf(source, sourceOffset, sourceCount,
+                target, targetOffset, targetCount, 0) >= 0;
     }
 
     public static boolean startsWith(CharSequence sorce, CharSequence target) {

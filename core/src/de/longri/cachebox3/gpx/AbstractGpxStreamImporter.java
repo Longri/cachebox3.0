@@ -45,6 +45,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
     private final Locale locale = Locale.getDefault();
 
+    private final char[] CREATOR = "creator".toCharArray();
     private final char[] DATE_PATTERN1 = "yyyy-MM-dd'T'HH:mm:ss.S".toCharArray();
     private final char[] DATE_PATTERN2 = "yyyy-MM-dd'T'HH:mm:ss".toCharArray();
     private final char[] DATE_PATTERN3 = "yyyy-MM-dd'T'HH:mm:ss'Z'".toCharArray();
@@ -56,6 +57,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     private final AtomicBoolean CONFLICT_READY = new AtomicBoolean(true);
     private final Database database;
     private final ImportHandler importHandler;
+    private final String GSAK_CORRECTED_COORDS = "Final GSAK Corrected";
 
     //Cache values
     protected double latitude;
@@ -91,6 +93,11 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected String logFinder;
     protected String logComment;
     protected LogTypes logType;
+    protected boolean hasCorrectedCoord;
+    protected double correctedLatitude;
+    protected double correctedLongitude;
+    protected String note;
+    protected int favPoints;
 
 
     public AbstractGpxStreamImporter(Database database, ImportHandler importHandler) {
@@ -98,7 +105,43 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         this.importHandler = importHandler;
     }
 
+
+    protected abstract void registerGroundspeakHandler();
+
+    protected abstract void registerOpenCachingHandler();
+
+    protected abstract void registerGsakHandler();
+
+    protected abstract void registerGenerallyHandler();
+
+    protected abstract void registerCacheboxHandler();
+
+    private final char[] GROUNDSPEAK = "Groundspeak".toCharArray();
+    private final char[] OPENCACHING = "Opencaching".toCharArray();
+    private final char[] GSAK = "GSAK".toCharArray();
+    private final char[] CACHEBOX = "Cachebox".toCharArray();
+
     public void doImport(FileHandle gpxFile) {
+
+        this.registerValueHandler("/gpx",
+                new ValueHandler() {
+                    @Override
+                    protected void handleValue(char[] valueName, char[] data, int offset, int length) {
+                        if (CharSequenceUtil.equals(CREATOR, valueName)) {
+                            registerGenerallyHandler();
+                            if (CharSequenceUtil.contains(data, offset, length, GROUNDSPEAK, 0, GROUNDSPEAK.length)) {
+                                registerGroundspeakHandler();
+                            } else if (CharSequenceUtil.contains(data, offset, length, OPENCACHING, 0, OPENCACHING.length)) {
+                                registerOpenCachingHandler();
+                            } else if (CharSequenceUtil.contains(data, offset, length, GSAK, 0, GSAK.length)) {
+                                registerGsakHandler();
+                            } else if (CharSequenceUtil.contains(data, offset, length, CACHEBOX, 0, CACHEBOX.length)) {
+                                registerCacheboxHandler();
+                            }
+                        }
+                    }
+                }, CREATOR);
+
 
         // wait, if parser working now
         while (!PARSE_READY.get() || !CONFLICT_READY.get()) {
@@ -128,6 +171,11 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                 e.printStackTrace();
             }
         }
+
+        //release Data/Value Handler
+        endTagHandlerMap.clear();
+        dataHandlerMap.clear();
+        valueHandlerMap.clear();
     }
 
 
@@ -159,6 +207,11 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         wpDate = null;
         tbCount = 0;
         wpTitle = null;
+        hasCorrectedCoord = false;
+        correctedLatitude = 0;
+        correctedLongitude = 0;
+        note = null;
+        favPoints = -1;
         resetLogValues();
     }
 
@@ -197,6 +250,11 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setShortDescription(database, this.shortDescription);
         cache.setFound(database, this.found);
         cache.setNumTravelbugs(this.tbCount);
+
+        cache.setTmpNote(note);
+        if (favPoints >= 0) cache.setFavoritePoints(favPoints);
+
+
         if (this.wpDate != null) {
             cache.setDateHidden(this.wpDate);
         }
@@ -207,8 +265,33 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         for (Attributes att : negativeAttributes)
             cache.addAttributeNegative(att);
 
-
         resolveCacheConflicts.add(cache);
+
+        if (hasCorrectedCoord) {
+            // create final WP with Corrected Coords
+            String newGcCode = Database.createFreeGcCode(database,cache.getGcCode().toString());
+
+            // Check if "Final GSAK Corrected" exist
+            Array<AbstractWaypoint> wplist = DaoFactory.WAYPOINT_DAO.getWaypointsFromCacheID(database, this.id, false);
+
+            for (int i = 0; i < wplist.size; i++) {
+                AbstractWaypoint wp = wplist.get(i);
+                if (wp.getType() == CacheTypes.Final) {
+                    if (CharSequenceUtil.equals(wp.getTitle(), GSAK_CORRECTED_COORDS)) {
+                        newGcCode = wp.getGcCode().toString();
+                        break;
+                    }
+                }
+            }
+
+            // "Final GSAK Corrected" is used for recognition of finals from GSAK on gpx - Import
+            AbstractWaypoint finalWP = new MutableWaypoint(correctedLatitude, correctedLongitude, this.id);
+            finalWP.setType(CacheTypes.Final);
+            finalWP.setGcCode(newGcCode);
+            finalWP.setTitle(GSAK_CORRECTED_COORDS);
+            resolveWaypoitConflicts.add(finalWP);
+        }
+
         resetValues();
     }
 

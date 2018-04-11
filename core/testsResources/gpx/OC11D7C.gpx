@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0" creator="Opencaching.de - https://www.opencaching.de/" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd https://github.com/opencaching/gpx-extension-v1 https://raw.githubusercontent.com/opencaching/gpx-extension-v1/master/schema.xsd http://www.gsak.net/xmlv1/4 http://www.gsak.net/xmlv1/4/gsak.xsd" xmlns="http://www.topografix.com/GPX/1/0">
+  <name>Cache listing generated from Opencaching.de</name>
+  <desc>This is a waypoint file generated from Opencaching.de</desc>
+  <author>Opencaching.de</author>
+  <email>kontakt@opencaching.de</email>
+  <url>www.opencaching.de</url>
+  <urlname>Opencaching.de - Geocaching in Deutschland, Österreich und der Schweiz</urlname>
+  <time>2018-04-10T18:11:24Z</time>
+  <keywords>cache, geocache, opencaching, waypoint</keywords>
+  <wpt lat="48.56025" lon="9.07163">
+    <time>2015-04-04T00:00:00Z</time>
+    <name>OC11D7C</name>
+    <desc>Kleindenkmale im Naturpark Schönbuch  #Spezial</desc>
+    <src>www.opencaching.de</src>
+    <url>https://www.opencaching.de/viewcache.php?cacheid=176173</url>
+    <urlname>Kleindenkmale im Naturpark Schönbuch  #Spezial</urlname>
+    <sym>Geocache Found</sym>
+    <type>Geocache|Unknown Cache</type>
+    <groundspeak:cache id="176173" available="True" archived="False" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0/1">
+      <groundspeak:name>Kleindenkmale im Naturpark Schönbuch  #Spezial</groundspeak:name>
+      <groundspeak:placed_by>Mutschelsucher</groundspeak:placed_by>
+      <groundspeak:owner id="223383">Mutschelsucher</groundspeak:owner>
+      <groundspeak:type>Unknown Cache</groundspeak:type>
+      <groundspeak:container>Micro</groundspeak:container>
+      <groundspeak:attributes>
+           <groundspeak:attribute id="22" inc="1">Hunting</groundspeak:attribute>
+           <groundspeak:attribute id="19" inc="1">Ticks</groundspeak:attribute>
+           <groundspeak:attribute id="130" inc="1">Point of interest</groundspeak:attribute>
+           <groundspeak:attribute id="14" inc="0">Recommended at night</groundspeak:attribute>
+           <groundspeak:attribute id="62" inc="0">Seasonal access</groundspeak:attribute>
+           <groundspeak:attribute id="15" inc="1">Available during winter</groundspeak:attribute>
+           <groundspeak:attribute id="154" inc="1">Investigation</groundspeak:attribute>
+      </groundspeak:attributes>
+      <groundspeak:difficulty>3</groundspeak:difficulty>
+      <groundspeak:terrain>2</groundspeak:terrain>
+      <groundspeak:country>Germany</groundspeak:country>
+      <groundspeak:state>Baden-Württemberg</groundspeak:state>
+      <groundspeak:short_description html="True">Möchte auf diesem Wege auf die vielen Brunnen im Schönbuch aufmerksam machen.</groundspeak:short_description>
+      <groundspeak:long_description html="True">&lt;p&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style="font-size:medium;"&gt;Diesmal kein Denkmal, sondern ein Brunnen.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style="font-size:medium;"&gt;Finde den Brunnen, dann findest du den Cache!&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;&lt;img src="https://www.opencaching.de/images/uploads/F3C52926-DAD6-11E4-89ED-525400E33611.jpg" alt="" /&gt;&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;
+&lt;span&gt;
+&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Die im Listing angegeben Koordinaten sind nicht die des Finals!&lt;/p&gt;
+&lt;p&gt;Das Dösle findest du ca. 8m vom Brunnen in Richtung Nordwest. Bitte Hint und Spoiler beachten!&lt;/p&gt;
+&lt;p&gt;Stift nicht vergessen und es muss keine Gewalt angewendet werden!&lt;/p&gt;&lt;p&gt;&lt;em&gt;© &lt;a href='https://www.opencaching.de/viewprofile.php?userid=223383' target='_blank'&gt;Mutschelsucher&lt;/a&gt;, &lt;a href='https://www.opencaching.de/viewcache.php?cacheid=176173' target='_blank'&gt;Opencaching.de&lt;/a&gt;, &lt;a href='http://creativecommons.org/licenses/by-nc-nd/3.0/de/' target='_blank'&gt;CC BY-NC-ND&lt;/a&gt;, Stand: 10.04.2018; alle Logeinträge © jeweiliger Autor&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;This geocache is probably placed within the following protected areas (&lt;a class='nooutline' href='http://wiki.opencaching.de/index.php/Schutzgebiete' alt='Anleitung' title='Anleitung' target='_blank'&gt;Info&lt;/a&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FFH-Gebiet: &lt;a href='http://www.google.de/search?q=FFH-Gebiet+Sch%C3%B6nbuch' target='_blank'&gt;Schönbuch&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Landschaftsschutzgebiet: &lt;a href='http://www.google.de/search?q=Landschaftsschutzgebiet+Sch%C3%B6nbuch' target='_blank'&gt;Schönbuch&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Naturpark: &lt;a href='http://www.google.de/search?q=Naturpark+Sch%C3%B6nbuch' target='_blank'&gt;Schönbuch&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Vogelschutzgebiet: &lt;a href='http://www.google.de/search?q=Vogelschutzgebiet+Sch%C3%B6nbuch' target='_blank'&gt;Schönbuch&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br /&gt;&lt;div style="float:left; padding:8px"&gt;&lt;a href="http://www.opencaching.de/images/uploads/303ADC70-DAD7-11E4-89ED-525400E33611.jpg" target="_blank"&gt;&lt;img src="https://www.opencaching.de/thumbs.php?type=2&amp;uuid=303ADC70-DAD7-11E4-89ED-525400E33611" /&gt;&lt;/a&gt;&lt;br /&gt;Spoiler (Spoiler anklicken zum Anzeigen)&lt;/div&gt;</groundspeak:long_description>
+      <groundspeak:encoded_hints>In einer kleinen Baumgruppe.
+Im Holz verborgen!
+</groundspeak:encoded_hints>      <groundspeak:logs>
+      <groundspeak:log id="1041352">
+        <groundspeak:date>2015-04-15T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Found it</groundspeak:type>
+        <groundspeak:finder id="135507">arbor95</groundspeak:finder>
+        <groundspeak:text encoded="False">Heute ging es mal wieder in den Schönbuch. Das tolle Wetter muss ja ausgenutzt werden.&lt;br /&gt;Nachdem wir uns auf ein paar Umwegen warmgefahren hatten (es war doch noch recht frisch) ging es direkt zum Brunnen. Ein gut gemachtes Dösle erwartete uns dort.&lt;br /&gt;TftC sagt arbor95</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="1194666">
+        <groundspeak:date>2017-09-16T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Owner Maintenance</groundspeak:type>
+        <groundspeak:finder id="223383">Mutschelsucher</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p&gt;&lt;i&gt;&lt;span style="color:#00c000"&gt;Cache ist ok&lt;/span&gt;, &lt;span style="color:#00c000"&gt;Cachebeschreibung ist ok&lt;/span&gt;&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;Neue Dose und neues Logbuch&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="1171079">
+        <groundspeak:date>2017-04-02T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Found it</groundspeak:type>
+        <groundspeak:finder id="209991">Schapabande</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p&gt;Da unser geplanter
+ Nachmittagstermin plötzlich ausgefallen ist, haben wir spontan unsere 
+Fahrräder ins Auto gepackt und sind Richtung Schönbuch gefahren.&lt;/p&gt;
+&lt;p&gt;Auf unserem weiteren Weg haben wir dann auch diesen schönen Brunnen 
+genau dort gefunden, wie wir es vermutet haben. Ein schöner Brunnen in 
+einem idyllischen Tal. Klasse. Die gut getarnte Dose konnte auch hervor 
+gelockt werden. Vielen Dank für das schöne Rätsel, fürs Herlocken und 
+Zeigen.&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="1142721">
+        <groundspeak:date>2016-09-14T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Owner Maintenance</groundspeak:type>
+        <groundspeak:finder id="223383">Mutschelsucher</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p&gt;&lt;i&gt;&lt;span style="color:#00c000"&gt;Cache ist ok&lt;/span&gt;, &lt;span style="color:#00c000"&gt;Cachebeschreibung ist ok&lt;/span&gt;&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span id="custom_ctl00_ContentBody_LogBookPanel1_LogText"&gt;Bei einer Cachekontrolle festgestellt das der Dichtungsring vom PETling fehlt und das Logbuch deshalb Bädschnass ist.&lt;br /&gt;
+Dichtungsring ersetzt und Logbuch erneuert.&lt;/span&gt;&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="1098949">
+        <groundspeak:date>2016-01-04T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Found it</groundspeak:type>
+        <groundspeak:finder id="126819">ekorren</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p&gt;&lt;span class="LogText"&gt;Den Brunnen kannte ich, weil ich schon oft 
+vorbeigekommen war. Hatte nur lange keine Mysteries in der Gegend mehr 
+angeschaut. Nunja... jetzt hieß es dann nur noch "Warten, bis man eh mal
+ in der Nähe vorbeikommt und dann zugreifen" ;)&lt;/span&gt;&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="1083449">
+        <groundspeak:date>2015-12-08T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Found it</groundspeak:type>
+        <groundspeak:finder id="324012">Nelly 01</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p&gt;Den Brunnen kenne ich schon längers, hab ihn jetzt mit einem Suchpferd nochmal gemacht. Nachdem wir ein wenig im Schlamm geplanscht haben, haben wir die Dose doch noch gefunden. War recht kreativ versteckt ;)&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="1062035">
+        <groundspeak:date>2015-08-09T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Found it</groundspeak:type>
+        <groundspeak:finder id="165774">steingesicht</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p&gt;Ein sehr schönes Plätzchen zum Verweilen.&lt;/p&gt;
+&lt;p&gt;Danke&lt;/p&gt;
+&lt;p&gt;Steingesicht&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="1091147">
+        <groundspeak:date>2015-06-04T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Found it</groundspeak:type>
+        <groundspeak:finder id="286161">Triariel</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p style="margin:0px;font-size:12px;line-height:normal;font-family:Helvetica;"&gt;Heute eine kleine Wanderung mit dem Vierbeiner durch den Schönbuch gemacht.&lt;/p&gt;
+&lt;p style="margin:0px;font-size:12px;line-height:normal;font-family:Helvetica;"&gt;Dabei war auch dieser Brunnen, dessen Position nach etwas Recherche bekannt war eines der Ziele. &lt;/p&gt;
+&lt;p style="margin:0px;font-size:12px;line-height:normal;font-family:Helvetica;"&gt;Die nette Umverpackung war Dank Hint dann schnell entdeckt.&lt;/p&gt;
+&lt;p style="margin:0px;font-size:12px;line-height:normal;font-family:Helvetica;"&gt; &lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p style="margin:0px;font-size:12px;line-height:normal;font-family:Helvetica;"&gt;Danke für das Zeigen und Herlocken&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="1047626">
+        <groundspeak:date>2015-05-10T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Found it</groundspeak:type>
+        <groundspeak:finder id="288605">dsrt99</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p class="LogText"&gt;Auf unserem Spaziergang kamen GeoTimII und ich heute 
+an diesem Brunnen vorbei. Das schön gemachte Cacheversteck konnten wir 
+schnell finden und uns gemeinsam in das Logbuch eintragen.&lt;br /&gt;&lt;br /&gt;TFTC! &lt;img alt="" align="middle" src="http://www.geocaching.com/images/icons/icon_smile.gif" border="0" /&gt;&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="1037714">
+        <groundspeak:date>2015-04-08T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Found it</groundspeak:type>
+        <groundspeak:finder id="122821">chomolungma</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p&gt;FEIN! GOLD!&lt;br /&gt;&lt;br /&gt;Der hübsche Brunnen kam mir zwar sehr bekannt vor, aber ohne Recherche kam ich dann doch nicht aus. O.K. - ist schon eine Weile her, dass ich in der Ecke war. Aber zum Glück hatte ich es nicht allzu weit.&lt;br /&gt;&lt;br /&gt;Ein hübsch verpacktes Dösle!&lt;br /&gt;&lt;br /&gt;Besten Dank und Grüße&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      </groundspeak:logs>
+      <groundspeak:travelbugs>
+      </groundspeak:travelbugs>
+    </groundspeak:cache>
+    <oc:cache xmlns:oc="https://github.com/opencaching/gpx-extension-v1">
+      <oc:type>Quiz Cache</oc:type>
+      <oc:size>Micro</oc:size>
+      <oc:requires_password>false</oc:requires_password>
+      <oc:other_code>GC5QPKJ</oc:other_code>
+      <oc:logs>
+        <oc:log id="1041352" uuid="65ab434e-eb2c-11e4-89ed-525400e33611">
+        </oc:log>
+        <oc:log id="1194666" uuid="62c7a351-9af5-11e7-bee1-e297132bc419">
+        </oc:log>
+        <oc:log id="1171079" uuid="c1e1f8ee-1fb9-11e7-8e90-86c6a7325f31">
+        </oc:log>
+        <oc:log id="1142721" uuid="a150987a-7c34-11e6-ad4a-3ed879e433be">
+        </oc:log>
+        <oc:log id="1098949" uuid="02bde4ab-cd87-11e5-931b-568baadf70bf">
+        </oc:log>
+        <oc:log id="1083449" uuid="b9f45110-9e65-11e5-99e6-525400e33611">
+        </oc:log>
+        <oc:log id="1062035" uuid="f0714bd4-41f5-11e5-ab58-525400e33611">
+        </oc:log>
+        <oc:log id="1091147" uuid="9899a8de-b40e-11e5-8c61-161743884843">
+        </oc:log>
+        <oc:log id="1047626" uuid="9f40b092-02f8-11e5-bc5c-525400e33611">
+        </oc:log>
+        <oc:log id="1037714" uuid="f475541a-ddbd-11e4-89ed-525400e33611">
+        </oc:log>
+      </oc:logs>
+    </oc:cache>
+  </wpt>
+</gpx>

@@ -223,7 +223,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setNoteChecksum(int value);
 
-    public abstract String getTmpNote();
+    public abstract String getTmpNote(Database database);
 
     public abstract void setTmpNote(String value);
 

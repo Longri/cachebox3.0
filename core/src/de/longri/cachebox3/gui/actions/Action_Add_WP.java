@@ -63,7 +63,7 @@ public class Action_Add_WP extends AbstractAction {
 
         String newGcCode = "";
         try {
-            newGcCode = Database.createFreeGcCode(EventHandler.getSelectedCache().getGcCode().toString());
+            newGcCode = Database.createFreeGcCode(Database.Data, EventHandler.getSelectedCache().getGcCode().toString());
         } catch (Exception e) {
             log.error("can't generate GcCode! can't show EditWaypoint Activity");
             return;

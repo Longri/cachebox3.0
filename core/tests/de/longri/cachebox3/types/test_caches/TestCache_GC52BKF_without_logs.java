@@ -45,6 +45,7 @@ public class TestCache_GC52BKF_without_logs extends AbstractTestCache {
         this.found = false;
         this.tbCount = 0;
         this.hint = "Nicht vom Bäcker";
+        this.note = "";
         try {
             this.dateHidden = DATE_PATTERN.parse("2014-04-12T07:00:00Z");
         } catch (ParseException e) {

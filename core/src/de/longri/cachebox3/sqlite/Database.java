@@ -662,8 +662,8 @@ public class Database {
     }
 
 
-    public static boolean waypointExists(String gcCode) {
-        GdxSqliteCursor cursor = Database.Data.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
+    public static boolean waypointExists(Database database, String gcCode) {
+        GdxSqliteCursor cursor = database.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
         {
             if (cursor == null) return false;
             cursor.moveToFirst();
@@ -682,7 +682,7 @@ public class Database {
         }
     }
 
-    public static String createFreeGcCode(String cacheGcCode) throws Exception {
+    public static String createFreeGcCode(Database database, String cacheGcCode) {
         String suffix = cacheGcCode.substring(2);
         String firstCharCandidates = "CBXADEFGHIJKLMNOPQRSTUVWYZ0123456789";
         String secondCharCandidates = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -690,10 +690,10 @@ public class Database {
         for (int i = 0; i < firstCharCandidates.length(); i++)
             for (int j = 0; j < secondCharCandidates.length(); j++) {
                 String gcCode = firstCharCandidates.substring(i, i + 1) + secondCharCandidates.substring(j, j + 1) + suffix;
-                if (!waypointExists(gcCode))
+                if (!waypointExists(database, gcCode))
                     return gcCode;
             }
-        throw new Exception("Alle GcCodes sind bereits vergeben! Dies sollte eigentlich nie vorkommen!");
+        throw new RuntimeException("Alle GcCodes sind bereits vergeben! Dies sollte eigentlich nie vorkommen!");
     }
 
 

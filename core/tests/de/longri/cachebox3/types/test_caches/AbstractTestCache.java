@@ -92,6 +92,8 @@ public abstract class AbstractTestCache {
     Array<AbstractWaypoint> waypoints = new Array<>();
     Array<LogEntry> logEntries = new Array<>();
     int tbCount;
+    int favoritePoints;
+    String note;
 
 
     public void assertCache(AbstractCache other, Database database) {
@@ -119,6 +121,8 @@ public abstract class AbstractTestCache {
         assertEquals(hint, other.getHint(database).toString().replaceAll("\r\n", "\n"), "Hint should be equals");
         assertThat("Cache Tb count must be " + tbCount + " but was :" + other.getNumTravelbugs(), tbCount == other.getNumTravelbugs());
         assertThat("Cache Favorite must be " + favorite + " but was :" + other.isFavorite(), favorite == other.isFavorite());
+        assertThat("Cache FavoritePoints count must be " + favoritePoints + " but was :" + other.getFavoritePoints(), favoritePoints == other.getFavoritePoints());
+        assertEquals(note, other.getTmpNote(database) != null ? other.getTmpNote(database).replaceAll("\r\n", "\n") : null, "Cache note should be equals");
 
         String expectedDate = DATE_PATTERN.format(this.dateHidden);
         String actualDate = DATE_PATTERN.format(other.getDateHidden(database));

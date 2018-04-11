@@ -439,7 +439,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getTmpNote() {
+    public String getTmpNote(Database database) {
         return this.note;
     }
 

@@ -255,7 +255,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                         ca.getUrl(database),
                         ca.getHint(database),
                         ca.getLongDescription(database),
-                        ca.getTmpNote(),
+                        ca.getTmpNote(database),
                         ca.getTmpSolver(),
                         ca.getShortDescription(database)
                 ).commit().reset();

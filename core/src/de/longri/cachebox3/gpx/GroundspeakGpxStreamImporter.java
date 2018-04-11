@@ -36,10 +36,12 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
 
     public GroundspeakGpxStreamImporter(Database database, ImportHandler importHandler) {
         super(database, importHandler);
-
         this.resetValues();
+    }
 
-        //register Handler
+
+    @Override
+    protected void registerGenerallyHandler() {
         this.registerValueHandler("/gpx/wpt",
                 new ValueHandler() {
                     @Override
@@ -51,7 +53,6 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
                         }
                     }
                 }, LAT, LON);
-
         this.registerValueHandler("gpx/wpt/groundspeak:cache",
                 new ValueHandler() {
                     @Override
@@ -63,7 +64,6 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
                         }
                     }
                 }, AVAILABLE, ARCHIEVED);
-
         this.registerValueHandler("/gpx/wpt/groundspeak:cache/groundspeak:attributes/groundspeak:attribute",
                 new ValueHandler() {
                     int attId;
@@ -85,7 +85,6 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
                         }
                     }
                 }, ID, INC);
-
         this.registerDataHandler("/gpx/wpt/type", new DataHandler() {
             @Override
             public void handleData(char[] data, int offset, int length) {
@@ -283,5 +282,58 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
 
         });
     }
+
+    @Override
+    protected void registerGroundspeakHandler() {
+
+    }
+
+    @Override
+    protected void registerCacheboxHandler() {
+
+    }
+
+    @Override
+    protected void registerOpenCachingHandler() {
+
+    }
+
+    @Override
+    protected void registerGsakHandler() {
+
+        this.registerDataHandler("/gpx/wpt/gsak:wptExtension/gsak:LatBeforeCorrect", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                hasCorrectedCoord = true;
+                correctedLatitude = latitude;
+                latitude = CharSequenceUtil.parseDouble(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/gsak:wptExtension/gsak:LonBeforeCorrect", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                correctedLongitude = longitude;
+                longitude = CharSequenceUtil.parseDouble(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/gsak:wptExtension/gsak:FavPoints", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                favPoints = CharSequenceUtil.parseInteger(data, offset, length);
+            }
+        });
+
+        this.registerDataHandler("/gpx/wpt/gsak:wptExtension/gsak:GcNote", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                note = new String(data, offset, length);
+            }
+        });
+
+
+    }
+
 
 }
