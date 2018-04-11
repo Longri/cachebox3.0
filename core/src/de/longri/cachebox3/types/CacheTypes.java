@@ -101,10 +101,6 @@ public enum CacheTypes implements SelectBoxItem {
         } else if (string.equalsIgnoreCase("Cache In Trash Out Event")) {
             return CITO;
         } else {
-            // remove trailing " cache" or " hybrid" fragments
-            if (string.contains(" "))
-                string = string.substring(0, string.indexOf(" "));
-
             // remove trailing "-cache" fragments
             if (string.contains("-"))
                 string = string.substring(0, string.indexOf("-"));
@@ -112,6 +108,15 @@ public enum CacheTypes implements SelectBoxItem {
             // remove trailing "Geocache|" fragments
             if (string.contains("|"))
                 string = string.substring(string.indexOf("|") + 1);
+
+            if (string.toLowerCase().contains("flag")) {
+                if (string.toLowerCase().contains("green"))
+                    return ReferencePoint;
+            }
+
+            // remove trailing " cache" or " hybrid" fragments
+            if (string.contains(" "))
+                string = string.substring(0, string.indexOf(" "));
 
             // Replace some opencaching.de / geotoad cache types
             if (string.toLowerCase().contains("unknown"))
@@ -144,6 +149,8 @@ public enum CacheTypes implements SelectBoxItem {
                 return MultiQuestion; // Import Virtual Stage as Question of a Multi
             if (string.toLowerCase().contains("physical"))
                 return MultiStage; // Import Physical Stage as a Multi Stage
+
+
             if (string.length() == 0)
                 return Undefined;
         }

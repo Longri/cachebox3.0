@@ -320,7 +320,13 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
 
     @Override
     protected void registerOpenCachingHandler() {
-
+        registerGroundspeakHandler();
+        this.registerDataHandler("/gpx/wpt/gsak:wptExtension/gsak:Parent", new DataHandler() {
+            @Override
+            public void handleData(char[] data, int offset, int length) {
+                gsakParent = new String(data, offset, length);
+            }
+        });
     }
 
     @Override
