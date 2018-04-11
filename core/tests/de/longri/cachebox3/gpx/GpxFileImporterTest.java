@@ -209,7 +209,6 @@ class GpxFileImporterTest {
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
-        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/gsak-correctedCoords.gpx");
         final AtomicInteger cacheCount = new AtomicInteger();
         final AtomicInteger waypointCount = new AtomicInteger();
         final AtomicInteger logCount = new AtomicInteger();
@@ -232,15 +231,77 @@ class GpxFileImporterTest {
             }
         };
 
-        new GroundspeakGpxStreamImporter(TEST_DB, importHandler).doImport(gpxFile);
+        GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(TEST_DB, importHandler);
+        AbstractCache cache;
+        //=================================================================================
+        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/gsak-correctedCoords.gpx"));
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
-        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC250Q2", true);
+        cache = TEST_DB.getFromDbByGcCode("GC250Q2", true);
         TEST_CACHES.GC250Q2.assertCache(cache, TEST_DB);
-
         assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
         assertEquals(waypointCount.get(), 1, "Imported Waypoint count is wrong");
         assertEquals(logCount.get(), 0, "Imported Log count is wrong");
         assertEquals(mysteryList.size, 1, "Imported Mystery count is Wrong");
+        //=================================================================================
+
+        //=================================================================================
+        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/TestCache3_WP_Parents_1_1.gpx"));
+        assertThat("Cache count must be 2", TEST_DB.getCacheCountOnThisDB() == 2);
+        cache = TEST_DB.getFromDbByGcCode("ACWP003", true);
+        TEST_CACHES.ACWP003.assertCache(cache, TEST_DB);
+        assertEquals(cacheCount.get(), 2, "Imported Cache count is wrong");
+        assertEquals(waypointCount.get(), 2, "Imported Waypoint count is wrong");
+        assertEquals(logCount.get(), 2, "Imported Log count is wrong");
+        assertEquals(mysteryList.size, 1, "Imported Mystery count is Wrong");
+        //=================================================================================
+
+
+        TEST_DB.close();
+
+        long elapseTime = System.currentTimeMillis() - start;
+        System.out.println("Gpx Stream import time: " + elapseTime + "ms");
+    }
+
+    @Test
+    public void testGpxStreamImport_GSAK_correctedCoords_1_0() throws Exception {
+        long start = System.currentTimeMillis();
+
+        Database TEST_DB = TestUtils.getTestDB(true);
+        final AtomicInteger cacheCount = new AtomicInteger();
+        final AtomicInteger waypointCount = new AtomicInteger();
+        final AtomicInteger logCount = new AtomicInteger();
+        final Array<String> mysteryList = new Array<>();
+        ImportHandler importHandler = new ImportHandler() {
+            @Override
+            public void incrementCaches(String mysteryGcCode) {
+                cacheCount.incrementAndGet();
+                if (mysteryGcCode != null) mysteryList.add(mysteryGcCode);
+            }
+
+            @Override
+            public void incrementWaypoints() {
+                waypointCount.incrementAndGet();
+            }
+
+            @Override
+            public void incrementLogs() {
+                logCount.incrementAndGet();
+            }
+        };
+
+        GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(TEST_DB, importHandler);
+        AbstractCache cache;
+
+        //=================================================================================
+        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/TestCache3_WP_Parents_1_0.gpx"));
+        assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
+        cache = TEST_DB.getFromDbByGcCode("ACWP003", true);
+        TEST_CACHES.ACWP003.assertCache(cache, TEST_DB);
+        assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
+        assertEquals(waypointCount.get(), 1, "Imported Waypoint count is wrong");
+        assertEquals(logCount.get(), 2, "Imported Log count is wrong");
+        assertEquals(mysteryList.size, 0, "Imported Mystery count is Wrong");
+        //=================================================================================
 
 
         TEST_DB.close();

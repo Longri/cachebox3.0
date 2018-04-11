@@ -46,6 +46,11 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     private final Locale locale = Locale.getDefault();
 
     private final char[] CREATOR = "creator".toCharArray();
+    private final char[] GROUNDSPEAK = "Groundspeak".toCharArray();
+    private final char[] OPENCACHING = "Opencaching".toCharArray();
+    private final char[] GSAK = "GSAK".toCharArray();
+    private final char[] VERSION = "version".toCharArray();
+    private final char[] CACHEBOX = "Cachebox".toCharArray();
     private final char[] DATE_PATTERN1 = "yyyy-MM-dd'T'HH:mm:ss.S".toCharArray();
     private final char[] DATE_PATTERN2 = "yyyy-MM-dd'T'HH:mm:ss".toCharArray();
     private final char[] DATE_PATTERN3 = "yyyy-MM-dd'T'HH:mm:ss'Z'".toCharArray();
@@ -112,21 +117,32 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
     protected abstract void registerGsakHandler();
 
+    protected abstract void registerGsakHandler_1_1();
+
     protected abstract void registerGenerallyHandler();
 
     protected abstract void registerCacheboxHandler();
 
-    private final char[] GROUNDSPEAK = "Groundspeak".toCharArray();
-    private final char[] OPENCACHING = "Opencaching".toCharArray();
-    private final char[] GSAK = "GSAK".toCharArray();
-    private final char[] CACHEBOX = "Cachebox".toCharArray();
-
     public void doImport(FileHandle gpxFile) {
+
+        if (gpxFile == null)
+            throw new RuntimeException("Can't import NULL");
+        if (!gpxFile.exists())
+            throw new RuntimeException("Can't import non exist File");
+        if (!gpxFile.file().canRead())
+            throw new RuntimeException("Can't import non readable File");
 
         this.registerValueHandler("/gpx",
                 new ValueHandler() {
+
+                    String version = "";
+
                     @Override
                     protected void handleValue(char[] valueName, char[] data, int offset, int length) {
+                        if (CharSequenceUtil.equals(VERSION, valueName)) {
+                            version = new String(data, offset, length);
+                        }
+
                         if (CharSequenceUtil.equals(CREATOR, valueName)) {
                             registerGenerallyHandler();
                             if (CharSequenceUtil.contains(data, offset, length, GROUNDSPEAK, 0, GROUNDSPEAK.length)) {
@@ -134,13 +150,18 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             } else if (CharSequenceUtil.contains(data, offset, length, OPENCACHING, 0, OPENCACHING.length)) {
                                 registerOpenCachingHandler();
                             } else if (CharSequenceUtil.contains(data, offset, length, GSAK, 0, GSAK.length)) {
-                                registerGsakHandler();
+                                if (version.equals("1.0")) {
+                                    registerGsakHandler();
+                                } else {
+                                    registerGsakHandler_1_1();
+                                }
+
                             } else if (CharSequenceUtil.contains(data, offset, length, CACHEBOX, 0, CACHEBOX.length)) {
                                 registerCacheboxHandler();
                             }
                         }
                     }
-                }, CREATOR);
+                }, VERSION, CREATOR);
 
 
         // wait, if parser working now
@@ -269,7 +290,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
         if (hasCorrectedCoord) {
             // create final WP with Corrected Coords
-            String newGcCode = Database.createFreeGcCode(database,cache.getGcCode().toString());
+            String newGcCode = Database.createFreeGcCode(database, cache.getGcCode().toString());
 
             // Check if "Final GSAK Corrected" exist
             Array<AbstractWaypoint> wplist = DaoFactory.WAYPOINT_DAO.getWaypointsFromCacheID(database, this.id, false);

@@ -165,15 +165,18 @@ public class CharSequenceUtil {
         switch (data[offset]) {
             case '+':
                 offset++;
+                length--;
                 break;
 
             case '-':
                 offset++;
+                length--;
                 isNegative = true;
                 break;
 
             case '.':
                 offset++;
+                length--;
                 hasDecimal = true;
                 break;
         }
@@ -215,10 +218,12 @@ public class CharSequenceUtil {
         switch (data[offset]) {
             case '+':
                 offset++;
+                length--;
                 break;
 
             case '-':
                 offset++;
+                length--;
                 isNegative = true;
                 break;
         }
@@ -250,10 +255,12 @@ public class CharSequenceUtil {
         switch (data[offset]) {
             case '+':
                 offset++;
+                length--;
                 break;
 
             case '-':
                 offset++;
+                length--;
                 isNegative = true;
                 break;
         }
