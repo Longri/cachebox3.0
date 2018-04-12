@@ -34,7 +34,9 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gpx.GroundspeakGpxStreamImporter;
 import de.longri.cachebox3.gpx.ImportHandler;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
+import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.ProgressBar;
@@ -42,6 +44,8 @@ import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.FilterInstances;
+import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnZip;
@@ -51,6 +55,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -175,6 +180,9 @@ public class ImportPQ extends ActivityBase {
     }
 
     private void importNow() {
+
+        final long importStart = System.currentTimeMillis();
+
         // get import information
         final AtomicInteger downloadPqCount = new AtomicInteger(0),
                 downloadedPqs = new AtomicInteger(0), extractedPQs = new AtomicInteger(0),
@@ -289,6 +297,8 @@ public class ImportPQ extends ActivityBase {
         });
 
         final Array<String> mysterieCodes = new Array<>();
+        final AtomicInteger readyImportedLogs = new AtomicInteger();
+        final AtomicInteger readyImportedWaypoints = new AtomicInteger();
 
         CB.postAsync(new NamedRunnable("Import extracted gpx files") {
             final ImportHandler importHandler = new ImportHandler() {
@@ -302,7 +312,7 @@ public class ImportPQ extends ActivityBase {
                             importLabel.setText(Translation.get("imported",
                                     Integer.toString(progressValue),
                                     Integer.toString(importCache.get())));
-                            extractProgress.setValue(progressValue);
+                            importProgress.setValue(progressValue);
                             CB.requestRendering();
                         }
                     });
@@ -310,12 +320,12 @@ public class ImportPQ extends ActivityBase {
 
                 @Override
                 public void incrementWaypoints() {
-
+                    readyImportedWaypoints.incrementAndGet();
                 }
 
                 @Override
                 public void incrementLogs() {
-
+                    readyImportedLogs.incrementAndGet();
                 }
             };
             final GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(Database.Data, importHandler);
@@ -350,7 +360,12 @@ public class ImportPQ extends ActivityBase {
             @Override
             public void run() {
                 while (!importReady.get() || mysterieCodes.size > 0) {
-
+                    //TODO use https://api.groundspeak.com/LiveV6/geocaching.svc/help/operations/GetUserWaypoints
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 correctReady.set(true);
             }
@@ -367,7 +382,26 @@ public class ImportPQ extends ActivityBase {
                     }
                 }
                 log.debug("PocketQuery ready imported, close Activity");
+
+                // finish, close activity and notify changes
                 ImportPQ.this.finish();
+                CacheListChangedEventList.Call();
+                String msg;
+                if (!iCancel.cancel()) {
+
+                    long importTime = System.currentTimeMillis() - importStart;
+
+                    msg = "Import " + String.valueOf(readyImportedCaches.get()) + "Caches \n"
+                            + String.valueOf(readyImportedWaypoints.get()) + " Waypoints \n"
+                            + String.valueOf(readyImportedLogs.get()) + " Logs \n"
+                            + "in " + String.valueOf(importTime / 1000) + " sec!";
+                    CB.viewmanager.toast(msg, ViewManager.ToastLength.EXTRA_LONG);
+                } else {
+                    msg = "Import canceled";
+                    CB.viewmanager.toast(msg);
+                }
+                log.debug(msg);
+                CB.viewmanager.setNewFilter(CB.viewmanager.getActFilter());
             }
         });
     }
