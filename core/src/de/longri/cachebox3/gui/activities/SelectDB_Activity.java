@@ -20,8 +20,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
@@ -33,13 +35,19 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.CacheList;
+import de.longri.cachebox3.types.DraftList;
 import de.longri.cachebox3.utils.FileList;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqlite;
@@ -83,38 +91,12 @@ public class SelectDB_Activity extends ActivityBase {
     public SelectDB_Activity(IReturnListener returnListener, boolean mustSelect) {
         super("select DB dialog");
         this.returnListener = returnListener;
-
         this.mustSelect = mustSelect;
-
-        String DBFile = Config.DatabaseName.getValue();
-
-        final FileList files = new FileList(CB.WorkPath, "DB3", true);
-        fileInfos = new String[files.size];
-        int index = 0;
-        int selectedIndex = -1;
-        for (File file : files) {
-            if (file.getName().equalsIgnoreCase(DBFile))
-                selectedIndex = index;
-            fileInfos[index] = "";
-            index++;
-        }
-
         lvFiles = new ListView(VERTICAL);
         lvFiles.setSelectable(SINGLE);
-        lvAdapter = new CustomAdapter(files);
-        lvFiles.setAdapter(lvAdapter);
+        this.setListViewAdapter();
         this.addActor(lvFiles);
 
-        if (selectedIndex > -1) {
-            final int finalIdx = selectedIndex;
-            CB.postOnNextGlThread(new Runnable() {
-                @Override
-                public void run() {
-                    lvFiles.setSelection(finalIdx);
-                }
-            });
-
-        }
 
         bNew = new CharSequenceButton(Translation.get("NewDB"));
         bSelect = new CharSequenceButton(Translation.get("confirm"));
@@ -200,6 +182,33 @@ public class SelectDB_Activity extends ActivityBase {
                 stopTimer();
         }
         setAutoStartText();
+
+    }
+
+    private void setListViewAdapter() {
+        String DBFile = Config.DatabaseName.getValue();
+        final FileList files = new FileList(CB.WorkPath, "DB3", true);
+        fileInfos = new String[files.size];
+        int index = 0;
+        int selectedIndex = -1;
+        for (File file : files) {
+            if (file.getName().equalsIgnoreCase(DBFile))
+                selectedIndex = index;
+            fileInfos[index] = "";
+            index++;
+        }
+        lvAdapter = new CustomAdapter(files);
+        lvFiles.setAdapter(lvAdapter);
+        if (selectedIndex > -1) {
+            final int finalIdx = selectedIndex;
+            CB.postOnNextGlThread(new Runnable() {
+                @Override
+                public void run() {
+                    lvFiles.setSelection(finalIdx);
+                }
+            });
+
+        }
         readCountAtThread();
     }
 
@@ -429,9 +438,33 @@ public class SelectDB_Activity extends ActivityBase {
         }
 
 
+        Array<SelectDBItem> itemArray = new Array();
+
         @Override
         public ListViewItem getView(final int listIndex) {
-            return new SelectDBItem(listIndex, files.get(listIndex), VisUI.getSkin().get("default", SelectDbStyle.class));
+
+            if (itemArray.size - 1 < listIndex) {
+                SelectDBItem item = new SelectDBItem(listIndex, files.get(listIndex), VisUI.getSkin().get("default", SelectDbStyle.class));
+
+                item.addListener(new ClickLongClickListener() {
+                    @Override
+                    public boolean clicked(InputEvent event, float x, float y) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean longClicked(Actor actor, float x, float y) {
+                        if (actor instanceof SelectDBItem) {
+                            log.debug("longClick on Item {}", files.get(listIndex).getName());
+                            deleteDatabase(files.get(listIndex));
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                return item;
+            }
+            return itemArray.get(listIndex);
         }
 
         @Override
@@ -519,6 +552,38 @@ public class SelectDB_Activity extends ActivityBase {
         fileInfos = null;
         StageManager.unRegisterForBackKey(cancelClickListener);
         super.dispose();
+    }
+
+    private void deleteDatabase(final File dbFile) {
+
+        OnMsgBoxClickListener dialogClickListener = new OnMsgBoxClickListener() {
+            @Override
+            public boolean onClick(int which, Object data) {
+                switch (which) {
+                    case ButtonDialog.BUTTON_POSITIVE:
+                        // Yes button clicked
+                        // delete aktDatabase
+
+                        //check of own repository
+                        FileHandle workPathFileHandle = Gdx.files.absolute(CB.WorkPath);
+                        FileHandle dbFileHandle = workPathFileHandle.child(dbFile.getName());
+                        FileHandle repositoryFileHandle = workPathFileHandle.child("repositories").child(dbFileHandle.nameWithoutExtension());
+
+                        dbFileHandle.delete();
+                        if (repositoryFileHandle.exists() && repositoryFileHandle.isDirectory())
+                            repositoryFileHandle.deleteDirectory();
+                        setListViewAdapter();
+                        break;
+                    case ButtonDialog.BUTTON_NEGATIVE:
+                        // No button clicked
+                        // do nothing
+                        break;
+                }
+                return true;
+            }
+        };
+        CharSequence message = Translation.get("confirmDatabaseDeletion", dbFile.getName());
+        MessageBox.show(message, Translation.get("deleteDatabase"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
     }
 
 
