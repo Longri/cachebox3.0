@@ -401,7 +401,27 @@ public class ImportPQ extends ActivityBase {
                     CB.viewmanager.toast(msg);
                 }
                 log.debug(msg);
-                CB.viewmanager.setNewFilter(CB.viewmanager.getActFilter());
+
+                CB.postOnNextGlThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CB.postAsync(new NamedRunnable("Reload Query after import") {
+                            @Override
+                            public void run() {
+                                Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                                log.debug("Call loadFilteredCacheList()");
+                                CB.loadFilteredCacheList(null);
+                                CB.postOnNextGlThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        CacheListChangedEventList.Call();
+                                    }
+                                });
+                            }
+                        });
+
+                    }
+                });
             }
         });
     }
