@@ -342,6 +342,7 @@ public class ImportPQ extends ActivityBase {
                             for (FileHandle gpxFile : gpxFolder.list(".gpx")) {
                                 importer.doImport(gpxFile);
                             }
+                            gpxFolder.deleteDirectory();
                         }
                     } else {
                         try {
