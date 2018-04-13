@@ -103,7 +103,7 @@ public class EditDrafts extends ActivityBase {
         else
             foundLabel = new VisLabel("Founds: #" + note.foundNumber);
 
-        dateLabel = new VisLabel(Translation.get("date") + ":");
+        dateLabel = new VisLabel(Translation.get("wptDate") + ":");
         timeLabel = new VisLabel(Translation.get("time") + ":");
 
         dateTextArea = new EditTextBox(false);

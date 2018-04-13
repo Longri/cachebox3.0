@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0" creator="Opencaching.de - http://www.opencaching.de" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" xmlns="http://www.topografix.com/GPX/1/0">
+  <name>Cache listing generated from Opencaching.de</name>
+  <desc>This is a waypoint file generated from Opencaching.de</desc>
+  <author>Opencaching.de</author>
+  <email>contact@opencaching.de</email>
+  <url>http://www.opencaching.de</url>
+  <urlname>Opencaching.de - Geocaching in Deutschland, Oesterreich und der Schweiz</urlname>
+  <time>2014-07-19T10:48:15Z</time>
+  <keywords>cache, geocache, opencaching, waypoint</keywords>
+  <wpt lat="53.00727" lon="9.00923">
+    <time>2013-01-09T00:00:00Z</time>
+    <name>OCF19A</name>
+    <desc>Bierdener Marsch</desc>
+    <src>www.opencaching.de</src>
+    <url>http://www.opencaching.de/viewcache.php?cacheid=164939</url>
+    <urlname>Bierdener Marsch</urlname>
+    <sym>Geocache Found</sym>
+    <type>Geocache|Multi-cache</type>
+    <groundspeak:cache id="164939" available="True" archived="False" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0/1">
+      <groundspeak:name>Bierdener Marsch</groundspeak:name>
+      <groundspeak:placed_by>Danlex</groundspeak:placed_by>
+      <groundspeak:owner id="222261">Danlex</groundspeak:owner>
+      <groundspeak:type>Multi-cache</groundspeak:type>
+      <groundspeak:container>Small</groundspeak:container>
+      <groundspeak:attributes>
+ 	      <groundspeak:attribute id="22" inc="1">Hunting</groundspeak:attribute>
+ 	      <groundspeak:attribute id="39" inc="1">Thorns</groundspeak:attribute>
+ 	      <groundspeak:attribute id="19" inc="1">Ticks</groundspeak:attribute>
+ 	      <groundspeak:attribute id="14" inc="0">Recommended at night</groundspeak:attribute>
+ 	      <groundspeak:attribute id="62" inc="0">Seasonal access</groundspeak:attribute>
+      </groundspeak:attributes>
+      <groundspeak:difficulty>2</groundspeak:difficulty>
+      <groundspeak:terrain>2.5</groundspeak:terrain>
+      <groundspeak:country>Germany</groundspeak:country>
+      <groundspeak:state>Niedersachsen</groundspeak:state>
+      <groundspeak:short_description html="True"></groundspeak:short_description>
+      <groundspeak:long_description html="True">&lt;p&gt;Das Zielgebiet dieses Multis ist die Bierdener Marsch, das Gebiet zwischen dem Achimer Ortsteil Bierden und der Weser. Durch dieses Gebiet führt hier ein gut 4 Kilometer langer Rundweg. Bei Weserhochwasser können hier weite Teile bis an den Deich überschwemmt sein. Verschiedene Bauern bauen hier Getreide oder Raps an oder nutzen die Felder als Weideland für ihre Tiere. So kann man hier unter anderem Pferde, Kühe und Schottische Hochlandrinder antreffen. Manchmal sind auch Rehe zu sehen. An der Weser begegnet man häufig Anglern.&lt;br /&gt;Dieses Gebiet ist ideal für Fußgänger mit Hund (welche in der Brut- und Setzzeit jedoch an der Leine geführt werden müssen) und Radfahrer geeignet und wird durch diese auch häufig genutzt.&lt;/p&gt;
+&lt;p&gt;Zum Cache:&lt;/p&gt;
+&lt;p&gt;Ihr sucht an den Startkoordinaten nach einer Filmdose, die Euch den weiteren Weg zu zwei Zwischenstationen und anschließend dem Final weist. Wenn Ihr diesen Cache zu Fuß angeht, solltet Ihr für den Weg sowie den Rückweg zum Start etwa eine Stunde einplanen. Es muss nicht weit ab der Wege gesucht werden, sodass hier meist normale Straßenschuhe ausreichen, insbesondere bei und nach Regen sollte aber auf wasser- und matschresistente Kleidung zurückgegriffen werden.&lt;/p&gt;
+&lt;p&gt;&lt;span&gt;&lt;strong&gt;Hinweis:&lt;/strong&gt; Die Finalkoordinaten haben bei mehreren Messungen etwas variiert. Geht im Zweifelsfall noch einige Schritte weiter.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Unterwegs bietet es sich an, den Tradi &lt;a href="http://coord.info/GC3WBY5"&gt;Am Konfluenzpunkt&lt;/a&gt; mitzunehmen. Wenn Ihr etwas mehr Zeit habt, sei Euch der Mystery &lt;a href="http://coord.info/GC3EAHM"&gt;Diebische Elster&lt;/a&gt; empfohlen, dessen Startpunkt nicht weit vom Start dieses Caches entfernt ist.&lt;br /&gt;(Beide Caches sind leider nur bei GC gelistet)&lt;/p&gt;
+&lt;p&gt;
+&lt;br /&gt;
+Nachdem Ihr diesen Cache gefunden habt bietet es sich an, die Runde zu komplettieren und noch den &lt;a href="http://www.Opencaching.de/OCF1BD"&gt;Bonuscache&lt;/a&gt; zu dieser Runde zu suchen.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Achtung:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Hier in der Marsch sind in der Nacht häufig Jäger unterwegs. Daher sollte in der Dunkelheit von einer Suche abgesehen werden.&lt;br /&gt;Außerdem solltet Ihr insbesondere an den Stationen auf die Ausläufer der Sträucher, Büsche und Bäume aufpassen, damit Ihr euch nicht am Kopf oder an den Augen verletzt.&lt;br /&gt;An der ersten Zwischenstation gebt bitte besonders Acht auf den Stacheldraht!&lt;/p&gt;&lt;p&gt;&lt;em&gt;© &lt;a href='http://www.opencaching.de/viewprofile.php?userid=222261' target='_blank'&gt;Danlex&lt;/a&gt;, &lt;a href='http://www.opencaching.de/viewcache.php?cacheid=164939' target='_blank'&gt;Opencaching.de&lt;/a&gt;, &lt;a href='http://creativecommons.org/licenses/by-nc-nd/3.0/de/' target='_blank'&gt;CC BY-NC-ND&lt;/a&gt;, Stand: 19.07.2014; alle Logeinträge © jeweiliger Autor&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Dieser Geocache liegt vermutlich in den folgenden Schutzgebieten (&lt;a href="http://wiki.opencaching.de/index.php/Schutzgebiete" target="_blank"&gt;Info&lt;/a&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Landschaftsschutzgebiet: &lt;a href='http://www.google.de/search?q=Landschaftsschutzgebiet+Achim-Bierdener+Marsch' target='_blank'&gt;Achim-Bierdener Marsch&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br /&gt;&lt;div style="float:left; padding:8px"&gt;&lt;a href="http://www.opencaching.de/images/uploads/137BADCE-BD7B-11E2-96F3-525400A7F25B.jpg" target="_blank"&gt;&lt;img src="http://www.opencaching.de/thumbs.php?uuid=137BADCE-BD7B-11E2-96F3-525400A7F25B" /&gt;&lt;/a&gt;&lt;br /&gt;Bierdener Marsch&lt;/div&gt;</groundspeak:long_description>
+      <groundspeak:encoded_hints>Start: Bei geformtem in gewachsenem Holz
+Final: Am Boden</groundspeak:encoded_hints>
+      <groundspeak:logs>
+      <groundspeak:log id="903547">
+        <groundspeak:date>2013-07-07T14:30:00Z</groundspeak:date>
+        <groundspeak:type>Owner Maintenance</groundspeak:type>
+        <groundspeak:finder id="222261">Danlex</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p&gt;Ich habe hier eben mal nach dem Rechten gesehen, abgesehen davon, dass hier ganz vieles zugewuchert ist, ist alles im Lot. Der Start und Station 1 waren zu finden, Station 2 die zuletzt nicht gefunden wurde war aber auch vor Ort.&lt;/p&gt;
+&lt;p&gt;Somit also viel Spaß und Erfolg!&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      <groundspeak:log id="899684">
+        <groundspeak:date>2013-06-16T00:00:00Z</groundspeak:date>
+        <groundspeak:type>Temporarily Disable Listing</groundspeak:type>
+        <groundspeak:finder id="222261">Danlex</groundspeak:finder>
+        <groundspeak:text encoded="False">&lt;p&gt;Ich werde die Runde mal überprüfen und ggf. auch umbauen, daher ist hier vorerst Pause.&lt;/p&gt;</groundspeak:text>
+      </groundspeak:log>
+      </groundspeak:logs>
+      <groundspeak:travelbugs>
+      </groundspeak:travelbugs>
+    </groundspeak:cache>
+  </wpt>
+  <wpt lat="53.00888" lon="9.00828">
+    <time>2013-01-09T00:00:00Z</time>
+    <name>OCF19A-1</name>
+    <cmt>Hier haben einige Cachemobile platz</cmt>
+    <desc>Parkplatz</desc>
+    <url>http://www.opencaching.de/viewcache.php?cacheid=164939</url>
+    <urlname>OCF19A Bierdener Marsch</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+    <gsak:wptExtension xmlns:gsak="http://www.gsak.net/xmlv1/4">
+      <gsak:Parent>OCF19A</gsak:Parent>
+    </gsak:wptExtension>
+  </wpt>
+  <wpt lat="53.00462" lon="8.99772">
+    <time>2013-01-09T00:00:00Z</time>
+    <name>OCF19A-2</name>
+    <cmt>Auf dieser Bank kann sich ausgeruht werden, sofern notwendig</cmt>
+    <desc>Station oder Referenzpunkt</desc>
+    <url>http://www.opencaching.de/viewcache.php?cacheid=164939</url>
+    <urlname>OCF19A Bierdener Marsch</urlname>
+    <sym>Flag, Green</sym>
+    <type>Waypoint|Flag, Green</type>
+    <gsak:wptExtension xmlns:gsak="http://www.gsak.net/xmlv1/4">
+      <gsak:Parent>OCF19A</gsak:Parent>
+    </gsak:wptExtension>
+  </wpt>
+  <wpt lat="52.99973" lon="9.00903">
+    <time>2013-01-09T00:00:00Z</time>
+    <name>OCF19A-3</name>
+    <cmt>Auf dieser Bank kann sich ausgeruht werden, sofern notwendig</cmt>
+    <desc>Station oder Referenzpunkt</desc>
+    <url>http://www.opencaching.de/viewcache.php?cacheid=164939</url>
+    <urlname>OCF19A Bierdener Marsch</urlname>
+    <sym>Flag, Green</sym>
+    <type>Waypoint|Flag, Green</type>
+    <gsak:wptExtension xmlns:gsak="http://www.gsak.net/xmlv1/4">
+      <gsak:Parent>OCF19A</gsak:Parent>
+    </gsak:wptExtension>
+  </wpt>
+</gpx>

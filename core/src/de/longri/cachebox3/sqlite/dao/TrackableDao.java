@@ -30,8 +30,6 @@ import java.util.Date;
  * Created by Longri on 22.01.2018.
  */
 public class TrackableDao {
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 
     public void writeToDB(Database database, Array<Trackable> tbList) {
         //create statements
@@ -47,7 +45,7 @@ public class TrackableDao {
                         entry.CacheId(),
                         entry.getCurrenGoal(),
                         entry.getCurrentOwner(),
-                        iso8601Format.format(entry.getDateCreated() == null ? new Date() : entry.getDateCreated()),
+                        Database.cbDbFormat.format(entry.getDateCreated() == null ? new Date() : entry.getDateCreated()),
                         entry.getDescription(),
                         entry.getIconUrl(),
                         entry.getImageUrl(),

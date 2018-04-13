@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -59,16 +59,16 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
 
     @Override
-    public void writeToDatabase(Database database, AbstractWaypoint wp) {
-        writeToDatabase(database, wp, false);
+    public void writeToDatabase(Database database, AbstractWaypoint wp, boolean fireChangedEvent) {
+        writeToDatabase(database, wp, false, fireChangedEvent);
     }
 
     @Override
-    public boolean updateDatabase(Database database, AbstractWaypoint wp) {
-        return writeToDatabase(database, wp, true);
+    public boolean updateDatabase(Database database, AbstractWaypoint wp, boolean fireChangedEvent) {
+        return writeToDatabase(database, wp, true, fireChangedEvent);
     }
 
-    private boolean writeToDatabase(Database database, AbstractWaypoint wp, boolean update) {
+    private boolean writeToDatabase(Database database, AbstractWaypoint wp, boolean update, boolean fireChangedEvent) {
         //TODO  int newCheckSum = createCheckSum(database, wp);
 
         Database.Parameters args = new Database.Parameters();
@@ -100,7 +100,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             database.insert("WaypointsText", args2);
         }
         checkUserWaypointFlag(database, wp);
-        waypointListChanged(wp, true);
+        waypointListChanged(database, wp, false, fireChangedEvent);
         return updated;
     }
 
@@ -111,7 +111,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
     }
 
     @Override
-    public void delete(Database database, AbstractWaypoint waypoint) {
+    public void delete(Database database, AbstractWaypoint waypoint, boolean fireChangedEvent) {
 
         //delete from Waypoints table
         database.delete("Waypoints", "GcCode='" + waypoint.getGcCode() + "'");
@@ -119,7 +119,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         //delete from WaypointsText table
         database.delete("WaypointsText", "GcCode='" + waypoint.getGcCode() + "'");
 
-        waypointListChanged(waypoint, true);
+        waypointListChanged(database, waypoint, true, fireChangedEvent);
     }
 
     private int createCheckSum(Database database, AbstractWaypoint WP) {
@@ -161,20 +161,22 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         }
     }
 
-    private void waypointListChanged(AbstractWaypoint wp, boolean delete) {
-        AbstractCache cache = Database.Data.Query.getCacheById(wp.getCacheId());
-        if (cache != null) {
+    private void waypointListChanged(Database database, AbstractWaypoint wp, boolean delete, boolean fireChangedEvent) {
+        AbstractCache cache = database.Query.getCacheById(wp.getCacheId());
+        if (cache != null && cache.getWaypoints() != null) {
             if (delete) {
                 cache.getWaypoints().removeValue(wp, false);
             } else {
                 cache.getWaypoints().add(wp);
             }
-        }
-        CB.postAsyncDelayd(100, new NamedRunnable("Call CacheListChanged Event") {
-            @Override
-            public void run() {
-                CacheListChangedEventList.Call();
+            if (fireChangedEvent) {
+                CB.postAsyncDelayd(100, new NamedRunnable("Call CacheListChanged Event") {
+                    @Override
+                    public void run() {
+                        CacheListChangedEventList.Call();
+                    }
+                });
             }
-        });
+        }
     }
 }

@@ -3300,5 +3300,13 @@
       "cacheListItemStyle": "bubble",
       "wayPointListItemStyle": "bubble"
     }
+  },
+  "de.longri.cachebox3.gui.skin.styles.PqListItemStyle": {
+    "default": {
+      "nameFont": "normal_font",
+      "nameFontColor": "font_color",
+      "infoFont": "mapPanelUnit",
+      "infoFontColor": "font_color"
+    }
   }
 }

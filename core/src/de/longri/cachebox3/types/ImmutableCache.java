@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -126,7 +126,7 @@ public class ImmutableCache extends AbstractCache {
     private final static Logger log = LoggerFactory.getLogger(ImmutableCache.class);
 
     private final CharSequence name, gcCode, placedBy, owner, gcId;
-    private final short rating, numTravelbugs, booleanStore;
+    private short rating, numTravelbugs, booleanStore;
     private final int favPoints;
     private final long id;
     private final CacheTypes type;
@@ -145,10 +145,22 @@ public class ImmutableCache extends AbstractCache {
         this.numTravelbugs = cursor.getShort(8);
 
         this.gcCode = new CharSequenceArray(cursor.getString(9));
-        this.name = new CharSequenceArray(cursor.getString(10).trim());
-        this.placedBy = new CharSequenceArray(cursor.getString(11));
-        this.owner = new CharSequenceArray(cursor.getString(12));
-        this.gcId = new CharSequenceArray(cursor.getString(13));
+
+        String nameString = cursor.getString(10);
+        if (nameString != null) this.name = new CharSequenceArray(nameString.trim());
+        else this.name = null;
+
+        String placedByString = cursor.getString(11);
+        if (placedByString != null) this.placedBy = new CharSequenceArray(placedByString);
+        else this.placedBy = null;
+
+        String ownerString = cursor.getString(12);
+        if (ownerString != null) this.owner = new CharSequenceArray(ownerString);
+        else this.owner = null;
+
+        String gcIdString = cursor.getString(13);
+        if (gcIdString != null) this.gcId = new CharSequenceArray(gcIdString);
+        else this.gcId = null;
 
         this.booleanStore = cursor.getShort(14);
         this.favPoints = cursor.getInt(15);
@@ -290,7 +302,11 @@ public class ImmutableCache extends AbstractCache {
         return getStringFromDB(database, "SELECT country FROM CacheInfo WHERE Id=?");
     }
 
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    @Override
+    public String getState(Database database) {
+        return getStringFromDB(database, "SELECT state FROM CacheInfo WHERE Id=?");
+    }
+
 
     @Override
     public Date getDateHidden(Database database) {
@@ -298,11 +314,21 @@ public class ImmutableCache extends AbstractCache {
         if (dateString == null || dateString.isEmpty()) return new Date();
 
         try {
-            return iso8601Format.parse(dateString);
+            return Database.cbDbFormat.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return new Date();
+    }
+
+    @Override
+    public String getTmpNote(Database database) {
+        return getStringFromDB(database, "SELECT Notes FROM CacheText WHERE Id=?");
+    }
+
+    @Override
+    public String getTmpSolver(Database database) {
+        return getStringFromDB(database, "SELECT Solver FROM CacheText WHERE Id=?");
     }
 
 
@@ -395,11 +421,6 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFavorite(boolean favorite) {
-        throwNotChangeable("Favorite");
-    }
-
-    @Override
     public void setLatLon(double latitude, double longitude) {
         throwNotChangeable("LatLon");
     }
@@ -439,7 +460,6 @@ public class ImmutableCache extends AbstractCache {
         throwNotChangeable("HasHint");
     }
 
-
     @Override
     public void setShortDescription(Database database, String value) {
         throwNotChangeable("ShortDescription");
@@ -470,17 +490,32 @@ public class ImmutableCache extends AbstractCache {
         throwNotChangeable("Longitude");
     }
 
-
     @Override
     public void setUrl(String value) {
         throwNotChangeable("Url");
     }
 
+    @Override
+    public void setState(String value) {
+        throwNotChangeable("State");
+    }
 
     @Override
     public void setCountry(String value) {
         throwNotChangeable("Country");
     }
+
+
+    @Override
+    public void setTmpNote(String value) {
+        throwNotChangeable("TempNote");
+    }
+
+    @Override
+    public void setTmpSolver(Database database,String value) {
+            throwNotChangeable("TempSolver");
+    }
+
     //################################################################################
     //# properties that not retained at the class but read/write directly from/to DB
     ///###############################################################################
@@ -540,10 +575,17 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFound(boolean found) {
+    public void setFound(Database database, boolean found) {
         //write direct to DB
-        int newBooleanStore = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, found, booleanStore);
-        DaoFactory.CACHE_DAO.writeCacheBooleanStore(Database.Data, newBooleanStore, getId());
+        booleanStore = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, found, booleanStore);
+        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
+    }
+
+    @Override
+    public void setFavorite(Database database, boolean favorite) {
+        //write direct to DB
+        booleanStore = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, favorite, booleanStore);
+        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
     }
 
 
@@ -642,15 +684,6 @@ public class ImmutableCache extends AbstractCache {
 
     }
 
-    @Override
-    public String getTmpNote() {
-        return null;
-    }
-
-    @Override
-    public void setTmpNote(String value) {
-
-    }
 
     @Override
     public int getSolverChecksum() {
@@ -661,28 +694,6 @@ public class ImmutableCache extends AbstractCache {
     public void setSolverChecksum(int value) {
 
     }
-
-    @Override
-    public String getTmpSolver() {
-        return null;
-    }
-
-    @Override
-    public void setTmpSolver(String value) {
-
-    }
-
-
-    @Override
-    public String getState() {
-        return null;
-    }
-
-    @Override
-    public void setState(String value) {
-
-    }
-
 
     @Override
     public void addAttributeNegative(Attributes attribute) {

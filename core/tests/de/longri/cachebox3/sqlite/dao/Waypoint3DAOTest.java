@@ -232,7 +232,7 @@ class Waypoint3DAOTest {
         assertWp("MutableWaypoint", wp);
 
         Waypoint3DAO DAO = new Waypoint3DAO();
-        DAO.writeToDatabase(cb3Database, wp);
+        DAO.writeToDatabase(cb3Database, wp, false);
 
         Array<AbstractWaypoint> waypoints = DAO.getWaypointsFromCacheID(cb3Database, should_cacheId, true);
         AbstractWaypoint wp2 = waypoints.get(0);
@@ -255,7 +255,7 @@ class Waypoint3DAOTest {
         wp2.setClue(should2_Clue);
         assertWp2("ChangedWaypoint", wp2);
 
-        DAO.updateDatabase(cb3Database, wp2);
+        DAO.updateDatabase(cb3Database, wp2, false);
 
         Array<AbstractWaypoint> waypoints2 = DAO.getWaypointsFromCacheID(cb3Database, should_cacheId, true);
         AbstractWaypoint wp3 = waypoints2.get(0);
@@ -263,13 +263,13 @@ class Waypoint3DAOTest {
 
 //3. delete wp -----------------------------------------------------------------------------
 
-        DAO.delete(cb3Database, wp3);
+        DAO.delete(cb3Database, wp3, false);
         Array<AbstractWaypoint> waypoints3 = DAO.getWaypointsFromCacheID(cb3Database, should_cacheId, true);
         assertThat("Waypoint list must be empty", waypoints3.size == 0);
 
         //check is also deleted from WaypointsText table
-        GdxSqliteCursor cursor = cb3Database.rawQuery("SELECT * FROM WaypointsText WHERE GcCode='GCCCCCX'",(String[]) null);
-        if (cursor!=null) {
+        GdxSqliteCursor cursor = cb3Database.rawQuery("SELECT * FROM WaypointsText WHERE GcCode='GCCCCCX'", (String[]) null);
+        if (cursor != null) {
             cursor.moveToFirst();
             assertThat("Waypoint must also deleted from WaypointsText table", cursor.isAfterLast());
         }

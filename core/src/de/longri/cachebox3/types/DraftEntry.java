@@ -92,9 +92,8 @@ public class DraftEntry {
         CacheName = reader.getString(2);
         cacheType = CacheTypes.get(reader.getInt(3));
         String sDate = reader.getString(4);
-        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            timestamp = iso8601Format.parse(sDate);
+            timestamp = Database.cbDbFormat.parse(sDate);
         } catch (ParseException e) {
         }
         if (timestamp == null)
@@ -162,8 +161,7 @@ public class DraftEntry {
         args.put("cacheid", CacheId);
         args.put("gccode", gcCode);
         args.put("name", CacheName);
-        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String stimestamp = iso8601Format.format(timestamp);
+        String stimestamp = Database.cbDbFormat.format(timestamp);
         args.put("timestamp", stimestamp);
         args.put("type", type.getGcLogTypeId());
         args.put("foundnumber", foundNumber);
@@ -210,8 +208,7 @@ public class DraftEntry {
         args.put("cacheid", CacheId);
         args.put("gccode", gcCode);
         args.put("name", CacheName);
-        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String stimestamp = iso8601Format.format(timestamp);
+        String stimestamp = Database.cbDbFormat.format(timestamp);
         args.put("timestamp", stimestamp);
         args.put("type", type.getGcLogTypeId());
         args.put("foundnumber", foundNumber);

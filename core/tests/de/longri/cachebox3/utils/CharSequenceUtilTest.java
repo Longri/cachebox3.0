@@ -19,12 +19,19 @@ import com.badlogic.gdx.utils.CharArray;
 import de.longri.cachebox3.translation.word.MutableString;
 import org.junit.jupiter.api.Test;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 27.10.2017.
  */
-class CharSequenceUtilTest {
+public class CharSequenceUtilTest {
 
     static CharArray buffer = new CharArray();
 
@@ -83,11 +90,113 @@ class CharSequenceUtilTest {
         assertThat("Index of 'TestStringAdded' must be 0", CharSequenceUtil.indexOf(m1, "TestStringAdded") == 0);
     }
 
+
+    char[] PARSE_ARRAY = " 49.349817 219011721901171232  3810940 TRUE False".toCharArray();
+
+    @Test
+    void parseDouble() {
+        double d = CharSequenceUtil.parseDouble(PARSE_ARRAY, 1, 9);
+        assertThat("Value should be 49.349817", d == 49.349817);
+    }
+
+    @Test
+    void parseInteger() {
+        int i = CharSequenceUtil.parseInteger(PARSE_ARRAY, 31, 7);
+        assertThat("Value should be 3810940", i == 3810940);
+
+        boolean throwedException = false;
+        try {
+            int j = CharSequenceUtil.parseInteger(PARSE_ARRAY, 11, 18);
+        } catch (ArithmeticException e) {
+            throwedException = true;
+        }
+        assertThat("must throw exception", throwedException);
+    }
+
+    @Test
+    void parseLong() {
+        long l = CharSequenceUtil.parseLong(PARSE_ARRAY, 11, 18);
+        assertThat("Value should be 219011721901171232", l == 219011721901171232L);
+    }
+
+    @Test
+    void parseBoolean() {
+        boolean b = CharSequenceUtil.parseBoolean(PARSE_ARRAY, 39, 4);
+        assertThat("Value should be true", b == true);
+
+        b = CharSequenceUtil.parseBoolean(PARSE_ARRAY, 44, 5);
+        assertThat("Value should be false", b == false);
+    }
+
+
+    char[] PARSE_DATE_ARRAY = " 49.349817 219011721901171232 2011-07-05T12:54:02.308107Z 3810940 2011-04-16T07:00:00Z TRUE 2011-04-17T03:39:24.4 False".toCharArray();
+    private final Locale locale = Locale.getDefault();
+    private final String STRING_PATTERN1 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private final String STRING_PATTERN2 = "yyyy-MM-dd'T'HH:mm:ss";
+    private final String STRING_PATTERN3 = "yyyy-MM-dd'T'HH:mm:ss.S";
+
+    private final SimpleDateFormat DATE_PATTERN_1 = new SimpleDateFormat(STRING_PATTERN1, locale);
+    private final SimpleDateFormat DATE_PATTERN_2 = new SimpleDateFormat(STRING_PATTERN2, locale);
+    private final SimpleDateFormat DATE_PATTERN_3 = new SimpleDateFormat(STRING_PATTERN3, locale);
+
+    private final DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+    @Test
+    void parseDate() throws ParseException {
+        Date expected = DATE_PATTERN_3.parse("2011-07-05T12:54:02.308107Z");
+        Date actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 30, 27, STRING_PATTERN3.toCharArray());
+        assertThat("Date should not NULL", actual != null);
+
+        String expectedString = iso8601Format.format(expected);
+        String actualString = iso8601Format.format(actual);
+
+        assertEquals(expectedString, actualString, "Date String should be equals");
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        expected = DATE_PATTERN_2.parse("2011-04-16T07:00:00Z");
+        actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 66, 20, STRING_PATTERN2.toCharArray());
+        assertThat("Date should not NULL", actual != null);
+
+        expectedString = iso8601Format.format(expected);
+        actualString = iso8601Format.format(actual);
+
+        assertEquals(expectedString, actualString, "Date String should be equals");
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+
+        // is unparseable date, return dat must be null
+        actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 66, 20, STRING_PATTERN3.toCharArray());
+        assertThat("Date should not NULL", actual == null);
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        expected = DATE_PATTERN_2.parse("2011-04-17T03:39:24.4");
+        actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 92, 21, STRING_PATTERN2.toCharArray());
+        assertThat("Date should not NULL", actual != null);
+
+        expectedString = iso8601Format.format(expected);
+        actualString = iso8601Format.format(actual);
+
+        assertEquals(expectedString, actualString, "Date String should be equals");
+
+        //-------------------------------------------------------------------------------------------------------------------------------
+        expected = DATE_PATTERN_3.parse("2011-04-17T03:39:24.4");
+        actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 92, 21, STRING_PATTERN3.toCharArray());
+        assertThat("Date should not NULL", actual != null);
+
+        expectedString = iso8601Format.format(expected);
+        actualString = iso8601Format.format(actual);
+
+        assertEquals(expectedString, actualString, "Date String should be equals");
+
+    }
+
     //##################################################################
     //# Helper
     //##################################################################
 
-    private boolean equals(CharSequence s1, CharSequence s2) {
+    public static boolean equals(CharSequence s1, CharSequence s2) {
+        if (s1 == null || s2 == null) return false;
         if (s1.length() != s2.length()) return false;
         int n = s1.length();
         while (n-- > 0) {

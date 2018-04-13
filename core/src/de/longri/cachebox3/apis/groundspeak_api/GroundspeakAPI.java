@@ -100,13 +100,18 @@ public class GroundspeakAPI {
 
         // URL encoder
         if (Url_Codiert) {
-            result = result.replace("/", "%2F");
-            result = result.replace("\\", "%5C");
-            result = result.replace("+", "%2B");
-            result = result.replace("=", "%3D");
+            result = getUrlCodiert(result);
         }
 
         return result;
+    }
+
+    public static String getUrlCodiert(String value) {
+        value = value.replace("/", "%2F");
+        value = value.replace("\\", "%5C");
+        value = value.replace("+", "%2B");
+        value = value.replace("=", "%3D");
+        return value;
     }
 
     private static String GetUTCDate(Date date) {

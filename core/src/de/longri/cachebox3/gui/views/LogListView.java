@@ -73,7 +73,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             @Override
             public void run() {
                 if (actGcCode == null || !actGcCode.equals(EventHandler.getSelectedCache().getGcCode())) {
-                    logEntries = Database.getLogs(EventHandler.getSelectedCache());
+                    logEntries = Database.Data.getLogs(EventHandler.getSelectedCache());
                     actGcCode = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getGcCode().toString();
 
                     logEntries.sort(new Comparator<LogEntry>() {

@@ -177,11 +177,10 @@ public class TestUtils {
 
         if (inMemory) {
             Database database = new Database(Database.DatabaseType.CacheBox3);
-            database.startUp();
-
+            Database.createNewInMemoryDB(database, "createNewDB" + Integer.toString(dbCount++));
             return database;
         } else {
-            FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++));
+            FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++) + ".db3");
 
             //delete if exist
             dbFiileHandle.delete();

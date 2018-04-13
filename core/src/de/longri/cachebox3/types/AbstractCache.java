@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -179,7 +179,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract boolean isFavorite();
 
-    public abstract void setFavorite(boolean favorite);
+    public abstract void setFavorite(Database database, boolean favorite);
 
     public abstract float getDifficulty();
 
@@ -191,7 +191,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract boolean isFound();
 
-    public abstract void setFound(boolean found);
+    public abstract void setFound(Database database, boolean found);
 
     public abstract boolean isLive();
 
@@ -209,6 +209,8 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setPlacedBy(String value);
 
+    public abstract String getState(Database database);
+
     public abstract Date getDateHidden(Database database);
 
     public abstract void setDateHidden(Date date);
@@ -221,7 +223,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setNoteChecksum(int value);
 
-    public abstract String getTmpNote();
+    public abstract String getTmpNote(Database database);
 
     public abstract void setTmpNote(String value);
 
@@ -229,9 +231,9 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setSolverChecksum(int value);
 
-    public abstract String getTmpSolver();
+    public abstract String getTmpSolver(Database database);
 
-    public abstract void setTmpSolver(String value);
+    public abstract void setTmpSolver(Database database, String value);
 
     public abstract String getUrl(Database database);
 
@@ -240,8 +242,6 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract String getCountry(Database database);
 
     public abstract void setCountry(String value);
-
-    public abstract String getState();
 
     public abstract void setState(String value);
 

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0" creator="Groundspeak, Inc. All Rights Reserved. http://www.groundspeak.com" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" xmlns="http://www.topografix.com/GPX/1/0">
+  <name>Cache Listing Generated from Geocaching.com</name>
+  <desc>This is an individual cache generated from Geocaching.com</desc>
+  <author>Account "B.Eule" From Geocaching.com</author>
+  <email>contact@geocaching.com</email>
+  <url>http://www.geocaching.com</url>
+  <urlname>Geocaching - High Tech Treasure Hunting</urlname>
+  <time>2015-03-31T09:35:20.9534824Z</time>
+  <keywords>cache, geocache</keywords>
+  <bounds minlat="53.104683" minlon="9.152833" maxlat="53.104683" maxlon="9.152833" />
+  <wpt lat="53.104683" lon="9.152833">
+    <time>2014-04-12T07:00:00Z</time>
+    <name>GC52BKF</name>
+    <desc>Kuh-Eule by B.Eule, Traditional Cache (1/1)</desc>
+    <url>http://www.geocaching.com/seek/cache_details.aspx?guid=977edb69-bd72-403b-bc05-0dce3d1aafe5</url>
+    <urlname>Kuh-Eule</urlname>
+    <sym>Geocache</sym>
+    <type>Geocache|Traditional Cache</type>
+    <groundspeak:cache id="4277242" available="True" archived="False" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0/1">
+      <groundspeak:name>Kuh-Eule</groundspeak:name>
+      <groundspeak:placed_by>B.Eule</groundspeak:placed_by>
+      <groundspeak:owner id="7502658">B.Eule</groundspeak:owner>
+      <groundspeak:type>Traditional Cache</groundspeak:type>
+      <groundspeak:container>Small</groundspeak:container>
+      <groundspeak:attributes>
+        <groundspeak:attribute id="24" inc="1">Wheelchair accessible</groundspeak:attribute>
+      </groundspeak:attributes>
+      <groundspeak:difficulty>1</groundspeak:difficulty>
+      <groundspeak:terrain>1</groundspeak:terrain>
+      <groundspeak:country>Germany</groundspeak:country>
+      <groundspeak:state>Niedersachsen</groundspeak:state>
+      <groundspeak:short_description html="True">&lt;p&gt;Drive In. Eine nette Zusatzeule. Bewohner ist informiert. Dennoch oft  muggelig. Das Grundstück muss nicht betreten werden! &lt;img alt="enlightened" src="http://www.geocaching.com/static/js/CKEditor/4.1.2/plugins/smiley/images/lightbulb.gif" title="enlightened" style="height:20px;width:20px;" /&gt;&lt;/p&gt;
+
+</groundspeak:short_description>
+      <groundspeak:long_description html="True">
+</groundspeak:long_description>
+      <groundspeak:encoded_hints>Nicht vom Bäcker</groundspeak:encoded_hints>
+      <groundspeak:logs>
+        <groundspeak:log id="485162304">
+          <groundspeak:date>2015-03-22T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="9708902">Team Schnuschel</groundspeak:finder>
+          <groundspeak:text encoded="False">Dank des auffälligen PKW in der Einfahrt konnte das Versteck schnell ausfindig gemacht werden. Zwischendurch noch die herumlaufende Katze gekuschelt. DFDC</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="482014897">
+          <groundspeak:date>2015-03-09T19:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="475070">Martinsbande</groundspeak:finder>
+          <groundspeak:text encoded="False">Found it 15:35, using Locus Map Pro.
+Ein wirklich pfiffiges Cacheversteck. Muggles waren gerade keine da. Das nebenan stehende Cachemobil bot sogar noch einen TB zum Loggen an. Danke fürs Herlocken!
+Wir vergeben hier - auch stellvertretend für die anderen Caches der Serie - einen Favo.
+Thank you for the Cache!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="479742076">
+          <groundspeak:date>2015-02-28T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="9685384">Bernd1974</groundspeak:finder>
+          <groundspeak:text encoded="False">Dieser ganz besondere Cache musste eine Eule sein :-) So hat die 200 gleich doppelt Spaß gemacht!!
+
+Danke für den Cache !!
+
+LG
+B &amp; C</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="478590976">
+          <groundspeak:date>2015-02-21T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="5193678">X-Power</groundspeak:finder>
+          <groundspeak:text encoded="False">Mit gctraveler gefunden.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="478588472">
+          <groundspeak:date>2015-02-21T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="9939719">GCtraveler</groundspeak:finder>
+          <groundspeak:text encoded="False">Ottersberg ist immer eine Reise wert. Mit X-Power gefunden.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="477971081">
+          <groundspeak:date>2015-02-18T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="2503847">Klein Hasi</groundspeak:finder>
+          <groundspeak:text encoded="False">Ich habe ja schon viele Verstecke gesehen. Ein solches war aber bisher noch nicht dabei. Sehr schönes unauffälliges Teil mit perfekter Tarnung.
+
+DfdC
+
+Klein Hasi</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="474720808">
+          <groundspeak:date>2015-01-31T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="6238589">wicked_panda</groundspeak:finder>
+          <groundspeak:text encoded="False">Der clever gemachte Wirt hatte uns schon beim Näherkommen angelächelt, doch dann mussten wir vor dem Loggen erst noch einen Nachbarn einparken lassen. Viele Grüße an den (leider nicht erspähten) Owner und danke für's Platzieren!
+TFTC,
+
+TEAM_panda
+
+#1160</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="472535965">
+          <groundspeak:date>2015-01-18T16:15:03Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="11216516">donholgone</groundspeak:finder>
+          <groundspeak:text encoded="False">Nettes Versteck</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="472342294">
+          <groundspeak:date>2015-01-17T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="3721571">NeoTheRamb</groundspeak:finder>
+          <groundspeak:text encoded="False">Am heutigen Nachmittag habe ich zusammen mit den Inari-Kids das gute Wetter genutzt, und Ottersberg einen kleinen Besuch abgestattet!
+
+Bei dieser Dose haben wir unseren kleinen Spaziergang gestartet und konnten uns ruckzuck im Logbuch verewigen!
+
+Vielen Dank und beste Grüße!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="471967630">
+          <groundspeak:date>2015-01-15T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="3313458">memofand</groundspeak:finder>
+          <groundspeak:text encoded="False">memofand on tour! Heute mal wieder in dieser Gegend.
+
+Auch dieses Döschen konnte ich schnell finden und mich im Logbuch verewigen.
+
+Danke für den Cache und liebe Grüße an den Owner, mit dem ich noch ein kleines Schwätzchen gehalten habe.
+memofand</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="468914064">
+          <groundspeak:date>2014-12-30T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Write note</groundspeak:type>
+          <groundspeak:finder id="7502658">B.Eule</groundspeak:finder>
+          <groundspeak:text encoded="False">Coin abgelegt.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="468388150">
+          <groundspeak:date>2014-12-28T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="1361845">kuckulucku</groundspeak:finder>
+          <groundspeak:text encoded="False">Der kommt mir doch bekannt vor - fix gefunden :). TFTC</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="466920235">
+          <groundspeak:date>2014-12-21T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="3798356">CachingDoctor</groundspeak:finder>
+          <groundspeak:text encoded="False">Klasse ... die Suche war nicht schwer aber einen Besuch war es wert!</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="466484479">
+          <groundspeak:date>2014-12-17T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="2388691">Rehder31</groundspeak:finder>
+          <groundspeak:text encoded="False">Der war ruck-zuck im Kasten - weil ich denselben Wirt noch zuhause im Keller hab....;_)</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="462833932">
+          <groundspeak:date>2014-11-23T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="11263342">S.ohli</groundspeak:finder>
+          <groundspeak:text encoded="False">Mit Rosa Findus gefunden sehr nett.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="462823338">
+          <groundspeak:date>2014-11-23T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="11263342">S.ohli</groundspeak:finder>
+          <groundspeak:text encoded="False">Mit Rosa findus gefunden</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="462820643">
+          <groundspeak:date>2014-11-23T20:00:00Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="11087030">Rosa Findus</groundspeak:finder>
+          <groundspeak:text encoded="False">Zusammen mit S.ohli einen schönen Gang durch die Wümmewiesen unternommen. 
+Der Hund im Wasser und wir im Gebüsch. 
+Super auf dem Rückweg zum Auto geloggt.</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="462489329">
+          <groundspeak:date>2014-11-22T12:28:55Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="11096697">Bille62</groundspeak:finder>
+          <groundspeak:text encoded="False">Thx!:-)</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="460054525">
+          <groundspeak:date>2014-11-09T13:57:25Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="10524926">RennleiterT</groundspeak:finder>
+          <groundspeak:text encoded="False">sehr schön :)
+
+tftc</groundspeak:text>
+        </groundspeak:log>
+        <groundspeak:log id="458520239">
+          <groundspeak:date>2014-11-02T14:55:36Z</groundspeak:date>
+          <groundspeak:type>Found it</groundspeak:type>
+          <groundspeak:finder id="6288800">tooltime77</groundspeak:finder>
+          <groundspeak:text encoded="False">Sehr schön
+
+
+Dfdc</groundspeak:text>
+        </groundspeak:log>
+      </groundspeak:logs>
+      <groundspeak:travelbugs />
+    </groundspeak:cache>
+  </wpt>
+</gpx>

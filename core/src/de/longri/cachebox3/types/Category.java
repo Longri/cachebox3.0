@@ -50,8 +50,7 @@ public class Category extends ArrayList<GpxFilename> implements Comparable<Categ
         Database.Parameters args = new Database.Parameters();
         args.put("GPXFilename", filename);
         args.put("CategoryId", this.Id);
-        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String stimestamp = iso8601Format.format(new Date());
+        String stimestamp = Database.cbDbFormat.format(new Date());
         args.put("Imported", stimestamp);
         try {
             Database.Data.insert("GpxFilenames", args);
@@ -86,7 +85,7 @@ public class Category extends ArrayList<GpxFilename> implements Comparable<Categ
     }
 
     public String GpxFilenameWoNumber() {
-        // Nummer der PQ weglassen, wenn dahinter noch eine Bezeichnung kommt.
+        // Nummer der PocketQuery weglassen, wenn dahinter noch eine Bezeichnung kommt.
         String name = GpxFilename;
         int pos = name.indexOf('_');
         if (pos < 0) return name;

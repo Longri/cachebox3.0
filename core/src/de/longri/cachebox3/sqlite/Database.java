@@ -42,6 +42,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Database {
 
 
+    public final static DateFormat cbDbFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
     private Logger log;
     public static Database Data;
     public static Database Drafts;
@@ -99,17 +102,21 @@ public class Database {
         return false;
     }
 
-    public static Array<LogEntry> getLogs(AbstractCache abstractCache) {
-        Array<LogEntry> result = new Array<LogEntry>();
+    public Array<LogEntry> getLogs(AbstractCache abstractCache) {
         if (abstractCache == null) // if no cache is selected!
-            return result;
+            return new Array<>();
+        return getLogs(abstractCache.getId());
+    }
 
-        GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(abstractCache.getId()) + "\"", (String[]) null);
+    public Array<LogEntry> getLogs(long id) {
+        Array<LogEntry> result = new Array<LogEntry>();
+
+        GdxSqliteCursor reader = this.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(id) + "\"", (String[]) null);
         if (reader != null) {
             try {
                 reader.moveToFirst();
                 while (!reader.isAfterLast()) {
-                    LogEntry logent = getLogEntry(abstractCache, reader, true);
+                    LogEntry logent = getLogEntry(reader, true);
                     if (logent != null)
                         result.add(logent);
                     reader.moveToNext();
@@ -121,17 +128,12 @@ public class Database {
         return result;
     }
 
-    private static LogEntry getLogEntry(AbstractCache abstractCache, GdxSqliteCursor reader, boolean filterBbCode) {
-        int intLogType = reader.getInt(3);
-        if (intLogType < 0 || intLogType > 13)
-            return null;
-
+    private static LogEntry getLogEntry(GdxSqliteCursor reader, boolean filterBbCode) {
         LogEntry retLogEntry = new LogEntry();
         retLogEntry.CacheId = reader.getLong(0);
         String sDate = reader.getString(1);
-        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            retLogEntry.Timestamp = iso8601Format.parse(sDate);
+            retLogEntry.Timestamp = Database.cbDbFormat.parse(sDate);
         } catch (ParseException e) {
         }
         retLogEntry.Finder = reader.getString(2);
@@ -141,13 +143,7 @@ public class Database {
         retLogEntry.Id = reader.getLong(5);
 
         if (filterBbCode) {
-            int lIndex;
-            while ((lIndex = retLogEntry.Comment.indexOf('[')) >= 0) {
-                int rIndex = retLogEntry.Comment.indexOf(']', lIndex);
-                if (rIndex == -1)
-                    break;
-                retLogEntry.Comment = retLogEntry.Comment.substring(0, lIndex) + retLogEntry.Comment.substring(rIndex + 1);
-            }
+            retLogEntry.Comment = LogEntry.filterBBCode(retLogEntry.Comment);
         }
         return retLogEntry;
     }
@@ -666,8 +662,8 @@ public class Database {
     }
 
 
-    public static boolean waypointExists(String gcCode) {
-        GdxSqliteCursor cursor = Database.Data.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
+    public static boolean waypointExists(Database database, String gcCode) {
+        GdxSqliteCursor cursor = database.rawQuery("select GcCode from Waypoints where GcCode=?", new String[]{gcCode});
         {
             if (cursor == null) return false;
             cursor.moveToFirst();
@@ -686,7 +682,7 @@ public class Database {
         }
     }
 
-    public static String createFreeGcCode(String cacheGcCode) throws Exception {
+    public static String createFreeGcCode(Database database, String cacheGcCode) {
         String suffix = cacheGcCode.substring(2);
         String firstCharCandidates = "CBXADEFGHIJKLMNOPQRSTUVWYZ0123456789";
         String secondCharCandidates = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -694,10 +690,10 @@ public class Database {
         for (int i = 0; i < firstCharCandidates.length(); i++)
             for (int j = 0; j < secondCharCandidates.length(); j++) {
                 String gcCode = firstCharCandidates.substring(i, i + 1) + secondCharCandidates.substring(j, j + 1) + suffix;
-                if (!waypointExists(gcCode))
+                if (!waypointExists(database, gcCode))
                     return gcCode;
             }
-        throw new Exception("Alle GcCodes sind bereits vergeben! Dies sollte eigentlich nie vorkommen!");
+        throw new RuntimeException("Alle GcCodes sind bereits vergeben! Dies sollte eigentlich nie vorkommen!");
     }
 
 
@@ -1189,6 +1185,9 @@ public class Database {
         }
     }
 
+    public boolean isInMemory() {
+        return inMemoryName != null;
+    }
 
     // Static methods ##############################################################################################
 

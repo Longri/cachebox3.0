@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.io.Serializable;
@@ -24,9 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class LogEntry implements Serializable {
-
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+public class LogEntry {
 
     /**
      * Benutzername des Loggers
@@ -36,7 +35,7 @@ public class LogEntry implements Serializable {
     /**
      * Logtyp, z.B. "Found it!"
      */
-    public LogTypes Type;
+    public LogTypes Type = LogTypes.unknown;
 
 
     /**
@@ -64,7 +63,7 @@ public class LogEntry implements Serializable {
         this.CacheId = cursor.getLong(1);
 
         try {
-            this.Timestamp = iso8601Format.parse(cursor.getString(2));
+            this.Timestamp = Database.cbDbFormat.parse(cursor.getString(2));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -93,6 +92,19 @@ public class LogEntry implements Serializable {
         Timestamp = null;
     }
 
+    @Override
+    public String toString() {
+        return "ID:" + Id;
+    }
+
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        // return true, if the id are equals
+        return other instanceof LogEntry && ((LogEntry) other).Id == this.Id;
+    }
+
     public LogEntry copy() {
         LogEntry ret = new LogEntry();
         ret.Finder = Finder;
@@ -102,5 +114,17 @@ public class LogEntry implements Serializable {
         ret.CacheId = CacheId;
         ret.Id = Id;
         return ret;
+    }
+
+    public static String filterBBCode(String string) {
+        if (string == null) return null;
+        int lIndex;
+        while ((lIndex = string.indexOf('[')) >= 0) {
+            int rIndex = string.indexOf(']', lIndex);
+            if (rIndex == -1)
+                break;
+            string = string.substring(0, lIndex) + string.substring(rIndex + 1);
+        }
+        return string;
     }
 }

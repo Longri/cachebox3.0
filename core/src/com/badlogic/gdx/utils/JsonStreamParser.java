@@ -30,30 +30,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by Longri on 18.04.2017.
  */
-public class JsonStreamParser implements JsonParser {
+public class JsonStreamParser extends AbstractStreamParser {
 
     private static final Logger log = LoggerFactory.getLogger(JsonStreamParser.class);
-    private static final int DEFAULT_BUFFER_LENGTH = 512;//1024;
     private final static String NULL = "null";
 
-    private int actBufferLength = DEFAULT_BUFFER_LENGTH;
-    private Reader reader;
-    private char[] buf = new char[actBufferLength];
-    private char[] tmp = new char[actBufferLength];
-    private float percent = 0;
     private Array<String> arrayNameStack = new Array<>();
-    private final boolean DEBUG = false;
     private int lastPeek;
     private int lastNameStart = -1;
-    private final AtomicBoolean CANCELD = new AtomicBoolean(false);
     private Array<String> exclude;
     private final AtomicBoolean isExclude = new AtomicBoolean(false);
     private final AtomicInteger isExcludeCount = new AtomicInteger(0);
     private AtomicBoolean noHandleForNextValue = new AtomicBoolean(false);
-
-    public JsonValue parse(final InputStream input) {
-        return parse(input, 1);
-    }
 
     public void cancel() {
         CANCELD.set(true);
@@ -70,87 +58,14 @@ public class JsonStreamParser implements JsonParser {
         return false;
     }
 
-    @Override
-    public JsonValue parse(final InputStream input, long length) {
-        this.reader = new InputStreamReader(input);
-
-        if (DEBUG) log.debug("Start parsing");
-
-        try {
-
-            int readed = 0;
-            int offset = 0;
-            while (!CANCELD.get()) {
-
-                if (offset < actBufferLength && actBufferLength > DEFAULT_BUFFER_LENGTH && offset < DEFAULT_BUFFER_LENGTH) {
-                    actBufferLength = actBufferLength >> 1;
-                    if (DEBUG)
-                        log.debug("can decrease buffer to {}", actBufferLength);
-                    buf = new char[actBufferLength];
-                    System.arraycopy(tmp, 0, buf, 0, offset);
-                    tmp = new char[actBufferLength];
-                }
-
-                if (offset == actBufferLength) {
-                    //must increase buffer size!
-                    actBufferLength = actBufferLength << 1;
-                    if (DEBUG)
-                        log.debug("increase buffer to {}", actBufferLength);
-                    buf = new char[actBufferLength];
-                    System.arraycopy(tmp, 0, buf, 0, offset);
-                    tmp = new char[actBufferLength];
-                }
-
-                int canReadLength = actBufferLength - offset;
-                int readedLength = 0;
-                boolean fillBuffer = canReadLength > 0;
-                while (fillBuffer) {
-                    readedLength = reader.read(buf, offset, canReadLength);
-                    if (readedLength < canReadLength && readedLength > -1) {
-                        offset += readedLength;
-                        canReadLength = actBufferLength - offset;
-                        if (canReadLength <= 0) fillBuffer = false;
-                    } else fillBuffer = false;
-                }
-
-                readed += readedLength;
-
-                percent = (float) readed / length * 100.0f;
-                if (DEBUG) log.debug("Read Buffer: available {}/{} = {}%", readed, length, percent);
-                if (DEBUG) log.debug(new String(buf));
-
-                int lastOffset = parse(buf);
-                if (readedLength == -1) break;
-                offset = actBufferLength - lastOffset;
-
-                if (offset == 0) {
-                    // clear buffer
-                    Arrays.fill(buf, '\0');
-                } else {
-                    // move unhandled char's
-                    Arrays.fill(tmp, '\0');
-                    System.arraycopy(buf, lastOffset, tmp, 0, offset);
-                    Arrays.fill(buf, '\0');
-                    System.arraycopy(tmp, 0, buf, 0, offset);
-                }
-
-                if (DEBUG) log.debug("Last Offset: {}", lastOffset);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            StreamUtils.closeQuietly(reader);
-        }
-        return null;
-    }
-
     /**
      * Parse the data and return offset of last processed item
      *
      * @param data
      * @return
      */
-    private int parse(char[] data) {
+    @Override
+    protected int parse(char[] data) {
 
         if (data[data.length - 1] == '\\') {
             return 0;
@@ -259,7 +174,6 @@ public class JsonStreamParser implements JsonParser {
         }
         return false;
     }
-
 
     void handleValue(String actName, String valueString) {
         valueString = unescape(valueString.trim());
@@ -458,45 +372,28 @@ public class JsonStreamParser implements JsonParser {
         return -1;
     }
 
-
-    @Override
     public void startArray(String name) {
-
     }
 
-    @Override
     public void endArray(String name) {
-
     }
 
-    @Override
     public void startObject(String name) {
-
     }
 
-    @Override
     public void pop() {
-
     }
 
-    @Override
     public void string(String name, String value) {
-
     }
 
-    @Override
     public void number(String name, double value, String stringValue) {
-
     }
 
-    @Override
     public void number(String name, long value, String stringValue) {
-
     }
 
-    @Override
     public void bool(String name, boolean value) {
-
     }
 
     public int getProgress() {

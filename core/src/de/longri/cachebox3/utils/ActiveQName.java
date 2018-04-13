@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.badlogic.gdx.utils;
+package de.longri.cachebox3.utils;
 
-import java.io.InputStream;
+import javax.xml.namespace.QName;
 
 /**
- * Created by Longri on 18.04.2017.
+ * Created by Longri on 01.04.18.
  */
-public interface JsonParser {
+public class ActiveQName extends QName {
 
-    public JsonValue parse(InputStream input, long length);
+    private boolean active = false;
 
-    void startArray(String name);
+    public ActiveQName(String localPart) {
+        super(localPart);
+    }
 
-    void endArray(String name);
+    public void setActive() {
+        active = true;
+    }
 
-    void startObject(String name);
+    public void setInActive() {
+        active = false;
+    }
 
-    void pop();
-
-    void string(String name, String value);
-
-    void number(String name, double value, String stringValue);
-
-    void number(String name, long value, String stringValue);
-
-    void bool(String name, boolean value);
-
+    public boolean isActive() {
+        return active;
+    }
 }

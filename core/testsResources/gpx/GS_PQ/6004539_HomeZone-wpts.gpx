@@ -1,0 +1,1931 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" creator="Groundspeak, Inc. All Rights Reserved. http://www.groundspeak.com" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0 http://www.groundspeak.com/cache/1/0/cache.xsd" xmlns="http://www.topografix.com/GPX/1/0">
+  <name>Waypoints for Cache Listings Generated from Geocaching.com</name>
+  <desc>This is a list of supporting waypoints for caches generated from Geocaching.com</desc>
+  <author>Various users from Geocaching.com</author>
+  <email>contact@geocaching.com</email>
+  <url>http://www.geocaching.com</url>
+  <urlname>Geocaching - High Tech Treasure Hunting</urlname>
+  <time>2011-09-03T08:59:20.6622411Z</time>
+  <keywords>cache, geocache, waypoints</keywords>
+  <bounds minlat="52.3594" minlon="13.023483" maxlat="52.64485" maxlon="13.5002" />
+  <wpt lat="52.5648" lon="13.393233">
+    <time>2006-03-26T03:55:00.917</time>
+    <name>AAV272</name>
+    <cmt />
+    <desc>Station 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=13df11e3-2361-4c55-8e1d-afe236131f80</url>
+    <urlname>Station 1</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.560367" lon="13.387767">
+    <time>2006-03-26T03:53:30.37</time>
+    <name>ABV272</name>
+    <cmt />
+    <desc>Station 2</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=e34bf493-5774-4c14-82b4-b922e22ea309</url>
+    <urlname>Station 2</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.562067" lon="13.3897">
+    <time>2006-03-26T03:56:15.853</time>
+    <name>ACV272</name>
+    <cmt />
+    <desc>Station 3</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=33665ab6-f339-4b78-9535-2548efb2de67</url>
+    <urlname>Station 3</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.56325" lon="13.390967">
+    <time>2006-03-26T03:57:04.027</time>
+    <name>ADV272</name>
+    <cmt />
+    <desc>Station 4</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d159d8e6-9f7d-4fcd-8eb0-24dd979ac221</url>
+    <urlname>Station 4</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.5647" lon="13.3936">
+    <time>2006-03-26T03:58:05.59</time>
+    <name>AEV272</name>
+    <cmt />
+    <desc>Station 5</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=6fcb8ff4-6ee4-40d8-a829-5471f9850d5b</url>
+    <urlname>Station 5</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.565733" lon="13.39535">
+    <time>2006-03-26T04:08:03.027</time>
+    <name>AFV272</name>
+    <cmt />
+    <desc>Station 6</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=48aa4103-0391-48b5-be2c-4752b46ce1e2</url>
+    <urlname>Station 6</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5685" lon="13.39965">
+    <time>2006-03-26T03:59:40.29</time>
+    <name>AGV272</name>
+    <cmt />
+    <desc>Station 7</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=be7b03de-8b17-4aff-92e3-535351a9db08</url>
+    <urlname>Station 7</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.5693" lon="13.397033">
+    <time>2006-04-02T12:12:27.003</time>
+    <name>BAV6HG</name>
+    <cmt />
+    <desc>START</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=1f95f2a7-bc91-4858-ba91-e5eee7fc08f6</url>
+    <urlname>START</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.5795" lon="13.375833">
+    <time>2006-08-30T13:38:31.587</time>
+    <name>PPY1NG</name>
+    <cmt />
+    <desc>Park-Empfehlung</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=b59dc632-2819-4e53-8224-9b2600dcddfe</url>
+    <urlname>Park-Empfehlung</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.53875" lon="13.398233">
+    <time>2011-06-19T05:01:42.563</time>
+    <name>S9YEV8</name>
+    <cmt>Suche im Umkreis von 10 Metern.</cmt>
+    <desc>GCYEV8 Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=5ba961c0-ee0f-4872-9672-dbe40afafd17</url>
+    <urlname>GCYEV8 Start</urlname>
+    <sym>Trailhead</sym>
+    <type>Waypoint|Trailhead</type>
+  </wpt>
+  <wpt lat="52.571183" lon="13.347483">
+    <time>2010-09-13T10:42:16.82</time>
+    <name>PKZ0A1</name>
+    <cmt>Parkhäfen und Zugang zum Gelände, wenn das andere Tor verschlossen ist!</cmt>
+    <desc>GCZ0A1 Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=4ba3a386-8974-48eb-89be-62c78fad520d</url>
+    <urlname>GCZ0A1 Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.544617" lon="13.410733">
+    <time>2007-07-09T02:03:54.2</time>
+    <name>SH145CH</name>
+    <cmt>Öffentlicher Zugang</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=e5b1e802-8c04-4818-ab0b-3a7ebbc9066b</url>
+    <urlname>Start</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.5862" lon="13.322983">
+    <time>2008-09-29T00:23:22.727</time>
+    <name>A117MT8</name>
+    <cmt>Hier hat Arno einen entscheidenen Hinweis verloren</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=bd5e93a5-4ada-4e7e-bc58-fd2efbd16fdc</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.58085" lon="13.408833">
+    <time>2008-04-25T08:40:06.89</time>
+    <name>ST1BK0B</name>
+    <cmt>Betrachte das Wandbild</cmt>
+    <desc>Blickpunkt</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=a8384d57-546e-4258-86af-ab672c317184</url>
+    <urlname>Blickpunkt</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.6019" lon="13.40295">
+    <time>2008-06-14T13:41:02.06</time>
+    <name>TH1D756</name>
+    <cmt>Place to enter the garden plot area /
+Nächstgelegener Eingang in die Kleingartenkolonie</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=b101b9bf-706e-4d38-85c7-79edd8706e12</url>
+    <urlname>Start</urlname>
+    <sym>Trailhead</sym>
+    <type>Waypoint|Trailhead</type>
+  </wpt>
+  <wpt lat="52.6021" lon="13.405467">
+    <time>2008-06-15T00:01:39.04</time>
+    <name>TP1D756</name>
+    <cmt>Hier in den Feldweg abbiegen/use this way</cmt>
+    <desc>Punkt 2</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=f65b888a-6645-4cd1-a0af-0636ad374013</url>
+    <urlname>Punkt 2</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.621167" lon="13.429667">
+    <time>2008-06-24T08:56:55.13</time>
+    <name>PA1DCKF</name>
+    <cmt>Hier parken die Besucher der Skatestrecke zum Kiessee Arkenberge, bei schönem Wetter ist viel los, die Leute sind aber mit sich selbst beschäftigt und Fremde fallen nicht auf :)</cmt>
+    <desc>Parken</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d98f4ae5-e684-4ae5-8f68-5c5767a6e751</url>
+    <urlname>Parken</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.589917" lon="13.324983">
+    <time>2008-07-19T12:00:49.153</time>
+    <name>011EB34</name>
+    <cmt>Zähle die golden Sterne am Portal und Decke des Portals. Summe = A</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=cccabe93-9ce6-4565-b0f3-ad2703d9bb59</url>
+    <urlname>Start</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.589767" lon="13.32405">
+    <time>2008-07-19T12:10:09.483</time>
+    <name>021EB34</name>
+    <cmt>Anzahl der Spielbahnen = B</cmt>
+    <desc>Boule-Anlage</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=b69b3f0c-104d-4f38-b372-a10d482037ee</url>
+    <urlname>Boule-Anlage</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.590183" lon="13.324083">
+    <time>2008-07-19T12:13:43.89</time>
+    <name>031EB34</name>
+    <cmt>Anzahl der Buchstaben auf dem Gedenkstein (UE=1) = C</cmt>
+    <desc>Gedenkstein</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=a3c2ad31-6e59-4286-bfbe-1899d1d9367e</url>
+    <urlname>Gedenkstein</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.588183" lon="13.319383">
+    <time>2008-07-19T12:15:46.81</time>
+    <name>041EB34</name>
+    <cmt>Addiere die Nummer der Eck-Parzelle und die Nummer des Wanderweges. Summe = D</cmt>
+    <desc>Wanderweg/Parzelle</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=004b5c12-21fe-48b3-a009-723be96441fc</url>
+    <urlname>Wanderweg/Parzelle</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.58795" lon="13.323783">
+    <time>2008-07-20T00:57:28.14</time>
+    <name>051EB34</name>
+    <cmt>Finde den PETling. Zahl = E</cmt>
+    <desc>PET-Baum</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=597a8f8b-b148-4e32-a752-8fd14153a8c4</url>
+    <urlname>PET-Baum</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.589217" lon="13.325067">
+    <time>2008-07-20T00:59:36.293</time>
+    <name>061EB34</name>
+    <cmt>Zähle die Städtenamen und Fische. Summe = F</cmt>
+    <desc>Ostseebrunnen</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=96c047a1-6915-4267-811c-4ea95bf03cfd</url>
+    <urlname>Ostseebrunnen</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.570167" lon="13.35125">
+    <time>2008-08-01T18:09:03.753</time>
+    <name>011ETA0</name>
+    <cmt>Zähle die Pfeiler des Brückenhauses. Anzahl=A</cmt>
+    <desc>Brückenbau</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=66bcff90-b32c-4053-a5e2-b899e9a2f2c3</url>
+    <urlname>Brückenbau</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.570383" lon="13.350417">
+    <time>2008-08-01T18:11:47.347</time>
+    <name>021ETA0</name>
+    <cmt>Finde die Hausnummer des Waschhauses. Zahl=B</cmt>
+    <desc>Waschhaus</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=bafb1f4a-6a2e-489b-aa97-6559d2f703e2</url>
+    <urlname>Waschhaus</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.570067" lon="13.3501">
+    <time>2008-08-01T18:14:11.58</time>
+    <name>031ETA0</name>
+    <cmt>Finde die Hausnummer des Heizwerks. Zahl=C</cmt>
+    <desc>Heizwerk</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=204c6a6f-5174-4f6b-b4ed-0fd93f4665c6</url>
+    <urlname>Heizwerk</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.591833" lon="13.395667">
+    <time>2008-11-29T02:51:30.387</time>
+    <name>S11JGTJ</name>
+    <cmt>Länge Hebel (Gelenk bis Äußerster Bogen) x 100 + 322 = Meter ST2
+Richtung Auslauf + 5 = Grad ST2
+Hinweis: Zrffra va Zrgre, xüemrfgr Ragsreahat</cmt>
+    <desc>P(l)umpe 25</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=4d430e33-8776-49f3-b9cd-36f36a7c5190</url>
+    <urlname>P(l)umpe 25</urlname>
+    <sym>Trailhead</sym>
+    <type>Waypoint|Trailhead</type>
+  </wpt>
+  <wpt lat="52.547667" lon="13.389733">
+    <time>2009-03-28T09:52:12.76</time>
+    <name>011P7MK</name>
+    <cmt>Suche den 12-stelligen Code</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d51840a1-72f5-4c0d-b051-4eb18ef5602b</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.555383" lon="13.41105">
+    <time>2009-06-14T06:18:33.803</time>
+    <name>011TNZR</name>
+    <cmt />
+    <desc>Startpunkt</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=7ef9128a-5a99-41fa-8900-c52ec9b9cfe9</url>
+    <urlname>Startpunkt</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.578867" lon="13.332833">
+    <time>2009-06-30T12:47:42.43</time>
+    <name>A11V2N0</name>
+    <cmt>Finde am Eingang die Gedenktafel zur NS-Zeit und ziehe die erste von der zweiten Zahl ab = A</cmt>
+    <desc>Gedenktafel</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=1a46c8b0-b6dd-4ded-88c9-f86f3dd689b4</url>
+    <urlname>Gedenktafel</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5798" lon="13.3316">
+    <time>2009-06-30T12:49:49.38</time>
+    <name>A21V2N0</name>
+    <cmt>Zähle die Anzahl der Wörter auf dem Kriegsdenkmal = B</cmt>
+    <desc>Kriegsdenkmal</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=e792cc65-77a6-41d6-9dc3-7700b0051a2c</url>
+    <urlname>Kriegsdenkmal</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5823" lon="13.328883">
+    <time>2009-06-30T12:51:21.607</time>
+    <name>A31V2N0</name>
+    <cmt>Zähle die runden Fenster am Uhrenturm = C</cmt>
+    <desc>Uhrenturm</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=259faae5-fffb-42da-b500-4822856d1d53</url>
+    <urlname>Uhrenturm</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5842" lon="13.33025">
+    <time>2009-06-30T12:55:32.07</time>
+    <name>A41V2N0</name>
+    <cmt>Wie viele Parkplätze gibt es laut Parkplatzschild hier an der Kapelle? = D</cmt>
+    <desc>Kapelle</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=f32fa42f-ac99-4758-a1d5-d4af99d48f37</url>
+    <urlname>Kapelle</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5801" lon="13.327133">
+    <time>2009-06-30T12:58:12.27</time>
+    <name>A51V2N0</name>
+    <cmt>Welche Tiere werden hier gehalten (ggf. sind sie im Winter nicht vor Ort)? = E  (Schafe:1, Ziegen:2, Kaninchen:3, Pferde:4)</cmt>
+    <desc>Tiere</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=bb36b94b-4cab-4be5-88a7-69d0a5b605da</url>
+    <urlname>Tiere</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.580583" lon="13.326083">
+    <time>2009-06-30T13:03:11.617</time>
+    <name>A61V2N0</name>
+    <cmt>Wie viele Sitzgelegenheiten gibt es an den "Pril-Blumen"? = F</cmt>
+    <desc>Pril-Blumen</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=bc28dcf1-8df6-444c-a3e8-22ff75f9c026</url>
+    <urlname>Pril-Blumen</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.578933" lon="13.324983">
+    <time>2009-06-30T13:05:08.277</time>
+    <name>A71V2N0</name>
+    <cmt>Finde die versteckte Zahl am Koldisch-Teich = G</cmt>
+    <desc>Koldisch-Teich</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=ac4e97ff-ce72-48f6-92f4-94d500fdb3fb</url>
+    <urlname>Koldisch-Teich</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5827" lon="13.33055">
+    <time>2009-06-30T13:14:35.413</time>
+    <name>A91V2N0</name>
+    <cmt>Die Ausstellung „TOTGESCHWIEGEN", 1933 – 1945 (im Hause 10, Mo-Fr:10-13Uhr)</cmt>
+    <desc>Ausstellung</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=9cc553c5-6a56-4b1e-9019-f5fe511016b6</url>
+    <urlname>Ausstellung</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.5785" lon="13.467333">
+    <time>2009-07-22T12:27:07.62</time>
+    <name>011W0Y0</name>
+    <cmt />
+    <desc>Parken</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=1a0ad76d-a32b-4488-99e2-9a64c82c7525</url>
+    <urlname>Parken</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.586083" lon="13.398883">
+    <time>2009-07-28T00:46:02.553</time>
+    <name>011WFPV</name>
+    <cmt>Hausnummer = A
+Auf dem Kreuz steht ein Spruch aus dem Johannesevangelium. (Bild)
+Kapitel = B
+Vers = C</cmt>
+    <desc>Das Kreuz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=71e7f93f-4a4f-4be5-8ebe-67eed0297d88</url>
+    <urlname>Das Kreuz</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.57555" lon="13.391783">
+    <time>2009-09-18T06:05:15.18</time>
+    <name>011YTEK</name>
+    <cmt>Start</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=33264549-c718-49e4-9482-c5f3cd184cfa</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.576117" lon="13.43035">
+    <time>2009-10-18T14:18:36.897</time>
+    <name>A120107</name>
+    <cmt>Offizieller Parkplatz. Man kann aber auch bis ranfahren !!</cmt>
+    <desc>Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d014111d-d26f-472a-94dc-be6705bf51a8</url>
+    <urlname>Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.548583" lon="13.451017">
+    <time>2009-12-03T12:36:44.143</time>
+    <name>AA21P5J</name>
+    <cmt>1.)	Bringt in Erfahrung, in welchem Jahr das Kino Toni entstand. Eine Hälfte der Jahreszahl ist A.</cmt>
+    <desc>Start - Antonplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=932d3305-b695-41a5-b61d-378078c06f9c</url>
+    <urlname>Start - Antonplatz</urlname>
+    <sym>Final Location</sym>
+    <type>Waypoint|Final Location</type>
+  </wpt>
+  <wpt lat="52.548433" lon="13.45295">
+    <time>2009-12-03T12:41:54.883</time>
+    <name>AB21P5J</name>
+    <cmt>2.)	Notiere den Preis einer Currywurst mit Brötchen in Cent als B.
+
+3.)	Geht zurück auf die Berliner Allee und vergesst nicht die Stahlmasten in der Mitteltrasse zwischen den Straßenbahnhaltestellen Antonplatz und Albertinenstraße zu zählen. Ihr erhaltet so C.</cmt>
+    <desc>Wegzehrung</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=708025df-3ee7-452a-8236-780e75ab1bda</url>
+    <urlname>Wegzehrung</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.550617" lon="13.461133">
+    <time>2009-12-03T12:46:45.28</time>
+    <name>AC21P5J</name>
+    <cmt>Folgt der Berliner Allee weiter bis zum Ort an dem die Zeit still steht.
+
+4.) Notiert die letzte Ziffer der Hausnummer. So erhaltet ihr D.
+5.) Notiert auch die ganze Hausnummer des zeitlosen Anwesens und ihr erhaltet E.</cmt>
+    <desc>Rast der Zeit</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=32153bc8-bea6-44f9-8c1c-251d28485247</url>
+    <urlname>Rast der Zeit</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.54905" lon="13.4478">
+    <time>2010-03-17T13:57:38.013</time>
+    <name>S125649</name>
+    <cmt />
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=08c4c839-f3ee-40af-b2de-106bed4875d6</url>
+    <urlname>Start</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.570617" lon="13.361283">
+    <time>2010-03-25T10:02:43.133</time>
+    <name>AA25J8F</name>
+    <cmt>Wie heißt die Station und wie viele zählbare weiße Zeichen siehst du auf dem blauen Hintergrund?
+Die Zahl die du suchst ist gleich A =</cmt>
+    <desc>Station 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=28a96483-f2e8-4701-a473-b6d51a7f1f78</url>
+    <urlname>Station 1</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.571183" lon="13.36065">
+    <time>2010-03-25T10:08:59.413</time>
+    <name>BB25J8F</name>
+    <cmt>Zähle von dem Muster nur die schwarzen Steine. B=</cmt>
+    <desc>Station 2</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=012496a8-7367-4bae-8eca-68b0312f3f8b</url>
+    <urlname>Station 2</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.57215" lon="13.36015">
+    <time>2010-03-25T10:06:49.01</time>
+    <name>CC25J8F</name>
+    <cmt>Die Zahlen die du finden muss sind = _ _ _ _  jetzt nehme die Quersumme und C =        ist geboren.</cmt>
+    <desc>Station 3</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=f4446254-95d6-439d-b9a4-f85891fdcf49</url>
+    <urlname>Station 3</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.57215" lon="13.362367">
+    <time>2010-03-25T10:09:46.133</time>
+    <name>DD25J8F</name>
+    <cmt>Schau ganz genau hin und sag mir welche Zahl mit GAS zu tun hat! D =</cmt>
+    <desc>Station 4</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=329971eb-8ef5-41bc-a81f-6ecebbb88057</url>
+    <urlname>Station 4</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.538017" lon="13.377033">
+    <time>2010-05-11T14:26:47.203</time>
+    <name>S1288A0</name>
+    <cmt />
+    <desc>GC288A0 Stage 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=b75e3eca-10bd-4ab0-bb6c-bc8ba2dfd764</url>
+    <urlname>GC288A0 Stage 1</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.583917" lon="13.348333">
+    <time>2010-06-17T10:31:18.07</time>
+    <name>A12A1MW</name>
+    <cmt />
+    <desc>ST1 / Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=814a0fe9-2215-45e5-bf42-4bbaf7bf5fc2</url>
+    <urlname>ST1 / Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.58585" lon="13.349067">
+    <time>2010-06-17T10:29:13.18</time>
+    <name>A22A1MW</name>
+    <cmt />
+    <desc>ST2</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=c0693750-f09a-4901-95a0-4279f8255bc1</url>
+    <urlname>ST2</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.586533" lon="13.350883">
+    <time>2010-06-17T10:28:05.82</time>
+    <name>A32A1MW</name>
+    <cmt />
+    <desc>ST3</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=92e30be5-c028-4afd-96bb-fd16e3a8057f</url>
+    <urlname>ST3</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.58765" lon="13.352067">
+    <time>2010-06-17T10:27:01.32</time>
+    <name>A42A1MW</name>
+    <cmt />
+    <desc>ST4</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=57fcc696-bef8-4d2d-8194-a8e1a4e2f136</url>
+    <urlname>ST4</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.608117" lon="13.4279">
+    <time>2010-06-16T13:42:51.023</time>
+    <name>002ABHY</name>
+    <cmt>Hier ist der Start</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=6d4a028f-452e-4781-b62f-bac05ec6742b</url>
+    <urlname>Start</urlname>
+    <sym>Trailhead</sym>
+    <type>Waypoint|Trailhead</type>
+  </wpt>
+  <wpt lat="52.609983" lon="13.424167">
+    <time>2010-06-16T13:47:07.943</time>
+    <name>012ABHY</name>
+    <cmt>An dieser Position seht ihr ein Schild der Kleingarten Kolonie. Zwei Parzellennummern fehlen (zwischen 1-63). 
+Notiert euch diese beiden Zahlen (a , b)</cmt>
+    <desc>Schild</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=f1848116-82de-4e59-bb0d-8a5fc67ae161</url>
+    <urlname>Schild</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.612467" lon="13.41895">
+    <time>2010-06-16T13:53:07.087</time>
+    <name>022ABHY</name>
+    <cmt>An dieser Stelle seht ihr einige Garagen. Zählt die Nummern der vorderen Garagen (6 Stück) zusammen (c)</cmt>
+    <desc>Garage</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=6f8cb3ee-0d28-44af-a5e0-b45840efb21e</url>
+    <urlname>Garage</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.611767" lon="13.41855">
+    <time>2010-06-16T13:55:48.6</time>
+    <name>032ABHY</name>
+    <cmt>An dieser Stelle ist der Ententeich oder auch Krugpfuhl genannt. Genießt die Aussicht. Das Gebiet steht unter Naturschutz.</cmt>
+    <desc>Krugpfuhl Ententeich</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=da63072c-fa42-4b36-9ce0-2439af78e0ba</url>
+    <urlname>Krugpfuhl Ententeich</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.597167" lon="13.3678">
+    <time>2010-07-04T04:21:45.177</time>
+    <name>A12B6XY</name>
+    <cmt>Wann stellte der Künstler den Berlin-Bird auf der Westberliner Seite auf? A.BC.DEFG</cmt>
+    <desc>Berlin-Bird</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=6e528999-4d9d-4db6-86b0-7d6d35639b2c</url>
+    <urlname>Berlin-Bird</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.566733" lon="13.409733">
+    <time>2010-07-17T15:37:21.73</time>
+    <name>S12BWW3</name>
+    <cmt>'Rechenaufgabe' ohne Gleichheitszeichen</cmt>
+    <desc>GC2BWW3 Stage 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=4362660b-c550-466e-97b2-0c8b49d51d33</url>
+    <urlname>GC2BWW3 Stage 1</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.586083" lon="13.361917">
+    <time>2010-09-23T13:29:09.503</time>
+    <name>A12D08A</name>
+    <cmt>Hier ist ein Zugang zum Park</cmt>
+    <desc>Parkeingang</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=11555956-cd88-441a-894c-f162035c06cb</url>
+    <urlname>Parkeingang</urlname>
+    <sym>Trailhead</sym>
+    <type>Waypoint|Trailhead</type>
+  </wpt>
+  <wpt lat="52.5863" lon="13.362333">
+    <time>2010-09-23T13:34:37.783</time>
+    <name>A22D08A</name>
+    <cmt>Hier kommt man nach der Runde um den Teich wieder raus...</cmt>
+    <desc>Ausgang</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=a2f291fe-ef00-4233-be3c-3d581f1a6edd</url>
+    <urlname>Ausgang</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.586833" lon="13.367667">
+    <time>2010-09-23T13:31:13.737</time>
+    <name>B12D08A</name>
+    <cmt>...und hier ist ein toller Bäcker, falls jemand Hunger bekommen sollte!</cmt>
+    <desc>Bäckerei</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=fedb777d-141c-4703-bf8c-99119eef4eff</url>
+    <urlname>Bäckerei</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.545383" lon="13.353433">
+    <time>2010-09-06T08:56:45.417</time>
+    <name>PK2EPQN</name>
+    <cmt />
+    <desc>GC2EPQN Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=320aa15c-8696-4942-8b59-f54e862f9ff1</url>
+    <urlname>GC2EPQN Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.5462" lon="13.3527">
+    <time>2010-09-07T08:03:06.853</time>
+    <name>PL2EPQN</name>
+    <cmt>Spielplatz / Playground</cmt>
+    <desc>Playground</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=cd4037dc-625d-48b7-80ea-f47e8e0d49e9</url>
+    <urlname>Playground</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.545683" lon="13.353117">
+    <time>2010-09-06T08:57:37.807</time>
+    <name>S12EPQN</name>
+    <cmt>Pfau / Peacock</cmt>
+    <desc>GC2EPQN Stage 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=ebf850b9-e5cb-4689-b608-a169ff2d2f17</url>
+    <urlname>GC2EPQN Stage 1</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.573433" lon="13.386883">
+    <time>2010-09-16T13:18:36.367</time>
+    <name>AA2F8XW</name>
+    <cmt>Hier könnt ihr parken</cmt>
+    <desc>Parken</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=1f4448ae-187c-4b24-8e75-6dc7e550ba73</url>
+    <urlname>Parken</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.57345" lon="13.38615">
+    <time>2010-09-16T13:19:33.88</time>
+    <name>BB2F8XW</name>
+    <cmt>Hier beginnt das Abenteuer</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d4c34639-7468-4ff1-9bd6-3a730b704d35</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.569333" lon="13.4075">
+    <time>2010-09-19T15:45:13.787</time>
+    <name>S12FEEB</name>
+    <cmt>Zählt sorgfältig!</cmt>
+    <desc>Stage 1 - Mitten auf dem Spielplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=cf5b6ba2-b678-4808-bbf3-06f328a4d08c</url>
+    <urlname>Stage 1 - Mitten auf dem Spielplatz</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.569067" lon="13.389">
+    <time>2010-10-10T11:17:22.993</time>
+    <name>002GDJ0</name>
+    <cmt />
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=bb9e1722-650c-45c6-9990-24da4425ec11</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.568433" lon="13.389317">
+    <time>2010-10-10T11:09:25.29</time>
+    <name>012GDJ0</name>
+    <cmt>Edding</cmt>
+    <desc>die Esel / the donkeys</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d9a2d005-b708-4bb7-8220-222f3e70a86d</url>
+    <urlname>die Esel / the donkeys</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.5851" lon="13.377267">
+    <time>2011-01-02T15:22:29.343</time>
+    <name>P12JPRK</name>
+    <cmt>Hier sollte das Cachemobil besser stehenbleiben...</cmt>
+    <desc>empfohlener Parkplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=f420eef2-74b6-41e1-8fb6-0bbbeb73700e</url>
+    <urlname>empfohlener Parkplatz</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.548967" lon="13.3927">
+    <time>2010-12-14T09:25:12.35</time>
+    <name>S12K19P</name>
+    <cmt>Hier wird kein Behälter, sondern ein DYMO-Aufkleber gesucht.</cmt>
+    <desc>Anfang</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=155db1c5-c378-48d0-b14a-ced1b83335aa</url>
+    <urlname>Anfang</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.549617" lon="13.4206">
+    <time>2010-12-07T12:07:23.657</time>
+    <name>PK2K2RT</name>
+    <cmt />
+    <desc>GC2K2RT Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=c7a5538d-d956-4f02-b514-36a5ef8620f1</url>
+    <urlname>GC2K2RT Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.55175" lon="13.409467">
+    <time>2011-03-12T00:38:39.17</time>
+    <name>S02Q3GX</name>
+    <cmt />
+    <desc>Großstadtkrabbelanfang</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=9d18feab-f562-48be-84eb-7c561a37bba0</url>
+    <urlname>Großstadtkrabbelanfang</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.562067" lon="13.423167">
+    <time>2011-06-17T06:55:12.807</time>
+    <name>AB2Y2ZK</name>
+    <cmt>Wie ist hier die Durchfahrtshöhe?</cmt>
+    <desc>Durchfahrtshöhe</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=be4988db-ca00-4f7b-a888-66591119a853</url>
+    <urlname>Durchfahrtshöhe</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5614" lon="13.423417">
+    <time>2011-06-17T06:57:44.847</time>
+    <name>BC2Y2ZK</name>
+    <cmt>Name der "schnellen" Bowlinghalle mit der hohen 2?</cmt>
+    <desc>Bowling</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=ba311ddd-1d98-4eb3-ae6d-404d8b8c7abb</url>
+    <urlname>Bowling</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.56175" lon="13.4231">
+    <time>2011-06-17T06:59:32.63</time>
+    <name>CD2Y2ZK</name>
+    <cmt>Wie viele Laternenmasten?</cmt>
+    <desc>Laternenmaste</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=4aee65e4-cb58-4a72-95cc-ddd80dd96baf</url>
+    <urlname>Laternenmaste</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.580267" lon="13.429967">
+    <time>2011-07-13T12:35:53.507</time>
+    <name>PK303T7</name>
+    <cmt />
+    <desc>GC303T7 Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=16e90f90-fe2c-4272-87b3-dd96ce6665ef</url>
+    <urlname>GC303T7 Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.594" lon="13.402833">
+    <time>2011-07-22T05:01:57.2</time>
+    <name>PK30MDD</name>
+    <cmt />
+    <desc>Parkplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d45e1a8a-4f21-4b8f-892d-6277e9ad9676</url>
+    <urlname>Parkplatz</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.575802" lon="13.406623">
+    <time>2011-07-23T02:35:23.8</time>
+    <name>PK30NZN</name>
+    <cmt>Hier könnt Ihr direkt vor dem Eingang zum Schlosspark Euer Auto abstellen.</cmt>
+    <desc>GC30NZN Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=71088262-6ce5-40ad-9b5c-91edd77ef1ef</url>
+    <urlname>GC30NZN Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.641283" lon="13.382233">
+    <time>2010-12-19T02:34:08.7</time>
+    <name>PIH7T5</name>
+    <cmt>HIer kann man sich auf dem Rückweg ausruhen und picknicken.</cmt>
+    <desc>Picknickplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=c7311346-06dd-4390-8c7a-de60a3a6c2d5</url>
+    <urlname>Picknickplatz</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.643283" lon="13.3846">
+    <time>2010-12-19T02:24:21.04</time>
+    <name>PKH7T5</name>
+    <cmt>Start und Parkmöglichkeit</cmt>
+    <desc>GCH7T5 Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=a04387c9-ac9b-481b-aeba-1d470c903c76</url>
+    <urlname>GCH7T5 Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.526383" lon="13.3747">
+    <time>2007-03-20T04:23:53.933</time>
+    <name>S610P05</name>
+    <cmt>Medizinhistorisches Museum der Charité</cmt>
+    <desc>Rudis rampe des restes</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=0d28cd9c-dce3-43a9-b972-e00cd45eab7e</url>
+    <urlname>Rudis rampe des restes</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.527617" lon="13.442633">
+    <time>2007-07-20T08:53:50.237</time>
+    <name>0014BEK</name>
+    <cmt>Hier geht's los...</cmt>
+    <desc>Startpunkt</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=cc1b2e4a-b58b-4fff-a782-a4fa20b1510e</url>
+    <urlname>Startpunkt</urlname>
+    <sym>Trailhead</sym>
+    <type>Waypoint|Trailhead</type>
+  </wpt>
+  <wpt lat="52.527717" lon="13.44345">
+    <time>2007-07-20T09:01:14.19</time>
+    <name>0114BEK</name>
+    <cmt>Anzahl der Querstangen, A =</cmt>
+    <desc>Ringe</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=c3c5a192-a4f5-457b-87ab-354c6a56dd8c</url>
+    <urlname>Ringe</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.527883" lon="13.443433">
+    <time>2007-07-20T09:09:51.47</time>
+    <name>0214BEK</name>
+    <cmt>Anzahl der Klimmzüge, B =</cmt>
+    <desc>Klimmzüge</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=30dc6e1b-2a77-4c2c-bb1b-a5a223ebf14e</url>
+    <urlname>Klimmzüge</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.528167" lon="13.4439">
+    <time>2007-07-20T09:13:37.177</time>
+    <name>0314BEK</name>
+    <cmt>Anzahl der Reckstangen, C =</cmt>
+    <desc>Aufschwung</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=07b36c79-9e55-4653-bc96-d71e1cb4dd50</url>
+    <urlname>Aufschwung</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.528267" lon="13.4443">
+    <time>2007-07-20T09:15:49.347</time>
+    <name>0414BEK</name>
+    <cmt>Anzahl der Querstreben, D =</cmt>
+    <desc>Hangeln</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=61ba2232-352f-4a47-890a-269f2ec8006d</url>
+    <urlname>Hangeln</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.52955" lon="13.443517">
+    <time>2007-07-20T09:22:12.253</time>
+    <name>0514BEK</name>
+    <cmt>Anzahl der Hürden, E =</cmt>
+    <desc>Hürdenlauf</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=9342a1d4-1ce2-4f6b-820d-3b9d8f9bf690</url>
+    <urlname>Hürdenlauf</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.530083" lon="13.442683">
+    <time>2007-07-20T09:40:15.377</time>
+    <name>0614BEK</name>
+    <cmt>Anzahl der Liegestütze, F =</cmt>
+    <desc>Liegestütze</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=65e38cd2-991c-46b9-92cf-1e14592f63ce</url>
+    <urlname>Liegestütze</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.53015" lon="13.442533">
+    <time>2007-07-20T09:42:31.847</time>
+    <name>0714BEK</name>
+    <cmt>Summe A bis F, G =</cmt>
+    <desc>Schräge</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=6cbb2731-c92e-4635-9916-6c6b3329a517</url>
+    <urlname>Schräge</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.530417" lon="13.442167">
+    <time>2007-07-20T09:45:57.33</time>
+    <name>0814BEK</name>
+    <cmt>Anzahl der Stützen, H =</cmt>
+    <desc>Balanceakt</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=ffe5e4ba-d624-4f4f-946f-b95f98258d71</url>
+    <urlname>Balanceakt</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.527567" lon="13.440317">
+    <time>2007-07-20T09:49:59.69</time>
+    <name>0914BEK</name>
+    <cmt>Anzahl der Schrauben, I =</cmt>
+    <desc>Laufwalze</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=2d14aeb5-b402-4c16-9fa9-3994d217d422</url>
+    <urlname>Laufwalze</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.527267" lon="13.440617">
+    <time>2007-07-20T09:54:17.55</time>
+    <name>1014BEK</name>
+    <cmt>Anzahl der Versuche, J =</cmt>
+    <desc>Bank</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=670838cf-909a-493a-9c07-e621b34206be</url>
+    <urlname>Bank</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.528217" lon="13.44135">
+    <time>2007-07-20T10:05:13.08</time>
+    <name>1114BEK</name>
+    <cmt>Anzahl der Meter, K =</cmt>
+    <desc>Felsen</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d22c70d2-e0f1-475b-a8da-1ca2d5a21532</url>
+    <urlname>Felsen</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.53335" lon="13.410333">
+    <time>2007-08-20T14:11:37.793</time>
+    <name>01154E7</name>
+    <cmt>A= B=</cmt>
+    <desc>Startpunkt</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=9a6bbeca-d03b-4c37-94e9-2bd30a32989d</url>
+    <urlname>Startpunkt</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.541717" lon="13.340533">
+    <time>2007-08-23T16:24:46.96</time>
+    <name>0115AQW</name>
+    <cmt>Start</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=b950b4f4-6b07-4f89-b45e-826eab9caa8c</url>
+    <urlname>Start</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.633667" lon="13.375917">
+    <time>2008-01-13T03:03:12.573</time>
+    <name>PA18JGX</name>
+    <cmt>letzte Parkmöglichkeit</cmt>
+    <desc>Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=683401e3-f2a5-4fcb-8e7b-f9b6b90a128b</url>
+    <urlname>Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.626667" lon="13.374217">
+    <time>2009-01-15T09:47:48.117</time>
+    <name>KS19D5Q</name>
+    <cmt>Original Cache Location. Come here to see the view :)</cmt>
+    <desc>Original Location</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=85543aec-3151-4dca-a0f5-d764f3e5c568</url>
+    <urlname>Original Location</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.53245" lon="13.398733">
+    <time>2008-03-01T10:23:03.283</time>
+    <name>0119TGT</name>
+    <cmt />
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=216ddbc9-aa19-42c7-8fbf-75a1e694f567</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.60415" lon="13.310267">
+    <time>2008-04-18T10:25:59.807</time>
+    <name>AB1BAQN</name>
+    <cmt>Hier gehts los</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=0528e6a1-0679-417e-b0f6-faf43e6ebde9</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.554717" lon="13.4615">
+    <time>2008-07-23T01:09:53.633</time>
+    <name>001EEJG</name>
+    <cmt>Start des Rundganges mit einer einfachen Frage !
+Wieviele Stufen seid ihr vom Weg bis zur Plattform runter gegangen ? (A)
+
+10 -&gt; 4
+08 -&gt; 2
+12 -&gt; 7</cmt>
+    <desc>Startpunkt</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=6a84582c-98d8-418a-b13b-77d8c23904e9</url>
+    <urlname>Startpunkt</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5525" lon="13.462667">
+    <time>2008-07-23T01:11:47.71</time>
+    <name>011EEJG</name>
+    <cmt>Wie viele Bänke sind auf dieser Ebene zu sehen ? (B)
+
+3 -&gt; 8
+4 -&gt; 3
+5 -&gt; 7</cmt>
+    <desc>Station</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=87268959-3631-49d7-bd10-b268c1c07ef8</url>
+    <urlname>Station</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.555417" lon="13.461833">
+    <time>2008-07-23T01:15:40.93</time>
+    <name>031EEJG</name>
+    <cmt>Welche Zahl steht an den Steinfiguren (Erbaut ?) (F)
+
+1912 -&gt; 9
+1916 -&gt; 5
+1920 -&gt; 3</cmt>
+    <desc>Station</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=0d2ed1bb-5a1a-4618-a4e1-0ac0b62c2837</url>
+    <urlname>Station</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5344" lon="13.412917">
+    <time>2008-11-03T05:30:07.813</time>
+    <name>011HT58</name>
+    <cmt>Lapidarium</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=dab0f6ff-bcd4-467a-abcc-1013332bd3f9</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.532567" lon="13.395156">
+    <time>2008-11-10T14:02:56.273</time>
+    <name>A11J1J1</name>
+    <cmt>Startpunkt/starting point
+Tramhaltestelle/tram station</cmt>
+    <desc>START</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=195a1414-4782-401b-ad1f-52df2abb3d98</url>
+    <urlname>START</urlname>
+    <sym>Trailhead</sym>
+    <type>Waypoint|Trailhead</type>
+  </wpt>
+  <wpt lat="52.600267" lon="13.497">
+    <time>2009-01-29T09:02:49.463</time>
+    <name>001M6N8</name>
+    <cmt>Treppen hoch / Stein</cmt>
+    <desc>Startpunkt</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=77d0d17e-c49e-4ee7-8373-9845ab0f72f8</url>
+    <urlname>Startpunkt</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.604" lon="13.498">
+    <time>2009-01-29T09:00:29.913</time>
+    <name>PP1M6N8</name>
+    <cmt />
+    <desc>Parkplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=fa95c0dd-f078-4940-996c-131a56519660</url>
+    <urlname>Parkplatz</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.550333" lon="13.484167">
+    <time>2009-02-09T11:01:52.153</time>
+    <name>011MHV8</name>
+    <cmt>Anzahl der Spitzen am rechten Eingangstor (A)
+Anzahl der Drehkreuze am Eingang (B)</cmt>
+    <desc>Parkplatz am Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=09adf4ab-1049-4e21-bd47-261f3dea7fb4</url>
+    <urlname>Parkplatz am Start</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.549367" lon="13.482117">
+    <time>2009-02-09T11:06:50.433</time>
+    <name>021MHV8</name>
+    <cmt>Letzte schwarze Ziffer auf weißem Grund (C)
+(oder blaue Ziffer)</cmt>
+    <desc>Rettung in Sicht</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=9c0c4264-5916-4610-9433-6b7efeeb4d10</url>
+    <urlname>Rettung in Sicht</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.611583" lon="13.484367">
+    <time>2009-03-03T13:51:07.137</time>
+    <name>011N4JD</name>
+    <cmt>Schaue nach West. 
+Linke Seite:
+Wie viele schmale Ausleger hat der Funkmast links oben? (X)
+Rechte Seite:
+Wie viele Dachflächen siehst Du am Kirchturm? (Y)
+
+Zahl im Straßennamen merken (Z), wenn Du zu Stage2 vorbeikommst</cmt>
+    <desc>Parken und Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=8e476824-d1d0-4863-95bc-cbe46d6635e1</url>
+    <urlname>Parken und Start</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.633933" lon="13.437033">
+    <time>2009-03-01T06:44:21.547</time>
+    <name>011N6XN</name>
+    <cmt />
+    <desc>Parken und Start 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=45ae9e6e-e60b-443c-a645-f1f845379377</url>
+    <urlname>Parken und Start 1</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.6356" lon="13.4378">
+    <time>2009-03-01T06:45:34.61</time>
+    <name>021N6XN</name>
+    <cmt />
+    <desc>Start 2</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=3d115d61-acd6-48da-921d-835550e4f8d0</url>
+    <urlname>Start 2</urlname>
+    <sym>Trailhead</sym>
+    <type>Waypoint|Trailhead</type>
+  </wpt>
+  <wpt lat="52.5525" lon="13.3365">
+    <time>2009-03-05T11:11:37.203</time>
+    <name>A11NANV</name>
+    <cmt>Hier könnte ihr parken</cmt>
+    <desc>Parken</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=3f54c1e5-29f1-4f2b-9e8d-a8d2432e68f3</url>
+    <urlname>Parken</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.5508" lon="13.3345">
+    <time>2009-03-22T12:20:20.853</time>
+    <name>A21NANV</name>
+    <cmt>Finde die beiden Herren</cmt>
+    <desc>Zwei Herren</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=27c36983-8130-4739-886a-596ce6760596</url>
+    <urlname>Zwei Herren</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.567583" lon="13.311017">
+    <time>2009-03-15T01:13:36.24</time>
+    <name>P11NFPT</name>
+    <cmt>Hier P+R - PPL</cmt>
+    <desc>Parkplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=bf655693-9a65-43da-a017-d2aec972e6a0</url>
+    <urlname>Parkplatz</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.524967" lon="13.443467">
+    <time>2009-05-20T14:09:38.603</time>
+    <name>011RK8C</name>
+    <cmt />
+    <desc>stage1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=3f426807-166a-4ccb-982b-333951911e4f</url>
+    <urlname>stage1</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.5864" lon="13.315783">
+    <time>2009-08-11T15:35:37.423</time>
+    <name>011X4PM</name>
+    <cmt />
+    <desc>COVO LOCO #6464</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=11b874f3-3c0d-4a2b-85fc-7921e447dd24</url>
+    <urlname>COVO LOCO #6464</urlname>
+    <sym>Final Location</sym>
+    <type>Waypoint|Final Location</type>
+  </wpt>
+  <wpt lat="52.5182" lon="13.39985">
+    <time>2009-09-07T00:54:38.317</time>
+    <name>011Y6DV</name>
+    <cmt />
+    <desc>Lustgarten</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=0e749961-88d9-4013-97fd-f52f2163edac</url>
+    <urlname>Lustgarten</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.51775" lon="13.39785">
+    <time>2009-09-07T00:55:50.113</time>
+    <name>021Y6DV</name>
+    <cmt />
+    <desc>Zeughaus</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=06826bf9-8e1b-4090-a9cb-1a5ab200a837</url>
+    <urlname>Zeughaus</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.517667" lon="13.395617">
+    <time>2009-09-07T00:56:40.087</time>
+    <name>031Y6DV</name>
+    <cmt />
+    <desc>Neue Wache</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=6ce8a28b-a5fc-46b9-8544-2dffda82bd3b</url>
+    <urlname>Neue Wache</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.517567" lon="13.393983">
+    <time>2009-09-07T00:57:41.057</time>
+    <name>041Y6DV</name>
+    <cmt />
+    <desc>Humboldt-Uni</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=cd9dfd7f-588f-4d8d-abc4-07eff2f0571b</url>
+    <urlname>Humboldt-Uni</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.517" lon="13.390767">
+    <time>2009-09-07T00:58:38.767</time>
+    <name>051Y6DV</name>
+    <cmt />
+    <desc>Hotel Carlton</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=34451704-0e3b-45c9-8b93-34f5ac587cbf</url>
+    <urlname>Hotel Carlton</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.514883" lon="13.391133">
+    <time>2009-09-07T00:59:57.367</time>
+    <name>061Y6DV</name>
+    <cmt />
+    <desc>KfW</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=4b7811de-b42a-4cd4-b5fa-121aec675161</url>
+    <urlname>KfW</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.513717" lon="13.3928">
+    <time>2009-09-07T01:00:55.633</time>
+    <name>071Y6DV</name>
+    <cmt />
+    <desc>Gendarmenmarkt</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=9b0d45c3-6ef2-435d-8386-e4f7b5e2139c</url>
+    <urlname>Gendarmenmarkt</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.515967" lon="13.394333">
+    <time>2009-09-07T01:01:57.577</time>
+    <name>081Y6DV</name>
+    <cmt />
+    <desc>St.Hedwigs-Kathedrale</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=1fe435ac-b0b8-4120-93ab-95c85e658a04</url>
+    <urlname>St.Hedwigs-Kathedrale</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.516433" lon="13.395483">
+    <time>2009-09-07T01:02:56.05</time>
+    <name>091Y6DV</name>
+    <cmt />
+    <desc>Bebelplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=f928cf1d-fe80-4a3f-ba98-d256e5463fa6</url>
+    <urlname>Bebelplatz</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.515533" lon="13.397717">
+    <time>2009-09-07T01:03:54.89</time>
+    <name>101Y6DV</name>
+    <cmt />
+    <desc>Friedrichwerdersche Kirche</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=b90e9f5f-3004-4174-bb9b-35408a465dc1</url>
+    <urlname>Friedrichwerdersche Kirche</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.58925" lon="13.487">
+    <time>2009-09-06T10:46:04.997</time>
+    <name>PP1Y9QN</name>
+    <cmt />
+    <desc>Parkplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=8c09124e-9d7e-40d1-9b5b-3fc35e2525e8</url>
+    <urlname>Parkplatz</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.5893" lon="13.486767">
+    <time>2009-09-06T10:47:20.797</time>
+    <name>S11Y9QN</name>
+    <cmt>Naturrohstoff</cmt>
+    <desc>Stage 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=48500a68-125d-497b-9890-dae7500ee7b0</url>
+    <urlname>Stage 1</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.572467" lon="13.483233">
+    <time>2009-11-21T01:29:07.873</time>
+    <name>AA217A3</name>
+    <cmt />
+    <desc>Eingang</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=782bb468-45cd-45f8-9117-05b0d26b8209</url>
+    <urlname>Eingang</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.557" lon="13.488667">
+    <time>2009-12-02T06:02:03.067</time>
+    <name>AB21MYJ</name>
+    <cmt>Begutachtet die Fassade:
+
+Die Anzahl der Männer, die sich durch einen fahrbaren Untersatz (linke Seite) fortbewegen = A
+
+Die Anzahl aller dargestellten Menschen (links und rechts) = B</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=3636391c-3df3-4042-8a2e-de1d289ea5c7</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.522433" lon="13.416983">
+    <time>2009-12-06T03:43:11.61</time>
+    <name>AA21RGW</name>
+    <cmt>„Der Mensch überwindet Zeit und Raum“.
+
+Betrachtet das Werk genau. Notiert die Anzahl der dargestellten Menschen und ihr erhaltet A.</cmt>
+    <desc>Haus des Reisens</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=bf783953-9094-495f-9d0f-d91656eeae00</url>
+    <urlname>Haus des Reisens</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5216" lon="13.416667">
+    <time>2009-12-06T03:46:10.627</time>
+    <name>AB21RGW</name>
+    <cmt>Betrachtet alle 4 Seiten des Fries und notiert die Anzahl der dargestellten Männer mit Kopfbedeckung und ihr erhaltet B. 
+
+Schaut auch nach den Friedenstauben. Wieviele sind es? (=C)</cmt>
+    <desc>Haus des Lehrers</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=503d5dfc-db61-4fe4-8562-2ab9557e7f5a</url>
+    <urlname>Haus des Lehrers</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.522033" lon="13.412783">
+    <time>2009-12-06T03:48:49.767</time>
+    <name>AC21RGW</name>
+    <cmt>Zählt die Anzahl der Schalen, durch die das Wasser abwärts fließt (D = die Hälfte der Quersumme dieser Anzahl) und die metallenen Blüten an der Außenseite (=E).</cmt>
+    <desc>Brunnen der Völkerfreundschaft</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=858b5bbb-3aee-4a4d-a758-a2cea85d6da0</url>
+    <urlname>Brunnen der Völkerfreundschaft</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.519817" lon="13.422567">
+    <time>2010-01-16T06:13:44.033</time>
+    <name>AA2312N</name>
+    <cmt>Schaut nach den Friedenstauben.</cmt>
+    <desc>Cafe Moskau</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=3891af37-8207-4d19-897e-76ec7b762161</url>
+    <urlname>Cafe Moskau</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.633667" lon="13.468783">
+    <time>2010-02-09T14:34:27.78</time>
+    <name>P123TT3</name>
+    <cmt>Guter Parkplatz.</cmt>
+    <desc>Parken</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=545f438b-f22a-4ebf-8a14-b81937fe756f</url>
+    <urlname>Parken</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.627767" lon="13.4611">
+    <time>2010-02-10T01:57:21.003</time>
+    <name>P223TT3</name>
+    <cmt>Eine Unterführung für Radfahrer und Fußgänger geht unter der Autobahn hindurch.</cmt>
+    <desc>Auch guter Parkplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=32184751-50da-4af3-ab89-dab07af250ea</url>
+    <urlname>Auch guter Parkplatz</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.631333" lon="13.4618">
+    <time>2010-02-09T14:10:36.637</time>
+    <name>S123TT3</name>
+    <cmt>Start - sucht hier Koordinaten für S2</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=cd1d83c6-5bb9-4f49-92d2-d3870f0f2f72</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.555917" lon="13.486833">
+    <time>2010-03-01T00:10:43.4</time>
+    <name>0124FA6</name>
+    <cmt>Hier könnt ihr euer Auto abstellen.</cmt>
+    <desc>Parken</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=dcb78f2b-b828-4a71-81e6-719434b95243</url>
+    <urlname>Parken</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.555917" lon="13.486833">
+    <time>2010-03-09T04:31:50.163</time>
+    <name>0124V1W</name>
+    <cmt>Hier kann das Auto abgestellt werden.</cmt>
+    <desc>Parken</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=357c8b88-4398-4e68-b3a1-4be9c9e2619b</url>
+    <urlname>Parken</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.5405" lon="13.336617">
+    <time>2010-04-28T12:16:39.1</time>
+    <name>AA26EG9</name>
+    <cmt />
+    <desc>Die Bank</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=7f60951b-fe56-4bde-b87c-12daaf8da2e3</url>
+    <urlname>Die Bank</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.5335" lon="13.465833">
+    <time>2010-05-23T11:39:37.707</time>
+    <name>00292A9</name>
+    <cmt />
+    <desc>Parkplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=09d1a820-91bb-4686-acba-c6537f010421</url>
+    <urlname>Parkplatz</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.534417" lon="13.468033">
+    <time>2010-05-23T11:57:55.783</time>
+    <name>S0292A9</name>
+    <cmt>Hier beginnt alles</cmt>
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=ecd82169-6da6-4382-9aec-340570b861c1</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.543367" lon="13.339083">
+    <time>2010-08-06T06:34:33.357</time>
+    <name>S12CYFQ</name>
+    <cmt />
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=bd01adbd-1c93-4a31-a21a-67a818a12955</url>
+    <urlname>Start</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.542233" lon="13.343933">
+    <time>2010-08-06T06:38:22.263</time>
+    <name>S52CYFQ</name>
+    <cmt />
+    <desc>Stage 4 - Rast</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=aa2cc4f9-9f54-4146-9d56-1596154c2390</url>
+    <urlname>Stage 4 - Rast</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.539717" lon="13.47135">
+    <time>2010-08-13T00:20:38.69</time>
+    <name>002D2PD</name>
+    <cmt />
+    <desc>Parken</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=324cdca1-9966-4865-a256-7a62c6a9d06c</url>
+    <urlname>Parken</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.539967" lon="13.4706">
+    <time>2010-08-13T00:22:59.537</time>
+    <name>012D2PD</name>
+    <cmt>Edding</cmt>
+    <desc>Stage 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=b782e66c-f478-4bb5-b88c-28cd4f1c796a</url>
+    <urlname>Stage 1</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.543948" lon="13.324882">
+    <time>2010-09-07T10:44:52.51</time>
+    <name>PK2DXT2</name>
+    <cmt />
+    <desc>GC2DXT2 Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d71f5a7d-d1eb-41b9-bdc1-0aa2b62d06be</url>
+    <urlname>GC2DXT2 Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.5383" lon="13.357167">
+    <time>2010-08-30T00:38:00.11</time>
+    <name>PK2EAA5</name>
+    <cmt />
+    <desc>GC2EAA5 Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=f04970bc-9300-4c71-a8e2-3bd1b98ab993</url>
+    <urlname>GC2EAA5 Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.5237" lon="13.3658">
+    <time>2010-09-13T12:43:51.507</time>
+    <name>ST2F4PR</name>
+    <cmt />
+    <desc>Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=953894c1-f413-4eff-9315-5b5478b3081d</url>
+    <urlname>Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.539717" lon="13.47135">
+    <time>2010-09-26T05:12:50.483</time>
+    <name>012FR9R</name>
+    <cmt />
+    <desc>Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=269f4d33-35eb-4c0b-aa8f-93fe19fa0853</url>
+    <urlname>Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.528217" lon="13.447833">
+    <time>2010-11-15T15:21:40.797</time>
+    <name>JS2GPB7</name>
+    <cmt />
+    <desc>Startpunkt</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=0e06c8fd-0ad8-4d36-b8d5-8c522c338e9b</url>
+    <urlname>Startpunkt</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.532617" lon="13.435517">
+    <time>2011-01-03T10:39:10.89</time>
+    <name>PK2H729</name>
+    <cmt>Parkmöglichkeiten hier in der Nähe / Parking available here</cmt>
+    <desc>GC2H729 Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=e6ea8200-ec64-43f0-8926-77e83b09bacf</url>
+    <urlname>GC2H729 Parking</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.532333" lon="13.43615">
+    <time>2011-01-04T10:52:14.843</time>
+    <name>S12H729</name>
+    <cmt>Hier gehts los!</cmt>
+    <desc>GC2H729 Stage 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=dd47dd46-8de6-4024-83f7-97a869fe72b0</url>
+    <urlname>GC2H729 Stage 1</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.64485" lon="13.3873">
+    <time>2010-11-27T08:32:28.323</time>
+    <name>S12JT2F</name>
+    <cmt>Finde hier den Schlüssel</cmt>
+    <desc>GC2JT2F Stage 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=e57b9aba-c630-458d-a5a3-52f78673d413</url>
+    <urlname>GC2JT2F Stage 1</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.427917" lon="13.328333">
+    <time>2011-07-27T05:24:40.687</time>
+    <name>J12KY9K</name>
+    <cmt>Berolina am 12. August im Ferdinand 34 in Lichterfelde-Ost</cmt>
+    <desc>Berolina August 2011</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=8fb64c50-9d1f-417a-bcb7-066d261abef8</url>
+    <urlname>Berolina August 2011</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.473617" lon="13.45815">
+    <time>2011-06-20T14:20:19.9</time>
+    <name>L12KY9K</name>
+    <cmt>Berolina am 22. Juli im Estrel Sommergarten in Neukölln</cmt>
+    <desc>Berolina Juli 2011</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d2235187-17af-4dfd-b975-3388935b0612</url>
+    <urlname>Berolina Juli 2011</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.524133" lon="13.346517">
+    <time>2011-06-06T14:39:56.893</time>
+    <name>N12KY9K</name>
+    <cmt>Berolina am 16. Juni im Paulaner's im Spreebogen in Moabit</cmt>
+    <desc>Berolina Juni 2011</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=3e0e9ebd-e73c-43a4-a247-5f100a902afe</url>
+    <urlname>Berolina Juni 2011</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.51135" lon="13.335867">
+    <time>2011-05-11T00:19:01.017</time>
+    <name>P12KY9K</name>
+    <cmt>Berolina am 24. Mai im Schleusenkrug Tiergarten</cmt>
+    <desc>Berolina Mai 2011</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=5e4458dd-ac58-4aeb-839d-90ba4e647de7</url>
+    <urlname>Berolina Mai 2011</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.3594" lon="13.023483">
+    <time>2011-03-29T02:13:03.753</time>
+    <name>R12KY9K</name>
+    <cmt>Berolina am 27. April in der Braumanufaktur im Forsthaus Templin (Potsdam)</cmt>
+    <desc>Berolina April 2011</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=06398dbb-6888-41a5-9dcf-43b1c12dabdb</url>
+    <urlname>Berolina April 2011</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.488933" lon="13.261267">
+    <time>2011-02-22T00:47:58.02</time>
+    <name>T12KY9K</name>
+    <cmt>Berolina am 28. M&amp;auml;rz im Restaurant Scheune am S-Bhf. Grunewald</cmt>
+    <desc>Berolina M&amp;auml;rz 2011</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=4d128a97-fe85-4a8f-879b-2d11f82b08ea</url>
+    <urlname>Berolina M&amp;auml;rz 2011</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.536517" lon="13.2047">
+    <time>2011-01-30T04:10:18.667</time>
+    <name>V12KY9K</name>
+    <cmt>Berolina am 18. Februar im "La Bottega Da Franco" in der Altstadt Spandau</cmt>
+    <desc>Berolina Februar 2011</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=6023f4e6-1456-4643-8881-93c34f7a889e</url>
+    <urlname>Berolina Februar 2011</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.422883" lon="13.434267">
+    <time>2011-01-02T05:36:21.31</time>
+    <name>X12KY9K</name>
+    <cmt>Berolina am 19. Januar im "Linden-Garten" in Alt-Buckow</cmt>
+    <desc>Berolina Januar 2011</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=dc6dee47-1a74-459e-9be2-23f93ee105bf</url>
+    <urlname>Berolina Januar 2011</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.521667" lon="13.413333">
+    <time>2011-01-02T05:33:10.86</time>
+    <name>ZZ2KY9K</name>
+    <cmt>Hier stand die Berolina.</cmt>
+    <desc>Standort der Berolina</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=f5b709c6-5bed-441e-88ac-da64b00091a2</url>
+    <urlname>Standort der Berolina</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.525933" lon="13.428767">
+    <time>2011-02-23T14:22:54.41</time>
+    <name>PA2P8HZ</name>
+    <cmt>Hier beginnt der Multi. Ihr befindet euch in der Nähe eines Automaten an dem es Spielzeug oder Süßes gibt. Wenn ihr noch etwas Kleingeld in der Tasche habt, spendiert den Kleinen was. Ihr könnt 5ct, 10ct, 20ct, 50ct oder 1€ Stücke benutzen. In der Strasse findet ihr außerdem bestimmt eine (noch) kostenlose Parkmöglichkeit. Ansonsten ist hier auch eine Bushaltestelle. Gleich gegenüber beginnt dann euer Ausflug auf dem ersten Spielplatz.</cmt>
+    <desc>Zahnfreundliches und Parkplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=90f68acd-6a63-493f-8f8e-fa349fa4457a</url>
+    <urlname>Zahnfreundliches und Parkplatz</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.526483" lon="13.428667">
+    <time>2011-02-23T14:29:44.927</time>
+    <name>S12P8HZ</name>
+    <cmt>Auf diesem Spielplatz findet ihr u.a. ein Piratenschiff, eine Spielburg, Wasserspiele, ein Klettergerüst mit Rutsche und eine Netzschaukel.
+
+Ermittelt den Wert für A
+Welches Tier entdeckt ihr an den Koordinaten?
+
+Giraffe = 2
+Krokodil = 4
+Elefant = 8</cmt>
+    <desc>GC2P8HZ Station 1 - Piratenspielplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=49176ac7-8c88-4fa1-b0ec-e4fa31a55a94</url>
+    <urlname>GC2P8HZ Station 1 - Piratenspielplatz</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.526967" lon="13.428417">
+    <time>2011-02-23T14:36:03.52</time>
+    <name>S22P8HZ</name>
+    <cmt>Hier befindet sich ein Planschbecken. Gerade im Sommer eine willkommende Erfrischung.
+
+Ermittelt den Wert für B
+Welches Tier gibt es hier doppelt ?
+
+Walross = 2
+Pinguin = 4
+Elefant = 6</cmt>
+    <desc>GC2P8HZ Station 2 - Plansche</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=1107acfa-a358-4639-9281-a2a45daebeb1</url>
+    <urlname>GC2P8HZ Station 2 - Plansche</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.52775" lon="13.431533">
+    <time>2011-02-23T14:40:48.33</time>
+    <name>S32P8HZ</name>
+    <cmt>Auf diesem Spielplatz befindet sind u.a. zwei Klettertürme mit Rutschen, eine Schaukel, Buddelkiste und ein Kletterturm mit Holzbrücke.
+
+Ermittelt den Wert für C
+Welches Tier gleicht dem an den Koordinaten?
+
+Bär = 5
+Pferd = 0
+Eule = 7</cmt>
+    <desc>GC2P8HZ Station 3 - Wildwestspielplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=e33078d2-7f61-4f76-9458-a650e0f309d7</url>
+    <urlname>GC2P8HZ Station 3 - Wildwestspielplatz</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.528917" lon="13.435083">
+    <time>2011-02-23T14:50:25.02</time>
+    <name>S42P8HZ</name>
+    <cmt>Hier befindet sich u.a. ein Fussballplatz, zwei Spieltürme mit Rutsche, eine Schaukel und viel Sand. Wenn ihr euch umseht seht ihr auch viele Tiere.
+
+Ermittelt den Wert für D
+Welches Tier befindet sich an den Koordinaten?
+
+Giraffe = 3
+Bär = 5
+Schildkröte = 9</cmt>
+    <desc>GC2P8HZ Station 4 - Buddelparadies</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=38b1286c-d6c4-4008-8dc6-23a702b32b36</url>
+    <urlname>GC2P8HZ Station 4 - Buddelparadies</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.52505" lon="13.43425">
+    <time>2011-02-23T14:55:22.94</time>
+    <name>S52P8HZ</name>
+    <cmt>Hier seid ihr am Teich. Die Tiere befinden sich diesmal im und auf dem Wasser.
+
+Ermittelt den Wert für E
+Ihr steht bei einer Bank. Aus wievielen einzelnen Sitzelementen besteht diese.
+
+Zwei = 1
+Acht = 5
+Zwölf = 7</cmt>
+    <desc>GC2P8HZ Station 5 - Teich</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=bc58f8a0-b0fd-4c7e-a861-ddb6893c78b2</url>
+    <urlname>GC2P8HZ Station 5 - Teich</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.524517" lon="13.435767">
+    <time>2011-02-23T15:00:41.643</time>
+    <name>S62P8HZ</name>
+    <cmt>Hier findet ihr u.a. ein Klettergerüst, Netze und vor allem die "Attraktion" mit Spaßfaktor.
+
+Ermittelt den Wert für F
+Was ist die "Hauptattraktion" auf diesem Spielplatz?
+
+Wasserrutsche = 7
+Plantschbecken = 9
+Seilrutsche = 1</cmt>
+    <desc>GC2P8HZ Station 6 - Abenteuerspielplatz</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=5e4800ed-25f6-4c18-aae0-29abd26228cb</url>
+    <urlname>GC2P8HZ Station 6 - Abenteuerspielplatz</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.528017" lon="13.434033">
+    <time>2011-02-23T15:03:05.8</time>
+    <name>SC2P8HZ</name>
+    <cmt>Auf halben Weg kommt ihr noch an einem Caffee vorbei. Hier könnt ihr euch stärken, solltet ihr den Picknickkorb vergessen haben.
+
+Guten Appetit</cmt>
+    <desc>GC2P8HZ - Erholung</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=c715423f-8e19-4b4f-94cc-6f6fd0023070</url>
+    <urlname>GC2P8HZ - Erholung</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.528583" lon="13.432117">
+    <time>2011-02-23T14:46:16.097</time>
+    <name>SP2P8HZ</name>
+    <cmt>Hier befindet sich ein Fussballplatz, eine Halfpipe, Tischtennisplatten und ein Beachvolleyballfeld. Sozusagen für die größeren Kinder.
+
+Hier müsst ihr keine Frage beantworten.</cmt>
+    <desc>GC2P8HZ - Sport</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=d73ae629-81f4-4b28-a2a5-9ef3392c4dcb</url>
+    <urlname>GC2P8HZ - Sport</urlname>
+    <sym>Reference Point</sym>
+    <type>Waypoint|Reference Point</type>
+  </wpt>
+  <wpt lat="52.63315" lon="13.421417">
+    <time>2011-03-14T11:32:35.103</time>
+    <name>PK2Q5MX</name>
+    <cmt />
+    <desc>GC2Q5MX Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=68655352-9793-4758-89ee-455939aebfd9</url>
+    <urlname>GC2Q5MX Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.636" lon="13.418333">
+    <time>2011-03-20T12:32:53.327</time>
+    <name>P12QK0T</name>
+    <cmt />
+    <desc>Parkplatz 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=8769ba1f-de24-402a-a8c6-4ae0b8f6c376</url>
+    <urlname>Parkplatz 1</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.574933" lon="13.5002">
+    <time>2011-03-24T10:44:59.637</time>
+    <name>S12QVC8</name>
+    <cmt>bora</cmt>
+    <desc>GC2QVC8 Stage 1 - Start</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=fe466f5f-21eb-4fb0-a62a-c3ab2408f470</url>
+    <urlname>GC2QVC8 Stage 1 - Start</urlname>
+    <sym>Stages of a Multicache</sym>
+    <type>Waypoint|Stages of a Multicache</type>
+  </wpt>
+  <wpt lat="52.574433" lon="13.499783">
+    <time>2011-03-24T23:49:33.83</time>
+    <name>S62QVC8</name>
+    <cmt />
+    <desc>GC2QVC8 Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=303aabe1-678d-486e-b181-65337ad0c399</url>
+    <urlname>GC2QVC8 Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.597" lon="13.315667">
+    <time>2011-08-28T08:06:52.867</time>
+    <name>AA324W7</name>
+    <cmt />
+    <desc>GC324W7 Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=9da33046-0424-4789-b073-49677cd76fdd</url>
+    <urlname>GC324W7 Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.596967" lon="13.313667">
+    <time>2011-08-28T08:08:01.01</time>
+    <name>BB324W7</name>
+    <cmt>Zähle die Bänke = A, zähle die Teile der Röhre = B, zähle die Metallpfähle = C, zähle die Papierkörbe = D.</cmt>
+    <desc>GC324W7 Stage 1</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=6d06e79d-6b9a-4676-88c3-96a9cf154ac9</url>
+    <urlname>GC324W7 Stage 1</urlname>
+    <sym>Question to Answer</sym>
+    <type>Waypoint|Question to Answer</type>
+  </wpt>
+  <wpt lat="52.633783" lon="13.36425">
+    <time>2011-08-13T12:01:24.73</time>
+    <name>PK324WC</name>
+    <cmt />
+    <desc>GC324WC Parking</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=963e7cfb-5bbb-4561-9e3a-a99771879f64</url>
+    <urlname>GC324WC Parking</urlname>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+  <wpt lat="52.62815" lon="13.355617">
+    <time>2011-08-13T12:52:25.173</time>
+    <name>FN32502</name>
+    <cmt />
+    <desc>GC32502 Final</desc>
+    <url>http://www.geocaching.com/seek/wpt.aspx?WID=77a35567-239b-476b-8814-ec536d7e3c8f</url>
+    <urlname>GC32502 Final</urlname>
+    <sym>Final Location</sym>
+    <type>Waypoint|Final Location</type>
+  </wpt>
+</gpx>

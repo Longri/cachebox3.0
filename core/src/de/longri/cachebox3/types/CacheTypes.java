@@ -19,33 +19,60 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public enum CacheTypes implements SelectBoxItem {
+
     Traditional(true), // = 0,
+
     Multi(true), // = 1,
+
     Mystery(true), // = 2,
+
     Camera(true), // = 3,
+
     Earth(true), // = 4,
+
     Event(true), // = 5,
+
     MegaEvent(true), // = 6,
+
     CITO(true), // = 7,
+
     Virtual(true), // = 8,
+
     Letterbox(true), // = 9,
+
     Wherigo(true), // = 10,
+
     ReferencePoint(false), // = 11,
+
     Wikipedia(false), // = 12,
+
     Undefined(true), // = 13,
+
     MultiStage(false), // = 14,
+
     MultiQuestion(false), // = 15,
+
     Trailhead(false), // = 16,
+
     ParkingArea(false), // = 17,
+
     Final(false), // = 18, !!! 18 used in CacheListDAO
+
     Cache(true), // = 19,
+
     MyParking(true), // = 20
+
     Giga(true), // 22
+
     LabCache(true);
+
+    private final static Logger log = LoggerFactory.getLogger(CacheTypes.class);
 
     private boolean isCache;
 
@@ -74,12 +101,22 @@ public enum CacheTypes implements SelectBoxItem {
         } else if (string.equalsIgnoreCase("Cache In Trash Out Event")) {
             return CITO;
         } else {
-            // remove trailing " cache" or " hybrid" fragments
-            if (string.contains(" "))
-                string = string.substring(0, string.indexOf(" "));
             // remove trailing "-cache" fragments
             if (string.contains("-"))
                 string = string.substring(0, string.indexOf("-"));
+
+            // remove trailing "Geocache|" fragments
+            if (string.contains("|"))
+                string = string.substring(string.indexOf("|") + 1);
+
+            if (string.toLowerCase().contains("flag")) {
+                if (string.toLowerCase().contains("green"))
+                    return ReferencePoint;
+            }
+
+            // remove trailing " cache" or " hybrid" fragments
+            if (string.contains(" "))
+                string = string.substring(0, string.indexOf(" "));
 
             // Replace some opencaching.de / geotoad cache types
             if (string.toLowerCase().contains("unknown"))
@@ -106,10 +143,14 @@ public enum CacheTypes implements SelectBoxItem {
                 return MultiStage;
             if (string.toLowerCase().contains("mega"))
                 return MegaEvent;
+            if (string.toLowerCase().contains("letterbox"))
+                return Letterbox;
             if (string.toLowerCase().contains("virtual"))
                 return MultiQuestion; // Import Virtual Stage as Question of a Multi
             if (string.toLowerCase().contains("physical"))
                 return MultiStage; // Import Physical Stage as a Multi Stage
+
+
             if (string.length() == 0)
                 return Undefined;
         }
@@ -118,26 +159,21 @@ public enum CacheTypes implements SelectBoxItem {
 
         {
             return valueOf(string);
-        } catch (
-
-                Exception ex)
-
-        {
+        } catch (Exception ex) {
             CacheTypes cacheType = Undefined;
             Boolean blnCacheTypeFound = false;
             for (CacheTypes ct : CacheTypes.values()) {
-                if (ct.toString().toLowerCase().equals(string.toLowerCase())) {
+                if (ct.toString().toLowerCase().contains(string.toLowerCase())) {
                     cacheType = ct;
                     blnCacheTypeFound = true;
                     break;
                 }
             }
             if (!blnCacheTypeFound) {
-                System.out.println("Handle cache type: " + string);
+                log.error("Handle cache type: " + string);
             }
             return cacheType;
         }
-
     }
 
     public CacheWidget getCacheWidget(CacheTypeStyle style,

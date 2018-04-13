@@ -48,6 +48,7 @@ public class CacheListChangedEventList {
     private static Thread threadCall;
 
     public static void Call() {
+        if (Database.Data == null | Database.Data.Query == null) return;
         AbstractCache abstractCache = Database.Data.Query.GetCacheByGcCode("CBPark");
 
         if (abstractCache != null)

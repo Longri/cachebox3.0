@@ -16,6 +16,9 @@
 package de.longri.cachebox3.utils;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
 import java.io.*;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -30,12 +33,25 @@ public class UnZip {
     /**
      * Extract the given ZIP-File
      *
-     * @param zipFile
+     * @param zipFile file to extract
      * @return Extracted Folder Path as String
-     * @throws ZipException
-     * @throws IOException
+     * @throws IOException with IO error
      */
-    static public String extractFolder(String zipFile) throws ZipException, IOException {
+    public FileHandle extractFolder(FileHandle zipFile) throws IOException {
+        String path = zipFile.file().getAbsolutePath();
+        String resultPath = extractFolder(path);
+        return Gdx.files.absolute(resultPath);
+    }
+
+
+    /**
+     * Extract the given ZIP-File
+     *
+     * @param zipFile file to extract
+     * @return Extracted Folder Path as String
+     * @throws IOException with IO error
+     */
+    public String extractFolder(String zipFile) throws IOException {
         System.out.println("extract => " + zipFile);
         int BUFFER = 2048;
         File file = new File(zipFile);

@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.actions;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.activities.ImportGcPos;
+import de.longri.cachebox3.gui.activities.ImportPQ;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -66,8 +67,8 @@ public class ShowImportMenu extends Menu {
 
                 switch (item.getMenuItemId()) {
                     case MenuID.MI_IMPORT_GS_PQ:
-//                        Import imp = new Import(MenuID.MI_IMPORT_GS_PQ);
-//                        imp.show();
+                        ImportPQ imp = new ImportPQ();
+                        imp.show();
                         return true;
                     case MenuID.MI_IMPORT_GS_API_POSITION:
                         CB.postAsync(new NamedRunnable("ShowImportMenu") {
@@ -92,7 +93,7 @@ public class ShowImportMenu extends Menu {
                 return true;
             }
         });
-        //ISSUE (#124 add Import of PQ)  menu.addItem(MenuID.MI_IMPORT_GS_PQ, "API_PocketQuery");
+        menu.addItem(MenuID.MI_IMPORT_GS_PQ, "API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ);
         menu.addItem(MenuID.MI_IMPORT_GS_API_POSITION, "API_IMPORT_OVER_POSITION", CB.getSkin().getMenuIcon.target);
         //ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
 

@@ -15,6 +15,9 @@
  */
 package de.longri.cachebox3.utils.converter;
 
+import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
+import de.longri.cachebox3.utils.ICancel;
+
 import java.io.BufferedOutputStream;
 
 /**
@@ -130,7 +133,7 @@ import java.io.BufferedOutputStream;
  */
 public class Base64 {
 
-	/* ******** P U B L I C F I E L D S ******** */
+    /* ******** P U B L I C F I E L D S ******** */
 
     /**
      * No options specified. Value is zero.
@@ -176,7 +179,7 @@ public class Base64 {
      */
     public final static int ORDERED = 32;
 
-	/* ******** P R I V A T E F I E L D S ******** */
+    /* ******** P R I V A T E F I E L D S ******** */
 
     /**
      * Maximum line length (76) of Base64 output.
@@ -201,7 +204,7 @@ public class Base64 {
     private final static byte WHITE_SPACE_ENC = -5; // Indicates white space in encoding
     private final static byte EQUALS_SIGN_ENC = -1; // Indicates equals sign in encoding
 
-	/* ******** S T A N D A R D B A S E 6 4 A L P H A B E T ******** */
+    /* ******** S T A N D A R D B A S E 6 4 A L P H A B E T ******** */
 
     /**
      * The 64 valid Base64 values.
@@ -248,7 +251,7 @@ public class Base64 {
             -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9 // Decimal 244 - 255
     };
 
-	/* ******** U R L S A F E B A S E 6 4 A L P H A B E T ******** */
+    /* ******** U R L S A F E B A S E 6 4 A L P H A B E T ******** */
 
     /**
      * Used in the URL- and Filename-safe dialect described in Section 4 of RFC3548: <a
@@ -300,7 +303,7 @@ public class Base64 {
             -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9 // Decimal 244 - 255
     };
 
-	/* ******** O R D E R E D B A S E 6 4 A L P H A B E T ******** */
+    /* ******** O R D E R E D B A S E 6 4 A L P H A B E T ******** */
 
     /**
      * I don't get the point of this technique, but someone requested it, and it is described here: <a
@@ -351,7 +354,7 @@ public class Base64 {
             -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9 // Decimal 244 - 255
     };
 
-	/* ******** D E T E R M I N E W H I C H A L H A B E T ******** */
+    /* ******** D E T E R M I N E W H I C H A L H A B E T ******** */
 
     /**
      * Returns one of the _SOMETHING_ALPHABET byte arrays depending on the options specified. It's possible, though silly, to specify
@@ -387,7 +390,7 @@ public class Base64 {
     private Base64() {
     }
 
-	/* ******** E N C O D I N G M E T H O D S ******** */
+    /* ******** E N C O D I N G M E T H O D S ******** */
 
     /**
      * Encodes up to the first three bytes of array <var>threeBytes</var> and returns a four-byte array in Base64 notation. The actual
@@ -891,7 +894,7 @@ public class Base64 {
 
     } // end encodeBytesToBytes
 
-	/* ******** D E C O D I N G M E T H O D S ******** */
+    /* ******** D E C O D I N G M E T H O D S ******** */
 
     /**
      * Decodes four bytes from array <var>source</var> and writes the resulting bytes (up to three of them) to <var>destination</var>. The
@@ -1155,7 +1158,7 @@ public class Base64 {
     } // end decode
 
     /*
-     * This reads the bytes from an InputStream and writes the result directly to a file Only for API-PQ-Download!!!
+     * This reads the bytes from an InputStream and writes the result directly to a file Only for API-PocketQuery-Download!!!
      */
     public static boolean decodeToStream(String data, int firstPos, int lastPos, BufferedOutputStream os) throws java.io.IOException {
         if (os == null) {
@@ -1216,18 +1219,17 @@ public class Base64 {
     } // end decode
 
     /*
-     * This reads the bytes from an InputStream and writes the result directly to a file Only for API-PQ-Download!!! buff : Buffer fuer das
+     * This reads the bytes from an InputStream and writes the result directly to a file Only for API-PocketQuery-Download!!! buff : Buffer fuer das
      * Einlesen buffLen : Max. Anzahl an Bytes im Buffer buffCount : Aktuell im Buffer enthaltene g�ltige Bytes buffPos : Aktuelle Position
      * im Buffer
      */
-    public static boolean decodeStreamToStream(java.io.InputStream inputStream, byte[] buff, int buffLen, int buffCount, int buffPos, BufferedOutputStream os) throws java.io.IOException {
+    public static boolean decodeStreamToStream(java.io.InputStream inputStream, byte[] buff,
+                                               PocketQuery.IncrementProgressBytesListener listener,
+                                               int buffCount, int buffPos, BufferedOutputStream os,
+                                               ICancel iCancel) throws java.io.IOException {
         if (os == null) {
             return false;
-        } // end if
-
-        // Decode
-        // bytes = decode( bytes, 0, bytes.length, options );
-
+        }
         byte[] DECODABET = getDecodabet(NO_OPTIONS);
 
         byte[] outBuff = new byte[4]; // Upper limit on size of output
@@ -1237,6 +1239,7 @@ public class Base64 {
         int b4Posn = 0; // Keep track of four byte input buffer
         byte sbiDecode = 0; // Special value from DECODABET
         do {
+            if (iCancel != null && iCancel.cancel()) return false;
             buffPos++;
             if (buffPos == buffCount) {
                 // weitere Daten laden!!!
@@ -1266,6 +1269,7 @@ public class Base64 {
                         outBuffPosn += decode4to3(b4, 0, outBuff, outBuffPosn, NO_OPTIONS);
                         // in outBuff there are outBuffPosn bytes which have to be written into the output Stream
                         os.write(outBuff, 0, outBuffPosn);
+                        listener.increment(outBuffPosn);
                         b4Posn = 0;
 
                         // If that was the equals sign, break out of 'for' loop
@@ -1591,7 +1595,7 @@ public class Base64 {
         } // end finally
     } // end decodeFileToFile
 
-	/* ******** I N N E R C L A S S I N P U T S T R E A M ******** */
+    /* ******** I N N E R C L A S S I N P U T S T R E A M ******** */
 
     /**
      * A {@link InputStream} will read data from another <tt>java.io.InputStream</tt>, given in the constructor, and encode/decode
@@ -1788,7 +1792,7 @@ public class Base64 {
 
     } // end inner class InputStream
 
-	/* ******** I N N E R C L A S S O U T P U T S T R E A M ******** */
+    /* ******** I N N E R C L A S S O U T P U T S T R E A M ******** */
 
     /**
      * A {@link OutputStream} will write data to another <tt>java.io.OutputStream</tt>, given in the constructor, and encode/decode

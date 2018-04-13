@@ -6,9 +6,9 @@ import java.io.InputStreamReader;
 /**
  * Created by longri on 13.05.17.
  */
-public class GdxJsonReader extends JsonReader implements JsonParser {
+public class GdxJsonReader extends JsonReader {
 
-    @Override
+
     public JsonValue parse(InputStream input, long length) {
         InputStreamReader reader = new InputStreamReader(input);
         return parse(reader);
@@ -17,11 +17,6 @@ public class GdxJsonReader extends JsonReader implements JsonParser {
     @Override
     public void startArray(String name) {
         super.startArray(name);
-    }
-
-    @Override
-    public void endArray(String name) {
-
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import java.util.Date;
 public class Cache3DAO extends AbstractCacheDAO {
 
     private final static Logger log = LoggerFactory.getLogger(Cache3DAO.class);
-    private final DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     @Override
     public AbstractWaypointDAO getWaypointDAO() {
@@ -42,16 +42,28 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public boolean updateDatabase(Database database, AbstractCache abstractCache) {
-        return writeOrUpdate(true, database, abstractCache);
+    public boolean updateDatabase(Database database, AbstractCache abstractCache, boolean fireChangedEvent) {
+        return writeOrUpdate(true, database, abstractCache, fireChangedEvent);
     }
 
     @Override
-    public void writeToDatabase(Database database, AbstractCache abstractCache) {
-        writeOrUpdate(false, database, abstractCache);
+    public void writeToDatabase(Database database, AbstractCache abstractCache, boolean fireChangedEvent) {
+
+        if (database == null || abstractCache == null) return;
+
+        //check for update
+        GdxSqliteCursor cousor = database.rawQuery("SELECT id FROM CacheCoreInfo WHERE id=" + abstractCache.getId());
+        boolean update = false;
+        if (cousor != null) {
+            update = true;
+            cousor.close();
+        }
+        writeOrUpdate(update, database, abstractCache, fireChangedEvent);
     }
 
-    private boolean writeOrUpdate(boolean update, Database database, AbstractCache abstractCache) {
+    private boolean writeOrUpdate(boolean update, Database database, AbstractCache abstractCache, boolean fireChangedEvent) {
+
+        if (database == null || abstractCache == null) return false;
 
         boolean noError = true;
 
@@ -60,7 +72,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         if (!update) args.put("Id", abstractCache.getId());
         args.put("Latitude", abstractCache.getLatitude());
         args.put("Longitude", abstractCache.getLongitude());
-        args.put("Size", abstractCache.getSize().ordinal());
+        args.put("Size", abstractCache.getSize() != null ? abstractCache.getSize().ordinal() : 0);
         args.put("Difficulty", (int) (abstractCache.getDifficulty() * 2));
         args.put("Terrain", (int) (abstractCache.getTerrain() * 2));
         args.put("Type", abstractCache.getType().ordinal());
@@ -93,11 +105,16 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to CacheInfo table
         args.clear();
         if (!update) args.put("Id", abstractCache.getId());
-        args.put("DateHidden", iso8601Format.format(abstractCache.getDateHidden(database) == null ? new Date() : abstractCache.getDateHidden(database)));
-        args.put("FirstImported", iso8601Format.format(new Date()));
+
+        Date dateHidden = abstractCache.getDateHidden(database);
+        if (dateHidden == null) dateHidden = new Date();
+        String dateString = Database.cbDbFormat.format(dateHidden);
+
+        args.put("DateHidden", dateString);
+        args.put("FirstImported", Database.cbDbFormat.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
-        args.put("state", abstractCache.getState());
+        args.put("state", abstractCache.getState(database));
         args.put("country", abstractCache.getCountry(database));
         args.put("ApiStatus", abstractCache.getApiState(database));
 
@@ -126,8 +143,8 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("Url", abstractCache.getUrl(database));
         args.put("Hint", abstractCache.getHint(database));
         args.put("Description", abstractCache.getLongDescription(database));
-        args.put("Notes", abstractCache.getTmpNote());
-        args.put("Solver", abstractCache.getTmpSolver());
+        args.put("Notes", abstractCache.getTmpNote(database));
+        args.put("Solver", abstractCache.getTmpSolver(database));
         args.put("ShortDescription", abstractCache.getShortDescription(database));
 
         if (args.size() > 0) {
@@ -191,11 +208,11 @@ public class Cache3DAO extends AbstractCacheDAO {
             while (n-- > 0) {
                 AbstractWaypoint wp = waypoints.get(n);
                 if (update) {
-                    if (!WDAO.updateDatabase(database, wp)) {
-                        WDAO.writeToDatabase(database, wp);
+                    if (!WDAO.updateDatabase(database, wp, fireChangedEvent)) {
+                        WDAO.writeToDatabase(database, wp, fireChangedEvent);
                     }
                 } else {
-                    WDAO.writeToDatabase(database, wp);
+                    WDAO.writeToDatabase(database, wp, fireChangedEvent);
                 }
 
             }
@@ -229,4 +246,23 @@ public class Cache3DAO extends AbstractCacheDAO {
             log.error("Can't update booleanStore");
         }
     }
+
+    @Override
+    public AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints) {
+        String statement = "SELECT * from CacheCoreInfo WHERE GcCode=?";
+        GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(gcCode)});
+        if (cursor == null) return null;
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+            AbstractCache cache = new ImmutableCache(cursor);
+            if (withWaypoints) {
+                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cache.getId(), true));
+            }
+            cursor.close();
+            return cache;
+        }
+        cursor.close();
+        return null;
+    }
+
 }

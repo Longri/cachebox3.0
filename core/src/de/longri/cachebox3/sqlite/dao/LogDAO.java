@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -22,14 +22,11 @@ import de.longri.gdx.sqlite.GdxSqliteCursor;
 import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
 public class LogDAO {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(ImageDAO.class);
-    private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     public synchronized void WriteToDatabase(LogEntry logEntry) {
@@ -38,8 +35,7 @@ public class LogDAO {
         args.put("Finder", logEntry.Finder);
         args.put("Type", logEntry.Type.ordinal());
         args.put("Comment", logEntry.Comment);
-        DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String stimestamp = iso8601Format.format(logEntry.Timestamp);
+        String stimestamp = Database.cbDbFormat.format(logEntry.Timestamp);
         args.put("Timestamp", stimestamp);
         args.put("CacheId", logEntry.CacheId);
         try {
@@ -87,21 +83,15 @@ public class LogDAO {
     public void writeToDB(Database database, Array<LogEntry> logList) {
         //create statements
         GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
-
-        database.myDB.beginTransaction();
-        try {
-            for (LogEntry entry : logList) {
-                REPLACE_LOGS.bind(
-                        entry.Id,
-                        entry.CacheId,
-                        iso8601Format.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                        entry.Finder,
-                        entry.Type,
-                        entry.Comment
-                ).commit().reset();
-            }
-        } finally {
-            database.myDB.endTransaction();
+        for (LogEntry entry : logList) {
+            REPLACE_LOGS.bind(
+                    entry.Id,
+                    entry.CacheId,
+                    Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                    entry.Finder,
+                    entry.Type,
+                    entry.Comment
+            ).commit().reset();
         }
     }
 

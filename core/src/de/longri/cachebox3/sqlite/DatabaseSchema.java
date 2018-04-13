@@ -136,7 +136,7 @@ public class DatabaseSchema {
             "                              UNIQUE,\n" +
             "    Value      NVARCHAR (255),\n" +
             "    LongString NTEXT,\n" +
-            "    desired    NTEXT\n" +
+            "    desired    NTEXT,\n" +
             "    blob    BLOB\n" +
             ");";
 

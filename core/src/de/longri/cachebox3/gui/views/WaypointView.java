@@ -340,7 +340,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                         if (which == ButtonDialog.BUTTON_POSITIVE) {
                             log.debug("Delete Waypoint");
                             // Yes button clicked
-                            DaoFactory.WAYPOINT_DAO.delete(Database.Data, actWaypoint);
+                            DaoFactory.WAYPOINT_DAO.delete(Database.Data, actWaypoint, true);
                             actAbstractCache.getWaypoints().removeValue(actWaypoint, false);
                             addNewListView();
                         }
@@ -361,7 +361,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     private void addWp(Coordinate coordinate, boolean showCoords) {
         String newGcCode = "";
         try {
-            newGcCode = Database.createFreeGcCode(EventHandler.getSelectedCache().getGcCode().toString());
+            newGcCode = Database.createFreeGcCode(Database.Data, EventHandler.getSelectedCache().getGcCode().toString());
         } catch (Exception e) {
             log.error("can't generate GcCode! can't show EditWaypoint Activity");
             return;
@@ -402,9 +402,9 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                                 DaoFactory.WAYPOINT_DAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
                             }
                             if (update) {
-                                DaoFactory.WAYPOINT_DAO.updateDatabase(Database.Data, value);
+                                DaoFactory.WAYPOINT_DAO.updateDatabase(Database.Data, value, true);
                             } else {
-                                DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value);
+                                DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value, true);
                             }
                             CB.requestRendering();
                         }

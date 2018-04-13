@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2017 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 
-import javax.naming.directory.Attribute;
 import java.util.Date;
 
 /**
@@ -56,6 +55,7 @@ public class MutableCache extends AbstractCache {
     private byte apiState;
     private String state;
     private String note;
+    private String solver;
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
@@ -68,11 +68,11 @@ public class MutableCache extends AbstractCache {
         this.latitude = cache.getLatitude();
         this.longitude = cache.getLongitude();
         this.attributes = cache.getAttributes(database);
-        this.name = cache.getName().toString();
-        this.gcCode = cache.getGcCode().toString();
-        this.placedBy = cache.getPlacedBy().toString();
-        this.owner = cache.getOwner().toString();
-        this.gcId = cache.getGcId().toString();
+        if (cache.getName() != null) this.name = cache.getName().toString();
+        if (cache.getGcCode() != null) this.gcCode = cache.getGcCode().toString();
+        if (cache.getPlacedBy() != null) this.placedBy = cache.getPlacedBy().toString();
+        if (cache.getOwner() != null) this.owner = cache.getOwner().toString();
+        if (cache.getGcId() != null) this.gcId = cache.getGcId().toString();
         this.rating = (short) (cache.getRating() * 2);
         this.favPoints = cache.getFavoritePoints();
         this.id = cache.getId();
@@ -95,9 +95,11 @@ public class MutableCache extends AbstractCache {
         this.hint = cache.getHint(database).toString();
         this.url = cache.getUrl(database);
         this.dateHidden = cache.getDateHidden(database);
-        this.state = cache.getState();
+        this.state = cache.getState(database);
         this.country = cache.getCountry(database);
         this.apiState = cache.getApiState(database);
+        this.note = cache.getTmpNote(database);
+        this.solver = cache.getTmpSolver(database);
     }
 
     public MutableCache(MutableCache cache) {
@@ -136,6 +138,8 @@ public class MutableCache extends AbstractCache {
         this.attributes = cache.attributes;
         this.attributesNegative = cache.attributesNegative;
         this.attributesPositive = cache.attributesPositive;
+        this.note = cache.note;
+        this.solver = cache.solver;
     }
 
     public MutableCache(double latitude, double longitude, String name, CacheTypes type, String gcCode) {
@@ -335,7 +339,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFavorite(boolean favorite) {
+    public void setFavorite(Database databse, boolean favorite) {
         this.favorite = favorite;
     }
 
@@ -365,7 +369,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFound(boolean found) {
+    public void setFound(Database databse, boolean found) {
         this.found = found;
     }
 
@@ -440,7 +444,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getTmpNote() {
+    public String getTmpNote(Database database) {
         return this.note;
     }
 
@@ -460,13 +464,13 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getTmpSolver() {
-        return null;
+    public String getTmpSolver(Database database) {
+        return this.solver;
     }
 
     @Override
-    public void setTmpSolver(String value) {
-
+    public void setTmpSolver(Database database, String value) {
+        this.solver = value;
     }
 
     @Override
@@ -490,7 +494,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getState() {
+    public String getState(Database database) {
         return this.state;
     }
 

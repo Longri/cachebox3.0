@@ -243,7 +243,8 @@ public class WelcomeScreen implements Screen {
             if (f.getName().contains("skin") && f.getName().endsWith(".jar")) {
 
                 try {
-                    UnZip.extractFolder(f.getAbsolutePath());
+                    final UnZip unZip = new UnZip();
+                    unZip.extractFolder(f.getAbsolutePath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
