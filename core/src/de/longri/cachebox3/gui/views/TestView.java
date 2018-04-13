@@ -53,10 +53,9 @@ import de.longri.cachebox3.gui.widgets.list_view.DefaultListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.IntProperty;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -241,40 +240,40 @@ public class TestView extends AbstractView {
 //        }
 
 
-//        {// test Map Info Bubble
-//
-//            AbstractCache cache = new MutableCache(0, 0);
-//            cache.setSize(CacheSizes.regular);
-//            cache.setType(CacheTypes.Traditional);
-//            cache.setName("CacheName CacheName CacheName CacheName");
-//            cache.setOwner("CacheOwner");
-//            cache.setFavoritePoints(1345); //TODO debug!
-//            cache.setFavorite(true);
-//            cache.setNumTravelbugs(12);
-//            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
-//
-//            ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
-//
-//            cacheListItem.setBackground(style.firstItem);
-//
-//            MapBubble mapBubble = new MapBubble(cache);
-//            mapBubble.layout();
-//            VisLabel label3 = new VisLabel("Map Info Bubble");
-//            Table lineTable = new Table();
-//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-//            lineTable = new Table();
-//            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-//            lineTable.add(label3);
-//            contentTable.add(lineTable).left().expandX().fillX();
-//            contentTable.row();
-//
-//            contentTable.add(cacheListItem).width(new Value.Fixed(contentWidth * 1.2f)).pad(5);
-//            contentTable.row();
-//
-//            contentTable.add(mapBubble).pad(20).height(new Value.Fixed(mapBubble.getHeight()));
-//            contentTable.row();
-//
-//        }
+        {// test Map Info Bubble
+
+            AbstractCache cache = new MutableCache(0, 0);
+            cache.setSize(CacheSizes.regular);
+            cache.setType(CacheTypes.Traditional);
+            cache.setName("CacheName CacheName CacheName CacheName");
+            cache.setOwner("CacheOwner");
+            cache.setFavoritePoints(1345); //TODO debug!
+            cache.setFavorite(Database.Data, true);
+            cache.setNumTravelbugs(12);
+            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache);
+
+            ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
+
+            cacheListItem.setBackground(style.firstItem);
+
+            MapBubble mapBubble = new MapBubble(cache);
+            mapBubble.layout();
+            VisLabel label3 = new VisLabel("Map Info Bubble");
+            Table lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable = new Table();
+            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+            lineTable.add(label3);
+            contentTable.add(lineTable).left().expandX().fillX();
+            contentTable.row();
+
+            contentTable.add(cacheListItem).width(new Value.Fixed(contentWidth * 1.2f)).pad(5);
+            contentTable.row();
+
+            contentTable.add(mapBubble).pad(20).height(new Value.Fixed(mapBubble.getHeight()));
+            contentTable.row();
+
+        }
 
 
         {// test FloatControl
