@@ -38,20 +38,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable theme;
     public Drawable themeStyle;
     public Drawable import_PQ;
-
-
-    @Override
-    public int getPrefWidth() {
-        return CB.getScaledInt(47);
-    }
-
-    @Override
-    public int getPrefHeight() {
-        return CB.getScaledInt(47);
-    }
-
     public Drawable favorit;
-
     public Drawable docIcon;
     public Drawable addCacheIcon;
     public Drawable deleteIcon;
@@ -100,4 +87,21 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable GC_Live;
     public Drawable viewSettings;
     public Drawable reloadCacheIcon;
+    public Drawable deleteCaches;
+    public Drawable deleteFilter;
+    public Drawable deleteArchieved;
+    public Drawable deleteFounds;
+
+
+    @Override
+    public int getPrefWidth() {
+        return CB.getScaledInt(47);
+    }
+
+    @Override
+    public int getPrefHeight() {
+        return CB.getScaledInt(47);
+    }
+
+
 }

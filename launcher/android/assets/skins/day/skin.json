@@ -896,6 +896,22 @@
       "path": "svg/deleteIcon.svg",
       "scale": 0.18
     },
+    "delete_Archieved": {
+      "path": "svg/delete_Archieved.svg",
+      "scale": 0.19
+    },
+    "delete_Caches": {
+      "path": "svg/delete_Caches.svg",
+      "scale": 0.19
+    },
+    "delete_Filter": {
+      "path": "svg/delete_Filter.svg",
+      "scale": 0.19
+    },
+    "delete_Founds": {
+      "path": "svg/delete_Founds.svg",
+      "scale": 0.19
+    },
     "description": {
       "path": "svg/description.svg",
       "scale": 0.235
@@ -2818,7 +2834,11 @@
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveMenuIcon",
       "viewSettings": "view",
-      "reloadCacheIcon": "reload_cache"
+      "reloadCacheIcon": "reload_cache",
+      "deleteCaches": "delete_Caches",
+      "deleteFilter": "delete_Filter",
+      "deleteArchieved": "delete_Archieved",
+      "deleteFounds": "delete_Founds"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
