@@ -482,4 +482,71 @@ public class CharSequenceUtil {
     }
 
 
+    private final static char[] AMP = "&amp;".toCharArray();
+    private final static char[] LT = "&lt;".toCharArray();
+    private final static char[] GT = "&gt;".toCharArray();
+    private final static char[] LINE_BREAK = "\r\n".toCharArray();
+
+    public static String getHtmlString(char[] data, int offset, int length) {
+        char[] stringData = new char[length];
+        System.arraycopy(data, offset, stringData, 0, length);
+
+        int newLength = length;
+        int startIndex = 0;
+        while (true) {
+            startIndex = replace(stringData, 0, newLength, AMP, '&', startIndex);
+            if (startIndex >= 0) {
+                newLength -= AMP.length - 1;
+            } else {
+                break;
+            }
+        }
+
+        startIndex = 0;
+        while (true) {
+            startIndex = replace(stringData, 0, newLength, LT, '<', startIndex);
+            if (startIndex >= 0) {
+                newLength -= LT.length - 1;
+            } else {
+                break;
+            }
+        }
+
+        startIndex = 0;
+        while (true) {
+            startIndex = replace(stringData, 0, newLength, GT, '>', startIndex);
+            if (startIndex >= 0) {
+                newLength -= GT.length - 1;
+            } else {
+                break;
+            }
+        }
+
+        startIndex = 0;
+        while (true) {
+            startIndex = replace(stringData, 0, newLength, LINE_BREAK, '\n', startIndex);
+            if (startIndex >= 0) {
+                newLength -= LINE_BREAK.length - 1;
+            } else {
+                break;
+            }
+        }
+        return new String(stringData, 0, newLength);
+    }
+
+    public static int replace(char[] data, int offset, int length, char[] searchChar, char replChar, int fromIndex) {
+        int indexOf = indexOf(data, offset, length, searchChar, 0, searchChar.length, fromIndex);
+        if (indexOf >= 0) {
+            //set replace char to array indexOf
+            data[indexOf] = replChar;
+
+            //copy rest of chars
+            System.arraycopy(data, indexOf + searchChar.length, data, indexOf + 1, length - (indexOf + searchChar.length));
+
+            //return index of replacement
+            return indexOf + 1;
+        }
+        return -1;
+    }
+
 }

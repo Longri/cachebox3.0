@@ -59,56 +59,56 @@ public class TestCache_GCV272 extends AbstractTestCache {
         this.positiveList.add(Attributes.Needs_maintenance);
         this.positiveList.add(Attributes.Recommended_for_kids);
 
-        this.shortDescription = "&lt;p&gt;Ein Spaziergang führt Euch durch die Geschichte der\n" +
+        this.shortDescription = "<p>Ein Spaziergang führt Euch durch die Geschichte der\n" +
                 "Wollankstraße in Berlin, die auch durch die Berliner Mauer stark\n" +
                 "geprägt wurde. Die angegebenen Koordinaten markieren den\n" +
-                "Ausgangspunkt des Spazierganges, den S-Bahnhof Wollankstraße.&lt;/p&gt;\n" +
-                "&lt;!-- Ende Kurzbeschreibung --&gt;";
+                "Ausgangspunkt des Spazierganges, den S-Bahnhof Wollankstraße.</p>\n" +
+                "<!-- Ende Kurzbeschreibung -->";
 
-        this.longDescription = "&lt;p align=\"justify\"&gt;Zunächst folgt eine kleine Beschreibung zur\n" +
+        this.longDescription = "<p align=\"justify\">Zunächst folgt eine kleine Beschreibung zur\n" +
                 "   Geschichte dieser Straße, das ist jedoch keine\n" +
-                "   Pflichtlektüre.&lt;br&gt;\n" +
+                "   Pflichtlektüre.<br>\n" +
                 "Zum Loggen des Caches genügt die Beantwortung aller sieben Fragen.\n" +
                 "Das dürfte nach einem Spaziergang von ca. 45 Minuten und einer\n" +
                 "kurzen Denkpause nicht schwer fallen. Ersetzt die fehlenden\n" +
                 "Variablen und errechnet mit der unten aufgeführten Formel die\n" +
-                "Zielkoordinate.&lt;/p&gt;\n" +
-                "&lt;font color=\"red\"&gt;Bitte achtet darauf, dass der Cache immer wieder\n" +
-                "genau an dieser Stelle befestigt wird und&lt;br&gt;\n" +
+                "Zielkoordinate.</p>\n" +
+                "<font color=\"red\">Bitte achtet darauf, dass der Cache immer wieder\n" +
+                "genau an dieser Stelle befestigt wird und<br>\n" +
                 "dadurch immer mit einem SCHNELLEN und BEQUEMEN Zugriff zu loggen\n" +
-                "ist!!!&lt;/font&gt; &lt;!-- Beginn Geschichte --&gt;\n" +
-                "&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n" +
-                "&lt;p&gt;&lt;b&gt;Geschichte&lt;/b&gt;&lt;/p&gt;\n" +
-                "&lt;p align=\"justify\"&gt;Die Berliner Wollankstraße ist eine ganz normale\n" +
+                "ist!!!</font> <!-- Beginn Geschichte -->\n" +
+                "<p>&nbsp;</p>\n" +
+                "<p><b>Geschichte</b></p>\n" +
+                "<p align=\"justify\">Die Berliner Wollankstraße ist eine ganz normale\n" +
                 "Straße in Berlin. Wirklich eine ganz normale Straße? Auf den\n" +
                 "zweiten Blick ist sie es tatsächlich nicht, denn es gibt viele\n" +
                 "Kleinode und Geschichten, die sich dem Betrachter erst auf den\n" +
-                "zweiten Blick erschließen.&lt;/p&gt;\n" +
-                "&lt;p align=\"justify\"&gt;Die Straße ist seit 1882 nach dem Gutsbesitzer\n" +
+                "zweiten Blick erschließen.</p>\n" +
+                "<p align=\"justify\">Die Straße ist seit 1882 nach dem Gutsbesitzer\n" +
                 "Adolf Friedrich Wollank (1833-1877) benannt. Vorher trug sie die\n" +
-                "Namen Prinzenweg (1703-1877) und Prinzenstraße (1877-1882).&lt;/p&gt;\n" +
-                "&lt;p align=\"justify\"&gt;Durch diese Straße führte ab dem Jahre 1895 die\n" +
+                "Namen Prinzenweg (1703-1877) und Prinzenstraße (1877-1882).</p>\n" +
+                "<p align=\"justify\">Durch diese Straße führte ab dem Jahre 1895 die\n" +
                 "erste elektrische Berliner Straßenbahn von Siemens und Halske vom\n" +
                 "Gesundbrunnen bis nach Pankow. Im Jahre 1938 wird im Rahmen\n" +
                 "Grenzbereinigung der südliche Teil der Wollankstraße dem Bezirk\n" +
                 "Wedding (heute Mitte) zugeschlagen. Dies stieß zu dieser Zeit nicht\n" +
                 "auf die Gegenliebe der Bewohner, denn der Bezirk Pankow ist eher\n" +
-                "bürgerlich geprägt, während der Wedding ein Arbeiterbezirk ist.&lt;/p&gt;\n" +
-                "&lt;p align=\"justify\"&gt;Das villenartige Empfangsgebäude des 1903\n" +
+                "bürgerlich geprägt, während der Wedding ein Arbeiterbezirk ist.</p>\n" +
+                "<p align=\"justify\">Das villenartige Empfangsgebäude des 1903\n" +
                 "errichteten Bahnhofes „Pankow Nordbahn“ befindet sich nicht an der\n" +
                 "Wollankstraße, sondern etwa einhundert Meter weiter westlich an der\n" +
                 "Nordbahnstraße. Die elektrische S-Bahn hält hier bereits seit dem\n" +
                 "5. Juni 1925. Den heutigen Namen „Wollankstraße“ trägt dieser\n" +
-                "Bahnhof erst seit dem Jahr 1937.&lt;/p&gt;\n" +
-                "&lt;p align=\"justify\"&gt;Die Teilung Berlins nach dem zweiten Weltkrieg\n" +
+                "Bahnhof erst seit dem Jahr 1937.</p>\n" +
+                "<p align=\"justify\">Die Teilung Berlins nach dem zweiten Weltkrieg\n" +
                 "und der Bau der Mauer 1961 prägen die Straße bis zum heutigen Tage.\n" +
                 "Da die Bezirksgrenzen maßgeblich für die Aufteilung der Stadt in\n" +
                 "Besatzungszonen waren, fiel der nördliche Pankower Teil der\n" +
                 "Wollankstraße in die sowjetische Zone, während der Weddinger Teil\n" +
                 "der französischen Besatzungszone zugeordnet wurde. Im Weddinger\n" +
                 "Teil der Wollankstraße wurde die Straßenbahn 1960 stillgelegt, im\n" +
-                "Pankower Teil bereits 1953.&lt;/p&gt;\n" +
-                "&lt;p align=\"justify\"&gt;Mit dem Bau der Mauer 1961 wurde die\n" +
+                "Pankower Teil bereits 1953.</p>\n" +
+                "<p align=\"justify\">Mit dem Bau der Mauer 1961 wurde die\n" +
                 "Straßenunterführung an der die S-Bahn-Brücke von den\n" +
                 "DDR-Grenztruppen verbarrikadiert. Bis zur Maueröffnung sollte diese\n" +
                 "Durchfahrt hermetisch abgeriegelt bleiben. Es gab in diesem Bereich\n" +
@@ -118,210 +118,210 @@ public class TestCache_GCV272 extends AbstractTestCache {
                 "Richtung Pankow vorgetriebener Fluchttunnel entdeckt wurde, bevor\n" +
                 "er zur Flucht benutzt werden konnte. Obwohl der S-Bahnhof und der\n" +
                 "gesamte Bahndamm in vollem Umfang zu Pankow gehört, war er für die\n" +
-                "Zeit der Mauer ausschließlich für West-Berliner zugänglich.&lt;/p&gt;\n" +
-                "&lt;p align=\"justify\"&gt;In den achtziger Jahren wurde die Wollankstraße\n" +
+                "Zeit der Mauer ausschließlich für West-Berliner zugänglich.</p>\n" +
+                "<p align=\"justify\">In den achtziger Jahren wurde die Wollankstraße\n" +
                 "im Wedding zurückgebaut und umgestaltet. Dies geschah auch deshalb,\n" +
                 "da diese Straße an der Mauer am S-Bahnhof endete und nicht mehr als\n" +
                 "Durchgangsstraße fungierte. Die letzten Überreste der\n" +
                 "Straßenbahnschienen in Pankow wurden erst nach dem Jahre 2000\n" +
                 "entfernt. Durch die unterschiedlichen Entwicklungen vor allen\n" +
                 "während der Zeit der Teilung geben die Straßenhälften ein sehr\n" +
-                "unterschiedliches Bild ab.&lt;/p&gt;\n" +
-                "&lt;p align=\"justify\"&gt;Von den Grenzanlagen der Berliner Mauer ist\n" +
+                "unterschiedliches Bild ab.</p>\n" +
+                "<p align=\"justify\">Von den Grenzanlagen der Berliner Mauer ist\n" +
                 "heute nur noch wenig zu erkennen. Nur der Todesstreifen, der\n" +
-                "östlich des Bahndammes verlief, ist noch zu erahnen.&lt;/p&gt;\n" +
-                "&lt;br&gt;\n" +
-                " &lt;!-- Ende Geschichte --&gt;\n" +
+                "östlich des Bahndammes verlief, ist noch zu erahnen.</p>\n" +
+                "<br>\n" +
+                " <!-- Ende Geschichte -->\n" +
                 " \n" +
-                "&lt;p&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;\n" +
-                "&lt;table cellpadding=\"0\" cellspacing=\"0\" width=\"99%\"&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"180\" bgcolor=\"#FFFF99\" style=\n" +
-                "\"text-align:left; text-indent:6px; margin:0; border-width:1px; border-color:black; border-top-style:solid; border-right-style:none; border-bottom-style:solid; border-left-style:none;\"&gt;\n" +
-                "&lt;p&gt;&lt;b&gt;Station 1&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"1058\" bgcolor=\"#FFFF99\" style=\n" +
-                "\"margin:0; border-width:1px; border-color:black; border-top-style:solid; border-right-style:none; border-bottom-style:solid; border-left-style:none;\"&gt;\n" +
-                "&lt;p&gt;N 52° 33.887 E 013° 23.594&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"1238\" colspan=\"2\"&gt;Am S-Bahnhof ist ein Schild befestigt.\n" +
-                "Welche Höhenangabe üNN ist hier angegeben?&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "Lösung: 4A,3B4&lt;br&gt;\n" +
-                "&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"180\" height=\"16\" bgcolor=\"#FFFF99\" style=\n" +
-                "\"text-align:left; text-indent:6px; border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;&lt;b&gt;Station 2&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"1058\" height=\"16\" bgcolor=\"#FFFF99\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "N 52° 33.622 E 013° 23.266&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"1238\" colspan=\"2\" height=\"16\"&gt;\n" +
-                "&lt;p&gt;In der Wollankstraße befinden sich zwei Friedhöfe. Gehe zum\n" +
+                "<p><b>&nbsp;</b></p>\n" +
+                "<table cellpadding=\"0\" cellspacing=\"0\" width=\"99%\">\n" +
+                "<tr>\n" +
+                "<td width=\"180\" bgcolor=\"#FFFF99\" style=\n" +
+                "\"text-align:left; text-indent:6px; margin:0; border-width:1px; border-color:black; border-top-style:solid; border-right-style:none; border-bottom-style:solid; border-left-style:none;\">\n" +
+                "<p><b>Station 1</b></p></td>\n" +
+                "<td width=\"1058\" bgcolor=\"#FFFF99\" style=\n" +
+                "\"margin:0; border-width:1px; border-color:black; border-top-style:solid; border-right-style:none; border-bottom-style:solid; border-left-style:none;\">\n" +
+                "<p>N 52° 33.887 E 013° 23.594</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"1238\" colspan=\"2\">Am S-Bahnhof ist ein Schild befestigt.\n" +
+                "Welche Höhenangabe üNN ist hier angegeben?<br>\n" +
+                "<br>\n" +
+                "Lösung: 4A,3B4<br>\n" +
+                "&nbsp;</td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"180\" height=\"16\" bgcolor=\"#FFFF99\" style=\n" +
+                "\"text-align:left; text-indent:6px; border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p><b>Station 2</b></p></td>\n" +
+                "<td width=\"1058\" height=\"16\" bgcolor=\"#FFFF99\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "N 52° 33.622 E 013° 23.266</td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"1238\" colspan=\"2\" height=\"16\">\n" +
+                "<p>In der Wollankstraße befinden sich zwei Friedhöfe. Gehe zum\n" +
                 "südlichen Eingang des St. Elisabeth-Friedhofs in der Wollankstraße.\n" +
                 "Neben dem sehenswerten Eingangsportal des Friedhofs befindet sich\n" +
-                "eine Blumenhandlung. Wann würde dieses Geschäft gegründet?&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                " Lösung: 1C7D&lt;br&gt;\n" +
-                "&amp;nbsp;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"180\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;&lt;b&gt;Station 3&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;N 52° 33.724 E 013° 23.382&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"1238\" colspan=\"2\" height=\"16\"&gt;\n" +
-                "&lt;p&gt;Die östliche Straßenseite in Mitte ist zu großen Teilen von der\n" +
+                "eine Blumenhandlung. Wann würde dieses Geschäft gegründet?<br>\n" +
+                "<br>\n" +
+                " Lösung: 1C7D<br>\n" +
+                "&nbsp;</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"180\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p><b>Station 3</b></p></td>\n" +
+                "<td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p>N 52° 33.724 E 013° 23.382</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"1238\" colspan=\"2\" height=\"16\">\n" +
+                "<p>Die östliche Straßenseite in Mitte ist zu großen Teilen von der\n" +
                 "Wohnungsbaugenossenschaft „Vaterländischer Bauverein“ bebaut\n" +
-                "worden. Wann wurden die Häuser Wollankstraße 75-83b erbaut?&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "Lösung: 1EF6&lt;br&gt;\n" +
-                "&amp;nbsp;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"180\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;&lt;b&gt;Station 4&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;N 52° 33.795 E 013° 23.458&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"1238\" colspan=\"2\" height=\"16\"&gt;\n" +
-                "&lt;p&gt;Etwas weiter nördlich folgt ein Kirchengemeindehaus. Durch den\n" +
+                "worden. Wann wurden die Häuser Wollankstraße 75-83b erbaut?<br>\n" +
+                "<br>\n" +
+                "Lösung: 1EF6<br>\n" +
+                "&nbsp;</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"180\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p><b>Station 4</b></p></td>\n" +
+                "<td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p>N 52° 33.795 E 013° 23.458</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"1238\" colspan=\"2\" height=\"16\">\n" +
+                "<p>Etwas weiter nördlich folgt ein Kirchengemeindehaus. Durch den\n" +
                 "Bau der Mauer 1961 wurde der Weddinger Teil der\n" +
                 "Martin-Luther-Gemeinde von ihrem Gemeindehaus in der Pradelstraße\n" +
                 "in Pankow getrennt. Das Haus, vor dem ihr jetzt steht, wurde 1962\n" +
                 "als Behelfsbau neu errichtet. Wer hat diesen Neubau und den Bau\n" +
-                "einer Kirche (inzwischen abgerissen) gesponsort?&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "Lösung:&lt;br&gt;\n" +
-                "- US-Präsident J.F.Kennedy (G=9) oder&lt;br&gt;\n" +
-                "- Berliner Bürgermeister Willy Brandt (G=7) oder&lt;br&gt;\n" +
-                "- schwedische Gräfin Lili Hamilton (G=4)&lt;/p&gt;\n" +
-                "&lt;p&gt;Tipp: ganz in der Nähe findet ihr einen kleinen Hinweis...&lt;br&gt;\n" +
-                "&amp;nbsp;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"180\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;&lt;b&gt;Station 5&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;N 52° 33.882 E 013° 23.616&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"1238\" colspan=\"2\"&gt;\n" +
-                "&lt;p&gt;Nun könnt ihr die Straßenseite wechseln und die ehemalige\n" +
+                "einer Kirche (inzwischen abgerissen) gesponsort?<br>\n" +
+                "<br>\n" +
+                "Lösung:<br>\n" +
+                "- US-Präsident J.F.Kennedy (G=9) oder<br>\n" +
+                "- Berliner Bürgermeister Willy Brandt (G=7) oder<br>\n" +
+                "- schwedische Gräfin Lili Hamilton (G=4)</p>\n" +
+                "<p>Tipp: ganz in der Nähe findet ihr einen kleinen Hinweis...<br>\n" +
+                "&nbsp;</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"180\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p><b>Station 5</b></p></td>\n" +
+                "<td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p>N 52° 33.882 E 013° 23.616</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"1238\" colspan=\"2\">\n" +
+                "<p>Nun könnt ihr die Straßenseite wechseln und die ehemalige\n" +
                 "Sektorengrenze überschreiten, in dem ihr die S-Bahn-Brücken\n" +
                 "unterquert. Doch halt! Im Boden ist eine kleine Gedenktafel\n" +
                 "eingelassen. Übrigens an der falschen Stelle, sie müsste auf der\n" +
                 "südlichen Seite des Bahndammes im Boden versenkt sein! Merkt Euch\n" +
-                "bitte die vorletzte Ziffer dieser Inschrift.&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "Lösung: H&lt;br&gt;\n" +
-                "&amp;nbsp;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"180\" bgcolor=\"#FFFF99\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;&lt;b&gt;Station 6&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;N 52° 33.944 E 013° 23.721&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"1238\" colspan=\"2\"&gt;\n" +
-                "&lt;p&gt;Einige Meter weiter befindet sich das Franziskanerkloster. 1921\n" +
+                "bitte die vorletzte Ziffer dieser Inschrift.<br>\n" +
+                "<br>\n" +
+                "Lösung: H<br>\n" +
+                "&nbsp;</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"180\" bgcolor=\"#FFFF99\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p><b>Station 6</b></p></td>\n" +
+                "<td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p>N 52° 33.944 E 013° 23.721</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"1238\" colspan=\"2\">\n" +
+                "<p>Einige Meter weiter befindet sich das Franziskanerkloster. 1921\n" +
                 "erwarben die Franziskaner von Breslau hier zwei Grundstücke, um\n" +
                 "sich niederzulassen. Die ärmsten der Stadt können sich hier eine\n" +
                 "warme Mahlzeit holen, sich waschen oder sich neu einkleiden lassen.\n" +
                 "Im Vorgarten befindet sich eine Glocke, die täglich zum Gebet\n" +
-                "aufruft. Nenne die erste Ziffer der Hausnummer.&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "Lösung: J&lt;br&gt;\n" +
-                "&amp;nbsp;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"180\" bgcolor=\"#FFFF99\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;&lt;b&gt;Station 7&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
-                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\"&gt;\n" +
-                "&lt;p&gt;N 52° 34.110 E 013° 23.979&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"1238\" colspan=\"2\"&gt;\n" +
-                "&lt;p&gt;Hier findet Ihr ein sehr altes, wenn nicht sogar das älteste\n" +
+                "aufruft. Nenne die erste Ziffer der Hausnummer.<br>\n" +
+                "<br>\n" +
+                "Lösung: J<br>\n" +
+                "&nbsp;</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"180\" bgcolor=\"#FFFF99\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p><b>Station 7</b></p></td>\n" +
+                "<td width=\"1058\" bgcolor=\"#FFFF99\" height=\"16\" style=\n" +
+                "\"border-width:1px; border-color:black; border-top-style:solid; border-bottom-style:solid;\">\n" +
+                "<p>N 52° 34.110 E 013° 23.979</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"1238\" colspan=\"2\">\n" +
+                "<p>Hier findet Ihr ein sehr altes, wenn nicht sogar das älteste\n" +
                 "Gebäude in dieser Straße. Die Anlage wurde um 1860 erbaut und ab\n" +
                 "1875 betrieb Carl Hartmann hier ein Geschäft. Um welches Gewerbe\n" +
-                "handelte es sich?&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "Lösung:&lt;br&gt;\n" +
-                "- eine Bank (K=3) oder&lt;br&gt;\n" +
-                "- eine Bäckerei (K=2) oder&lt;br&gt;\n" +
-                "- ein Museum (K=7)&lt;br&gt;\n" +
-                "&amp;nbsp;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;\n" +
-                "&lt;p&gt;&lt;!-- Beginn Lösungstabelle --&gt;\n" +
-                "&lt;/p&gt;\n" +
-                "&lt;table border=\"1\" cellspacing=\"0\" bordercolordark=\"white\"\n" +
-                "bordercolorlight=\"black\"&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;A&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;B&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;C&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;D&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;E&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;F&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;G&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;H&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;J&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;K&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;\n" +
-                "&lt;tr&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;/p&gt;&lt;/td&gt;\n" +
-                "&lt;td width=\"45\" height=\"25\"&gt;\n" +
-                "&lt;p align=\"center\"&gt;&amp;nbsp;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;\n" +
-                "&lt;!-- Ende Lösungstabelle --&gt;\n" +
-                "&lt;br&gt;\n" +
-                "&lt;p&gt;Die Zielkoordinate errechnet sich wie folgt:&lt;/p&gt;\n" +
-                "&lt;b&gt;&lt;br&gt;&lt;/b&gt;N 52° 34'(F+H-8)(D+K)(E-9)''&lt;br&gt;\n" +
-                "E 13° 23'(C)(G+J+1)(A+B+D)'' &lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "&lt;!-- Beginn Zähler --&gt;\n" +
-                " &lt;a rel=\"nofollow\" href=\"http://www.andyhoppe.com/\" target=\"_blank\"\n" +
-                "title=\"Counter\"&gt;&lt;img src=\n" +
+                "handelte es sich?<br>\n" +
+                "<br>\n" +
+                "Lösung:<br>\n" +
+                "- eine Bank (K=3) oder<br>\n" +
+                "- eine Bäckerei (K=2) oder<br>\n" +
+                "- ein Museum (K=7)<br>\n" +
+                "&nbsp;</p></td></tr></table>\n" +
+                "<p><!-- Beginn Lösungstabelle -->\n" +
+                "</p>\n" +
+                "<table border=\"1\" cellspacing=\"0\" bordercolordark=\"white\"\n" +
+                "bordercolorlight=\"black\">\n" +
+                "<tr>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">A</p></td>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">B</p></td>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">C</p></td>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">D</p></td>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">E</p></td>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">F</p></td>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">G</p></td>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">H</p></td>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">J</p></td>\n" +
+                "<td width=\"45\" height=\"25\" bgcolor=\"#FFFF99\">\n" +
+                "<p align=\"center\">K</p></td></tr>\n" +
+                "<tr>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\"><b>&nbsp;</b></p></td>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\"><b>&nbsp;</b></p></td>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\"><b>&nbsp;</b></p></td>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\"><b>&nbsp;</b></p></td>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\"><b>&nbsp;</b></p></td>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\"><b>&nbsp;</b></p></td>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\"><b>&nbsp;</b></p></td>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\"><b>&nbsp;</b></p></td>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\"><b>&nbsp;</b></p></td>\n" +
+                "<td width=\"45\" height=\"25\">\n" +
+                "<p align=\"center\">&nbsp;</p></td></tr></table>\n" +
+                "<!-- Ende Lösungstabelle -->\n" +
+                "<br>\n" +
+                "<p>Die Zielkoordinate errechnet sich wie folgt:</p>\n" +
+                "<b><br></b>N 52° 34'(F+H-8)(D+K)(E-9)''<br>\n" +
+                "E 13° 23'(C)(G+J+1)(A+B+D)'' <br>\n" +
+                "<br>\n" +
+                "<br>\n" +
+                "<br>\n" +
+                "<!-- Beginn Zähler -->\n" +
+                " <a rel=\"nofollow\" href=\"http://www.andyhoppe.com/\" target=\"_blank\"\n" +
+                "title=\"Counter\"><img src=\n" +
                 "\"http://www.andyhoppe.com/count/?id=1143359603\" border=\"0\"\n" +
-                "     alt=\"Counter\"&gt;&lt;/a&gt; &lt;br&gt;\n" +
-                " &lt;!-- Ende Zähler --&gt;\n" +
-                "&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
-                "&lt;br&gt;\n" +
+                "     alt=\"Counter\"></a> <br>\n" +
+                " <!-- Ende Zähler -->\n" +
+                "<br>\n" +
+                "<br>\n" +
+                "<br>\n" +
                 " \n" +
-                "&lt;p&gt;&amp;nbsp;&lt;/p&gt;\n" +
-                "&lt;!-- Ende Cachebeschreibung --&gt;&lt;p&gt;Additional Waypoints&lt;/p&gt;AAV272 - Station 1&lt;br /&gt;N 52° 33.888 E 013° 23.594&lt;br /&gt;&lt;br /&gt;ABV272 - Station 2&lt;br /&gt;N 52° 33.622 E 013° 23.266&lt;br /&gt;&lt;br /&gt;ACV272 - Station 3&lt;br /&gt;N 52° 33.724 E 013° 23.382&lt;br /&gt;&lt;br /&gt;ADV272 - Station 4&lt;br /&gt;N 52° 33.795 E 013° 23.458&lt;br /&gt;&lt;br /&gt;AEV272 - Station 5&lt;br /&gt;N 52° 33.882 E 013° 23.616&lt;br /&gt;&lt;br /&gt;AFV272 - Station 6&lt;br /&gt;N 52° 33.944 E 013° 23.721&lt;br /&gt;&lt;br /&gt;AGV272 - Station 7&lt;br /&gt;N 52° 34.110 E 013° 23.979&lt;br /&gt;&lt;br /&gt;";
+                "<p>&nbsp;</p>\n" +
+                "<!-- Ende Cachebeschreibung --><p>Additional Waypoints</p>AAV272 - Station 1<br />N 52° 33.888 E 013° 23.594<br /><br />ABV272 - Station 2<br />N 52° 33.622 E 013° 23.266<br /><br />ACV272 - Station 3<br />N 52° 33.724 E 013° 23.382<br /><br />ADV272 - Station 4<br />N 52° 33.795 E 013° 23.458<br /><br />AEV272 - Station 5<br />N 52° 33.882 E 013° 23.616<br /><br />AFV272 - Station 6<br />N 52° 33.944 E 013° 23.721<br /><br />AGV272 - Station 7<br />N 52° 34.110 E 013° 23.979<br /><br />";
     }
 
     @Override

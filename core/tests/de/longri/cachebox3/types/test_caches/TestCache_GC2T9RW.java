@@ -64,67 +64,67 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
 
 
         this.hint = "wenn du ihn nicht findest, findet er dich!!";
-        this.shortDescription = "&lt;font face=\"tahoma\" size=\"3\" color=\"#330033\"&gt;&lt;br /&gt;\n" +
-                "&lt;br /&gt;\n" +
-                "T5 Klettercache&lt;br /&gt;\n" +
-                "Ihr benötigt ein 30 m Seil und Eurer Klettergeraffel&lt;br /&gt;\n" +
-                "Bigshot wäre von Vorteil!&lt;br /&gt;\n" +
+        this.shortDescription = "<font face=\"tahoma\" size=\"3\" color=\"#330033\"><br />\n" +
+                "<br />\n" +
+                "T5 Klettercache<br />\n" +
+                "Ihr benötigt ein 30 m Seil und Eurer Klettergeraffel<br />\n" +
+                "Bigshot wäre von Vorteil!<br />\n" +
                 "BITTE NUR KLETTERN, wenn Klettererfahrungen und geeignetes Wissen\n" +
-                "vorhanden sind!! Klettern natürlich auf eigene Gefahr!&lt;br /&gt;\n" +
-                "BITTE:&lt;br /&gt;\n" +
+                "vorhanden sind!! Klettern natürlich auf eigene Gefahr!<br />\n" +
+                "BITTE:<br />\n" +
                 "NICHT alleine Klettern!! Denkt daran, auch ein Fall aus wenigen\n" +
-                "Metern Höhe kann böse enden!!&lt;br /&gt;&lt;/font&gt;";
-        this.longDescription = "&lt;br /&gt;\n" +
-                "&lt;center&gt;&lt;img src=\n" +
-                "\"http://img.geocaching.com/cache/9b0334c7-c419-41c8-b883-8bb0adf20ac3.jpg\" /&gt;&lt;br /&gt;\n" +
+                "Metern Höhe kann böse enden!!<br /></font>";
+        this.longDescription = "<br />\n" +
+                "<center><img src=\n" +
+                "\"http://img.geocaching.com/cache/9b0334c7-c419-41c8-b883-8bb0adf20ac3.jpg\" /><br />\n" +
                 "\n" +
-                "&lt;br /&gt;\n" +
-                "&lt;font face=\"tahoma\" size=\"3\" color=\"#330033\"&gt;&lt;br /&gt;\n" +
-                "&lt;br /&gt;\n" +
-                "Der Hampir, so sagt man, optisch ein liebes zartes Wesen&lt;br /&gt;\n" +
-                "im dunklen Hardtwald treibt er seine Spesen.&lt;br /&gt;\n" +
-                "So süß, so flauschig sogleich&lt;br /&gt;\n" +
-                "auch sein Fell so samtig und weich!&lt;br /&gt;\n" +
-                "Deshalb lass dich blos nicht blenden,&lt;br /&gt;\n" +
-                "sonst könnte es sehr böse für dich enden!&lt;br /&gt;\n" +
-                "&lt;br /&gt;\n" +
-                "Aaaaaber wenn du ihn entdeckst,&lt;br /&gt;\n" +
-                "so achte dich vor ihm, die Gefahr besteht dass du vergisst&lt;br /&gt;\n" +
+                "<br />\n" +
+                "<font face=\"tahoma\" size=\"3\" color=\"#330033\"><br />\n" +
+                "<br />\n" +
+                "Der Hampir, so sagt man, optisch ein liebes zartes Wesen<br />\n" +
+                "im dunklen Hardtwald treibt er seine Spesen.<br />\n" +
+                "So süß, so flauschig sogleich<br />\n" +
+                "auch sein Fell so samtig und weich!<br />\n" +
+                "Deshalb lass dich blos nicht blenden,<br />\n" +
+                "sonst könnte es sehr böse für dich enden!<br />\n" +
+                "<br />\n" +
+                "Aaaaaber wenn du ihn entdeckst,<br />\n" +
+                "so achte dich vor ihm, die Gefahr besteht dass du vergisst<br />\n" +
                 "und vor lauter Kummer und Sorgen ihm tief in die Augen\n" +
-                "erblickst!!&lt;br /&gt;\n" +
-                "&lt;br /&gt;\n" +
-                "Es ist dann zu spät!&lt;br /&gt;\n" +
-                "Dann hat dich der Hampir bereits erspäht!!&lt;br /&gt;\n" +
-                "Der Hampir, so sagt man erschallt sein Gelächter&lt;br /&gt;\n" +
-                "wenn es Beute vor sich hat, so schaurig so grell,&lt;br /&gt;\n" +
-                "rette dich wenn du kannst schneller als schnell!&lt;br /&gt;\n" +
-                "&lt;br /&gt;\n" +
-                "Und wage dich nicht in den Wald&lt;br /&gt;\n" +
-                "in der Nacht beim Vollmond ist es dort bitterkalt!&lt;br /&gt;\n" +
-                "Nebelschwaden dort, aber die schaurige Gestalten&lt;br /&gt;\n" +
-                "verstecken sich im dunkeln mit dem Gedanken,&lt;br /&gt;\n" +
-                "ihre Beute noch schneller zu jagen als der Hampir!&lt;br /&gt;\n" +
-                "Dennoch willst du in den Wald?! Überlege es dir!!&lt;br /&gt;\n" +
-                "&lt;br /&gt;\n" +
-                "Du meinst, ach was... Hampire... die gibt es doch nicht?!&lt;br /&gt;\n" +
-                "Die Hasen die warnen: HIER wartet er auf dich!!!&lt;br /&gt;\n" +
-                "&lt;br /&gt;&lt;/font&gt;&lt;/center&gt;\n" +
-                "&lt;font face=\"tahoma\" size=\"3\" color=\"#330033\"&gt;&lt;br /&gt;\n" +
-                "&lt;br /&gt;\n" +
-                "Fotos dürft Ihr gerne machen &lt;img src=\n" +
+                "erblickst!!<br />\n" +
+                "<br />\n" +
+                "Es ist dann zu spät!<br />\n" +
+                "Dann hat dich der Hampir bereits erspäht!!<br />\n" +
+                "Der Hampir, so sagt man erschallt sein Gelächter<br />\n" +
+                "wenn es Beute vor sich hat, so schaurig so grell,<br />\n" +
+                "rette dich wenn du kannst schneller als schnell!<br />\n" +
+                "<br />\n" +
+                "Und wage dich nicht in den Wald<br />\n" +
+                "in der Nacht beim Vollmond ist es dort bitterkalt!<br />\n" +
+                "Nebelschwaden dort, aber die schaurige Gestalten<br />\n" +
+                "verstecken sich im dunkeln mit dem Gedanken,<br />\n" +
+                "ihre Beute noch schneller zu jagen als der Hampir!<br />\n" +
+                "Dennoch willst du in den Wald?! Überlege es dir!!<br />\n" +
+                "<br />\n" +
+                "Du meinst, ach was... Hampire... die gibt es doch nicht?!<br />\n" +
+                "Die Hasen die warnen: HIER wartet er auf dich!!!<br />\n" +
+                "<br /></font></center>\n" +
+                "<font face=\"tahoma\" size=\"3\" color=\"#330033\"><br />\n" +
+                "<br />\n" +
+                "Fotos dürft Ihr gerne machen <img src=\n" +
                 "'http://www.geocaching.com/images/icons/icon_smile_big.gif' border=\n" +
-                "\"0\" align=\"middle\" /&gt;&lt;br /&gt;\n" +
-                "&lt;br /&gt;\n" +
-                "&lt;br /&gt;\n" +
+                "\"0\" align=\"middle\" /><br />\n" +
+                "<br />\n" +
+                "<br />\n" +
                 "ein besonderer Dank an Monas Cacherteam, für die handwerkliche\n" +
-                "Meisterleistung!!&lt;br /&gt;\n" +
+                "Meisterleistung!!<br />\n" +
                 "Es ist genau so geworden, wie es sich die Hasen vorgestellt\n" +
-                "haben!!&lt;br /&gt;\n" +
-                "&lt;br /&gt;&lt;/font&gt;&lt;br /&gt;\n" +
-                "&lt;a href=\"http://www.andyhoppe.com/\" title=\n" +
-                "\"Counter/Zähler\"&gt;&lt;img src=\"http://c.andyhoppe.com/1302990447\"\n" +
-                "style=\"border:none\" alt=\"Counter/Zähler\" /&gt;&lt;/a&gt;&lt;p&gt;Additional Hidden Waypoints&lt;/p&gt;PK2T9RW - GC2T9RW Parking&lt;br /&gt;N 49° 21.077 E 008° 37.840&lt;br /&gt;Raststätte Hardtwald West.\n" +
-                "Und für Ortskundige: einfach Richtung ADAC Übungsgelände. Dann müsst Ihr nicht auf die Autobahn.&lt;br /&gt;";
+                "haben!!<br />\n" +
+                "<br /></font><br />\n" +
+                "<a href=\"http://www.andyhoppe.com/\" title=\n" +
+                "\"Counter/Zähler\"><img src=\"http://c.andyhoppe.com/1302990447\"\n" +
+                "style=\"border:none\" alt=\"Counter/Zähler\" /></a><p>Additional Hidden Waypoints</p>PK2T9RW - GC2T9RW Parking<br />N 49° 21.077 E 008° 37.840<br />Raststätte Hardtwald West.\n" +
+                "Und für Ortskundige: einfach Richtung ADAC Übungsgelände. Dann müsst Ihr nicht auf die Autobahn.<br />";
 
     }
 

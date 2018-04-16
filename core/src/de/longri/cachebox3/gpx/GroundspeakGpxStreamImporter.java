@@ -47,7 +47,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/cmt", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                shortDescription = new String(data, offset, length).replace("\r\n", "\n");
+                shortDescription = CharSequenceUtil.getHtmlString(data, offset, length);
             }
         });
 
@@ -213,21 +213,21 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:encoded_hints", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                hint = new String(data, offset, length).replace("\r\n", "\n");
+                hint = CharSequenceUtil.getHtmlString(data, offset, length);
             }
         });
 
         this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:long_description", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                longDescription = new String(data, offset, length).replace("\r\n", "\n");
+                longDescription = CharSequenceUtil.getHtmlString(data, offset, length);
             }
         });
 
         this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:short_description", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                shortDescription = new String(data, offset, length);
+                shortDescription = CharSequenceUtil.getHtmlString(data, offset, length);
             }
         });
 
@@ -266,7 +266,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:text", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                logComment = new String(data, offset, length).replace("\r\n", "\n");
+                logComment = CharSequenceUtil.getHtmlString(data, offset, length);
             }
         });
 
@@ -527,28 +527,28 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/extensions/groundspeak:cache/groundspeak:encoded_hints", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                hint = new String(data, offset, length).replace("\r\n", "\n");
+                hint = CharSequenceUtil.getHtmlString(data, offset, length);
             }
         });
 
         this.registerDataHandler("/gpx/wpt/extensions/groundspeak:cache/groundspeak:long_description", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                longDescription = new String(data, offset, length).replace("\r\n", "\n");
+                longDescription = CharSequenceUtil.getHtmlString(data, offset, length);
             }
         });
 
         this.registerDataHandler("/gpx/wpt/extensions/groundspeak:cache/groundspeak:short_description", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                shortDescription = new String(data, offset, length);
+                shortDescription = CharSequenceUtil.getHtmlString(data, offset, length);
             }
         });
 
         this.registerDataHandler("/gpx/wpt/extensions/cmt", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                shortDescription = new String(data, offset, length).replace("\r\n", "\n");
+                shortDescription = CharSequenceUtil.getHtmlString(data, offset, length).replace("\r\n", "\n");
             }
         });
 
@@ -587,7 +587,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/extensions/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:text", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                logComment = new String(data, offset, length).replace("\r\n", "\n");
+                logComment = CharSequenceUtil.getHtmlString(data, offset, length);
             }
         });
 

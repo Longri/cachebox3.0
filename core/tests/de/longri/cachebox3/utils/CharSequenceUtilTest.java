@@ -191,6 +191,28 @@ public class CharSequenceUtilTest {
 
     }
 
+    @Test
+    public void getHtmlStringTest() {
+
+        char[] source = ("&lt;p&gt;Ein Spaziergang führt Euch durch die Geschichte der\r\n" +
+                "Wollankstraße in Berlin, die auch durch die Berliner Mauer stark\r\n" +
+                "geprägt wurde &amp; Die angegebenen Koordinaten markieren den\r\n" +
+                "Ausgangspunkt des Spazierganges, den S-Bahnhof Wollankstraße.&lt;/p&gt;\r\n" +
+                "&lt;!-- Ende Kurzbeschreibung --&gt;").toCharArray();
+
+        String target = "<p>Ein Spaziergang führt Euch durch die Geschichte der\n" +
+                "Wollankstraße in Berlin, die auch durch die Berliner Mauer stark\n" +
+                "geprägt wurde & Die angegebenen Koordinaten markieren den\n" +
+                "Ausgangspunkt des Spazierganges, den S-Bahnhof Wollankstraße.</p>\n" +
+                "<!-- Ende Kurzbeschreibung -->";
+
+        String result = CharSequenceUtil.getHtmlString(source, 0, source.length);
+
+        assertEquals(target, result, "Should be equals");
+
+    }
+
+
     //##################################################################
     //# Helper
     //##################################################################
