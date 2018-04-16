@@ -15,8 +15,10 @@
  */
 package de.longri.cachebox3.gui.actions;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.LongArray;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -69,17 +71,39 @@ public class ShowDeleteMenu extends Menu {
 
         //check if Filter set to delete whole Database
         int wholeCount = Database.Data.getCacheCountOnThisDB();
-        
+
         LongArray deleteCacheIdList = new LongArray();
+        Array<String> deleteCacheGcCodeList = new Array<>();
         CacheList3DAO dao = new CacheList3DAO();
-        dao.readCacheListIDs(Database.Data, deleteCacheIdList, filter.getSqlWhere(Config.GcLogin.getValue()));
+        dao.readCacheListIDs(Database.Data, deleteCacheIdList, deleteCacheGcCodeList,
+                filter.getSqlWhere(Config.GcLogin.getValue()));
         int filteredCacheCount = deleteCacheIdList.size;
         if (wholeCount == filteredCacheCount) {
             log.debug("Filter is set to delete whole Database");
+            Database.Data.beginTransaction();
+            Database.Data.execSQL("DELETE FROM Attributes;");
+            Database.Data.execSQL("DELETE FROM CacheCoreInfo;");
+            Database.Data.execSQL("DELETE FROM CacheInfo;");
+            Database.Data.execSQL("DELETE FROM CacheText;");
+            Database.Data.execSQL("DELETE FROM Category;");
+            Database.Data.execSQL("DELETE FROM GPXFilenames;");
+            Database.Data.execSQL("DELETE FROM Images;");
+            Database.Data.execSQL("DELETE FROM Logs;");
+            Database.Data.execSQL("DELETE FROM PocketQueries;");
+            Database.Data.execSQL("DELETE FROM Replication;");
+            Database.Data.execSQL("DELETE FROM Waypoints;");
+            Database.Data.execSQL("DELETE FROM WaypointsText;");
+            Database.Data.endTransaction();
+            Database.Data.Query.clear();
+            CacheListChangedEventList.Call();
         } else {
             log.debug("delete {} Caches", filteredCacheCount);
         }
 
+    }
+
+    private void deleteImages(Array<String> deleteCacheGcCodeList) {
+        //TODO
     }
 
 }

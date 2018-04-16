@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.events;
 
 
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
@@ -59,6 +60,18 @@ public class CacheListChangedEventList {
             abstractCache = new MutableCache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
             Database.Data.Query.insert(0, abstractCache);
         }
+
+
+        //if selected Cache not into Query, reset selected Cache
+        AbstractCache selectedCache = EventHandler.getSelectedCache();
+        if (selectedCache != null) {
+            AbstractCache selectedInQuery = Database.Data.Query.GetCacheById(selectedCache.getId());
+            if (selectedInQuery == null) {
+                //reset
+                EventHandler.setSelectedWaypoint(null, null);
+            }
+        }
+
 
         //TODO add Live Caches
 //            // add all Live Caches
