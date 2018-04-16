@@ -453,7 +453,7 @@ public class MapView extends AbstractView {
     public void sizeChanged() {
         if (map == null) return;
         map.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
-        map.viewport().setScreenSize((int) this.getWidth(), (int) this.getHeight());
+        map.viewport().setViewSize((int) this.getWidth(), (int) this.getHeight());
         main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
 
         mapHalfWith = map.getWidth() / 2;

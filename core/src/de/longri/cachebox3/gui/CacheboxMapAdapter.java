@@ -75,6 +75,16 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         return height;
     }
 
+    @Override
+    public int getScreenWidth() {
+        return Gdx.graphics.getWidth();
+    }
+
+    @Override
+    public int getScreenHeight() {
+        return Gdx.graphics.getHeight();
+    }
+
     public void setMapPosAndSize(float newX, float newY, float newWidth, float newHeight) {
         width = (int) newWidth;
         height = (int) newHeight;
@@ -166,9 +176,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
                 if (mapPosition.getTilt() > 0) {
                     float offset = MathUtils.linearInterpolation
                             (viewport().getMinTilt(), viewport().getMaxTilt(), 0, 0.8f, mapPosition.getTilt());
-                    viewport().setMapScreenCenter(offset);
+                    viewport().setMapViewCenter(offset);
                 } else {
-                    viewport().setMapScreenCenter(0);
+                    viewport().setMapViewCenter(0);
                 }
             }
         }
