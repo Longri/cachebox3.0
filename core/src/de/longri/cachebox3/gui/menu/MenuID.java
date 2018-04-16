@@ -263,4 +263,8 @@ public class MenuID {
     public static final int MI_MAPVIEW_THEME = 212;
     public static final int MI_MAPVIEW_THEME_STYLE = 213;
 
+    public static final int MI_DELETE_ARCHIEVED = 214;
+    public static final int MI_DELETE_FILTER = 215;
+    public static final int MI_DELETE_FOUNDS = 216;
+
 }

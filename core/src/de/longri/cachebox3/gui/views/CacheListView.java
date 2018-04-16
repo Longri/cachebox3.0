@@ -26,6 +26,7 @@ import de.longri.cachebox3.events.location.OrientationChangedEvent;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
+import de.longri.cachebox3.gui.actions.ShowDeleteMenu;
 import de.longri.cachebox3.gui.actions.ShowImportMenu;
 import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
@@ -440,7 +441,9 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
         cm.addItem(MenuID.MI_CHK_STATE_API_FAV_POI, "chkFavPoints", CB.getSkin().getMenuIcon.favPoint);
 
         //ISSUE (#118 add new Cache) cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon);
-        //ISSUE (#119 add delete Cache Dialog) cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteIcon);
+        //ISSUE (#119 add delete Cache Dialog)
+        mi = cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteCaches);
+        mi.setMoreMenu(new ShowDeleteMenu());
 
         return cm;
     }
