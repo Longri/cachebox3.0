@@ -16,6 +16,7 @@
 package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.LongArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
@@ -308,6 +309,20 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             }
         } finally {
             database.myDB.endTransaction();
+        }
+
+    }
+
+    public void readCacheListIDs(Database data, LongArray deleteCacheIdList, String sqlWhere) {
+        sqlWhere = sqlWhere.replace("SELECT *", "SELECT id");
+        GdxSqliteCursor cursor = data.rawQuery(sqlWhere);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                deleteCacheIdList.add(cursor.getLong(0));
+                cursor.next();
+            }
+            cursor.close();
         }
 
     }

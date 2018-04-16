@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
+import com.badlogic.gdx.utils.LongArray;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheList;
@@ -30,4 +31,5 @@ public abstract class AbstractCacheListDAO {
     public abstract int getFilteredCacheCount(Database database, String statement);
 
     public abstract void writeToDB(Database database, CacheList cacheList);
+
 }

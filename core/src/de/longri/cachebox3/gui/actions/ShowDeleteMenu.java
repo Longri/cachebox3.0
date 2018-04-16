@@ -15,11 +15,17 @@
  */
 package de.longri.cachebox3.gui.actions;
 
+import com.badlogic.gdx.utils.LongArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
+import de.longri.cachebox3.types.FilterInstances;
+import de.longri.cachebox3.types.FilterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,16 +50,36 @@ public class ShowDeleteMenu extends Menu {
             switch (item.getMenuItemId()) {
                 case MenuID.MI_DELETE_FILTER:
                     log.debug("Delete Caches (Filter selection)");
+                    deleteCaches(CB.viewmanager.getActFilter());
                     break;
                 case MenuID.MI_DELETE_ARCHIEVED:
                     log.debug("Delete Caches (Archived)");
+                    deleteCaches(FilterInstances.ARCHIEVED);
                     break;
                 case MenuID.MI_DELETE_FOUNDS:
                     log.debug("Delete Caches (Founds)");
+                    deleteCaches(FilterInstances.MYFOUNDS);
                     break;
             }
             return true;
         }
     };
+
+    private void deleteCaches(FilterProperties filter) {
+
+        //check if Filter set to delete whole Database
+        int wholeCount = Database.Data.getCacheCountOnThisDB();
+        
+        LongArray deleteCacheIdList = new LongArray();
+        CacheList3DAO dao = new CacheList3DAO();
+        dao.readCacheListIDs(Database.Data, deleteCacheIdList, filter.getSqlWhere(Config.GcLogin.getValue()));
+        int filteredCacheCount = deleteCacheIdList.size;
+        if (wholeCount == filteredCacheCount) {
+            log.debug("Filter is set to delete whole Database");
+        } else {
+            log.debug("delete {} Caches", filteredCacheCount);
+        }
+
+    }
 
 }

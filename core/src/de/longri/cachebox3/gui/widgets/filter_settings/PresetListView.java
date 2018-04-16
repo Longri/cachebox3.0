@@ -170,6 +170,7 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
 
         FilterInstances.HISTORY.isHistory = true;
 
+        presetEntriesAdd("myfinds", style.finds, FilterInstances.MYFOUNDS);
         presetEntriesAdd("HISTORY", style.HISTORY, FilterInstances.HISTORY);
         presetEntriesAdd("AllCachesToFind", style.AllCachesToFind, FilterInstances.ACTIVE);
         presetEntriesAdd("QuickCaches", style.QuickCaches, FilterInstances.QUICK);
