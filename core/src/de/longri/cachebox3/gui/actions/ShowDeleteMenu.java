@@ -33,6 +33,7 @@ import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,12 +68,12 @@ public class ShowDeleteMenu extends Menu {
                 case MenuID.MI_DELETE_ARCHIEVED:
                     log.debug("Delete Caches (Archived)");
                     selectedFilter = FilterInstances.ARCHIEVED;
-                    msg=Translation.get("DelArchived");
+                    msg = Translation.get("DelArchived");
                     break;
                 case MenuID.MI_DELETE_FOUNDS:
                     log.debug("Delete Caches (Founds)");
                     selectedFilter = FilterInstances.MYFOUNDS;
-                    msg=Translation.get("DelFound");
+                    msg = Translation.get("DelFound");
                     break;
             }
 
@@ -81,20 +82,30 @@ public class ShowDeleteMenu extends Menu {
                 @Override
                 public boolean onClick(int which, Object data) {
                     if (which == ButtonDialog.BUTTON_POSITIVE)
-                        deleteCaches(filter);
+                        CB.postAsync(new NamedRunnable("Delete Caches") {
+                            @Override
+                            public void run() {
+                                deleteCaches(filter);
+                            }
+                        });
                     return true;
                 }
             });
-
-
             return true;
         }
     };
 
+    private BlockUiProgress_Activity blockUi;
+
     private void deleteCaches(FilterProperties filter) {
 
-        BlockUiProgress_Activity blockUi = new BlockUiProgress_Activity(Translation.get("DB_Convert"));
-        blockUi.show();
+        CB.postOnGlThread(new NamedRunnable("Show BlockUi for Delete Caches") {
+            @Override
+            public void run() {
+                blockUi = new BlockUiProgress_Activity(Translation.get("DeleteCaches"));
+                blockUi.show();
+            }
+        });
 
 
         //check if Filter set to delete whole Database
@@ -166,12 +177,22 @@ public class ShowDeleteMenu extends Menu {
                 AbstractCache delCache = queryDeleteList.pop();
                 Database.Data.Query.removeValue(delCache, true);
             }
-
+            Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
         }
         Database.Data.execSQL("VACUUM;");
         deleteImages(deleteCacheGcCodeList);
+        if (blockUi != null) blockUi.finish();
 
-        blockUi.finish();
+        final int deletedCacheCount = filteredCacheCount;
+        CB.postOnNextGlThread(new Runnable() {
+            @Override
+            public void run() {
+                CB.viewmanager.toast(Translation.get("DeletedCaches", Integer.toString(deletedCacheCount)));
+            }
+        });
+
+        deleteCacheIdList.clear();
+        deleteCacheGcCodeList.clear();
     }
 
     private void deleteImages(Array<String> deleteCacheGcCodeList) {
