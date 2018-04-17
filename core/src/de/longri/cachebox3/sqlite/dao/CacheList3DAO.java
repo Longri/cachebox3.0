@@ -313,7 +313,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
     }
 
-    public void readCacheListIDs(Database data, LongArray deleteCacheIdList, Array<String> deleteCacheGcCodeList, String sqlWhere) {
+    public void readCacheListIDs(Database data, LongArray deleteCacheIdList, Array<CharSequence> deleteCacheGcCodeList, String sqlWhere) {
         sqlWhere = sqlWhere.replace("SELECT *", "SELECT id,GcCode");
         GdxSqliteCursor cursor = data.rawQuery(sqlWhere);
         if (cursor != null) {

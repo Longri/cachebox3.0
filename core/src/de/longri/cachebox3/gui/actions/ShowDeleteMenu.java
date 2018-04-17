@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.gui.actions;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.LongArray;
 import de.longri.cachebox3.CB;
@@ -27,6 +29,7 @@ import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
 import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
@@ -112,7 +115,7 @@ public class ShowDeleteMenu extends Menu {
         int wholeCount = Database.Data.getCacheCountOnThisDB();
 
         LongArray deleteCacheIdList = new LongArray();
-        Array<String> deleteCacheGcCodeList = new Array<>();
+        Array<CharSequence> deleteCacheGcCodeList = new Array<>();
         CacheList3DAO dao = new CacheList3DAO();
         dao.readCacheListIDs(Database.Data, deleteCacheIdList, deleteCacheGcCodeList,
                 filter.getSqlWhere(Config.GcLogin.getValue()));
@@ -195,8 +198,20 @@ public class ShowDeleteMenu extends Menu {
         deleteCacheGcCodeList.clear();
     }
 
-    private void deleteImages(Array<String> deleteCacheGcCodeList) {
-        //TODO
+    private void deleteImages(Array<CharSequence> deleteCacheGcCodeList) {
+        while (deleteCacheGcCodeList.size > 0) {
+            CharSequence gcCode = deleteCacheGcCodeList.pop();
+            FileHandle imageFolder = Gdx.files.absolute(DescriptionImageGrabber.getImageFolderPath(gcCode));
+            if (imageFolder.exists() && imageFolder.isDirectory()) {
+                imageFolder.deleteDirectory();
+
+                //delete parent, if empty
+                FileHandle parent = imageFolder.parent();
+                if (parent.exists() && parent.isDirectory() && parent.list().length == 0) {
+                    parent.delete();
+                }
+            }
+        }
     }
 
 }

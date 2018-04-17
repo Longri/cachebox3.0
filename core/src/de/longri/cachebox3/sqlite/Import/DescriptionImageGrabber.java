@@ -113,20 +113,7 @@ public class DescriptionImageGrabber {
             }
         }
 
-        StringBuilder imagePath;
-        if (Config.DescriptionImageFolderLocal.getValue().length() > 0) {
-            imagePath = new StringBuilder(Config.DescriptionImageFolderLocal.getValue());
-        } else {
-            imagePath = new StringBuilder(Config.DescriptionImageFolder.getValue());
-        }
-
-        imagePath.append("/");
-        for (int i = 0; i <= 4; i++)
-            imagePath.append(gcCode.charAt(i));
-
-        imagePath.append("/");
-        imagePath.append(gcCode);
-
+        StringBuilder imagePath = getStringBuilderPathforGcCode(gcCode);
 
         // String uriName = url.Substring(url.LastIndexOf('/') + 1);
         // int idx = uri.AbsolutePath.LastIndexOf('.');
@@ -140,6 +127,27 @@ public class DescriptionImageGrabber {
         // Global.sdbm(uri.AbsolutePath).ToString() + extension;!!!!!!!!!!!!!
         imagePath.append("/").append(gcCode).append(Utils.sdbm(path)).append(extension);
         return imagePath.toString();
+    }
+
+    public static String getImageFolderPath(CharSequence gcCode) {
+        return getStringBuilderPathforGcCode(gcCode).toString();
+    }
+
+    private static StringBuilder getStringBuilderPathforGcCode(CharSequence gcCode) {
+        StringBuilder imagePath;
+        if (Config.DescriptionImageFolderLocal.getValue().length() > 0) {
+            imagePath = new StringBuilder(Config.DescriptionImageFolderLocal.getValue());
+        } else {
+            imagePath = new StringBuilder(Config.DescriptionImageFolder.getValue());
+        }
+
+        imagePath.append("/");
+        for (int i = 0; i <= 4; i++)
+            imagePath.append(gcCode.charAt(i));
+
+        imagePath.append("/");
+        imagePath.append(gcCode);
+        return imagePath;
     }
 
     /**
