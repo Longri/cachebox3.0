@@ -84,7 +84,7 @@ public class FileChooser extends ActivityBase {
 
         switch (selectMode) {
             case FILES:
-                if (extentions == null) {
+                if (extentions == null || extentions.length == 0 || (extentions.length == 1 && extentions[0] == null)) {
                     this.actFilter = fileFilter;
                 } else {
                     this.fileExtentions = extentions;

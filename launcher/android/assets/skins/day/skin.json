@@ -1080,6 +1080,10 @@
       "path": "svg/giga.svg",
       "scale": 0.2
     },
+    "gpxFileIcon": {
+      "path": "svg/gpxFileIcon.svg",
+      "scale": 0.9
+    },
     "helpIcon": {
       "path": "svg/helpIcon.svg",
       "scale": 1
@@ -2838,7 +2842,8 @@
       "deleteCaches": "delete_Caches",
       "deleteFilter": "delete_Filter",
       "deleteArchieved": "delete_Archieved",
-      "deleteFounds": "delete_Founds"
+      "deleteFounds": "delete_Founds",
+      "gpxFile": "gpxFileIcon"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
