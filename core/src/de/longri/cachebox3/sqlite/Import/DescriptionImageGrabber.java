@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -17,6 +17,7 @@ package de.longri.cachebox3.sqlite.Import;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
@@ -97,19 +98,12 @@ public class DescriptionImageGrabber {
         return result;
     }
 
-    public static String RemoveSpaces(String line) {
-        String dummy = line.replace("\n", "");
-        dummy = dummy.replace("\r", "");
-        dummy = dummy.replace(" ", "");
-        return dummy;
-    }
-
     /**
-     * @param GcCode
+     * @param gcCode
      * @param _uri
      * @return
      */
-    public static String BuildImageFilename(String GcCode, URI _uri) {
+    public static String BuildImageFilename(CharSequence gcCode, URI _uri) {
         // in der DB stehts ohne large. der Dateiname wurde aber mit large gebildet. Ev auch nur ein Handy / PC Problem.
         String path = _uri.getPath();
         String authority = _uri.getAuthority();
@@ -118,9 +112,21 @@ public class DescriptionImageGrabber {
                 path = path.replace("/large/", "/");
             }
         }
-        String imagePath = Config.DescriptionImageFolder.getValue() + "/" + GcCode.substring(0, 4);
-        if (Config.DescriptionImageFolderLocal.getValue().length() > 0)
-            imagePath = Config.DescriptionImageFolderLocal.getValue() + "/" + GcCode.substring(0, 4);
+
+        StringBuilder imagePath;
+        if (Config.DescriptionImageFolderLocal.getValue().length() > 0) {
+            imagePath = new StringBuilder(Config.DescriptionImageFolderLocal.getValue());
+        } else {
+            imagePath = new StringBuilder(Config.DescriptionImageFolder.getValue());
+        }
+
+        imagePath.append("/");
+        for (int i = 0; i <= 4; i++)
+            imagePath.append(gcCode.charAt(i));
+
+        imagePath.append("/");
+        imagePath.append(gcCode);
+
 
         // String uriName = url.Substring(url.LastIndexOf('/') + 1);
         // int idx = uri.AbsolutePath.LastIndexOf('.');
@@ -132,7 +138,8 @@ public class DescriptionImageGrabber {
 
         // return imagePath + "\\" + GcCode +
         // Global.sdbm(uri.AbsolutePath).ToString() + extension;!!!!!!!!!!!!!
-        return imagePath + "/" + GcCode + Utils.sdbm(path) + extension;
+        imagePath.append("/").append(gcCode).append(Utils.sdbm(path)).append(extension);
+        return imagePath.toString();
     }
 
     /**
@@ -146,7 +153,7 @@ public class DescriptionImageGrabber {
     public static String resolveImages(AbstractCache abstractCache, String html, boolean suppressNonLocalMedia, LinkedList<String> nonLocalImages, LinkedList<String> nonLocalImagesUrl) {
         /*
          * NonLocalImages = new List<string>(); NonLocalImagesUrl = new List<string>();
-		 */
+         */
 
         URI baseUri;
         try {
@@ -180,8 +187,8 @@ public class DescriptionImageGrabber {
 
             if (srcIdx != -1 && srcStart != -1 && srcEnd != -1) {
                 String src = img.text.substring(srcStart + 1, srcEnd/*
-                                                                     * - srcStart - 1
-																	 */);
+                 * - srcStart - 1
+                 */);
                 try {
                     URI imgUri = URI.create(/* baseUri, */src); // NICHT
                     // ORGINAL!!!!!!!!!
@@ -218,8 +225,8 @@ public class DescriptionImageGrabber {
                 } catch (Exception exc) {
                     /*
                      * #if DEBUG Global.AddLog( "DescriptionImageGrabber.resolveImages: failed to resolve relative uri. Base '" + baseUri +
-					 * "', relative '" + src + "': " + exc.ToString()); #endif
-					 */
+                     * "', relative '" + src + "': " + exc.ToString()); #endif
+                     */
                 }
             }
         }
