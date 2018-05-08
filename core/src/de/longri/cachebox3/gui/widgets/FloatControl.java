@@ -37,7 +37,7 @@ public class FloatControl extends Catch_Table {
         void valueChanged(float value, boolean dragged);
     }
 
-    private final ProgressBar progressBar;
+    private final CB_ProgressBar CBProgressBar;
     private final Button slideButton;
     private final ValueChangeListener changeListener;
     private final boolean fireChangedWithDrag;
@@ -46,14 +46,14 @@ public class FloatControl extends Catch_Table {
 
     public FloatControl(float min, float max, float step, boolean fireWithDrag, ValueChangeListener listener) {
         FloatControlStyle style = VisUI.getSkin().get(FloatControlStyle.class);
-        this.progressBar = new ProgressBar(min, max, step, false, style.progressBarStyle);
+        this.CBProgressBar = new CB_ProgressBar(min, max, step, false, style.progressBarStyle);
         this.slideButton = new Button(style.buttonStyle);
         this.fireChangedWithDrag = fireWithDrag;
         this.changeListener = listener;
         this.defaults().pad(CB.scaledSizes.MARGIN);
-        this.add(progressBar).fillX().expandX();
+        this.add(CBProgressBar).fillX().expandX();
         this.addActor(slideButton);
-        float s = progressBar.getPrefHeight() + CB.scaledSizes.MARGINx2;
+        float s = CBProgressBar.getPrefHeight() + CB.scaledSizes.MARGINx2;
         slideButton.setSize(s, s);
         final DragListener dragListener = new DragListener() {
 
@@ -89,10 +89,10 @@ public class FloatControl extends Catch_Table {
 
                 //set progress value by percent
                 float percent = x / (getWidth() - slideButton.getWidth());
-                float value = (progressBar.getMaxValue() - progressBar.getMinValue()) * percent;
-                progressBar.setValue(value);
+                float value = (CBProgressBar.getMaxValue() - CBProgressBar.getMinValue()) * percent;
+                CBProgressBar.setValue(value);
                 if (fireChangedWithDrag && changeListener != null) {
-                    changeListener.valueChanged(progressBar.getValue(), true);
+                    changeListener.valueChanged(CBProgressBar.getValue(), true);
                 }
                 event.stop();
             }
@@ -104,7 +104,7 @@ public class FloatControl extends Catch_Table {
 
                 //fire changed event
                 if (changeListener != null) {
-                    changeListener.valueChanged(progressBar.getValue(), false);
+                    changeListener.valueChanged(CBProgressBar.getValue(), false);
                 }
             }
 
@@ -117,13 +117,13 @@ public class FloatControl extends Catch_Table {
 
     private void setSliderPosition() {
         if (onDrag) return;
-        float sliderPos = (this.getWidth() - slideButton.getWidth()) * progressBar.getVisualPercent();
-        float y = progressBar.getY() - CB.scaledSizes.MARGIN;
+        float sliderPos = (this.getWidth() - slideButton.getWidth()) * CBProgressBar.getVisualPercent();
+        float y = CBProgressBar.getY() - CB.scaledSizes.MARGIN;
         slideButton.setPosition(sliderPos, y);
     }
 
     public void setValue(float value) {
-        progressBar.setValue(value);
+        CBProgressBar.setValue(value);
         invalidate();
         layout();
     }

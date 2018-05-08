@@ -384,7 +384,7 @@ public class OptionsPane extends Table {
                         styles.put("compassViewStyle", compassViewStyle);
                     }
 
-                    if (widgetStyle.equals("com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle")) {
+                    if (widgetStyle.equals("com.badlogic.gdx.scenes.scene2d.ui.CB_ProgressBar$ProgressBarStyle")) {
                         CircularProgressStyle circularProgressStyle = game.skinProject.get("circularProgressStyle", CircularProgressStyle.class);
                         styles.put("circularProgressStyle", circularProgressStyle);
                     }

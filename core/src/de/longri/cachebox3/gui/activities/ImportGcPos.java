@@ -34,15 +34,12 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
-import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.BlockGpsActivityBase;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
-import de.longri.cachebox3.gui.widgets.CoordinateButton;
-import de.longri.cachebox3.gui.widgets.ProgressBar;
+import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.settings.Config;
@@ -63,7 +60,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 12.04.2017.
  */
-public class ImportGcPos extends ActivityBase {
+public class ImportGcPos extends BlockGpsActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(ImportGcPos.class);
 
@@ -77,7 +74,7 @@ public class ImportGcPos extends ActivityBase {
     private boolean importRuns = false;
     private boolean needLayout = true;
     private final Image workAnimation;
-    private final ProgressBar progressBar;
+    private final CB_ProgressBar CBProgressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
 
     /**
@@ -110,7 +107,7 @@ public class ImportGcPos extends ActivityBase {
 
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);
-        progressBar = new ProgressBar(0, 100, 1, false, "default");
+        CBProgressBar = new CB_ProgressBar(0, 100, 1, false, "default");
 
 
         createOkCancelBtn();
@@ -164,7 +161,7 @@ public class ImportGcPos extends ActivityBase {
         this.add(workAnimation).colspan(5).center();
         this.row();
         this.add();
-        this.add(progressBar).colspan(3).center().expandX().fillX();
+        this.add(CBProgressBar).colspan(3).center().expandX().fillX();
         this.row();
         this.add(lblCaches).colspan(5).left();
         this.row();
@@ -189,7 +186,7 @@ public class ImportGcPos extends ActivityBase {
 
     private void setWorkAnimationVisible(boolean visible) {
         workAnimation.setVisible(visible);
-        progressBar.setVisible(visible);
+        CBProgressBar.setVisible(visible);
         lblCaches.setVisible(visible);
         lblWaypoints.setVisible(visible);
         lblLogs.setVisible(visible);
@@ -341,7 +338,7 @@ public class ImportGcPos extends ActivityBase {
             public void progressChanged(final ImportProgressChangedEvent event) {
 
                 if (event.progress.msg.equals("Start parsing result")) {
-                    progressBar.setVisible(true);
+                    CBProgressBar.setVisible(true);
                     lblCaches.setVisible(true);
                     lblWaypoints.setVisible(true);
                     lblLogs.setVisible(true);
@@ -350,7 +347,7 @@ public class ImportGcPos extends ActivityBase {
                 CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
                     @Override
                     public void run() {
-                        progressBar.setValue(event.progress.progress);
+                        CBProgressBar.setValue(event.progress.progress);
                         lblCaches.setText("Imported Caches: " + event.progress.caches);
                         lblWaypoints.setText("Imported Waypoints: " + event.progress.wayPoints);
                         lblLogs.setText("Imported Logs: " + event.progress.logs);

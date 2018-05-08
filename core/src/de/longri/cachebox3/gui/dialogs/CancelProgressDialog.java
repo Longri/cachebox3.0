@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.widgets.ProgressBar;
+import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -58,7 +58,7 @@ public class CancelProgressDialog extends ButtonDialog {
         contentTable.add(contentTable.label).width(new Value.Fixed(contentWidth)).pad(20);
         contentTable.row();
 
-        contentTable.progress = new ProgressBar(0, 100, 1, false, "default");
+        contentTable.progress = new CB_ProgressBar(0, 100, 1, false, "default");
         contentTable.add(contentTable.progress).width(new Value.Fixed(contentWidth)).pad(20);
         contentTable.row();
 
@@ -98,7 +98,7 @@ public class CancelProgressDialog extends ButtonDialog {
 
 
     private static class ProgressTable extends Catch_Table {
-        ProgressBar progress;
+        CB_ProgressBar progress;
         VisLabel label;
     }
 

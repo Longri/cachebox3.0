@@ -44,7 +44,7 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.ProgressBar;
+import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -76,7 +76,7 @@ public class CheckStateActivity extends ActivityBase {
     private boolean importRuns = false;
     private boolean needLayout = true;
     private final Image workAnimation;
-    private final ProgressBar progressBar;
+    private final CB_ProgressBar CBProgressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
     private final boolean withFavPoi;
 
@@ -94,7 +94,7 @@ public class CheckStateActivity extends ActivityBase {
         lblTitle.setStyle(style);
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);
-        progressBar = new ProgressBar(0, 100, 1, false, "default");
+        CBProgressBar = new CB_ProgressBar(0, 100, 1, false, "default");
 
         createOkCancelBtn();
         setWorkAnimationVisible(false);
@@ -125,7 +125,7 @@ public class CheckStateActivity extends ActivityBase {
         this.add(workAnimation).colspan(5).center();
         this.row();
         this.add();
-        this.add(progressBar).colspan(3).center().expandX().fillX();
+        this.add(CBProgressBar).colspan(3).center().expandX().fillX();
         this.row();
         Table nestedTable2 = new Table();
         nestedTable2.defaults().pad(CB.scaledSizes.MARGIN).bottom();
@@ -139,7 +139,7 @@ public class CheckStateActivity extends ActivityBase {
 
     private void setWorkAnimationVisible(boolean visible) {
         workAnimation.setVisible(visible);
-        progressBar.setVisible(visible);
+        CBProgressBar.setVisible(visible);
     }
 
 
@@ -169,14 +169,14 @@ public class CheckStateActivity extends ActivityBase {
         }
 
         setWorkAnimationVisible(true);
-        progressBar.setAnimateDuration(0);
+        CBProgressBar.setAnimateDuration(0);
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
             public void progressChanged(final ImportProgressChangedEvent event) {
                 CB.postOnGlThread(new NamedRunnable("CheckStateActivity") {
                     @Override
                     public void run() {
-                        progressBar.setValue(event.progress.progress);
+                        CBProgressBar.setValue(event.progress.progress);
                     }
                 });
             }

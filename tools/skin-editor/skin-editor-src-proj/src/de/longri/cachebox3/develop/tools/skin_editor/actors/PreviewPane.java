@@ -228,7 +228,7 @@ public class PreviewPane extends Table {
 
                         add(w).pad(10).width(220).padBottom(20).expandX().fillX().row();
 
-                    } else if (widget.equals("ProgressBar")) { // ProgressBar
+                    } else if (widget.equals("CB_ProgressBar")) { // CB_ProgressBar
 
                         ProgressBarStyle progressStyle = null;
                         CircularProgressStyle circProgressStyle = null;

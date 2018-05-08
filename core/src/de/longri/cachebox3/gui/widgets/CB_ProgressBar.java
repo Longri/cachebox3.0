@@ -20,29 +20,41 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 05.07.2017.
  */
-public class ProgressBar extends VisProgressBar {
+public class CB_ProgressBar extends VisProgressBar {
+    private final static Logger log = LoggerFactory.getLogger(CB_ProgressBar.class);
 
     boolean round = true;
 
-    public ProgressBar(float min, float max, float stepSize, boolean vertical) {
+    public CB_ProgressBar(float min, float max, float stepSize, boolean vertical) {
         super(min, max, stepSize, vertical);
     }
 
-    public ProgressBar(float min, float max, float stepSize, boolean vertical, String styleName) {
+    public CB_ProgressBar(float min, float max, float stepSize, boolean vertical, String styleName) {
         super(min, max, stepSize, vertical, styleName);
     }
 
-    public ProgressBar(float min, float max, float stepSize, boolean vertical, ProgressBarStyle style) {
+    public CB_ProgressBar(float min, float max, float stepSize, boolean vertical, ProgressBarStyle style) {
         super(min, max, stepSize, vertical, style);
     }
 
     public void setRound(boolean round) {
         super.setRound(round);
         this.round = round;
+    }
+
+    public boolean setValue(float value) {
+        boolean ret = false;
+        try {
+            ret = super.setValue(value);
+        } catch (Exception e) {
+        }
+        return ret;
     }
 
     public float getPrefWidth() {

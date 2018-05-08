@@ -226,6 +226,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
     }
 
     private void removeBackGroundLocationListener() {
+        if (backgroundTask == null) return;
         log.debug("stop long time Background task");
 
         //get last background location and fire to foreground
@@ -255,5 +256,10 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                 initialForegroundLocationListener();
             }
         });
+    }
+
+    public void stopForgroundUpdates() {
+        log.debug("Stop foreground location listener");
+        removeForegroundLocationListener();
     }
 }

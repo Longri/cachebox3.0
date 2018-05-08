@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -44,6 +45,7 @@ import java.text.NumberFormat;
 
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
+import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -68,17 +70,18 @@ public class CacheboxMain extends ApplicationAdapter {
 //        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
 //        EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
 //
-//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
-//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
-//
+        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
+        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+        EXCLUDE_LIST.add("EMPTY");
+        EXCLUDE_LIST.add("DB:cachebox");
 //        EXCLUDE_LIST.add(LocationAccuracyLayer.class.getName());
 //        EXCLUDE_LIST.add(LocationRenderer.class.getName());
 //        EXCLUDE_LIST.add(DoubleAnimator.class.getName());
 //        EXCLUDE_LIST.add(GpsEventHelper.class.getName());
 //        EXCLUDE_LIST.add(DirectLineLayer.class.getName());
 //        EXCLUDE_LIST.add(EventHandler.class.getName());
-//        EXCLUDE_LIST.add(CB.class.getName());
+        EXCLUDE_LIST.add(AbstractGpxStreamImporter.class.getName());
 
 
     }

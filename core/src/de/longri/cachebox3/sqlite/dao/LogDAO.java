@@ -84,14 +84,32 @@ public class LogDAO {
         //create statements
         GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
         for (LogEntry entry : logList) {
-            REPLACE_LOGS.bind(
-                    entry.Id,
-                    entry.CacheId,
-                    Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                    entry.Finder,
-                    entry.Type,
-                    entry.Comment
-            ).commit().reset();
+            try {
+                REPLACE_LOGS.bind(
+                        entry.Id,
+                        entry.CacheId,
+                        Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                        entry.Finder,
+                        entry.Type,
+                        entry.Comment
+                ).commit();
+            } catch (Exception e) {
+                log.error("Can't write Log-Entry with values: \n" +
+                        "ID:{}\n" +
+                        "CacheID:{}\n" +
+                        "Date:{}\n" +
+                        "Finder:{}\n" +
+                        "Type:{}\n" +
+                        "Comment:{}\n\n\n",
+                        entry.Id,entry.CacheId,
+                        Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                        entry.Finder,
+                        entry.Type,
+                        entry.Comment
+                        );
+            } finally {
+                REPLACE_LOGS.reset();
+            }
         }
     }
 

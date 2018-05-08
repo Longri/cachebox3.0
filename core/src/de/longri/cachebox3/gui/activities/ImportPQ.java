@@ -33,19 +33,17 @@ import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gpx.GroundspeakGpxStreamImporter;
 import de.longri.cachebox3.gpx.ImportHandler;
-import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.BlockGpsActivityBase;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
+import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.ProgressBar;
 import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.FilterInstances;
-import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnZip;
@@ -55,7 +53,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -63,7 +60,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by Longri on 26.03.2018.
  */
-public class ImportPQ extends ActivityBase {
+public class ImportPQ extends BlockGpsActivityBase {
 
     private final static Logger log = LoggerFactory.getLogger(ImportPQ.class);
     private final ListView pqList = new ListView(ListViewType.VERTICAL, false);
@@ -78,11 +75,11 @@ public class ImportPQ extends ActivityBase {
     };
     private final PqListItemStyle itemStyle;
     private final AligmentLabel downloadLabel;
-    private final ProgressBar downloadProgress;
+    private final CB_ProgressBar downloadProgress;
     private final AligmentLabel extractLabel;
-    private final ProgressBar extractProgress;
+    private final CB_ProgressBar extractProgress;
     private final AligmentLabel importLabel;
-    private final ProgressBar importProgress;
+    private final CB_ProgressBar importProgress;
     private final AligmentLabel correctedLabel;
 
     public ImportPQ() {
@@ -120,7 +117,7 @@ public class ImportPQ extends ActivityBase {
 
         //download progress
         downloadLabel = new AligmentLabel(Translation.get("downloaded", "?", "?"), selectedLabelStyle, Align.left);
-        downloadProgress = new ProgressBar(0, 0, 1, false, "default");
+        downloadProgress = new CB_ProgressBar(0, 0, 1, false, "default");
         this.add(downloadLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
         this.row();
         this.add(downloadProgress).expandX().fillX();
@@ -130,7 +127,7 @@ public class ImportPQ extends ActivityBase {
 
         //extract progress
         extractLabel = new AligmentLabel(Translation.get("extracted", "?", "?"), selectedLabelStyle, Align.left);
-        extractProgress = new ProgressBar(0, 0, 1, false, "default");
+        extractProgress = new CB_ProgressBar(0, 0, 1, false, "default");
         this.add(extractLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
         this.row();
         this.add(extractProgress).expandX().fillX();
@@ -140,7 +137,7 @@ public class ImportPQ extends ActivityBase {
 
         //import progress
         importLabel = new AligmentLabel(Translation.get("imported", "?", "?"), selectedLabelStyle, Align.left);
-        importProgress = new ProgressBar(0, 0, 1, false, "default");
+        importProgress = new CB_ProgressBar(0, 0, 1, false, "default");
         this.add(importLabel).padLeft(CB.scaledSizes.MARGINx4).expandX().fillX();
         this.row();
         this.add(importProgress).expandX().fillX();
@@ -309,11 +306,13 @@ public class ImportPQ extends ActivityBase {
                         public void run() {
                             // update progress Label
                             int progressValue = readyImportedCaches.incrementAndGet();
-                            importLabel.setText(Translation.get("imported",
-                                    Integer.toString(progressValue),
-                                    Integer.toString(importCache.get())));
-                            importProgress.setValue(progressValue);
-                            CB.requestRendering();
+                            if (importCache.get()<100||progressValue % 10 == 0) {
+                                importLabel.setText(Translation.get("imported",
+                                        Integer.toString(progressValue),
+                                        Integer.toString(importCache.get())));
+                                importProgress.setValue(progressValue);
+                                CB.requestRendering();
+                            }
                         }
                     });
                 }

@@ -339,7 +339,7 @@ public class TestView extends AbstractView {
 
 
         {
-            VisLabel label3 = new VisLabel("ProgressBar SvgNinePatch");
+            VisLabel label3 = new VisLabel("CB_ProgressBar SvgNinePatch");
             Table lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             lineTable = new Table();
@@ -348,7 +348,7 @@ public class TestView extends AbstractView {
             contentTable.add(lineTable).left().expandX().fillX();
             contentTable.row();
 
-            final ProgressBar progress1 = new ProgressBar(0, 100, 1, false, "default");
+            final CB_ProgressBar progress1 = new CB_ProgressBar(0, 100, 1, false, "default");
             contentTable.add(progress1).width(new Value.Fixed(contentWidth)).pad(20);
             contentTable.row();
 

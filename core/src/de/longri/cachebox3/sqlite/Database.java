@@ -31,6 +31,7 @@ import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.impl.EmptyLogger;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -228,8 +229,8 @@ public class Database {
     public void startUp() {
         //open in memory DB
 
-        log = LoggerFactory.getLogger("DB:" + inMemoryName);
-
+//        log = LoggerFactory.getLogger("DB:" + inMemoryName);
+        log= LoggerFactory.getLogger("EMPTY");
 
         //reset version
         shemaVersion.set(-1);
