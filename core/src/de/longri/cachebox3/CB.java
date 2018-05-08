@@ -682,32 +682,33 @@ public class CB {
 
     static boolean mapScaleInitial = false;
 
-    private static void recalculateMapScale() {
-        //calculate CanvasAdapter.dpi
-        float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
-        CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
-        CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
-        Tile.SIZE = Tile.calculateTileSize();
-        loadThemeFile(CB.actThemeFile);
-    }
+    private static IChanged mapScaleSettingChanged = new IChanged() {
+
+        private float lastDpi = 0;
+        private float lastText = 0;
+
+        @Override
+        public void isChanged() {
+            float dpi = Settings.MapViewDPIFaktor.getValue();
+            float text = Settings.MapViewTextFaktor.getValue();
+            if (dpi != lastDpi || text != lastText) {
+                lastDpi = dpi;
+                lastText = text;
+                //calculate CanvasAdapter.dpi
+                float scaleFactor = CB.getScaledFloat(dpi);
+                CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
+                CanvasAdapter.textScale = text;
+                Tile.SIZE = Tile.calculateTileSize();
+                loadThemeFile(CB.actThemeFile);
+            }
+        }
+    };
 
     public static boolean loadThemeFile(ThemeFile themeFile) {
 
         if (!mapScaleInitial) {
-            Settings.MapViewDPIFaktor.addChangedEventListener(new IChanged() {
-                @Override
-                public void isChanged() {
-                    //must reload Theme with new Scale settings
-                    recalculateMapScale();
-                }
-            });
-            Settings.MapViewTextFaktor.addChangedEventListener(new IChanged() {
-                @Override
-                public void isChanged() {
-                    //must reload Theme with new Scale settings
-                    recalculateMapScale();
-                }
-            });
+            Settings.MapViewDPIFaktor.addChangedEventListener(mapScaleSettingChanged);
+            Settings.MapViewTextFaktor.addChangedEventListener(mapScaleSettingChanged);
             mapScaleInitial = true;
         }
 

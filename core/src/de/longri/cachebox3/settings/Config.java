@@ -71,14 +71,15 @@ public class Config extends Settings {
         inWrite.set(true);
         final Array<SettingBase<?>> dirtyList = new Array<>();
         while (settingsList.dirtyList.size > 0) {
-            dirtyList.add(settingsList.dirtyList.pop());
+            SettingBase<?> setting=settingsList.dirtyList.pop();
+            setting.fireChangedEvent();
+            dirtyList.add(setting);
         }
 
         log.debug("Start writing {} settings changed", dirtyList.size);
 
         try {
             // Write into DB
-            SettingsDAO dao = new SettingsDAO();
 
             final Database data = Database.Data;
             final Database settingsDB = Database.Settings;

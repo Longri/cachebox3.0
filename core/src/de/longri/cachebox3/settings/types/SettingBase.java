@@ -30,7 +30,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
 
     final public String name;
 
-    protected CB_List<IChanged> ChangedEventList = new CB_List<IChanged>();
+    protected CB_List<IChanged> changedEventList = new CB_List<>();
     protected de.longri.cachebox3.settings.types.SettingCategory category;
 
     protected de.longri.cachebox3.settings.types.SettingMode mode;
@@ -69,15 +69,15 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     }
 
     public void addChangedEventListener(IChanged listener) {
-        synchronized (ChangedEventList) {
-            if (!ChangedEventList.contains(listener, true))
-                ChangedEventList.add(listener);
+        synchronized (changedEventList) {
+            if (!changedEventList.contains(listener, true))
+                changedEventList.add(listener);
         }
     }
 
     public void removeChangedEventListener(IChanged listener) {
-        synchronized (ChangedEventList) {
-            ChangedEventList.removeValue(listener, true);
+        synchronized (changedEventList) {
+            changedEventList.removeValue(listener, true);
         }
     }
 
@@ -88,7 +88,6 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     void setDirty() {
         if (!this.dirtyList.contains(this, true))
             this.dirtyList.add(this);
-        fireChangedEvent();
     }
 
     public void clearDirty() {
@@ -135,15 +134,15 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
         return Double.compare(o.index, this.index);
     }
 
-    private void fireChangedEvent() {
-        synchronized (ChangedEventList) {
+    public void fireChangedEvent() {
+        synchronized (changedEventList) {
             // do this at new Thread, dont't block Ui-Thread
 
             Thread th = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = 0, n = ChangedEventList.size; i < n; i++) {
-                        IChanged event = ChangedEventList.get(i);
+                    for (int i = 0, n = changedEventList.size; i < n; i++) {
+                        IChanged event = changedEventList.get(i);
                         event.isChanged();
                     }
                 }
