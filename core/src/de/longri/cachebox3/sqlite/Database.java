@@ -45,7 +45,7 @@ public class Database {
 
     public final static DateFormat cbDbFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
+    private final AtomicInteger EXCLUSIVE_ID = new AtomicInteger(-1);
     private Logger log;
     public static Database Data;
     public static Database Drafts;
@@ -230,7 +230,7 @@ public class Database {
         //open in memory DB
 
 //        log = LoggerFactory.getLogger("DB:" + inMemoryName);
-        log= LoggerFactory.getLogger("EMPTY");
+        log = LoggerFactory.getLogger("EMPTY");
 
         //reset version
         shemaVersion.set(-1);
@@ -1089,14 +1089,39 @@ public class Database {
 
     public void beginTransaction() {
         log.debug("begin transaction");
+        if (EXCLUSIVE_ID.get() != -1){
+            log.warn("Can't start Transaction is Exclusive for ID: " + EXCLUSIVE_ID.get());
+            return;
+        }
+
         if (myDB != null)
             myDB.beginTransaction();
     }
 
     public void endTransaction() {
         log.debug("end transaction");
+        if (EXCLUSIVE_ID.get() != -1){
+            log.warn("Can't end Transaction is Exclusive for ID: " + EXCLUSIVE_ID.get());
+            return;
+        }
         if (myDB != null)
             myDB.endTransaction();
+    }
+
+    public void endTransactionExclusive(int id) {
+        if (EXCLUSIVE_ID.get() != id)
+            throw new RuntimeException("Wrong Exclusive ID: " + id);
+        EXCLUSIVE_ID.set(-1);
+        if (myDB != null)
+            myDB.endTransaction();
+    }
+
+    public void beginTransactionExclusive(int id) {
+        if (EXCLUSIVE_ID.get() != -1)
+            throw new RuntimeException("Can't begin Transaction Exclusive! ID is Exclusive: " + EXCLUSIVE_ID.get());
+        EXCLUSIVE_ID.set(id);
+        if (myDB != null)
+            myDB.beginTransaction();
     }
 
     public void insertWithConflictReplace(String tablename, Parameters val) {

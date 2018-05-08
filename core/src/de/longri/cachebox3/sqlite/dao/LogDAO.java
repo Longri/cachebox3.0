@@ -82,7 +82,7 @@ public class LogDAO {
 
     public void writeToDB(Database database, Array<LogEntry> logList) {
         //create statements
-        GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
+        GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("INSERT OR REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
         for (LogEntry entry : logList) {
             try {
                 REPLACE_LOGS.bind(

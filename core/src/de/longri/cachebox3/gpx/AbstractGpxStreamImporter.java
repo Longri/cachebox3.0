@@ -357,7 +357,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
             CB.postAsync(new NamedRunnable("Import Conflict handler") {
                 @Override
                 public void run() {
-                    database.beginTransaction();
+                    final int TRANSACTION_ID = 290272;
+                    database.beginTransactionExclusive(TRANSACTION_ID);
                     while (!PARSE_READY.get() || resolveCacheConflicts.size > 0
                             || resolveWaypoitConflicts.size > 0
                             || storeLogEntry.size > 0) {
@@ -367,29 +368,38 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                         if (resolveCacheConflicts.size > 0) {
                             sleep = false;
                             AbstractCache cache = resolveCacheConflicts.pop();
-
+Read Hashmap <id,booleanStore>
                             //get boolean store from Cache and check Favorite nad Found
-                            GdxSqliteCursor cursor = database.rawQuery("SELECT BooleanStore FROM CacheCoreInfo WHERE id=" + cache.getId());
-                            boolean update = false;
-                            if (cursor != null) {
-                                update = true;
-                                cursor.moveToFirst();
-                                short booleanStore = cursor.getShort(0);
-                                cursor.close();
+//                            GdxSqliteCursor cursor = database.rawQuery("SELECT BooleanStore FROM CacheCoreInfo WHERE id=" + cache.getId());
+//                            boolean update = false;
+//                            if (cursor != null) {
+//                                update = true;
+//                                cursor.moveToFirst();
+//                                short booleanStore = cursor.getShort(0);
+//                                cursor.close();
+//
+//                                boolean inDbFavorite = ImmutableCache.getMaskValue(MASK_FOUND, booleanStore);
+//                                boolean inDbFound = ImmutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
+//                                cache.setFavorite(database, inDbFavorite);
+//                                if (inDbFound) {
+//                                    cache.setFound(database, true);
+//                                }
+//                            }
+//
+//                            if (update) {
+//                                DaoFactory.CACHE_DAO.updateDatabase(database, cache, false);
+//                            } else {
+//                                DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
+//                            }
 
-                                boolean inDbFavorite = ImmutableCache.getMaskValue(MASK_FOUND, booleanStore);
-                                boolean inDbFound = ImmutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
-                                cache.setFavorite(database, inDbFavorite);
-                                if (inDbFound) {
-                                    cache.setFound(database, true);
-                                }
-                            }
+                                    create Statement like LogDao.writeToDB(List)
 
-                            if (update) {
-                                DaoFactory.CACHE_DAO.updateDatabase(database, cache, false);
-                            } else {
-                                DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
-                            }
+
+
+                            DaoFactory.CACHE_DAO.updateDatabase(database, cache, false);
+
+
+
                             if (importHandler != null) {
                                 importHandler.incrementCaches(cache.getType() == CacheTypes.Mystery ? cache.getGcCode().toString() : null);
                             }
@@ -398,7 +408,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             AbstractWaypoint waypoint = resolveWaypoitConflicts.pop();
 
                             //TODO handle waypoint conflict
-                            DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint, false);
+//                            DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint, false);
                             if (importHandler != null) importHandler.incrementWaypoints();
                         } else if (storeLogEntry.size > 0) {
                             sleep = false;
@@ -408,7 +418,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                 writeList.add(storeLogEntry.pop());
                                 if (importHandler != null) importHandler.incrementLogs();
                             }
-                            dao.writeToDB(database, writeList);
+//                            dao.writeToDB(database, writeList);
 
                         }
 
@@ -422,7 +432,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
                     }
                     CONFLICT_READY.set(true);
-                    database.endTransaction();
+                    database.endTransactionExclusive(TRANSACTION_ID);
                 }
             });
         } else {
