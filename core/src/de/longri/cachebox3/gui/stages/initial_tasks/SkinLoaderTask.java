@@ -34,7 +34,9 @@ import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.DevicesSizes;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SizeF;
+import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
+import org.oscim.core.Tile;
 import org.oscim.theme.ThemeLoader;
 import org.oscim.theme.VtmThemes;
 import org.slf4j.Logger;
@@ -162,6 +164,13 @@ public final class SkinLoaderTask extends AbstractInitTask {
         CB.postAsync(new NamedRunnable("preload Map Theme") {
             @Override
             public void run() {
+
+                //calculate CanvasAdapter.dpi
+                float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
+                CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
+                CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
+                Tile.SIZE = Tile.calculateTileSize();
+
                 String path;
                 if (!Config.nightMode.getValue()) {
                     path = Config.MapsforgeDayTheme.getValue();

@@ -45,6 +45,7 @@ import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.locator.manager.LocationHandler;
 import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
@@ -55,6 +56,7 @@ import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.*;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
+import org.oscim.core.Tile;
 import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.theme.IRenderTheme;
 import org.oscim.theme.ThemeFile;
@@ -677,7 +679,38 @@ public class CB {
         });
     }
 
+
+    static boolean mapScaleInitial = false;
+
+    private static void recalculateMapScale() {
+        //calculate CanvasAdapter.dpi
+        float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
+        CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
+        CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
+        Tile.SIZE = Tile.calculateTileSize();
+        loadThemeFile(CB.actThemeFile);
+    }
+
     public static boolean loadThemeFile(ThemeFile themeFile) {
+
+        if (!mapScaleInitial) {
+            Settings.MapViewDPIFaktor.addChangedEventListener(new IChanged() {
+                @Override
+                public void isChanged() {
+                    //must reload Theme with new Scale settings
+                    recalculateMapScale();
+                }
+            });
+            Settings.MapViewTextFaktor.addChangedEventListener(new IChanged() {
+                @Override
+                public void isChanged() {
+                    //must reload Theme with new Scale settings
+                    recalculateMapScale();
+                }
+            });
+            mapScaleInitial = true;
+        }
+
         log.debug("load new Theme: {}", CB.actTheme);
 
         //store theme on config

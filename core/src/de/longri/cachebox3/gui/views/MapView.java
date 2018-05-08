@@ -263,13 +263,10 @@ public class MapView extends AbstractView {
 
     private CacheboxMapAdapter createMap() {
 
-        {//set map scale
-            float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
-            CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
-            log.debug("Create new map instance with scale factor:" + Float.toString(scaleFactor));
-            log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
-            log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
-        }
+
+        log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
+        log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
+
 
         CacheboxMain.drawMap = true;
         map = new CacheboxMapAdapter() {

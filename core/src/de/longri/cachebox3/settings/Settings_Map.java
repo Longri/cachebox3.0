@@ -37,6 +37,7 @@ public class Settings_Map extends Settings_Const {
 
     // EXPERT visible
     public static final SettingFloat MapViewDPIFaktor = (SettingFloat) Config.settingsList.addSetting(new SettingFloat("MapViewDPIFaktor", SettingCategory.Map, EXPERT, 1f, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingFloat MapViewTextFaktor = (SettingFloat) Config.settingsList.addSetting(new SettingFloat("MapViewTextFaktor", SettingCategory.Map, EXPERT, 1f, SettingStoreType.Global, SettingUsage.ACB));
 
 
     // DEVELOPER visible
