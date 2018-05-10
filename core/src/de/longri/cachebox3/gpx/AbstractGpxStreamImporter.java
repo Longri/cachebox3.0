@@ -17,6 +17,7 @@ package de.longri.cachebox3.gpx;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.LongMap;
 import com.badlogic.gdx.utils.XmlStreamParser;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.Database;
@@ -26,6 +27,7 @@ import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -357,6 +359,27 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
             CB.postAsync(new NamedRunnable("Import Conflict handler") {
                 @Override
                 public void run() {
+
+                    //Read all 'BooleanStore' values from Database for conflict handling
+                    String sql = "SELECT Id, BooleanStore FROM CacheCoreInfo";
+
+                    LongMap<Short> booleanStoreMap = new LongMap<>();
+                    GdxSqliteCursor cursor = database.myDB.rawQuery(sql);
+
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        while (cursor.isAfterLast() == false) {
+                            booleanStoreMap.put(cursor.getLong(0), cursor.getShort(1));
+                            cursor.next();
+                        }
+                    }
+
+                    //prepare statements
+                    GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("INSERT OR REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
+                    GdxSqlitePreparedStatement REPLACE_WAYPOINT = database.myDB.prepare("INSERT OR REPLACE INTO Waypoints VALUES(?,?,?,?,?,?,?,?,?) ;");
+                    GdxSqlitePreparedStatement REPLACE_WAYPOINT_TEXT = database.myDB.prepare("INSERT OR REPLACE INTO WaypointsText VALUES(?,?,?) ;");
+
+
                     final int TRANSACTION_ID = 290272;
                     database.beginTransactionExclusive(TRANSACTION_ID);
                     while (!PARSE_READY.get() || resolveCacheConflicts.size > 0
@@ -368,36 +391,28 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                         if (resolveCacheConflicts.size > 0) {
                             sleep = false;
                             AbstractCache cache = resolveCacheConflicts.pop();
-Read Hashmap <id,booleanStore>
+
                             //get boolean store from Cache and check Favorite nad Found
-//                            GdxSqliteCursor cursor = database.rawQuery("SELECT BooleanStore FROM CacheCoreInfo WHERE id=" + cache.getId());
-//                            boolean update = false;
-//                            if (cursor != null) {
-//                                update = true;
-//                                cursor.moveToFirst();
-//                                short booleanStore = cursor.getShort(0);
-//                                cursor.close();
-//
-//                                boolean inDbFavorite = ImmutableCache.getMaskValue(MASK_FOUND, booleanStore);
-//                                boolean inDbFound = ImmutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
-//                                cache.setFavorite(database, inDbFavorite);
-//                                if (inDbFound) {
-//                                    cache.setFound(database, true);
-//                                }
-//                            }
-//
-//                            if (update) {
-//                                DaoFactory.CACHE_DAO.updateDatabase(database, cache, false);
-//                            } else {
-//                                DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
-//                            }
+                            Short booleanStore = booleanStoreMap.get(cache.getId());
+                            boolean update = false;
+                            if (booleanStore != null) {
+                                update = true;
+                                boolean inDbFavorite = ImmutableCache.getMaskValue(MASK_FOUND, booleanStore);
+                                boolean inDbFound = ImmutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
+                                cache.setFavorite(database, inDbFavorite);
+                                if (inDbFound) {
+                                    cache.setFound(database, true);
+                                }
+                            }
 
-                                    create Statement like LogDao.writeToDB(List)
+                            if (update) {
+                                DaoFactory.CACHE_DAO.updateDatabase(database, cache, false);
+                            } else {
+                                DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
+                            }
 
-
-
+//                                    create Statement like LogDao.writeToDB(List)
                             DaoFactory.CACHE_DAO.updateDatabase(database, cache, false);
-
 
 
                             if (importHandler != null) {
@@ -405,20 +420,86 @@ Read Hashmap <id,booleanStore>
                             }
                         } else if (resolveWaypoitConflicts.size > 0) {
                             sleep = false;
-                            AbstractWaypoint waypoint = resolveWaypoitConflicts.pop();
 
                             //TODO handle waypoint conflict
-//                            DaoFactory.WAYPOINT_DAO.writeToDatabase(database, waypoint, false);
+
+                            AbstractWaypoint wp = resolveWaypoitConflicts.pop();
+
+                            try {
+                                REPLACE_WAYPOINT.bind(
+                                        wp.getCacheId(),
+                                        wp.getGcCode(),
+                                        wp.getLatitude(),
+                                        wp.getLongitude(),
+                                        wp.getType().ordinal(),
+                                        wp.isStart(),
+                                        wp.isSyncExcluded(),
+                                        wp.isUserWaypoint(),
+                                        wp.getTitle()
+                                ).commit();
+                            } catch (Exception e) {
+                                log.error("Can't write Waypoint  with values: \n" +
+                                                "GC-Code:{}\n",
+                                        wp.getGcCode()
+                                );
+                            } finally {
+                                REPLACE_WAYPOINT.reset();
+                            }
+
+
+                            try {
+                                REPLACE_WAYPOINT_TEXT.bind(
+                                        wp.getGcCode(),
+                                        wp.getDescription(null),
+                                        wp.getClue(null)
+                                ).commit();
+                            } catch (Exception e) {
+                                log.error("Can't write Waypoint Text with values: \n" +
+                                                "GC-Code:{}\n" +
+                                                "Description:{}\n" +
+                                                "Clue:{}\n\n\n",
+                                        wp.getGcCode(),
+                                        wp.getDescription(null),
+                                        wp.getClue(null)
+                                );
+                            } finally {
+                                REPLACE_WAYPOINT_TEXT.reset();
+                            }
+
                             if (importHandler != null) importHandler.incrementWaypoints();
                         } else if (storeLogEntry.size > 0) {
                             sleep = false;
-                            LogDAO dao = new LogDAO();
-                            Array<LogEntry> writeList = new Array<>();
                             while (storeLogEntry.size > 0) {
-                                writeList.add(storeLogEntry.pop());
+                                LogEntry entry = storeLogEntry.pop();
+                                try {
+                                    REPLACE_LOGS.bind(
+                                            entry.Id,
+                                            entry.CacheId,
+                                            Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                                            entry.Finder,
+                                            entry.Type,
+                                            entry.Comment
+                                    ).commit();
+                                } catch (Exception e) {
+                                    log.error("Can't write Log-Entry with values: \n" +
+                                                    "ID:{}\n" +
+                                                    "CacheID:{}\n" +
+                                                    "Date:{}\n" +
+                                                    "Finder:{}\n" +
+                                                    "Type:{}\n" +
+                                                    "Comment:{}\n\n\n",
+                                            entry.Id, entry.CacheId,
+                                            Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                                            entry.Finder,
+                                            entry.Type,
+                                            entry.Comment
+                                    );
+                                } finally {
+                                    REPLACE_LOGS.reset();
+                                }
                                 if (importHandler != null) importHandler.incrementLogs();
                             }
-//                            dao.writeToDB(database, writeList);
+
 
                         }
 

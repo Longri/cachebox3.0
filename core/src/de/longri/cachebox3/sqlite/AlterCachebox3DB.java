@@ -57,11 +57,12 @@ public class AlterCachebox3DB {
                 boolean isExist = false;
                 GdxSqliteCursor cursor = database.rawQuery("PRAGMA table_info(Config)");
                 cursor.moveToFirst();
-                while (cursor.next()) {
+                while (cursor.isAfterLast() == false) {
                     if (cursor.getString(1).equals("desired")) {
                         isExist = true;
                         break;
                     }
+                    cursor.next();
                 }
 
                 DatabaseSchema schemaStrings = new DatabaseSchema();

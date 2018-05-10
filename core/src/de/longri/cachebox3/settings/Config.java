@@ -218,7 +218,7 @@ public class Config extends Settings {
                 if (data != null) {
                     GdxSqliteCursor cursor = data.rawQuery("SELECT * FROM Config", (String[]) null);
                     cursor.moveToFirst();
-                    while (cursor.next()) {
+                    while (cursor.isAfterLast() == false) {
                         String key = cursor.getString(0);
                         DbSettingValues values = new DbSettingValues();
                         values.value = cursor.getString(1);
@@ -226,13 +226,14 @@ public class Config extends Settings {
                         if (cursor.getColumnCount() > 3)
                             values.desired = cursor.getString(3);
                         localMap.put(key, values);
+                        cursor.next();
                     }
                 }
 
                 if (settingsDB != null) {
                     GdxSqliteCursor cursor = settingsDB.rawQuery("SELECT * FROM Config", (String[]) null);
                     cursor.moveToFirst();
-                    while (cursor.next()) {
+                    while (cursor.isAfterLast() == false) {
                         String key = cursor.getString(0);
                         DbSettingValues values = new DbSettingValues();
                         values.value = cursor.getString(1);
@@ -240,6 +241,7 @@ public class Config extends Settings {
                         if (cursor.getColumnCount() > 3)
                             values.desired = cursor.getString(3);
                         globalMap.put(key, values);
+                        cursor.next();
                     }
                 }
 
