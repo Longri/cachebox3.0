@@ -375,11 +375,15 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                     }
 
                     //prepare statements
-                    GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("INSERT OR REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
-                    GdxSqlitePreparedStatement REPLACE_WAYPOINT = database.myDB.prepare("INSERT OR REPLACE INTO Waypoints VALUES(?,?,?,?,?,?,?,?,?) ;");
-                    GdxSqlitePreparedStatement REPLACE_WAYPOINT_TEXT = database.myDB.prepare("INSERT OR REPLACE INTO WaypointsText VALUES(?,?,?) ;");
+                    final GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("INSERT OR REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
+                    final GdxSqlitePreparedStatement REPLACE_WAYPOINT = database.myDB.prepare("INSERT OR REPLACE INTO Waypoints VALUES(?,?,?,?,?,?,?,?,?) ;");
+                    final GdxSqlitePreparedStatement REPLACE_WAYPOINT_TEXT = database.myDB.prepare("INSERT OR REPLACE INTO WaypointsText VALUES(?,?,?) ;");
+                    final GdxSqlitePreparedStatement REPLACE_CACHE_CORE = database.myDB.prepare("INSERT OR REPLACE INTO CacheCoreInfo VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ;");
+                    final GdxSqlitePreparedStatement REPLACE_CACHE_INFO = database.myDB.prepare("INSERT OR REPLACE INTO CacheInfo VALUES(?,?,?,?,?,?,?,?,?) ;");
+                    final GdxSqlitePreparedStatement REPLACE_CACHE_TEXT = database.myDB.prepare("INSERT OR REPLACE INTO CacheText VALUES(?,?,?,?,?,?,?) ;");
+                    final GdxSqlitePreparedStatement REPLACE_ATTRIBUTE = database.myDB.prepare("INSERT OR REPLACE INTO Attributes VALUES(?,?,?,?,?) ;");
 
-
+                    int operationCount = 0;
                     final int TRANSACTION_ID = 290272;
                     database.beginTransactionExclusive(TRANSACTION_ID);
                     while (!PARSE_READY.get() || resolveCacheConflicts.size > 0
@@ -394,9 +398,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
                             //get boolean store from Cache and check Favorite nad Found
                             Short booleanStore = booleanStoreMap.get(cache.getId());
-                            boolean update = false;
                             if (booleanStore != null) {
-                                update = true;
                                 boolean inDbFavorite = ImmutableCache.getMaskValue(MASK_FOUND, booleanStore);
                                 boolean inDbFound = ImmutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
                                 cache.setFavorite(database, inDbFavorite);
@@ -405,15 +407,111 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                 }
                             }
 
-                            if (update) {
-                                DaoFactory.CACHE_DAO.updateDatabase(database, cache, false);
-                            } else {
-                                DaoFactory.CACHE_DAO.writeToDatabase(database, cache, false);
+                            try {
+                                REPLACE_CACHE_CORE.bind(
+                                        cache.getId(),
+                                        cache.getLatitude(),
+                                        cache.getLongitude(),
+                                        cache.getSize() != null ? cache.getSize().ordinal() : 0,
+                                        (int) (cache.getDifficulty() * 2),
+                                        (int) (cache.getTerrain() * 2),
+                                        cache.getType().ordinal(),
+                                        (int) (cache.getRating() * 200),
+                                        cache.getNumTravelbugs(),
+                                        cache.getGcCode(),
+                                        cache.getName(),
+                                        cache.getPlacedBy(),
+                                        cache.getOwner(),
+                                        cache.getGcId(),
+                                        cache.getBooleanStore(),
+                                        cache.getFavoritePoints(),
+                                        (int) (cache.getRating() * 2)
+                                ).commit();
+                            } catch (Exception e) {
+                                log.error("Can't write Cache " +
+                                                "GC-Code:{}\n",
+                                        cache.getGcCode()
+                                );
+                            } finally {
+                                REPLACE_CACHE_CORE.reset();
                             }
 
-//                                    create Statement like LogDao.writeToDB(List)
-                            DaoFactory.CACHE_DAO.updateDatabase(database, cache, false);
 
+                            Date dateHidden = cache.getDateHidden(database);
+                            if (dateHidden == null) dateHidden = new Date();
+                            String dateString = Database.cbDbFormat.format(dateHidden);
+
+                            try {
+                                REPLACE_CACHE_INFO.bind(
+                                        cache.getId(),
+                                        dateString,
+                                        Database.cbDbFormat.format(new Date()),
+                                        cache.getTourName(),
+                                        cache.getGPXFilename_ID(),
+                                        0,// TODO handle Listing CheckSum
+                                        cache.getState(null),
+                                        cache.getCountry(null),
+                                        cache.getApiState(null)
+                                ).commit();
+                            } catch (Exception e) {
+                                log.error("Can't write Cache Info" +
+                                                "GC-Code:{}\n",
+                                        cache.getGcCode()
+                                );
+                            } finally {
+                                REPLACE_CACHE_INFO.reset();
+                            }
+
+                            try {
+                                REPLACE_CACHE_TEXT.bind(
+                                        cache.getId(),
+                                        cache.getUrl(null),
+                                        cache.getHint(null),
+                                        cache.getLongDescription(null),
+                                        cache.getTmpNote(null),
+                                        cache.getTmpSolver(null),
+                                        cache.getShortDescription(null)
+                                ).commit();
+                            } catch (Exception e) {
+                                log.error("Can't write Cache Text" +
+                                                "GC-Code:{}\n",
+                                        cache.getGcCode()
+                                );
+                            } finally {
+                                REPLACE_CACHE_TEXT.reset();
+                            }
+
+
+                            long AttributesPositive = 0;
+                            long AttributesPositiveHigh = 0;
+                            long AttributesNegative = 0;
+                            long AttributesNegativeHigh = 0;
+
+                            if (cache.getAttributesPositive() != null) {
+                                AttributesPositive = cache.getAttributesPositive().getLow();
+                                AttributesPositiveHigh = cache.getAttributesPositive().getHigh();
+                            }
+                            if (cache.getAttributesNegative() != null) {
+                                AttributesNegative = cache.getAttributesNegative().getLow();
+                                AttributesNegativeHigh = cache.getAttributesNegative().getHigh();
+                            }
+
+                            try {
+                                REPLACE_ATTRIBUTE.bind(
+                                        cache.getId(),
+                                        AttributesPositive,
+                                        AttributesNegative,
+                                        AttributesPositiveHigh,
+                                        AttributesNegativeHigh
+                                ).commit();
+                            } catch (Exception e) {
+                                log.error("Can't write Cache Attribute" +
+                                                "GC-Code:{}\n",
+                                        cache.getGcCode()
+                                );
+                            } finally {
+                                REPLACE_ATTRIBUTE.reset();
+                            }
 
                             if (importHandler != null) {
                                 importHandler.incrementCaches(cache.getType() == CacheTypes.Mystery ? cache.getGcCode().toString() : null);
@@ -471,31 +569,34 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             sleep = false;
                             while (storeLogEntry.size > 0) {
                                 LogEntry entry = storeLogEntry.pop();
-                                try {
-                                    REPLACE_LOGS.bind(
-                                            entry.Id,
-                                            entry.CacheId,
-                                            Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                                            entry.Finder,
-                                            entry.Type,
-                                            entry.Comment
-                                    ).commit();
-                                } catch (Exception e) {
-                                    log.error("Can't write Log-Entry with values: \n" +
-                                                    "ID:{}\n" +
-                                                    "CacheID:{}\n" +
-                                                    "Date:{}\n" +
-                                                    "Finder:{}\n" +
-                                                    "Type:{}\n" +
-                                                    "Comment:{}\n\n\n",
-                                            entry.Id, entry.CacheId,
-                                            Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                                            entry.Finder,
-                                            entry.Type,
-                                            entry.Comment
-                                    );
-                                } finally {
-                                    REPLACE_LOGS.reset();
+
+                                if ( entry!=null) {
+                                    try {
+                                        REPLACE_LOGS.bind(
+                                                entry.Id,
+                                                entry.CacheId,
+                                                Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                                                entry.Finder,
+                                                entry.Type,
+                                                entry.Comment
+                                        ).commit();
+                                    } catch (Exception e) {
+                                        log.error("Can't write Log-Entry with values: \n" +
+                                                        "ID:{}\n" +
+                                                        "CacheID:{}\n" +
+                                                        "Date:{}\n" +
+                                                        "Finder:{}\n" +
+                                                        "Type:{}\n" +
+                                                        "Comment:{}\n\n\n",
+                                                entry.Id, entry.CacheId,
+                                                Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                                                entry.Finder,
+                                                entry.Type,
+                                                entry.Comment
+                                        );
+                                    } finally {
+                                        REPLACE_LOGS.reset();
+                                    }
                                 }
                                 if (importHandler != null) importHandler.incrementLogs();
                             }
@@ -509,11 +610,28 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                        } else {
+                            // commit every 100 operations
+                            if (operationCount++ > 100) {
+                                database.endTransactionExclusive(TRANSACTION_ID);
+                                database.beginTransactionExclusive(TRANSACTION_ID);
+                                operationCount = 0;
+                            }
                         }
 
                     }
                     CONFLICT_READY.set(true);
                     database.endTransactionExclusive(TRANSACTION_ID);
+
+                    //release statements
+                    REPLACE_LOGS.close();
+                    REPLACE_WAYPOINT.close();
+                    REPLACE_WAYPOINT_TEXT.close();
+                    REPLACE_CACHE_CORE.close();
+                    REPLACE_CACHE_INFO.close();
+                    REPLACE_CACHE_TEXT.close();
+                    REPLACE_ATTRIBUTE.close();
+
                 }
             });
         } else {
