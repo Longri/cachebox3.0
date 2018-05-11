@@ -33,7 +33,7 @@ import java.util.Locale;
 /**
  * Created by Longri on 26.03.2018.
  */
-class PqListItem extends ListViewItem {
+public class PqListItem extends ListViewItem {
     private final PocketQuery pq;
     private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private final static DecimalFormat decimalFormat = new DecimalFormat("###.##");
