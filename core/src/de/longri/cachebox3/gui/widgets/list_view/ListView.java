@@ -477,7 +477,10 @@ public class ListView extends Catch_WidgetGroup {
 
     @Override
     public void act(float delta) {
-        super.act(delta);
+        try {
+            super.act(delta);
+        } catch (Exception e) {
+        }
 
         if (this.scrollChangedEventListener != null) {
             boolean scrollChanged = false;
