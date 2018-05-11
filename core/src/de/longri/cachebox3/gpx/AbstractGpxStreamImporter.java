@@ -383,18 +383,36 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                     final GdxSqlitePreparedStatement REPLACE_CACHE_TEXT = database.myDB.prepare("INSERT OR REPLACE INTO CacheText VALUES(?,?,?,?,?,?,?) ;");
                     final GdxSqlitePreparedStatement REPLACE_ATTRIBUTE = database.myDB.prepare("INSERT OR REPLACE INTO Attributes VALUES(?,?,?,?,?) ;");
 
-                    int operationCount = 0;
+
                     final int TRANSACTION_ID = 290272;
                     database.beginTransactionExclusive(TRANSACTION_ID);
-                    while (!PARSE_READY.get() || resolveCacheConflicts.size > 0
-                            || resolveWaypoitConflicts.size > 0
-                            || storeLogEntry.size > 0) {
+                    while (true) {
 
                         boolean sleep = true;
 
-                        if (resolveCacheConflicts.size > 0) {
+                        AbstractCache cache = null;
+                        synchronized (resolveCacheConflicts) {
+                            if (resolveCacheConflicts.size > 0)
+                                cache = resolveCacheConflicts.pop();
+                        }
+
+                        AbstractWaypoint wp = null;
+                        synchronized (resolveWaypoitConflicts) {
+                            if (resolveWaypoitConflicts.size > 0)
+                                wp = resolveWaypoitConflicts.pop();
+                        }
+
+
+                        LogEntry entry = null;
+                        synchronized (storeLogEntry) {
+                            if (storeLogEntry.size > 0)
+                                entry = storeLogEntry.pop();
+                        }
+
+
+                        if (cache != null) {
                             sleep = false;
-                            AbstractCache cache = resolveCacheConflicts.pop();
+
 
                             //get boolean store from Cache and check Favorite nad Found
                             Short booleanStore = booleanStoreMap.get(cache.getId());
@@ -516,12 +534,13 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             if (importHandler != null) {
                                 importHandler.incrementCaches(cache.getType() == CacheTypes.Mystery ? cache.getGcCode().toString() : null);
                             }
-                        } else if (resolveWaypoitConflicts.size > 0) {
+
+                        }
+
+                        if (wp != null) {
                             sleep = false;
 
                             //TODO handle waypoint conflict
-
-                            AbstractWaypoint wp = resolveWaypoitConflicts.pop();
 
                             try {
                                 REPLACE_WAYPOINT.bind(
@@ -565,44 +584,42 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             }
 
                             if (importHandler != null) importHandler.incrementWaypoints();
-                        } else if (storeLogEntry.size > 0) {
-                            sleep = false;
-                            while (storeLogEntry.size > 0) {
-                                LogEntry entry = storeLogEntry.pop();
-
-                                if ( entry!=null) {
-                                    try {
-                                        REPLACE_LOGS.bind(
-                                                entry.Id,
-                                                entry.CacheId,
-                                                Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                                                entry.Finder,
-                                                entry.Type,
-                                                entry.Comment
-                                        ).commit();
-                                    } catch (Exception e) {
-                                        log.error("Can't write Log-Entry with values: \n" +
-                                                        "ID:{}\n" +
-                                                        "CacheID:{}\n" +
-                                                        "Date:{}\n" +
-                                                        "Finder:{}\n" +
-                                                        "Type:{}\n" +
-                                                        "Comment:{}\n\n\n",
-                                                entry.Id, entry.CacheId,
-                                                Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                                                entry.Finder,
-                                                entry.Type,
-                                                entry.Comment
-                                        );
-                                    } finally {
-                                        REPLACE_LOGS.reset();
-                                    }
-                                }
-                                if (importHandler != null) importHandler.incrementLogs();
-                            }
-
 
                         }
+
+                        if (entry != null) {
+                            sleep = false;
+
+
+                            try {
+                                REPLACE_LOGS.bind(
+                                        entry.Id,
+                                        entry.CacheId,
+                                        Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                                        entry.Finder,
+                                        entry.Type,
+                                        entry.Comment
+                                ).commit();
+                            } catch (Exception e) {
+                                log.error("Can't write Log-Entry with values: \n" +
+                                                "ID:{}\n" +
+                                                "CacheID:{}\n" +
+                                                "Date:{}\n" +
+                                                "Finder:{}\n" +
+                                                "Type:{}\n" +
+                                                "Comment:{}\n\n\n",
+                                        entry.Id, entry.CacheId,
+                                        Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
+                                        entry.Finder,
+                                        entry.Type,
+                                        entry.Comment
+                                );
+                            } finally {
+                                REPLACE_LOGS.reset();
+                            }
+                            if (importHandler != null) importHandler.incrementLogs();
+                        }
+
 
                         if (sleep) {
                             try {
@@ -610,14 +627,34 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        } else {
-                            // commit every 100 operations
-                            if (operationCount++ > 100) {
-                                database.endTransactionExclusive(TRANSACTION_ID);
-                                database.beginTransactionExclusive(TRANSACTION_ID);
-                                operationCount = 0;
-                            }
                         }
+//                        else {
+//                            // commit every 100 operations
+//                            if (operationCount++ > 100) {
+//                                database.endTransactionExclusive(TRANSACTION_ID);
+//                                database.beginTransactionExclusive(TRANSACTION_ID);
+//                                operationCount = 0;
+//                            }
+//                        }
+
+                        boolean cacheEmpty = false;
+                        boolean waypointEmpty = false;
+                        boolean logsEmpty = false;
+
+                        synchronized (resolveCacheConflicts) {
+                            cacheEmpty = resolveCacheConflicts.size == 0;
+                        }
+
+                        synchronized (resolveWaypoitConflicts) {
+                            waypointEmpty = resolveWaypoitConflicts.size == 0;
+                        }
+
+                        synchronized (storeLogEntry) {
+                            logsEmpty = storeLogEntry.size == 0;
+                        }
+
+                        if (PARSE_READY.get() && cacheEmpty && waypointEmpty && logsEmpty)
+                            break;
 
                     }
                     CONFLICT_READY.set(true);
