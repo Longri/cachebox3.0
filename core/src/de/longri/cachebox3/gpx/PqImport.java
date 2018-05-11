@@ -43,13 +43,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class PqImport {
 
+    public PqImport(Database database) {
+        this.database = database;
+    }
+
     public interface IReadyHandler {
-        void ready(int importedCaches, int importedWaypoints,int importedLogs);
+        void ready(int importedCaches, int importedWaypoints, int importedLogs);
     }
 
     private final static Logger log = LoggerFactory.getLogger(ImportPQActivity.class);
 
-    public void importNow(final Array<ListViewItemInterface> selectedItems,IReadyHandler ready) {
+    final Database database;
+
+
+    public void importNow(final Array<ListViewItemInterface> selectedItems, IReadyHandler ready) {
         this.importNow(selectedItems, null, null, null,
                 null, null,
                 null, null,
@@ -60,8 +67,8 @@ public class PqImport {
                           final AligmentLabel downloadLabel, final CB_ProgressBar downloadProgress,
                           final AligmentLabel extractLabel, final CB_ProgressBar extractProgress,
                           final AligmentLabel importLabel, final CB_ProgressBar importProgress,
-                          final AligmentLabel correctedLabel,final IReadyHandler readyHandler) {
-        
+                          final AligmentLabel correctedLabel, final IReadyHandler readyHandler) {
+
         // get import information
         final AtomicInteger downloadPqCount = new AtomicInteger(0),
                 downloadedPqs = new AtomicInteger(0), extractedPQs = new AtomicInteger(0),
@@ -78,17 +85,23 @@ public class PqImport {
         }
 
         //set initial progress values
-        downloadLabel.setText(Translation.get("downloaded", "0", Integer.toString(downloadPqCount.get())));
-        downloadProgress.setRange(0, downloadBytes.get());
+        if (downloadLabel != null)
+            downloadLabel.setText(Translation.get("downloaded", "0", Integer.toString(downloadPqCount.get())));
+        if (downloadProgress != null) downloadProgress.setRange(0, downloadBytes.get());
 
-        extractLabel.setText(Translation.get("extracted", "0", Integer.toString(downloadPqCount.get())));
-        extractProgress.setRange(0, downloadPqCount.get());
+        if (extractLabel != null)
+            extractLabel.setText(Translation.get("extracted", "0", Integer.toString(downloadPqCount.get())));
+        if (extractProgress != null) extractProgress.setRange(0, downloadPqCount.get());
 
-        importLabel.setText(Translation.get("imported", "0", Integer.toString(importCache.get())));
-        importProgress.setRange(0, importCache.get());
+        if (importLabel != null)
+            importLabel.setText(Translation.get("imported", "0", Integer.toString(importCache.get())));
+        if (importProgress != null) importProgress.setRange(0, importCache.get());
 
-        correctedLabel.setText(Translation.get("correctedCoords", "0", "0"));
+        if (correctedLabel != null) correctedLabel.setText(Translation.get("correctedCoords", "0", "0"));
 
+
+        final int TRANSACTION_ID = 290272;
+        database.beginTransactionExclusive(TRANSACTION_ID);
 
         //start download async
         final FileHandle pqFolder = Gdx.files.absolute(Config.PocketQueryFolder.getValue());
@@ -106,7 +119,8 @@ public class PqImport {
                     FileHandle downloadedFile = pqListItem.getPocketQuery().download(pqFolder, iCancel, new PocketQuery.IncrementProgressBytesListener() {
                         @Override
                         public void increment(int bytes) {
-                            downloadProgress.setValue(readyDownloadBytes.addAndGet(bytes));
+                            if (downloadProgress != null)
+                                downloadProgress.setValue(readyDownloadBytes.addAndGet(bytes));
                             CB.requestRendering();
                         }
                     });
@@ -116,7 +130,7 @@ public class PqImport {
                             @Override
                             public void run() {
                                 //update progress message
-                                downloadLabel.setText(Translation.get("downloaded",
+                                if (downloadLabel != null) downloadLabel.setText(Translation.get("downloaded",
                                         Integer.toString(downloadedPqs.incrementAndGet()),
                                         Integer.toString(downloadPqCount.get())));
                                 CB.requestRendering();
@@ -154,10 +168,10 @@ public class PqImport {
                                 public void run() {
                                     // update progress Label
                                     int progressValue = extractedPQs.incrementAndGet();
-                                    extractLabel.setText(Translation.get("extracted",
+                                    if (extractLabel != null) extractLabel.setText(Translation.get("extracted",
                                             Integer.toString(progressValue),
                                             Integer.toString(downloadPqCount.get())));
-                                    extractProgress.setValue(progressValue);
+                                    if (extractProgress != null) extractProgress.setValue(progressValue);
                                     CB.requestRendering();
                                 }
                             });
@@ -189,10 +203,10 @@ public class PqImport {
                             // update progress Label
                             int progressValue = readyImportedCaches.incrementAndGet();
                             if (importCache.get() < 100 || progressValue % 10 == 0) {
-                                importLabel.setText(Translation.get("imported",
+                                if (importLabel != null) importLabel.setText(Translation.get("imported",
                                         Integer.toString(progressValue),
                                         Integer.toString(importCache.get())));
-                                importProgress.setValue(progressValue);
+                                if (importProgress != null) importProgress.setValue(progressValue);
                                 CB.requestRendering();
                             }
                         }
@@ -209,7 +223,7 @@ public class PqImport {
                     readyImportedLogs.incrementAndGet();
                 }
             };
-            final GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(Database.Data, importHandler);
+            final GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(database, importHandler);
 
 
             @Override
@@ -264,8 +278,9 @@ public class PqImport {
                     }
                 }
                 log.debug("PocketQuery ready imported");
-                if(readyHandler!=null){
-                    readyHandler.ready(readyImportedCaches.get(),readyImportedWaypoints.get(),readyImportedLogs.get());
+                database.endTransactionExclusive(TRANSACTION_ID);
+                if (readyHandler != null) {
+                    readyHandler.ready(readyImportedCaches.get(), readyImportedWaypoints.get(), readyImportedLogs.get());
                 }
 
             }

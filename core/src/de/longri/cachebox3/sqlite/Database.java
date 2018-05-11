@@ -368,7 +368,7 @@ public class Database {
 
     private AtomicInteger shemaVersion = new AtomicInteger(-1);
 
-    protected int getDatabaseSchemeVersion() {
+    public int getDatabaseSchemeVersion() {
 
         if (shemaVersion.get() >= 0) return shemaVersion.get();
 

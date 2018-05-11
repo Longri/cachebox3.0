@@ -374,6 +374,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                         }
                     }
 
+
+
                     //prepare statements
                     final GdxSqlitePreparedStatement REPLACE_LOGS = database.myDB.prepare("INSERT OR REPLACE INTO Logs VALUES(?,?,?,?,?,?) ;");
                     final GdxSqlitePreparedStatement REPLACE_WAYPOINT = database.myDB.prepare("INSERT OR REPLACE INTO Waypoints VALUES(?,?,?,?,?,?,?,?,?) ;");
@@ -383,25 +385,6 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                     final GdxSqlitePreparedStatement REPLACE_CACHE_TEXT = database.myDB.prepare("INSERT OR REPLACE INTO CacheText VALUES(?,?,?,?,?,?,?) ;");
                     final GdxSqlitePreparedStatement REPLACE_ATTRIBUTE = database.myDB.prepare("INSERT OR REPLACE INTO Attributes VALUES(?,?,?,?,?) ;");
 
-
-                    final int TRANSACTION_ID = 290272;
-
-
-                    CB.postOnGlThread(new NamedRunnable("") {
-                        @Override
-                        public void run() {
-                            database.beginTransactionExclusive(TRANSACTION_ID);
-                        }
-                    });
-
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    if(database.myDB.getAutoCommit()>0)
-                        throw new RuntimeException("No Transaction");
 
                     while (true) {
 
@@ -675,13 +658,6 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
                     }
                     CONFLICT_READY.set(true);
-
-
-
-                    if(database.myDB.getAutoCommit()>0)
-                        throw new RuntimeException("No Transaction");
-
-                    database.endTransactionExclusive(TRANSACTION_ID);
 
                     //release statements
                     REPLACE_LOGS.close();

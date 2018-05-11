@@ -171,7 +171,7 @@ public class ImportPQActivity extends BlockGpsActivityBase {
     }
 
     private void importNow() {
-        PqImport pqImport = new PqImport();
+        PqImport pqImport = new PqImport(Database.Data);
         final long importStart = System.currentTimeMillis();
         PqImport.IReadyHandler readyHandler = new PqImport.IReadyHandler() {
             public void ready(int importedCaches, int importedWaypoints, int importedLogs) {

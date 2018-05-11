@@ -38,10 +38,13 @@ public class PqListItem extends ListViewItem {
     private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private final static DecimalFormat decimalFormat = new DecimalFormat("###.##");
 
-    PqListItem(int index, PocketQuery pq, PqListItemStyle style) {
+    public PqListItem(int index, PocketQuery pq, PqListItemStyle style) {
         super(index);
 
         this.pq = pq;
+
+        if (style == null) return;
+
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
         nameLabelStyle.font = style.nameFont;
         nameLabelStyle.fontColor = style.nameFontColor;
