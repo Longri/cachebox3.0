@@ -32,7 +32,6 @@ import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.impl.EmptyLogger;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -893,6 +892,12 @@ public class Database {
                     log.debug("open data base: " + databasePath);
                     myDB = new GdxSqlite(databasePath);
                     myDB.openOrCreateDatabase();
+
+                    //set PRAGMAS
+                    myDB.execSQL("PRAGMA synchronous = OFF");
+                    myDB.execSQL("PRAGMA journal_mode = MEMORY");
+
+
                 } catch (Exception exc) {
                     log.error("Can't open Database", exc);
                 }

@@ -22,7 +22,6 @@ import com.badlogic.gdx.utils.XmlStreamParser;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
-import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -359,7 +358,6 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
             CB.postAsync(new NamedRunnable("Import Conflict handler") {
                 @Override
                 public void run() {
-
                     //Read all 'BooleanStore' values from Database for conflict handling
                     String sql = "SELECT Id, BooleanStore FROM CacheCoreInfo";
 
@@ -373,7 +371,6 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             cursor.next();
                         }
                     }
-
 
 
                     //prepare statements
@@ -667,9 +664,9 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                     REPLACE_CACHE_INFO.close();
                     REPLACE_CACHE_TEXT.close();
                     REPLACE_ATTRIBUTE.close();
-
                 }
             });
+
         } else {
             CONFLICT_READY.set(true);
         }

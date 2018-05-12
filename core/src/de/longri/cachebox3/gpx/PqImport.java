@@ -20,7 +20,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
-import de.longri.cachebox3.gui.activities.ImportPQActivity;
 import de.longri.cachebox3.gui.activities.PqListItem;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
@@ -43,6 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class PqImport {
 
+
     public PqImport(Database database) {
         this.database = database;
     }
@@ -51,12 +51,13 @@ public class PqImport {
         void ready(int importedCaches, int importedWaypoints, int importedLogs);
     }
 
-    private final static Logger log = LoggerFactory.getLogger(ImportPQActivity.class);
+    private final static Logger log = LoggerFactory.getLogger(PqImport.class);
 
     final Database database;
 
 
     public void importNow(final Array<ListViewItemInterface> selectedItems, IReadyHandler ready) {
+
         this.importNow(selectedItems, null, null, null,
                 null, null,
                 null, null,
@@ -194,6 +195,7 @@ public class PqImport {
         final AtomicInteger readyImportedWaypoints = new AtomicInteger();
 
         CB.postAsync(new NamedRunnable("Import extracted gpx files") {
+
             final ImportHandler importHandler = new ImportHandler() {
                 @Override
                 public void incrementCaches(String mysteryGcCode) {
@@ -228,7 +230,6 @@ public class PqImport {
 
             @Override
             public void run() {
-
                 while (!extractReady.get() || extractedfolder.size > 0) {
                     if (extractedfolder.size > 0) {
                         FileHandle gpxFolder = extractedfolder.pop();
@@ -282,7 +283,6 @@ public class PqImport {
                 if (readyHandler != null) {
                     readyHandler.ready(readyImportedCaches.get(), readyImportedWaypoints.get(), readyImportedLogs.get());
                 }
-
             }
         });
     }
