@@ -18,16 +18,12 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gpx.GpxWptCounter;
 import de.longri.cachebox3.gpx.GroundspeakGpxStreamImporter;
 import de.longri.cachebox3.gpx.ImportHandler;
-import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.activities.ImportGcPos;
-import de.longri.cachebox3.gui.activities.ImportPQ;
+import de.longri.cachebox3.gui.activities.ImportPQActivity;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -43,7 +39,6 @@ import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -96,7 +91,7 @@ public class ShowImportMenu extends Menu {
 
                 switch (item.getMenuItemId()) {
                     case MenuID.MI_IMPORT_GS_PQ:
-                        ImportPQ imp = new ImportPQ();
+                        ImportPQActivity imp = new ImportPQActivity();
                         imp.show();
                         return true;
                     case MenuID.MI_IMPORT_GS_API_POSITION:

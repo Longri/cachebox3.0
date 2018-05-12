@@ -18,6 +18,8 @@ package de.longri.cachebox3.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Enumeration;
@@ -29,6 +31,8 @@ import java.util.zip.ZipFile;
  * @author Longri from => http://stackoverflow.com/questions/981578/how-to-unzip-files-recursively-in-java
  */
 public class UnZip {
+
+    private final Logger log= LoggerFactory.getLogger(UnZip.class);
 
     /**
      * Extract the given ZIP-File
@@ -52,7 +56,7 @@ public class UnZip {
      * @throws IOException with IO error
      */
     public String extractFolder(String zipFile) throws IOException {
-        System.out.println("extract => " + zipFile);
+        log.debug("extract => " + zipFile);
         int BUFFER = 2048;
         File file = new File(zipFile);
 

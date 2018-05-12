@@ -25,18 +25,19 @@ import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.impl.EmptyLogger;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -278,64 +279,83 @@ public class Database {
     }
 
 
-    public boolean startUp(FileHandle databasePath) throws SQLiteGdxException {
+    public boolean startUp(final FileHandle path) throws SQLiteGdxException {
 
-        log = LoggerFactory.getLogger("DB:" + databasePath.nameWithoutExtension());
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+        final AtomicBoolean io = new AtomicBoolean(false);
 
-        FileHandle parentDirectory = databasePath.parent();
+        CB.postOnGlThread(new NamedRunnable("StartUp Database on MainThread") {
+            @Override
+            public void run() {
+                log = LoggerFactory.getLogger("DB:" + path.nameWithoutExtension());
 
-        if (!parentDirectory.exists()) {
-            throw new SQLiteGdxException("Directory for DB doesn't exist: " + parentDirectory.file().getAbsolutePath());
-        }
+                FileHandle parentDirectory = path.parent();
 
-        //reset version
-        shemaVersion.set(-1);
-
-        log.debug("startUp Database: " + Utils.GetFileName(databasePath));
-        if (myDB != null) {
-            log.debug("Database is open ");
-            if (this.databasePath.file().getAbsolutePath().equals(databasePath.file().getAbsolutePath())) {
-                log.debug("Database is the same");
-                if (!myDB.isOpen()) {
-                    log.debug("Database was close so open now");
-                    myDB.openOrCreateDatabase();
+                if (!parentDirectory.exists()) {
+                    throw new SQLiteGdxException("Directory for DB doesn't exist: " + parentDirectory.file().getAbsolutePath());
                 }
 
-                // is open
-                return true;
+                //reset version
+                shemaVersion.set(-1);
+
+                log.debug("startUp Database: " + Utils.GetFileName(path));
+                if (myDB != null) {
+                    log.debug("Database is open ");
+                    if (databasePath.file().getAbsolutePath().equals(path.file().getAbsolutePath())) {
+                        log.debug("Database is the same");
+                        if (!myDB.isOpen()) {
+                            log.debug("Database was close so open now");
+                            myDB.openOrCreateDatabase();
+                        }
+
+                        // is open
+                        io.set(true);
+                    }
+                    log.debug("Database is changed! close " + Utils.GetFileName(databasePath));
+                    if (myDB != null && myDB.isOpen()) myDB.closeDatabase();
+                    myDB = null;
+                }
+
+
+                databasePath = path;
+                log.debug("Initial database: " + Utils.GetFileName(databasePath));
+                initialize();
+
+//
+                int databaseSchemeVersion = getDatabaseSchemeVersion();
+                log.debug("DatabaseSchemeVersion: " + databaseSchemeVersion);
+                if (databaseSchemeVersion < latestDatabaseChange) {
+                    log.debug("Alter Database to SchemeVersion: " + latestDatabaseChange);
+                    alterDatabase(databaseSchemeVersion);
+                    SetDatabaseSchemeVersion();
+                }
+
+
+                if (databaseType == DatabaseType.CacheBox3) { // create or load DatabaseId for each
+                    DatabaseId = readConfigLong("DatabaseId");
+                    if (DatabaseId <= 0) {
+                        DatabaseId = new Date().getTime();
+                        writeConfigLong("DatabaseId", DatabaseId);
+                    }
+                    // Read MasterDatabaseId. If MasterDatabaseId > 0 -> This database
+                    // is connected to the Replications Master of WinCB
+                    // In this case changes of Waypoints, Solvertext, Notes must be
+                    // noted in the Table Replication...
+                    MasterDatabaseId = readConfigLong("MasterDatabaseId");
+                }
+                WAIT.set(false);
             }
-            log.debug("Database is changed! close " + Utils.GetFileName(this.databasePath));
-            if (myDB != null && myDB.isOpen()) myDB.closeDatabase();
-            myDB = null;
-        }
+        });
 
-
-        this.databasePath = databasePath;
-        log.debug("Initial database: " + Utils.GetFileName(databasePath));
-        initialize();
-
-//        endTransaction();
-        int databaseSchemeVersion = getDatabaseSchemeVersion();
-        log.debug("DatabaseSchemeVersion: " + databaseSchemeVersion);
-        if (databaseSchemeVersion < latestDatabaseChange) {
-            log.debug("Alter Database to SchemeVersion: " + latestDatabaseChange);
-            alterDatabase(databaseSchemeVersion);
-            SetDatabaseSchemeVersion();
-        }
-
-
-        if (databaseType == DatabaseType.CacheBox3) { // create or load DatabaseId for each
-            DatabaseId = readConfigLong("DatabaseId");
-            if (DatabaseId <= 0) {
-                DatabaseId = new Date().getTime();
-                writeConfigLong("DatabaseId", DatabaseId);
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            // Read MasterDatabaseId. If MasterDatabaseId > 0 -> This database
-            // is connected to the Replications Master of WinCB
-            // In this case changes of Waypoints, Solvertext, Notes must be
-            // noted in the Table Replication...
-            MasterDatabaseId = readConfigLong("MasterDatabaseId");
         }
+
+
         return true;
     }
 
@@ -347,7 +367,7 @@ public class Database {
 
     private AtomicInteger shemaVersion = new AtomicInteger(-1);
 
-    protected int getDatabaseSchemeVersion() {
+    public int getDatabaseSchemeVersion() {
 
         if (shemaVersion.get() >= 0) return shemaVersion.get();
 
@@ -872,6 +892,12 @@ public class Database {
                     log.debug("open data base: " + databasePath);
                     myDB = new GdxSqlite(databasePath);
                     myDB.openOrCreateDatabase();
+
+                    //set PRAGMAS
+                    myDB.execSQL("PRAGMA synchronous = OFF");
+                    myDB.execSQL("PRAGMA journal_mode = MEMORY");
+
+
                 } catch (Exception exc) {
                     log.error("Can't open Database", exc);
                 }
@@ -1089,7 +1115,7 @@ public class Database {
 
     public void beginTransaction() {
         log.debug("begin transaction");
-        if (EXCLUSIVE_ID.get() != -1){
+        if (EXCLUSIVE_ID.get() != -1) {
             log.warn("Can't start Transaction is Exclusive for ID: " + EXCLUSIVE_ID.get());
             return;
         }
@@ -1100,7 +1126,7 @@ public class Database {
 
     public void endTransaction() {
         log.debug("end transaction");
-        if (EXCLUSIVE_ID.get() != -1){
+        if (EXCLUSIVE_ID.get() != -1) {
             log.warn("Can't end Transaction is Exclusive for ID: " + EXCLUSIVE_ID.get());
             return;
         }
