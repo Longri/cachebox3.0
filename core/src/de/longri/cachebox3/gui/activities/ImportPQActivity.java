@@ -177,7 +177,6 @@ public class ImportPQActivity extends BlockGpsActivityBase {
             public void ready(int importedCaches, int importedWaypoints, int importedLogs) {
                 // finish, close activity and notify changes
                 ImportPQActivity.this.finish();
-                CacheListChangedEventList.Call();
                 String msg;
                 if (!iCancel.cancel()) {
 

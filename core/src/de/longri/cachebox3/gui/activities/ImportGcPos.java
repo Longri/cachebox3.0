@@ -457,8 +457,26 @@ public class ImportGcPos extends BlockGpsActivityBase {
                             //close Dialog
                             finish();
 
-                            //fire CacheList changed event
-                            CacheListChangedEventList.Call();
+                            CB.postOnNextGlThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    CB.postAsync(new NamedRunnable("Reload Query after import") {
+                                        @Override
+                                        public void run() {
+                                            Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                                            log.debug("Call loadFilteredCacheList()");
+                                            CB.loadFilteredCacheList(null);
+                                            CB.postOnNextGlThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    CacheListChangedEventList.Call();
+                                                }
+                                            });
+                                        }
+                                    });
+
+                                }
+                            });
                         } else {
                             //Error
                             log.debug("ERROR");
