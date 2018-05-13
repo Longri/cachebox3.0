@@ -18,6 +18,7 @@ package de.longri.cachebox3.gpx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.gui.activities.PqListItem;
@@ -30,10 +31,12 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnZip;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -283,9 +286,35 @@ public class PqImport {
                 if (readyHandler != null) {
                     readyHandler.ready(readyImportedCaches.get(), readyImportedWaypoints.get(), readyImportedLogs.get());
                 }
+
+
+                //write last import
+
+                // get all exist PQ entries
+                GdxSqliteCursor cursor = database.rawQuery("SELECT * FROM PocketQueries");
+                ObjectMap<String, Integer> existMap = new ObjectMap<>();
+                if (cursor != null) {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        existMap.put(cursor.getString(1), cursor.getInt(0));
+                        cursor.next();
+                    }
+                }
+
+                int idx = existMap.size + 1;
+                String dateStringNow = Database.cbDbFormat.format(new Date());
+                for (ListViewItemInterface item : selectedItems) {
+                    String pqName = ((PqListItem) item).getPocketQuery().name;
+
+                    if (existMap.containsKey(pqName)) {
+                        database.execSQL("UPDATE  PocketQueries SET(CreationTimeOfPQ) VALUES('" + dateStringNow + "') WHERE id=" + existMap.get(pqName));
+                        log.debug("Update PQ import '{}' to {}", pqName, dateStringNow);
+                    } else {
+                        database.execSQL("INSERT INTO PocketQueries (Id, PQName, CreationTimeOfPQ) VALUES('" + idx++ + "','" + pqName + "','" + dateStringNow + "')");
+                        log.debug("Insert PQ import '{}' to {}", pqName, dateStringNow);
+                    }
+                }
             }
         });
     }
-
-
 }
