@@ -358,14 +358,16 @@ public class Menu extends Window {
 
     @Override
     public void pack() {
-        for (ListViewItem item : mItems) {
-            ((MenuItem) item).initial();
-            item.pack();
-        }
         super.pack();
         float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (titleGroup.getHeight());
         listView.setBounds(((Gdx.graphics.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
+        for (ListViewItem item : mItems) {
+            ((MenuItem) item).initial();
+            item.layout();
+            item.pack();
+            item.layout();
+        }
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

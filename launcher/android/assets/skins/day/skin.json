@@ -1994,6 +1994,12 @@
       "b": 0.9,
       "a": 1
     },
+    "nePqColor": {
+      "r": 1,
+      "g": 0.9411765,
+      "b": 0.5019608,
+      "a": 1
+    },
     "notAvailable": {
       "r": 0.6784314,
       "a": 1
@@ -3331,7 +3337,11 @@
       "nameFont": "normal_font",
       "nameFontColor": "font_color",
       "infoFont": "mapPanelUnit",
-      "infoFontColor": "font_color"
+      "infoFontColor": "font_color",
+      "newFontColor": "nePqColor",
+      "newBackgroundColor": "circleProgressTextBack",
+      "readyFontColor": "coordinateValuesFocus",
+      "neverFontColor": "notAvailable"
     }
   }
 }

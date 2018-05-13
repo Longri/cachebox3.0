@@ -89,13 +89,12 @@ public class PqListItem extends ListViewItem {
                 this.add(new AligmentLabel(Translation.get("new"), colorLabelStyle, Align.left)).expandX().fillX();
             }
         } else {
+            this.add(new AligmentLabel(" ", infoLabelStyle, Align.left)).expandX().fillX();
             Label.LabelStyle colorLabelStyle = new Label.LabelStyle(infoLabelStyle);
             if (style.neverFontColor != null) colorLabelStyle.fontColor = style.neverFontColor;
             if (style.neverBackgroundColor != null)
                 colorLabelStyle.background = new ColorDrawable(style.neverBackgroundColor);
-            this.add().expandX().fillX();
-            this.add(new AligmentLabel(Translation.get("never"), colorLabelStyle, Align.left));
-
+            this.add(new AligmentLabel(Translation.get("never"), colorLabelStyle, Align.left)).expandX().fillX();
         }
         this.row();
     }
