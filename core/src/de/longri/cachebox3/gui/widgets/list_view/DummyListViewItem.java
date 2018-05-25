@@ -83,11 +83,47 @@ public class DummyListViewItem extends Catch_Actor implements ListViewItemInterf
 
     @Override
     public void setOnDrawListener(OnDrawListener onDrawListener) {
+        //ignore
+    }
 
+    @Override
+    public void setOnItemSizeChangedListener(OnItemSizeChangedListener onItemSizeChangedListener) {
+        //ignore
     }
 
     @Override
     public void setSelected(boolean selected) {
         this.isSelected = selected;
+    }
+
+    @Override
+    public void removeOnItemSizeChangedListener(OnItemSizeChangedListener onItemSizeChangedListener) {
+        //ignore
+    }
+
+    @Override
+    public void removeOnDrawListener(OnDrawListener onDrawListener) {
+        //ignore
+    }
+
+    private float finalWidth, finalHeight;
+    private boolean hasFinalSize = false;
+
+    public void setFinalSize(float width, float height) {
+        this.finalWidth = width;
+        this.finalHeight = height;
+        hasFinalSize = true;
+    }
+
+    public boolean hasFinalSize() {
+        return hasFinalSize;
+    }
+
+    public float getFinalWidth() {
+        return this.finalWidth;
+    }
+
+    public float getFinalHeight() {
+        return this.finalHeight;
     }
 }

@@ -120,15 +120,23 @@ public class TestView extends AbstractView {
             int itemCount = 10;
             final DefaultListViewAdapter items = new DefaultListViewAdapter();
             for (int i = 0; i < itemCount; i++) {
-                MenuItem item = new MenuItem(i, i, "ITEM " + Integer.toString(i), null);
-                item.setTitle(item.getName());
-                item.pack();
-                items.add(item);
+                MenuItem item = null;
+                if (i==0) {
+                    item = new MenuItem(i, i, "Historische Objekte (Bodendenkmal, Grenzstein, Burg, Gedenkstätte, Ruine, Wegkreuz/Schrein, Wrack)", null);
+                    item.setCheckable(true);
+                }else{
+//                    item = new MenuItem(i, i, "ITEM " + Integer.toString(i), null);
+                }
+                if (item!=null) {
+                    item.setTitle(item.getName());
+                    item.pack();
+                    items.add(item);
+                }
             }
 
             listView.showWorkAnimationUntilSetAdapter();
 
-            CB.postOnGLThreadDelayed(5000, new NamedRunnable("") {
+            CB.postOnGLThreadDelayed(1000, new NamedRunnable("") {
                 @Override
                 public void run() {
                     listView.setAdapter(items);

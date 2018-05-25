@@ -52,7 +52,7 @@ public class ListView extends Catch_WidgetGroup {
     private final ListViewType type;
     private final boolean canDisposeItems;
     final VisScrollPane scrollPane;
-    private final ListViewStyle style;
+    public final ListViewStyle style;
     private final ListViewItemLinkedList itemList;
     private final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
     private final Array<ListViewItemInterface> selectedItemList = new Array<>();

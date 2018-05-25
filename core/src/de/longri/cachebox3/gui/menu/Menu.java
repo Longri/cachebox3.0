@@ -362,7 +362,12 @@ public class Menu extends Window {
         float maxListViewHeight = CB.scaledSizes.WINDOW_HEIGHT - (titleGroup.getHeight());
         listView.setBounds(((Gdx.graphics.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
+
+        float itemWidth = listView.getWidth() - (Math.max(listView.style.padLeft, listView.style.pad) + Math.max(listView.style.padRight, listView.style.pad));
+
         for (ListViewItem item : mItems) {
+            item.setPrefWidth(itemWidth);
+            item.setWidth(itemWidth);
             ((MenuItem) item).initial();
             item.layout();
             item.pack();

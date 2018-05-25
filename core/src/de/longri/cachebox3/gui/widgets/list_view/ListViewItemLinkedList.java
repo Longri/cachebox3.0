@@ -371,24 +371,51 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             newItem.setBackground(style.firstItem);
         }
         //set default sizes
-        float changedSize;
-        if (type == VERTICAL) {
-            newItem.setPrefWidth(this.getWidth() - (padLeft + padRight));
-            newItem.pack();
-            newItem.setHeight(newItem.getPrefHeight());
-            newItem.setX(padLeft);
-            newItem.setY(old.getY());
-            changedSize = newItem.getHeight() - old.getHeight();
-        } else {
-            newItem.setPrefHeight(this.getHeight() - (padBottom + padTop));
-            newItem.pack();
-            newItem.setWidth(newItem.getPrefWidth());
-            newItem.setY(padTop);
-            newItem.setX(old.getX());
-            changedSize = newItem.getWidth() - old.getWidth();
+        float changedSize = 0;
+
+        if (newItem instanceof DummyListViewItem) {
+            DummyListViewItem dummyListViewItem = (DummyListViewItem) newItem;
+            dummyListViewItem.setFinalSize(old.getWidth(), old.getHeight());
+        } else if (old instanceof DummyListViewItem) {
+            DummyListViewItem dummyListViewItem = (DummyListViewItem) old;
+            if (dummyListViewItem.hasFinalSize()) {
+                float finalWidth = dummyListViewItem.getFinalWidth();
+                float finalHeight = dummyListViewItem.getFinalHeight();
+                newItem.setPrefWidth(finalWidth);
+                newItem.setWidth(finalWidth);
+                newItem.setPrefHeight(finalHeight);
+                newItem.setHeight(finalHeight);
+                if (type == VERTICAL) {
+                    newItem.setX(padLeft);
+                    newItem.setY(old.getY());
+                } else {
+                    newItem.setY(padTop);
+                    newItem.setX(old.getX());
+                }
+            } else {
+                if (type == VERTICAL) {
+                    final float prefWidth = this.getWidth() - (padLeft + padRight);
+                    newItem.setPrefWidth(prefWidth);
+                    newItem.setWidth(prefWidth);
+                    newItem.pack();
+                    newItem.setX(padLeft);
+                    newItem.setY(old.getY());
+                    changedSize = newItem.getHeight() - old.getHeight();
+                } else {
+                    newItem.setPrefHeight(this.getHeight() - (padBottom + padTop));
+                    newItem.pack();
+                    newItem.setWidth(newItem.getPrefWidth());
+                    newItem.setY(padTop);
+                    newItem.setX(old.getX());
+                    changedSize = newItem.getWidth() - old.getWidth();
+                }
+            }
         }
 
         newItem.setOnDrawListener(this.onDrawListener);
+        newItem.setOnItemSizeChangedListener(this.onItemSizeChangedListener);
+        old.removeOnDrawListener(this.onDrawListener);
+        old.removeOnItemSizeChangedListener(this.onItemSizeChangedListener);
         if (oldItems != null && newItems != null) {
             oldItems.add(old);
             newItems.add(newItem);
@@ -405,19 +432,39 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
 
         if (changedSize != 0) {
-            //set pos of items that are before
-            for (int i = 0; i < newItem.getListIndex(); i++) {
-                if (type == VERTICAL) {
-                    itemArray[i].setY(itemArray[i].getY() + changedSize);
-                } else {
-                    itemArray[i].setX(itemArray[i].getX() + changedSize);
-                }
-            }
-            this.completeSize += changedSize;
-            if (type == VERTICAL) this.setHeight(completeSize);
-            else this.setWidth(completeSize);
+            itemChangedSize(newItem, changedSize);
+
         }
         return old.isVisible() != newItem.isVisible();
+    }
+
+
+    private final OnItemSizeChangedListener onItemSizeChangedListener = new OnItemSizeChangedListener() {
+        @Override
+        public void onSizeChanged(ListViewItemInterface item, float changedWidth, float changedHeight) {
+            if (type == VERTICAL) {
+                if (changedHeight < 0) return; //only with gow up
+                itemChangedSize(item, changedHeight);
+            } else {
+                if (changedWidth < 0) return; //only with gow up
+                itemChangedSize(item, changedWidth);
+            }
+        }
+    };
+
+
+    private void itemChangedSize(ListViewItemInterface newItem, float changedSize) {
+        //set pos of items that are before
+        for (int i = 0; i < newItem.getListIndex(); i++) {
+            if (type == VERTICAL) {
+                itemArray[i].setY(itemArray[i].getY() + changedSize);
+            } else {
+                itemArray[i].setX(itemArray[i].getX() + changedSize);
+            }
+        }
+        this.completeSize += changedSize;
+        if (type == VERTICAL) this.setHeight(completeSize);
+        else this.setWidth(completeSize);
     }
 
     private static ListViewItemInterface search(ListViewType type, ListViewItemInterface[] arr, float searchValue, float range) {

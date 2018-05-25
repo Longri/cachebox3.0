@@ -21,7 +21,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
@@ -83,12 +85,31 @@ public class MenuItem extends ListViewItem {
 
     @Override
     public void pack() {
-        try {
-            super.pack();
-            initial();
-        } catch (Exception e) {
+        // calc pref Label width
+        float prefLabelWidth = this.getWidth();
+        if (checkImage != null) {
+            prefLabelWidth -= checkImage.getWidth() + CB.scaledSizes.MARGINx2;
+        } else {
+            prefLabelWidth -= CB.scaledSizes.MARGIN;
         }
-
+        if (mIcon != null) {
+            prefLabelWidth -= mIcon.getMinWidth() + CB.scaledSizes.MARGINx2;
+        } else {
+            prefLabelWidth -= CB.scaledSizes.MARGIN;
+        }
+        // calc prefHeight
+        float prefHeight = 0;
+        if (checkImage != null) prefHeight = checkImage.getHeight();
+        if (mIcon != null) prefHeight = Math.max(prefHeight, mIcon.getMinHeight());
+        if (mLabel != null) {
+            mLabel.setWidth(prefLabelWidth);
+            mLabel.invalidate();
+//            mLabel.getGlyphLayout().setText(style.font, mTitle, style.fontColor, prefLabelWidth, Align.left, true);
+            prefHeight = Math.max(prefHeight, mLabel.getPrefHeight());
+        }
+        prefHeight += CB.scaledSizes.MARGINx4;
+        this.setPrefHeight(prefHeight);
+        this.setHeight(prefHeight);
     }
 
     @Override
@@ -109,15 +130,8 @@ public class MenuItem extends ListViewItem {
             }
         }
 
-        if (mTitle != null) {
-            mLabel = new Label(mTitle, new Label.LabelStyle(style.font, style.fontColor));
-            mLabel.setWrap(true);
-            this.add(mLabel).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
-        }
-
         if (moreMenu != null && parentMenu.style.menu_for != null) {
             checkImage = new Image(parentMenu.style.menu_for);
-            this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
         } else if (mIsCheckable) { // ignore checkable hav this item a moreMenu
             if (mIsChecked) {
                 if (mIsEnabled) {
@@ -128,8 +142,16 @@ public class MenuItem extends ListViewItem {
             } else {
                 checkImage = new Image(CB.getSprite("check_off"));
             }
-            this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
         }
+
+
+        if (mTitle != null) {
+            mLabel = new Label(mTitle, new Label.LabelStyle(style.font, style.fontColor));
+            mLabel.setWrap(true);
+            this.add(mLabel).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
+        }
+
+        if (checkImage != null) this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
 
         if (!mIsEnabled) {
@@ -139,6 +161,11 @@ public class MenuItem extends ListViewItem {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if (mLabel != null && mLabel.getHeight() > this.getHeight()) {
+            this.setHeight(mLabel.getHeight() + CB.scaledSizes.MARGINx4);
+            parentMenu.listView.invalidate();
+            parentMenu.listView.layout();
+        }
 
         // set alpha if item disabled
         if (!this.mIsEnabled)
@@ -259,6 +286,10 @@ public class MenuItem extends ListViewItem {
         return this.moreMenu;
     }
 
+    @Override
+    public void setHeight(float height) {
+        super.setHeight(height);
+    }
 
     private boolean backgroundOverrides = false;
 

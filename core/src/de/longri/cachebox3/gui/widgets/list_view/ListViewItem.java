@@ -28,6 +28,7 @@ import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 public class ListViewItem extends Catch_Table implements Disposable, ListViewItemInterface {
 
     private OnDrawListener onDrawListener;
+    private OnItemSizeChangedListener onItemSizeChangedListener;
 
     private float prefHeight = -1f;
     private float prefWidth = -1f;
@@ -50,7 +51,8 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
 
     @Override
     public void dispose() {
-
+        this.onItemSizeChangedListener = null;
+        this.onDrawListener = null;
     }
 
     private OnDrawListener getOnDrawListener() {
@@ -62,8 +64,23 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
     }
 
     @Override
+    public void setOnItemSizeChangedListener(OnItemSizeChangedListener onItemSizeChangedListener) {
+        this.onItemSizeChangedListener = onItemSizeChangedListener;
+    }
+
+    @Override
     public void setSelected(boolean selected) {
         this.isSelected = selected;
+    }
+
+    @Override
+    public void removeOnItemSizeChangedListener(OnItemSizeChangedListener onItemSizeChangedListener) {
+        this.onItemSizeChangedListener = null;
+    }
+
+    @Override
+    public void removeOnDrawListener(OnDrawListener onDrawListener) {
+        this.onDrawListener = null;
     }
 
 
@@ -120,5 +137,63 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
 
     public void setNewIndex(int index) {
         this.index = index;
+    }
+
+    @Override
+    public void setWidth(float width) {
+        if (this.getWidth() != width) {
+            onItemSizeChanged(width - this.getWidth(), 0);
+            super.setWidth(width);
+        }
+    }
+
+    @Override
+    public void setHeight(float height) {
+        if (this.getHeight() != height) {
+            onItemSizeChanged(0, height - this.getHeight());
+            super.setHeight(height);
+        }
+    }
+
+    @Override
+    public void setSize(float width, float height) {
+        if (this.getWidth() != width || this.getHeight() != height) {
+            onItemSizeChanged(width - this.getWidth(), height - this.getHeight());
+            super.setSize(width, height);
+        }
+    }
+
+    @Override
+    public void sizeBy(float size) {
+        if (size != 0) {
+            float width = getWidth() + size;
+            float height = getHeight() + size;
+            onItemSizeChanged(width - this.getWidth(), height - this.getHeight());
+            super.setSize(width, height);
+        }
+    }
+
+    @Override
+    public void sizeBy(float widthSize, float heightSize) {
+        if (widthSize != 0 || heightSize != 0) {
+            float width = getWidth() + widthSize;
+            float height = getHeight() + heightSize;
+            onItemSizeChanged(width - this.getWidth(), height - this.getHeight());
+            super.setSize(width, height);
+        }
+    }
+
+    @Override
+    public void setBounds(float x, float y, float width, float height) {
+        if (this.getWidth() != width || this.getHeight() != height) {
+            onItemSizeChanged(width - this.getWidth(), height - this.getHeight());
+        }
+        super.setBounds(x, y, width, height);
+    }
+
+    private void onItemSizeChanged(float changedWidth, float changedHeight) {
+        if (onItemSizeChangedListener != null) {
+            onItemSizeChangedListener.onSizeChanged(this, changedWidth, changedHeight);
+        }
     }
 }

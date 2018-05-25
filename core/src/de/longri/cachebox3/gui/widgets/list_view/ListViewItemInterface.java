@@ -58,6 +58,8 @@ public interface ListViewItemInterface {
 
     void setOnDrawListener(OnDrawListener onDrawListener);
 
+    void setOnItemSizeChangedListener(OnItemSizeChangedListener onItemSizeChangedListener);
+
     void setWidth(float width);
 
     void setHeight(float height);
@@ -65,4 +67,8 @@ public interface ListViewItemInterface {
     void setSelected(boolean selected);
 
     void setVisible(boolean visible);
+
+    void removeOnItemSizeChangedListener(OnItemSizeChangedListener onItemSizeChangedListener);
+
+    void removeOnDrawListener(OnDrawListener onDrawListener);
 }
