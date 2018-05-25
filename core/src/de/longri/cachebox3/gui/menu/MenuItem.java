@@ -105,7 +105,6 @@ public class MenuItem extends ListViewItem {
         if (mLabel != null) {
             mLabel.setWidth(prefLabelWidth);
             mLabel.invalidate();
-//            mLabel.getGlyphLayout().setText(style.font, mTitle, style.fontColor, prefLabelWidth, Align.left, true);
             prefHeight = Math.max(prefHeight, mLabel.getPrefHeight());
         }
         prefHeight += CB.scaledSizes.MARGINx4;

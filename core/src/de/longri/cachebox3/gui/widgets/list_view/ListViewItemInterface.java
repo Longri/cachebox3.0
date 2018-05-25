@@ -71,4 +71,8 @@ public interface ListViewItemInterface {
     void removeOnItemSizeChangedListener(OnItemSizeChangedListener onItemSizeChangedListener);
 
     void removeOnDrawListener(OnDrawListener onDrawListener);
+
+    void setFinalHeight(float finalHeight);
+
+    void setFinalWidth(float finalWidth);
 }

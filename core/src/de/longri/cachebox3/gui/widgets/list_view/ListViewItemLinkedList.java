@@ -281,8 +281,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                     ListViewItemInterface dummy = new DummyListViewItem(idx);
                     dummy.setX(old.getX());
                     dummy.setY(old.getY());
-                    dummy.setWidth(old.getWidth());
-                    dummy.setHeight(old.getHeight());
+                    ((DummyListViewItem) dummy).setFinalSize(old.getWidth(),old.getHeight());
                     dummy.setVisible(old.isVisible());
                     itemArray[idx] = dummy;
 
@@ -381,10 +380,8 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             if (dummyListViewItem.hasFinalSize()) {
                 float finalWidth = dummyListViewItem.getFinalWidth();
                 float finalHeight = dummyListViewItem.getFinalHeight();
-                newItem.setPrefWidth(finalWidth);
-                newItem.setWidth(finalWidth);
-                newItem.setPrefHeight(finalHeight);
-                newItem.setHeight(finalHeight);
+                newItem.setFinalWidth(finalWidth);
+                newItem.setFinalHeight(finalHeight);
                 if (type == VERTICAL) {
                     newItem.setX(padLeft);
                     newItem.setY(old.getY());
@@ -433,7 +430,6 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
         if (changedSize != 0) {
             itemChangedSize(newItem, changedSize);
-
         }
         return old.isVisible() != newItem.isVisible();
     }

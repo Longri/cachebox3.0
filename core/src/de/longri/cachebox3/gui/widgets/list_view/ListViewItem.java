@@ -34,6 +34,8 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
     private float prefWidth = -1f;
     private int index;
     private boolean isSelected = false;
+    private float finalWidth, finalHeight;
+    private boolean hasFinalSize = false;
 
     public ListViewItem(int index) {
         this.index = index;
@@ -141,6 +143,9 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
 
     @Override
     public void setWidth(float width) {
+        if (this.hasFinalSize) {
+            return;
+        }
         if (this.getWidth() != width) {
             onItemSizeChanged(width - this.getWidth(), 0);
             super.setWidth(width);
@@ -149,6 +154,9 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
 
     @Override
     public void setHeight(float height) {
+        if (this.hasFinalSize) {
+            return;
+        }
         if (this.getHeight() != height) {
             onItemSizeChanged(0, height - this.getHeight());
             super.setHeight(height);
@@ -157,6 +165,9 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
 
     @Override
     public void setSize(float width, float height) {
+        if (this.hasFinalSize) {
+            return;
+        }
         if (this.getWidth() != width || this.getHeight() != height) {
             onItemSizeChanged(width - this.getWidth(), height - this.getHeight());
             super.setSize(width, height);
@@ -165,6 +176,9 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
 
     @Override
     public void sizeBy(float size) {
+        if (this.hasFinalSize) {
+            return;
+        }
         if (size != 0) {
             float width = getWidth() + size;
             float height = getHeight() + size;
@@ -175,6 +189,9 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
 
     @Override
     public void sizeBy(float widthSize, float heightSize) {
+        if (this.hasFinalSize) {
+            return;
+        }
         if (widthSize != 0 || heightSize != 0) {
             float width = getWidth() + widthSize;
             float height = getHeight() + heightSize;
@@ -185,6 +202,10 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
 
     @Override
     public void setBounds(float x, float y, float width, float height) {
+        if (this.hasFinalSize) {
+            super.setPosition(x, y);
+            return;
+        }
         if (this.getWidth() != width || this.getHeight() != height) {
             onItemSizeChanged(width - this.getWidth(), height - this.getHeight());
         }
@@ -195,5 +216,17 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
         if (onItemSizeChangedListener != null) {
             onItemSizeChangedListener.onSizeChanged(this, changedWidth, changedHeight);
         }
+    }
+
+    @Override
+    public void setFinalHeight(float finalHeight) {
+        this.setHeight(finalHeight);
+        this.hasFinalSize = true;
+    }
+
+    @Override
+    public void setFinalWidth(float finalWidth) {
+        this.setWidth(finalWidth);
+        this.hasFinalSize = true;
     }
 }

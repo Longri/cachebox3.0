@@ -106,6 +106,16 @@ public class DummyListViewItem extends Catch_Actor implements ListViewItemInterf
         //ignore
     }
 
+    @Override
+    public void setFinalHeight(float finalHeight) {
+        //ignore
+    }
+
+    @Override
+    public void setFinalWidth(float finalWidth) {
+        //ignore
+    }
+
     private float finalWidth, finalHeight;
     private boolean hasFinalSize = false;
 
