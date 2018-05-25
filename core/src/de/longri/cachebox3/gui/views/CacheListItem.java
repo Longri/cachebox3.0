@@ -30,7 +30,7 @@ import de.longri.cachebox3.types.LogTypes;
 public class CacheListItem extends ListViewItem implements Disposable {
 
 
-    public static ListViewItem getListItem(int listIndex, final AbstractCache abstractCache) {
+    public static ListViewItem getListItem(int listIndex, final AbstractCache abstractCache, final float targetWidth) {
         if (abstractCache == null) return null;
 
         LogTypes left = null;
@@ -55,6 +55,9 @@ public class CacheListItem extends ListViewItem implements Disposable {
                 (int) Math.min(abstractCache.getRating() * 2, 5 * 2), abstractCache.getSize(),
                 abstractCache.getSize().toShortString(), left, right, isAvailable, abstractCache.isFavorite(),
                 abstractCache.getFavoritePoints(), abstractCache.getNumTravelbugs());
+        listViewItem.setWidth(targetWidth);
+        listViewItem.invalidate();
+        listViewItem.pack();
         return listViewItem;
     }
 
@@ -77,7 +80,6 @@ public class CacheListItem extends ListViewItem implements Disposable {
         if (!cacheItem.distanceOrBearingChanged) return false;
         cacheItem.arrowImage.setRotation(bearing);
         cacheItem.distanceLabel.setText(distance);
-
         cacheItem.arrowImage.layout();
         cacheItem.distanceLabel.layout();
         cacheItem.distanceOrBearingChanged = false;

@@ -139,11 +139,11 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             @Override
             public ListViewItem getView(int index) {
                 if (index == 0) {
-                    return CacheListItem.getListItem(index, actAbstractCache);
+                    return CacheListItem.getListItem(index, actAbstractCache,getWidth());
                 } else {
                     final WayPointListItem item;
                     try {
-                        item = WayPointListItem.getListItem(index, actAbstractCache.getWaypoints().get(index - 1));
+                        item = WayPointListItem.getListItem(index, actAbstractCache.getWaypoints().get(index - 1),getWidth());
                     } catch (Exception e) {
                         CB.postOnGlThread(new NamedRunnable("Waypoint list invalid") {
                             @Override

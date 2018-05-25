@@ -120,7 +120,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
                     createdItems[index] = null;
                     return null;
                 }
-                ListViewItem item = CacheListItem.getListItem(index, Database.Data.Query.get(index));
+                ListViewItem item = CacheListItem.getListItem(index, Database.Data.Query.get(index), getWidth());
                 createdItems[index] = item;
                 return item;
             }

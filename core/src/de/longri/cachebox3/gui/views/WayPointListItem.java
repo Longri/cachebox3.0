@@ -28,9 +28,12 @@ import de.longri.cachebox3.types.CacheTypes;
  */
 public class WayPointListItem extends ListViewItem implements Disposable {
 
-    public static WayPointListItem getListItem(int listIndex, final AbstractWaypoint waypoint) {
+    public static WayPointListItem getListItem(int listIndex, final AbstractWaypoint waypoint, float targetWidth) {
         WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.getType(),
                 waypoint.getGcCode().toString(), waypoint.getTitle().toString(), waypoint.getDescription(Database.Data), waypoint.FormatCoordinate());
+        listViewItem.setWidth(targetWidth);
+        listViewItem.invalidate();
+        listViewItem.pack();
         return listViewItem;
     }
 
