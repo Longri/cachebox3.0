@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
@@ -131,16 +132,16 @@ public class MenuItem extends ListViewItem {
         }
 
         if (moreMenu != null && parentMenu.style.menu_for != null) {
-            checkImage = new Image(parentMenu.style.menu_for);
+            checkImage = new Image(parentMenu.style.menu_for, Scaling.none);
         } else if (mIsCheckable) { // ignore checkable hav this item a moreMenu
             if (mIsChecked) {
                 if (mIsEnabled) {
-                    checkImage = new Image(CB.getSprite("check_on"));
+                    checkImage = new Image(new TextureRegionDrawable(CB.getSprite("check_on")), Scaling.none, Align.center);
                 } else {
-                    checkImage = new Image(CB.getSprite("check_disabled"));
+                    checkImage = new Image(new TextureRegionDrawable(CB.getSprite("check_disabled")), Scaling.none, Align.center);
                 }
             } else {
-                checkImage = new Image(CB.getSprite("check_off"));
+                checkImage = new Image(new TextureRegionDrawable(CB.getSprite("check_off")), Scaling.none, Align.center);
             }
         }
 
@@ -151,7 +152,9 @@ public class MenuItem extends ListViewItem {
             this.add(mLabel).expandX().fillX().padTop(CB.scaledSizes.MARGIN).padBottom(CB.scaledSizes.MARGIN);
         }
 
-        if (checkImage != null) this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+        if (checkImage != null) {
+            this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+        }
 
 
         if (!mIsEnabled) {
