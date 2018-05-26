@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -1073,9 +1074,9 @@ public class Settings_Activity extends ActivityBase {
         // add check icon
         final Image[] checkImage = new Image[1];
         if (setting.getValue()) {
-            checkImage[0] = new Image(style.checkOn);
+            checkImage[0] = new Image(style.checkOn, Scaling.none);
         } else {
-            checkImage[0] = new Image(style.checkOff);
+            checkImage[0] = new Image(style.checkOff, Scaling.none);
         }
         table.add(checkImage[0]).width(checkImage[0].getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
