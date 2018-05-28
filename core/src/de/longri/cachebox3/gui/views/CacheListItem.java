@@ -50,15 +50,15 @@ public class CacheListItem extends ListViewItem implements Disposable {
             isAvailable = false;
         }
 
-        ListViewItem listViewItem = new CacheListItem(listIndex, abstractCache.getId(), abstractCache.getType(), abstractCache.getName(),
+        CacheListItem cacheListItem = new CacheListItem(listIndex, abstractCache.getId(), abstractCache.getType(), abstractCache.getName(),
                 (int) (abstractCache.getDifficulty() * 2), (int) (abstractCache.getTerrain() * 2),
                 (int) Math.min(abstractCache.getRating() * 2, 5 * 2), abstractCache.getSize(),
                 abstractCache.getSize().toShortString(), left, right, isAvailable, abstractCache.isFavorite(),
                 abstractCache.getFavoritePoints(), abstractCache.getNumTravelbugs());
-        listViewItem.setWidth(targetWidth);
-        listViewItem.invalidate();
-        listViewItem.pack();
-        return listViewItem;
+        cacheListItem.setWidth(targetWidth);
+        cacheListItem.invalidate();
+        cacheListItem.pack();
+        return cacheListItem;
     }
 
     private final CacheItem cacheItem;
@@ -73,6 +73,15 @@ public class CacheListItem extends ListViewItem implements Disposable {
                 leftLogType, rightLogType, isAvailable, isFavorite, favPoints, numOfTb, style);
         this.add(cacheItem).expand().fill();
         this.cacheId = cacheId;
+    }
+
+    public void pack() {
+        this.setPrefWidth(this.getWidth());
+        cacheItem.setWidth(this.getWidth());
+        cacheItem.invalidate();
+        cacheItem.pack();
+        this.setHeight(cacheItem.getHeight());
+        this.setPrefHeight(cacheItem.getHeight());
     }
 
 
@@ -96,6 +105,6 @@ public class CacheListItem extends ListViewItem implements Disposable {
     }
 
     public long getId() {
-        return this.cacheId ;
+        return this.cacheId;
     }
 }

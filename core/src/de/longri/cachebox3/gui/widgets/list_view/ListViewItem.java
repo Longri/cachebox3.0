@@ -220,12 +220,14 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
 
     @Override
     public void setFinalHeight(float finalHeight) {
+        this.hasFinalSize = false;
         this.setHeight(finalHeight);
         this.hasFinalSize = true;
     }
 
     @Override
     public void setFinalWidth(float finalWidth) {
+        this.hasFinalSize = false;
         this.setWidth(finalWidth);
         this.hasFinalSize = true;
     }
