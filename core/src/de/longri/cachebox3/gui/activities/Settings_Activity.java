@@ -1152,6 +1152,18 @@ public class Settings_Activity extends ActivityBase {
         desclabel.setAlignment(Align.left);
         table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
+        table.setWidth(this.getWidth());
+        table.setPrefWidth(this.getWidth());
+        table.invalidate();
+        table.pack();
+        int rows = table.getRows();
+        float calcHeight = 0;
+        float pad = CB.scaledSizes.MARGIN;
+        for (int i = 0; i < rows; i++) {
+            calcHeight += table.getRowPrefHeight(i);
+            calcHeight += pad;
+        }
+        table.setFinalHeight(calcHeight);
         return table;
     }
 
