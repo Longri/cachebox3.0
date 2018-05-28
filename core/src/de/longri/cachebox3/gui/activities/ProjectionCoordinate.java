@@ -24,12 +24,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.locator.Coordinate;
@@ -83,21 +85,35 @@ public class ProjectionCoordinate extends ActivityBase {
         }
     };
 
-    private final NumPad numPad = new NumPad(keyEventListener, NumPad.OptionalButton.DelBack);
+    private final float targetWidth = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4;
+    private final NumPad numPad = new NumPad(keyEventListener, targetWidth, NumPad.OptionalButton.DelBack);
     private VisTextField actFocusField;
+    private VisCheckBox invertCheckBox;
 
     protected ProjectionCoordinate(Coordinate coordinate) {
         super("project");
         this.cordButton = new CoordinateButton(coordinate);
 
-        this.defaults().pad(CB.scaledSizes.MARGINx2);
+        this.defaults().padLeft(CB.scaledSizes.MARGIN);
+        this.defaults().padRight(CB.scaledSizes.MARGIN);
 
         this.row();
         this.add(cordButton);
-        this.row();
-        this.add((Actor) null).expand().fill();
+
 
         createInputFields();
+        this.row();
+
+        Table invertLine = new VisTable();
+        invertLine.defaults().pad(CB.scaledSizes.MARGIN);
+        invertCheckBox = new CharSequenceCheckBox(Translation.get("Invert"));
+        invertLine.add(invertCheckBox).left();
+        invertLine.add((Actor) null).expandX().fillX();
+
+        this.add(invertLine).expandX().fillX();
+
+        this.row();
+        this.add((Actor) null).expand().fill();
         createNumPad();
         createOkCancel();
 
@@ -143,6 +159,7 @@ public class ProjectionCoordinate extends ActivityBase {
                         //TODO handle ( give feedback for wrong input)
                         callBack(null);
                     }
+                    if (invertCheckBox.isChecked()) direction -= 180;
                     Coordinate project = Coordinate.Project(cordButton.getCoordinate(), direction, distance);
                     callBack(project);
                 }
@@ -159,7 +176,7 @@ public class ProjectionCoordinate extends ActivityBase {
 
     private void addEditLine(CharSequence name, final VisTextField textField, CharSequence unity) {
         Table line = new VisTable();
-        line.defaults().pad(CB.scaledSizes.MARGINx2);
+        line.defaults().pad(CB.scaledSizes.MARGIN);
         line.add(name).left();
 
 
