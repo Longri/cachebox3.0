@@ -41,7 +41,6 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
 
     private final SymbolBucket mSymbolBucket;
     private final float[] mBox = new float[8];
-    private final LocationLayer locationLayer;
     private final Point mapPoint = new Point();
     private final Map mMap;
 
@@ -57,9 +56,8 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
 
     }
 
-    public LocationRenderer(Map map, LocationLayer locationLayer) {
+    public LocationRenderer(Map map) {
         mSymbolBucket = new SymbolBucket();
-        this.locationLayer = locationLayer;
         this.mMap = map;
 
     }

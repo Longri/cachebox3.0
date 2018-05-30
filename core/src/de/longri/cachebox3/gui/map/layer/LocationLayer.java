@@ -34,20 +34,11 @@ public class LocationLayer extends Layer implements Disposable {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(LocationLayer.class);
 
     private final de.longri.cachebox3.gui.map.layer.renderer.LocationRenderer locationRenderer;
-    private final LinkedHashMap<Object, TextureRegion> textureRegionMap;
-    private final MapArrowStyle style;
 
-
-    public LocationLayer(Map map, LinkedHashMap<Object, TextureRegion> textureRegionMap) {
+    public LocationLayer(Map map, TextureRegion textureRegion) {
         super(map);
-        mRenderer = locationRenderer = new LocationRenderer(map, this);
-        this.textureRegionMap = textureRegionMap;
-
-        style = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
-
-        String bmpName = ((GetName) style.myLocation).getName();
-
-        setArrow(textureRegionMap.get(bmpName));
+        mRenderer = locationRenderer = new LocationRenderer(map);
+        setArrow(textureRegion);
     }
 
 

@@ -510,7 +510,10 @@ public class MapView extends AbstractView {
         mapScaleBarLayer = new MapScaleBarLayer(map, mapScaleBar);
         wayPointLayer = new WaypointLayer(this, map, CB.textureRegionMap);
         myLocationAccuracy = new LocationAccuracyLayer(map);
-        myLocationLayer = new LocationLayer(map, CB.textureRegionMap);
+        MapArrowStyle style = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
+        String bmpName = ((GetName) style.myLocation).getName();
+        TextureRegion textureRegion = CB.textureRegionMap.get(bmpName);
+        myLocationLayer = new LocationLayer(map, textureRegion);
 
         boolean showDirectLine = Settings_Map.ShowDirektLine.getValue();
         log.debug("Initial direct line layer and {}", showDirectLine ? "enable" : "disable");
