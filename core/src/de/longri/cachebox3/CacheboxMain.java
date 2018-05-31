@@ -77,7 +77,7 @@ public class CacheboxMain extends ApplicationAdapter {
         EXCLUDE_LIST.add("EMPTY");
         EXCLUDE_LIST.add("DB:cachebox");
 //        EXCLUDE_LIST.add(LocationAccuracyLayer.class.getName());
-//        EXCLUDE_LIST.add(LocationRenderer.class.getName());
+//        EXCLUDE_LIST.add(LocationTextureRenderer.class.getName());
 //        EXCLUDE_LIST.add(DoubleAnimator.class.getName());
         EXCLUDE_LIST.add(GpsEventHelper.class.getName());
 //        EXCLUDE_LIST.add(DirectLineLayer.class.getName());

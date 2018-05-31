@@ -16,7 +16,7 @@
 package de.longri.cachebox3.gui.animations.map;
 
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
-import de.longri.cachebox3.gui.map.layer.LocationLayer;
+import de.longri.cachebox3.gui.map.layer.LocationTextureLayer;
 import de.longri.cachebox3.locator.LatLong;
 
 import static de.longri.cachebox3.gui.animations.map.DoubleAnimator.DEFAULT_DURATION;
@@ -28,11 +28,11 @@ public class MyPositionAnimator {
 
     private final DoubleAnimator posLatitude, posLongitude, heading, accuracy;
     private final DirectLineLayer directLineLayer;
-    private final LocationLayer myLocationLayer;
+    private final LocationTextureLayer myLocationLayer;
     private double actLatitude, actLongitude, actAccuracy;
     private float actHead;
 
-    public MyPositionAnimator(DirectLineLayer directLineLayer, LocationLayer myLocationLayer) {
+    public MyPositionAnimator(DirectLineLayer directLineLayer, LocationTextureLayer myLocationLayer) {
         this.directLineLayer = directLineLayer;
         this.myLocationLayer = myLocationLayer;
         this.posLatitude = new DoubleAnimator();

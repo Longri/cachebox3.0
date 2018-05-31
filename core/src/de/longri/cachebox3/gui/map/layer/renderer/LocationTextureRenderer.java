@@ -27,8 +27,6 @@ import org.oscim.renderer.bucket.SymbolItem;
 import org.oscim.utils.FastMath;
 import org.oscim.utils.geom.GeometryUtils;
 import org.oscim.utils.math.Interpolation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 
@@ -37,18 +35,51 @@ import static org.oscim.backend.GLAdapter.gl;
 /**
  * Created by Longri on 14.02.17
  */
-public class LocationRenderer extends BucketRenderer {
+public class LocationTextureRenderer extends BucketRenderer {
 
-    private static final Logger log = LoggerFactory.getLogger(LocationRenderer.class);
     private static final PointF CENTER_OFFSET = new PointF(0.5f, 0.5f);
     private static final long ANIM_RATE = 50;
     private static final long INTERVAL = 2000;
     private static final float CIRCLE_SIZE = 30;
     private static final int SHOW_ACCURACY_ZOOM = 13;
+    private static final boolean IS_MAC = System.getProperty("os.name").toLowerCase(Locale.ENGLISH).contains("mac");
+
+    private final static String V_SHADER = (""
+            + "precision highp float;"
+            + "uniform mat4 u_mvp;"
+            + "uniform float u_phase;"
+            + "uniform float u_scale;"
+            + "attribute vec2 a_pos;"
+            + "varying vec2 v_tex;"
+            + "void main() {"
+            + "  gl_Position = u_mvp * vec4(a_pos * u_scale * u_phase, 0.0, 1.0);"
+            + "  v_tex = a_pos;"
+            + "}").replace("precision highp float;", IS_MAC ? "" : "precision highp float;");
+
+    // only circle without direction
+    private static final String F_SHADER = (""
+            + "precision highp float;"
+            + "varying vec2 v_tex;"
+            + "uniform float u_scale;"
+            + "uniform float u_phase;"
+            + "uniform vec4 u_fill;"
+            + "void main() {"
+            + "  float len = 1.0 - length(v_tex);"
+            ///  outer ring
+            + "  float a = smoothstep(0.0, 2.0 / u_scale, len);"
+            ///  inner ring
+            + "  float b = 0.8 * smoothstep(3.0 / u_scale, 4.0 / u_scale, len);"
+            ///  center point
+            + "  float c = 0.5 * (1.0 - smoothstep(14.0 / u_scale, 16.0 / u_scale, 1.0 - len));"
+            + "  vec2 dir = normalize(v_tex);"
+            ///  - subtract inner from outer to create the outline
+            ///  - multiply by viewshed
+            ///  - add center point
+            + "  a = (a - (b + c)) + c;"
+            + "  gl_FragColor = u_fill * a;"
+            + "}").replace("precision highp float;", IS_MAC ? "" : "precision highp float;");
 
 
-    private int accuracyColor = Color.BLUE;
-    private int viewShedColor = Color.RED;
     private final SymbolBucket symbolBucket;
     private final float[] box = new float[8];
     private final Point mapPoint = new Point();
@@ -69,14 +100,38 @@ public class LocationRenderer extends BucketRenderer {
     private boolean runAnim;
     private long animStart;
     private boolean update;
-    private TextureRegion arrowRegion;
-    private float arrowHeading;
+    private float heading;
 
-    public LocationRenderer(Map map) {
+    //properties
+    private TextureRegion textureRegion;
+    private int accuracyColor = Color.BLUE;
+    private int viewShedColor = Color.RED;
+
+    public LocationTextureRenderer(Map map) {
         symbolBucket = new SymbolBucket();
         this.map = map;
     }
 
+    public void setPosition(double latitude, double longitude, float heading, double accuracy) {
+        update = true;
+        this.heading = -heading;
+        while (this.heading < 0) this.heading += 360;
+        mapPoint.x = MercatorProjection.longitudeToX(longitude);
+        mapPoint.y = MercatorProjection.latitudeToY(latitude);
+        accuracyRadius = accuracy;
+    }
+
+    public void setAccuracyColor(int color) {
+        this.accuracyColor = color;
+    }
+
+    public void setIndicatorColor(int color) {
+        this.viewShedColor = color;
+    }
+
+    public void setTextureRegion(TextureRegion region) {
+        textureRegion = region;
+    }
 
     @Override
     public synchronized void update(GLViewport v) {
@@ -84,12 +139,10 @@ public class LocationRenderer extends BucketRenderer {
 
 
         //accuracy
-
         if (!initialized) {
             init();
             initialized = true;
         }
-
         setReady(true);
 
         int width = map.getWidth();
@@ -162,9 +215,9 @@ public class LocationRenderer extends BucketRenderer {
         }
 
         mMapPosition.bearing = -mMapPosition.bearing;
-        if (arrowRegion == null) return;
+        if (textureRegion == null) return;
         SymbolItem symbolItem = SymbolItem.pool.get();
-        symbolItem.set(symbolX, symbolY, arrowRegion, this.arrowHeading, true);
+        symbolItem.set(symbolX, symbolY, textureRegion, this.heading, true);
         symbolItem.offset = CENTER_OFFSET;
         symbolBucket.pushSymbol(symbolItem);
 
@@ -175,58 +228,14 @@ public class LocationRenderer extends BucketRenderer {
         update = false;
     }
 
-    public void update(double latitude, double longitude, float arrowHeading, double actAccuracy) {
-        update = true;
-        this.arrowHeading = -arrowHeading;
-        while (this.arrowHeading < 0) this.arrowHeading += 360;
-        mapPoint.x = (longitude + 180.0) / 360.0;
-        double sinLatitude = Math.sin(latitude * (Math.PI / 180.0));
-        mapPoint.y = 0.5 - Math.log((1.0 + sinLatitude) / (1.0 - sinLatitude)) / (4.0 * Math.PI);
-        log.debug("Set x: {} y: {} head: {}", mapPoint.x, mapPoint.y, arrowHeading);
-
-
-        accuracyRadius = actAccuracy;
-
-    }
-
-    private void animate(boolean enable) {
-        if (runAnim == enable)
-            return;
-
-        runAnim = enable;
-        if (!enable)
-            return;
-
-        final Runnable action = new Runnable() {
-            private long lastRun;
-
-            @Override
-            public void run() {
-                if (!runAnim)
-                    return;
-
-                long diff = System.currentTimeMillis() - lastRun;
-                map.postDelayed(this, Math.min(ANIM_RATE, diff));
-                map.render();
-                lastRun = System.currentTimeMillis();
-            }
-        };
-
-        animStart = System.currentTimeMillis();
-        map.postDelayed(action, ANIM_RATE);
-    }
-
-    private float animPhase() {
-        return (float) ((MapRenderer.frametime - animStart) % INTERVAL) / INTERVAL;
-    }
-
-
-    public void setTextureRegion(TextureRegion region) {
-        arrowRegion = region;
+    @Override
+    public void render(GLViewport v) {
+        renderAccuracyCircle(v);
+        super.render(v);
     }
 
     private void init() {
-        int shader = GLShader.createProgram(vShaderStr, fShaderStr3);
+        int shader = GLShader.createProgram(V_SHADER, F_SHADER);
         if (shader == 0)
             return;
 
@@ -236,11 +245,6 @@ public class LocationRenderer extends BucketRenderer {
         hPhase = gl.getUniformLocation(shader, "u_phase");
         hScale = gl.getUniformLocation(shader, "u_scale");
         uFill = gl.getUniformLocation(shader, "u_fill");
-    }
-
-    public void render(GLViewport v) {
-        renderAccuracyCircle(v);
-        super.render(v);
     }
 
     private void renderAccuracyCircle(GLViewport v) {
@@ -291,42 +295,35 @@ public class LocationRenderer extends BucketRenderer {
         gl.flush();
     }
 
+    private void animate(boolean enable) {
+        if (runAnim == enable)
+            return;
 
-    private final static boolean isMac = System.getProperty("os.name").toLowerCase(Locale.ENGLISH).contains("mac");
+        runAnim = enable;
+        if (!enable)
+            return;
 
-    private final static String vShaderStr = (""
-            + "precision highp float;"
-            + "uniform mat4 u_mvp;"
-            + "uniform float u_phase;"
-            + "uniform float u_scale;"
-            + "attribute vec2 a_pos;"
-            + "varying vec2 v_tex;"
-            + "void main() {"
-            + "  gl_Position = u_mvp * vec4(a_pos * u_scale * u_phase, 0.0, 1.0);"
-            + "  v_tex = a_pos;"
-            + "}").replace("precision highp float;", isMac ? "" : "precision highp float;");
+        final Runnable action = new Runnable() {
+            private long lastRun;
 
-    // only circle without direction
-    private static final String fShaderStr3 = (""
-            + "precision highp float;"
-            + "varying vec2 v_tex;"
-            + "uniform float u_scale;"
-            + "uniform float u_phase;"
-            + "uniform vec4 u_fill;"
-            + "void main() {"
-            + "  float len = 1.0 - length(v_tex);"
-            ///  outer ring
-            + "  float a = smoothstep(0.0, 2.0 / u_scale, len);"
-            ///  inner ring
-            + "  float b = 0.8 * smoothstep(3.0 / u_scale, 4.0 / u_scale, len);"
-            ///  center point
-            + "  float c = 0.5 * (1.0 - smoothstep(14.0 / u_scale, 16.0 / u_scale, 1.0 - len));"
-            + "  vec2 dir = normalize(v_tex);"
-            ///  - subtract inner from outer to create the outline
-            ///  - multiply by viewshed
-            ///  - add center point
-            + "  a = (a - (b + c)) + c;"
-            + "  gl_FragColor = u_fill * a;"
-            + "}").replace("precision highp float;", isMac ? "" : "precision highp float;");
+            @Override
+            public void run() {
+                if (!runAnim)
+                    return;
+
+                long diff = System.currentTimeMillis() - lastRun;
+                map.postDelayed(this, Math.min(ANIM_RATE, diff));
+                map.render();
+                lastRun = System.currentTimeMillis();
+            }
+        };
+
+        animStart = System.currentTimeMillis();
+        map.postDelayed(action, ANIM_RATE);
+    }
+
+    private float animPhase() {
+        return (float) ((MapRenderer.frametime - animStart) % INTERVAL) / INTERVAL;
+    }
 
 }

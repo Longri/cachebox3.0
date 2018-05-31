@@ -24,7 +24,7 @@ import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.animations.map.MyPositionAnimator;
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
-import de.longri.cachebox3.gui.map.layer.LocationLayer;
+import de.longri.cachebox3.gui.map.layer.LocationTextureLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
@@ -59,7 +59,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
     private boolean dynZoomEnabled;
     private float lastBearing = -1;
 
-    public MapViewPositionChangedHandler(CacheboxMapAdapter map, DirectLineLayer directLineLayer, LocationLayer myLocationLayer,
+    public MapViewPositionChangedHandler(CacheboxMapAdapter map, DirectLineLayer directLineLayer, LocationTextureLayer myLocationLayer,
                                          MapInfoPanel infoPanel) {
         this.map = map;
         this.infoPanel = infoPanel;

@@ -59,7 +59,6 @@ import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.settings.types.SettingBool;
 import de.longri.cachebox3.types.AbstractCache;
@@ -70,6 +69,7 @@ import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
+import org.oscim.backend.canvas.Color;
 import org.oscim.core.MapPosition;
 import org.oscim.core.MercatorProjection;
 import org.oscim.core.Point;
@@ -131,7 +131,7 @@ public class MapView extends AbstractView {
 
     private final MapState lastMapState = new MapState();
 
-    private LocationLayer myLocationLayer;
+    private LocationTextureLayer myLocationLayer;
 
     private MapViewPositionChangedHandler positionChangedHandler;
 
@@ -510,7 +510,9 @@ public class MapView extends AbstractView {
         MapArrowStyle style = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
         String bmpName = ((GetName) style.myLocation).getName();
         TextureRegion textureRegion = CB.textureRegionMap.get(bmpName);
-        myLocationLayer = new LocationLayer(map, textureRegion);
+        myLocationLayer = new LocationTextureLayer(map, textureRegion);
+        myLocationLayer.setAccuracyColor(Color.BLUE);
+        myLocationLayer.setIndicatorColor(Color.RED);
 
         boolean showDirectLine = Settings_Map.ShowDirektLine.getValue();
         log.debug("Initial direct line layer and {}", showDirectLine ? "enable" : "disable");
@@ -523,7 +525,6 @@ public class MapView extends AbstractView {
         if (tileGrid)
             layerGroup.layers.add(new TileGridLayer(map));
 
-//        layerGroup.layers.add(myLocationAccuracy);
         layerGroup.layers.add(wayPointLayer);
         layerGroup.layers.add(directLineLayer);
         layerGroup.layers.add(myLocationLayer);
