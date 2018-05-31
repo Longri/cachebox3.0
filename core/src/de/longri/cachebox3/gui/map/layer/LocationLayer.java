@@ -15,22 +15,16 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.GetName;
-import com.badlogic.gdx.utils.Disposable;
-import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.map.layer.renderer.LocationRenderer;
-import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import org.oscim.layers.Layer;
 import org.oscim.map.Map;
 import org.oscim.renderer.atlas.TextureRegion;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedHashMap;
-
 /**
  * Created by Longri on 14.02.17
  */
-public class LocationLayer extends Layer implements Disposable {
+public class LocationLayer extends Layer {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(LocationLayer.class);
 
     private final de.longri.cachebox3.gui.map.layer.renderer.LocationRenderer locationRenderer;
@@ -46,12 +40,7 @@ public class LocationLayer extends Layer implements Disposable {
         locationRenderer.setTextureRegion(region);
     }
 
-    @Override
-    public void dispose() {
-        locationRenderer.dispose();
-    }
-
     public void setPosition(double latitude, double longitude, float arrowHeading, double actAccuracy) {
-        locationRenderer.update(latitude, longitude, arrowHeading,actAccuracy);
+        locationRenderer.update(latitude, longitude, arrowHeading, actAccuracy);
     }
 }

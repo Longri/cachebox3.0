@@ -15,11 +15,9 @@
  */
 package de.longri.cachebox3.gui.map.layer.renderer;
 
-
-import com.badlogic.gdx.utils.Disposable;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.map.layer.LocationLayer;
+import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.GL;
+import org.oscim.backend.canvas.Color;
 import org.oscim.core.*;
 import org.oscim.map.Map;
 import org.oscim.renderer.*;
@@ -39,97 +37,79 @@ import static org.oscim.backend.GLAdapter.gl;
 /**
  * Created by Longri on 14.02.17
  */
-public class LocationRenderer extends BucketRenderer implements Disposable {
+public class LocationRenderer extends BucketRenderer {
 
-    public static final Logger log = LoggerFactory.getLogger(LocationRenderer.class);
+    private static final Logger log = LoggerFactory.getLogger(LocationRenderer.class);
     private static final PointF CENTER_OFFSET = new PointF(0.5f, 0.5f);
     private static final long ANIM_RATE = 50;
     private static final long INTERVAL = 2000;
-
     private static final float CIRCLE_SIZE = 30;
     private static final int SHOW_ACCURACY_ZOOM = 13;
 
-    private final SymbolBucket mSymbolBucket;
-    private final float[] mBox = new float[8];
+
+    private int accuracyColor = Color.BLUE;
+    private int viewShedColor = Color.RED;
+    private final SymbolBucket symbolBucket;
+    private final float[] box = new float[8];
     private final Point mapPoint = new Point();
-    private final Map mMap;
-    private boolean mInitialized;
-    private boolean mLocationIsVisible;
-    private int mShaderProgram;
+    private final Map map;
+    private boolean initialized;
+    private boolean locationIsVisible;
+    private int shaderProgramNumber;
     private int hVertexPosition;
     private int hMatrixPosition;
     private int hScale;
     private int hPhase;
-    private int hDirection;
-    private double mRadius;
+    private int uFill;
+    private double accuracyRadius;
 
-    private final Point mIndicatorPosition = new Point();
-
-    private final Point mScreenPoint = new Point();
-    private final Box mBBox = new Box();
-
-    private boolean mRunAnim;
-    private long mAnimStart;
-
-
-    /**
-     * flag to force update with location changed
-     */
-    private boolean mUpdate;
+    private final Point indicatorPosition = new Point();
+    private final Point screenPoint = new Point();
+    private final Box boundingBox = new Box();
+    private boolean runAnim;
+    private long animStart;
+    private boolean update;
     private TextureRegion arrowRegion;
     private float arrowHeading;
 
-    public void dispose() {
-
-    }
-
     public LocationRenderer(Map map) {
-        mSymbolBucket = new SymbolBucket();
-        this.mMap = map;
-
+        symbolBucket = new SymbolBucket();
+        this.map = map;
     }
 
 
     @Override
     public synchronized void update(GLViewport v) {
-
-
-
-
-
-        if (!v.changed() && !mUpdate) return;
+        if (!v.changed() && !update) return;
 
 
         //accuracy
 
-        if (!mInitialized) {
+        if (!initialized) {
             init();
-            mInitialized = true;
+            initialized = true;
         }
 
         setReady(true);
 
-        int width = mMap.getWidth();
-        int height = mMap.getHeight();
-
-        // clamp location to a position that can be
-        // savely translated to screen coordinates
-        v.getBBox(mBBox, 0);
+        int width = map.getWidth();
+        int height = map.getHeight();
+        v.getBBox(boundingBox, 0);
 
         double x = mapPoint.x;
         double y = mapPoint.y;
 
-        if (!mBBox.contains(mapPoint)) {
-            x = FastMath.clamp(x, mBBox.xmin, mBBox.xmax);
-            y = FastMath.clamp(y, mBBox.ymin, mBBox.ymax);
+        if (!boundingBox.contains(mapPoint)) {
+            x = FastMath.clamp(x, boundingBox.xmin, boundingBox.xmax);
+            y = FastMath.clamp(y, boundingBox.ymin, boundingBox.ymax);
         }
 
         // get position of Location in pixel relative to
         // screen center
-        v.toScreenPoint(x, y, mScreenPoint);
+        v.toScreenPoint(x, y, screenPoint);
 
-        x = mScreenPoint.x + width / 2;
-        y = mScreenPoint.y + height / 2;
+        x = screenPoint.x + width / 2;
+        y = screenPoint.y + height / 2;
 
         // clip position to screen boundaries
         int visible = 0;
@@ -148,25 +128,24 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         else
             visible++;
 
-        mLocationIsVisible = (visible == 2);
+        locationIsVisible = (visible == 2);
 
-        if (mLocationIsVisible) {
+        if (locationIsVisible) {
             animate(false);
         } else {
             animate(true);
         }
         // set location indicator position
-        v.fromScreenPoint(x, y, mIndicatorPosition);
+        v.fromScreenPoint(x, y, indicatorPosition);
 
 
-
-       //Texture
+        //Texture
         mMapPosition.copy(v.pos);
 
         double mx = v.pos.x;
         double my = v.pos.y;
         double scale = Tile.SIZE * v.pos.scale;
-        mMap.viewport().getMapExtents(mBox, 100);
+        map.viewport().getMapExtents(box, 100);
         long flip = (long) (Tile.SIZE * v.pos.scale) >> 1;
 
         /* check visibility */
@@ -178,7 +157,7 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         else if (symbolX < -flip)
             symbolX += (flip << 1);
         buckets.clear();
-        if (!GeometryUtils.pointInPoly(symbolX, symbolY, mBox, 8, 0)) {
+        if (!GeometryUtils.pointInPoly(symbolX, symbolY, box, 8, 0)) {
             return;
         }
 
@@ -187,17 +166,17 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         SymbolItem symbolItem = SymbolItem.pool.get();
         symbolItem.set(symbolX, symbolY, arrowRegion, this.arrowHeading, true);
         symbolItem.offset = CENTER_OFFSET;
-        mSymbolBucket.pushSymbol(symbolItem);
+        symbolBucket.pushSymbol(symbolItem);
 
-        buckets.set(mSymbolBucket);
+        buckets.set(symbolBucket);
         buckets.prepare();
         buckets.compile(true);
         compile();
-        mUpdate = false;
+        update = false;
     }
 
     public void update(double latitude, double longitude, float arrowHeading, double actAccuracy) {
-        mUpdate = true;
+        update = true;
         this.arrowHeading = -arrowHeading;
         while (this.arrowHeading < 0) this.arrowHeading += 360;
         mapPoint.x = (longitude + 180.0) / 360.0;
@@ -206,15 +185,15 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         log.debug("Set x: {} y: {} head: {}", mapPoint.x, mapPoint.y, arrowHeading);
 
 
-        mRadius = actAccuracy;
+        accuracyRadius = actAccuracy;
 
     }
 
     private void animate(boolean enable) {
-        if (mRunAnim == enable)
+        if (runAnim == enable)
             return;
 
-        mRunAnim = enable;
+        runAnim = enable;
         if (!enable)
             return;
 
@@ -223,22 +202,22 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
 
             @Override
             public void run() {
-                if (!mRunAnim)
+                if (!runAnim)
                     return;
 
                 long diff = System.currentTimeMillis() - lastRun;
-                mMap.postDelayed(this, Math.min(ANIM_RATE, diff));
-                mMap.render();
+                map.postDelayed(this, Math.min(ANIM_RATE, diff));
+                map.render();
                 lastRun = System.currentTimeMillis();
             }
         };
 
-        mAnimStart = System.currentTimeMillis();
-        mMap.postDelayed(action, ANIM_RATE);
+        animStart = System.currentTimeMillis();
+        map.postDelayed(action, ANIM_RATE);
     }
 
     private float animPhase() {
-        return (float) ((MapRenderer.frametime - mAnimStart) % INTERVAL) / INTERVAL;
+        return (float) ((MapRenderer.frametime - animStart) % INTERVAL) / INTERVAL;
     }
 
 
@@ -247,19 +226,16 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
     }
 
     private void init() {
-        int shader = 0;
-
-                shader = GLShader.createProgram(vShaderStr, fShaderStr3);
-
+        int shader = GLShader.createProgram(vShaderStr, fShaderStr3);
         if (shader == 0)
             return;
 
-        mShaderProgram = shader;
+        shaderProgramNumber = shader;
         hVertexPosition = gl.getAttribLocation(shader, "a_pos");
         hMatrixPosition = gl.getUniformLocation(shader, "u_mvp");
         hPhase = gl.getUniformLocation(shader, "u_phase");
         hScale = gl.getUniformLocation(shader, "u_scale");
-        hDirection = gl.getUniformLocation(shader, "u_dir");
+        uFill = gl.getUniformLocation(shader, "u_fill");
     }
 
     public void render(GLViewport v) {
@@ -267,8 +243,8 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
         super.render(v);
     }
 
-    public void renderAccuracyCircle(GLViewport v) {
-        GLState.useProgram(mShaderProgram);
+    private void renderAccuracyCircle(GLViewport v) {
+        GLState.useProgram(shaderProgramNumber);
         GLState.blend(true);
         GLState.test(false, false);
 
@@ -277,19 +253,19 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
 
         float radius = 10;
         boolean viewShed = false;
-        if (!mLocationIsVisible) {
-            radius = CB.getScaledFloat(CIRCLE_SIZE);
+        if (!locationIsVisible) {
+            radius = CIRCLE_SIZE * CanvasAdapter.getScale();
         } else {
             if (v.pos.zoomLevel >= SHOW_ACCURACY_ZOOM) {
-                radius = (float) (mRadius / MercatorProjection.groundResolution(v.pos));
+                radius = (float) (accuracyRadius / MercatorProjection.groundResolution(v.pos));
             }
-            radius = Math.max(CB.getScaledFloat(10), radius);
+            radius = Math.max(2, radius);
             viewShed = true;
         }
         gl.uniform1f(hScale, radius);
 
-        double x = mIndicatorPosition.x - v.pos.x;
-        double y = mIndicatorPosition.y - v.pos.y;
+        double x = indicatorPosition.x - v.pos.x;
+        double y = indicatorPosition.y - v.pos.y;
         double tileScale = Tile.SIZE * v.pos.scale;
 
         v.mvp.setTransScale((float) (x * tileScale), (float) (y * tileScale), 1);
@@ -300,22 +276,15 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
             float phase = Math.abs(animPhase() - 0.5f) * 2;
             //phase = Interpolation.fade.apply(phase);
             phase = Interpolation.swing.apply(phase);
-
             gl.uniform1f(hPhase, 0.8f + phase * 0.2f);
         } else {
             gl.uniform1f(hPhase, 1);
         }
 
-        if (viewShed && mLocationIsVisible) {
-//            float rotation = 0;
-//            if (mCallback != null)
-//                rotation = mCallback.getRotation();
-//            rotation -= 90;
-            gl.uniform2f(hDirection,
-                    (float) Math.cos(Math.toRadians(-90)),
-                    (float) Math.sin(Math.toRadians(-90)));
+        if (viewShed && locationIsVisible) {
+            GLUtils.setColor(uFill, accuracyColor, 1);
         } else {
-            gl.uniform2f(hDirection, 0, 0);
+            GLUtils.setColor(uFill, viewShedColor, 1);
         }
 
         gl.drawArrays(GL.TRIANGLE_STRIP, 0, 4);
@@ -343,7 +312,7 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
             + "varying vec2 v_tex;"
             + "uniform float u_scale;"
             + "uniform float u_phase;"
-            + "uniform vec2 u_dir;"
+            + "uniform vec4 u_fill;"
             + "void main() {"
             + "  float len = 1.0 - length(v_tex);"
             ///  outer ring
@@ -357,14 +326,7 @@ public class LocationRenderer extends BucketRenderer implements Disposable {
             ///  - multiply by viewshed
             ///  - add center point
             + "  a = (a - (b + c)) + c;"
-            + "  if (u_dir.x == 0.0 && u_dir.y == 0.0){"
-            + "  gl_FragColor = vec4(0.8, 0.2, 0.1, 0.8) * a;"
-            + "  } else {"
-            + "  gl_FragColor = vec4(0.2, 0.2, 0.8, 1.0) * a;"
-            + "}}").replace("precision highp float;", isMac ? "" : "precision highp float;");
-
-    public interface Callback {
-        float getRotation();
-    }
+            + "  gl_FragColor = u_fill * a;"
+            + "}").replace("precision highp float;", isMac ? "" : "precision highp float;");
 
 }
