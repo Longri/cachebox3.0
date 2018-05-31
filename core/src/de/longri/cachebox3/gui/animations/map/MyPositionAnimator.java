@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.animations.map;
 
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
-import de.longri.cachebox3.gui.map.layer.LocationAccuracyLayer;
 import de.longri.cachebox3.gui.map.layer.LocationLayer;
 import de.longri.cachebox3.locator.LatLong;
 
@@ -30,14 +29,12 @@ public class MyPositionAnimator {
     private final DoubleAnimator posLatitude, posLongitude, heading, accuracy;
     private final DirectLineLayer directLineLayer;
     private final LocationLayer myLocationLayer;
-    private final LocationAccuracyLayer myLocationAccuracy;
     private double actLatitude, actLongitude, actAccuracy;
     private float actHead;
 
-    public MyPositionAnimator(DirectLineLayer directLineLayer, LocationLayer myLocationLayer, LocationAccuracyLayer myLocationAccuracy) {
+    public MyPositionAnimator(DirectLineLayer directLineLayer, LocationLayer myLocationLayer) {
         this.directLineLayer = directLineLayer;
         this.myLocationLayer = myLocationLayer;
-        this.myLocationAccuracy = myLocationAccuracy;
         this.posLatitude = new DoubleAnimator();
         this.posLongitude = new DoubleAnimator();
         this.heading = new DoubleAnimator();
@@ -69,11 +66,11 @@ public class MyPositionAnimator {
         }
 
         if (posChanged) {
-            myLocationLayer.setPosition(actLatitude, actLongitude, actHead);
+            myLocationLayer.setPosition(actLatitude, actLongitude, actHead, actAccuracy);
             directLineLayer.redrawLine(new LatLong(actLatitude, actLongitude));
-            myLocationAccuracy.setPosition(actLatitude, actLongitude, actAccuracy);
+//            myLocationAccuracy.setPosition(actLatitude, actLongitude, actAccuracy);
         } else if (accuracyChanged) {
-            myLocationAccuracy.setPosition(actLatitude, actLongitude, actAccuracy);
+            myLocationLayer.setPosition(actLatitude, actLongitude, actHead, actAccuracy);
         }
 
     }

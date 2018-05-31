@@ -51,7 +51,7 @@ public class LocationLayer extends Layer implements Disposable {
         locationRenderer.dispose();
     }
 
-    public void setPosition(double latitude, double longitude, float arrowHeading) {
-        locationRenderer.update(latitude, longitude, arrowHeading);
+    public void setPosition(double latitude, double longitude, float arrowHeading, double actAccuracy) {
+        locationRenderer.update(latitude, longitude, arrowHeading,actAccuracy);
     }
 }

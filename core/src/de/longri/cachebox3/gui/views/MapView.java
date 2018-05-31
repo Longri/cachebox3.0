@@ -124,15 +124,12 @@ public class MapView extends AbstractView {
     private MapScaleBarLayer mapScaleBarLayer;
     private final MapStateButton mapStateButton;
     private final ZoomButton zoomButton;
-    //    public final MapAnimator animator;
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
     private CenterCrossLayer ccl;
     private MapInfoPanel infoPanel;
 
     private final MapState lastMapState = new MapState();
-
-    private LocationAccuracyLayer myLocationAccuracy;
 
     private LocationLayer myLocationLayer;
 
@@ -318,7 +315,7 @@ public class MapView extends AbstractView {
 
 
         //add position changed handler
-        positionChangedHandler = new MapViewPositionChangedHandler(map, directLineLayer, myLocationLayer, myLocationAccuracy, infoPanel);
+        positionChangedHandler = new MapViewPositionChangedHandler(map, directLineLayer, myLocationLayer, infoPanel);
 
         return map;
     }
@@ -509,7 +506,7 @@ public class MapView extends AbstractView {
         directLineLayer = new DirectLineLayer(map);
         mapScaleBarLayer = new MapScaleBarLayer(map, mapScaleBar);
         wayPointLayer = new WaypointLayer(this, map, CB.textureRegionMap);
-        myLocationAccuracy = new LocationAccuracyLayer(map);
+//        myLocationAccuracy = new LocationAccuracyLayer(map);
         MapArrowStyle style = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
         String bmpName = ((GetName) style.myLocation).getName();
         TextureRegion textureRegion = CB.textureRegionMap.get(bmpName);
@@ -526,7 +523,7 @@ public class MapView extends AbstractView {
         if (tileGrid)
             layerGroup.layers.add(new TileGridLayer(map));
 
-        layerGroup.layers.add(myLocationAccuracy);
+//        layerGroup.layers.add(myLocationAccuracy);
         layerGroup.layers.add(wayPointLayer);
         layerGroup.layers.add(directLineLayer);
         layerGroup.layers.add(myLocationLayer);
