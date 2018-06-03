@@ -16,8 +16,8 @@
 package de.longri.cachebox3.gui.animations.map;
 
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
-import de.longri.cachebox3.gui.map.layer.LocationTextureLayer;
 import de.longri.cachebox3.locator.LatLong;
+import org.oscim.layers.LocationTextureLayer;
 
 import static de.longri.cachebox3.gui.animations.map.DoubleAnimator.DEFAULT_DURATION;
 
@@ -29,8 +29,8 @@ public class MyPositionAnimator {
     private final DoubleAnimator posLatitude, posLongitude, heading, accuracy;
     private final DirectLineLayer directLineLayer;
     private final LocationTextureLayer myLocationLayer;
-    private double actLatitude, actLongitude, actAccuracy;
-    private float actHead;
+    private double actLatitude, actLongitude;
+    private float actHead, actAccuracy;
 
     public MyPositionAnimator(DirectLineLayer directLineLayer, LocationTextureLayer myLocationLayer) {
         this.directLineLayer = directLineLayer;
@@ -61,14 +61,13 @@ public class MyPositionAnimator {
         }
 
         if (accuracy.update(delta)) {
-            actAccuracy = accuracy.getAct();
+            actAccuracy = (float) accuracy.getAct();
             accuracyChanged = true;
         }
 
         if (posChanged) {
             myLocationLayer.setPosition(actLatitude, actLongitude, actHead, actAccuracy);
             directLineLayer.redrawLine(new LatLong(actLatitude, actLongitude));
-//            myLocationAccuracy.setPosition(actLatitude, actLongitude, actAccuracy);
         } else if (accuracyChanged) {
             myLocationLayer.setPosition(actLatitude, actLongitude, actHead, actAccuracy);
         }

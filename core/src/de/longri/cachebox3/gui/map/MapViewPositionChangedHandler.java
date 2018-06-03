@@ -24,7 +24,6 @@ import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.animations.map.MyPositionAnimator;
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
-import de.longri.cachebox3.gui.map.layer.LocationTextureLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
@@ -32,6 +31,7 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.IChanged;
 import org.oscim.core.MercatorProjection;
+import org.oscim.layers.LocationTextureLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

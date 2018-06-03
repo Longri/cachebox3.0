@@ -78,6 +78,7 @@ import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.layers.GroupLayer;
 import org.oscim.layers.Layer;
+import org.oscim.layers.LocationTextureLayer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
@@ -506,13 +507,13 @@ public class MapView extends AbstractView {
         directLineLayer = new DirectLineLayer(map);
         mapScaleBarLayer = new MapScaleBarLayer(map, mapScaleBar);
         wayPointLayer = new WaypointLayer(this, map, CB.textureRegionMap);
-//        myLocationAccuracy = new LocationAccuracyLayer(map);
         MapArrowStyle style = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
         String bmpName = ((GetName) style.myLocation).getName();
         TextureRegion textureRegion = CB.textureRegionMap.get(bmpName);
         myLocationLayer = new LocationTextureLayer(map, textureRegion);
-        myLocationLayer.setAccuracyColor(Color.BLUE);
-        myLocationLayer.setIndicatorColor(Color.RED);
+        myLocationLayer.locationRenderer.setAccuracyColor(Color.BLUE);
+        myLocationLayer.locationRenderer.setIndicatorColor(Color.RED);
+        myLocationLayer.locationRenderer.setBillboard(false);
 
         boolean showDirectLine = Settings_Map.ShowDirektLine.getValue();
         log.debug("Initial direct line layer and {}", showDirectLine ? "enable" : "disable");
