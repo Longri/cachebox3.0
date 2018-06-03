@@ -27,12 +27,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DoubleClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.MapMode;
+import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.translation.Translation;
 import org.oscim.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +43,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 01.10.16.
  */
-public class MapStateButton extends Widget implements Disposable {
+public class MapStateButton extends SelectBox<MapMode> implements Disposable {
 
     private final static Logger log = LoggerFactory.getLogger(MapStateButton.class);
 
@@ -48,11 +51,8 @@ public class MapStateButton extends Widget implements Disposable {
         void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event);
     }
 
-    private MapStateButtonStyle style;
-    private final DoubleClickListener clickListener;
-    private final ActorGestureListener gestureListener;
+    private final MapStateButtonStyle style;
     private final StateChangedListener stateChangedListener;
-    private final int mapStateLength = MapMode.values().length;
     private boolean isLongPressed = false;
 
 
@@ -62,51 +62,26 @@ public class MapStateButton extends Widget implements Disposable {
                 || style.stateWaypoint == null || style.stateGps == null) {
             throw new RuntimeException("MapStateButtonStyle drawables can not be NULL");
         }
-        clickListener = new DoubleClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                log.debug("button clicked" + event);
-                if (isLongPressed) {
-                    isLongPressed = false;
-                    return;
-                }
-                int intState = CB.mapMode.ordinal();
-                intState++;
-                if (intState > mapStateLength - 3) {// last mapMode is Mapstate.Lock. Activated with double click
-                    intState = 0;
-                }
-                setMapMode(MapMode.fromOrdinal(intState), new Event());
-            }
 
-            @Override
-            public void doubleClicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                log.debug("button double clicked" + event);
-                setMapMode(MapMode.LOCK, false, new Event());
-            }
-        };
+        // add values
+        Array<MapMode> itemList = new Array<>();
+        itemList.add(MapMode.FREE);
+        itemList.add(MapMode.GPS);
+        itemList.add(MapMode.WP);
+        itemList.add(MapMode.LOCK);
+        itemList.add(MapMode.CAR);
 
-        gestureListener = new ActorGestureListener() {
-            @Override
-            public boolean longPress(Actor actor, float x, float y) {
-                log.debug("button long clicked");
-                setMapMode(MapMode.CAR, false, new Event());
-                isLongPressed = true;
-                return true;
-            }
-        };
-
-        gestureListener.getGestureDetector().setLongPressSeconds((float) (Config.LongClicktime.getValue() / 1000f));
-
-
-        this.addListener(gestureListener);
-        this.addListener(clickListener);
+        this.set(itemList);
         this.setTouchable(Touchable.enabled);
-
-
         this.stateChangedListener = stateChangedListener;
         setSize(getPrefWidth(), getPrefHeight());
 
+    }
+
+    @Override
+    public void select(MapMode item) {
+        super.select(item);
+        setMapMode(this.getSelected(), false, new Event());
     }
 
     public void setMapMode(MapMode mapMode, Event event) {
@@ -119,17 +94,20 @@ public class MapStateButton extends Widget implements Disposable {
         log.debug("Set to Mode: {} from last Mode {} / fireEvet:{}", mapMode, lastMode, !programmatic);
         if (!programmatic && this.stateChangedListener != null)
             this.stateChangedListener.stateChanged(mapMode, lastMode, event);
+        super.select(mapMode);
         Gdx.graphics.requestRendering();
     }
 
 
     @Override
     public float getPrefWidth() {
+        if (style == null) return 0;
         return style.stateFree.getMinWidth();
     }
 
     @Override
     public float getPrefHeight() {
+        if (style == null) return 0;
         return style.stateFree.getMinHeight();
     }
 
@@ -160,22 +138,12 @@ public class MapStateButton extends Widget implements Disposable {
         if (isPressed && !isLongPressed && style.pressedOverdraw != null) {
             style.pressedOverdraw.draw(batch, getX(), getY(), getWidth(), getHeight());
         }
-
-        Stage stage = getStage();
-        if (stage != null && stage.getActionsRequestRendering() && isPressed != clickListener.isPressed())
-            Gdx.graphics.requestRendering();
-
     }
 
-    public boolean isPressed() {
-        return clickListener.isVisualPressed();
-    }
 
+    @Override
     public void dispose() {
-        style = null;
-        //remove the listener
-        this.removeListener(clickListener);
-        this.removeListener(gestureListener);
+
     }
 
 

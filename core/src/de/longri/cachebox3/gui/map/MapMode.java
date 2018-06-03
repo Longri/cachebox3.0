@@ -15,10 +15,15 @@
  */
 package de.longri.cachebox3.gui.map;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
+import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
+
 /**
  * Created by Longri on 28.09.2016.
  */
-public enum MapMode {
+public enum MapMode implements SelectBoxItem {
 
     FREE, GPS, WP, LOCK, CAR, NONE;
 
@@ -26,5 +31,15 @@ public enum MapMode {
         for (MapMode mapMode : MapMode.values())
             if (mapMode.ordinal() == ordinal) return mapMode;
         return null;
+    }
+
+    public String getName() {
+        return this.name();
+    }
+
+    @Override
+    public Drawable getDrawable() {
+        // for select Box interface, use 'default' style
+       return null;
     }
 }
