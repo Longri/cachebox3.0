@@ -36,6 +36,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.map.MapMode;
+import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
 import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
@@ -103,6 +104,8 @@ public class CB {
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
 
     public static MapMode mapMode = MapMode.FREE;
+    public static final MapState lastMapState = new MapState();
+    public static final MapState lastMapStateBevoreCarMode = new MapState();
 
     public static int androidStatusbarHeight;
 

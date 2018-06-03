@@ -113,7 +113,6 @@ public class MapView extends AbstractView {
 
     private static double lastCenterPosLat, lastCenterPosLon;
     private static MapMode lastMapMode = MapMode.FREE;
-    Point screenPoint = new Point();
 
     public static Coordinate getLastCenterPos() {
         return new Coordinate(lastCenterPosLat, lastCenterPosLon);
@@ -128,19 +127,17 @@ public class MapView extends AbstractView {
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
     private CenterCrossLayer ccl;
-    private MapInfoPanel infoPanel;
-
-    private final MapState lastMapState = new MapState();
-
+    private final MapInfoPanel infoPanel;
     private LocationTextureLayer myLocationLayer;
-
     private MapViewPositionChangedHandler positionChangedHandler;
-
+    private Point screenPoint = new Point();
 
     public MapView(CacheboxMain main) {
         super("MapView");
         this.setTouchable(Touchable.disabled);
         this.main = main;
+
+        //TODO use better packer like rectPack2D
         if (CB.textureRegionMap == null) CB.textureRegionMap = createTextureAtlasRegions();
 
         mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
@@ -151,30 +148,30 @@ public class MapView extends AbstractView {
             public void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event) {
 
                 if (mapMode == MapMode.CAR) {
-                    lastMapState.setMapMode(lastMapMode);
-                    log.debug("Activate Carmode with last mapstate:" + lastMapState);
+                    CB.lastMapState.setMapMode(lastMapMode);
+                    log.debug("Activate Carmode with last mapstate:{}", CB.lastMapState);
                     float bearing = -EventHandler.getHeading();
                     positionChangedHandler.setBearing(bearing);
                     setBuildingLayerEnabled(false);
                     setCenterCrossLayerEnabled(false);
                 } else if (lastMapMode == MapMode.CAR) {
-                    log.debug("Disable Carmode! Activate last Mode:" + lastMapState);
+                    log.debug("Disable Carmode! Activate last Mode:{}", CB.lastMapState);
                     setBuildingLayerEnabled(true);
                     final MapPosition mapPosition = map.getMapPosition();
                     // restore last MapState
-                    if (lastMapState.getMapMode() == MapMode.WP) {
+                    if (CB.lastMapState.getMapMode() == MapMode.WP) {
                         final Coordinate wpCoord = EventHandler.getSelectedCoord();
                         log.debug("set animation to WP coords");
                         mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
                     }
-                    mapStateButton.setMapMode(lastMapState.getMapMode(), true, selfEvent);
+                    mapStateButton.setMapMode(CB.lastMapState.getMapMode(), true, selfEvent);
                     mapPosition.setTilt(map.viewport().getMinTilt());
                     float ori = 0;
-                    if (lastMapState.getMapOrientationMode() != MapOrientationMode.NORTH) {
+                    if (CB.lastMapState.getMapOrientationMode() != MapOrientationMode.NORTH) {
                         ori = EventHandler.getHeading();
                     }
                     positionChangedHandler.rotate(ori);
-                    positionChangedHandler.scale(1 << lastMapState.getZoom());
+                    positionChangedHandler.scale(1 << CB.lastMapState.getZoom());
                     map.updateMap(true);
                 } else if (mapMode == MapMode.GPS) {
                     log.debug("Activate GPS Mode");
@@ -210,7 +207,7 @@ public class MapView extends AbstractView {
                     setCenterCrossLayerEnabled(true);
                 }
                 if (event != selfEvent && mapMode != MapMode.CAR && lastMapMode != MapMode.CAR)
-                    setMapState(lastMapState);
+                    setMapState(CB.lastMapState);
             }
         });
         infoPanel = new MapInfoPanel();
@@ -234,13 +231,11 @@ public class MapView extends AbstractView {
                     value = value * 0.5;
 
                 positionChangedHandler.scale(value);
-                lastMapState.setZoom(FastMath.log2((int) value));
+                CB.lastMapState.setZoom(FastMath.log2((int) value));
             }
         });
         this.zoomButton.pack();
         this.addActor(zoomButton);
-
-
     }
 
     private void setCenterCrossLayerEnabled(boolean enabled) {
@@ -304,13 +299,14 @@ public class MapView extends AbstractView {
         main.mMapRenderer = new MapRenderer(map);
         main.mMapRenderer.onSurfaceCreated();
 
-        this.lastMapState.setValues(Settings_Map.lastMapState.getValue());
-        this.lastMapState.setValues(Settings_Map.lastMapState.getValue());
+        //TODO store also LatLon, orientation and tilt
+        CB.lastMapState.setValues(Settings_Map.lastMapState.getValue());
+
 
         double lastLatitude = Settings_Map.MapInitLatitude.getValue();
         double lastLongitude = Settings_Map.MapInitLongitude.getValue();
 
-        map.setMapPosition(lastLatitude, lastLongitude, 1 << this.lastMapState.getZoom());
+        map.setMapPosition(lastLatitude, lastLongitude, 1 << CB.lastMapState.getZoom());
 
         initLayers(false);
 
@@ -389,7 +385,7 @@ public class MapView extends AbstractView {
         CacheboxMain.drawMap = false;
         //save last position for next initial
         MapPosition mapPosition = this.map.getMapPosition();
-        Settings_Map.lastMapState.setValue(lastMapState.getValues());
+        Settings_Map.lastMapState.setValue(CB.lastMapState.getValues());
         Settings_Map.MapInitLatitude.setValue(mapPosition.getLatitude());
         Settings_Map.MapInitLongitude.setValue(mapPosition.getLongitude());
         Config.AcceptChanges();
@@ -413,13 +409,11 @@ public class MapView extends AbstractView {
         layers.clear();
 
         wayPointLayer = null;
-
         mapInputHandler.clear();
         mapInputHandler = null;
-
-
         map.clearMap();
         map.destroy();
+        map = null;
         CB.postOnGlThread(new NamedRunnable("MapView:dispose texture items") {
             @Override
             public void run() {
@@ -430,11 +424,9 @@ public class MapView extends AbstractView {
         });
 
         main.mMapRenderer = null;
-        map = null;
 
         //dispose actors
         mapStateButton.dispose();
-
         infoPanel.dispose();
         Settings_Map.ShowMapCenterCross.removeChangedEventListener(showMapCenterCrossChangedListener);
     }

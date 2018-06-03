@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.map;
 
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
+import de.longri.cachebox3.locator.LatLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,33 @@ public class MapState {
     private final int MAP_ZOOM_MASK = 992;
 
     private int value = 0;
+    private LatLong freePosition;
+    private float orientation;
+    private float tilt;
+
+    public void setPosition(LatLong latLong) {
+        this.freePosition = latLong;
+    }
+
+    public LatLong getFreePosition() {
+        return freePosition;
+    }
+
+    public void setOrientation(float orientation) {
+        this.orientation = orientation;
+    }
+
+    public float getOrientation() {
+        return orientation;
+    }
+
+    public void setTilt(float tilt) {
+        this.tilt = tilt;
+    }
+
+    public float getTilt() {
+        return tilt;
+    }
 
     public void setMapMode(MapMode mode) {
         log.debug("set MapMode to: {}", mode);
