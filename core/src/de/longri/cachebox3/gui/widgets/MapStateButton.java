@@ -18,23 +18,13 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.DoubleClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.MapMode;
-import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import org.oscim.event.Event;
 import org.slf4j.Logger;
@@ -90,8 +80,7 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
     }
 
     public void setMapMode(MapMode mapMode, boolean programmatic, Event event) {
-        MapMode lastMode = CB.mapMode;
-        CB.mapMode = mapMode;
+        MapMode lastMode = CB.lastMapState.getMapMode();
         log.debug("Set to Mode: {} from last Mode {} / fireEvet:{}", mapMode, lastMode, !programmatic);
         if (!programmatic && this.stateChangedListener != null)
             this.stateChangedListener.stateChanged(mapMode, lastMode, event);
@@ -118,7 +107,7 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
 
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        switch (CB.mapMode) {
+        switch (CB.lastMapState.getMapMode()) {
             case FREE:
                 style.stateFree.draw(batch, getX(), getY(), getWidth(), getHeight());
                 break;

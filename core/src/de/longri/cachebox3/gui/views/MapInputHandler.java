@@ -11,7 +11,6 @@ import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Map;
 import org.oscim.map.ViewController;
 import org.oscim.theme.VtmThemes;
-import org.oscim.utils.math.MathUtils;
 
 /**
  * Created by Longri on 12.09.2016.
@@ -177,7 +176,7 @@ public class MapInputHandler implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK) return true;
+        if (CB.lastMapState.getMapMode() == MapMode.CAR || CB.lastMapState.getMapMode() == MapMode.LOCK) return true;
         boolean changed = false;
 
         if (!(mActiveScale || mActiveRotate || mActiveTilt))

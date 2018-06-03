@@ -46,7 +46,10 @@ import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.BaseMapManager;
 import de.longri.cachebox3.gui.map.baseMap.MapsforgeSingleMap;
 import de.longri.cachebox3.gui.map.baseMap.OSciMap;
-import de.longri.cachebox3.gui.map.layer.*;
+import de.longri.cachebox3.gui.map.layer.CenterCrossLayer;
+import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
+import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
+import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.menu.*;
 import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
@@ -57,6 +60,7 @@ import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
@@ -112,7 +116,6 @@ public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
 
     private static double lastCenterPosLat, lastCenterPosLon;
-    private static MapMode lastMapMode = MapMode.FREE;
 
     public static Coordinate getLastCenterPos() {
         return new Coordinate(lastCenterPosLat, lastCenterPosLon);
@@ -131,6 +134,7 @@ public class MapView extends AbstractView {
     private LocationTextureLayer myLocationLayer;
     private MapViewPositionChangedHandler positionChangedHandler;
     private Point screenPoint = new Point();
+    private final Event selfEvent = new Event();
 
     public MapView(CacheboxMain main) {
         super("MapView");
@@ -142,13 +146,11 @@ public class MapView extends AbstractView {
 
         mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
 
-            private final Event selfEvent = new Event();
-
             @Override
             public void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event) {
 
                 if (mapMode == MapMode.CAR) {
-                    CB.lastMapState.setMapMode(lastMapMode);
+                    storeMapstate(lastMapMode, true);
                     log.debug("Activate Carmode with last mapstate:{}", CB.lastMapState);
                     float bearing = -EventHandler.getHeading();
                     positionChangedHandler.setBearing(bearing);
@@ -156,23 +158,7 @@ public class MapView extends AbstractView {
                     setCenterCrossLayerEnabled(false);
                 } else if (lastMapMode == MapMode.CAR) {
                     log.debug("Disable Carmode! Activate last Mode:{}", CB.lastMapState);
-                    setBuildingLayerEnabled(true);
-                    final MapPosition mapPosition = map.getMapPosition();
-                    // restore last MapState
-                    if (CB.lastMapState.getMapMode() == MapMode.WP) {
-                        final Coordinate wpCoord = EventHandler.getSelectedCoord();
-                        log.debug("set animation to WP coords");
-                        mapPosition.setPosition(wpCoord.latitude, wpCoord.longitude);
-                    }
-                    mapStateButton.setMapMode(CB.lastMapState.getMapMode(), true, selfEvent);
-                    mapPosition.setTilt(map.viewport().getMinTilt());
-                    float ori = 0;
-                    if (CB.lastMapState.getMapOrientationMode() != MapOrientationMode.NORTH) {
-                        ori = EventHandler.getHeading();
-                    }
-                    positionChangedHandler.rotate(ori);
-                    positionChangedHandler.scale(1 << CB.lastMapState.getZoom());
-                    map.updateMap(true);
+                    restoreMapstate(CB.lastMapStateBevoreCarMode);
                 } else if (mapMode == MapMode.GPS) {
                     log.debug("Activate GPS Mode");
                     final Coordinate myPos = EventHandler.getMyPosition();
@@ -206,8 +192,8 @@ public class MapView extends AbstractView {
                 } else if (mapMode == MapMode.FREE) {
                     setCenterCrossLayerEnabled(true);
                 }
-                if (event != selfEvent && mapMode != MapMode.CAR && lastMapMode != MapMode.CAR)
-                    setMapState(CB.lastMapState);
+//                if (event != selfEvent && mapMode != MapMode.CAR && lastMapMode != MapMode.CAR)
+//                    setMapState(CB.lastMapState);
             }
         });
         infoPanel = new MapInfoPanel();
@@ -222,7 +208,6 @@ public class MapView extends AbstractView {
         this.zoomButton = new ZoomButton(new ZoomButton.ValueChangeListener() {
             @Override
             public void valueChanged(int changeValue) {
-
                 MapPosition mapPosition = map.getMapPosition();
                 double value = mapPosition.getScale();
                 if (changeValue > 0)
@@ -236,6 +221,27 @@ public class MapView extends AbstractView {
         });
         this.zoomButton.pack();
         this.addActor(zoomButton);
+    }
+
+    private void storeMapstate(MapMode mapMode, boolean beforeCare) {
+        MapPosition mapPosition = map.getMapPosition();
+        CB.lastMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
+        CB.lastMapState.setMapMode(mapMode);
+        CB.lastMapState.setOrientation(mapPosition.bearing);
+        CB.lastMapState.setTilt(mapPosition.tilt);
+
+        if (beforeCare)
+            CB.lastMapStateBevoreCarMode.set(CB.lastMapState);
+    }
+
+    private void restoreMapstate(MapState mapState) {
+        MapPosition mapPosition = map.getMapPosition();
+        mapPosition.bearing = mapState.getOrientation();
+        mapPosition.tilt = mapState.getTilt();
+        if (mapState.getFreePosition() != null)
+            mapPosition.setPosition(mapState.getFreePosition().latitude, mapState.getFreePosition().longitude);
+        mapStateButton.setMapMode(mapState.getMapMode(), true, selfEvent);
+        map.setMapPosition(mapPosition);
     }
 
     private void setCenterCrossLayerEnabled(boolean enabled) {
@@ -277,7 +283,7 @@ public class MapView extends AbstractView {
                 super.onMapEvent(e, mapPosition);
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
-                    if (CB.mapMode != MapMode.FREE)
+                    if (CB.lastMapState.getMapMode() != MapMode.FREE)
                         mapStateButton.setMapMode(MapMode.FREE, new Event());
                 } else if (e == Map.TILT_EVENT) {
 //                    log.debug("Map.TILT_EVENT");
@@ -368,14 +374,13 @@ public class MapView extends AbstractView {
 
         //set initial direction
         infoPanel.setNewValues(EventHandler.getMyPosition(), EventHandler.getHeading());
-        CB.mapMode = lastMapMode;
+        if (CB.lastMapState != null) restoreMapstate(CB.lastMapState);
     }
 
     @Override
     public void onHide() {
         removeInputListener();
-        lastMapMode = CB.mapMode;
-        CB.mapMode = MapMode.NONE;
+        storeMapstate(mapStateButton.getSelected(), false);
     }
 
 
@@ -429,11 +434,6 @@ public class MapView extends AbstractView {
         mapStateButton.dispose();
         infoPanel.dispose();
         Settings_Map.ShowMapCenterCross.removeChangedEventListener(showMapCenterCrossChangedListener);
-    }
-
-    private void setMapState(MapState state) {
-        state.setMapMode(CB.mapMode);
-        state.setZoom(this.map.getMapPosition().getZoomLevel());
     }
 
     @Override

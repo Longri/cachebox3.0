@@ -17,7 +17,6 @@ package de.longri.cachebox3.events.location;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Region;
 import de.longri.cachebox3.settings.Config;
@@ -157,7 +156,7 @@ public class GpsEventHelper implements LocationEvents {
             }
         }
 
-        if (!useCompassOnly && (lastSpeed > compassLevel || CB.mapMode == MapMode.CAR)) {
+        if (!useCompassOnly && (lastSpeed > compassLevel || CB.isCarMode())) {
             EventHandler.fire(new OrientationChangedEvent((float) lastGpsHeading));
             log.debug("fire GPS heading event {} (rad:{}) ", lastGpsHeading, Math.toRadians(lastGpsHeading));
         } else {

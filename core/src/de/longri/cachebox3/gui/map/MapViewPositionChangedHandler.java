@@ -109,7 +109,8 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
      * @return Boolean
      */
     public boolean getCenterGps() {
-        return CB.mapMode == null || CB.mapMode == MapMode.GPS || CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK;
+        return CB.lastMapState.getMapMode() == null || CB.lastMapState.getMapMode() == MapMode.GPS
+                || CB.lastMapState.getMapMode() == MapMode.CAR || CB.lastMapState.getMapMode() == MapMode.LOCK;
     }
 
     /**
@@ -145,11 +146,11 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
             myPositionAnimator.setPosition(lat, lon);
 
             //force full tilt on CarMode
-            if (CB.mapMode == MapMode.CAR)
+            if (CB.isCarMode())
                 mapAnimator.tilt(map.viewport().getMaxTilt());
 
 
-            if (dynZoomEnabled && CB.mapMode == MapMode.CAR) {
+            if (dynZoomEnabled && CB.isCarMode()) {
                 // calculate dynamic Zoom
                 double percent = actSpeed / maxSpeed;
                 double dynZoom = (float) (maxZoom - ((maxZoom - minZoom) * percent));
@@ -166,7 +167,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
             }
 
             float bearing = -EventHandler.getHeading();
-            if (CB.mapMode == MapMode.CAR) {
+            if (CB.isCarMode()) {
                 this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
                 //change bearing only with speed over 10 kmh
                 if (actSpeed < 10 && lastBearing >= 0) {
@@ -234,7 +235,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
 
     @Override
     public void orientationChanged(OrientationChangedEvent event) {
-        if (CB.mapMode == MapMode.CAR) {
+        if (CB.isCarMode()) {
             this.mapBearing = event.getOrientation();
             this.arrowHeading = 0;
         }

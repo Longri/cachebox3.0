@@ -103,7 +103,6 @@ public class CB {
     public static float stateTime;
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
 
-    public static MapMode mapMode = MapMode.FREE;
     public static final MapState lastMapState = new MapState();
     public static final MapState lastMapStateBevoreCarMode = new MapState();
 
@@ -740,6 +739,10 @@ public class CB {
         CB.actThemeFile = themeFile;
         Config.AcceptChanges();
         return true;
+    }
+
+    public static boolean isCarMode() {
+        return lastMapState.getMapMode() == MapMode.CAR;
     }
 }
 

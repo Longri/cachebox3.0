@@ -35,7 +35,7 @@ public class MapMotionHandler extends MotionHandler {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (CB.mapMode == MapMode.CAR || CB.mapMode == MapMode.LOCK) return true;
+        if (CB.lastMapState.getMapMode() == MapMode.CAR || CB.lastMapState.getMapMode() == MapMode.LOCK) return true;
         return super.touchDragged(screenX, screenY, pointer);
     }
 }

@@ -22,8 +22,6 @@ import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
-import de.longri.cachebox3.gui.map.MapMode;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.CompassView;
 import de.longri.cachebox3.gui.views.MapView;
@@ -195,7 +193,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                             AbstractView actView = CB.viewmanager.getActView();
                             if (actView == null) return false;
                             if (actView instanceof MapView) {
-                                return CB.mapMode != MapMode.CAR;
+                                return !CB.isCarMode();
                             } else if (actView instanceof CompassView) {
                                 return true;
                             }

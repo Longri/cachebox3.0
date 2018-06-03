@@ -106,4 +106,11 @@ public class MapState {
     public String toString() {
         return getMapMode() + "/ " + getMapOrientationMode() + " / Z:" + getZoom();
     }
+
+    public void set(MapState mapState) {
+        this.value = mapState.value;
+        this.tilt = mapState.tilt;
+        this.orientation = mapState.orientation;
+        this.freePosition = mapState.freePosition.copy();
+    }
 }
