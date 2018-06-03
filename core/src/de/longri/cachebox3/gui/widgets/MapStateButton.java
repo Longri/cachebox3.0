@@ -75,6 +75,7 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
         this.setTouchable(Touchable.enabled);
         this.stateChangedListener = stateChangedListener;
         setSize(getPrefWidth(), getPrefHeight());
+        this.setSelectTitle(Translation.get("selectMapMode"));
 
     }
 

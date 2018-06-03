@@ -42,6 +42,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     private T selectedItem;
     private boolean heideWithItemClick = true;
     private String prefix;
+    private CharSequence selectTitle = null;
 
     public SelectBox() {
         super("");
@@ -125,6 +126,10 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     public void set(Array<T> list) {
         this.entries = list;
         select(0, false);
+    }
+
+    public void setSelectTitle(CharSequence title) {
+        this.selectTitle = title;
     }
 
     public void setStyle(SelectBoxStyle style) {
@@ -225,7 +230,12 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
     }
 
     public Menu getMenu() {
-        Menu menu = new Menu(Translation.get("select"));
+        Menu menu = null;
+        if (this.selectTitle != null) {
+            menu = new Menu(this.selectTitle);
+        } else {
+            menu = new Menu(Translation.get("select"));
+        }
         for (int i = 0, n = entries.size; i < n; i++) {
             menu.addItem(getMenuItem(i, entries.get(i)));
         }
