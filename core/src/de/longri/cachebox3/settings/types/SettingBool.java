@@ -28,14 +28,14 @@ public class SettingBool extends SettingBase<Boolean> {
     }
 
     @Override
-    public String toDBString() {
+    public Object toDbValue() {
         return String.valueOf(value);
     }
 
     @Override
-    public boolean fromDBString(String dbString) {
+    public boolean fromDbvalue(Object dbString) {
         try {
-            value = dbString.equals("1") ? true : Boolean.valueOf(dbString);
+            value = dbString.equals("1") ? true : Boolean.valueOf((String) dbString);
             return true;
         } catch (Exception ex) {
             value = defaultValue;

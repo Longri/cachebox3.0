@@ -28,7 +28,7 @@ public class SettingsDAO {
             if (cursor != null && cursor.getCount() > 0)
                 database.execSQL("DELETE FROM Config WHERE Key='" + setting.name + "'");
         } else {
-            String dbString = setting.toDBString();
+            Object dbString = setting.toDbValue();
             if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
                 database.WriteConfigLongString(setting.name, dbString);
             } else
@@ -64,7 +64,7 @@ public class SettingsDAO {
             if (dbString == null) {
                 setting.loadDefault();
             } else {
-                setting.fromDBString(dbString);
+                setting.fromDbvalue(dbString);
             }
 
             String desiredString = database.readConfigDesiredString(setting.name);

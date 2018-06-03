@@ -28,14 +28,14 @@ public class SettingFloat extends SettingBase<Float> {
     }
 
     @Override
-    public String toDBString() {
+    public Object toDbValue() {
         return String.valueOf(value);
     }
 
     @Override
-    public boolean fromDBString(String dbString) {
+    public boolean fromDbvalue(Object dbString) {
         try {
-            value = Float.valueOf(dbString);
+            value = Float.valueOf((String) dbString);
             return true;
         } catch (Exception ex) {
             value = defaultValue;

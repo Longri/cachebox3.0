@@ -147,7 +147,7 @@ public class AlterCachebox3DB {
         try {
             if (lastDatabaseSchemeVersion < 1030) {
                 //Extend Config with Blob
-                database.execSQL("ALTER TABLE [Config] ADD [blob] BLOB NULL;");
+                database.execSQL("ALTER TABLE [Config] ADD [blob] BLOB;");
             }
         } catch (Exception exc) {
             log.error("alterDatabase", exc);

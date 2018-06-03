@@ -441,7 +441,7 @@ public class Database {
         return false;
     }
 
-    public void writeConfigString(String key, String value) {
+    public void writeConfigString(String key, Object value) {
         Parameters val = new Parameters();
         val.put("Value", value);
         long anz = update("Config", val, "[Key] like '" + key + "'", null);
@@ -452,7 +452,7 @@ public class Database {
         }
     }
 
-    public void WriteConfigLongString(String key, String value) {
+    public void WriteConfigLongString(String key, Object value) {
         Parameters val = new Parameters();
         val.put("LongString", value);
         long anz = update("Config", val, "[Key] like '" + key + "'", null);
@@ -641,8 +641,10 @@ public class Database {
                 try {
                     if (lastDatabaseSchemeVersion <= 0) {
                         // First Initialization of the Database
-                        execSQL("CREATE TABLE [Config] ([Key] nvarchar (30) NOT NULL, [Value] nvarchar (255) NULL);");
+                        final DatabaseSchema schema=new DatabaseSchema();
+                        execSQL(schema.CONFIG_TABLE);
                         execSQL("CREATE INDEX [Key_idx] ON [Config] ([Key] ASC);");
+                        return;
                     }
                     if (lastDatabaseSchemeVersion < 1002) {
                         // Long Text Field for long Strings
@@ -671,7 +673,7 @@ public class Database {
                     }
                     if (lastDatabaseSchemeVersion < 1005) {
                         //Extend Config with Blob
-                        execSQL("ALTER TABLE [Config] ADD [blob] BLOB NULL;");
+                        execSQL("ALTER TABLE [Config] ADD [blob] BLOB;");
                     }
                 } catch (Exception exc) {
                     log.error("alterDatabase", exc);

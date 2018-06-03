@@ -30,13 +30,13 @@ public class SettingsListGetApiButton<T> extends SettingBase<T> {
     }
 
     @Override
-    public String toDBString() {
+    public Object toDbValue() {
 
         return null;
     }
 
     @Override
-    public boolean fromDBString(String dbString) {
+    public boolean fromDbvalue(Object dbString) {
 
         return false;
     }

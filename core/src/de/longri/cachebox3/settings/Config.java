@@ -22,6 +22,7 @@ import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
@@ -71,7 +72,7 @@ public class Config extends Settings {
         inWrite.set(true);
         final Array<SettingBase<?>> dirtyList = new Array<>();
         while (settingsList.dirtyList.size > 0) {
-            SettingBase<?> setting=settingsList.dirtyList.pop();
+            SettingBase<?> setting = settingsList.dirtyList.pop();
             setting.fireChangedEvent();
             dirtyList.add(setting);
         }
@@ -184,11 +185,15 @@ public class Config extends Settings {
                     if (setting.isDefault()) {
                         deleteStatement.bind(setting.getName()).commit().reset();
                     } else {
-                        if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
-                            insertStatement.bind(setting.getName(), null, setting.toDBString()
+
+                        if (setting instanceof SettingsBlob) {
+                            insertStatement.bind(setting.getName(), null, null
+                                    , Long.toString(setting.expiredTime), setting.toDbValue()).commit().reset();
+                        } else if (setting instanceof SettingLongString || setting instanceof SettingStringList) {
+                            insertStatement.bind(setting.getName(), null, setting.toDbValue()
                                     , Long.toString(setting.expiredTime)).commit().reset();
                         } else {
-                            insertStatement.bind(setting.getName(), setting.toDBString(), null
+                            insertStatement.bind(setting.getName(), setting.toDbValue(), null
                                     , Long.toString(setting.expiredTime)).commit().reset();
                         }
                     }
@@ -212,37 +217,37 @@ public class Config extends Settings {
                 // Read from DB
 
                 //load all config entries hold in DB
-                ObjectMap<String, DbSettingValues> localMap = new ObjectMap<>();
-                ObjectMap<String, DbSettingValues> globalMap = new ObjectMap<>();
+                final ObjectMap<String, DbSettingValues> localMap = new ObjectMap<>();
+                final ObjectMap<String, DbSettingValues> globalMap = new ObjectMap<>();
 
                 if (data != null) {
-                    GdxSqliteCursor cursor = data.rawQuery("SELECT * FROM Config", (String[]) null);
-                    cursor.moveToFirst();
-                    while (cursor.isAfterLast() == false) {
-                        String key = cursor.getString(0);
-                        DbSettingValues values = new DbSettingValues();
-                        values.value = cursor.getString(1);
-                        values.longString = cursor.getString(2);
-                        if (cursor.getColumnCount() > 3)
-                            values.desired = cursor.getString(3);
-                        localMap.put(key, values);
-                        cursor.next();
-                    }
+                    data.myDB.rawQuery("SELECT * FROM Config", new GdxSqlite.RowCallback() {
+                        @Override
+                        public void newRow(String[] columnName, Object[] value, int[] types) {
+                            String key = (String) value[0];
+                            DbSettingValues values = new DbSettingValues();
+                            values.value = (String) value[1];
+                            values.longString = (String) value[2];
+                            values.desired = (String) value[3];
+                            values.blob = (byte[]) value[4];
+                            localMap.put(key, values);
+                        }
+                    });
                 }
 
                 if (settingsDB != null) {
-                    GdxSqliteCursor cursor = settingsDB.rawQuery("SELECT * FROM Config", (String[]) null);
-                    cursor.moveToFirst();
-                    while (cursor.isAfterLast() == false) {
-                        String key = cursor.getString(0);
-                        DbSettingValues values = new DbSettingValues();
-                        values.value = cursor.getString(1);
-                        values.longString = cursor.getString(2);
-                        if (cursor.getColumnCount() > 3)
-                            values.desired = cursor.getString(3);
-                        globalMap.put(key, values);
-                        cursor.next();
-                    }
+                    settingsDB.myDB.rawQuery("SELECT * FROM Config", new GdxSqlite.RowCallback() {
+                        @Override
+                        public void newRow(String[] columnName, Object[] value, int[] types) {
+                            String key = (String) value[0];
+                            DbSettingValues values = new DbSettingValues();
+                            values.value = (String) value[1];
+                            values.longString = (String) value[2];
+                            values.desired = (String) value[3];
+                            values.blob = (byte[]) value[4];
+                            globalMap.put(key, values);
+                        }
+                    });
                 }
 
 
@@ -258,7 +263,8 @@ public class Config extends Settings {
                             if (values == null) {
                                 setting.loadDefault();
                             } else {
-                                setting.fromDBString(values.longString == null ? values.value : values.longString);
+                                setting.fromDbvalue(values.blob != null ? values.blob :
+                                        (values.longString == null ? values.value : values.longString));
                             }
                         }
                     } else if (de.longri.cachebox3.settings.types.SettingStoreType.Global == setting.getStoreType()) {
@@ -266,7 +272,8 @@ public class Config extends Settings {
                         if (values == null) {
                             setting.loadDefault();
                         } else {
-                            setting.fromDBString(values.longString == null ? values.value : values.longString);
+                            setting.fromDbvalue(values.blob != null ? values.blob :
+                                    (values.longString == null ? values.value : values.longString));
                         }
                     }
 
@@ -317,6 +324,7 @@ public class Config extends Settings {
 //        );
 
         private String value, longString, desired;
+        private byte[] blob;
 
     }
 

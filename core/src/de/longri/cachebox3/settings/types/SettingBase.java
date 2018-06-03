@@ -125,9 +125,9 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
         this.mode = mode;
     }
 
-    public abstract String toDBString();
+    public abstract Object toDbValue();
 
-    public abstract boolean fromDBString(String dbString);
+    public abstract boolean fromDbvalue(Object dbString);
 
     @Override
     public int compareTo(SettingBase<T> o) {
@@ -209,6 +209,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     }
 
     public boolean isDefault() {
+        if (value == null && defaultValue == null) return true;
         return value.equals(defaultValue);
     }
 

@@ -46,7 +46,7 @@ public class SettingsAudio extends SettingBase<Audio> {
     }
 
     @Override
-    public String toDBString() {
+    public Object toDbValue() {
         String ret = "";
         ret += "#" + value.Path;
         ret += "#" + String.valueOf(value.Volume);
@@ -56,8 +56,8 @@ public class SettingsAudio extends SettingBase<Audio> {
     }
 
     @Override
-    public boolean fromDBString(String dbString) {
-        String[] values = dbString.split("#");
+    public boolean fromDbvalue(Object dbString) {
+        String[] values = ((String)dbString).split("#");
         value.Path = values[1];
         value.Volume = Float.parseFloat(values[2]);
         value.Mute = Boolean.parseBoolean(values[3]);
