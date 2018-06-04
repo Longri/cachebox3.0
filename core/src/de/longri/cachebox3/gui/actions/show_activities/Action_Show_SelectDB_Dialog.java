@@ -102,6 +102,11 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
                 CB.loadFilteredCacheList(null);
             }
         });
+
+        //restore MapState
+        Config.readFromDB(true);
+        CB.lastMapState.deserialize(Config.lastMapState.getValue());
+        CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
     }
 
 }

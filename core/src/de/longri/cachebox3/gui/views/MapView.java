@@ -116,6 +116,7 @@ public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
 
     private static double lastCenterPosLat, lastCenterPosLon;
+    private boolean menuInShow;
 
     public static Coordinate getLastCenterPos() {
         return new Coordinate(lastCenterPosLat, lastCenterPosLon);
@@ -150,7 +151,7 @@ public class MapView extends AbstractView {
             public void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event) {
 
                 if (mapMode == MapMode.CAR) {
-                    storeMapstate(lastMapMode, true);
+                    storeMapstate(mapMode, lastMapMode);
                     log.debug("Activate Carmode with last mapstate:{}", CB.lastMapState);
                     float bearing = -EventHandler.getHeading();
                     positionChangedHandler.setBearing(bearing);
@@ -158,9 +159,10 @@ public class MapView extends AbstractView {
                     setCenterCrossLayerEnabled(false);
                 } else if (lastMapMode == MapMode.CAR) {
                     log.debug("Disable Carmode! Activate last Mode:{}", CB.lastMapState);
-                    restoreMapstate(CB.lastMapStateBevoreCarMode);
+                    restoreMapstate(CB.lastMapStateBeforeCar);
                 } else if (mapMode == MapMode.GPS) {
                     log.debug("Activate GPS Mode");
+                    storeMapstate(mapMode, null);
                     final Coordinate myPos = EventHandler.getMyPosition();
                     if (myPos != null) {
                         positionChangedHandler.position(
@@ -170,6 +172,7 @@ public class MapView extends AbstractView {
                     }
                     setCenterCrossLayerEnabled(false);
                 } else if (mapMode == MapMode.WP) {
+                    storeMapstate(mapMode, null);
                     final Coordinate wpCoord = EventHandler.getSelectedCoord();
                     if (wpCoord == null) {
                         // we hav no selected WP, so switch MapMode to 'LOCK'
@@ -188,14 +191,22 @@ public class MapView extends AbstractView {
                         setCenterCrossLayerEnabled(false);
                     }
                 } else if (mapMode == MapMode.LOCK) {
+                    storeMapstate(mapMode, null);
                     setCenterCrossLayerEnabled(false);
                 } else if (mapMode == MapMode.FREE) {
+                    storeMapstate(mapMode, null);
                     setCenterCrossLayerEnabled(true);
                 }
 //                if (event != selfEvent && mapMode != MapMode.CAR && lastMapMode != MapMode.CAR)
 //                    setMapState(CB.lastMapState);
             }
-        });
+        }) {
+            @Override
+            public Menu getMenu() {
+                menuInShow = true;
+                return super.getMenu();
+            }
+        };
         infoPanel = new MapInfoPanel();
         infoPanel.setBounds(10, 100, 200, 100);
         this.addActor(infoPanel);
@@ -223,19 +234,20 @@ public class MapView extends AbstractView {
         this.addActor(zoomButton);
     }
 
-    private void storeMapstate(MapMode mapMode, boolean beforeCare) {
+    private void storeMapstate(MapMode mapMode, MapMode beforeCar) {
         MapPosition mapPosition = map.getMapPosition();
         CB.lastMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
         CB.lastMapState.setMapMode(mapMode);
         CB.lastMapState.setOrientation(mapPosition.bearing);
         CB.lastMapState.setTilt(mapPosition.tilt);
 
-        if (beforeCare)
-            CB.lastMapStateBevoreCarMode.set(CB.lastMapState);
+        if (beforeCar != null)
+            CB.lastMapStateBeforeCar.set(CB.lastMapState);
     }
 
     private void restoreMapstate(MapState mapState) {
         MapPosition mapPosition = map.getMapPosition();
+        mapPosition.scale = 1 << mapState.getZoom();
         mapPosition.bearing = mapState.getOrientation();
         mapPosition.tilt = mapState.getTilt();
         if (mapState.getFreePosition() != null)
@@ -305,17 +317,7 @@ public class MapView extends AbstractView {
         main.mMapRenderer = new MapRenderer(map);
         main.mMapRenderer.onSurfaceCreated();
 
-        //TODO store also LatLon, orientation and tilt
-        CB.lastMapState.setValues(Settings_Map.lastMapState.getValue());
-
-
-        double lastLatitude = Settings_Map.MapInitLatitude.getValue();
-        double lastLongitude = Settings_Map.MapInitLongitude.getValue();
-
-        map.setMapPosition(lastLatitude, lastLongitude, 1 << CB.lastMapState.getZoom());
-
         initLayers(false);
-
 
         //add position changed handler
         positionChangedHandler = new MapViewPositionChangedHandler(map, directLineLayer, myLocationLayer, infoPanel);
@@ -374,13 +376,17 @@ public class MapView extends AbstractView {
 
         //set initial direction
         infoPanel.setNewValues(EventHandler.getMyPosition(), EventHandler.getHeading());
-        if (CB.lastMapState != null) restoreMapstate(CB.lastMapState);
+        if ( !menuInShow)
+            restoreMapstate(CB.lastMapState);
+        else
+            menuInShow = false;
     }
 
     @Override
     public void onHide() {
         removeInputListener();
-        storeMapstate(mapStateButton.getSelected(), false);
+        if (!menuInShow)
+            storeMapstate(mapStateButton.getSelected(), null);
     }
 
 
@@ -388,18 +394,6 @@ public class MapView extends AbstractView {
     public void dispose() {
         log.debug("Dispose MapView");
         CacheboxMain.drawMap = false;
-        //save last position for next initial
-
-
-
-
-
-
-        MapPosition mapPosition = this.map.getMapPosition();
-        Settings_Map.lastMapState.setValue(CB.lastMapState.getValues());
-        Settings_Map.MapInitLatitude.setValue(mapPosition.getLatitude());
-        Settings_Map.MapInitLongitude.setValue(mapPosition.getLongitude());
-        Config.AcceptChanges();
 
         positionChangedHandler.dispose();
         positionChangedHandler = null;

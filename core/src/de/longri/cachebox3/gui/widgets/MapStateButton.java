@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.MapMode;
+import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.translation.Translation;
 import org.oscim.event.Event;
 import org.slf4j.Logger;
@@ -70,6 +71,11 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
     }
 
     @Override
+    public Menu getMenu() {
+        return super.getMenu();
+    }
+
+    @Override
     public void select(MapMode item) {
         super.select(item);
         setMapMode(this.getSelected(), false, new Event());
@@ -107,7 +113,8 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
 
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        switch (CB.lastMapState.getMapMode()) {
+
+        switch ( this.getSelected()) {
             case FREE:
                 style.stateFree.draw(batch, getX(), getY(), getWidth(), getHeight());
                 break;

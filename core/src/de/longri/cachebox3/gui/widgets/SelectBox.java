@@ -78,7 +78,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
         if (clickListener != null) this.addListener(clickListener);
     }
 
-    private void showMenu() {
+    public void showMenu() {
         getMenu().show();
     }
 

@@ -160,6 +160,9 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     }
 
     protected boolean ifValueEquals(T newValue) {
+        if (this.value == null) {
+            return newValue == null;
+        }
         return this.value.equals(newValue);
     }
 

@@ -104,7 +104,7 @@ public class CB {
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
 
     public static final MapState lastMapState = new MapState();
-    public static final MapState lastMapStateBevoreCarMode = new MapState();
+    public static final MapState lastMapStateBeforeCar = new MapState();
 
     public static int androidStatusbarHeight;
 

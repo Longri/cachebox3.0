@@ -46,16 +46,21 @@ public class MapState {
     }
 
     public MapState(byte[] serialize) {
-        BitStore store = new BitStore(serialize);
+        deserialize(serialize);
+    }
+
+    public void deserialize(byte[] bytes) {
+        if (bytes == null) return;
+        BitStore store = new BitStore(bytes);
         try {
             value = store.readInt();
-            if(store.readBool()){
+            if (store.readBool()) {
                 double lat = store.readInt() / CONVERSION;
                 double lon = store.readInt() / CONVERSION;
                 freePosition = new LatLong(lat, lon);
             }
-            orientation = store.readInt() / CONVERSION;
-            tilt = store.readInt() / CONVERSION;
+            orientation = (float) store.readInt() / (float) CONVERSION;
+            tilt = (float) store.readInt() / (float) CONVERSION;
 
         } catch (NotImplementedException e) {
             e.printStackTrace();
@@ -66,11 +71,11 @@ public class MapState {
         BitStore store = new BitStore();
         try {
             store.write(value);
-            if(freePosition != null){
+            if (freePosition != null) {
                 store.write(true);
                 store.write((int) (freePosition.latitude * CONVERSION));
                 store.write((int) (freePosition.longitude * CONVERSION));
-            }else{
+            } else {
                 store.write(false);
             }
             store.write((int) (orientation * CONVERSION));

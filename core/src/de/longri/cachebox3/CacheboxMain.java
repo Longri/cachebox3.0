@@ -30,9 +30,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
+import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import org.oscim.backend.GL;
@@ -47,6 +49,7 @@ import java.text.NumberFormat;
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
+import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -57,9 +60,9 @@ public class CacheboxMain extends ApplicationAdapter {
         COORD_SCALE = 1;
         EventHandler.INIT();
 
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
+        INCLUDE_LIST.add(MapState.class.getName());
+        INCLUDE_LIST.add(MapView.class.getName());
+        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
@@ -67,9 +70,9 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add(CircularProgressWidget.class.getName());
 
 
-//        EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
-//        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-//        EXCLUDE_LIST.add("de.longri.cachebox3.gui.map.MapViewPositionChangedHandler");
+        EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
+        EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
+        EXCLUDE_LIST.add(StageManager.class.getName());
 //
         EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
         EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
@@ -253,9 +256,14 @@ public class CacheboxMain extends ApplicationAdapter {
         if (EventHandler.getSelectedCache() != null) {
             //save selected Cache
             Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode().toString());
-            Config.AcceptChanges();
             log.debug("Store LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
         }
+
+        //store MapState
+        Config.lastMapState.setValue(CB.lastMapState.serialize());
+        Config.lastMapStateBeforeCar.setValue(CB.lastMapStateBeforeCar.serialize());
+
+        Config.AcceptChanges();
 
         log.debug("App on pause close databases");
         if (Database.Data != null) Database.Data.close();

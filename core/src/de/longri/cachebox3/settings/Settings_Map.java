@@ -39,12 +39,6 @@ public class Settings_Map extends Settings_Const {
     public static final SettingFloat MapViewDPIFaktor = (SettingFloat) Config.settingsList.addSetting(new SettingFloat("MapViewDPIFaktor", SettingCategory.Map, EXPERT, 1f, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingFloat MapViewTextFaktor = (SettingFloat) Config.settingsList.addSetting(new SettingFloat("MapViewTextFaktor", SettingCategory.Map, EXPERT, 1f, SettingStoreType.Global, SettingUsage.ACB));
 
-
-    // DEVELOPER visible
-    public static final SettingDouble MapInitLatitude = (SettingDouble) Config.settingsList.addSetting(new SettingDouble("MapInitLatitude", SettingCategory.Positions, DEVELOPER, -1000, SettingStoreType.Global, SettingUsage.ALL));
-    public static final SettingDouble MapInitLongitude = (SettingDouble) Config.settingsList.addSetting(new SettingDouble("MapInitLongitude", SettingCategory.Positions, DEVELOPER, -1000, SettingStoreType.Global, SettingUsage.ALL));
-
-
     // NEVER visible
     public static final SettingBool ShowAllWaypoints = (SettingBool) Config.settingsList.addSetting(new SettingBool("ShowAllWaypoints", SettingCategory.Map, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool MapShowRating = (SettingBool) Config.settingsList.addSetting(new SettingBool("MapShowRating", SettingCategory.Map, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
@@ -55,7 +49,6 @@ public class Settings_Map extends Settings_Const {
     public static final SettingBool MapHideMyFinds = (SettingBool) Config.settingsList.addSetting(new SettingBool("MapHideMyFinds", SettingCategory.Map, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingFolder MapPackFolderLocal = (SettingFolder) Config.settingsList.addSetting(new SettingFolder("MapPackFolderLocal", SettingCategory.Map, NEVER, "?/repository/maps", SettingStoreType.Local, SettingUsage.ALL, false));
     public static final SettingStringList CurrentMapLayer = (SettingStringList) Config.settingsList.addSetting(new SettingStringList("CurrentMapLayer", SettingCategory.Map, NEVER, new String[]{"Mapnik"}, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingInt lastMapState = (SettingInt) Config.settingsList.addSetting(new SettingInt("lastMapState", SettingCategory.Map, NEVER, 0, SettingStoreType.Global, SettingUsage.ALL));
     public static final SettingBool ShowAccuracyCircle = (SettingBool) Config.settingsList.addSetting(new SettingBool("ShowAccuracyCircle", SettingCategory.Map, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool ShowMapCenterCross = (SettingBool) Config.settingsList.addSetting(new SettingBool("ShowMapCenterCross", SettingCategory.Map, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingFolder TileCacheFolder = (SettingFolder) Config.settingsList.addSetting(new SettingFolder("TileCacheFolder", SettingCategory.Folder, NEVER, "?/repository/cache", SettingStoreType.Global, SettingUsage.ALL, true));
@@ -64,6 +57,8 @@ public class Settings_Map extends Settings_Const {
     public static final SettingFile MapsforgeDayTheme = (SettingFile) Config.settingsList.addSetting(new SettingFile("MapsforgeDayTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
     public static final SettingFile MapsforgeNightTheme = (SettingFile) Config.settingsList.addSetting(new SettingFile("MapsforgeNightTheme", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB, "xml"));
 
+    public static final SettingsBlob lastMapState = (SettingsBlob) Config.settingsList.addSetting(new SettingsBlob("lastMapState", SettingCategory.Map, NEVER, SettingStoreType.Local, SettingUsage.ACB,false,new byte[]{}));
+    public static final SettingsBlob lastMapStateBeforeCar = (SettingsBlob) Config.settingsList.addSetting(new SettingsBlob("lastMapStateBeforeCar", SettingCategory.Map, NEVER, SettingStoreType.Local, SettingUsage.ACB,false,new byte[]{}));
 
 //    public static final SettingIntArray ZoomCross = (SettingIntArray) Config.settingsList.addSetting(new SettingIntArray("ZoomCross", SettingCategory.Map, NORMAL, 16, SettingStoreType.Global, SettingUsage.ACB, CrossLevel));
 //    public static final SettingString CurrentMapOverlayLayer = (SettingString) Config.settingsList.addSetting(new SettingString("CurrentMapOverlayLayer", SettingCategory.Map, NEVER, "", SettingStoreType.Global, SettingUsage.ACB));
