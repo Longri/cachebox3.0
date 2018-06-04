@@ -277,6 +277,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (INSTANCE.myPosition == null) {
             //return last stored Pos
             LatLong lastStoredPos = CB.lastMapState.getFreePosition();
+            if (lastStoredPos == null) return null;
             return new Coordinate(lastStoredPos.latitude, lastStoredPos.longitude);
         }
         return INSTANCE.myPosition;

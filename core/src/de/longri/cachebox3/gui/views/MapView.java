@@ -240,6 +240,7 @@ public class MapView extends AbstractView {
         CB.lastMapState.setMapMode(mapMode);
         CB.lastMapState.setOrientation(mapPosition.bearing);
         CB.lastMapState.setTilt(mapPosition.tilt);
+        CB.lastMapState.setMapOrientationMode(infoPanel.getOrientationState());
 
         if (beforeCar != null)
             CB.lastMapStateBeforeCar.set(CB.lastMapState);
@@ -253,6 +254,7 @@ public class MapView extends AbstractView {
         if (mapState.getFreePosition() != null)
             mapPosition.setPosition(mapState.getFreePosition().latitude, mapState.getFreePosition().longitude);
         mapStateButton.setMapMode(mapState.getMapMode(), true, selfEvent);
+        infoPanel.setMapOrientationMode(mapState.getMapOrientationMode());
         map.setMapPosition(mapPosition);
     }
 
@@ -376,7 +378,7 @@ public class MapView extends AbstractView {
 
         //set initial direction
         infoPanel.setNewValues(EventHandler.getMyPosition(), EventHandler.getHeading());
-        if ( !menuInShow)
+        if (!menuInShow)
             restoreMapstate(CB.lastMapState);
         else
             menuInShow = false;

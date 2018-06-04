@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.map;
 
+import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.serializable.BitStore;
@@ -32,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class MapState {
     private final static Logger log = LoggerFactory.getLogger(MapState.class);
 
-    private final int CONVERSION = 1000000;
+    private final float CONVERSION = 1000000;
     private final int MAP_MODE_MASK = 7;
     private final int MAP_ORIENTATION_MODE_MASK = 24;
     private final int MAP_ZOOM_MASK = 992;
@@ -55,12 +56,12 @@ public class MapState {
         try {
             value = store.readInt();
             if (store.readBool()) {
-                double lat = store.readInt() / CONVERSION;
-                double lon = store.readInt() / CONVERSION;
+                double lat = (float) store.readInt() / CONVERSION;
+                double lon = (float) store.readInt() / CONVERSION;
                 freePosition = new LatLong(lat, lon);
             }
-            orientation = (float) store.readInt() / (float) CONVERSION;
-            tilt = (float) store.readInt() / (float) CONVERSION;
+            orientation = (float) store.readInt() / CONVERSION;
+            tilt = (float) store.readInt() / CONVERSION;
 
         } catch (NotImplementedException e) {
             e.printStackTrace();
@@ -153,7 +154,14 @@ public class MapState {
     }
 
     public String toString() {
-        return getMapMode() + "/ " + getMapOrientationMode() + " / Z:" + getZoom();
+        StringBuilder sb = new StringBuilder();
+        sb.append("M:").append(getMapMode()).append(" ");
+        sb.append("O:").append(getMapOrientationMode()).append(" ");
+        sb.append("Z:").append(getZoom()).append(" ");
+        sb.append("GPS:").append(getFreePosition()).append(" ");
+        sb.append("T:").append(getTilt()).append(" ");
+        sb.append("H:").append(getOrientation()).append(" ");
+        return sb.toString();
     }
 
     public void set(MapState mapState) {

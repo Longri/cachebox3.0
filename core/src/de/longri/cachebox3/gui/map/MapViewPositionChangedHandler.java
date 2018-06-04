@@ -125,7 +125,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
             lastEventID = eventID;
             if (isDisposed.get()) return;
 
-            double lat, lon;
+            double lat=0, lon=0;
             if (getCenterGps()) {
                 if (this.mapCenter == null) {
                     this.mapCenter = EventHandler.getMyPosition();
@@ -136,8 +136,10 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                 if (this.myPosition == null) {
                     this.myPosition = EventHandler.getMyPosition();
                 }
-                lon = this.myPosition.longitude;
-                lat = this.myPosition.latitude;
+                if (this.myPosition != null) {
+                    lon = this.myPosition.longitude;
+                    lat = this.myPosition.latitude;
+                }
             }
             mapAnimator.position(
                     MercatorProjection.longitudeToX(lon),
