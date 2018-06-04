@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.GL;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
@@ -274,13 +275,18 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void resume() {
-        if (viewManager != null) viewManager.resume();
-        checkLogger();
-        log.debug("App on resume reopen databases");
-        if (Database.Data != null) Database.Data.open();
-        if (Database.Settings != null) Database.Settings.open();
-        if (Database.Drafts != null) Database.Drafts.open();
-        CB.isBackground = false;
+        CB.postOnGlThread(new NamedRunnable("onResume") {
+                @Override
+            public void run() {
+                    if (viewManager != null) viewManager.resume();
+                    checkLogger();
+                    log.debug("App on resume reopen databases");
+                    if (Database.Data != null) Database.Data.open();
+                    if (Database.Settings != null) Database.Settings.open();
+                    if (Database.Drafts != null) Database.Drafts.open();
+                    CB.isBackground = false;
+            }
+        });
     }
 
     public String getMemory() {

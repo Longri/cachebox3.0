@@ -500,10 +500,12 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     public void resume() {
         locationReceiver.resume();
+        if(actView!=null)actView.onShow();
     }
 
     public void pause() {
         locationReceiver.pause();
+        if(actView!=null)actView.onHide();
     }
 
     @Override
