@@ -105,4 +105,26 @@ class MapStateTest {
         assertThat("Must MapOrientationMode.USER", state.getMapOrientationMode() == MapOrientationMode.USER);
         assertThat("Must MapMode.GPS", state.getMapMode() == MapMode.GPS);
     }
+
+    @Test
+    void serialize() {
+        MapState state = new MapState();
+        state.setMapMode(MapMode.CAR);
+        state.setMapOrientationMode(MapOrientationMode.COMPASS);
+        state.setZoom(12);
+        assertThat("Must zoom Level 12", state.getZoom() == 12);
+        assertThat("Must MapOrientationMode.COMPASS", state.getMapOrientationMode() == MapOrientationMode.COMPASS);
+        assertThat("Must MapMode.CAR", state.getMapMode() == MapMode.CAR);
+
+        more tests
+
+        byte[] bytes = state.serialize();
+        MapState mapState = new MapState(bytes);
+
+        assertThat("Must zoom Level 12", mapState.getZoom() == 12);
+        assertThat("Must MapOrientationMode.COMPASS", mapState.getMapOrientationMode() == MapOrientationMode.COMPASS);
+        assertThat("Must MapMode.CAR", mapState.getMapMode() == MapMode.CAR);
+
+
+    }
 }

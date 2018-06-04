@@ -17,6 +17,8 @@ package de.longri.cachebox3.gui.map;
 
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.locator.LatLong;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +32,7 @@ import org.slf4j.LoggerFactory;
 public class MapState {
     private final static Logger log = LoggerFactory.getLogger(MapState.class);
 
+    private final int CONVERSION = 1000000;
     private final int MAP_MODE_MASK = 7;
     private final int MAP_ORIENTATION_MODE_MASK = 24;
     private final int MAP_ZOOM_MASK = 992;
@@ -38,6 +41,47 @@ public class MapState {
     private LatLong freePosition;
     private float orientation;
     private float tilt;
+
+    public MapState() {
+    }
+
+    public MapState(byte[] serialize) {
+        BitStore store = new BitStore(serialize);
+        try {
+            value = store.readInt();
+            if(store.readBool()){
+                double lat = store.readInt() / CONVERSION;
+                double lon = store.readInt() / CONVERSION;
+                freePosition = new LatLong(lat, lon);
+            }
+            orientation = store.readInt() / CONVERSION;
+            tilt = store.readInt() / CONVERSION;
+
+        } catch (NotImplementedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public byte[] serialize() {
+        BitStore store = new BitStore();
+        try {
+            store.write(value);
+            if(freePosition != null){
+                store.write(true);
+                store.write((int) (freePosition.latitude * CONVERSION));
+                store.write((int) (freePosition.longitude * CONVERSION));
+            }else{
+                store.write(false);
+            }
+            store.write((int) (orientation * CONVERSION));
+            store.write((int) (tilt * CONVERSION));
+
+            return store.getArray();
+        } catch (NotImplementedException e) {
+
+        }
+        return null;
+    }
 
     public void setPosition(LatLong latLong) {
         this.freePosition = latLong;

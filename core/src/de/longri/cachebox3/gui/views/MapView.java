@@ -389,6 +389,12 @@ public class MapView extends AbstractView {
         log.debug("Dispose MapView");
         CacheboxMain.drawMap = false;
         //save last position for next initial
+
+
+
+
+
+
         MapPosition mapPosition = this.map.getMapPosition();
         Settings_Map.lastMapState.setValue(CB.lastMapState.getValues());
         Settings_Map.MapInitLatitude.setValue(mapPosition.getLatitude());
