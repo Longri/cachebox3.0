@@ -63,10 +63,13 @@ public class GeoUtils {
 
         text = text.replace("'", " ");
         text = text.replace("\\U0022", "");
-        text = text.replace("\"", "");
+        text = text.replace("\"", " ");
         text = text.replace("\r", "");
         text = text.replace("\n", "");
         text = text.replace("/", "");
+        text = text.replace((char) 8242, ' ');
+        text = text.replace((char) 8243, ' ');
+        text = text.replace((char) 176, ' ');
         // NumberFormatInfo ni = new NumberFormatInfo();
         // text = text.Replace(".", Global.DecimalSeparator);
         text = text.replace(",", ".");

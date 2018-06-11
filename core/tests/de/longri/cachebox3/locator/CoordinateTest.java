@@ -42,13 +42,14 @@ class CoordinateTest {
     @Test
     void stringConstructor() {
         String str = "N 48° 40.441 E 009° 23.470";
-
         Coordinate coord = new Coordinate(str);
-
         assertEquals(48.674017, coord.getLatitude());
         assertEquals(9.391167, coord.getLongitude());
 
-
+        str = "52°34′49.7316″N 13°23′8.3364″E";
+        coord = new Coordinate(str);
+        assertEquals(52.580481, coord.getLatitude());
+        assertEquals(13.385649, coord.getLongitude());
 
     }
 
