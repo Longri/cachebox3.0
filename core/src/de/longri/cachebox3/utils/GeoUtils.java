@@ -168,6 +168,11 @@ public class GeoUtils {
         if (values[1] < -180.00001)
             values[2] = 0;
 
+        //round values to six digits
+        values[0] = (double) Math.round(values[0] * 1000000d) / 1000000d;
+        values[1] = (double) Math.round(values[1] * 1000000d) / 1000000d;
+
+
         return values;
 
     }
