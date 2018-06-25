@@ -30,6 +30,6 @@ public class ImagicoLandCover extends AbstractBitmapLayer {
 
     @Override
     public TileLayer getTileLayer(Map map) {
-        return new BitmapTileLayer(map, DefaultSources.IMAGICO_LANDCOVER.build());
+        return new BitmapTileLayer(map, DefaultSources.NE_LANDCOVER.build());
     }
 }

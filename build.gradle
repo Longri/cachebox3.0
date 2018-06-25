@@ -181,7 +181,7 @@ project(":android") {
 //        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 
         //vtm
-        compile "org.mapsforge:vtm-android:$vtmVersion"
+        compile "org.mapsforge:vtm-android:$vtmVersion@aar"
         compile "org.mapsforge:vtm-gdx:$vtmVersion"
         compile "org.mapsforge:vtm-android:$vtmVersion:natives-arm64-v8a"
         compile "org.mapsforge:vtm-android:$vtmVersion:natives-armeabi"
