@@ -30,6 +30,6 @@ public class OpenStreetMapTransport extends AbstractBitmapLayer {
 
     @Override
     public TileLayer getTileLayer(Map map) {
-        return new BitmapTileLayer(map, DefaultSources.OSM_TRANSPORT.build());
+        return new BitmapTileLayer(map, DefaultSources.OPENSTREETMAP.build());
     }
 }
