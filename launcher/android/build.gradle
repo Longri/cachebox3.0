@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -15,8 +14,6 @@ android {
         }
 
     }
-
-
     defaultConfig {
         applicationId "de.longri.cachebox3"
         minSdkVersion 23
@@ -33,18 +30,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions.encoding = 'UTF-8'
+    buildToolsVersion '27.0.3'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 }
 
 configurations { natives }
 
 dependencies {
-    implementation project(":core")
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':core')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
-
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
@@ -68,7 +67,6 @@ dependencies {
     natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-arm64-v8a"
     natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-x86"
     natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-x86_64"
-
     implementation 'com.caverock:androidsvg:1.2.2-beta-1'
 
     //vtm

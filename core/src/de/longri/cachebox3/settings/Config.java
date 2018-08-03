@@ -220,7 +220,7 @@ public class Config extends Settings {
                 final ObjectMap<String, DbSettingValues> localMap = new ObjectMap<>();
                 final ObjectMap<String, DbSettingValues> globalMap = new ObjectMap<>();
 
-                if (data != null) {
+                if (data != null&&false) {
                     data.myDB.rawQuery("SELECT * FROM Config", new GdxSqlite.RowCallback() {
                         @Override
                         public void newRow(String[] columnName, Object[] value, int[] types) {
