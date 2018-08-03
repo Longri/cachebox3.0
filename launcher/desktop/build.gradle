@@ -1,12 +1,49 @@
-apply plugin: "java"
+apply plugin: 'java'
 
-targetCompatibility = 1.7
-sourceCompatibility = 1.7
+configurations { natives }
+
+
+repositories {
+    flatDir {
+        dirs "./libs"
+    }
+}
+
+dependencies {
+    natives ":libPP-platform-0.9.0-SNAPSHOT-natives-desktop:"
+}
+
+
+dependencies {
+    implementation project(':core')
+    implementation project(':gps-simulator')
+    implementation project(':cb3-file-transfer')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+    implementation 'com.kitfox.svg:svg-salamander:1.0'
+    implementation 'commons-cli:commons-cli:1.3.1'
+    implementation "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+    //vtm
+    implementation "org.mapsforge:vtm-gdx:$vtmVersion"
+    implementation("org.mapsforge:vtm-desktop:$vtmVersion") {
+        exclude group: 'com.metsci.ext.com.kitfox.svg'
+    }
+    implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
+    implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
+    implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.output.resourcesDir "../android/assets/"
 
 project.ext.mainClassName = "de.longri.cachebox3.desktop.touch.TouchLauncher"
-project.ext.assetsDir = new File("../android/assets")
+project.ext.assetsDir = new File("../../android/assets")
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -28,29 +65,11 @@ task launcherJar(type: Jar, dependsOn: classes) {
 }
 
 task copyAssets(type: Copy) {
-    from("../android/assets")
+    from("../../android/assets")
     into("workingDir")
 }
 
 
-tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
+tasks.withType(JavaCompile) {
     compileTask -> compileTask.dependsOn copyAssets
-}
-
-eclipse {
-    project {
-        name = appName + "-desktop"
-        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/android/assets'
-    }
-}
-
-task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
-  doLast {
-    def classpath = new XmlParser().parse(file(".classpath"))
-    new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
-    def writer = new FileWriter(file(".classpath"))
-    def printer = new XmlNodePrinter(new PrintWriter(writer))
-    printer.setPreserveWhitespace(true)
-    printer.print(classpath)
-  }
 }

@@ -1,7 +1,55 @@
-sourceSets.main.java.srcDirs = ["src/"]
+apply plugin: "java"
+apply plugin: "robovm"
 
-sourceCompatibility = '1.7'
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+configurations { natives }
+
+dependencies {
+
+    implementation project(":core")
+    implementation "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
+    implementation "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
+    implementation "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+    implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+
+
+    implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+    natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-ios"
+
+    //include libs
+//        compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //vtm
+    implementation("org.mapsforge:vtm-ios:$vtmVersion") {
+        exclude group: 'org.slf4j', module: 'slf4j-simple'
+    }
+    natives "org.mapsforge:vtm-ios:$vtmVersion:natives"
+
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // libgdx
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
+
+    //vtm
+    implementation "org.mapsforge:vtm:$vtmVersion"
+    implementation "org.mapsforge:vtm-gdx:$vtmVersion"
+    implementation "org.mapsforge:vtm-themes:$vtmVersion"
+
+    implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+    implementation "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+sourceSets.main.java.srcDirs = [ "src/" ]
 
 ext {
     mainClassName = "de.longri.cachebox3.IOS_Launcher"
@@ -42,15 +90,3 @@ launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
 createIPA.dependsOn build
-
-//robovm {
-//    archs = "thumbv7:arm64"
-//    iosSignIdentity = "iPhone Developer: Andre Hopfner (FE92XCBVAD)"
-//    iosProvisioningProfile = "/Users/longri/Downloads/cachebox3.mobileprovision"
-//    iosSkipSigning = false
-//}
-
-eclipse.project {
-    name = appName + "-ios"
-    natures 'org.robovm.eclipse.RoboVMNature'
-}

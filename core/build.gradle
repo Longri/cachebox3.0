@@ -1,78 +1,26 @@
-apply plugin: "java"
-apply plugin: 'org.junit.platform.gradle.plugin'
-targetCompatibility = 1.7
-sourceCompatibility = 1.7
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-sourceSets.main.java.srcDirs = ["src/"]
-sourceSets.test.java.srcDirs = ["tests/"]
-sourceSets.test.resources.srcDirs = ["testsResources/"]
-eclipse.project {
-    name = appName + "-core"
+apply plugin: 'java'
+
+dependencies {
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // libgdx
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
+
+    //vtm
+    implementation "org.mapsforge:vtm:$vtmVersion"
+    implementation "org.mapsforge:vtm-gdx:$vtmVersion"
+    implementation "org.mapsforge:vtm-themes:$vtmVersion"
+
+    implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+    implementation "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
 }
 
-task saveBuildInfo {
-    doFirst {
-        // get the current commit hash in git
-        def git_version = new ByteArrayOutputStream()
-        exec {
-            commandLine 'git', 'log', '-1', '--format=%h'
-            standardOutput = git_version
-        }
-        git_version = git_version.toString().trim()
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 
-        def git_revison = new ByteArrayOutputStream()
-        exec {
-            commandLine 'git', 'rev-list', '--all', '--count'
-            standardOutput = git_revison
-        }
-        git_revison = git_revison.toString().trim()
-
-        // get the current git branch, if any
-        def git_branch = new ByteArrayOutputStream()
-        exec {
-            commandLine 'git', 'symbolic-ref', '--short', '-q', 'HEAD'
-            standardOutput = git_branch
-            // ignore error output as we might not be on a branch
-            ignoreExitValue = true
-        }
-
-        // get the current git branch, if any
-        def git_ver_tag = new ByteArrayOutputStream()
-        exec {
-            commandLine 'git', 'describe', '--tags', '--abbrev=0', '--match', 'V*'
-            standardOutput = git_ver_tag
-            // ignore error output as we might not be on a branch
-            ignoreExitValue = true
-        }
-
-        // if we are not on a branch, try to get a tag for the commit
-        def git_branch_or_tag
-        if (git_branch.size() > 0) {
-            git_branch_or_tag = git_branch.toString().trim()
-        } else {
-            def git_tag = new ByteArrayOutputStream()
-            exec {
-                commandLine 'git', 'describe', '--tags', '--exact-match'
-                standardOutput = git_tag
-                // ignore error output
-                errorOutput = new ByteArrayOutputStream()
-                ignoreExitValue = true
-            }
-
-            git_branch_or_tag = git_tag.toString().trim()
-        }
-
-        def build_time = new Date().toString()
-
-        // save the combined build info into assets/build.info file
-        def result_line = git_ver_tag.toString().trim() + "#" + git_revison + "#" + git_branch_or_tag + "#" + git_version + "#" +
-                build_time
-        def assetsDir = "$projectDir/../launcher/android/assets"
-        def buildInfoFile = new File(assetsDir, 'build.info').getAbsolutePath()
-        new File(buildInfoFile).write(result_line)
-    }
-}
-
-tasks.withType(JavaCompile) {
-    compileTask -> compileTask.dependsOn saveBuildInfo
-}
+sourceSets.main.java.srcDirs = [ "src/" ]
