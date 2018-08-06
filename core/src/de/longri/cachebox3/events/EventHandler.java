@@ -23,6 +23,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.location.*;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
@@ -275,7 +276,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
         if (INSTANCE.myPosition == null) {
             //return last stored Pos
-            return new Coordinate(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());
+            LatLong lastStoredPos = CB.lastMapState.getFreePosition();
+            if (lastStoredPos == null) return null;
+            return new Coordinate(lastStoredPos.latitude, lastStoredPos.longitude);
         }
         return INSTANCE.myPosition;
     }

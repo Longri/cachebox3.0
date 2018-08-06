@@ -28,14 +28,14 @@ public class SettingInt extends SettingBase<Integer> {
     }
 
     @Override
-    public String toDBString() {
+    public Object toDbValue() {
         return String.valueOf(value);
     }
 
     @Override
-    public boolean fromDBString(String dbString) {
+    public boolean fromDbvalue(Object dbString) {
         try {
-            value = Integer.valueOf(dbString);
+            value = Integer.valueOf((String) dbString);
             return true;
         } catch (Exception ex) {
             value = defaultValue;

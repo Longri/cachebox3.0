@@ -19,7 +19,7 @@ import java.io.Serializable;
 /**
  * A LatLong represents an immutable pair of latitude and longitude coordinates.
  */
-public class LatLong implements  Serializable {
+public class LatLong implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
@@ -96,4 +96,7 @@ public class LatLong implements  Serializable {
         return this.longitude;
     }
 
+    public LatLong copy() {
+        return new LatLong(this.latitude, this.longitude);
+    }
 }

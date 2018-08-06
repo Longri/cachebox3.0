@@ -39,9 +39,13 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
-import de.longri.cachebox3.gui.widgets.*;
+import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
+import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -244,14 +248,15 @@ public class ImportGcPos extends BlockGpsActivityBase {
 
         tglBtnMap.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                LatLong lastStoredPos = CB.lastMapState.getFreePosition();
                 if (tglBtnMap.isDisabled()) {
-                    actSearchPos = new CoordinateGPS(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());
+                    actSearchPos = new CoordinateGPS(lastStoredPos.latitude, lastStoredPos.longitude);
                     setToggleBtnState(0);
                     return;
                 }
                 Coordinate mapCenterPos = MapView.getLastCenterPos();
                 if (mapCenterPos == null) {
-                    actSearchPos = new CoordinateGPS(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());
+                    actSearchPos = new CoordinateGPS(lastStoredPos.latitude, lastStoredPos.longitude);
                 } else {
                     actSearchPos = mapCenterPos;
                 }
@@ -277,7 +282,8 @@ public class ImportGcPos extends BlockGpsActivityBase {
             case 1:
                 Coordinate mapCenterPos = MapView.getLastCenterPos();
                 if (mapCenterPos == null) {
-                    actSearchPos = new CoordinateGPS(Config.MapInitLatitude.getValue(), Config.MapInitLongitude.getValue());
+                    LatLong lastStoredPos = CB.lastMapState.getFreePosition();
+                    actSearchPos = new CoordinateGPS(lastStoredPos.latitude, lastStoredPos.longitude);
                 } else {
                     actSearchPos = mapCenterPos;
                 }

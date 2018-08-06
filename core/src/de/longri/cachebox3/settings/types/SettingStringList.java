@@ -33,7 +33,7 @@ public class SettingStringList extends SettingBase<String[]> {
     }
 
     @Override
-    public String toDBString() {
+    public Object toDbValue() {
 
         StringBuilder sb = new StringBuilder();
         int idx = 0;
@@ -46,9 +46,9 @@ public class SettingStringList extends SettingBase<String[]> {
     }
 
     @Override
-    public boolean fromDBString(String dbString) {
+    public boolean fromDbvalue(Object dbString) {
         try {
-            value = dbString.split(SettingString.STRING_SPLITTER);
+            value = ((String)dbString).split(SettingString.STRING_SPLITTER);
             return true;
         } catch (Exception ex) {
             value = defaultValue;

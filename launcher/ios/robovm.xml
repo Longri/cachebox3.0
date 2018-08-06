@@ -19,7 +19,8 @@
         </resource>
     </resources>
     <forceLinkClasses>
-        <pattern>de.longri.cachebox3.gui.activities.SelectDB_Activity$SelectDbStyle</pattern>
+        <pattern>de.longri.cachebox3.*</pattern>
+        <pattern>com.kotcrab.vis.*</pattern>
         <pattern>com.badlogic.gdx.scenes.scene2d.ui.*</pattern>
         <pattern>com.badlogic.gdx.graphics.g3d.particles.**</pattern>
         <pattern>com.android.okhttp.HttpHandler</pattern>

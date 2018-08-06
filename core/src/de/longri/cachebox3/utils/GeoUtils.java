@@ -63,10 +63,13 @@ public class GeoUtils {
 
         text = text.replace("'", " ");
         text = text.replace("\\U0022", "");
-        text = text.replace("\"", "");
+        text = text.replace("\"", " ");
         text = text.replace("\r", "");
         text = text.replace("\n", "");
         text = text.replace("/", "");
+        text = text.replace((char) 8242, ' ');
+        text = text.replace((char) 8243, ' ');
+        text = text.replace((char) 176, ' ');
         // NumberFormatInfo ni = new NumberFormatInfo();
         // text = text.Replace(".", Global.DecimalSeparator);
         text = text.replace(",", ".");
@@ -167,6 +170,11 @@ public class GeoUtils {
             values[2] = 0;
         if (values[1] < -180.00001)
             values[2] = 0;
+
+        //round values to six digits
+        values[0] = (double) Math.round(values[0] * 1000000d) / 1000000d;
+        values[1] = (double) Math.round(values[1] * 1000000d) / 1000000d;
+
 
         return values;
 

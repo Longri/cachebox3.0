@@ -34,14 +34,14 @@ public class SettingColor extends SettingBase<Color> {
     }
 
     @Override
-    public String toDBString() {
+    public Object toDbValue() {
         return value.toString();
     }
 
     @Override
-    public boolean fromDBString(String dbString) {
+    public boolean fromDbvalue(Object dbString) {
         try {
-            value = new HSV_Color(dbString);
+            value = new HSV_Color((String) dbString);
             return true;
         } catch (Exception e) {
             value = defaultValue;

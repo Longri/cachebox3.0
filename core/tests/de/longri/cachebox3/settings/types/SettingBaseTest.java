@@ -42,8 +42,17 @@ class SettingBaseTest {
             SettingUsage.ACB, true));
 
 
+    private static final SettingsBlob testBlob = (SettingsBlob) Config.settingsList.addSetting(new SettingsBlob("testBlob"
+            , SettingCategory.RememberAsk, SettingMode.Normal, SettingStoreType.Global,
+            SettingUsage.ACB, false, new byte[]{}));
+
+
     @Test
     void desiredTimeTest() throws SQLiteGdxException {
+
+
+        byte[] testByteArray = new byte[]{12, 127, -127, 7, 32};
+
 
         //Create new test config.db
         FileHandle configFileHandle = Gdx.files.local("testConfig.db3");
@@ -61,11 +70,14 @@ class SettingBaseTest {
 
         assertThat("Database file must exist", configFileHandle.exists());
         assertThat("", !testBool.getValue());
+        assertThat("", testBlob.getValue().length == 0);
 
         assertThat("Setting must desired", testBool.isExpired());
 
         testBool.setValue(true);
+        testBlob.setValue(testByteArray);
         assertThat("", testBool.getValue());
+        assertThat("", testBlob.getValue().length == testByteArray.length);
         assertThat("Setting must not desired", testBool.isExpired());
 
         long now = Calendar.getInstance().getTimeInMillis();
@@ -139,7 +151,11 @@ class SettingBaseTest {
         Config.readFromDB(true);
         assertThat("", testBool.getValue());
         assertThat("Setting must desired", testBool.isExpired());
-
+        assertThat("", testBlob.getValue().length == testByteArray.length);
+        assertThat("", testBlob.getValue()[0] == testByteArray[0]);
+        assertThat("", testBlob.getValue()[1] == testByteArray[1]);
+        assertThat("", testBlob.getValue()[2] == testByteArray[2]);
+        assertThat("", testBlob.getValue()[3] == testByteArray[3]);
 
         //check changed setting
         assertThat("Setting must changed to false", !Config.showGestureHelp.getValue());

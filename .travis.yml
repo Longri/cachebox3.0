@@ -1,19 +1,19 @@
-sudo: true
+sudo: "required"
 
-
+install: true
 language: android
-
 android:
   components:
-    - tools
-    - tools
-    - platform-tools
-    - build-tools-24.0.2
-    - android-24
-    - extra-google-m2repository
-    - extra-android-m2repository
-  licenses:
-    - 'android-sdk-license-.+'
+  # Uncomment the lines below if you want to
+  # use the latest revision of Android SDK Tools
+  # - tools
+  # - platform-tools
+
+  # The BuildTools version used by your project
+  - build-tools-27.0.3
+
+  # The SDK version used to compile your project
+  - android-27
 
 jdk:
   - oraclejdk8
@@ -31,5 +31,4 @@ global: GRADLE_OPTS="-Xmx2048m"
 before_install: chmod +x gradlew
 before_script: chmod +x gradlew
 script:
-- ./gradlew core:clean
-- ./gradlew core:build --stacktrace
+- ./gradlew core:junitPlatformTest --stacktrace
