@@ -37,6 +37,7 @@ dependencies {
     testImplementation 'com.kitfox.svg:svg-salamander:1.0'
     testImplementation project(":desktop")
     testImplementation group: 'org.openjdk.jol', name: 'jol-core', version: '0.9'
+    testImplementation 'org.mapsforge:mapsforge-core:0.8.0'
 
 }
 
