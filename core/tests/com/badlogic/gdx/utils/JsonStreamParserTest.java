@@ -39,6 +39,102 @@ class JsonStreamParserTest {
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
     final static org.slf4j.Logger log = LoggerFactory.getLogger(JsonStreamParserTest.class);
 
+
+    @Test
+    void searchPeekTest() throws FileNotFoundException {
+
+        String testString = "{\n" +
+                "  \"Status\": {\n" +
+                "    \"ImageURL\": \"http:\\/\\/www.geocaching.com\\/images\\/wpttypes\\/2.gif\",\n" +
+                "    \"StatusCode\": 0,\n" +
+                "    \"StatusMessage\": \"OK\",\n" +
+                "    \"ExceptionDetails\": \"\",\n" +
+                "    \"Warnings\": [],\n" +
+                "    \"IsContainer\": false,\n" +
+                "    \"IsGrandfathered\": null\n" +
+                "  },\n" +
+                "  \"Geocaches\": [\n" +
+                "    {\n" +
+                "      \"AccountID\": 137464\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"AccountID\": 137464\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"PQCount\": 0\n" +
+                "}";
+
+        char[] testArray = testString.toCharArray();
+        JsonStreamParser jtp = new JsonStreamParser();
+        int result = jtp.searchPeek(testArray, 0);
+        assertEquals(0, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(14, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(86, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(107, result);
+        
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(134, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(162, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(180, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(181, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(182, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(208, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(240, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(241, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(258, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(264, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(296, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(297, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(303, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(335, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(339, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(340, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(357, result);
+
+        result = jtp.searchPeek(testArray, result+1);
+        assertEquals(-1, result);
+
+    }
+
+
     @Test
     void parse() throws FileNotFoundException {
 

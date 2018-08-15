@@ -337,7 +337,7 @@ public class JsonStreamParser extends AbstractStreamParser {
         return found;
     }
 
-    private int searchPeek(char[] data, int offset) {
+    int searchPeek(char[] data, int offset) {
 
         boolean isString = false;
 
