@@ -124,5 +124,5 @@ public abstract class AbstractStreamParser {
      * @param data
      * @return
      */
-    protected abstract int parse(char[] data);
+     abstract int parse(char[] data);
 }

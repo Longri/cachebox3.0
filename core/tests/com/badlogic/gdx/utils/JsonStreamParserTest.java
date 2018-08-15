@@ -62,9 +62,124 @@ class JsonStreamParserTest {
 
     final static char[] testArray = testString.toCharArray();
 
+    @Test
+    void parseData() {
+
+        final StringBuilder sb = new StringBuilder();
+
+        JsonStreamParser jtp = new JsonStreamParser() {
+            public void startArray(String name) {
+                sb.append("startArray: ");
+                sb.append(name);
+                sb.append("\n");
+            }
+
+            public void endArray(String name) {
+                sb.append("endArray: ");
+                sb.append(name);
+                sb.append("\n");
+            }
+
+            public void startObject(String name) {
+                sb.append("startObject: ");
+                sb.append(name);
+                sb.append("\n");
+            }
+
+            public void pop() {
+                sb.append("pop()");
+                sb.append("\n");
+            }
+
+            public void string(String name, String value) {
+                sb.append("StringValue: ");
+                sb.append(name);
+                sb.append(" = ");
+                sb.append(value);
+                sb.append("\n");
+            }
+
+            public void number(String name, double value, String stringValue) {
+                sb.append("DoubleValue: ");
+                sb.append(name);
+                sb.append(" = ");
+                sb.append(value);
+                sb.append("\n");
+            }
+
+            public void number(String name, long value, String stringValue) {
+                sb.append("longValue: ");
+                sb.append(name);
+                sb.append(" = ");
+                sb.append(value);
+                sb.append("\n");
+            }
+
+            public void bool(String name, boolean value) {
+                sb.append("BoolValue: ");
+                sb.append(name);
+                sb.append(" = ");
+                sb.append(value);
+                sb.append("\n");
+            }
+        };
+
+        jtp.parse(testArray);
+
+        String expected="startObject: null\n" +
+                "startObject: Status\n" +
+                "StringValue: ImageURL = http://www.geocaching.com/images/wpttypes/2.gif\n" +
+                "longValue: StatusCode = 0\n" +
+                "StringValue: StatusMessage = OK\n" +
+                "StringValue: ExceptionDetails = \n" +
+                "startArray: Warnings\n" +
+                "pop()\n" +
+                "endArray: Warnings\n" +
+                "BoolValue: IsContainer = false\n" +
+                "StringValue: IsGrandfathered = null\n" +
+                "pop()\n" +
+                "startArray: Geocaches\n" +
+                "startObject: null\n" +
+                "longValue: AccountID = 137464\n" +
+                "pop()\n" +
+                "startObject: null\n" +
+                "longValue: AccountID = 137464\n" +
+                "pop()\n" +
+                "pop()\n" +
+                "endArray: Geocaches\n" +
+                "longValue: PQCount = 0\n" +
+                "pop()\n";
+
+        assertEquals(expected, sb.toString());
+
+    }
+
 
     @Test
-    void searchNameBefore(){
+    void getName() {
+        JsonStreamParser jtp = new JsonStreamParser();
+        String result = jtp.getName(testArray, 4);
+        assertEquals("Status", result);
+
+        result = jtp.getName(testArray, 20);
+        assertEquals("ImageURL", result);
+
+        result = jtp.getName(testArray, 92);
+        assertEquals("StatusCode", result);
+
+        result = jtp.getName(testArray, 113);
+        assertEquals("StatusMessage", result);
+
+        result = jtp.getName(testArray, 140);
+        assertEquals("ExceptionDetails", result);
+
+        result = jtp.getName(testArray, 168);
+        assertEquals("Warnings", result);
+    }
+
+
+    @Test
+    void searchNameBefore() {
         JsonStreamParser jtp = new JsonStreamParser();
         int result = jtp.searchNameBefore(testArray, 0);
         assertEquals(-1, result);
@@ -74,6 +189,18 @@ class JsonStreamParserTest {
 
         result = jtp.searchNameBefore(testArray, 86);
         assertEquals(20, result);
+
+        result = jtp.searchNameBefore(testArray, 107);
+        assertEquals(92, result);
+
+        result = jtp.searchNameBefore(testArray, 134);
+        assertEquals(113, result);
+
+        result = jtp.searchNameBefore(testArray, 162);
+        assertEquals(140, result);
+
+        result = jtp.searchNameBefore(testArray, 180);
+        assertEquals(168, result);
     }
 
     @Test
@@ -83,67 +210,67 @@ class JsonStreamParserTest {
         int result = jtp.searchPeek(testArray, 0);
         assertEquals(0, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(14, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(86, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(107, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(134, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(162, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(180, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(181, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(182, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(208, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(240, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(241, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(258, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(264, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(296, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(297, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(303, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(335, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(339, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(340, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(357, result);
 
-        result = jtp.searchPeek(testArray, result+1);
+        result = jtp.searchPeek(testArray, result + 1);
         assertEquals(-1, result);
 
     }

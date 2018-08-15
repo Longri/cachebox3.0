@@ -65,7 +65,7 @@ public class JsonStreamParser extends AbstractStreamParser {
      * @return
      */
     @Override
-    protected int parse(char[] data) {
+    int parse(char[] data) {
 
         if (data[data.length - 1] == '\\') {
             return 0;
@@ -275,7 +275,7 @@ public class JsonStreamParser extends AbstractStreamParser {
         return null;
     }
 
-    private String getName(char[] data, int nameStart) {
+     String getName(char[] data, int nameStart) {
         int found = -1;
         for (int i = nameStart + 1, n = data.length; i < n; i++) {
             switch (data[i]) {
