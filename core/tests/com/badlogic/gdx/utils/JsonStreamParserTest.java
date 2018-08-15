@@ -39,32 +39,46 @@ class JsonStreamParserTest {
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
     final static org.slf4j.Logger log = LoggerFactory.getLogger(JsonStreamParserTest.class);
 
+    final static String testString = "{\n" +
+            "  \"Status\": {\n" +
+            "    \"ImageURL\": \"http:\\/\\/www.geocaching.com\\/images\\/wpttypes\\/2.gif\",\n" +
+            "    \"StatusCode\": 0,\n" +
+            "    \"StatusMessage\": \"OK\",\n" +
+            "    \"ExceptionDetails\": \"\",\n" +
+            "    \"Warnings\": [],\n" +
+            "    \"IsContainer\": false,\n" +
+            "    \"IsGrandfathered\": null\n" +
+            "  },\n" +
+            "  \"Geocaches\": [\n" +
+            "    {\n" +
+            "      \"AccountID\": 137464\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"AccountID\": 137464\n" +
+            "    }\n" +
+            "  ],\n" +
+            "  \"PQCount\": 0\n" +
+            "}";
+
+    final static char[] testArray = testString.toCharArray();
+
 
     @Test
-    void searchPeekTest() throws FileNotFoundException {
+    void searchNameBefore(){
+        JsonStreamParser jtp = new JsonStreamParser();
+        int result = jtp.searchNameBefore(testArray, 0);
+        assertEquals(-1, result);
 
-        String testString = "{\n" +
-                "  \"Status\": {\n" +
-                "    \"ImageURL\": \"http:\\/\\/www.geocaching.com\\/images\\/wpttypes\\/2.gif\",\n" +
-                "    \"StatusCode\": 0,\n" +
-                "    \"StatusMessage\": \"OK\",\n" +
-                "    \"ExceptionDetails\": \"\",\n" +
-                "    \"Warnings\": [],\n" +
-                "    \"IsContainer\": false,\n" +
-                "    \"IsGrandfathered\": null\n" +
-                "  },\n" +
-                "  \"Geocaches\": [\n" +
-                "    {\n" +
-                "      \"AccountID\": 137464\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"AccountID\": 137464\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"PQCount\": 0\n" +
-                "}";
+        result = jtp.searchNameBefore(testArray, 14);
+        assertEquals(4, result);
 
-        char[] testArray = testString.toCharArray();
+        result = jtp.searchNameBefore(testArray, 86);
+        assertEquals(20, result);
+    }
+
+    @Test
+    void searchPeekTest() {
+
         JsonStreamParser jtp = new JsonStreamParser();
         int result = jtp.searchPeek(testArray, 0);
         assertEquals(0, result);
@@ -77,7 +91,7 @@ class JsonStreamParserTest {
 
         result = jtp.searchPeek(testArray, result+1);
         assertEquals(107, result);
-        
+
         result = jtp.searchPeek(testArray, result+1);
         assertEquals(134, result);
 

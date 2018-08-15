@@ -293,7 +293,7 @@ public class JsonStreamParser extends AbstractStreamParser {
         return null;
     }
 
-    private int searchNameBefore(char[] data, int peek) {
+     int searchNameBefore(char[] data, int peek) {
         int found = -1;
         boolean first = true;
         boolean end = true;
