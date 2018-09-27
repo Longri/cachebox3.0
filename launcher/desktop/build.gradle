@@ -44,7 +44,7 @@ targetCompatibility = "1.7"
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "de.longri.cachebox3.desktop.touch.TouchLauncher"
-project.ext.assetsDir = new File("../../android/assets")
+project.ext.assetsDir = new File("workingDir")
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -66,8 +66,8 @@ task launcherJar(type: Jar, dependsOn: classes) {
 }
 
 task copyAssets(type: Copy) {
-    from("../../android/assets")
-    into("workingDir")
+    from("../android/assets")
+    into("./workingDir")
 }
 
 
