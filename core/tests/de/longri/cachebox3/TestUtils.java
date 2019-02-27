@@ -16,16 +16,19 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
+
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.BuildInfo;
+
 import org.apache.commons.codec.Charsets;
 import org.mapsforge.core.util.LatLongUtils;
 import org.slf4j.impl.DummyLogApplication;
@@ -44,7 +47,9 @@ public class TestUtils {
     public static void initialGdx() {
         if (Gdx.net != null) return;
         BuildInfo.setTestBuildInfo("JUnitTest");
-        Gdx.net = new LwjglNet();
+        LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
+
+//        Gdx.net = new LwjglNet(configuration);
         Gdx.files = new LwjglFiles();
         Gdx.app = new DummyLogApplication() {
             @Override

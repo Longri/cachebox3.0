@@ -110,6 +110,11 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     };
 
     @Override
+    public void updateMap() {
+        updateMap(true);
+    }
+
+    @Override
     public void updateMap(boolean forceRender) {
         synchronized (mRedrawCb) {
             if (!mRenderRequest) {
@@ -176,9 +181,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
                 if (mapPosition.getTilt() > 0) {
                     float offset = MathUtils.linearInterpolation
                             (viewport().getMinTilt(), viewport().getMaxTilt(), 0, 0.8f, mapPosition.getTilt());
-                    viewport().setMapViewCenter(offset);
+                    viewport().setMapViewCenter(0f,offset);
                 } else {
-                    viewport().setMapViewCenter(0);
+                    viewport().setMapViewCenter(0f,0f);
                 }
             }
         }

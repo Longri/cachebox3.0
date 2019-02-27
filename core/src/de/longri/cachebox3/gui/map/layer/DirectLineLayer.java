@@ -103,7 +103,7 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
         LineBucket ll = buckets.addLineBucket(0,
                 new LineStyle(0, "",
                         Color.get(style.color.a, (int) (style.color.r * 255), (int) (style.color.g * 255), (int) (style.color.b * 255)),
-                        CB.getScaledFloat(style.width), style.cap, true, 0, 0, 0,
+                        CB.getScaledFloat(style.width), style.cap, true, 1.0, 0, 0, 0,
                         -1, 0, false, textureItem, true, null, REPEAT_START_DEFAULT, REPEAT_GAP_DEFAULT)
         );
 

@@ -16,6 +16,7 @@
 package de.longri.cachebox3.file_transfer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
@@ -42,7 +43,11 @@ public class MainWindow extends Application {
 
         if (Gdx.net != null) return;
         BuildInfo.setTestBuildInfo("JUnitTest");
-        Gdx.net = new LwjglNet();
+
+        LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
+
+
+        Gdx.net = new LwjglNet(configuration);
         Gdx.files = new LwjglFiles();
         Gdx.app = new DummyLogApplication() {
             @Override
