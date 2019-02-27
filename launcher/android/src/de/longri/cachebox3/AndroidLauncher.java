@@ -26,6 +26,8 @@ import android.widget.RelativeLayout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import de.longri.cachebox3.locator.manager.Android_LocationHandler;
+import org.oscim.backend.DateTime;
+import org.oscim.backend.DateTimeAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +58,8 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
         } else {
             CB.androidStatusbarHeight = bm.getHeight() / 2;
         }
+
+        DateTimeAdapter.init(new DateTime());
     }
 
     protected void onStart() {
