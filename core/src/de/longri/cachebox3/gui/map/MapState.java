@@ -42,6 +42,7 @@ public class MapState {
     private LatLong freePosition;
     private float orientation;
     private float tilt;
+    private boolean changed = false;
 
     public MapState() {
     }
@@ -89,34 +90,69 @@ public class MapState {
         return null;
     }
 
+    //setter
+
     public void setPosition(LatLong latLong) {
         this.freePosition = latLong;
-    }
-
-    public LatLong getFreePosition() {
-        return freePosition;
+        changed = true;
     }
 
     public void setOrientation(float orientation) {
         this.orientation = orientation;
-    }
-
-    public float getOrientation() {
-        return orientation;
+        changed = true;
     }
 
     public void setTilt(float tilt) {
         this.tilt = tilt;
-    }
-
-    public float getTilt() {
-        return tilt;
+        changed = true;
     }
 
     public void setMapMode(MapMode mode) {
         log.debug("set MapMode to: {}", mode);
         int shift = mode.ordinal() & MAP_MODE_MASK;
         value = (~MAP_MODE_MASK & value) | shift;
+        changed = true;
+    }
+
+    public void setMapOrientationMode(MapOrientationMode mode) {
+        log.debug("set MapOrientationMode to: {}", mode);
+        int shift = (mode.ordinal() << 3 & MAP_ORIENTATION_MODE_MASK);
+        value = (~MAP_ORIENTATION_MODE_MASK & value) | shift;
+        changed = true;
+    }
+
+    public void setZoom(int zoom) {
+        log.debug("set Zoom to: {}", zoom);
+        int shift = (zoom << 5 & MAP_ZOOM_MASK);
+        value = (~MAP_ZOOM_MASK & value) | shift;
+        changed = true;
+    }
+
+    public void setValues(int values) {
+        this.value = values;
+        changed = true;
+    }
+
+    public void set(MapState mapState) {
+        this.value = mapState.value;
+        this.tilt = mapState.tilt;
+        this.orientation = mapState.orientation;
+        this.freePosition = mapState.freePosition.copy();
+        changed = true;
+    }
+
+    //getter
+
+    public LatLong getFreePosition() {
+        return freePosition;
+    }
+
+    public float getOrientation() {
+        return orientation;
+    }
+
+    public float getTilt() {
+        return tilt;
     }
 
     public MapMode getMapMode() {
@@ -124,33 +160,27 @@ public class MapState {
         return MapMode.fromOrdinal(ordinal);
     }
 
-    public void setMapOrientationMode(MapOrientationMode mode) {
-        log.debug("set MapOrientationMode to: {}", mode);
-        int shift = (mode.ordinal() << 3 & MAP_ORIENTATION_MODE_MASK);
-        value = (~MAP_ORIENTATION_MODE_MASK & value) | shift;
-    }
-
     public MapOrientationMode getMapOrientationMode() {
         int ordinal = (value & MAP_ORIENTATION_MODE_MASK) >> 3;
         return MapOrientationMode.fromOrdinal(ordinal);
-    }
-
-    public void setZoom(int zoom) {
-        log.debug("set Zoom to: {}", zoom);
-        int shift = (zoom << 5 & MAP_ZOOM_MASK);
-        value = (~MAP_ZOOM_MASK & value) | shift;
     }
 
     public int getZoom() {
         return (value & MAP_ZOOM_MASK) >> 5;
     }
 
-    public void setValues(int values) {
-        this.value = values;
-    }
-
     public int getValues() {
         return this.value;
+    }
+
+
+    /**
+     * Returns TRUE if no value changed
+     *
+     * @return
+     */
+    public boolean isEmpty() {
+        return !changed;
     }
 
     public String toString() {
@@ -162,12 +192,5 @@ public class MapState {
         sb.append("T:").append(getTilt()).append(" ");
         sb.append("H:").append(getOrientation()).append(" ");
         return sb.toString();
-    }
-
-    public void set(MapState mapState) {
-        this.value = mapState.value;
-        this.tilt = mapState.tilt;
-        this.orientation = mapState.orientation;
-        this.freePosition = mapState.freePosition.copy();
     }
 }

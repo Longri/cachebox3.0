@@ -285,6 +285,10 @@ public class CacheboxMain extends ApplicationAdapter {
                     if (Database.Settings != null) Database.Settings.open();
                     if (Database.Drafts != null) Database.Drafts.open();
                     CB.isBackground = false;
+
+                    //restore MapState
+                    CB.lastMapState.deserialize(Config.lastMapState.getValue());
+                    CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
             }
         });
     }

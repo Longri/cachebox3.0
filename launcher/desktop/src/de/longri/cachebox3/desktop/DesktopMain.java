@@ -54,7 +54,7 @@ public class DesktopMain extends CacheboxMain {
 
     @Override
     public void resume() {
-
+        onResume();
     }
 
     private void onPause() {

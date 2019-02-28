@@ -105,8 +105,6 @@ public class Action_Show_SelectDB_Dialog extends AbstractAction {
 
         //restore MapState
         Config.readFromDB(true);
-        CB.lastMapState.deserialize(Config.lastMapState.getValue());
-        CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
     }
 
 }

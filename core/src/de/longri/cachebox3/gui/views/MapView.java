@@ -244,9 +244,19 @@ public class MapView extends AbstractView {
 
         if (beforeCar != null)
             CB.lastMapStateBeforeCar.set(CB.lastMapState);
+
+        log.debug("store MapState: " + CB.lastMapState);
+
+        // write to config
+        Config.lastMapState.setValue(CB.lastMapState.serialize());
+        Config.lastMapStateBeforeCar.setValue(CB.lastMapStateBeforeCar.serialize());
+        Config.AcceptChanges();
     }
 
     private void restoreMapstate(MapState mapState) {
+
+        log.debug("restore MapState: " + mapState);
+
         MapPosition mapPosition = map.getMapPosition();
         mapPosition.scale = 1 << mapState.getZoom();
         mapPosition.bearing = mapState.getOrientation();
@@ -378,9 +388,13 @@ public class MapView extends AbstractView {
 
         //set initial direction
         infoPanel.setNewValues(EventHandler.getMyPosition(), EventHandler.getHeading());
-        if (!menuInShow)
+        if (!menuInShow) {
+            if(CB.lastMapState.isEmpty()){
+                //load from config
+                CB.lastMapState.deserialize(Config.lastMapState.getValue());
+            }
             restoreMapstate(CB.lastMapState);
-        else
+        } else
             menuInShow = false;
     }
 
