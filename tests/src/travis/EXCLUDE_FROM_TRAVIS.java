@@ -23,7 +23,7 @@ public class EXCLUDE_FROM_TRAVIS {
             p.load(new FileInputStream(new File("unittest.properties")));
         } catch (IOException e) {
             try {
-                p.load(new FileInputStream(new File("core/unittest.properties")));
+                p.load(new FileInputStream(new File("tests/unittest.properties")));
             } catch (IOException e1) {
                 readFailer = true;
             }

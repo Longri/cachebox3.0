@@ -75,8 +75,8 @@ public class TestUtils {
         File file = new File(path);
 
         if (!file.exists()) {
-            //try set /core path
-            path = "core/" + path;
+            //try set /tests path
+            path = "tests/" + path;
             file = new File(path);
         }
 
@@ -169,8 +169,8 @@ public class TestUtils {
         File file = new File(path);
 
         if (!file.exists()) {
-            //try set /core path
-            path = "core/" + path;
+            //try set /tests path
+            path = "tests/" + path;
             file = new File(path);
         }
 
