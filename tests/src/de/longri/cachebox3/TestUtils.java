@@ -16,10 +16,7 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
-import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
-import com.badlogic.gdx.backends.lwjgl.LwjglNet;
+import com.badlogic.gdx.backends.lwjgl.*;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
@@ -46,6 +43,8 @@ public class TestUtils {
 
     public static void initialGdx() {
         if (Gdx.net != null) return;
+        new JUnitGdxTestApp("JUnitTest");
+
         BuildInfo.setTestBuildInfo("JUnitTest");
         LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
 //        Gdx.net = new LwjglNet(configuration);

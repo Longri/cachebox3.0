@@ -401,6 +401,8 @@ class JsonStreamParserTest {
                     sb.appendLine("pop ");
                 }
 
+
+
                 if (ex.size > 0 && this.root != null && this.root.name != null && this.root.name.equals(ex.peek())) {
                     endArray(this.root.name);
                 }
