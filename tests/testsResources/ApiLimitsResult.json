@@ -1,0 +1,712 @@
+{
+  "Status": {
+    "StatusCode": 0,
+    "StatusMessage": "OK",
+    "ExceptionDetails": "",
+    "Warnings": []
+  },
+  "Limits": {
+    "CacheLimits": [
+      {
+        "CacheLimit": 6000,
+        "InMinutes": 1440
+      }
+    ],
+    "EnforceCacheLimits": true,
+    "EnforceLiteCacheLimits": true,
+    "EnforceMethodLimits": true,
+    "ForMembershipType": 30,
+    "LicenseKey": "00000000-0000-0000-0000-000000000000",
+    "LiteCacheLimits": [
+      {
+        "CacheLimit": 10000,
+        "InMinutes": 1440
+      }
+    ],
+    "MaxCallsbyIPIn1Minute": 30,
+    "MethodLimits": [
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Account.GetAccount",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Account.GetAccounts",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Account.GetAccountFromUserGuid",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Account.Invalidate",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "CreateDraftAndPublishV1",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Trackable.CreateLog",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.SearchForGeocaches",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GetMembershipTypes",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocaching.UpdateCacheNote",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocaching.DeleteCacheNote",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocaching.UserProfile",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetWptLogTypes",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetPocketQueryList",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetPocketQueryUrls",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetPocketQueryZippedFile",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetPocketQueryData",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Trackable.GetTrackablesByUser",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Trackable.GetTrackablesByTrackingNumber",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Trackable.GetTrackablesByTBCode",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Trackable.GetTrackablesInCache",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "AttributeTypes.GetAttributeTypes",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocaching.UploadImagetoGeocacheLog",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GetGeocacheLogsByGCCode",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocaching.WebSite",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "UserProfile.GetAnotherUsersProfile",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "UserProfile.GetYourUserProfile",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetGeocacheTypes",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetGeocacheDataTypes",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Bookmarks.GetBookmarkListsForUser",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Bookmarks.GetBookmarkListsByUserID",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Bookmarks.GetBookmarkListByGUID",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Bookmarks.AddGeocachesToBookmarkList",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.RegisterNewUser",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.PostCurrentLocation",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.BroadcastChatToZone",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.BroadcastChatToUsers",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.RetrieveUsersNearMe",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.UpdateUsersSettings",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.AddUserToIgnoreList",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.RemoveUserFromIgnoreList",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.AddSpamMessageToList",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.GetUserSettings",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GeocachingLive.RetrieveChatMessages",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Souvenir.GetSouvenirDataV1Response",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "FavoritePoints.GetCacheIdsFavoritedByUser",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "FavoritePoints.GetCachesFavoritedByUser",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "FavoritePoints.GetUsersWhoFavoritedCache",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "FavoritePoints.GetUsersFavoritePoints",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "FavoritePoints.RemoveFavoritePointFromCache",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "FavoritePoints.AddFavoritePointToCache",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Trackable.GetTrackableTravelList",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GetMoreGeocaches",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Trackable.GetTrackableLogsByTBCode",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GetGeocacheStatus",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "UserWaypoints.GetUserWaypoints",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "UserWaypoints.DeleteUserWaypoint",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "UserWaypoints.SaveUserWaypoint",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GetImagesForGeocache",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetApiLimits",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetStatusMessages",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Trackable.GetTrackablesByOwner",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "GetSiteStats",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 0,
+        "MethodName": "GetServerDetails",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "SendFeedbackMessage",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GetUsersGeocacheLogs",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GetUsersCacheNotes",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "UserProfile.GetUserGallery",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GetUsersCacheCounts",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GetCacheByTileGuid",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.MobileSearchForGeocache",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "RegisterWP7DeviceTile",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Trackable.UploadImagetoTrackableLog",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Geocache.GeocodeString",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenge.SearchForChallenges",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.AcceptChallenge",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.DeclineChallenge",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.MarkChallengeComplete",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.MarkChallengeIncomplete",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.RateChallenge",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.AddCommentToChallenge",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.AddCommentToComment",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.UpdateGoalStatus",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.GetGoalStatuses",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.FlagChallenge",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.FlagComment",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.GetChallengeTypes",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.GetChildComments",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.GetComments",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.GetChallengeAssets",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.CheckDiscoverRequirement",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.CreateChallenge",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 30,
+        "MethodName": "Challenges.SaveChallenge",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.GetActiveScavengerHuntsByUser",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.CanUserCreateScavengerHunt",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.DeleteOrAbandonScavengerHunt",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.ActivateScavengerHunt",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.GetCompletedScavengerHuntsByUser",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.GetScavengerHuntByGUID",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.GetScavengerHuntItems",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.GetScavengerHuntsByLocation",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.GetMyScavengerHunts",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.JoinScavengerHunt",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.RegenerateScavengerHuntItems",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "ScavengerHunt.CreateScavengerHunt",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "Waymark.GetWaymarkByWaymarkCode",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "Waymark.GetWaymarkByWaymarkID",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "HuntItemCounts.GetHuntItemCounts",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "RadiusItems.GetRadiusItems",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "Visit.VisitWaymark",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "Visit.VisitWaymarkForScavengerHunt",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "WaymarkingUserProfile.GetYourUserProfile",
+        "PartnerMethod": false
+      },
+      {
+        "InMinutes": 1,
+        "MaxCalls": 2000,
+        "MethodName": "Waymark.CreateWaymark",
+        "PartnerMethod": false
+      }
+    ],
+    "RestrictbyIP": false,
+    "ValidateIPCounts": false
+  },
+  "MaxPerPage": {
+    "Geocaches": 50,
+    "GeocacheLogs": 30,
+    "Trackables": 30,
+    "TrackableLogs": 30,
+    "CacheNotes": 30,
+    "GalleryImages": 30
+  }
+}

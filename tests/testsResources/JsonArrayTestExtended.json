@@ -1,0 +1,114 @@
+{
+  "Status": {
+    "StatusCode": 0,
+    "StatusMessage": "OK",
+    "ExceptionDetails": "\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" ",
+    "Warnings": []
+  },
+  "Geocaches": [
+    {
+      "AccountID": 137464,
+      "Archived": false,
+      "Attributes": [
+        {
+          "AttributeTypeID": 1,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 6,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 7,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 8,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 26,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 32,
+          "IsOn": true
+        }
+      ],
+      "Available": true,
+      "CacheType": {
+        "Description": "",
+        "GeocacheTypeId": 2,
+        "GeocacheTypeName": "Traditional Cache",
+        "ImageURL": "http:\/\/www.geocaching.com\/images\/wpttypes\/2.gif",
+        "IsContainer": false,
+        "IsGrandfathered": null,
+        "ParentTypeId": 0,
+        "UserCount": null
+      },
+      "CanCacheBeFavorited": true,
+      "Code": "GC18JGX",
+      "ContainerType": {
+        "ContainerTypeId": 8,
+        "ContainerTypeName": "Small",
+        "Order": 30
+      }
+    },
+    {
+      "AccountID": 137464,
+      "Archived": false,
+      "Attributes": [
+        {
+          "AttributeTypeID": 1,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 6,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 7,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 8,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 26,
+          "IsOn": true
+        },
+        {
+          "AttributeTypeID": 32,
+          "IsOn": true
+        }
+      ],
+      "Available": true,
+      "CacheType": {
+        "Description": "",
+        "GeocacheTypeId": 2,
+        "GeocacheTypeName": "Traditional Cache",
+        "ImageURL": "http:\/\/www.geocaching.com\/images\/wpttypes\/2.gif",
+        "IsContainer": false,
+        "IsGrandfathered": null,
+        "ParentTypeId": 0,
+        "UserCount": null
+      },
+      "CanCacheBeFavorited": true,
+      "Code": "GC18JGX",
+      "ContainerType": {
+        "ContainerTypeId": 8,
+        "ContainerTypeName": "Small",
+        "Order": 30
+      }
+    }
+  ],
+  "PQCount": 0,
+  "CacheCodes": [],
+  "CacheLimits": {
+    "CachesLeft": 5581,
+    "CurrentCacheCount": 419,
+    "MaxCacheCount": 6000
+  },
+  "TotalMatchingCaches": 23
+}

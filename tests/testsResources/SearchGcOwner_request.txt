@@ -1,0 +1,1 @@
+{"HiddenByUsers":{"UserNames":["bros"]},"PointRadius":{"DistanceInMeters":50000,"Point":{"Latitude":52.581892,"Longitude":13.398128}},"AccessToken":"+DummyKEY","MaxPerPage":30,"StartIndex":0,"IsLite":false,"TrackableLogCount":10,"GeocacheLogCount":10}

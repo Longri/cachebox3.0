@@ -44,10 +44,10 @@ public class MainWindow extends Application {
         if (Gdx.net != null) return;
         BuildInfo.setTestBuildInfo("JUnitTest");
 
-        LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
+//        LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
+//        Gdx.net = new LwjglNet(configuration);
 
-
-        Gdx.net = new LwjglNet(configuration);
+        Gdx.net = new LwjglNet();
         Gdx.files = new LwjglFiles();
         Gdx.app = new DummyLogApplication() {
             @Override

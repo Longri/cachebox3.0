@@ -1,0 +1,919 @@
+{
+  "Status": {
+    "StatusCode": 0,
+    "StatusMessage": "OK",
+    "ExceptionDetails": "",
+    "Warnings": []
+  },
+  "GeocacheStatuses": [
+    {
+      "Archived": false,
+      "Available": false,
+      "CacheCode": "GC12DR6",
+      "CacheName": "Der Dessauer Turm",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC14PAT",
+      "CacheName": "Sachsenspiegel",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC16JN5",
+      "CacheName": "Hünengrab Steinerhütte",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC16NXB",
+      "CacheName": "Rübenbahn",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC1JH4H",
+      "CacheName": "Fährmann hol über",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC1M3A2",
+      "CacheName": "Das kommt mir Spanisch vor",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC1RDE7",
+      "CacheName": "Der Tag, als sich die Erde auftat #5",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 3
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC1ZTH3",
+      "CacheName": "Schwein gehabt",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2588R",
+      "CacheName": "Moria - Eingang Schwarz-Sachsendorf",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 1
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2FG37",
+      "CacheName": "Willkommen in Köthen 6",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2GR64",
+      "CacheName": "Ortsumgehung Köthen",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2MGA2",
+      "CacheName": "Eier, Milch, Kaffee ...",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2NKQY",
+      "CacheName": "Preußen-Anhalt-Express am Gleis R1",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2RMER",
+      "CacheName": "Willkommen in Köthen 1",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 7
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2T4TW",
+      "CacheName": "Willkommen in Köthen 2",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2T4VM",
+      "CacheName": "Willkommen in Köthen 3",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2T4ZF",
+      "CacheName": "Willkommen in Köthen 8",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2T50X",
+      "CacheName": "Willkommen in Köthen 4",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC2VMBH",
+      "CacheName": "Willkommen in Köthen 5",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC360HJ",
+      "CacheName": "Das Rittergut Zehringen und die süßen Rüben",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC3GGFY",
+      "CacheName": "Blick zur Crücherner Mühle",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC3JXNH",
+      "CacheName": "LMC-Köthen",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC3TC0K",
+      "CacheName": "Vor verschlossener Tür",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC3XXT0",
+      "CacheName": "Der Riese von Köthen",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC47VFB",
+      "CacheName": "Ein weiterer Riese von Köthen (Der Blick)",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC487KE",
+      "CacheName": "The Wall",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC4ANRV",
+      "CacheName": "Martzins Erster",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC4B2N0",
+      "CacheName": "Das Ende der Welt",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": true,
+      "Available": false,
+      "CacheCode": "GC4CP0Y",
+      "CacheName": "Historisches Landgut zu Bobbe",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC4CPAG",
+      "CacheName": "An der Ziethe: Der Scherbelberg",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC4D5JY",
+      "CacheName": "Köthen's Historische Gebäude - Hallescher Turm",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 1
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC4D5K7",
+      "CacheName": "Köthen's Historische Gebäude - Kirche St. Jakob",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC4DJWK",
+      "CacheName": "Max Park",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC4MME7",
+      "CacheName": "Buschteich",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC4YB2Q",
+      "CacheName": "Niedrigste Gangart",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC508F2",
+      "CacheName": "Poleys 1#",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC508FF",
+      "CacheName": "Poleys 3#",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC51APC",
+      "CacheName": "St. Laurentius Zuchau",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC55KPT",
+      "CacheName": "Lost Döner",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC55QAJ",
+      "CacheName": "WW Aken II (Lost Place)",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC569RP",
+      "CacheName": "Am Schießplatz",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC56BB2",
+      "CacheName": "Ein Riese von Köthen (Der Riese)",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC56FVX",
+      "CacheName": "Osterköthen",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC56FXQ",
+      "CacheName": "Dorfteich zu Klepzig",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC56FYH",
+      "CacheName": "Der Wegelagerer",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": true,
+      "Available": false,
+      "CacheCode": "GC5AYH2",
+      "CacheName": "Endstation",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5BC60",
+      "CacheName": "TB-Hotel: Zehringen an der Ziethe",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 1
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5BFJ3",
+      "CacheName": "Sport& Fun",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5BXEM",
+      "CacheName": "Hier fällt das Ei aus dem Nest ",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5CF6E",
+      "CacheName": "Radtour, die erste - Am Zollhaus ",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5GR8M",
+      "CacheName": "Auf Pilzsuche",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5GZ18",
+      "CacheName": "Bernburger Brückenkopf",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5H7VQ",
+      "CacheName": "Pfingstberg",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5KT1G",
+      "CacheName": "B6N ",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5NMA7",
+      "CacheName": "Wagnersparte",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5PNKC",
+      "CacheName": "Großsteingrab Drosa",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5R1P0",
+      "CacheName": "Der Tierpark Köthen - ein Teil unserer Heimat!",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5ZE9D",
+      "CacheName": "Willkommen in Bernburg #10",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC5ZEAC",
+      "CacheName": "Willkommen in Bernburg #11",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC60F5D",
+      "CacheName": "Colno Cool",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC60GX5",
+      "CacheName": "Ehemaliger Berlin - Halberstädter Bahnhof ",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": true,
+      "Available": false,
+      "CacheCode": "GC60JQH",
+      "CacheName": "Geschichte in Köthen - Johann Sebastian Bach",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": true,
+      "Available": false,
+      "CacheCode": "GC60K9C",
+      "CacheName": "Geschichte in Köthen - Angelika Hartmann",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": true,
+      "Available": false,
+      "CacheCode": "GC60KXP",
+      "CacheName": "Wir trauten uns ",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC60MFQ",
+      "CacheName": "Ehemalige Mälzerei Wrede Köthen",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC60MQQ",
+      "CacheName": "Kranbau Köthen",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC61M1R",
+      "CacheName": "Ernst - Messinger - Sporthalle",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC61M20",
+      "CacheName": "Am Hockeyplatz",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC61M23",
+      "CacheName": "Willkommen in Osternienburg 3",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC61M2G",
+      "CacheName": "Willkommen in Osternienburg 2",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": true,
+      "Available": false,
+      "CacheCode": "GC61M2N",
+      "CacheName": "Willkommen in Osternienburg 1",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC61M31",
+      "CacheName": "Willkommen in Osternienburg 4",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC61M37",
+      "CacheName": "Willkommen in Osternienburg 5",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC61M3T",
+      "CacheName": "Jugendfreizeitzentrum Osternienburg",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC61M47",
+      "CacheName": "Ice Ice Baby",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": true,
+      "Available": false,
+      "CacheCode": "GC61M5P",
+      "CacheName": "Am Denkmal",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": true,
+      "Available": false,
+      "CacheCode": "GC61M7Q",
+      "CacheName": "R1 Europaradweg - Porst",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC61M87",
+      "CacheName": "R1 Europaradweg - Ein Kreuz am Rande",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC64EEZ",
+      "CacheName": "An der Mauer zum Jenseits",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC65FXD",
+      "CacheName": "Ein weiterer Riese von Köthen (Die Trasse)",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC65H6H",
+      "CacheName": "Ein weiterer Riese von Köthen (Abnehmer I) LP",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC65P6N",
+      "CacheName": "Der Mord an Theodor Klepp",
+      "CacheType": 2,
+      "Premium": true,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC65PXP",
+      "CacheName": "Das Gleis",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC660RC",
+      "CacheName": "Der Wasserturm von Köthen",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC662VA",
+      "CacheName": "R1 Frenz",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC662XH",
+      "CacheName": "Der Überblick",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC666QV",
+      "CacheName": "Le-La #4 - willkommen im Grünen ",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC666RD",
+      "CacheName": "Le-La #5 - die Badestelle",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC666RV",
+      "CacheName": "Le-La #6 - an der Rohrbrücke",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC666T7",
+      "CacheName": "Le-La #7 - zurück zu den Wurzeln",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC666TJ",
+      "CacheName": "Le-La #8 - Raketenabschussrampe?",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC66WAE",
+      "CacheName": "Lost Factory (LP)",
+      "CacheType": 2,
+      "Premium": true,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC689HM",
+      "CacheName": "Coca-Cola nicht Light",
+      "CacheType": 2,
+      "Premium": true,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": true,
+      "Available": false,
+      "CacheCode": "GC68QYF",
+      "CacheName": "Am Kuhteich",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC6CFTW",
+      "CacheName": "Zwei zum Preis von Einem",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": false,
+      "CacheCode": "GC6EKP4",
+      "CacheName": "Die Martinskirche",
+      "CacheType": 2,
+      "Premium": true,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC6GM7J",
+      "CacheName": "PSV 05 Porst",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC6MB49",
+      "CacheName": "Hochschule Anhalt Fachbereich Informatik (rel.)",
+      "CacheType": 2,
+      "Premium": true,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC6N911",
+      "CacheName": "Das Kreuz",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": true,
+      "CacheCode": "GC6NK72",
+      "CacheName": "Der alte Durchgang ",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 0
+    },
+    {
+      "Archived": false,
+      "Available": false,
+      "CacheCode": "GC6QJED",
+      "CacheName": "Ehemaliger Wohnkomplex LP",
+      "CacheType": 2,
+      "Premium": false,
+      "TrackableCount": 5
+    }
+  ]
+}

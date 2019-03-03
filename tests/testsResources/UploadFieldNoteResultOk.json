@@ -1,0 +1,12 @@
+{
+  "Status": {
+    "StatusCode": 0,
+    "StatusMessage": "OK",
+    "ExceptionDetails": "",
+    "Warnings": []
+  },
+  "Log": null,
+  "Souvenirs": [],
+  "HasValidFacebookAccountLinked": false,
+  "HasValidTwitterAccountLinked": false
+}

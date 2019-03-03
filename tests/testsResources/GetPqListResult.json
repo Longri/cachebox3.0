@@ -1,0 +1,64 @@
+{
+  "Status": {
+    "StatusCode": 0,
+    "StatusMessage": "OK",
+    "ExceptionDetails": "",
+    "Warnings": []
+  },
+  "PocketQueryList": [
+    {
+      "GUID": "a1244aab-f585-4648-8dea-f9b979b533be",
+      "Name": "Birkenwerder",
+      "DateLastGenerated": "\/Date(1521969736000-0700)\/",
+      "IsDownloadAvailable": false,
+      "FileSizeInBytes": 1899174,
+      "PQSearchType": 1,
+      "PQCount": 1000
+    },
+    {
+      "GUID": "85c3888c-d097-4055-b02e-0f182d71fa9e",
+      "Name": "H&#246;now",
+      "DateLastGenerated": "\/Date(1521971482000-0700)\/",
+      "IsDownloadAvailable": true,
+      "FileSizeInBytes": 1753293,
+      "PQSearchType": 1,
+      "PQCount": 1000
+    },
+    {
+      "GUID": "28348f8b-b1a4-4908-9d05-b1dd6ecbaefe",
+      "Name": "HomeZone",
+      "DateLastGenerated": "\/Date(1521973466000-0700)\/",
+      "IsDownloadAvailable": true,
+      "FileSizeInBytes": 2163334,
+      "PQSearchType": 1,
+      "PQCount": 1000
+    },
+    {
+      "GUID": "767c9cb9-6f46-46fd-933c-8591e9963145",
+      "Name": "Joachimstal",
+      "DateLastGenerated": "\/Date(1521876773000-0700)\/",
+      "IsDownloadAvailable": true,
+      "FileSizeInBytes": 1707088,
+      "PQSearchType": 1,
+      "PQCount": 1000
+    },
+    {
+      "GUID": "04d0c4bb-e95f-44a9-820a-f27b19d6f5f0",
+      "Name": "LongriWork",
+      "DateLastGenerated": "\/Date(1522048271000-0700)\/",
+      "IsDownloadAvailable": true,
+      "FileSizeInBytes": 1570674,
+      "PQSearchType": 5,
+      "PQCount": 761
+    },
+    {
+      "GUID": "e6071d91-9425-4828-94f2-543c7fafc899",
+      "Name": "Wandlitz",
+      "DateLastGenerated": "\/Date(1522049839000-0700)\/",
+      "IsDownloadAvailable": true,
+      "FileSizeInBytes": 1847508,
+      "PQSearchType": 1,
+      "PQCount": 1000
+    }
+  ]
+}
