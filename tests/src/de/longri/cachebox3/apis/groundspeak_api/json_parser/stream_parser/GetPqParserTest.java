@@ -96,7 +96,9 @@ class GetPqParserTest {
             }
         });
 
-        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/streamedPqCancel.zipTest");
+        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/GetPQResult.json")
+                .parent().child("streamedPqCancel.zipTest");
+
 
         if (targetFile.exists()) {
             assertThat("Target file must deleted", targetFile.delete());

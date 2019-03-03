@@ -306,7 +306,7 @@ public class PqImport {
                 for (ListViewItemInterface item : selectedItems) {
                     String pqName = ((PqListItem) item).getPocketQuery().name;
 
-                    if (existMap.containsKey(pqName)) {
+                    if (pqName != null && existMap.containsKey(pqName)) {
                         database.execSQL("UPDATE  PocketQueries SET(CreationTimeOfPQ) VALUES('" + dateStringNow + "') WHERE id=" + existMap.get(pqName));
                         log.debug("Update PQ import '{}' to {}", pqName, dateStringNow);
                     } else {
