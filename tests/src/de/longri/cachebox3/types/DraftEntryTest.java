@@ -41,7 +41,7 @@ public class DraftEntryTest {
             FileHandle resourcesFolder = Gdx.files.absolute("testsResources");
             if (!resourcesFolder.exists()) {
                 //try set /core path
-                resourcesFolder = Gdx.files.absolute("core/testsResources");
+                resourcesFolder = Gdx.files.absolute("tests/testsResources");
             }
 
             FileHandle fieldNotesFileHandle = resourcesFolder.child("fieldNotes.db3");
