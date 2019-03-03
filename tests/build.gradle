@@ -37,6 +37,8 @@ dependencies {
     implementation group: 'org.openjdk.jol', name: 'jol-core', version: '0.9'
     implementation 'org.mapsforge:mapsforge-core:0.8.0'
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
+    implementation group: 'org.lwjgl.lwjgl', name: 'lwjgl', version: '2.9.2'
+
 
     implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
     implementation "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
