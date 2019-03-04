@@ -34,7 +34,6 @@ class SettingBaseTest {
 
     static {
         TestUtils.initialGdx();
-
     }
 
     private static final SettingBool testBool = (SettingBool) Config.settingsList.addSetting(new SettingBool("testBool"
