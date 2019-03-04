@@ -15,8 +15,7 @@ repositories {
 dependencies {
     
     testRuntime(
-            'org.junit.jupiter:junit-jupiter-engine:5.0.1',
-            'org.junit.vintage:junit-vintage-engine:5.4.0'
+            'org.junit.jupiter:junit-jupiter-engine:5.0.1'
     )
 
     testCompile(
@@ -26,6 +25,9 @@ dependencies {
     implementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.0.1'
     implementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.0.1'
     implementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.0.1'
+
+    // libgdx
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 
 
     implementation project(":core")

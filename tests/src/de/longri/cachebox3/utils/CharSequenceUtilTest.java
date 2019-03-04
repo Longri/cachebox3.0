@@ -31,17 +31,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Created by Longri on 27.10.2017.
  */
-public class CharSequenceUtilTest {
+class CharSequenceUtilTest {
 
-    static CharArray buffer = new CharArray();
+    private static CharArray buffer = new CharArray();
 
-    static String t1 = "Test";
-    static String t2 = "String";
-    static String t3 = "Added";
-    static MutableString m1 = new MutableString(buffer, t1);
-    static MutableString m3 = new MutableString(buffer, t3);
-    static MutableString m2 = new MutableString(buffer, t2);
-    static String shouldString = t1 + t2 + t3;
+    private static String t1 = "Test";
+    private static String t2 = "String";
+    private static String t3 = "Added";
+    private static MutableString m1 = new MutableString(buffer, t1);
+    private static MutableString m3 = new MutableString(buffer, t3);
+    private static MutableString m2 = new MutableString(buffer, t2);
+    private static String shouldString = t1 + t2 + t3;
 
     static {
         m1.add(m2).add(m3);
@@ -91,7 +91,7 @@ public class CharSequenceUtilTest {
     }
 
 
-    char[] PARSE_ARRAY = " 49.349817 219011721901171232  3810940 TRUE False".toCharArray();
+    private char[] PARSE_ARRAY = " 49.349817 219011721901171232  3810940 TRUE False".toCharArray();
 
     @Test
     void parseDouble() {
@@ -106,7 +106,7 @@ public class CharSequenceUtilTest {
 
         boolean throwedException = false;
         try {
-            int j = CharSequenceUtil.parseInteger(PARSE_ARRAY, 11, 18);
+           CharSequenceUtil.parseInteger(PARSE_ARRAY, 11, 18);
         } catch (ArithmeticException e) {
             throwedException = true;
         }
@@ -122,20 +122,18 @@ public class CharSequenceUtilTest {
     @Test
     void parseBoolean() {
         boolean b = CharSequenceUtil.parseBoolean(PARSE_ARRAY, 39, 4);
-        assertThat("Value should be true", b == true);
+        assertThat("Value should be true", b);
 
         b = CharSequenceUtil.parseBoolean(PARSE_ARRAY, 44, 5);
-        assertThat("Value should be false", b == false);
+        assertThat("Value should be false", !b);
     }
 
 
-    char[] PARSE_DATE_ARRAY = " 49.349817 219011721901171232 2011-07-05T12:54:02.308107Z 3810940 2011-04-16T07:00:00Z TRUE 2011-04-17T03:39:24.4 False".toCharArray();
+    private char[] PARSE_DATE_ARRAY = " 49.349817 219011721901171232 2011-07-05T12:54:02.308107Z 3810940 2011-04-16T07:00:00Z TRUE 2011-04-17T03:39:24.4 False".toCharArray();
     private final Locale locale = Locale.getDefault();
-    private final String STRING_PATTERN1 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private final String STRING_PATTERN2 = "yyyy-MM-dd'T'HH:mm:ss";
     private final String STRING_PATTERN3 = "yyyy-MM-dd'T'HH:mm:ss.S";
 
-    private final SimpleDateFormat DATE_PATTERN_1 = new SimpleDateFormat(STRING_PATTERN1, locale);
     private final SimpleDateFormat DATE_PATTERN_2 = new SimpleDateFormat(STRING_PATTERN2, locale);
     private final SimpleDateFormat DATE_PATTERN_3 = new SimpleDateFormat(STRING_PATTERN3, locale);
 
@@ -192,7 +190,7 @@ public class CharSequenceUtilTest {
     }
 
     @Test
-    public void getHtmlStringTest() {
+    void getHtmlStringTest() {
 
         char[] source = ("&lt;p&gt;Ein Spaziergang führt Euch durch die Geschichte der\r\n" +
                 "Wollankstraße in Berlin, die auch durch die Berliner Mauer stark\r\n" +
@@ -217,7 +215,7 @@ public class CharSequenceUtilTest {
     //# Helper
     //##################################################################
 
-    public static boolean equals(CharSequence s1, CharSequence s2) {
+    static boolean equals(CharSequence s1, CharSequence s2) {
         if (s1 == null || s2 == null) return false;
         if (s1.length() != s2.length()) return false;
         int n = s1.length();
