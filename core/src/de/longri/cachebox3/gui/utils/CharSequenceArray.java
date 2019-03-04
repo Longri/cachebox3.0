@@ -86,6 +86,18 @@ public class CharSequenceArray extends CharArray implements CharSequence {
         return new String(this.shrink());
     }
 
+    public boolean equals(String other) {
+        if (this.hashCode() != ((CharSequence) other).hashCode()) return false;
+            int n = this.size;
+            int i = 0;
+            while (n-- != 0) {
+                if (this.items[i] != ((CharSequence) other).charAt(i))
+                    return false;
+                i++;
+            }
+            return true;
+    }
+
 
     @Override
     public boolean equals(Object other) {

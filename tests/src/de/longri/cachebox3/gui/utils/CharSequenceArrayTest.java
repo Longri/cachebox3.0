@@ -39,7 +39,7 @@ class CharSequenceArrayTest {
         CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
 
         for (int i = 0, n = testString.length(); i < n; i++) {
-            assertThat("Char at: " + Integer.toString(i) + " must equals",
+            assertThat("Char at: " + i + " must equals",
                     testString.charAt(i) == charSequenceArray.charAt(i));
         }
 
@@ -54,7 +54,7 @@ class CharSequenceArrayTest {
         CharSequence subCharArray = charSequenceArray.subSequence(3, 6);
 
         for (int i = 0, n = subString.length(); i < n; i++) {
-            assertThat("Char at: " + Integer.toString(i) + " must equals",
+            assertThat("Char at: " + i + " must equals",
                     subString.charAt(i) == subCharArray.charAt(i));
         }
 
@@ -70,7 +70,7 @@ class CharSequenceArrayTest {
         int[] charArrayInt = charSequenceArray.chars().toArray();
 
         for (int i = 0, n = stringInt.length; i < n; i++) {
-            assertThat("Int at: " + Integer.toString(i) + " must equals",
+            assertThat("Int at: " + i + " must equals",
                     stringInt[i] == charArrayInt[i]);
         }
 
@@ -85,7 +85,7 @@ class CharSequenceArrayTest {
         int[] charArrayInt = charSequenceArray.codePoints().toArray();
 
         for (int i = 0, n = stringInt.length; i < n; i++) {
-            assertThat("Int at: " + Integer.toString(i) + " must equals",
+            assertThat("Int at: " + i + " must equals",
                     stringInt[i] == charArrayInt[i]);
         }
     }
