@@ -42,7 +42,7 @@ public class issue_166 {
     @BeforeAll
     static void setUp() {
         TestUtils.initialGdx();
-        workpath = TestUtils.getResourceFileHandle("testsResources").child("TestMapDirs");
+        workpath = TestUtils.getResourceFileHandle("testsResources",false).child("TestMapDirs");
         workpath.mkdirs();
 
 
@@ -74,7 +74,7 @@ public class issue_166 {
 
 
         //copy some test maps to test folder
-        FileHandle pankowMap = TestUtils.getResourceFileHandle("testsResources/pankow.map");
+        FileHandle pankowMap = TestUtils.getResourceFileHandle("testsResources/pankow.map",true);
         FileHandle repositotyCopy = workpath.child("repository").child("maps").child("reposetoryMap.map");
         repositotyCopy.parent().mkdirs();
         pankowMap.copyTo(repositotyCopy);

@@ -48,7 +48,7 @@ class XmlStreamParserTest {
 
         final Logger log = LoggerFactory.getLogger(XmlStreamParserTest.class);
 
-        final FileHandle testFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx");
+        final FileHandle testFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx",true);
         final XmlStreamParser parser = new XmlStreamParser();
         parser.registerDataHandler("/gpx/name", new XmlStreamParser.DataHandler() {
             @Override

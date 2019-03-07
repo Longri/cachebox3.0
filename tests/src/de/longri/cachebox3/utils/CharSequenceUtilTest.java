@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Created by Longri on 27.10.2017.
  */
-class CharSequenceUtilTest {
+public class CharSequenceUtilTest {
 
     private static CharArray buffer = new CharArray();
 
@@ -215,7 +215,7 @@ class CharSequenceUtilTest {
     //# Helper
     //##################################################################
 
-    static boolean equals(CharSequence s1, CharSequence s2) {
+    public static boolean equals(CharSequence s1, CharSequence s2) {
         if (s1 == null || s2 == null) return false;
         if (s1.length() != s2.length()) return false;
         int n = s1.length();

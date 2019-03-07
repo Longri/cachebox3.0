@@ -292,6 +292,7 @@ public class Database {
                 FileHandle parentDirectory = path.parent();
 
                 if (!parentDirectory.exists()) {
+                    WAIT.set(false);
                     throw new SQLiteGdxException("Directory for DB doesn't exist: " + parentDirectory.file().getAbsolutePath());
                 }
 

@@ -32,6 +32,7 @@ dependencies {
 
     implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
     implementation "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+    implementation "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
 
     // libgdx
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"

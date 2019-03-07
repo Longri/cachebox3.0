@@ -24,7 +24,7 @@ class ImmutableCacheTest {
         TestUtils.initialGdx();
 
         // copy testDb
-        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3");
+        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3",true);
         copyDbFileHandle = testDbFileHandle.parent().child("testImutableCache.db3");
         if (copyDbFileHandle.exists()) {
             // delete first

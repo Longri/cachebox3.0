@@ -19,7 +19,7 @@ class UnZipTest {
 
     @Test
     void extractFolder() throws IOException, InterruptedException {
-        FileHandle zipFile = TestUtils.getResourceFileHandle("testsResources/zip/zipTest.zip");
+        FileHandle zipFile = TestUtils.getResourceFileHandle("testsResources/zip/zipTest.zip",true);
         FileHandle extractedFolder = zipFile.parent().child("zipTest");
         FileHandle test1 = extractedFolder.child("text1.txt");
         FileHandle test2 = extractedFolder.child("text2.txt");

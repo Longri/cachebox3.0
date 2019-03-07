@@ -44,7 +44,7 @@ class GpxFileImporterTest {
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
-        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx");
+        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC2T9RW.gpx",true);
         final AtomicInteger cacheCount = new AtomicInteger();
         final AtomicInteger waypointCount = new AtomicInteger();
         final AtomicInteger logCount = new AtomicInteger();
@@ -89,7 +89,7 @@ class GpxFileImporterTest {
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
-        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC52BKF.gpx");
+        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GC52BKF.gpx",true);
         final AtomicInteger cacheCount = new AtomicInteger();
         final AtomicInteger waypointCount = new AtomicInteger();
         final AtomicInteger logCount = new AtomicInteger();
@@ -156,8 +156,8 @@ class GpxFileImporterTest {
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
-        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ/6004539_HomeZone.gpx");
-        FileHandle gpxFile2 = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ/6004539_HomeZone-wpts.gpx");
+        FileHandle gpxFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ/6004539_HomeZone.gpx",true);
+        FileHandle gpxFile2 = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ/6004539_HomeZone-wpts.gpx",true);
         final AtomicInteger cacheCount = new AtomicInteger();
         final AtomicInteger waypointCount = new AtomicInteger();
         final AtomicInteger logCount = new AtomicInteger();
@@ -234,7 +234,7 @@ class GpxFileImporterTest {
         GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(TEST_DB, importHandler);
         AbstractCache cache;
         //=================================================================================
-        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/gsak-correctedCoords.gpx"));
+        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/gsak-correctedCoords.gpx",true));
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
         cache = TEST_DB.getFromDbByGcCode("GC250Q2", true);
         TEST_CACHES.GC250Q2.assertCache(cache, TEST_DB);
@@ -245,7 +245,7 @@ class GpxFileImporterTest {
         //=================================================================================
 
         //=================================================================================
-        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/TestCache3_WP_Parents_1_1.gpx"));
+        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/TestCache3_WP_Parents_1_1.gpx",true));
         assertThat("Cache count must be 2", TEST_DB.getCacheCountOnThisDB() == 2);
         cache = TEST_DB.getFromDbByGcCode("ACWP003", true);
         TEST_CACHES.ACWP003.assertCache(cache, TEST_DB);
@@ -293,7 +293,7 @@ class GpxFileImporterTest {
         AbstractCache cache;
 
         //=================================================================================
-        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/TestCache3_WP_Parents_1_0.gpx"));
+        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/TestCache3_WP_Parents_1_0.gpx",true));
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
         cache = TEST_DB.getFromDbByGcCode("ACWP003", true);
         TEST_CACHES.ACWP003.assertCache(cache, TEST_DB);
@@ -341,7 +341,7 @@ class GpxFileImporterTest {
         AbstractCache cache;
 
         //=================================================================================
-        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/acb_export.gpx"));
+        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/acb_export.gpx",true));
         assertThat("Cache count must be 350", TEST_DB.getCacheCountOnThisDB() == 350);
         cache = TEST_DB.getFromDbByGcCode("GC2V0NP", true);
         TEST_CACHES.GC2V0NP.assertCache(cache, TEST_DB);
@@ -389,7 +389,7 @@ class GpxFileImporterTest {
         AbstractCache cache;
 
         //=================================================================================
-        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/OCF19A.gpx"));
+        importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/OCF19A.gpx",true));
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
         cache = TEST_DB.getFromDbByGcCode("OCF19A", true);
         TEST_CACHES.OCF19A.assertCache(cache, TEST_DB);

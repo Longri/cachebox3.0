@@ -35,7 +35,7 @@ class FilterPropertiesTest {
         TestUtils.initialGdx();
         testDb = new Database(Database.DatabaseType.CacheBox3);
         try {
-            testDb.startUp(TestUtils.getResourceFileHandle("testsResources/Database/cacheboxFilterTestDB.db3"));
+            testDb.startUp(TestUtils.getResourceFileHandle("testsResources/Database/cacheboxFilterTestDB.db3", false));
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }

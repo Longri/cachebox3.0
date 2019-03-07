@@ -161,10 +161,10 @@ public class TestUtils {
         }
     }
 
-    public static FileHandle getResourceFileHandle(String path) {
+    public static FileHandle getResourceFileHandle(String path, boolean mustexist) {
         File file = new File(path);
 
-        if (!file.exists()) {
+        if (mustexist&&!file.exists()) {
             //try set /tests path
             path = "tests/" + path;
             file = new File(path);
