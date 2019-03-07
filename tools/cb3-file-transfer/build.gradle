@@ -6,7 +6,8 @@ dependencies {
 
 
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-
+    implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
 }
 

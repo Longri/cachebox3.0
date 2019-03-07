@@ -15,20 +15,20 @@
  */
 package de.longri.cachebox3;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.*;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.files.FileHandle;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
-
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.BuildInfo;
 
+import de.longri.cachebox3.utils.GeoUtils;
 import org.apache.commons.codec.Charsets;
-import org.mapsforge.core.util.LatLongUtils;
-import org.slf4j.impl.DummyLogApplication;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -41,32 +41,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class TestUtils {
 
+    private static boolean gdxIsInitial = false;
+
     public static void initialGdx() {
-        if (Gdx.net != null) return;
-        new JUnitGdxTestApp("JUnitTest");
-
+        if (gdxIsInitial) return;
+        gdxIsInitial = true;
         BuildInfo.setTestBuildInfo("JUnitTest");
-        LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
-//        Gdx.net = new LwjglNet(configuration);
-        Gdx.net = new LwjglNet();
-
-
-        Gdx.files = new LwjglFiles();
-        Gdx.app = new DummyLogApplication() {
+        Gdx.app = new HeadlessApplication(new Game() {
             @Override
-            public ApplicationType getType() {
-                return ApplicationType.HeadlessDesktop;
+            public void create() {
+
             }
-        };
-        Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
+        });
+        Gdx.files = Gdx.app.getFiles();
+        Gdx.net = Gdx.app.getNet();
         CB.WorkPath = "!!!";
         VisUI.load(new Skin());
         CB.initThreadCheck();
+
     }
 
     public static double roundDoubleCoordinate(double value) {
-        value = Math.round(LatLongUtils.degreesToMicrodegrees(value));
-        value = LatLongUtils.microdegreesToDegrees((int) value);
+        value = Math.round(GeoUtils.degreesToMicrodegrees(value));
+        value = GeoUtils.microdegreesToDegrees((int) value);
         return value;
     }
 

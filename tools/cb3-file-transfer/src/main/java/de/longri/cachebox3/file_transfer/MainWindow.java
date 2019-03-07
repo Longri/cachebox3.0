@@ -15,8 +15,9 @@
  */
 package de.longri.cachebox3.file_transfer;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglNet;
@@ -24,8 +25,6 @@ import de.longri.cachebox3.utils.BuildInfo;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import org.slf4j.impl.DummyLogApplication;
 
 
 /**
@@ -44,19 +43,14 @@ public class MainWindow extends Application {
         if (Gdx.net != null) return;
         BuildInfo.setTestBuildInfo("JUnitTest");
 
-//        LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
-//        Gdx.net = new LwjglNet(configuration);
-
-        Gdx.net = new LwjglNet();
-        Gdx.files = new LwjglFiles();
-        Gdx.app = new DummyLogApplication() {
+        Gdx.app = new HeadlessApplication(new Game() {
             @Override
-            public ApplicationType getType() {
-                return ApplicationType.HeadlessDesktop;
-            }
-        };
-        Gdx.app.setApplicationLogger(new LwjglApplicationLogger());
+            public void create() {
 
+            }
+        });
+        Gdx.net = Gdx.app.getNet();
+        Gdx.files =  Gdx.app.getFiles();
 
     }
 
