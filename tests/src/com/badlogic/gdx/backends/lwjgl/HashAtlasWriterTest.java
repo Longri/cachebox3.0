@@ -47,8 +47,7 @@ class HashAtlasWriterTest {
 
         if (EXCLUDE_FROM_TRAVIS.VALUE) return;
 
-        // Initial JUnit GDX App
-        new JUnitGdxTestApp("TestHashWriter");
+        TestUtils.initialGdx();
 
         testFolder = Gdx.files.local("TestHashWriter");
         testFolder.mkdirs();

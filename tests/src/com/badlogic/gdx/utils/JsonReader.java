@@ -26,7 +26,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.JsonValue.ValueType;
+import com.badlogic.gdx.utils.StringBuilder;
 
 /** Lightweight JSON parser.<br>
  * <br>
@@ -715,7 +717,7 @@ public class JsonReader implements BaseJsonReader {
 
     private String unescape (String value) {
         int length = value.length();
-        StringBuilder buffer = new StringBuilder(length + 16);
+        com.badlogic.gdx.utils.StringBuilder buffer = new StringBuilder(length + 16);
         for (int i = 0; i < length;) {
             char c = value.charAt(i++);
             if (c != '\\') {

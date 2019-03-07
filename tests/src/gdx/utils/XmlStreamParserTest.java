@@ -1,6 +1,7 @@
 package com.badlogic.gdx.utils;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.XmlStreamParser;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.junit.jupiter.api.Test;
