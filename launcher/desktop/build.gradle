@@ -39,8 +39,8 @@ dependencies {
     implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "de.longri.cachebox3.desktop.touch.TouchLauncher"

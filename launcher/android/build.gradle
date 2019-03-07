@@ -81,8 +81,8 @@ dependencies {
     implementation "org.mapsforge:vtm-android:$vtmVersion:natives-x86_64"
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders
