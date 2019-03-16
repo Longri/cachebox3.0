@@ -25,6 +25,8 @@ public interface LocationEvents {
 
     void newAltitude(double altitude);
 
+    void newTilt(double tilt);
+
     void newBearing(float bearing, boolean gps);
 
     void newSpeed(double speed);

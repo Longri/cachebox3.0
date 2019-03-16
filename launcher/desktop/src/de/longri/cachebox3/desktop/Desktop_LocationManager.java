@@ -25,6 +25,8 @@ import de.longri.cachebox3.locator.Region;
 import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.utils.MathUtils;
 
+import static org.oscim.map.Map.POSITION_EVENT;
+
 /**
  * Created by Longri on 09.03.18.
  */
@@ -100,10 +102,10 @@ public class Desktop_LocationManager extends LocationManager {
 
 
         double lastcourse;
+        double lastTilt;
 
         @Override
         public void valueChanged() {
-
             {//check region handler
                 LatLong latLong = new LatLong(GPSData.getLatitude(), GPSData.getLongitude());
                 clearList.clear();
@@ -139,7 +141,10 @@ public class Desktop_LocationManager extends LocationManager {
                 locationEvents.newBearing((float) Math.toRadians(GPSData.getCourse()), true);
                 locationEvents.newBearing((float) Math.toRadians(GPSData.getCourse()), false);
                 lastcourse = GPSData.getCourse();
-            } else {
+            } else if(lastTilt!=GPSData.getTilt()){
+                locationEvents.newTilt(GPSData.getTilt());
+                lastTilt= GPSData.getTilt();
+            }else {
 
                 //check distance filter
                 MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, lastLat, lastLon, GPSData.getLatitude(), GPSData.getLongitude(), distanceResult);

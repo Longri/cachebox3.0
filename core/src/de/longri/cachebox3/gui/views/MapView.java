@@ -389,7 +389,7 @@ public class MapView extends AbstractView {
         //set initial direction
         infoPanel.setNewValues(EventHandler.getMyPosition(), EventHandler.getHeading());
         if (!menuInShow) {
-            if(CB.lastMapState.isEmpty()){
+            if (CB.lastMapState.isEmpty()) {
                 //load from config
                 CB.lastMapState.deserialize(Config.lastMapState.getValue());
             }
@@ -1129,4 +1129,9 @@ public class MapView extends AbstractView {
         return infoBubble != null;
     }
 
+    public void setTilt(double tilt) {
+        MapPosition actPosition = map.getMapPosition();
+        actPosition.tilt = (float) tilt;
+        map.setMapPosition(actPosition);
+    }
 }

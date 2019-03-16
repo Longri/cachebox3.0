@@ -28,6 +28,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
+import ch.fhnw.imvs.gpssimulator.components.TiltPanel;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.events.location.LocationEvents;
 import org.mapsforge.map.swing.view.MapPanel;
@@ -41,6 +45,12 @@ import ch.fhnw.imvs.gpssimulator.nmea.GLL;
 import ch.fhnw.imvs.gpssimulator.nmea.GSA;
 import ch.fhnw.imvs.gpssimulator.nmea.NMEASentence;
 import ch.fhnw.imvs.gpssimulator.nmea.RMC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.impl.LibgdxLogger;
+import org.slf4j.impl.LoggerInit;
+
+import static com.badlogic.gdx.Application.LOG_DEBUG;
 
 public class SimulatorMain {
 
@@ -77,6 +87,7 @@ public class SimulatorMain {
         nmeaTypes.add(new GLL());
         box.add(new LocationPanel()); // add location component
         box.add(new CoursePanel()); // add course component
+        box.add(new TiltPanel()); // add course tilt
         box.add(new XMLPanel()); // add XML waypoints component
 
         JPanel rightbox = new JPanel();
@@ -105,5 +116,23 @@ public class SimulatorMain {
         f.pack();
         f.setResizable(false);
         f.setVisible(true);
+
+
+        //initial Logger with HeadlessAplication for GDX
+        Gdx.app = new HeadlessApplication(new Game() {
+            @Override
+            public void create() {
+
+            }
+        });
+        Gdx.net = Gdx.app.getNet();
+        Gdx.files =  Gdx.app.getFiles();
+
+        Gdx.app.setLogLevel(LOG_DEBUG);
+        LoggerInit.initlogger();
+
+
+        // add Gps
+
     }
 }

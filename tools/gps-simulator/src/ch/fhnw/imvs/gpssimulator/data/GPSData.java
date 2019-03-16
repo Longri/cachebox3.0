@@ -12,12 +12,18 @@
 package ch.fhnw.imvs.gpssimulator.data;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class GPSData {
+
+    static Logger log = LoggerFactory.getLogger(GPSData.class);
+
 
     public enum Status {
         A, V
@@ -54,6 +60,7 @@ public final class GPSData {
     private static double speed;
     private static double altitude;
     private static double course;
+    private static double tilt;
     private static int satellites;
     private static int quality;
     private static FixType fixType; // 3: 3D-fix, 2: 2D-fix, 1: no-fix
@@ -94,11 +101,28 @@ public final class GPSData {
     }
 
 
+    private static CoordinateGPS_Simulator lastCoord;
+
     private static void notifyChange() {
+
+        CoordinateGPS_Simulator coord = new CoordinateGPS_Simulator(latitude, longitude, speed, altitude, course, quality, tilt);
+
+
         for (int i = 0; i < listeners.size; i++) {
             GPSDataListener l = listeners.get(i);
-            if (l != null) l.valueChanged();
+            if (l != null) {
+                if (!l.getClass().getName().startsWith("ch.fhnw.imvs.gpssimulator")) {
+                    // Listener is extern so check if changed
+                    if (!coord.equals(lastCoord)) {
+                        log.debug("Gps data changed: " + coord.toString());
+                        l.valueChanged();
+                    }
+                } else {
+                    l.valueChanged();
+                }
+            }
         }
+        lastCoord = coord;
     }
 
 
@@ -200,6 +224,17 @@ public final class GPSData {
     public static void setCourse(double course) {
         if (GPSData.course != course) {
             GPSData.course = course;
+            notifyChange();
+        }
+    }
+
+    public static double getTilt() {
+        return tilt;
+    }
+
+    public static void setTilt(double tilt) {
+        if (GPSData.tilt != tilt) {
+            GPSData.tilt = tilt;
             notifyChange();
         }
     }

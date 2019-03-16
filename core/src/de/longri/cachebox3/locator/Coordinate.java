@@ -213,11 +213,11 @@ public class Coordinate extends LatLong {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Coordinate) {
-            Coordinate coord = (Coordinate) other;
+        if (other instanceof LatLong) {
+            LatLong latLong = (LatLong) other;
 
-            double la = (this.getLatitude() > coord.getLatitude()) ? this.getLatitude() - coord.getLatitude() : coord.getLatitude() - this.getLatitude();
-            double lo = (this.getLongitude() > coord.getLongitude()) ? this.getLongitude() - coord.getLongitude() : coord.getLongitude() - this.getLongitude();
+            double la = this.getLatitude() - latLong.getLatitude();
+            double lo = this.getLongitude() - latLong.getLongitude();
 
             if (la < 0)
                 la *= -1;

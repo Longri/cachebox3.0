@@ -17,6 +17,8 @@ package de.longri.cachebox3.events.location;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Region;
 import de.longri.cachebox3.settings.Config;
@@ -121,6 +123,17 @@ public class GpsEventHelper implements LocationEvents {
     public void newAltitude(double altitude) {
         if (CB.isBackground) return;
         CB.sensoerIO.write_newAltitude(altitude);
+    }
+
+    @Override
+    public void newTilt(double tilt) {
+        // is called only from GPSSimulator on Desktop
+        if (CB.isBackground) return;
+
+        AbstractView actView = CB.viewmanager.getActView();
+        if (actView instanceof MapView) {
+            ((MapView) actView).setTilt(tilt);
+        }
     }
 
     float lastBearing;

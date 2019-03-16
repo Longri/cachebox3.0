@@ -115,6 +115,11 @@ public class BackgroundTask implements Runnable {
                             }
 
                             @Override
+                            public void newTilt(double tilt) {
+
+                            }
+
+                            @Override
                             public void newBearing(float bearing, boolean gps) {
 //                                log.debug("New Background Bearing!");
                             }
