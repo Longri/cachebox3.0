@@ -103,6 +103,7 @@ public class CB {
     public static float stateTime;
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
 
+    public static final MapState actMapState = new MapState();
     public static final MapState lastMapState = new MapState();
     public static final MapState lastMapStateBeforeCar = new MapState();
 
@@ -742,7 +743,7 @@ public class CB {
     }
 
     public static boolean isCarMode() {
-        return lastMapState.getMapMode() == MapMode.CAR;
+        return actMapState.getMapMode() == MapMode.CAR;
     }
 }
 

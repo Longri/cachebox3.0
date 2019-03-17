@@ -150,9 +150,18 @@ public class MapView extends AbstractView {
             @Override
             public void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event) {
 
+                MapPosition mapPosition = map.getMapPosition();
+                CB.actMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
+                CB.actMapState.setMapMode(mapMode);
+                CB.actMapState.setOrientation(mapPosition.bearing);
+                CB.actMapState.setTilt(mapPosition.tilt);
+                CB.actMapState.setMapOrientationMode(infoPanel.getOrientationState());
+
+                log.debug("Map state changed to:" + CB.actMapState);
+
                 if (mapMode == MapMode.CAR) {
                     storeMapstate(mapMode, lastMapMode);
-                    log.debug("Activate Carmode with last mapstate:{}", CB.lastMapState);
+                    log.debug("Activate Carmode with last mapstate:{}", CB.lastMapStateBeforeCar);
                     float bearing = -EventHandler.getHeading();
                     positionChangedHandler.setBearing(bearing);
                     setBuildingLayerEnabled(false);
@@ -197,8 +206,6 @@ public class MapView extends AbstractView {
                     storeMapstate(mapMode, null);
                     setCenterCrossLayerEnabled(true);
                 }
-//                if (event != selfEvent && mapMode != MapMode.CAR && lastMapMode != MapMode.CAR)
-//                    setMapState(CB.lastMapState);
             }
         }) {
             @Override
@@ -242,8 +249,11 @@ public class MapView extends AbstractView {
         CB.lastMapState.setTilt(mapPosition.tilt);
         CB.lastMapState.setMapOrientationMode(infoPanel.getOrientationState());
 
-        if (beforeCar != null)
+        if (beforeCar != null) {
             CB.lastMapStateBeforeCar.set(CB.lastMapState);
+            CB.lastMapStateBeforeCar.setMapMode(beforeCar);
+        }
+
 
         log.debug("store MapState: " + CB.lastMapState);
 
@@ -266,6 +276,7 @@ public class MapView extends AbstractView {
         mapStateButton.setMapMode(mapState.getMapMode(), true, selfEvent);
         infoPanel.setMapOrientationMode(mapState.getMapOrientationMode());
         map.setMapPosition(mapPosition);
+        map.updateMap(true);
     }
 
     private void setCenterCrossLayerEnabled(boolean enabled) {
@@ -392,6 +403,7 @@ public class MapView extends AbstractView {
             if (CB.lastMapState.isEmpty()) {
                 //load from config
                 CB.lastMapState.deserialize(Config.lastMapState.getValue());
+                CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
             }
             restoreMapstate(CB.lastMapState);
         } else

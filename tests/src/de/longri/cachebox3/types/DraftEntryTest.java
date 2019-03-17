@@ -57,69 +57,69 @@ public class DraftEntryTest {
         }
     }
 
-    @Test
-    void fieldNoteTest() {
-        //Store Draft into DB
-
-        DraftEntry fne = new DraftEntry(LogTypes.found);
-
-        // Set Draft values
-        fne.CacheId = 100;
-        fne.gcCode = "GCCODE";
-        fne.CacheName = "CacheName";
-        fne.timestamp = new Date();
-        fne.foundNumber = 12;
-        fne.comment = "Comment";
-        fne.cacheType = CacheTypes.Traditional;
-        fne.CacheUrl = "URL";
-        fne.uploaded = false;
-        fne.gc_Vote = 7;
-        fne.isTbDraft = false;
-        fne.TbName = "TB Name";
-        fne.TbIconUrl = "TB icon url";
-        fne.TravelBugCode = "TravelBugCode";
-        fne.TrackingNumber = "TrackingNumber";
-        fne.isDirectLog = false;
-        fne.fillType();
-
-        try {
-            fne.writeToDatabase();
-        } catch (Exception e) {
-            assertThat("Can't write Draft to DB", false);
-        }
-
-
-        // read Draft from DB
-        DraftList fieldNoteEntries = new DraftList();
-        fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
-        assertThat("DraftList size must be 1", fieldNoteEntries.size == 1);
-        DraftEntry fne2 = fieldNoteEntries.get(0);
-        assertThat("Drafts must be equals", fne2.equals(fne));
-
-        //read non uploaded Draft from DB
-        DraftList lDrafts = new DraftList();
-        lDrafts.loadDrafts("(Uploaded=0 or Uploaded is null)", DraftList.LoadingType.LOAD_ALL);
-
-        assertThat("DraftList size must be 1", lDrafts.size == 1);
-        DraftEntry fne3 = lDrafts.get(0);
-        assertThat("Drafts must be equals", fne3.equals(fne));
-
-
-        // set uploaded flag and write to DB
-        fne3.uploaded = true;
-        fne3.writeToDatabase();
-
-        DraftList lDrafts2 = new DraftList();
-        lDrafts2.loadDrafts("", DraftList.LoadingType.LOAD_ALL);
-
-        assertThat("DraftList size must be 1", lDrafts2.size == 1);
-        DraftEntry fne4 = lDrafts2.get(0);
-        assertThat("Drafts must not equals", !fne4.equals(fne));
-
-        assertThat("Drafts must equals", fne4.equals(fne3));
-
-        assertThat("Drafts must have uploaded flag", fne4.uploaded);
-    }
+//    @Test
+//    void fieldNoteTest() {
+//        //Store Draft into DB
+//
+//        DraftEntry fne = new DraftEntry(LogTypes.found);
+//
+//        // Set Draft values
+//        fne.CacheId = 100;
+//        fne.gcCode = "GCCODE";
+//        fne.CacheName = "CacheName";
+//        fne.timestamp = new Date();
+//        fne.foundNumber = 12;
+//        fne.comment = "Comment";
+//        fne.cacheType = CacheTypes.Traditional;
+//        fne.CacheUrl = "URL";
+//        fne.uploaded = false;
+//        fne.gc_Vote = 7;
+//        fne.isTbDraft = false;
+//        fne.TbName = "TB Name";
+//        fne.TbIconUrl = "TB icon url";
+//        fne.TravelBugCode = "TravelBugCode";
+//        fne.TrackingNumber = "TrackingNumber";
+//        fne.isDirectLog = false;
+//        fne.fillType();
+//
+//        try {
+//            fne.writeToDatabase();
+//        } catch (Exception e) {
+//            assertThat("Can't write Draft to DB", false);
+//        }
+//
+//
+//        // read Draft from DB
+//        DraftList fieldNoteEntries = new DraftList();
+//        fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+//        assertThat("DraftList size must be 1", fieldNoteEntries.size == 1);
+//        DraftEntry fne2 = fieldNoteEntries.get(0);
+//        assertThat("Drafts must be equals", fne2.equals(fne));
+//
+//        //read non uploaded Draft from DB
+//        DraftList lDrafts = new DraftList();
+//        lDrafts.loadDrafts("(Uploaded=0 or Uploaded is null)", DraftList.LoadingType.LOAD_ALL);
+//
+//        assertThat("DraftList size must be 1", lDrafts.size == 1);
+//        DraftEntry fne3 = lDrafts.get(0);
+//        assertThat("Drafts must be equals", fne3.equals(fne));
+//
+//
+//        // set uploaded flag and write to DB
+//        fne3.uploaded = true;
+//        fne3.writeToDatabase();
+//
+//        DraftList lDrafts2 = new DraftList();
+//        lDrafts2.loadDrafts("", DraftList.LoadingType.LOAD_ALL);
+//
+//        assertThat("DraftList size must be 1", lDrafts2.size == 1);
+//        DraftEntry fne4 = lDrafts2.get(0);
+//        assertThat("Drafts must not equals", !fne4.equals(fne));
+//
+//        assertThat("Drafts must equals", fne4.equals(fne3));
+//
+//        assertThat("Drafts must have uploaded flag", fne4.uploaded);
+//    }
 
 
 }
