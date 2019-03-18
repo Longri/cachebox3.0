@@ -32,7 +32,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.gui.actions.*;
-import de.longri.cachebox3.gui.actions.show_vies.*;
+import de.longri.cachebox3.gui.actions.show_views.*;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
@@ -70,18 +70,18 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     private Slider slider;
     private float sliderPos = 0;
     private final CacheboxMain main;
-    private final Action_Show_DescriptionView action_show_descriptionView = new Action_Show_DescriptionView();
-    private final Action_Show_WaypointView action_show_waypointView = new Action_Show_WaypointView();
-    private final Action_Show_LogView action_show_logView = new Action_Show_LogView();
-    private final Action_Show_MapView action_show_mapView = new Action_Show_MapView();
-    private final Action_Show_CompassView action_show_compassView = new Action_Show_CompassView();
-    private final Action_Show_CacheList action_show_cacheList = new Action_Show_CacheList();
-    private final Action_Show_TrackListView action_show_trackListView = new Action_Show_TrackListView();
-    private final Action_Show_SpoilerView action_show_spoilerView = new Action_Show_SpoilerView();
-    private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
-    private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
+    private final Action_Show_DescriptionView action_show_descriptionView = new  Action_Show_DescriptionView();
+    private final Action_Show_WaypointView action_show_waypointView = new  Action_Show_WaypointView();
+    private final  Action_Show_LogView action_show_logView = new Action_Show_LogView();
+    private final Action_Show_MapView action_show_mapView = new  Action_Show_MapView();
+    private final Action_Show_CompassView action_show_compassView = new  Action_Show_CompassView();
+    private final Action_Show_CacheList action_show_cacheList = new  Action_Show_CacheList();
+    private final  Action_Show_TrackListView action_show_trackListView = new  Action_Show_TrackListView();
+    private final  Action_Show_SpoilerView action_show_spoilerView = new  Action_Show_SpoilerView();
+    private final  Action_Show_TrackableListView action_show_trackableListView = new  Action_Show_TrackableListView();
+    private final  Action_Show_NoteView action_show_noteView = new  Action_Show_NoteView();
     private final Action_Show_Quit action_show_quit = new Action_Show_Quit();
-    private final Action_Show_DraftsView action_show_fieldNotesView = new Action_Show_DraftsView();
+    private final  Action_Show_DraftsView action_show_fieldNotesView = new  Action_Show_DraftsView();
 
     private FilterProperties actFilter = FilterInstances.ALL;
     private final AtomicBoolean isFilters = new AtomicBoolean(false);
@@ -241,8 +241,8 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
             gestureButton.aktActionView = null;
             if (!buttonFound) {
                 for (ActionButton actionButton : gestureButton.getButtonActions()) {
-                    if (actionButton.getAction() instanceof Abstract_Action_ShowView) {
-                        Abstract_Action_ShowView viewAction = (Abstract_Action_ShowView) actionButton.getAction();
+                    if (actionButton.getAction() instanceof  Abstract_Action_ShowView) {
+                         Abstract_Action_ShowView viewAction = ( Abstract_Action_ShowView) actionButton.getAction();
                         if (viewAction.viewTypeEquals(this.actView)) {
                             gestureButton.setChecked(true);
                             gestureButton.setHasContextMenu(viewAction.hasContextMenu());
@@ -288,11 +288,14 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionParking, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
-        if (CB.isTestVersion())
+        if (CB.isTestVersion()){
             tool_button.addAction(new ActionButton(new Action_Show_TestView(), false));
-//
-        misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
-        misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
+            tool_button.addAction(new ActionButton(new  Action_Show_PlatformTestView(), false));
+
+        }
+
+        misc_button.addAction(new ActionButton(new  Action_Show_AboutView(), true, GestureDirection.Up));
+        misc_button.addAction(new ActionButton(new  Action_Show_Credits(), false));
         misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_activities.Action_Show_Settings(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));

@@ -79,7 +79,7 @@ public class TestView extends AbstractView {
         createIconTable();
     }
 
-    VisScrollPane scrollPane;
+    private VisScrollPane scrollPane;
 
     private void createIconTable() {
         this.clear();
@@ -121,13 +121,13 @@ public class TestView extends AbstractView {
             final DefaultListViewAdapter items = new DefaultListViewAdapter();
             for (int i = 0; i < itemCount; i++) {
                 MenuItem item = null;
-                if (i==0) {
+                if (i == 0) {
                     item = new MenuItem(i, i, "Historische Objekte (Bodendenkmal, Grenzstein, Burg, Gedenkstätte, Ruine, Wegkreuz/Schrein, Wrack)", null);
                     item.setCheckable(true);
-                }else{
+                } else {
 //                    item = new MenuItem(i, i, "ITEM " + Integer.toString(i), null);
                 }
-                if (item!=null) {
+                if (item != null) {
                     item.setTitle(item.getName());
                     item.pack();
                     items.add(item);
@@ -258,7 +258,7 @@ public class TestView extends AbstractView {
             cache.setFavoritePoints(1345); //TODO debug!
             cache.setFavorite(Database.Data, true);
             cache.setNumTravelbugs(12);
-            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache,contentWidth * 1.2f);
+            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache, contentWidth * 1.2f);
 
             ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
 

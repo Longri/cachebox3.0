@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 -2017 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,48 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.show_vies;
+package de.longri.cachebox3.gui.actions.show_views;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.SpoilerView;
+import de.longri.cachebox3.gui.views.LogListView;
 
 /**
  * Created by Longri on 14.09.2016.
  */
-public class Action_Show_SpoilerView extends Abstract_Action_ShowView {
-    private final Color DISABLE_COLOR = new Color(0.2f, 0.2f, 0.2f, 0.2f);
-
-    public Action_Show_SpoilerView() {
-        super(SpoilerView.class, NOT_IMPLEMENTED, "ShowSpoiler", MenuID.AID_SHOW_SOLVER);
+public class Action_Show_LogView extends Abstract_Action_ShowView {
+    public Action_Show_LogView() {
+        super(LogListView.class, IMPLEMENTED, "ShowLogs", MenuID.AID_SHOW_LOGS);
     }
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof SpoilerView;
+        return CB.viewmanager.getActView() instanceof LogListView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(SpoilerView.class.getName());
+        return actView.getClass().getName().equals(LogListView.class.getName());
     }
 
     @Override
     public void execute() {
         if (isActVisible()) return;
-        SpoilerView view = new SpoilerView();
+        LogListView view = new LogListView();
         CB.viewmanager.showView(view);
     }
 
     @Override
     public Drawable getIcon() {
-        boolean hasSpoiler = CB.selectedCachehasSpoiler();
-        if (hasSpoiler) {
-            return CB.getSkin().getMenuIcon.imagesIcon;
-        }
-        return CB.getSkin().getMenuIcon.imagesIconOff;
+        return CB.getSkin().getMenuIcon.logViewIcon;
     }
 }

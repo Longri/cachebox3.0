@@ -13,41 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.show_vies;
+package de.longri.cachebox3.gui.actions.show_views;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.DraftsView;
+import de.longri.cachebox3.gui.views.DescriptionView;
 
 /**
  * Created by Longri on 14.09.2016.
  */
-public class Action_Show_DraftsView extends Abstract_Action_ShowView {
-    public Action_Show_DraftsView() {
-        super(DraftsView.class, IMPLEMENTED, "ManageDrafts", MenuID.AID_SHOW_FIELDNOTES);
+public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
+    public Action_Show_DescriptionView() {
+        super(DescriptionView.class, IMPLEMENTED, "Description", MenuID.AID_SHOW_DESCRIPTION);
     }
+
+
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof DraftsView;
+        return CB.viewmanager.getActView() instanceof DescriptionView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(DraftsView.class.getName());
+        return actView.getClass().getName().equals(DescriptionView.class.getName());
     }
 
     @Override
     public void execute() {
         if (isActVisible()) return;
-        DraftsView view = new DraftsView();
+        DescriptionView view = new DescriptionView();
         CB.viewmanager.showView(view);
     }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.fieldNoteList;
+        return CB.getSkin().getMenuIcon.docIcon;
     }
 }

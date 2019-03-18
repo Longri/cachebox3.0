@@ -13,41 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.show_vies;
+package de.longri.cachebox3.gui.actions.show_views;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.LogListView;
+import de.longri.cachebox3.gui.views.WaypointView;
 
 /**
  * Created by Longri on 14.09.2016.
  */
-public class Action_Show_LogView extends Abstract_Action_ShowView {
-    public Action_Show_LogView() {
-        super(LogListView.class, IMPLEMENTED, "ShowLogs", MenuID.AID_SHOW_LOGS);
+public class Action_Show_WaypointView extends Abstract_Action_ShowView {
+    public Action_Show_WaypointView() {
+        super(WaypointView.class, IMPLEMENTED, "Waypoints", MenuID.AID_SHOW_WAYPOINTS);
     }
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof LogListView;
+        return CB.viewmanager.getActView() instanceof WaypointView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(LogListView.class.getName());
+        return actView.getClass().getName().equals(WaypointView.class.getName());
     }
 
     @Override
     public void execute() {
         if (isActVisible()) return;
-        LogListView view = new LogListView();
+        WaypointView view = new WaypointView();
         CB.viewmanager.showView(view);
     }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.logViewIcon;
+        return CB.getSkin().getMenuIcon.waypointListIcon;
     }
 }

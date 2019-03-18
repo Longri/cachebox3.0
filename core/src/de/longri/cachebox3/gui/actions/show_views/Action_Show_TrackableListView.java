@@ -13,41 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.show_vies;
+package de.longri.cachebox3.gui.actions.show_views;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.WaypointView;
+import de.longri.cachebox3.gui.views.TrackableListView;
 
 /**
- * Created by Longri on 14.09.2016.
+ * Created by Longri on 24.07.16.
  */
-public class Action_Show_WaypointView extends Abstract_Action_ShowView {
-    public Action_Show_WaypointView() {
-        super(WaypointView.class, IMPLEMENTED, "Waypoints", MenuID.AID_SHOW_WAYPOINTS);
-    }
-
-    @Override
-    public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof WaypointView;
-    }
-
-    @Override
-    public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(WaypointView.class.getName());
+public class Action_Show_TrackableListView extends Abstract_Action_ShowView {
+    public Action_Show_TrackableListView() {
+        super(TrackableListView.class, NOT_IMPLEMENTED, "TBList", MenuID.AID_SHOW_TRACKABLELIST);
     }
 
     @Override
     public void execute() {
         if (isActVisible()) return;
-        WaypointView view = new WaypointView();
+
+        TrackableListView view = new TrackableListView();
         CB.viewmanager.showView(view);
+
+    }
+
+    public Drawable getIcon() {
+        return CB.getSkin().getMenuIcon.tbListIcon;
     }
 
     @Override
-    public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.waypointListIcon;
+    public boolean isActVisible() {
+        return CB.viewmanager.getActView() instanceof TrackableListView;
+    }
+
+    @Override
+    public boolean viewTypeEquals(AbstractView actView) {
+        return actView.getClass().getName().equals(TrackableListView.class.getName());
     }
 }

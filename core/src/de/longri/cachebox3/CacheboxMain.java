@@ -35,6 +35,7 @@ import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
+import de.longri.cachebox3.platformTest.gui.PlatformTestView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -61,9 +62,10 @@ public class CacheboxMain extends ApplicationAdapter {
         COORD_SCALE = 1;
         EventHandler.INIT();
 
-        INCLUDE_LIST.add(MapState.class.getName());
-        INCLUDE_LIST.add(MapView.class.getName());
-        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
+//        INCLUDE_LIST.add(PlatformTestView.class.getName());
+//        INCLUDE_LIST.add(MapState.class.getName());
+//        INCLUDE_LIST.add(MapView.class.getName());
+//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,42 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.show_vies;
+package de.longri.cachebox3.gui.actions.show_views;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.CompassView;
+import de.longri.cachebox3.gui.views.TestView;
+import de.longri.cachebox3.platformTest.gui.PlatformTestView;
 
 /**
- * Created by Longri on 24.07.16.
+ * Created by Longri on 18.03.19.
  */
-public class Action_Show_CompassView extends Abstract_Action_ShowView {
-    public Action_Show_CompassView() {
-        super(CompassView.class, IMPLEMENTED, "Compass", MenuID.AID_SHOW_COMPASS);
+public class Action_Show_PlatformTestView extends Abstract_Action_ShowView {
+
+    public Action_Show_PlatformTestView() {
+        super(PlatformTestView.class, IMPLEMENTED, "PlatformTestView", MenuID.AID_TEST_Platform_View);
     }
+
 
     @Override
     public void execute() {
         if (isActVisible()) return;
 
-        CompassView view = new CompassView();
+        PlatformTestView view = new PlatformTestView();
         CB.viewmanager.showView(view);
-    }
 
-    public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.compassIcon;
     }
-
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof CompassView;
+        return CB.viewmanager.getActView() instanceof PlatformTestView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(CompassView.class.getName());
+        return actView.getClass().getName().equals(PlatformTestView.class.getName());
+    }
+
+    @Override
+    public Drawable getIcon() {
+        return CB.getSkin().getMenuIcon.cb;
     }
 }

@@ -23,9 +23,6 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.test_caches.AbstractTestCache;
 import de.longri.cachebox3.types.test_caches.TEST_CACHES;
 import de.longri.cachebox3.types.test_caches.TestCache_GC52BKF_without_logs;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +44,6 @@ class GpxFileImporterTest {
     @BeforeEach
     public void setUp() {
         try {
-//            Thread.sleep(50);
             System.gc();
         } catch (Exception e) {
             e.printStackTrace();

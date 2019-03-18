@@ -13,45 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.show_vies;
+package de.longri.cachebox3.gui.actions.show_views;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.TestView;
+import de.longri.cachebox3.gui.views.NotesView;
 
 /**
- * Created by Longri on 24.07.16.
+ * Created by Longri on 14.09.2016.
  */
-public class Action_Show_TestView extends Abstract_Action_ShowView {
-
-    public Action_Show_TestView() {
-        super(TestView.class, IMPLEMENTED, "TestView", MenuID.AID_TEST_VIEW);
-    }
-
-
-    @Override
-    public void execute() {
-        if (isActVisible()) return;
-
-        TestView view = new TestView();
-        CB.viewmanager.showView(view);
-
+public class Action_Show_NoteView extends Abstract_Action_ShowView {
+    public Action_Show_NoteView() {
+        super(NotesView.class, NOT_IMPLEMENTED, "Notes", MenuID.AID_SHOW_NOTES);
     }
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof TestView;
+        return CB.viewmanager.getActView() instanceof NotesView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(TestView.class.getName());
+        return actView.getClass().getName().equals(NotesView.class.getName());
+    }
+
+    @Override
+    public void execute() {
+        if (isActVisible()) return;
+        NotesView view = new NotesView();
+        CB.viewmanager.showView(view);
     }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.cb;
+        return CB.getSkin().getMenuIcon.noteIcon;
     }
 }

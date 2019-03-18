@@ -13,43 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.show_vies;
+package de.longri.cachebox3.gui.actions.show_views;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.views.MapView;
 
 /**
  * Created by Longri on 24.07.16.
  */
-public class Action_Show_AboutView extends Abstract_Action_ShowView {
+public class Action_Show_MapView extends Abstract_Action_ShowView {
 
-    public Action_Show_AboutView() {
-        super(AboutView.class, IMPLEMENTED, "about", MenuID.AID_SHOW_CACHELIST);
+    private MapView mapViewInstance;
+
+    public Action_Show_MapView() {
+        super(MapView.class, IMPLEMENTED, "Map", MenuID.AID_SHOW_MAP);
     }
-
 
     @Override
     public void execute() {
         if (isActVisible()) return;
-        AboutView view = new AboutView();
-        CB.viewmanager.showView(view);
+        mapViewInstance = new MapView(CB.viewmanager.getMain());
+        CB.viewmanager.showView(mapViewInstance);
+    }
+
+    public Drawable getIcon() {
+        return CB.getSkin().getMenuIcon.mapIcon;
     }
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof AboutView;
+        return CB.viewmanager.getActView() instanceof MapView;
     }
 
     @Override
     public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(AboutView.class.getName());
-    }
-
-    @Override
-    public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.cb;
+        return actView.getClass().getName().equals(MapView.class.getName());
     }
 }

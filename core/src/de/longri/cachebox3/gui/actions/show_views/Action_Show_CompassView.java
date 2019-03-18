@@ -13,41 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.show_vies;
+package de.longri.cachebox3.gui.actions.show_views;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.NotesView;
+import de.longri.cachebox3.gui.views.CompassView;
 
 /**
- * Created by Longri on 14.09.2016.
+ * Created by Longri on 24.07.16.
  */
-public class Action_Show_NoteView extends Abstract_Action_ShowView {
-    public Action_Show_NoteView() {
-        super(NotesView.class, NOT_IMPLEMENTED, "Notes", MenuID.AID_SHOW_NOTES);
-    }
-
-    @Override
-    public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof NotesView;
-    }
-
-    @Override
-    public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(NotesView.class.getName());
+public class Action_Show_CompassView extends Abstract_Action_ShowView {
+    public Action_Show_CompassView() {
+        super(CompassView.class, IMPLEMENTED, "Compass", MenuID.AID_SHOW_COMPASS);
     }
 
     @Override
     public void execute() {
         if (isActVisible()) return;
-        NotesView view = new NotesView();
+
+        CompassView view = new CompassView();
         CB.viewmanager.showView(view);
     }
 
-    @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.noteIcon;
+        return CB.getSkin().getMenuIcon.compassIcon;
+    }
+
+
+    @Override
+    public boolean isActVisible() {
+        return CB.viewmanager.getActView() instanceof CompassView;
+    }
+
+    @Override
+    public boolean viewTypeEquals(AbstractView actView) {
+        return actView.getClass().getName().equals(CompassView.class.getName());
     }
 }

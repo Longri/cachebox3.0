@@ -132,7 +132,7 @@ public class MenuID {
     // AbstractAction ID�s
 
     public static final int AID_TEST_VIEW = -1;
-    public static final int AID_TEST2 = -2;
+    public static final int AID_TEST_Platform_View = -2;
 
     public static final int AID_SHOW_MAP = 100;
     public static final int AID_SHOW_HINT = 101;

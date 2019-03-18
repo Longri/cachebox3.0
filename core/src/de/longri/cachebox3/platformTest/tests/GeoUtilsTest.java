@@ -13,18 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.utils;
+package de.longri.cachebox3.platformTest.tests;
 
 import de.longri.cachebox3.locator.Coordinate;
-import org.junit.jupiter.api.Test;
-import static org.hamcrest.MatcherAssert.assertThat;
+import de.longri.cachebox3.platformTest.PlatformAssertionError;
+import de.longri.cachebox3.platformTest.Test;
+
+
+import static de.longri.cachebox3.platformTest.Assert.assertThat;
+
 
 /**
  * Created by Longri on 20.06.2017.
  */
-class GeoUtilsTest {
+public class GeoUtilsTest {
+
+    public GeoUtilsTest(){}
+
     @Test
-    void parseCoordinate() {
+    public void parseCoordinate() throws PlatformAssertionError {
         String coordStr = "53° 36,135N / 10° 10,017E";
         Coordinate coordinate = new Coordinate(coordStr);
 
