@@ -75,8 +75,12 @@ public class MyPositionAnimator {
     }
 
     public void setPosition(double latitude, double longitude) {
-        this.posLatitude.start(DEFAULT_DURATION, actLatitude, latitude);
-        this.posLongitude.start(DEFAULT_DURATION, actLongitude, longitude);
+        setPosition(DEFAULT_DURATION, latitude, longitude);
+    }
+
+    public void setPosition(float duration, double latitude, double longitude) {
+        this.posLatitude.start(duration, actLatitude, latitude);
+        this.posLongitude.start(duration, actLongitude, longitude);
     }
 
     public void setArrowHeading(float heading) {

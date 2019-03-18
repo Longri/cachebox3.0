@@ -28,6 +28,8 @@ import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.IChanged;
 import org.oscim.core.MercatorProjection;
@@ -125,7 +127,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
             lastEventID = eventID;
             if (isDisposed.get()) return;
 
-            double lat=0, lon=0;
+            double lat = 0, lon = 0;
             if (getCenterGps()) {
                 if (this.mapCenter == null) {
                     this.mapCenter = EventHandler.getMyPosition();
@@ -134,7 +136,21 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                 lat = this.mapCenter.latitude;
             } else {
                 if (this.myPosition == null) {
-                    this.myPosition = EventHandler.getMyPosition();
+                    Coordinate myPos = EventHandler.getMyPosition();
+                    //use saved pos
+                    if (myPos == null) {
+
+                        if(CB.lastMapState.isEmpty()){
+                            //restore MapState
+                            CB.lastMapState.deserialize(Config.lastMapState.getValue());
+                            CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
+                        }
+
+                        LatLong latLon = CB.lastMapState.getFreePosition();
+                        if (latLon != null) {
+                            this.myPosition = new Coordinate(latLon);
+                        }
+                    }
                 }
                 if (this.myPosition != null) {
                     lon = this.myPosition.longitude;
@@ -263,6 +279,11 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
 
     public void position(double x, double y) {
         mapAnimator.position(x, y);
+    }
+
+    public void setPositionWithoutAnimation(double x, double y) {
+        mapAnimator.position(0, x, y);
+        myPositionAnimator.setPosition(0, x, y);
     }
 
     public void animateToPos(double x, double y) {

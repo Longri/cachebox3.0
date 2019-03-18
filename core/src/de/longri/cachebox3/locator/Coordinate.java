@@ -46,6 +46,10 @@ public class Coordinate extends LatLong {
 
     private static final float[] mResults = new float[2];
 
+    public Coordinate(LatLong latLon) {
+        super(latLon);
+    }
+
     public static Coordinate Project(Coordinate coord, double Direction, double Distance) {
         return Project(coord.getLatitude(), coord.getLongitude(), Direction, Distance);
     }

@@ -397,8 +397,20 @@ public class MapView extends AbstractView {
         addInputListener();
         sizeChanged();
 
-        //set initial direction
-        infoPanel.setNewValues(EventHandler.getMyPosition(), EventHandler.getHeading());
+        //set initial position/direction without animation
+        Coordinate myPos = EventHandler.getMyPosition();
+
+        //use saved pos
+        if (myPos == null) {
+            LatLong latLon = CB.lastMapState.getFreePosition();
+            if (latLon != null) {
+                myPos = new Coordinate(latLon);
+            }
+        }
+        if (myPos != null) {
+            infoPanel.setNewValues(myPos, EventHandler.getHeading());
+            positionChangedHandler.setPositionWithoutAnimation(myPos.latitude, myPos.longitude);
+        }
         if (!menuInShow) {
             if (CB.lastMapState.isEmpty()) {
                 //load from config

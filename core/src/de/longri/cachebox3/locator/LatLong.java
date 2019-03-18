@@ -39,6 +39,11 @@ public class LatLong implements Serializable {
         this.longitude = longitude;
     }
 
+    public LatLong(LatLong latLon) {
+        this.latitude = latLon.latitude;
+        this.longitude = latLon.longitude;
+    }
+
 
     /**
      * Returns the approximate distance in degrees between this location and the
