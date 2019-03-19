@@ -8,5 +8,7 @@ project(':ios').projectDir = new File('./launcher/ios')
 project(':gps-simulator').projectDir = new File('./tools/gps-simulator')
 project(':cb3-file-transfer').projectDir = new File('./tools/cb3-file-transfer')
 project(':skin-editor-src-proj').projectDir = new File('./tools/skin-editor/skin-editor-src-proj')
-include 'tests'
 
+
+include ':junit_test'
+project(':junit_test').projectDir = new File('./tests/junit_test')

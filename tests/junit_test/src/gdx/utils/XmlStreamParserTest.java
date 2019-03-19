@@ -1,4 +1,4 @@
-package com.badlogic.gdx.utils;
+package gdx.utils;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.XmlStreamParser;

@@ -33,5 +33,5 @@ global: GRADLE_OPTS="-Xmx2048m"
 before_install: chmod +x gradlew
 before_script: chmod +x gradlew
 script:
-- ./gradlew tests:junitPlatformTest --stacktrace --debug
+- ./gradlew junit_test:junitPlatformTest --stacktrace --debug
 
