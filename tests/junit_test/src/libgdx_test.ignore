@@ -1,0 +1,13 @@
+com.badlogic.gdx/
+travis/
+ISSUE_Tests/
+gdx.utils/
+de.longri.cachebox3.TestUtils.java
+de.longri.cachebox3.types/
+de.longri.cachebox3.gpx/
+de.longri.cachebox3.gui.utils.json_parser/
+de.longri.cachebox3.gui.utils.lists/
+de.longri.cachebox3.gui.utils.CharSequenceUtilTest.java
+de.longri.cachebox3.gui.utils.DownloaderTest.java
+de.longri.cachebox3.gui.utils.MathUtilsTest.java
+de.longri.cachebox3.gui.utils.UnZipTest.java
