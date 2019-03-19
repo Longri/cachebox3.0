@@ -10,5 +10,7 @@ project(':cb3-file-transfer').projectDir = new File('./tools/cb3-file-transfer')
 project(':skin-editor-src-proj').projectDir = new File('./tools/skin-editor/skin-editor-src-proj')
 
 
-include ':junit_test'
+include ':junit_test', ':libgdx_test',':extract_libgdx_test'
 project(':junit_test').projectDir = new File('./tests/junit_test')
+project(':libgdx_test').projectDir = new File('./tests/libgdx_test')
+project(':extract_libgdx_test').projectDir = new File('./tools/extract_libgdx_test')
