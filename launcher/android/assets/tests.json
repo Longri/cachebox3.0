@@ -1,10 +1,10 @@
 {
-  "de.longri.cachebox3.platformTest.tests.GeoUtilsTest": {
+  "de.longri.cachebox3.platform_test.tests.GeoUtilsTest": {
     "parseCoordinate": {},
     "parseCoor": {},
     "parseDinate": {}
   },
-  "de.longri.cachebox3.platformTest.tests.GeoUtilsTe": {
+  "de.longri.cachebox3.platform_test.tests.GeoUtilsTe": {
     "parseCoordinate": {}
   }
 }

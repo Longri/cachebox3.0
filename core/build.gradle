@@ -28,9 +28,16 @@ sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-sourceSets.main.java.srcDirs = ["src/"]
+
 //sourceSets.test.java.srcDirs = ["tests/"]
 sourceSets.test.resources.srcDirs = ["testsResources/"]
+
+//sourceSets with including LibGdx Tests for run unit tests on device
+sourceSets.main.java.srcDirs = ["src/","../tests/libgdx_test/src"]
+
+////sourceSets without LibGdx tests (aka release)
+//sourceSets.main.java.srcDirs = ["src/"]
+
 
 task saveBuildInfo {
     doFirst {

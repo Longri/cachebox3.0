@@ -39,32 +39,33 @@ class ImmutableCacheTest {
 
     }
 
-//    @AfterAll
-//    static void tearDown() {
-//        cb3Database.close();
-//        assertThat("TestDB must be deleted after cleanup", copyDbFileHandle.delete());
-//    }
-//
-//
-//    @Test
-//    void getUrl() {
-//
-//        ImmutableCache cache = new ImmutableCache(0, 0);
-//        String url = "HTTP://team-cachebox.de";
-//
-//        MutableCache mutableCache = cache.getMutable(cb3Database);
-//        mutableCache.setId(123456789l);
-//
-//        mutableCache.setUrl(url);
-//        DaoFactory.CACHE_DAO.writeToDatabase(cb3Database, mutableCache,false);
-//
-//
-//        cache = (ImmutableCache) DaoFactory.CACHE_DAO.getFromDbByCacheId(cb3Database, 123456789l, false);
-//
-//        String testUrl = cache.getUrl(cb3Database);
-//        assertThat("Url must equals", url.equals(testUrl));
-//
-//
-//    }
+    @AfterAll
+    static void tearDown() {
+        cb3Database.close();
+        System.gc();
+        assertThat("TestDB must be deleted after cleanup", copyDbFileHandle.delete());
+    }
+
+
+    @Test
+    void getUrl() {
+
+        ImmutableCache cache = new ImmutableCache(0, 0);
+        String url = "HTTP://team-cachebox.de";
+
+        MutableCache mutableCache = cache.getMutable(cb3Database);
+        mutableCache.setId(123456789l);
+
+        mutableCache.setUrl(url);
+        DaoFactory.CACHE_DAO.writeToDatabase(cb3Database, mutableCache,false);
+
+
+        cache = (ImmutableCache) DaoFactory.CACHE_DAO.getFromDbByCacheId(cb3Database, 123456789l, false);
+
+        String testUrl = cache.getUrl(cb3Database);
+        assertThat("Url must equals", url.equals(testUrl));
+
+
+    }
 
 }
