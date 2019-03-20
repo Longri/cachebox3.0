@@ -117,7 +117,7 @@ public class main {
                     throw new RuntimeException("Can't generate/(delete) target file:" + source.name());
                 }
             }
-            json.writeObjectStart(source.nameWithoutExtension());
+            json.writeObjectStart("de.longri.cachebox3.platform_test.tests." + source.nameWithoutExtension());
             targetFileHandle.writeString(generateTestFile(source, json), false, "utf-8");
             json.writeObjectEnd();
         }
