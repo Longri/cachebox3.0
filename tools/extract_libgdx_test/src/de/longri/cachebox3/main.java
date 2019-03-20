@@ -77,14 +77,14 @@ public class main {
             for (String dir : ignoredDirs) {
                 if (file.path().contains(dir)) {
                     isIgnored = true;
-                    continue;
+                    break;
                 }
             }
             if (isIgnored) continue;
             for (String name : ignoredFiles) {
-                if (file.name().equals(name)) {
+                if (file.path().endsWith(name)) {
                     isIgnored = true;
-                    continue;
+                    break;
                 }
             }
             if (isIgnored) continue;
