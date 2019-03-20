@@ -24,4 +24,24 @@ public class Assert {
             throw new PlatformAssertionError(reason);
         }
     }
+
+    public static void assertThat(boolean assertion) throws PlatformAssertionError {
+        if (!assertion) {
+            throw new PlatformAssertionError("");
+        }
+    }
+
+    public static void assertEquals(Object expected, Object actual, String reason) throws PlatformAssertionError {
+        if (!objectsAreEqual(expected, actual)) {
+            throw new PlatformAssertionError(reason);
+        }
+    }
+
+    static boolean objectsAreEqual(Object obj1, Object obj2) {
+        if (obj1 == null) {
+            return (obj2 == null);
+        }
+        return obj1.equals(obj2);
+    }
+
 }

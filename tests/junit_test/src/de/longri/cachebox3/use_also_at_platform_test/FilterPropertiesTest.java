@@ -13,12 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.types;
+package de.longri.cachebox3.use_also_at_platform_test;
 
 
+import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.CacheList;
+import de.longri.cachebox3.types.FilterInstances;
+import de.longri.cachebox3.types.FilterProperties;
 import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +40,9 @@ class FilterPropertiesTest {
         TestUtils.initialGdx();
         testDb = new Database(Database.DatabaseType.CacheBox3);
         try {
-            testDb.startUp(TestUtils.getResourceFileHandle("testsResources/Database/cacheboxFilterTestDB.db3", false));
+            FileHandle dbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/cacheboxFilterTestDB.db3", false);
+            dbFileHandle.parent().mkdirs();
+            testDb.startUp(dbFileHandle);
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }

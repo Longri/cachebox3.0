@@ -29,10 +29,12 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.list_view.*;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,53 +70,60 @@ public class PlatformTestView extends AbstractView {
         VisTextButton button = new VisTextButton("Start Unit Tests");
         button.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                for (PlatformTestViewItem item : itemArray) {
-                    item.setState(PlatformTestViewItem.State.IN_PROGRESS);
-                }
 
-                PlatformTestViewItem actContainer = null;
-                boolean annyFaildOnContainer = false;
+                //run on new Thread
+                CB.postAsync(new NamedRunnable("Platform Unit Test") {
+                    @Override
+                    public void run() {
+                        for (PlatformTestViewItem item : itemArray) {
+                            item.setState(PlatformTestViewItem.State.IN_PROGRESS);
+                        }
 
-                for (PlatformTestViewItem item : itemArray) {
-                    if (actContainer == null && item.type == PlatformTestViewItem.Type.CONTAINER) {
-                        actContainer = item;
-                        continue;
-                    }
+                        PlatformTestViewItem actContainer = null;
+                        boolean annyFaildOnContainer = false;
 
-                    if (item.type == PlatformTestViewItem.Type.CONTAINER) {
+                        for (PlatformTestViewItem item : itemArray) {
+                            if (actContainer == null && item.type == PlatformTestViewItem.Type.CONTAINER) {
+                                actContainer = item;
+                                continue;
+                            }
+
+                            if (item.type == PlatformTestViewItem.Type.CONTAINER) {
+                                if (annyFaildOnContainer) {
+                                    actContainer.setState(PlatformTestViewItem.State.TEST_FAIL);
+                                } else {
+                                    actContainer.setState(PlatformTestViewItem.State.TEST_OK);
+                                }
+                                actContainer = item;
+                                annyFaildOnContainer = false;
+                                continue;
+                            }
+
+                            //reflect test method
+                            //TODO stop watch
+                            //TODO break test after 100sec
+                            try {
+                                Class refClass = ClassReflection.forName(actContainer.className);
+                                Object instance = ClassReflection.newInstance(refClass);
+
+                                Method method = ClassReflection.getMethod(refClass, item.testName);
+                                method.invoke(instance);
+                                item.setState(PlatformTestViewItem.State.TEST_OK);
+                            } catch (Exception e) {
+                                log.error("TestFailed", e);
+                                annyFaildOnContainer = true;
+                                item.setState(PlatformTestViewItem.State.TEST_FAIL);
+                            }
+
+
+                        }
                         if (annyFaildOnContainer) {
                             actContainer.setState(PlatformTestViewItem.State.TEST_FAIL);
                         } else {
                             actContainer.setState(PlatformTestViewItem.State.TEST_OK);
                         }
-                        actContainer = item;
-                        annyFaildOnContainer = false;
-                        continue;
                     }
-
-                    //reflect test method
-                    //TODO stop watch
-                    //TODO break test after 100sec
-                    try {
-                        Class refClass = ClassReflection.forName(actContainer.className);
-                        Object instance = ClassReflection.newInstance(refClass);
-
-                        Method method = ClassReflection.getMethod(refClass, item.testName);
-                        method.invoke(instance);
-                        item.setState(PlatformTestViewItem.State.TEST_OK);
-                    } catch (Exception e) {
-                        log.error("TestFailed", e);
-                        annyFaildOnContainer = true;
-                        item.setState(PlatformTestViewItem.State.TEST_FAIL);
-                    }
-
-
-                }
-                if (annyFaildOnContainer) {
-                    actContainer.setState(PlatformTestViewItem.State.TEST_FAIL);
-                } else {
-                    actContainer.setState(PlatformTestViewItem.State.TEST_OK);
-                }
+                });
             }
         });
 
