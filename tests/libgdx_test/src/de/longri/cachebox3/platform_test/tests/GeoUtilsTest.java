@@ -26,9 +26,6 @@ import static de.longri.cachebox3.platform_test.Assert.assertThat;
  * Created by Longri on 20.06.2017.
  */
 public class GeoUtilsTest {
-
-    public GeoUtilsTest(){}
-
     @Test
     public void parseCoordinate() throws PlatformAssertionError {
         String coordStr = "53° 36,135N / 10° 10,017E";
