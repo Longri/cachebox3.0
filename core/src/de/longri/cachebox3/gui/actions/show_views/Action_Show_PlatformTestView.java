@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.gui.actions.show_views;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -26,8 +28,14 @@ import de.longri.cachebox3.platform_test.gui.PlatformTestView;
  */
 public class Action_Show_PlatformTestView extends Abstract_Action_ShowView {
 
+    static boolean isImplemented() {
+        FileHandle jsnFile = Gdx.files.internal("platform_test/tests.json");
+        return !jsnFile.exists();
+    }
+
+
     public Action_Show_PlatformTestView() {
-        super(PlatformTestView.class, IMPLEMENTED, "PlatformTestView", MenuID.AID_TEST_Platform_View);
+        super(PlatformTestView.class, isImplemented(), "PlatformTestView", MenuID.AID_TEST_Platform_View);
     }
 
 

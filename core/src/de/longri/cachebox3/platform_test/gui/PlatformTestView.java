@@ -137,7 +137,7 @@ public class PlatformTestView extends AbstractView {
 
         //read generated tests.json
 
-        FileHandle jsnFile = Gdx.files.internal("tests.json");
+        FileHandle jsnFile = Gdx.files.internal("platform_test/tests.json");
 
         JsonReader reader = new JsonReader();
 

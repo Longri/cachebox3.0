@@ -20,8 +20,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.StringBuilder;
 import org.apache.commons.cli.*;
+
+import java.io.StringWriter;
 
 import static java.lang.System.exit;
 
@@ -64,6 +68,8 @@ public class main {
     private static Array<FileHandle> sourceFilesToCopy = new Array<>();
     private static FileHandle junitSrcDir;
     private static FileHandle libgdxTestSrcDir;
+    private static final String ASSET_DIR = "./launcher/android/assets/platform_test/";
+    private static final String TEST_JSON = "tests.json";
     private static final String TEST_SRC_DIR = "./tests/junit_test/src";
     private static final String TEST_TARGET_DIR = "./tests/libgdx_test/src/de/longri/cachebox3/platform_test/tests";
     private static final String TARGET_PACKAGE_LINE = "package de.longri.cachebox3.platform_test.tests;";
@@ -85,6 +91,25 @@ public class main {
         readIgnoreFile();
         fillSourceFileList();
 
+        // create asset dir
+        FileHandle assetDir = Gdx.files.absolute(ASSET_DIR);
+        FileHandle testJsonFile = assetDir.child(TEST_JSON);
+
+        if (!assetDir.isDirectory()) {
+            assetDir.mkdirs();
+            if (!assetDir.isDirectory()) {
+                throw new RuntimeException("Can't create Asset directory: " + assetDir.file().getAbsolutePath());
+            }
+        }
+
+
+        StringWriter stringWriter = new StringWriter();
+        JsonWriter writer = new JsonWriter(stringWriter);
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json);
+        json.setWriter(writer);
+        json.writeObjectStart();
+
         for (FileHandle source : sourceFilesToCopy) {
             FileHandle targetFileHandle = libgdxTestSrcDir.child(source.name());
             if (targetFileHandle.exists()) {
@@ -92,11 +117,24 @@ public class main {
                     throw new RuntimeException("Can't generate/(delete) target file:" + source.name());
                 }
             }
-            targetFileHandle.writeString(generateTestFile(source), false, "utf-8");
+            json.writeObjectStart(source.nameWithoutExtension());
+            targetFileHandle.writeString(generateTestFile(source, json), false, "utf-8");
+            json.writeObjectEnd();
         }
+        json.writeObjectEnd();
+        String jsonString = stringWriter.toString();
+        testJsonFile.writeString(jsonString, false);
     }
 
     private static void disable() {
+        // delete asset dir for Android
+        FileHandle assetDir = Gdx.files.absolute(ASSET_DIR);
+        assetDir.deleteDirectory();
+
+        // delete asset dir for Android
+        FileHandle assetDirDesk = Gdx.files.absolute("./launcher/desktop/workingDir/platform_test");
+        assetDirDesk.deleteDirectory();
+
 
     }
 
@@ -153,7 +191,7 @@ public class main {
         }
     }
 
-    private static String generateTestFile(FileHandle fileHandle) {
+    private static String generateTestFile(FileHandle fileHandle, Json json) {
         StringBuilder sb = new StringBuilder(GENERATE);
         String source = fileHandle.readString();
         String[] lines = source.split("\n");
@@ -163,7 +201,9 @@ public class main {
         boolean assertThatReplace = false;
         boolean publicClassReplace = false;
 
-        for (String line : lines) {
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+
             line = line.replace("\r", "");
 
             if (!packageReplace && (line.startsWith("package") || line.contains(" package "))) {
@@ -185,10 +225,20 @@ public class main {
             }
 
             if (line.contains(VOID)) {
-                //check public
-                if (!line.contains(PUBLIC + VOID)) {
-                    line = line.replace(VOID, PUBLIC + VOID);
+                //check public have @Test annotation
+                if (lines[i - 1].contains("@Test")) {
+                    if (!line.contains(PUBLIC + VOID)) {
+                        line = line.replace(VOID, PUBLIC + VOID);
+                    }
+
+                    // write test to json
+                    int pos = line.indexOf(VOID) + VOID.length();
+                    int nameEnd = line.indexOf("(", pos);
+                    String methodName = line.substring(pos, nameEnd);
+                    json.writeObjectStart(methodName);
+                    json.writeObjectEnd();
                 }
+
 
                 // add throws
                 if (line.contains(THROWS)) {
