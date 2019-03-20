@@ -21,12 +21,17 @@ import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
+import org.apache.commons.cli.*;
+
+import static java.lang.System.exit;
 
 /**
  * Created by Longri on 19.03.2019.
  */
 public class main {
     public static void main(String[] args) throws Exception {
+
+        CommandLine cmd = getCommandLine(args);
 
         //initial mock Gdx for using FileHandle
         Gdx.app = new HeadlessApplication(new Game() {
@@ -41,19 +46,17 @@ public class main {
         junitSrcDir = Gdx.files.absolute(TEST_SRC_DIR);
         libgdxTestSrcDir = Gdx.files.absolute(TEST_TARGET_DIR);
 
-        readIgnoreFile();
-        fillSourceFileList();
+        if (cmd.hasOption("e")) {
+            enable();
 
-        for (FileHandle source : sourceFilesToCopy) {
-            FileHandle targetFileHandle = libgdxTestSrcDir.child(source.name());
-            if (targetFileHandle.exists()) {
-                if (!targetFileHandle.delete()) {
-                    throw new RuntimeException("Can't generate/(delete) target file:" + source.name());
-                }
-            }
-            targetFileHandle.writeString(generateTestFile(source), false, "utf-8");
+            System.out.println("Platform tests enabled!");
+        } else if (cmd.hasOption('d')) {
+            disable();
+
+            System.out.println("Platform tests disabled!");
         }
 
+        exit(0);
     }
 
     private static Array<String> ignoredDirs = new Array<>();
@@ -69,6 +72,33 @@ public class main {
     private static final String JUPITER_TEST = "org.junit.jupiter.api.Test";
     private static final String IMPORT_TEST_ANNOTATION = "import de.longri.cachebox3.platform_test.PlatformAssertionError;\n" +
             "import de.longri.cachebox3.platform_test.Test;";
+    private static final String ASSERT_THAT = "Assert.assertThat;";
+    private static final String ASSERT_THAT_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertThat;";
+    private static final String CLASS = "class ";
+    private static final String VOID = "void ";
+    private static final String PUBLIC = "public ";
+    private static final String THROWS = "() throws ";
+    private static final String ASSERTATION_ERROR = "PlatformAssertionError";
+
+
+    private static void enable() {
+        readIgnoreFile();
+        fillSourceFileList();
+
+        for (FileHandle source : sourceFilesToCopy) {
+            FileHandle targetFileHandle = libgdxTestSrcDir.child(source.name());
+            if (targetFileHandle.exists()) {
+                if (!targetFileHandle.delete()) {
+                    throw new RuntimeException("Can't generate/(delete) target file:" + source.name());
+                }
+            }
+            targetFileHandle.writeString(generateTestFile(source), false, "utf-8");
+        }
+    }
+
+    private static void disable() {
+
+    }
 
     private static void readIgnoreFile() {
         FileHandle ignoreFile = junitSrcDir.child("libgdx_test.ignore");
@@ -130,6 +160,8 @@ public class main {
 
         boolean packageReplace = false;
         boolean jupiterTestReplace = false;
+        boolean assertThatReplace = false;
+        boolean publicClassReplace = false;
 
         for (String line : lines) {
             line = line.replace("\r", "");
@@ -142,6 +174,30 @@ public class main {
                 jupiterTestReplace = true;
                 sb.appendLine(IMPORT_TEST_ANNOTATION);
                 continue;
+            } else if (!assertThatReplace && line.endsWith(ASSERT_THAT)) {
+                assertThatReplace = true;
+                sb.appendLine(ASSERT_THAT_LINE);
+                continue;
+            } else if (!publicClassReplace && line.contains(CLASS)) {
+                publicClassReplace = true;
+                sb.appendLine(line.replace(CLASS, PUBLIC + CLASS));
+                continue;
+            }
+
+            if (line.contains(VOID)) {
+                //check public
+                if (!line.contains(PUBLIC + VOID)) {
+                    line = line.replace(VOID, PUBLIC + VOID);
+                }
+
+                // add throws
+                if (line.contains(THROWS)) {
+                    //TODO
+                } else {
+                    line = line.replace("()", THROWS + ASSERTATION_ERROR);
+                }
+                sb.appendLine(line);
+                continue;
             }
 
             sb.appendLine(line);
@@ -151,4 +207,40 @@ public class main {
         return sb.toString();
     }
 
+    private static CommandLine getCommandLine(String[] args) {
+        Options options = new Options();
+
+        Option enable = new Option("e", "enable", false, "enable Platform Test");
+        enable.setRequired(false);
+        options.addOption(enable);
+
+        Option disable = new Option("d", "disable", false, "disable Platform Test");
+        disable.setRequired(false);
+        options.addOption(disable);
+
+
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd;
+
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            formatter.printHelp("Extract Platform Test need one of two options 'enable' or 'disable' !", options);
+
+            System.exit(1);
+            return null;
+        }
+
+        if (cmd.getOptions() == null || cmd.getOptions().length == 0) {
+            formatter.printHelp("Extract Platform Test need one of two options," +
+                    "\n 'enable' or 'disable' !\n\n", options);
+
+            System.exit(1);
+            return null;
+        }
+
+        return cmd;
+    }
 }

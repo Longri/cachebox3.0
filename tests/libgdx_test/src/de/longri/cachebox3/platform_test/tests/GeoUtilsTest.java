@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -18,9 +22,7 @@ package de.longri.cachebox3.platform_test.tests;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
-
 import static de.longri.cachebox3.platform_test.Assert.assertThat;
-
 
 /**
  * Created by Longri on 20.06.2017.
