@@ -80,10 +80,12 @@ public class main {
             "import de.longri.cachebox3.platform_test.Test;";
     private static final String ASSERT_THAT = "Assert.assertThat;";
     private static final String ASSERT_THAT_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertThat;";
+    private static final String ASSERT_EQUALS = "Assertions.assertEquals;";
+    private static final String ASSERT_EQUALS_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertEquals;";
     private static final String CLASS = "class ";
     private static final String VOID = "void ";
     private static final String PUBLIC = "public ";
-    private static final String THROWS = "() throws ";
+    private static final String THROWS = ") throws ";
     private static final String ASSERTATION_ERROR = "PlatformAssertionError";
 
 
@@ -199,6 +201,7 @@ public class main {
         boolean packageReplace = false;
         boolean jupiterTestReplace = false;
         boolean assertThatReplace = false;
+        boolean assertEqualseReplace = false;
         boolean publicClassReplace = false;
 
         for (int i = 0; i < lines.length; i++) {
@@ -213,6 +216,10 @@ public class main {
             } else if (!jupiterTestReplace && line.startsWith(IMPORT) && line.contains(JUPITER_TEST)) {
                 jupiterTestReplace = true;
                 sb.appendLine(IMPORT_TEST_ANNOTATION);
+                continue;
+            } else if (!assertEqualseReplace && line.endsWith(ASSERT_EQUALS)) {
+                assertEqualseReplace = true;
+                sb.appendLine(ASSERT_EQUALS_LINE);
                 continue;
             } else if (!assertThatReplace && line.endsWith(ASSERT_THAT)) {
                 assertThatReplace = true;
@@ -240,12 +247,29 @@ public class main {
                 }
 
 
-                // add throws
-                if (line.contains(THROWS)) {
-                    //TODO
-                } else {
-                    line = line.replace("()", THROWS + ASSERTATION_ERROR);
+                // add throws, if method contains any assertion call
+                boolean hasAssertCall = false;
+                int braceCnt = 1;
+                for (int j = i + 1; j < lines.length; j++) {
+                    if (lines[j].contains("assertThat(") || lines[j].contains("assertEquals(")) {
+                        hasAssertCall = true;
+                        break;
+                    }
+                    if (lines[j].contains("{")) braceCnt++;
+                    if (lines[j].contains("}")) braceCnt--;
+                    if (braceCnt == 0) {
+                        break;
+                    }
                 }
+
+                if (hasAssertCall) {
+                    if (line.contains(THROWS)) {
+                        //TODO
+                    } else {
+                        line = line.replace(")", THROWS + ASSERTATION_ERROR);
+                    }
+                }
+
                 sb.appendLine(line);
                 continue;
             }

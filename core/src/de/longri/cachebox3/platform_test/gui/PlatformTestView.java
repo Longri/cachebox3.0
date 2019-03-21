@@ -107,6 +107,7 @@ public class PlatformTestView extends AbstractView {
                                 Object instance = ClassReflection.newInstance(refClass);
 
                                 Method method = ClassReflection.getMethod(refClass, item.testName);
+                                method.setAccessible(true);
                                 method.invoke(instance);
                                 item.setState(PlatformTestViewItem.State.TEST_OK);
                             } catch (Exception e) {

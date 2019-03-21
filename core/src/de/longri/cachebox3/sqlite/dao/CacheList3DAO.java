@@ -193,6 +193,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             statement = statement.replace("SELECT *", "SELECT COUNT(*)");
         }
         GdxSqliteCursor cursor = database.rawQuery(statement, (String[]) null);
+        if (cursor == null) return 0;
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();

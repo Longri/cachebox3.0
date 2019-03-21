@@ -32,9 +32,8 @@ import de.longri.gdx.sqlite.SQLiteGdxException;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
 
-import static de.longri.cachebox3.platform_test.Assert.assertEquals;
 import static de.longri.cachebox3.platform_test.Assert.assertThat;
-
+import static de.longri.cachebox3.platform_test.Assert.assertEquals;
 
 /**
  * Created by Longri on 19.02.17.
@@ -263,7 +262,7 @@ public class FilterPropertiesTest {
 
 
     @Test
-    public void checkPresetBEGINNER() throws PlatformAssertionError {
+    public void checkPresetBEGINNER() {
 
     }
 
