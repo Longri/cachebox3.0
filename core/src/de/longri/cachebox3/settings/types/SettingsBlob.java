@@ -30,4 +30,17 @@ public class SettingsBlob extends SettingBase<byte[]> {
     public boolean equals(Object obj) {
         return false;
     }
+
+    @Override
+    public void loadFromLastValue() {
+
+        // lastValue and value can be NULL, so we can not throw a exception and overload this method!
+
+
+//        if (lastValue == null)
+//            throw new IllegalArgumentException("You have never saved the last value of '" + name + "'! Call SaveToLastValue()");
+
+
+        value = lastValue;
+    }
 }

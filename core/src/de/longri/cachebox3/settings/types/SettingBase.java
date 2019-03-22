@@ -189,7 +189,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
 
     public void loadFromLastValue() {
         if (lastValue == null)
-            throw new IllegalArgumentException("You have never saved the last value! Call SaveToLastValue()");
+            throw new IllegalArgumentException("You have never saved the last value of '" + name + "'! Call SaveToLastValue()");
         value = lastValue;
     }
 
