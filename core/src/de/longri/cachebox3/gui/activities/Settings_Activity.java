@@ -477,7 +477,7 @@ public class Settings_Activity extends ActivityBase {
             public void run() {
                 newListView.setAdapter(listViewAdapter);
                 newListView.setUserObject(category);
-                showListView(newListView, category.name(), animate);
+                showListView(newListView, Translation.get(category.name()), animate);
             }
         });
 
@@ -863,8 +863,7 @@ public class Settings_Activity extends ActivityBase {
 
         // add label with category name, align left
         table.left();
-//        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
-        VisLabel label = new VisLabel("Test", nameStyle);
+        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
         label.setWrap(true);
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();

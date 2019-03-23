@@ -329,7 +329,6 @@ public class GroundspeakAPI {
             CB.postAsync(new NamedRunnable("GroundspeakAPI") {
                 @Override
                 public void run() {
-                    log.debug(("API is not checked, call API check"));
                     final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(getAccessToken());
                     getYourUserProfile.post(new GenericCallBack<ApiResultState>() {
                         @Override
