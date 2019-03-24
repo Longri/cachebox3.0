@@ -308,7 +308,7 @@ public class main {
 
                 if (hasAssertCall) {
                     if (line.contains(THROWS)) {
-                        //TODO
+                        line = line.replace(" {", ", " + ASSERTATION_ERROR + " {");
                     } else {
                         line = line.replace(")", THROWS + ASSERTATION_ERROR);
                     }
