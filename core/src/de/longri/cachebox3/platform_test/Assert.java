@@ -31,9 +31,16 @@ public class Assert {
         }
     }
 
+
     public static void assertEquals(Object expected, Object actual, String reason) throws PlatformAssertionError {
         if (!objectsAreEqual(expected, actual)) {
             throw new PlatformAssertionError(reason);
+        }
+    }
+
+    public static void assertEquals(Object expected, Object actual) throws PlatformAssertionError {
+        if (!objectsAreEqual(expected, actual)) {
+            throw new PlatformAssertionError("");
         }
     }
 
@@ -44,4 +51,15 @@ public class Assert {
         return obj1.equals(obj2);
     }
 
+    public static void assertTrue(boolean assertion, String reason) throws PlatformAssertionError {
+        if (!assertion) {
+            throw new PlatformAssertionError(reason);
+        }
+    }
+
+    public static void assertFalse(boolean assertion, String reason) throws PlatformAssertionError {
+        if (assertion) {
+            throw new PlatformAssertionError(reason);
+        }
+    }
 }

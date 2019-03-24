@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -13,23 +17,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.locator;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.locator.*;
 
 import de.longri.cachebox3.utils.MathUtils;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static de.longri.cachebox3.platform_test.Assert.assertEquals;
+import static de.longri.cachebox3.platform_test.Assert.assertFalse;
+import static de.longri.cachebox3.platform_test.Assert.assertTrue;
 
 
 /**
  * Created by Longri on 25.10.2017.
  */
-class CoordinateTest {
+public class CoordinateTest {
 
     @Test
-    void project() {
+    public void project() throws PlatformAssertionError {
 
         int distance = 24;//meter
 
@@ -42,7 +49,7 @@ class CoordinateTest {
     }
 
     @Test
-    void stringConstructor() {
+    public void stringConstructor() throws PlatformAssertionError {
         String str = "N 48° 40.441 E 009° 23.470";
         Coordinate coord = new Coordinate(str);
         assertEquals(48.674017, coord.getLatitude());
@@ -56,7 +63,7 @@ class CoordinateTest {
     }
 
     @Test
-    void equalsTest() {
+    public void equalsTest() throws PlatformAssertionError {
         Coordinate corrd1 = new Coordinate("N 52° 36.307 E 013° 21.517");
         Coordinate corrd2 = new Coordinate("N 52° 36.435 E 013° 21.821");
         Coordinate corrd3 = new Coordinate("N 52° 36.045 E 013° 21.760");
