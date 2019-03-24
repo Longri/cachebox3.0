@@ -216,26 +216,31 @@ public class Coordinate extends LatLong {
     private final static double TOL = 0.000008;
 
     @Override
-    public boolean equals(Object other) {
-        if (other instanceof LatLong) {
-            LatLong latLong = (LatLong) other;
+    public boolean equals(Object obj) {
 
-            double la = this.getLatitude() - latLong.getLatitude();
-            double lo = this.getLongitude() - latLong.getLongitude();
-
-            if (la < 0)
-                la *= -1;
-            if (lo < 0)
-                la *= -1;
-
-            if (la > TOL)
-                return false;
-            if (lo > TOL)
-                return false;
-
+        if (this == obj) {
             return true;
+        } else if (!(obj instanceof Coordinate)) {
+            return false;
         }
-        return false;
+        Coordinate other = (Coordinate) obj;
+        if (other.hashCode() != this.hashCode()) return false;
+
+
+        double la = this.latitude - other.latitude;
+        double lo = this.longitude - other.longitude;
+
+        if (la < 0)
+            la *= -1;
+        if (lo < 0)
+            lo *= -1;
+
+        if (la > TOL)
+            return false;
+        if (lo > TOL)
+            return false;
+
+        return true;
     }
 
     public static Coordinate Crossbearing(CalculationType type, Coordinate coord1, double direction1, Coordinate coord2, double direction2) {
