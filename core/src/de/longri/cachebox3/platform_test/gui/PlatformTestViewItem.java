@@ -15,7 +15,10 @@
  */
 package de.longri.cachebox3.platform_test.gui;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
@@ -26,7 +29,7 @@ import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
  */
 public class PlatformTestViewItem extends ListViewItem {
 
-    private final de.longri.cachebox3.platform_test.gui.TestStateWidget testStateWidget = new TestStateWidget();
+    private final TestStateWidget testStateWidget = new TestStateWidget();
 
     enum Type {
         CONTAINER, TEST
@@ -41,6 +44,8 @@ public class PlatformTestViewItem extends ListViewItem {
     public final String containerName;
     public final String testName;
     public final Type type;
+    public final TimeLabel timeLabel = new TimeLabel(false);
+
 
     public PlatformTestViewItem(int index, Type type, String containerName) {
         this(index, type, containerName, null);
@@ -57,7 +62,7 @@ public class PlatformTestViewItem extends ListViewItem {
 
         contentTable.setRound(false);
 
-        VisLabel label1 = new VisLabel(testName == null ? this.containerName : testName);
+        VisLabel label1 = new VisLabel(testName == null ? this.containerName : testName, "AboutInfo", Color.BLACK);
         Table lineTable = new Table();
         lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
 
@@ -71,6 +76,7 @@ public class PlatformTestViewItem extends ListViewItem {
         lineTable.add(testStateWidget);
 
         lineTable.add(label1).left().expandX().fillX();
+        lineTable.add(timeLabel);
         contentTable.add(lineTable).left().expandX().fillX();
 
         this.addActor(contentTable);
@@ -80,10 +86,17 @@ public class PlatformTestViewItem extends ListViewItem {
         testStateWidget.setState(state);
     }
 
+    public void start() {
+        timeLabel.start();
+    }
+
+    public void stop() {
+        timeLabel.stop();
+    }
+
     @Override
     protected void sizeChanged() {
         contentTable.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
-
 
 }

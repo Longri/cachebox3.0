@@ -55,6 +55,7 @@ public class PlatformTestView extends AbstractView {
     private VisScrollPane scrollPane;
     private ListView testListView;
     private final Array<PlatformTestViewItem> itemArray = new Array<>();
+    private final TestButton button = new TestButton();
 
     public PlatformTestView() {
         super("TestUnitView");
@@ -67,7 +68,6 @@ public class PlatformTestView extends AbstractView {
 
 
         // add button for start Unit-test
-        VisTextButton button = new VisTextButton("Start Unit Tests");
         button.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 
@@ -75,6 +75,9 @@ public class PlatformTestView extends AbstractView {
                 CB.postAsync(new NamedRunnable("Platform Unit Test") {
                     @Override
                     public void run() {
+                        button.beginnTest();
+                        boolean anyTestFaild = false;
+
                         for (PlatformTestViewItem item : itemArray) {
                             item.setState(PlatformTestViewItem.State.IN_PROGRESS);
                         }
@@ -82,7 +85,11 @@ public class PlatformTestView extends AbstractView {
                         PlatformTestViewItem actContainer = null;
                         boolean annyFaildOnContainer = false;
 
+                        int count = 0;
                         for (PlatformTestViewItem item : itemArray) {
+                            item.start();
+                            button.setreadyTestCount(++count);
+                            if (item.testName != null) button.setActTestName(item.testName);
                             if (actContainer == null && item.type == PlatformTestViewItem.Type.CONTAINER) {
                                 actContainer = item;
                                 continue;
@@ -91,17 +98,16 @@ public class PlatformTestView extends AbstractView {
                             if (item.type == PlatformTestViewItem.Type.CONTAINER) {
                                 if (annyFaildOnContainer) {
                                     actContainer.setState(PlatformTestViewItem.State.TEST_FAIL);
+                                    anyTestFaild = true;
                                 } else {
                                     actContainer.setState(PlatformTestViewItem.State.TEST_OK);
                                 }
+                                actContainer.stop();
                                 actContainer = item;
                                 annyFaildOnContainer = false;
                                 continue;
                             }
 
-                            //reflect test method
-                            //TODO stop watch
-                            //TODO break test after 100sec
                             try {
                                 Class refClass = ClassReflection.forName(actContainer.className);
                                 Object instance = ClassReflection.newInstance(refClass);
@@ -115,15 +121,20 @@ public class PlatformTestView extends AbstractView {
                                 annyFaildOnContainer = true;
                                 item.setState(PlatformTestViewItem.State.TEST_FAIL);
                             }
-
+                            item.stop();
 
                         }
+                        actContainer.stop();
                         if (annyFaildOnContainer) {
                             actContainer.setState(PlatformTestViewItem.State.TEST_FAIL);
+                            anyTestFaild = true;
                         } else {
                             actContainer.setState(PlatformTestViewItem.State.TEST_OK);
                         }
+
+                        button.testFinish(anyTestFaild);
                     }
+
                 });
             }
         });
@@ -162,10 +173,8 @@ public class PlatformTestView extends AbstractView {
                 log.debug("   --" + child.name);
                 itemArray.add(new PlatformTestViewItem(idx++, PlatformTestViewItem.Type.TEST, jsonValue.name, child.name));
             }
-
-
         }
-
+        button.setTestCount(itemArray.size);
         testListView.setAdapter(new ListViewAdapter() {
             @Override
             public int getCount() {
