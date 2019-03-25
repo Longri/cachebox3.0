@@ -50,7 +50,7 @@ public class TestStateWidget extends WidgetGroup {
     public TestStateWidget() {
 
         //reduce pref size
-        CircularProgressStyle style = VisUI.getSkin().get("circularProgressStyle", CircularProgressStyle.class);
+        CircularProgressStyle style = new CircularProgressStyle(VisUI.getSkin().get("circularProgressStyle", CircularProgressStyle.class));
         style.scaledPreferedRadius = CB.getScaledFloat(5);
         prefSize = style.scaledPreferedRadius * 4;
         style.unknownColor = Color.BLACK;

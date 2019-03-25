@@ -19,9 +19,7 @@ import java.io.Serializable;
 /**
  * A LatLong represents an immutable pair of latitude and longitude coordinates.
  */
-public class LatLong implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class LatLong {
 
     /**
      * The latitude coordinate of this LatLong in degrees.
@@ -33,6 +31,7 @@ public class LatLong implements Serializable {
      */
     public final double longitude;
 
+    private int hash = 0;
 
     public LatLong(double latitude, double longitude) {
         this.latitude = latitude;
@@ -61,6 +60,7 @@ public class LatLong implements Serializable {
             return false;
         }
         LatLong other = (LatLong) obj;
+        if (other.hashCode() != this.hashCode()) return false;
         if (Double.doubleToLongBits(this.latitude) != Double.doubleToLongBits(other.latitude)) {
             return false;
         } else if (Double.doubleToLongBits(this.longitude) != Double.doubleToLongBits(other.longitude)) {
@@ -71,14 +71,16 @@ public class LatLong implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
+        if (hash != 0) return hash;
+        int prime = 31;
         int result = 1;
         long temp;
         temp = Double.doubleToLongBits(this.latitude);
         result = prime * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(this.longitude);
         result = prime * result + (int) (temp ^ (temp >>> 32));
-        return result;
+        hash = result;
+        return hash;
     }
 
     @Override

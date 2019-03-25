@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
@@ -93,7 +94,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
                 boolean hasIcon = (mIcon != null);
                 if (hasIcon) {
-                    com.badlogic.gdx.scenes.scene2d.ui.Image iconImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(mIcon);
+                    com.badlogic.gdx.scenes.scene2d.ui.Image iconImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(mIcon, Scaling.none);
                     this.add(iconImage).center().padRight(CB.scaledSizes.MARGIN_HALF);
                     if (!mIsEnabled) {
                         // TODO iconImage.setColor(COLOR.getDisableFontColor());
@@ -107,9 +108,9 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
                 }
 
                 if (mIsChecked) {
-                    checkImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(style.option_select);
+                    checkImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(style.option_select, Scaling.none);
                 } else {
-                    checkImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(style.option_back);
+                    checkImage = new com.badlogic.gdx.scenes.scene2d.ui.Image(style.option_back, Scaling.none);
                 }
                 this.add(checkImage).width(checkImage.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
             }

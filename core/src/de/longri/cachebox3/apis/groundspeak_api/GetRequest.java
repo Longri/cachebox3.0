@@ -43,7 +43,7 @@ public abstract class GetRequest {
         this.iCancel = iCancel;
     }
 
-    protected abstract void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack);
+    protected abstract void handleResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack);
 
     public void post(final GenericCallBack<ApiResultState> readyCallBack) {
         post(readyCallBack, this.iCancel);
@@ -62,8 +62,8 @@ public abstract class GetRequest {
                 String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
 
-                final Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.GET);
-                httpPost.setUrl(URL + getCallUrl());
+                final Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.GET);
+                httpRequest.setUrl(URL + getCallUrl());
 
                 final AtomicBoolean checkCancel = new AtomicBoolean(iCancel != null);
                 if (checkCancel.get()) {
@@ -73,7 +73,7 @@ public abstract class GetRequest {
                         public void run() {
                             while (checkCancel.get()) {
                                 if (iCancel.cancel()) {
-                                    Gdx.net.cancelHttpRequest(httpPost);
+                                    Gdx.net.cancelHttpRequest(httpRequest);
                                     checkCancel.set(false);
                                 }
 
@@ -87,13 +87,13 @@ public abstract class GetRequest {
                     });
                 }
 
-                log.debug("Send Post request");
-                Gdx.net.sendHttpRequest(httpPost, new Net.HttpResponseListener() {
+                log.debug("Send http GET request");
+                Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
                     @Override
                     public void handleHttpResponse(Net.HttpResponse httpResponse) {
                         log.debug("Handle Response");
                         checkCancel.set(false);
-                        GetRequest.this.handleHttpResponse(httpResponse, readyCallBack);
+                        handleResponse(httpResponse, readyCallBack);
                     }
 
                     @Override

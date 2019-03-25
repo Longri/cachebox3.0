@@ -44,7 +44,7 @@ public class GetPocketQuery extends GetRequest {
     }
 
     @Override
-    protected void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
+    protected void handleResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
 
         // for debug: String resultAsString = httpResponse.getResultAsString();
         InputStream stream = httpResponse.getResultAsStream();

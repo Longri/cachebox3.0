@@ -9,6 +9,5 @@ de.longri.cachebox3.gpx/
 de.longri.cachebox3.gui.utils.CharSequenceArrayTest.java
 de.longri.cachebox3.utils.json_parser/
 de.longri.cachebox3.utils.lists/
-de.longri.cachebox3.utils.CharSequenceUtilTest.java
 de.longri.cachebox3.utils.DownloaderTest.java
 de.longri.cachebox3.utils.UnZipTest.java

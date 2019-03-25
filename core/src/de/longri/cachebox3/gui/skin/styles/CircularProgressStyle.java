@@ -30,4 +30,19 @@ public class CircularProgressStyle {
     public Color textFontColor;
     public float scaledPreferedRadius;
     public Color progressColor;
+
+    public CircularProgressStyle() {
+    }
+
+    public CircularProgressStyle(CircularProgressStyle other) {
+        readyDrawable = other.readyDrawable;
+        borderColor = other.borderColor;
+        backgroundColor = other.backgroundColor;
+        textBackgroundColor = other.textBackgroundColor;
+        textBorderColor = other.textBorderColor;
+        unknownColor = other.unknownColor;
+        textFont = other.textFont;
+        textFontColor = other.textFontColor;
+        progressColor = other.progressColor;
+    }
 }

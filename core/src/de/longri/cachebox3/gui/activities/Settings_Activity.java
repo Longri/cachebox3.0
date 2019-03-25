@@ -80,6 +80,7 @@ public class Settings_Activity extends ActivityBase {
     private static final boolean FORCE = true;
     private CharSequenceButton btnOk, btnCancel, btnMenu;
     private final SettingsActivityStyle style;
+    private float itemWidth;
 
     public Settings_Activity() {
         super("Settings_Activity");
@@ -109,6 +110,9 @@ public class Settings_Activity extends ActivityBase {
         x -= CB.scaledSizes.MARGIN + btnOk.getWidth();
 
         btnOk.setPosition(x, y);
+
+        itemWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 + CB.scaledSizes.MARGIN_HALF);
+
         log.debug("Layout Settings");
     }
 
@@ -473,7 +477,7 @@ public class Settings_Activity extends ActivityBase {
             public void run() {
                 newListView.setAdapter(listViewAdapter);
                 newListView.setUserObject(category);
-                showListView(newListView, category.name(), animate);
+                showListView(newListView, Translation.get(category.name()), animate);
             }
         });
 
@@ -763,8 +767,8 @@ public class Settings_Activity extends ActivityBase {
                 }
             }
         });
-        table.setWidth(this.getWidth());
-        table.setPrefWidth(this.getWidth());
+        table.setWidth(itemWidth);
+        table.setPrefWidth(itemWidth);
         table.invalidate();
         table.pack();
         int rows = table.getRows();
@@ -945,8 +949,10 @@ public class Settings_Activity extends ActivityBase {
                 }
             }
         });
-        table.setWidth(this.getWidth());
-        table.setPrefWidth(this.getWidth());
+
+
+        table.setWidth(itemWidth);
+        table.setPrefWidth(itemWidth);
         table.invalidate();
         table.pack();
 
@@ -1066,8 +1072,8 @@ public class Settings_Activity extends ActivityBase {
             }
         });
 
-        table.setWidth(this.getWidth());
-        table.setPrefWidth(this.getWidth());
+        table.setWidth(itemWidth);
+        table.setPrefWidth(itemWidth);
         table.invalidate();
         table.pack();
         int rows = table.getRows();
@@ -1152,8 +1158,8 @@ public class Settings_Activity extends ActivityBase {
         desclabel.setAlignment(Align.left);
         table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
-        table.setWidth(this.getWidth());
-        table.setPrefWidth(this.getWidth());
+        table.setWidth(itemWidth);
+        table.setPrefWidth(itemWidth);
         table.invalidate();
         table.pack();
         int rows = table.getRows();

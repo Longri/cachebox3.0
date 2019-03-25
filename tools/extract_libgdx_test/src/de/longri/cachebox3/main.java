@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.StringBuilder;
 import org.apache.commons.cli.*;
 
+import java.io.IOException;
 import java.io.StringWriter;
 
 import static java.lang.System.exit;
@@ -33,6 +34,7 @@ import static java.lang.System.exit;
  * Created by Longri on 19.03.2019.
  */
 public class main {
+
     public static void main(String[] args) throws Exception {
 
         CommandLine cmd = getCommandLine(args);
@@ -82,6 +84,11 @@ public class main {
     private static final String ASSERT_THAT_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertThat;";
     private static final String ASSERT_EQUALS = "Assertions.assertEquals;";
     private static final String ASSERT_EQUALS_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertEquals;";
+    private static final String ASSERT_TRUE = "Assertions.assertTrue;";
+    private static final String ASSERT_TRUE_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertTrue;";
+    private static final String ASSERT_FALSE = "Assertions.assertFalse;";
+    private static final String ASSERT_FALSE_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertFalse;";
+
     private static final String CLASS = "class ";
     private static final String VOID = "void ";
     private static final String PUBLIC = "public ";
@@ -202,6 +209,8 @@ public class main {
         boolean jupiterTestReplace = false;
         boolean assertThatReplace = false;
         boolean assertEqualseReplace = false;
+        boolean assertTrueReplace = false;
+        boolean assertFalseReplace = false;
         boolean publicClassReplace = false;
 
         for (int i = 0; i < lines.length; i++) {
@@ -211,7 +220,26 @@ public class main {
 
             if (!packageReplace && (line.startsWith("package") || line.contains(" package "))) {
                 packageReplace = true;
+
                 sb.appendLine(TARGET_PACKAGE_LINE);
+
+                //import package if not empty
+                String packageName = line.replace("package", "").replace(";", "").trim();
+                try {
+                    Class[] list = ReflectionHelper.getClasses(packageName);
+
+                    if (list.length > 0) {
+                        sb.appendLine("");
+                        sb.append("import ");
+                        sb.appendLine(packageName + ".*;");
+                    }
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
                 continue;
             } else if (!jupiterTestReplace && line.startsWith(IMPORT) && line.contains(JUPITER_TEST)) {
                 jupiterTestReplace = true;
@@ -225,8 +253,21 @@ public class main {
                 assertThatReplace = true;
                 sb.appendLine(ASSERT_THAT_LINE);
                 continue;
+            } else if (!assertTrueReplace && line.endsWith(ASSERT_TRUE)) {
+                assertTrueReplace = true;
+                sb.appendLine(ASSERT_TRUE_LINE);
+                continue;
+            } else if (!assertFalseReplace && line.endsWith(ASSERT_FALSE)) {
+                assertFalseReplace = true;
+                sb.appendLine(ASSERT_FALSE_LINE);
+                continue;
             } else if (!publicClassReplace && line.contains(CLASS)) {
                 publicClassReplace = true;
+                //maybe class is public
+                if (line.contains(PUBLIC + CLASS)) {
+                    sb.appendLine(line);
+                    continue;
+                }
                 sb.appendLine(line.replace(CLASS, PUBLIC + CLASS));
                 continue;
             }
@@ -251,7 +292,10 @@ public class main {
                 boolean hasAssertCall = false;
                 int braceCnt = 1;
                 for (int j = i + 1; j < lines.length; j++) {
-                    if (lines[j].contains("assertThat(") || lines[j].contains("assertEquals(")) {
+                    if (lines[j].contains("assertThat(") ||
+                            lines[j].contains("assertEquals(") ||
+                            lines[j].contains("assertTrue(") ||
+                            lines[j].contains("assertFalse(")) {
                         hasAssertCall = true;
                         break;
                     }
@@ -264,7 +308,7 @@ public class main {
 
                 if (hasAssertCall) {
                     if (line.contains(THROWS)) {
-                        //TODO
+                        line = line.replace(" {", ", " + ASSERTATION_ERROR + " {");
                     } else {
                         line = line.replace(")", THROWS + ASSERTATION_ERROR);
                     }
