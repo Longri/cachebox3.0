@@ -183,7 +183,7 @@ public class Settings_Activity extends ActivityBase {
 
 
         btnCancel.addListener(cancelClickListener);
-        StageManager.registerForBackKey(cancelClickListener);
+        CB.stageManager.registerForBackKey(cancelClickListener);
     }
 
     private final ClickListener cancelClickListener = new ClickListener() {
@@ -331,7 +331,7 @@ public class Settings_Activity extends ActivityBase {
         listViews.add(widgetGroup);
         listViewsNames.add(name);
         listBackClickListener.add(backClickListener);
-        StageManager.registerForBackKey(backClickListener);
+        CB.stageManager.registerForBackKey(backClickListener);
         this.addActor(widgetGroup);
     }
 
@@ -342,7 +342,7 @@ public class Settings_Activity extends ActivityBase {
         if (listViews.size == 1) {
             // remove all BackClickListener
             while (listBackClickListener.size > 0) {
-                StageManager.unRegisterForBackKey(listBackClickListener.pop());
+                CB.stageManager.unRegisterForBackKey(listBackClickListener.pop());
             }
 
             //Send click to Cancel button
@@ -350,7 +350,7 @@ public class Settings_Activity extends ActivityBase {
             return;
         }
 
-        StageManager.unRegisterForBackKey(listBackClickListener.pop());
+        CB.stageManager.unRegisterForBackKey(listBackClickListener.pop());
         listViewsNames.pop();
         WidgetGroup actWidgetGroup = listViews.pop();
         WidgetGroup showingWidgetGroup = listViews.get(listViews.size - 1);
@@ -1223,7 +1223,7 @@ public class Settings_Activity extends ActivityBase {
     @Override
     public void dispose() {
         super.dispose();
-        StageManager.unRegisterForBackKey(cancelClickListener);
+        CB.stageManager.unRegisterForBackKey(cancelClickListener);
     }
 
 }

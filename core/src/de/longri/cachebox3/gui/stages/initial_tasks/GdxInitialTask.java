@@ -50,7 +50,7 @@ public final class GdxInitialTask extends AbstractInitTask {
     public void runnable() {
         EventHandler.fire(new IncrementProgressEvent(2, "Initial openGL"));
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        StageManager.setInputMultiplexer(inputMultiplexer);
+        CB.stageManager.setInputMultiplexer(inputMultiplexer);
 
 
         Config.VibrateTime.addChangedEventListener(new IChanged() {

@@ -174,13 +174,13 @@ public class EditDrafts extends ActivityBase {
     @Override
     public void onShow() {
         super.onShow();
-        StageManager.registerForBackKey(cancelClickListener);
+        CB.stageManager.registerForBackKey(cancelClickListener);
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        StageManager.unRegisterForBackKey(cancelClickListener);
+        CB.stageManager.unRegisterForBackKey(cancelClickListener);
     }
 
     public void setDraft(DraftEntry note, ReturnListener listener, boolean isNewDraft) {

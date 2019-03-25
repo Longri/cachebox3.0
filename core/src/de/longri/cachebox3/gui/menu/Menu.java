@@ -58,7 +58,7 @@ public class Menu extends Window {
     private final ClickListener backClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             hide(false);
-            StageManager.unRegisterForBackKey(this);
+            CB.stageManager.unRegisterForBackKey(this);
         }
     };
 
@@ -220,7 +220,7 @@ public class Menu extends Window {
             showAsChild();
         }
         this.setTouchable(Touchable.enabled);
-        StageManager.registerForBackKey(backClickListener);
+        CB.stageManager.registerForBackKey(backClickListener);
         log.debug("show menu: " + this.name);
     }
 
@@ -234,9 +234,9 @@ public class Menu extends Window {
         mainMenuWidgetGroup.addActor(this);
 
         if (this.parentMenu == null) {
-            showingStage = StageManager.showOnNewStage(mainMenuWidgetGroup);
+            showingStage = CB.stageManager.showOnNewStage(mainMenuWidgetGroup);
         } else {
-            showingStage = StageManager.showOnActStage(mainMenuWidgetGroup);
+            showingStage = CB.stageManager.showOnActStage(mainMenuWidgetGroup);
         }
 
         if (this.parentMenu == null)
@@ -270,8 +270,8 @@ public class Menu extends Window {
         if (!isShowing) return;
         if (this.parentMenu != null) {
             if (all) {
-                StageManager.removeAllWithActStage(showingStage);
-                StageManager.unRegisterForBackKey(backClickListener);
+                CB.stageManager.removeAllWithActStage(showingStage);
+                CB.stageManager.unRegisterForBackKey(backClickListener);
             } else {
                 float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
                 mainMenuWidgetGroup.addAction(Actions.sequence(Actions.moveTo(0 + nextXPos, 0, MORE_MENU_ANIMATION_TIME), Actions.removeActor()));
@@ -279,7 +279,7 @@ public class Menu extends Window {
             }
         } else {
             super.hide();
-            StageManager.unRegisterForBackKey(backClickListener);
+            CB.stageManager.unRegisterForBackKey(backClickListener);
         }
         log.debug("Hide menu: " + this.name);
         isShowing = false;

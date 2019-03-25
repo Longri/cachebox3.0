@@ -85,7 +85,7 @@ public class Window extends Catch_Table implements Disposable {
         clearActions();
         pack();
 
-        showingStage = StageManager.showOnNewStage(this);
+        showingStage = CB.stageManager.showOnNewStage(this);
         addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
         if (this instanceof Showable) {
@@ -98,7 +98,7 @@ public class Window extends Catch_Table implements Disposable {
     public void hide() {
         CB.assertGlThread();
         clearActions();
-        StageManager.removeAllWithActStage(showingStage);
+        CB.stageManager.removeAllWithActStage(showingStage);
 
         if (this.windowCloseListener != null) {
             this.windowCloseListener.windowClosed();

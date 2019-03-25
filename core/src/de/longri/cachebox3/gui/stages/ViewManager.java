@@ -404,7 +404,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     }
 
     public boolean isTop(Stage stage) {
-        return StageManager.isTop(stage);
+        return CB.stageManager.isTop(stage);
     }
 
 
@@ -477,7 +477,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
     }
 
     public void toast(final Actor actor, ToastLength length) {
-        StageManager.addToastActor(actor);
+        CB.stageManager.addToastActor(actor);
         actor.addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
         if (length.wait) {

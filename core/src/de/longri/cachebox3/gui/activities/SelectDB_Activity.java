@@ -161,7 +161,7 @@ public class SelectDB_Activity extends ActivityBase {
 
         // Cancel Button
         bCancel.addListener(cancelClickListener);
-        StageManager.registerForBackKey(cancelClickListener);
+        CB.stageManager.registerForBackKey(cancelClickListener);
 
         // AutoStart Button
         bAutostart.addListener(new ClickListener() {
@@ -550,7 +550,7 @@ public class SelectDB_Activity extends ActivityBase {
         lvFiles = null;
         lvAdapter = null;
         fileInfos = null;
-        StageManager.unRegisterForBackKey(cancelClickListener);
+        CB.stageManager.unRegisterForBackKey(cancelClickListener);
         super.dispose();
     }
 

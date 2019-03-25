@@ -191,7 +191,7 @@ public class FileChooser extends ActivityBase {
         });
 
         btnCancel.addListener(cancelClickListener);
-        StageManager.registerForBackKey(cancelClickListener);
+        CB.stageManager.registerForBackKey(cancelClickListener);
     }
 
     private final ClickListener cancelClickListener = new ClickListener() {
@@ -467,6 +467,6 @@ public class FileChooser extends ActivityBase {
     @Override
     public void dispose() {
         super.dispose();
-        StageManager.unRegisterForBackKey(cancelClickListener);
+        CB.stageManager.unRegisterForBackKey(cancelClickListener);
     }
 }

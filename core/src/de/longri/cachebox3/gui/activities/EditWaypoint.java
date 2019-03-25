@@ -167,7 +167,7 @@ public class EditWaypoint extends ActivityBase {
                 }
             });
         }
-        StageManager.registerForBackKey(cancelClickListener);
+        CB.stageManager.registerForBackKey(cancelClickListener);
     }
 
 
@@ -229,6 +229,6 @@ public class EditWaypoint extends ActivityBase {
     @Override
     public void dispose() {
         super.dispose();
-        StageManager.unRegisterForBackKey(cancelClickListener);
+        CB.stageManager.unRegisterForBackKey(cancelClickListener);
     }
 }

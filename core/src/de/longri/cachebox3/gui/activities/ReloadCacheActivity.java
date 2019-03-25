@@ -136,7 +136,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
     private void createOkCancelBtn() {
         bCancel.addListener(cancelClickListener);
-        StageManager.registerForBackKey(cancelClickListener);
+        CB.stageManager.registerForBackKey(cancelClickListener);
     }
 
     @Override
@@ -216,7 +216,7 @@ public class ReloadCacheActivity extends ActivityBase {
     @Override
     public void dispose() {
         super.dispose();
-        StageManager.unRegisterForBackKey(cancelClickListener);
+        CB.stageManager.unRegisterForBackKey(cancelClickListener);
     }
 }
 

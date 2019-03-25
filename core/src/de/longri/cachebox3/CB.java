@@ -126,6 +126,9 @@ public class CB {
 
     public final static SensorIO sensoerIO = new SensorIO();
 
+    public static CacheboxMain cbMain;
+    public static StageManager stageManager;
+
     /**
      * WorkPath is a String to the used work path.<br>
      * This Path is a absolute path.<br>
@@ -351,7 +354,7 @@ public class CB {
                 runnable.run();
             } catch (Exception e) {
                 log.error("postOnGlThread:" + runnable.name, e);
-                StageManager.indicateException(EXCEPTION_COLOR_POST);
+                CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
             }
             return;
         }
@@ -363,7 +366,7 @@ public class CB {
                     runnable.run();
                 } catch (Exception e) {
                     log.error("postOnGlThread:" + runnable.name, e);
-                    StageManager.indicateException(EXCEPTION_COLOR_POST);
+                    CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                 }
                 WAIT.set(false);
             }
@@ -391,7 +394,7 @@ public class CB {
                             runnable.run();
                         } catch (Exception e) {
                             log.error("postAsyncDelayd:" + runnable.name, e);
-                            StageManager.indicateException(EXCEPTION_COLOR_POST);
+                            CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                         }
                     }
                 };
@@ -418,7 +421,7 @@ public class CB {
                     log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
                 } catch (final Exception e) {
                     log.error("postAsync:" + runnable.name, e);
-                    StageManager.indicateException(EXCEPTION_COLOR_POST);
+                    CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                     executeCount.decrementAndGet();
                 }
                 return null;

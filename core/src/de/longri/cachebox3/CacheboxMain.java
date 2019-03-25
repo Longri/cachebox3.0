@@ -102,15 +102,14 @@ public class CacheboxMain extends ApplicationAdapter {
 
     protected Sprite FpsInfoSprite;
     public static boolean drawMap = false;
-
-    // public CacheboxMapAdapter mMap;
     public MapRenderer mMapRenderer;
 
 
     @Override
     public void create() {
-
-        Gdx.graphics.setContinuousRendering(false);
+        CB.cbMain = this;
+        CB.stageManager = new StageManager();
+        Gdx.graphics.setContinuousRendering(true);
 
         final Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         final Batch batch = new SpriteBatch();
@@ -128,16 +127,19 @@ public class CacheboxMain extends ApplicationAdapter {
                     public void run() {
 
                         viewManager = new ViewManager(
-                                CacheboxMain.this, StageManager.viewport, StageManager.batch);
+                                CacheboxMain.this, CB.stageManager.viewport, CB.stageManager.batch);
 
-                        StageManager.setMainStage(viewManager);
+                        CB.stageManager.setMainStage(viewManager);
                         batch.dispose();
+
+                        FpsInfoSprite = null;
+                        Gdx.graphics.setContinuousRendering(true);
                     }
                 });
             }
         }, viewport, batch);
 
-        StageManager.setMainStage(splash);
+        CB.stageManager.setMainStage(splash);
 
         Gdx.graphics.requestRendering();
         CB.initThreadCheck();
@@ -175,7 +177,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
         CB.stateTime += Gdx.graphics.getDeltaTime();
 
-        if (drawMap && mMapRenderer != null && StageManager.isMainStageOnlyDrawing()) {
+        if (drawMap && mMapRenderer != null && CB.stageManager.isMainStageOnlyDrawing()) {
             GLState.enableVertexArrays(-1, -1);
 
             // set map position and size
@@ -208,7 +210,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
 
         try {
-            StageManager.draw();
+            CB.stageManager.draw();
         } catch (Exception e) {
             log.error("Draw StageManager", e);
         }
@@ -216,7 +218,7 @@ public class CacheboxMain extends ApplicationAdapter {
         if (CB.isTestVersion()) {
             float FpsInfoSize = CB.getScaledFloat(4f);
             if (FpsInfoSprite != null) {
-                batch = StageManager.getBatch();
+                batch = CB.stageManager.getBatch();
                 if (!batch.isDrawing())
                     batch.begin();
                 Color lastColor = batch.getColor();
@@ -273,20 +275,23 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void resume() {
-        CB.postOnGlThread(new NamedRunnable("onResume") {
-                @Override
-            public void run() {
-                    if (viewManager != null) viewManager.resume();
-                    checkLogger();
-                    log.debug("App on resume reopen databases");
-                    if (Database.Data != null) Database.Data.open();
-                    if (Database.Settings != null) Database.Settings.open();
-                    if (Database.Drafts != null) Database.Drafts.open();
-                    CB.isBackground = false;
+        FpsInfoSprite = null;
+        Gdx.graphics.setContinuousRendering(true);
 
-                    //restore MapState
-                    CB.lastMapState.deserialize(Config.lastMapState.getValue());
-                    CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
+        CB.postOnGlThread(new NamedRunnable("onResume") {
+            @Override
+            public void run() {
+                if (viewManager != null) viewManager.resume();
+                checkLogger();
+                log.debug("App on resume reopen databases");
+                if (Database.Data != null) Database.Data.open();
+                if (Database.Settings != null) Database.Settings.open();
+                if (Database.Drafts != null) Database.Drafts.open();
+                CB.isBackground = false;
+
+                //restore MapState
+                CB.lastMapState.deserialize(Config.lastMapState.getValue());
+                CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
             }
         });
     }

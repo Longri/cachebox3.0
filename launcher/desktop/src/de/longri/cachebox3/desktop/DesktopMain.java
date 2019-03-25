@@ -76,7 +76,7 @@ public class DesktopMain extends CacheboxMain {
 
         if (pause) {
             //Draw Black Overlay
-            Batch batch = StageManager.getBatch();
+            Batch batch = CB.stageManager.getBatch();
             if (!batch.isDrawing())
                 batch.begin();
             Color lastColor = batch.getColor();

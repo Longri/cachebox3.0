@@ -213,7 +213,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
         });
 
         bCancel.addListener(cancelClickListener);
-        StageManager.registerForBackKey(cancelClickListener);
+        CB.stageManager.registerForBackKey(cancelClickListener);
     }
 
     private final ClickListener cancelClickListener = new ClickListener() {
@@ -505,7 +505,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
 
     @Override
     public void dispose() {
-        StageManager.unRegisterForBackKey(cancelClickListener);
+        CB.stageManager.unRegisterForBackKey(cancelClickListener);
 
 //        if (bOK != null)
 //            bOK.dispose();

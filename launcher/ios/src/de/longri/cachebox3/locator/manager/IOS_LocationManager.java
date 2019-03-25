@@ -109,7 +109,7 @@ public class IOS_LocationManager extends LocationManager {
                             if (courseRad >= 0) locationEvents.newBearing(courseRad, true);
                             if (speed >= 0) locationEvents.newSpeed(speed);
                         } catch (Exception e) {
-                            StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                            CB.stageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
                             log.error("didUpdateLocations", e);
                         }
                     }
@@ -136,7 +136,7 @@ public class IOS_LocationManager extends LocationManager {
                             float headingRad = (float) Math.toRadians(newHeading.getTrueHeading());
                             if (locationEvents != null) locationEvents.newBearing(headingRad, false);
                         } catch (Exception e) {
-                            StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                            CB.stageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
                             log.error("didUpdateHeading", e);
                         }
                     }
@@ -170,7 +170,7 @@ public class IOS_LocationManager extends LocationManager {
                 try {
                     locationEvents.didEnterRegion(regionMap.get(region));
                 } catch (Exception e) {
-                    StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                    CB.stageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
                     log.error("didEnterRegion", e);
                 }
             }
@@ -181,7 +181,7 @@ public class IOS_LocationManager extends LocationManager {
                 try {
                     locationEvents.didExitRegion(regionMap.get(region));
                 } catch (Exception e) {
-                    StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+                    CB.stageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
                     log.error("didExitRegion", e);
                 }
             }

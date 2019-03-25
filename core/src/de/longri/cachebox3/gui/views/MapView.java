@@ -622,11 +622,11 @@ public class MapView extends AbstractView {
 
     private void addInputListener() {
         if (mapInputHandler == null) createMapInputHandler();
-        StageManager.addMapMultiplexer(mapInputHandler);
+        CB.stageManager.addMapMultiplexer(mapInputHandler);
     }
 
     private void removeInputListener() {
-        StageManager.removeMapMultiplexer(mapInputHandler);
+        CB.stageManager.removeMapMultiplexer(mapInputHandler);
     }
 
     public boolean getAlignToCompass() {

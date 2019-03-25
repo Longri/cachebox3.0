@@ -48,26 +48,26 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by Longri on 25.08.2016.
  */
 public class StageManager {
-    final static Logger log = LoggerFactory.getLogger(StageManager.class);
-    final static Array<NamedStage> stageList = new Array<>(5);
+    final  Logger log = LoggerFactory.getLogger(StageManager.class);
+    final  Array<NamedStage> stageList = new Array<>(5);
 
-    public final static Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
-    public final static CB_SpriteBatch batch = new CB_SpriteBatch(CB_SpriteBatch.Mode.NORMAL);
+    public final  Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+    public final  CB_SpriteBatch batch = new CB_SpriteBatch(CB_SpriteBatch.Mode.NORMAL);
 
 
-    final static NamedStage toastStage = new NamedStage("toastStage", viewport, batch);
+    final  NamedStage toastStage = new NamedStage("toastStage", viewport, batch);
 
-    private static boolean debug = true;
-    private static boolean writeDrawSequence = debug;
+    private  boolean debug = true;
+    private  boolean writeDrawSequence = debug;
 
-    private static NamedStage mainStage;
-    private static InputMultiplexer inputMultiplexer;
+    private  NamedStage mainStage;
+    private  InputMultiplexer inputMultiplexer;
 
     public static final InputEvent BACK_KEY_INPUT_EVENT = new InputEvent();
-    private static final Array<ClickListener> backKeyClickListener = new Array<>();
-    private static NamedStage zOrderTopStage;
+    private  final Array<ClickListener> backKeyClickListener = new Array<>();
+    private  NamedStage zOrderTopStage;
 
-    public static void draw() {
+    public  void draw() {
         synchronized (stageList) {
             if (stageList.size < 2) {
                 mainStage.act();
@@ -124,19 +124,19 @@ public class StageManager {
 
     }
 
-    public static void indicateException(Color color) {
+    public  void indicateException(Color color) {
         if (!CB.DRAW_EXCEPTION_INDICATOR) return;
         exceptionDrawColor = color;
         exceptionDrawCount.set(0);
         indicateCatchedException.set(true);
     }
 
-    private final static AtomicBoolean indicateCatchedException = new AtomicBoolean(false);
-    private final static AtomicInteger exceptionDrawCount = new AtomicInteger(0);
-    private static Color exceptionDrawColor = Color.GREEN;
-    private static Sprite exceptionSprite;
+    private final  AtomicBoolean indicateCatchedException = new AtomicBoolean(false);
+    private final  AtomicInteger exceptionDrawCount = new AtomicInteger(0);
+    private  Color exceptionDrawColor = Color.GREEN;
+    private  Sprite exceptionSprite;
 
-    public static void addToastActor(Actor actor) {
+    public  void addToastActor(Actor actor) {
         log.debug("show Toast");
         //only one Toast Actor is visible
         if (toastStage.getActors().size > 0) {
@@ -147,7 +147,7 @@ public class StageManager {
         if (debug) writeDrawSequence = true;
     }
 
-    public static NamedStage showOnNewStage(final Actor actor) {
+    public  NamedStage showOnNewStage(final Actor actor) {
         synchronized (stageList) {
             if (stageList.size > 0) {
                 NamedStage actStage = stageList.get(stageList.size - 1);
@@ -205,13 +205,13 @@ public class StageManager {
         }
     }
 
-    public static NamedStage showOnActStage(Actor actor) {
+    public  NamedStage showOnActStage(Actor actor) {
         NamedStage stage = stageList.get(stageList.size - 1);
         stage.addActor(actor);
         return stage;
     }
 
-    public static void removeAllWithActStage(NamedStage showingStage) {
+    public  void removeAllWithActStage(NamedStage showingStage) {
         synchronized (stageList) {
             if (stageList.size == 0) return;
             NamedStage stage = stageList.pop();
@@ -263,7 +263,7 @@ public class StageManager {
         }
     }
 
-    private static void setTopStage() {
+    private  void setTopStage() {
         if (stageList.size > 0) {
             zOrderTopStage = stageList.get(stageList.size - 1);
         } else {
@@ -271,7 +271,7 @@ public class StageManager {
         }
     }
 
-    public static void setMainStage(NamedStage stage) {
+    public  void setMainStage(NamedStage stage) {
         mainStage = stage;
 
         if (false && mainStage instanceof ViewManager) {
@@ -298,12 +298,12 @@ public class StageManager {
         if (inputMultiplexer != null) addNonDoubleInputProzessor(mainStage);
     }
 
-    private static void addNonDoubleInputProzessor(InputProcessor processor) {
+    private  void addNonDoubleInputProzessor(InputProcessor processor) {
         if (inputMultiplexer.getProcessors().contains(processor, true)) return;
         inputMultiplexer.addProcessor(processor);
     }
 
-    public static void setInputMultiplexer(InputMultiplexer newInputMultiplexer) {
+    public  void setInputMultiplexer(InputMultiplexer newInputMultiplexer) {
         inputMultiplexer = newInputMultiplexer;
 
         //add BackKey listener
@@ -318,33 +318,33 @@ public class StageManager {
         inputMultiplexer.addProcessor(backProcessor);
     }
 
-    public static Batch getBatch() {
+    public  Batch getBatch() {
         return mainStage.getBatch();
     }
 
-    public static void addMapMultiplexer(InputMultiplexer mapInputHandler) {
+    public  void addMapMultiplexer(InputMultiplexer mapInputHandler) {
         if (!inputMultiplexer.getProcessors().contains(mapInputHandler, true)) {
             inputMultiplexer.addProcessor(mapInputHandler);
         }
     }
 
-    public static void removeMapMultiplexer(InputMultiplexer mapInputHandler) {
+    public  void removeMapMultiplexer(InputMultiplexer mapInputHandler) {
         inputMultiplexer.removeProcessor(mapInputHandler);
     }
 
-    public static void registerForBackKey(ClickListener clickListener) {
+    public  void registerForBackKey(ClickListener clickListener) {
         if (!backKeyClickListener.contains(clickListener, true)) {
             backKeyClickListener.add(clickListener);
         }
     }
 
-    public static void unRegisterForBackKey(ClickListener clickListener) {
+    public  void unRegisterForBackKey(ClickListener clickListener) {
         if (backKeyClickListener.contains(clickListener, true)) {
             backKeyClickListener.removeValue(clickListener, true);
         }
     }
 
-    private static void callBackKeyClicked() {
+    private  void callBackKeyClicked() {
         if (backKeyClickListener.size == 0) {
             // no listener registered, call Quit!
             CB.viewmanager.getAction_Show_Quit().execute();
@@ -354,11 +354,11 @@ public class StageManager {
         }
     }
 
-    public static boolean isTop(Stage stage) {
+    public  boolean isTop(Stage stage) {
         return zOrderTopStage == stage;
     }
 
-    public static boolean isMainStageOnlyDrawing() {
+    public  boolean isMainStageOnlyDrawing() {
         return stageList.size == 0;
     }
 }

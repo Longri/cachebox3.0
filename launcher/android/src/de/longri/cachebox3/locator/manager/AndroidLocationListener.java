@@ -105,7 +105,7 @@ public class AndroidLocationListener implements LocationListener {
                     this.handler.newNetworkPos(location.getLatitude(), location.getLongitude(), acc);
             }
         } catch (Exception e) {
-            StageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
+            CB.stageManager.indicateException(CB.EXCEPTION_COLOR_LOCATION);
             log.error("onLocationChanged", e);
         }
     }

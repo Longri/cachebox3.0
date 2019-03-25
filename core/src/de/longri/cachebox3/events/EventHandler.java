@@ -132,7 +132,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                             try {
                                 event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
                             } catch (Exception e) {
-                                StageManager.indicateException(CB.EXCEPTION_COLOR_EVENT);
+                                CB.stageManager.indicateException(CB.EXCEPTION_COLOR_EVENT);
                                 String name;
                                 try {
                                     name = list.items[i].getClass().getSimpleName();

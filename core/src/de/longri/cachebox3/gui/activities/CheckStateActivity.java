@@ -154,7 +154,7 @@ public class CheckStateActivity extends ActivityBase {
 
     private void createOkCancelBtn() {
         bCancel.addListener(cancelListener);
-        StageManager.registerForBackKey(cancelListener);
+        CB.stageManager.registerForBackKey(cancelListener);
     }
 
     @Override
@@ -355,7 +355,7 @@ public class CheckStateActivity extends ActivityBase {
     @Override
     public void dispose() {
         super.dispose();
-        StageManager.unRegisterForBackKey(cancelListener);
+        CB.stageManager.unRegisterForBackKey(cancelListener);
     }
 }
 

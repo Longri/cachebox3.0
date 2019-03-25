@@ -141,7 +141,7 @@ public class NumPad extends Catch_Table implements TextField.OnscreenKeyboard, D
         btnDot.addListener(clickListener);
         btnLeft.addListener(clickListener);
         btnRight.addListener(clickListener);
-        StageManager.registerForBackKey(clickListener);
+        CB.stageManager.registerForBackKey(clickListener);
 
     }
 
@@ -243,7 +243,7 @@ public class NumPad extends Catch_Table implements TextField.OnscreenKeyboard, D
         btnDot.removeListener(clickListener);
         btnLeft.removeListener(clickListener);
         btnRight.removeListener(clickListener);
-        StageManager.unRegisterForBackKey(clickListener);
+        CB.stageManager.unRegisterForBackKey(clickListener);
         this.clear();
     }
 
