@@ -69,8 +69,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(TestView.class);
 
-    static private FileChooser fileChooser = new FileChooser("select sensor file",
-            FileChooser.Mode.OPEN, FileChooser.SelectionMode.FILES, "lon");
     private final AtomicBoolean showing = new AtomicBoolean(true);
 
     public TestView() {

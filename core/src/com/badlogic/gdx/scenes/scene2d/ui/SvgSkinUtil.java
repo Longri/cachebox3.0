@@ -78,7 +78,11 @@ public class SvgSkinUtil {
                     CB.postOnGlThread(new NamedRunnable("SvgSkinUtil") {
                         @Override
                         public void run() {
-                            atlas[0] = new TextureAtlas(finalCachedTexturatlasFileHandle);
+                            try {
+                                atlas[0] = new TextureAtlas(finalCachedTexturatlasFileHandle);
+                            } catch (Exception e) {
+                                log.error("", e);
+                            }
                         }
                     }, true);
                     return atlas[0];

@@ -42,7 +42,9 @@ dependencies {
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
     
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
-    
+
+    implementation group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
+
 }
 
 test {

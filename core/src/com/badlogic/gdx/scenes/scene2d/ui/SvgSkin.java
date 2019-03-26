@@ -105,7 +105,11 @@ public class SvgSkin extends Skin {
             skinFile = skinFolder.child(SKIN_JSON_NAME);
             this.skinFolder = skinFolder;
         }
-        load(skinFile);
+        try {
+            load(skinFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void load(FileHandle skinFile) {
@@ -250,7 +254,11 @@ public class SvgSkin extends Skin {
 
                         if (valueMap.name().equals(ScaledSvg.class.getName())) {
                             log.debug("read scaled SVG'S");
-                            readScaledSvgs(json, ClassReflection.forName(valueMap.name()), valueMap);
+                            try {
+                                readScaledSvgs(json, ClassReflection.forName(valueMap.name()), valueMap);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             readNamedObjects(json, ClassReflection.forName(valueMap.name()), valueMap);
                         }

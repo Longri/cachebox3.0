@@ -88,6 +88,8 @@ public class main {
     private static final String ASSERT_TRUE_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertTrue;";
     private static final String ASSERT_FALSE = "Assertions.assertFalse;";
     private static final String ASSERT_FALSE_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertFalse;";
+    private static final String ASSERT_NOT_NULL = "Assertions.assertNotNull;";
+    private static final String ASSERT_NOT_NULL_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertNotNull;";
 
     private static final String CLASS = "class ";
     private static final String VOID = "void ";
@@ -211,6 +213,7 @@ public class main {
         boolean assertEqualseReplace = false;
         boolean assertTrueReplace = false;
         boolean assertFalseReplace = false;
+        boolean assertNotNullReplace = false;
         boolean publicClassReplace = false;
 
         for (int i = 0; i < lines.length; i++) {
@@ -233,9 +236,7 @@ public class main {
                         sb.append("import ");
                         sb.appendLine(packageName + ".*;");
                     }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -261,7 +262,11 @@ public class main {
                 assertFalseReplace = true;
                 sb.appendLine(ASSERT_FALSE_LINE);
                 continue;
-            } else if (!publicClassReplace && line.contains(CLASS)) {
+            } else if (!assertNotNullReplace && line.endsWith(ASSERT_NOT_NULL)) {
+                assertNotNullReplace = true;
+                sb.appendLine(ASSERT_NOT_NULL_LINE);
+                continue;
+            }  else if (!publicClassReplace && line.contains(CLASS)) {
                 publicClassReplace = true;
                 //maybe class is public
                 if (line.contains(PUBLIC + CLASS)) {
@@ -295,7 +300,9 @@ public class main {
                     if (lines[j].contains("assertThat(") ||
                             lines[j].contains("assertEquals(") ||
                             lines[j].contains("assertTrue(") ||
-                            lines[j].contains("assertFalse(")) {
+                            lines[j].contains("assertFalse(")||
+                            lines[j].contains("assertNotNull(")||
+                            lines[j].contains("assertAbstractViewSerialation(")) {
                         hasAssertCall = true;
                         break;
                     }

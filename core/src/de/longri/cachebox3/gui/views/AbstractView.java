@@ -22,6 +22,7 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.widgets.CB_View_Base;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.utils.SkinColor;
+import de.longri.serializable.BitStore;
 
 /**
  * Created by Longri on 23.07.16.
@@ -30,6 +31,11 @@ public abstract class AbstractView extends CB_View_Base {
 
     ColorWidget colorWidget;
     VisLabel nameLabel;
+
+    public AbstractView(BitStore reader) throws de.longri.serializable.NotImplementedException {
+        super(reader.readString());
+        restoreInstanceState(reader);
+    }
 
     public AbstractView(String name) {
         super(name);
@@ -68,4 +74,22 @@ public abstract class AbstractView extends CB_View_Base {
     public abstract boolean hasContextMenu();
 
     public abstract Menu getContextMenu();
+
+    public final BitStore saveInstanceState() throws de.longri.serializable.NotImplementedException {
+        BitStore store = new BitStore();
+        store.write(this.getClass().getName());
+        store.write(this.NAME);
+        saveInstanceState(store);
+        return store;
+    }
+
+    protected void saveInstanceState(BitStore writer) {
+
+    }
+
+    protected void restoreInstanceState(BitStore reader) {
+
+    }
+
+
 }

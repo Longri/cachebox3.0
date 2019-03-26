@@ -19,16 +19,28 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.files.FileHandle;
-
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.BuildInfo;
-
 import de.longri.cachebox3.utils.GeoUtils;
+import de.longri.cachebox3.utils.ScaledSizes;
 import org.apache.commons.codec.Charsets;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -58,6 +70,22 @@ public class TestUtils {
         CB.WorkPath = "!!!";
         VisUI.load(new Skin());
         CB.initThreadCheck();
+        Gdx.gl = mock(GL20.class);
+    }
+
+    public static void initialVisUI() {
+        initialGdx();
+        if (!VisUI.isLoaded()) VisUI.load();
+        CB.scaledSizes = new ScaledSizes(100, 50, 150, 10,
+                50, 10);
+        CB.backgroundImage = new Image((Drawable) null);
+
+
+        // add missing styles as test styles
+        //com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle registered with name: default
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = new BitmapFont();
+        VisUI.getSkin().add("default", labelStyle, Label.LabelStyle.class);
 
     }
 
@@ -164,7 +192,7 @@ public class TestUtils {
     public static FileHandle getResourceFileHandle(String path, boolean mustexist) {
         File file = new File(path);
 
-        if (mustexist&&!file.exists()) {
+        if (mustexist && !file.exists()) {
             //try set /tests path
             path = "tests/" + path;
             file = new File(path);
@@ -196,4 +224,34 @@ public class TestUtils {
 
 
     }
+
+    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz) throws de.longri.serializable.NotImplementedException {
+        de.longri.serializable.BitStore store = abstractView.saveInstanceState();
+        byte[] bytes = store.getArray();
+
+        de.longri.serializable.BitStore reader = new de.longri.serializable.BitStore(bytes);
+
+        String className = reader.readString();
+
+        AbstractView newInstanceAbstractView = null;
+        Object obj = null;
+
+        try {
+            Class clazz = ClassReflection.forName(className);
+            Constructor constructor = ClassReflection.getConstructor(clazz, de.longri.serializable.BitStore.class);
+
+            obj = constructor.newInstance(reader);
+            newInstanceAbstractView = (AbstractView) obj;
+
+        } catch (ReflectionException e) {
+            e.printStackTrace(
+
+            );
+        }
+        assertNotNull(obj);
+        assertNotNull(newInstanceAbstractView);
+        assertTrue(expectedClazz.isInstance(obj));
+        return newInstanceAbstractView;
+    }
+
 }

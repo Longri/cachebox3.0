@@ -17,8 +17,16 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
+import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
 
 import java.io.File;
+
+import static de.longri.cachebox3.platform_test.Assert.assertNotNull;
+import static de.longri.cachebox3.platform_test.Assert.assertTrue;
 
 public class TestUtils {
 
@@ -26,8 +34,41 @@ public class TestUtils {
         // we don't need to initial GDX on PlatformTest Gdx are initial!
     }
 
+    public static void initialVisUI() {
+        // we don't need to initial VisUI on PlatformTest VisUI are loaded!
+    }
+
     public static FileHandle getResourceFileHandle(String path, boolean mustexist) {
         FileHandle fileHandle = Gdx.files.absolute(path);
         return fileHandle;
+    }
+
+    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz) throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+        de.longri.serializable.BitStore store = abstractView.saveInstanceState();
+        byte[] bytes = store.getArray();
+
+        de.longri.serializable.BitStore reader = new de.longri.serializable.BitStore(bytes);
+
+        String className = reader.readString();
+
+        AbstractView newInstanceAbstractView = null;
+        Object obj = null;
+
+        try {
+            Class clazz = ClassReflection.forName(className);
+            Constructor constructor = ClassReflection.getConstructor(clazz, de.longri.serializable.BitStore.class);
+
+            obj = constructor.newInstance(reader);
+            newInstanceAbstractView = (AbstractView) obj;
+
+        } catch (ReflectionException e) {
+            e.printStackTrace(
+
+            );
+        }
+        assertNotNull(obj);
+        assertNotNull(newInstanceAbstractView);
+        assertTrue(expectedClazz.isInstance(obj));
+        return newInstanceAbstractView;
     }
 }

@@ -51,6 +51,10 @@ public class Assert {
         return obj1.equals(obj2);
     }
 
+    public static void assertTrue(boolean assertion) throws PlatformAssertionError {
+        assertTrue(assertion, "");
+    }
+
     public static void assertTrue(boolean assertion, String reason) throws PlatformAssertionError {
         if (!assertion) {
             throw new PlatformAssertionError(reason);
@@ -61,5 +65,13 @@ public class Assert {
         if (assertion) {
             throw new PlatformAssertionError(reason);
         }
+    }
+
+    public static void assertNotNull(Object obj) throws PlatformAssertionError {
+        assertNotNull(obj, "");
+    }
+
+    public static void assertNotNull(Object obj, String message) throws PlatformAssertionError {
+        if (obj == null) throw new PlatformAssertionError(message);
     }
 }

@@ -366,7 +366,7 @@ public class CB {
                     runnable.run();
                 } catch (Exception e) {
                     log.error("postOnGlThread:" + runnable.name, e);
-                    CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
+                    if (CB.stageManager != null) CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                 }
                 WAIT.set(false);
             }
