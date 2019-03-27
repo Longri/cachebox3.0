@@ -57,6 +57,8 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,10 +73,15 @@ public class TestView extends AbstractView {
 
     private final AtomicBoolean showing = new AtomicBoolean(true);
 
+    public TestView(BitStore reader) throws NotImplementedException {
+        super(reader);
+    }
+
     public TestView() {
         super("TestView");
 //        this.setDebug(true, true);
-        createIconTable();
+        CB.assertGlThread();
+        if (!CB.isMocked()) createIconTable();
     }
 
     private VisScrollPane scrollPane;

@@ -48,6 +48,8 @@ import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +73,11 @@ public class DraftsView extends AbstractView {
     private final DraftListItemStyle itemStyle;
 
     private Array<ListViewItem> items;
+
+    public DraftsView(BitStore reader) throws NotImplementedException {
+        super(reader);
+        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
+    }
 
     public DraftsView() {
         super("DraftsView");

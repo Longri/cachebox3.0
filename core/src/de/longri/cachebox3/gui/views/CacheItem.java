@@ -68,9 +68,9 @@ public class CacheItem extends VisTable implements Disposable {
         this.style = style;
         this.type = type;
         this.cacheName = cacheName;
-        this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(this.style.logTypesStyle);
-        this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(this.style.logTypesStyle);
-        this.rightTopIcon = isFavorite ? LogTypes.ownFavorite.getDrawable(this.style.logTypesStyle) : null;
+        this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(style == null ? null : style.logTypesStyle);
+        this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(style == null ? null : style.logTypesStyle);
+        this.rightTopIcon = isFavorite ? LogTypes.ownFavorite.getDrawable(style == null ? null : style.logTypesStyle) : null;
         this.isAvailable = isAvailable;
         this.favPoints = favPoints;
         this.tbCount = tbCount;
@@ -85,6 +85,8 @@ public class CacheItem extends VisTable implements Disposable {
 
         this.clear();
 
+
+        if (this.style == null) return;
         if (this.type != null) {
             VisTable iconTable = new VisTable();
             iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon, null, rightTopIcon));

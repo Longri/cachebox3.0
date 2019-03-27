@@ -114,6 +114,7 @@ public class Compass extends Catch_WidgetGroup implements Layout {
     }
 
     private void calcSizes() {
+        if (style == null || style.frameNorthOrient == null) return;
         prefSize = style.frameNorthOrient.getMinWidth();
         minSize = prefSize * (CAN_SCALE ? 0.4f : 1f);
         maxSize = prefSize * (CAN_SCALE ? 1.3f : 1f);

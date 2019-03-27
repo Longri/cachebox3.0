@@ -155,9 +155,7 @@ public enum CacheTypes implements SelectBoxItem {
                 return Undefined;
         }
 
-        try
-
-        {
+        try {
             return valueOf(string);
         } catch (Exception ex) {
             CacheTypes cacheType = Undefined;
@@ -197,8 +195,8 @@ public enum CacheTypes implements SelectBoxItem {
     }
 
     public Drawable getDrawable(CacheTypeStyle style) {
+        if (style == null) return null;
         Drawable drawable;
-
         switch (this) {
             case Traditional:
                 drawable = style.traditional;

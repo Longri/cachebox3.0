@@ -469,6 +469,7 @@ public enum LogTypes implements SelectBoxItem {
     }
 
     public Drawable getDrawable(LogTypesStyle style) {
+        if (style == null) return null;
         switch (this) {
             case found:
                 return style.found;

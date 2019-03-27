@@ -50,6 +50,8 @@ import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,11 +63,11 @@ public class CompassView extends AbstractView implements
 
     private static final Logger log = LoggerFactory.getLogger(CompassView.class);
 
-    private final CompassPanel compassPanel;
-    private final VisSplitPane splitPane;
-    private final Table topTable, bottomTable;
-    private final CompassViewStyle style;
-    private final Image backgroundWidget;
+    private CompassPanel compassPanel;
+    private VisSplitPane splitPane;
+    private Table topTable, bottomTable;
+    private CompassViewStyle style;
+    private Image backgroundWidget;
     private final float result[] = new float[4];
 
     private Coordinate actCoord;
@@ -74,6 +76,10 @@ public class CompassView extends AbstractView implements
 
     private boolean resetLayout, showMap, showName, showIcon, showAtt, showGcCode, showCoords, showWpDesc, showSatInfos, showSunMoon, showAnyContent, showTargetDirection, showSDT, showLastFound;
     private float accuracy;
+
+    public CompassView(BitStore reader) throws NotImplementedException {
+        super(reader);
+    }
 
     public CompassView() {
         super("CompassView");
@@ -97,6 +103,8 @@ public class CompassView extends AbstractView implements
         topTable.setBackground(style.splitBackground);
         bottomTable.setBackground(style.splitBackground);
 
+
+        if (CB.isMocked()) return;
 
         VisSplitPane.VisSplitPaneStyle visSplitPaneStyle = new VisSplitPane.VisSplitPaneStyle();
         visSplitPaneStyle.handle = style.splitHandle;

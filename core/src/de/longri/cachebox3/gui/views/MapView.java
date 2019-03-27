@@ -70,6 +70,8 @@ import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.utils.EQUALS;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
@@ -124,23 +126,31 @@ public class MapView extends AbstractView {
 
     private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter map;
-    private final CacheboxMain main;
     private MapScaleBarLayer mapScaleBarLayer;
-    private final MapStateButton mapStateButton;
-    private final ZoomButton zoomButton;
+    private MapStateButton mapStateButton;
+    private ZoomButton zoomButton;
+    private MapInfoPanel infoPanel;
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
     private CenterCrossLayer ccl;
-    private final MapInfoPanel infoPanel;
     private LocationTextureLayer myLocationLayer;
     private MapViewPositionChangedHandler positionChangedHandler;
     private Point screenPoint = new Point();
     private final Event selfEvent = new Event();
 
-    public MapView(CacheboxMain main) {
+    public MapView(BitStore reader) throws NotImplementedException {
+        super(reader);
+        create();
+    }
+
+    public MapView() {
         super("MapView");
+        create();
+    }
+
+    @Override
+    protected void create() {
         this.setTouchable(Touchable.disabled);
-        this.main = main;
 
         //TODO use better packer like rectPack2D
         if (CB.textureRegionMap == null) CB.textureRegionMap = createTextureAtlasRegions();
@@ -297,6 +307,7 @@ public class MapView extends AbstractView {
 
     private CacheboxMapAdapter createMap() {
 
+        if (CB.isMocked()) return null;
 
         log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
         log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
@@ -337,8 +348,8 @@ public class MapView extends AbstractView {
                 lastCenterPosLon = mapPosition.getLongitude();
             }
         };
-        main.mMapRenderer = new MapRenderer(map);
-        main.mMapRenderer.onSurfaceCreated();
+        ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer = new MapRenderer(map);
+        ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer.onSurfaceCreated();
 
         initLayers(false);
 
@@ -352,6 +363,7 @@ public class MapView extends AbstractView {
         // create TextureRegions from all Bitmap symbols
         LinkedHashMap<Object, TextureRegion> textureRegionMap = new LinkedHashMap<>();
         ObjectMap<String, MapWayPointItemStyle> list = VisUI.getSkin().getAll(MapWayPointItemStyle.class);
+        if (list == null) return null;
         Array<Bitmap> bitmapList = new Array<>();
         for (MapWayPointItemStyle style : list.values()) {
             if (style.small != null) if (!bitmapList.contains(style.small, true)) bitmapList.add(style.small);
@@ -384,12 +396,6 @@ public class MapView extends AbstractView {
         TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, false,
                 flipped);
         return textureRegionMap;
-    }
-
-    @Override
-    protected void create() {
-        // override and don't call super
-        // for non creation of default name label
     }
 
     @Override
@@ -468,7 +474,7 @@ public class MapView extends AbstractView {
             }
         });
 
-        main.mMapRenderer = null;
+        ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer = null;
 
         //dispose actors
         mapStateButton.dispose();
@@ -481,7 +487,7 @@ public class MapView extends AbstractView {
         if (map == null) return;
         map.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
         map.viewport().setViewSize((int) this.getWidth(), (int) this.getHeight());
-        main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
+        ((CacheboxMain) Gdx.app.getApplicationListener()).setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
 
         mapHalfWith = map.getWidth() / 2;
         mapHalfHeight = map.getHeight() / 2;
@@ -504,7 +510,7 @@ public class MapView extends AbstractView {
 
     @Override
     public void positionChanged() {
-        main.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
+        ((CacheboxMain) Gdx.app.getApplicationListener()).setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
     }
 
 

@@ -159,10 +159,11 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
             float y = (this.getHeight() - imageDrawable.getMinHeight()) / 2;
             image.setBounds(x, y, imageDrawable.getMinWidth(), imageDrawable.getMinHeight());
         }
-        selectIcon.setBounds(this.getWidth() - (style.selectIcon.getMinWidth() + CB.scaledSizes.MARGIN),
-                (this.getHeight() - style.selectIcon.getMinHeight()) / 2,
-                style.selectIcon.getMinWidth(),
-                style.selectIcon.getMinHeight());
+        if (selectIcon != null && style.selectIcon != null)
+            selectIcon.setBounds(this.getWidth() - (style.selectIcon.getMinWidth() + CB.scaledSizes.MARGIN),
+                    (this.getHeight() - style.selectIcon.getMinHeight()) / 2,
+                    style.selectIcon.getMinWidth(),
+                    style.selectIcon.getMinHeight());
 
     }
 

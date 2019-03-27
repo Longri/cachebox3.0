@@ -44,6 +44,7 @@ public class MyPositionAnimator {
     public void update(float delta) {
         boolean posChanged = false;
         boolean accuracyChanged = false;
+        boolean headingChanged = false;
 
         if (posLatitude.update(delta)) {
             actLatitude = posLatitude.getAct();
@@ -57,7 +58,7 @@ public class MyPositionAnimator {
 
         if (heading.update(delta)) {
             actHead = (float) heading.getAct();
-            posChanged = true;
+            headingChanged = true;
         }
 
         if (accuracy.update(delta)) {
@@ -68,7 +69,7 @@ public class MyPositionAnimator {
         if (posChanged) {
             myLocationLayer.setPosition(actLatitude, actLongitude, actHead, actAccuracy);
             directLineLayer.redrawLine(new LatLong(actLatitude, actLongitude));
-        } else if (accuracyChanged) {
+        } else if (accuracyChanged || headingChanged) {
             myLocationLayer.setPosition(actLatitude, actLongitude, actHead, actAccuracy);
         }
 

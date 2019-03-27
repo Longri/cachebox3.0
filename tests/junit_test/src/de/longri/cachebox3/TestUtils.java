@@ -23,14 +23,24 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.menu.MenuItem;
+import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.widgets.MapStateButton;
+import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.translation.AbstractTranslationHandler;
+import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.BuildInfo;
@@ -38,15 +48,14 @@ import de.longri.cachebox3.utils.GeoUtils;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.apache.commons.codec.Charsets;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by longri on 14.04.17.
@@ -80,6 +89,34 @@ public class TestUtils {
                 50, 10);
         CB.backgroundImage = new Image((Drawable) null);
 
+        //init mock translation
+        Translation.translation = new AbstractTranslationHandler(null, null) {
+            @Override
+            public void loadTranslation(String langPath) throws IOException {
+
+            }
+
+            @Override
+            public CompoundCharSequence getTranslation(String stringId, CharSequence... params) {
+                return new CompoundCharSequence("Test");
+            }
+
+            @Override
+            public CompoundCharSequence getTranslation(int hashCode, CharSequence... params) {
+                return new CompoundCharSequence("Test");
+            }
+
+            @Override
+            public boolean isInitial() {
+                return true;
+            }
+
+            @Override
+            public String getLangNameFromFile(String path) throws IOException {
+                return "test";
+            }
+        };
+
 
         // add missing styles as test styles
         //com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle registered with name: default
@@ -87,6 +124,83 @@ public class TestUtils {
         labelStyle.font = new BitmapFont();
         VisUI.getSkin().add("default", labelStyle, Label.LabelStyle.class);
 
+        //de.longri.cachebox3.gui.skin.styles.ListViewStyle registered with name: default
+        ListViewStyle listViewStyle = new ListViewStyle();
+        VisUI.getSkin().add("default", listViewStyle, ListViewStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.CompassViewStyle registered with name: compassViewStyle
+        CompassViewStyle compassViewStyle = new CompassViewStyle();
+        VisUI.getSkin().add("compassViewStyle", compassViewStyle, CompassViewStyle.class);
+
+        //com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle registered with name: list
+        ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
+        VisUI.getSkin().add("list", scrollPaneStyle, ScrollPane.ScrollPaneStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.DraftListItemStyle registered with name: fieldNoteListItemStyle
+        DraftListItemStyle draftListItemStyle = new DraftListItemStyle();
+        VisUI.getSkin().add("fieldNoteListItemStyle", draftListItemStyle, DraftListItemStyle.class);
+
+        //de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle registered with name: default
+        ActivityBase.ActivityBaseStyle activityBaseStyle = new ActivityBase.ActivityBaseStyle();
+        VisUI.getSkin().add("default", activityBaseStyle, ActivityBase.ActivityBaseStyle.class);
+
+        //de.longri.cachebox3.gui.menu.MenuItem$MenuItemStyle registered with name: default
+        MenuItem.MenuItemStyle menuItemStyle = new MenuItem.MenuItemStyle();
+        menuItemStyle.font = new BitmapFont();
+        VisUI.getSkin().add("default", menuItemStyle, MenuItem.MenuItemStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.CircularProgressStyle registered with name: circularProgressStyle
+        CircularProgressStyle circularProgressStyle = new CircularProgressStyle();
+        VisUI.getSkin().add("circularProgressStyle", circularProgressStyle, CircularProgressStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.EditTextStyle registered with name: default
+        EditTextStyle editTextStyle = new EditTextStyle();
+        VisUI.getSkin().add("default", editTextStyle, EditTextStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.CacheListItemStyle registered with name: cacheListItems
+        CacheListItemStyle cacheListItemStyle = new CacheListItemStyle();
+        cacheListItemStyle.nameFont = new BitmapFont();
+        cacheListItemStyle.distanceFont = new BitmapFont();
+        VisUI.getSkin().add("cacheListItems", cacheListItemStyle, CacheListItemStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.MapBubbleStyle registered with name: bubble
+        MapBubbleStyle mapBubbleStyle = new MapBubbleStyle();
+        VisUI.getSkin().add("bubble", mapBubbleStyle, MapBubbleStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.FloatControlStyle registered with name: default
+        FloatControlStyle floatControlStyle = new FloatControlStyle();
+        VisUI.getSkin().add("default", floatControlStyle, FloatControlStyle.class);
+
+        //com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle registered with name: default
+        VisTextButton.VisTextButtonStyle visTextButtonStyle = new VisTextButton.VisTextButtonStyle();
+        visTextButtonStyle.font = new BitmapFont();
+        VisUI.getSkin().add("default", visTextButtonStyle, VisTextButton.VisTextButtonStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.SelectBoxStyle registered with name: default
+        SelectBoxStyle selectBoxStyle = new SelectBoxStyle();
+        selectBoxStyle.font = new BitmapFont();
+        VisUI.getSkin().add("default", selectBoxStyle, SelectBoxStyle.class);
+
+        //de.longri.cachebox3.gui.widgets.MapStateButton$MapStateButtonStyle registered with name: default
+        MapStateButton.MapStateButtonStyle mapStateButtonStyle = new MapStateButton.MapStateButtonStyle();
+        VisUI.getSkin().add("default", mapStateButtonStyle, MapStateButton.MapStateButtonStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle registered with name: infoPanel
+        MapInfoPanelStyle mapInfoPanelStyle = new MapInfoPanelStyle();
+        mapInfoPanelStyle.coordinateLabel_Font = mapInfoPanelStyle.distanceLabel_Font
+                = mapInfoPanelStyle.distanceUnitLabel_Font
+                = mapInfoPanelStyle.speedUnitLabel_Font
+                = mapInfoPanelStyle.speedLabel_Font
+                = new BitmapFont();
+        VisUI.getSkin().add("infoPanel", mapInfoPanelStyle, MapInfoPanelStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.CompassStyle registered with name: mapCompassStyle
+        CompassStyle compassStyle = new CompassStyle();
+        VisUI.getSkin().add("mapCompassStyle", compassStyle, CompassStyle.class);
+
+        //de.longri.cachebox3.gui.widgets.ZoomButton$ZoomButtonStyle registered with name: default
+        ZoomButton.ZoomButtonStyle zoomButtonStyle=new ZoomButton.ZoomButtonStyle();
+        VisUI.getSkin().add("default", zoomButtonStyle, ZoomButton.ZoomButtonStyle.class);
     }
 
     public static double roundDoubleCoordinate(double value) {

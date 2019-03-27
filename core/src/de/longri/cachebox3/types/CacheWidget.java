@@ -42,11 +42,13 @@ public class CacheWidget extends Widget {
                        Drawable leftInfoIcon, Drawable rightInfoIcon,
                        Drawable leftTopIcon, Drawable rightTopIcon) {
         this.typeIcon = cacheType.getDrawable(style);
-        prefSize = typeIcon.getMinHeight();
         this.leftInfoIcon = leftInfoIcon;
         this.rightInfoIcon = rightInfoIcon;
         this.leftTopIcon = leftTopIcon;
         this.rightTopIcon = rightTopIcon;
+
+        if (typeIcon == null) return;
+        this.prefSize = typeIcon.getMinHeight();
         if (leftInfoIcon != null) {
             hasInfoIcon = true;
             logTypeIconSize = leftInfoIcon.getMinWidth();
@@ -71,7 +73,7 @@ public class CacheWidget extends Widget {
             super.layout();
             return;
         }
-
+        if (typeIcon == null) return;
         typeIconWidth = typeIcon.getMinWidth();
         typeIconHeight = typeIcon.getMinHeight();
 

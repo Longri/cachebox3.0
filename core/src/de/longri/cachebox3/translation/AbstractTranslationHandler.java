@@ -15,7 +15,7 @@ public abstract class AbstractTranslationHandler {
 
     protected AbstractTranslationHandler(FileHandle workPath, String defaultLang) {
         this.workPath = workPath;
-        this.defaultLang = workPath.child(defaultLang + "/strings.ini");
+        this.defaultLang = workPath == null ? null : workPath.child(defaultLang + "/strings.ini");
     }
 
 

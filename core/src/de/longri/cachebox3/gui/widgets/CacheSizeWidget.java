@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.skin.styles.CacheSizeStyle;
 import de.longri.cachebox3.types.CacheSizes;
 
@@ -30,34 +29,34 @@ public class CacheSizeWidget extends AbstractIntValueChangedWidget {
     private final CacheSizeStyle style;
 
     public CacheSizeWidget(CacheSizes size, CacheSizeStyle style) {
+
         this.style = style;
-
-
-        switch (size) {
-            case other:
-                sizeDrawable = style.other;
-                break;
-            case micro:
-                sizeDrawable = style.micro;
-                break;
-            case small:
-                sizeDrawable = style.small;
-                break;
-            case regular:
-                sizeDrawable = style.regular;
-                break;
-            case large:
-                sizeDrawable = style.large;
-                break;
-            case notChosen:
-                sizeDrawable = style.notChosen;
-                break;
-            case virtual:
-                sizeDrawable = style.virtualSize;
-                break;
-            default:
-                sizeDrawable = style.other; // unknown
-        }
+        if (style != null)
+            switch (size) {
+                case other:
+                    sizeDrawable = style.other;
+                    break;
+                case micro:
+                    sizeDrawable = style.micro;
+                    break;
+                case small:
+                    sizeDrawable = style.small;
+                    break;
+                case regular:
+                    sizeDrawable = style.regular;
+                    break;
+                case large:
+                    sizeDrawable = style.large;
+                    break;
+                case notChosen:
+                    sizeDrawable = style.notChosen;
+                    break;
+                case virtual:
+                    sizeDrawable = style.virtualSize;
+                    break;
+                default:
+                    sizeDrawable = style.other; // unknown
+            }
     }
 
     public CacheSizeWidget(int value, CacheSizeStyle style) {
@@ -75,12 +74,12 @@ public class CacheSizeWidget extends AbstractIntValueChangedWidget {
 
     @Override
     public float getPrefWidth() {
-        return sizeDrawable.getMinWidth();
+        return sizeDrawable == null ? 0 : sizeDrawable.getMinWidth();
     }
 
     @Override
     public float getPrefHeight() {
-        return sizeDrawable.getMinHeight();
+        return sizeDrawable == null ? 0 : sizeDrawable.getMinHeight();
     }
 
     @Override

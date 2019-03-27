@@ -35,7 +35,7 @@ public class Action_Show_MapView extends Abstract_Action_ShowView {
     @Override
     public void execute() {
         if (isActVisible()) return;
-        mapViewInstance = new MapView(CB.viewmanager.getMain());
+        mapViewInstance = new MapView();
         CB.viewmanager.showView(mapViewInstance);
     }
 

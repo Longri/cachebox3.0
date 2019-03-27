@@ -45,6 +45,7 @@ public class Stars extends AbstractIntValueChangedWidget {
 
     public void setValue(int value) {
 
+        if (style == null) return;
         if (value < 0 || value > 10) {
             throw new RuntimeException("value must between 0-10! it was:" + Integer.toString(value));
         }

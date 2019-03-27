@@ -49,9 +49,11 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
 
     public MapStateButton(StateChangedListener stateChangedListener) {
         this.style = VisUI.getSkin().get("default", MapStateButtonStyle.class);
+
+        this.stateChangedListener = stateChangedListener;
         if (style.stateCar == null || style.stateFree == null || style.stateLock == null
                 || style.stateWaypoint == null || style.stateGps == null) {
-            throw new RuntimeException("MapStateButtonStyle drawables can not be NULL");
+           return;
         }
 
         // add values
@@ -64,7 +66,6 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
 
         this.set(itemList);
         this.setTouchable(Touchable.enabled);
-        this.stateChangedListener = stateChangedListener;
         setSize(getPrefWidth(), getPrefHeight());
         this.setSelectTitle(Translation.get("selectMapMode"));
 

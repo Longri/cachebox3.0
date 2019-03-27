@@ -53,6 +53,8 @@ import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,8 +73,12 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
     private ViewManager.ToastLength WAIT_TOAST_LENGTH = ViewManager.ToastLength.WAIT;
 
+    public CacheListView(BitStore reader) throws NotImplementedException {
+        super(reader);
+    }
+
     public CacheListView() {
-        super("CacheListView CacheCount: " + Database.Data.Query.size);
+        super("CacheListView CacheCount: ");
 
         //register as cacheListChanged eventListener
         CacheListChangedEventList.Add(this);

@@ -307,8 +307,20 @@ public class CB {
     // GL-Thread check
     private static Thread GL_THREAD;
 
+    private static boolean mockChecked = false;
+    private static boolean isMocked = false;
+
+    public static boolean isMocked() {
+        if (!mockChecked) {
+            isMocked = Gdx.gl.toString().toLowerCase().contains("mock");
+            mockChecked = true;
+        }
+        return isMocked;
+    }
+
     public static void assertGlThread() {
-        if (GL_THREAD != Thread.currentThread()) {
+
+        if (!isMocked() && GL_THREAD != Thread.currentThread()) {
             throw new RuntimeException("Access from non-GL thread!");
         }
     }

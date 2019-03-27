@@ -58,6 +58,8 @@ import de.longri.cachebox3.types.MutableWaypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,6 +75,10 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     private AbstractCache actAbstractCache;
     private AbstractWaypoint actWaypoint;
     private ListView listView;
+
+    public WaypointView(BitStore reader) throws NotImplementedException {
+        super(reader);
+    }
 
     public WaypointView() {
         super("WaypointView");

@@ -33,6 +33,8 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.LogEntry;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +52,10 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
     Array<LogEntry> logEntries;
 
     private String actGcCode;
+
+    public LogListView(BitStore reader) throws NotImplementedException {
+        super(reader);
+    }
 
     public LogListView() {
         super("LogListView");

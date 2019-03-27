@@ -90,6 +90,7 @@ public class ZoomButton extends Catch_Group {
     }
 
     public void pack() {
+        if (style == null || style.minus == null || style.plus == null) return;
         float widthMinus = style.minus.getMinWidth();
         float widthPlus = style.plus.getMinWidth();
         float height = style.minus.getMinHeight();
