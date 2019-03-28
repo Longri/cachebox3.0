@@ -69,18 +69,23 @@ public class DraftsView extends AbstractView {
     private static DraftList draftEntries;
 
 
-    private final ListView listView = new ListView(VERTICAL);
-    private final DraftListItemStyle itemStyle;
+    private ListView listView = new ListView(VERTICAL);
+    private DraftListItemStyle itemStyle;
 
     private Array<ListViewItem> items;
 
     public DraftsView(BitStore reader) throws NotImplementedException {
         super(reader);
-        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
+        create();
     }
 
     public DraftsView() {
         super("DraftsView");
+        create();
+    }
+
+    @Override
+    protected void create() {
         THAT = this;
         itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
 
@@ -180,15 +185,18 @@ public class DraftsView extends AbstractView {
     @Override
     public void dispose() {
         EventHandler.remove(this);
-        draftEntries.clear();
+        if (draftEntries != null) draftEntries.clear();
         draftEntries = null;
         aktDraft = null;
         THAT = null;
-        listView.dispose();
-        for (ListViewItem item : items) {
-            item.dispose();
+        if (listView != null) listView.dispose();
+        listView = null;
+        if (items != null) {
+            for (ListViewItem item : items) {
+                item.dispose();
+            }
+            items.clear();
         }
-        items.clear();
         items = null;
     }
 
@@ -315,7 +323,6 @@ public class DraftsView extends AbstractView {
         ).show();
     }
 
-
     private Menu getSecondMenu() {
         Menu sm = new Menu("DraftContextMenu/2");
         MenuItem mi;
@@ -357,7 +364,6 @@ public class DraftsView extends AbstractView {
 
         return sm;
     }
-
 
     public static void addNewFieldnote(LogTypes type) {
         addNewFieldnote(type, false);
@@ -922,7 +928,6 @@ public class DraftsView extends AbstractView {
         }
     };
 
-
     public void notifyDataSetChanged() {
         CB.postOnGlThread(new NamedRunnable("DraftsView") {
             @Override
@@ -931,7 +936,6 @@ public class DraftsView extends AbstractView {
             }
         });
     }
-
 
     //################### Context menu implementation ####################################
     @Override
@@ -1029,4 +1033,36 @@ public class DraftsView extends AbstractView {
         return cm;
     }
 
+    @Override
+    public void saveInstanceState(BitStore writer) {
+        // we save only listView scroll pos
+        float pos = listView == null ? -1 : listView.getScrollPos();
+        try {
+            writer.write(Float.floatToIntBits(pos));
+        } catch (NotImplementedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void restoreInstanceState(BitStore reader) {
+        // we save only listView scroll pos
+        float pos = -1;
+
+        try {
+            pos = Float.intBitsToFloat(reader.readInt());
+        } catch (NotImplementedException e) {
+            e.printStackTrace();
+        }
+
+        if (pos > 0) {
+            final float finalPos = pos;
+            CB.postOnGLThreadDelayed(300, new NamedRunnable("restore ScrollPos") {
+                @Override
+                public void run() {
+                    listView.setScrollPos(finalPos);
+                }
+            });
+        }
+    }
 }

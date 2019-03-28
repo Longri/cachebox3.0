@@ -26,6 +26,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
@@ -34,6 +36,7 @@ import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -47,7 +50,6 @@ import org.oscim.utils.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.text.NumberFormat;
 
 import static org.oscim.backend.GLAdapter.gl;
@@ -158,6 +160,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
                         FpsInfoSprite = null;
                         Gdx.graphics.setContinuousRendering(true);
+                        restoreInstanceState(instanceStateReader);
                     }
                 });
             }
@@ -299,7 +302,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
                     //store DB name
                     saveInstanceStateWriter.write(Config.DatabaseName.getValue());
-                    //todo store complete app state
+                    saveInstanceState(saveInstanceStateWriter);
 
                     Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
                     prefs.putString(SAVE_INSTANCE_KEY, Base64.encodeBytes(saveInstanceStateWriter.getArray()));
@@ -362,5 +365,34 @@ public class CacheboxMain extends ApplicationAdapter {
         if (log == null) {
             log = LoggerFactory.getLogger(CacheboxMain.class);
         }
+    }
+
+    private void saveInstanceState(BitStore writer) throws NotImplementedException {
+        // save last actView
+        AbstractView abstractView = viewManager.getActView();
+        writer.write(abstractView.getClass().getName());
+        writer.write(abstractView.NAME);
+        abstractView.saveInstanceState(writer);
+    }
+
+    private void restoreInstanceState(BitStore reader) {
+        //restore last view
+        CB.postOnGLThreadDelayed(500, new NamedRunnable("Restore last View") {
+            @Override
+            public void run() {
+                try {
+                    String className = reader.readString();
+                    Class clazz = ClassReflection.forName(className);
+                    Constructor constructor = ClassReflection.getConstructor(clazz, de.longri.serializable.BitStore.class);
+
+                    Object obj = constructor.newInstance(reader);
+                    AbstractView newInstanceAbstractView = (AbstractView) obj;
+                    viewManager.showView(newInstanceAbstractView);
+
+                } catch (Exception e) {
+                    log.error("can't restore last view");
+                }
+            }
+        });
     }
 }

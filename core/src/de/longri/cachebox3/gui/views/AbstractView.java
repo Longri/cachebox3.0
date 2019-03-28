@@ -83,7 +83,7 @@ public abstract class AbstractView extends CB_View_Base {
         return store;
     }
 
-    protected void saveInstanceState(BitStore writer) {
+    public void saveInstanceState(BitStore writer) {
 
     }
 
