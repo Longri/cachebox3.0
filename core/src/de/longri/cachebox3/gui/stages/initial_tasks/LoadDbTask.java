@@ -25,6 +25,8 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.FileList;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +35,11 @@ import org.slf4j.LoggerFactory;
  */
 public class LoadDbTask extends AbstractInitTask {
     final static Logger log = LoggerFactory.getLogger(LoadDbTask.class);
+    final BitStore instanceStateReader;
 
-    public LoadDbTask(String name) {
+    public LoadDbTask(String name, BitStore instanceStateReader) {
         super(name);
+        this.instanceStateReader = instanceStateReader;
     }
 
     @Override
@@ -52,7 +56,20 @@ public class LoadDbTask extends AbstractInitTask {
                 // search number of DB3 files
                 final FileList fileList = new FileList(CB.WorkPath, "DB3");
 
-                if ((fileList.size > 1) && Config.MultiDBAsk.getValue()) {
+                //restore saved instance state
+                String dbName = null;
+                if (instanceStateReader != null) {
+                    try {
+                        // get Name of last DB
+                        dbName = instanceStateReader.readString();
+                    } catch (NotImplementedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                final String finalDbName = dbName;
+
+                if (finalDbName == null && (fileList.size > 1) && Config.MultiDBAsk.getValue()) {
                     CB.postAsync(new NamedRunnable("LoadDbTask") {
                         @Override
                         public void run() {
@@ -79,7 +96,6 @@ public class LoadDbTask extends AbstractInitTask {
                         @Override
                         public void run() {
                             //wait for initial viewmanager
-
                             while (CB.viewmanager == null) {
                                 try {
                                     Thread.sleep(20);
@@ -87,11 +103,12 @@ public class LoadDbTask extends AbstractInitTask {
                                     e.printStackTrace();
                                 }
                             }
-
                             Gdx.app.postRunnable(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (fileList.size == 0) {
+                                    if (finalDbName != null) {
+                                        Config.DatabaseName.setValue(finalDbName);
+                                    } else if (fileList.size == 0) {
                                         Config.DatabaseName.setValue("cachebox.db3");
                                     } else {
                                         Config.DatabaseName.setValue(Utils.GetFileName(fileList.get(0).getName()));

@@ -36,6 +36,7 @@ import de.longri.cachebox3.events.IncrementProgressListener;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.stages.initial_tasks.*;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.serializable.BitStore;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -79,7 +80,7 @@ public class Splash extends NamedStage {
     final InitTaskList initTaskList = new InitTaskList();
 
 
-    public Splash(LoadReady loadReadyHandler, Viewport viewport, Batch batch) {
+    public Splash(LoadReady loadReadyHandler, Viewport viewport, Batch batch, BitStore instanceStateReader) {
         super("splash", viewport, batch);
         this.loadReadyHandler = loadReadyHandler;
         Texture backgroundTexture = new Texture("splash-back.jpg");
@@ -87,11 +88,11 @@ public class Splash extends NamedStage {
         CB.backgroundImage.setWidth(Gdx.graphics.getWidth());
         CB.backgroundImage.setHeight(Gdx.graphics.getHeight());
         this.addActor(CB.backgroundImage);
-        InitialView();
+        InitialView(instanceStateReader);
     }
 
 
-    private void InitialView() {
+    private void InitialView(BitStore instanceStateReader) {
 
         // create SVG image from Cachbox Logo
         try {
@@ -141,7 +142,7 @@ public class Splash extends NamedStage {
         initTaskList.add(new SkinLoaderTask("Load UI"));
         initTaskList.add(new TranslationLoaderTask("Load Translations"));
         initTaskList.add(new GdxInitialTask("Initial GDX"));
-        initTaskList.add(new LoadDbTask("Load Database"));
+        initTaskList.add(new LoadDbTask("Load Database",instanceStateReader));
 
         // Use classpath for Desktop or assets for iOS and Android
         assets = (CanvasAdapter.platform.isDesktop()) ?

@@ -229,7 +229,7 @@ public class Config extends Settings {
                             values.value = (String) value[1];
                             values.longString = (String) value[2];
                             values.desired = (String) value[3];
-                            values.blob = (byte[]) value[4];
+                            if (value.length > 4) values.blob = (byte[]) value[4];
                             localMap.put(key, values);
                         }
                     });
@@ -244,7 +244,7 @@ public class Config extends Settings {
                             values.value = (String) value[1];
                             values.longString = (String) value[2];
                             values.desired = (String) value[3];
-                            values.blob = (byte[]) value[4];
+                            if (value.length > 4) values.blob = (byte[]) value[4];
                             globalMap.put(key, values);
                         }
                     });

@@ -18,6 +18,7 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,6 +37,9 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.cachebox3.utils.converter.Base64;
+import de.longri.serializable.BitStore;
+import de.longri.serializable.NotImplementedException;
 import org.oscim.backend.GL;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
@@ -43,11 +47,13 @@ import org.oscim.utils.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.text.NumberFormat;
 
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
+import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -58,9 +64,9 @@ public class CacheboxMain extends ApplicationAdapter {
         COORD_SCALE = 1;
         EventHandler.INIT();
 
-//        INCLUDE_LIST.add(PlatformTestView.class.getName());
-//        INCLUDE_LIST.add(MapState.class.getName());
-//        INCLUDE_LIST.add(MapView.class.getName());
+        INCLUDE_LIST.add(CacheboxMain.class.getName());
+        INCLUDE_LIST.add(CB.class.getName());
+        INCLUDE_LIST.add(ViewManager.class.getName());
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
@@ -90,6 +96,7 @@ public class CacheboxMain extends ApplicationAdapter {
     }
 
     static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
+    static final String SAVE_INSTANCE_KEY = "SaveInstanceState";
 
     Runtime runtime = Runtime.getRuntime();
     NumberFormat format = NumberFormat.getInstance();
@@ -104,12 +111,29 @@ public class CacheboxMain extends ApplicationAdapter {
     public static boolean drawMap = false;
     public MapRenderer mMapRenderer;
 
+    private BitStore instanceStateReader;
 
     @Override
     public void create() {
+        log.debug("onCreate");
         CB.cbMain = this;
         CB.stageManager = new StageManager();
         Gdx.graphics.setContinuousRendering(true);
+
+
+        //maybe restore last instance state
+        try {
+            Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
+            instanceStateReader = new BitStore(Base64.decode(prefs.getString(SAVE_INSTANCE_KEY)));
+            if (instanceStateReader.readBool()) {
+                // exit was called restore nothing
+                instanceStateReader = null;
+            }
+        } catch (Exception e) {
+            // exit was called restore nothing
+            instanceStateReader = null;
+        }
+
 
         final Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         final Batch batch = new SpriteBatch();
@@ -137,7 +161,7 @@ public class CacheboxMain extends ApplicationAdapter {
                     }
                 });
             }
-        }, viewport, batch);
+        }, viewport, batch, instanceStateReader);
 
         CB.stageManager.setMainStage(splash);
 
@@ -244,14 +268,47 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        log.debug("onDispose");
         viewManager.dispose();
         batch.dispose();
     }
 
     @Override
     public void pause() {
+        log.debug("onPause");
         CB.isBackground = true;
-        if (viewManager != null) viewManager.pause();
+        if (viewManager != null) {
+            viewManager.pause();
+
+            if (CB.isQuitCalled()) {
+                log.debug("save instance state quit called");
+                BitStore saveInstanceStateWriter = new BitStore();
+                try {
+                    saveInstanceStateWriter.write(true); // nothing to restore
+                    Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
+                    prefs.putString(SAVE_INSTANCE_KEY, Base64.encodeBytes(saveInstanceStateWriter.getArray()));
+                    prefs.flush();
+                } catch (NotImplementedException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                log.debug("save instance state");
+                BitStore saveInstanceStateWriter = new BitStore();
+                try {
+                    saveInstanceStateWriter.write(false); // nothing to restore
+
+                    //store DB name
+                    saveInstanceStateWriter.write(Config.DatabaseName.getValue());
+                    //todo store complete app state
+
+                    Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
+                    prefs.putString(SAVE_INSTANCE_KEY, Base64.encodeBytes(saveInstanceStateWriter.getArray()));
+                    prefs.flush();
+                } catch (NotImplementedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         checkLogger();
 
         if (EventHandler.getSelectedCache() != null) {
@@ -275,6 +332,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void resume() {
+        log.debug("onResume");
         FpsInfoSprite = null;
         Gdx.graphics.setContinuousRendering(true);
 

@@ -265,8 +265,15 @@ public class CB {
         return actSkin != null ? actSkin.getSprite(name) : null;
     }
 
+    private static AtomicBoolean quitCalled = new AtomicBoolean(false);
+
+    public static boolean isQuitCalled() {
+        return quitCalled.get();
+    }
+
     public static void callQuit() {
         PlatformConnector.callQuit();
+        quitCalled.set(true);
     }
 
     public static boolean selectedCachehasSpoiler() {
