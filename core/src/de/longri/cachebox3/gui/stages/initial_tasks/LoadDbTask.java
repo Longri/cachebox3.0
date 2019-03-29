@@ -62,7 +62,7 @@ public class LoadDbTask extends AbstractInitTask {
                     try {
                         // get Name of last DB
                         dbName = instanceStateReader.readString();
-                    } catch (NotImplementedException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
