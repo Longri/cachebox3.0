@@ -72,7 +72,7 @@ public abstract class PostRequest {
                 }
 
                 if (iCancel != null && iCancel.cancel()) readyCallBack.callBack(ApiResultState.CANCELED);
-                String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+                String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
                 StringWriter writer = new StringWriter();
                 Json json = new Json(JsonWriter.OutputType.json);

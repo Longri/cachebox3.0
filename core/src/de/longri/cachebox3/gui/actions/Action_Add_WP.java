@@ -76,8 +76,8 @@ public class Action_Add_WP extends AbstractAction {
                 coord = EventHandler.getSelectedCache();
         }
 
-        MutableWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint
-                , coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
+        MutableWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint, "",
+                coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
 
         newWP.setUserWaypoint(true);
         EditWaypoint editWaypoint = new EditWaypoint(newWP, false, false, new GenericCallBack<AbstractWaypoint>() {

@@ -117,11 +117,10 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void create() {
-        log.debug("onCreate");
+        log.debug("create");
         CB.cbMain = this;
         CB.stageManager = new StageManager();
         Gdx.graphics.setContinuousRendering(true);
-
 
         //maybe restore last instance state
         try {
@@ -140,9 +139,10 @@ public class CacheboxMain extends ApplicationAdapter {
         final Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         final Batch batch = new SpriteBatch();
 
-        final Splash splash = new Splash(new Splash.LoadReady() {
+        Splash splash = new Splash(new Splash.LoadReady() {
             @Override
             public void ready() {
+                log.debug("Splash ready");
                 Config.AppRaterlaunchCount.setValue(Config.AppRaterlaunchCount.getValue() + 1);
                 Config.AcceptChanges();
 
@@ -151,6 +151,7 @@ public class CacheboxMain extends ApplicationAdapter {
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
+                        log.debug("switch Stage to ViewManager");
 
                         viewManager = new ViewManager(
                                 CacheboxMain.this, CB.stageManager.viewport, CB.stageManager.batch);
@@ -170,6 +171,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
         Gdx.graphics.requestRendering();
         CB.initThreadCheck();
+        log.debug("create end");
     }
 
 

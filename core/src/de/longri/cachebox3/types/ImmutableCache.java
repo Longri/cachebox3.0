@@ -416,7 +416,7 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public void setCorrectedCoordinates(boolean correctedCoordinates) {
+    public void setHasCorrectedCoordinates(boolean correctedCoordinates) {
         throwNotChangeable("hasCorrectedCoordinates");
     }
 

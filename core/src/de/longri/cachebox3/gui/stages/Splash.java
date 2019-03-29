@@ -82,6 +82,7 @@ public class Splash extends NamedStage {
 
     public Splash(LoadReady loadReadyHandler, Viewport viewport, Batch batch, BitStore instanceStateReader) {
         super("splash", viewport, batch);
+        log.debug("Splash creating");
         this.loadReadyHandler = loadReadyHandler;
         Texture backgroundTexture = new Texture("splash-back.jpg");
         CB.backgroundImage = new Image(backgroundTexture);
@@ -89,6 +90,7 @@ public class Splash extends NamedStage {
         CB.backgroundImage.setHeight(Gdx.graphics.getHeight());
         this.addActor(CB.backgroundImage);
         InitialView(instanceStateReader);
+        log.debug("Splash creating ready");
     }
 
 

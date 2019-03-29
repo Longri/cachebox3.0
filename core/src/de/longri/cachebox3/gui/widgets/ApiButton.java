@@ -64,11 +64,11 @@ public class ApiButton extends IconButton {
 
     protected void setIcon() {
         boolean Entry = false;
-        if (Config.StagingAPI.getValue()) {
-            if (!Config.GcAPIStaging.getValue().equals(""))
+        if (Config.UseTestUrl.getValue()) {
+            if (!Config.AccessTokenForTest.getValue().equals(""))
                 Entry = true;
         } else {
-            if (!Config.GcAPI.getValue().equals(""))
+            if (!Config.AccessToken.getValue().equals(""))
                 Entry = true;
         }
 
@@ -120,10 +120,10 @@ public class ApiButton extends IconButton {
                 GroundspeakAPI.CacheStatusLiteValid = false;
 
                 // store the encrypted AccessToken in the Config file
-                if (Config.StagingAPI.getValue()) {
-                    Config.GcAPIStaging.setEncryptedValue(accessToken);
+                if (Config.UseTestUrl.getValue()) {
+                    Config.AccessTokenForTest.setEncryptedValue(accessToken);
                 } else {
-                    Config.GcAPI.setEncryptedValue(accessToken);
+                    Config.AccessToken.setEncryptedValue(accessToken);
                 }
 
                 //reset ApiKey validation

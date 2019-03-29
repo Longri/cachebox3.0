@@ -59,8 +59,8 @@ public class Settings_Map extends Settings_Const {
     public static final SettingFile MapsforgeDayTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeDayTheme", Map, NEVER, "", Global, ACB, "xml"));
     public static final SettingFile MapsforgeNightTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeNightTheme", Map, NEVER, "", Global, ACB, "xml"));
 
-    public static final SettingsBlob lastMapState = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapState", Map, NEVER, Local, ACB,false,new byte[]{}));
-    public static final SettingsBlob lastMapStateBeforeCar = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapStateBeforeCar", Map, NEVER, Local, ACB,false,new byte[]{}));
+    public static final SettingsBlob lastMapState = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapState", Map, NEVER, Local, ACB, false, new byte[]{}));
+    public static final SettingsBlob lastMapStateBeforeCar = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapStateBeforeCar", Map, NEVER, Local, ACB, false, new byte[]{}));
 
 //    public static final SettingIntArray ZoomCross = (SettingIntArray) settingsList.addSetting(new SettingIntArray("ZoomCross", Map, NORMAL, 16, Global, ACB, CrossLevel));
 //    public static final SettingString CurrentMapOverlayLayer = (SettingString) settingsList.addSetting(new SettingString("CurrentMapOverlayLayer", Map, NEVER, "", Global, ACB));

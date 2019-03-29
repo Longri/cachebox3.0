@@ -17,13 +17,10 @@ package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.LogEntry;
 import de.longri.cachebox3.types.Trackable;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -41,16 +38,16 @@ public class TrackableDao {
                 REPLACE_LOGS.bind(
                         entry.getId(),
                         entry.getArchived(),
-                        entry.getGcCode(),
+                        entry.getTBCode(),
                         entry.CacheId(),
-                        entry.getCurrenGoal(),
-                        entry.getCurrentOwner(),
+                        entry.getCurrentGoal(),
+                        entry.getCurrentOwnerName(),
                         Database.cbDbFormat.format(entry.getDateCreated() == null ? new Date() : entry.getDateCreated()),
                         entry.getDescription(),
                         entry.getIconUrl(),
                         entry.getImageUrl(),
                         entry.getName(),
-                        entry.getOwner(),
+                        entry.getOwnerName(),
                         entry.getUrl()
                 ).commit().reset();
             }

@@ -17,6 +17,7 @@ package de.longri.cachebox3.sqlite.Import;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
@@ -44,8 +45,8 @@ public class DescriptionImageGrabber {
         public String text;
     }
 
-    public static CB_List<Segment> Segmentize(String text, String leftSeperator, String rightSeperator) {
-        CB_List<Segment> result = new CB_List<Segment>();
+    public static Array<Segment> Segmentize(String text, String leftSeperator, String rightSeperator) {
+        Array<Segment> result = new CB_List<Segment>();
 
         if (text == null) {
             return result;
@@ -183,7 +184,7 @@ public class DescriptionImageGrabber {
 
         // String htmlNoSpaces = RemoveSpaces(html);
 
-        CB_List<Segment> imgTags = Segmentize(html, "<img", ">");
+        Array<Segment> imgTags = Segmentize(html, "<img", ">");
 
         int delta = 0;
 
@@ -302,7 +303,7 @@ public class DescriptionImageGrabber {
             return images;
         }
 
-        CB_List<Segment> imgTags = Segmentize(html, "<img", ">");
+        Array<Segment> imgTags = Segmentize(html, "<img", ">");
 
         for (int i = 0, n = imgTags.size; i < n; i++) {
             Segment img = imgTags.get(i);

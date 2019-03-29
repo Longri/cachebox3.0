@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.types;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,7 +32,7 @@ public class Trackable implements Comparable<Trackable> {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(Trackable.class);
     private int Id = -1;
     private boolean Archived;
-    private String GcCode = "";
+    private String TBCode = "";
     private long CacheId;
     private String CurrentGoal = "";
     private String CurrentGeocacheCode = "";
@@ -82,7 +81,7 @@ public class Trackable implements Comparable<Trackable> {
         try {
             Id = reader.getInt(0);
             Archived = reader.getInt(1) != 0;
-            GcCode = reader.getString(2).trim();
+            TBCode = reader.getString(2).trim();
             try {
                 CacheId = reader.getLong(3);
             } catch (Exception e1) {
@@ -169,7 +168,7 @@ public class Trackable implements Comparable<Trackable> {
 //            e.printStackTrace();
 //        }
 //        try {
-//            GcCode = JObj.getString("Code");
+//            TBCode = JObj.getString("Code");
 //        } catch (JSONException e) {
 //
 //            e.printStackTrace();
@@ -288,7 +287,7 @@ public class Trackable implements Comparable<Trackable> {
         return TypeName;
     }
 
-    public String getOwner() {
+    public String getOwnerName() {
         return OwnerName;
     }
 
@@ -308,8 +307,8 @@ public class Trackable implements Comparable<Trackable> {
         return Archived;
     }
 
-    public String getGcCode() {
-        return GcCode;
+    public String getTBCode() {
+        return TBCode;
     }
 
     public long CacheId() {
@@ -320,7 +319,7 @@ public class Trackable implements Comparable<Trackable> {
 //        return Jsoup.parse(CurrentGoal).text();
 //    }
 
-    public String getCurrentOwner() {
+    public String getCurrentOwnerName() {
         return CurrentOwnerName;
     }
 
@@ -340,7 +339,7 @@ public class Trackable implements Comparable<Trackable> {
         return Url;
     }
 
-    public String getTrackingNumber() {
+    public String getTrackingCode() {
         return this.TrackingCode;
     }
 
@@ -350,33 +349,6 @@ public class Trackable implements Comparable<Trackable> {
 
     public void setTrackingCode(String trackingCode) {
         this.TrackingCode = trackingCode;
-    }
-
-    /*
-     * Methods
-     */
-
-    /**
-     * Generiert eine Eindeutige ID aus den ASCII values des GcCodes. <br>
-     * Damit lässt sich dieser TB schneller in der DB finden.
-     *
-     * @return long
-     */
-    public static long GenerateTBId(String GcCode) {
-        long result = 0;
-        char[] dummy = GcCode.toCharArray();
-        byte[] byteDummy = new byte[8];
-        for (int i = 0; i < 8; i++) {
-            if (i < GcCode.length())
-                byteDummy[i] = (byte) dummy[i];
-            else
-                byteDummy[i] = 0;
-        }
-        for (int i = 7; i >= 0; i--) {
-            result *= 256;
-            result += byteDummy[i];
-        }
-        return result;
     }
 
     /*
@@ -470,20 +442,20 @@ public class Trackable implements Comparable<Trackable> {
         this.Id = value.intValue();
     }
 
-    public void setGcCode(String value) {
-        this.GcCode = value;
+    public void setTBCode(String value) {
+        this.TBCode = value;
     }
 
-    public String getCurrenGoal() {
+    public String getCurrentGoal() {
         return this.CurrentGoal;
     }
 
 
-    public void setCurrenGoal(String value) {
+    public void setCurrentGoal(String value) {
         this.CurrentGoal = value;
     }
 
-    public void setCurrentCacheCode(String value) {
+    public void setCurrentGeocacheCode(String value) {
         this.CurrentGeocacheCode = value;
     }
 
@@ -517,5 +489,13 @@ public class Trackable implements Comparable<Trackable> {
 
     public void setImageUrl(String value) {
         this.ImageUrl = value;
+    }
+
+    public void setCurrentOwnerName(String stringValue) {
+        CurrentOwnerName = stringValue;
+    }
+
+    public void setOwnerName(String stringValue) {
+        OwnerName = stringValue;
     }
 }

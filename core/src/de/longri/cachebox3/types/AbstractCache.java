@@ -167,7 +167,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract boolean hasCorrectedCoordinates();
 
-    public abstract void setCorrectedCoordinates(boolean correctedCoordinates);
+    public abstract void setHasCorrectedCoordinates(boolean correctedCoordinates);
 
     public abstract boolean isArchived();
 

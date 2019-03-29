@@ -33,7 +33,7 @@ public class Settings extends Settings_Skin {
     public static final SettingString GcLogin = (SettingString) settingsList.addSetting(new SettingString("GcLogin", Login, NORMAL, "", Global, ALL));
     public static final SettingEnum<Language> localisation = (SettingEnum<Language>) settingsList.addSetting(new SettingEnum("localisation", Locale, NORMAL, Language.en_GB, Global, ALL, Language.en_GB));
     public static final SettingBool showGestureHelp = (SettingBool) settingsList.addSetting(new SettingBool("showGestureHelp", RememberAsk, NORMAL, true, Global, ACB));
-
+    public static final SettingBool UseCorrectedFinal = (SettingBool) settingsList.addSetting(new SettingBool("UseCorrectedFinal", Misc, NORMAL, true, Global, ALL));
 
     // EXPERT visible
 
@@ -45,19 +45,19 @@ public class Settings extends Settings_Skin {
 
 
     // DEVELOPER visible
-    public static final SettingEncryptedString GcAPI = (SettingEncryptedString) settingsList.addSetting(new SettingEncryptedString("GcAPI", Login, DEVELOPER, "", Global, ALL));
+    public static final SettingEncryptedString AccessToken = (SettingEncryptedString) settingsList.addSetting(new SettingEncryptedString("GcAPI", Login, DEVELOPER, "", Global, ALL));
 
 
     // NEVER visible
 
-    public static final SettingEncryptedString GcAPIStaging = (SettingEncryptedString) settingsList.addSetting(new SettingEncryptedString("GcAPIStaging", Login, NEVER, "", Global, ALL));
+    public static final SettingEncryptedString AccessTokenForTest = (SettingEncryptedString) settingsList.addSetting(new SettingEncryptedString("GcAPIStaging", Login, NEVER, "", Global, ALL));
     public static final SettingFolder DescriptionImageFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("DescriptionImageFolder", Folder, NEVER, "?/repository/images", Global, ALL, true));
     public static final SettingFolder DescriptionImageFolderLocal = (SettingFolder) settingsList.addSetting(new SettingFolder("DescriptionImageFolderLocal", Folder, NEVER, "", Local, ALL, true));
     public static final SettingFolder SpoilerFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("SpoilerFolder", Folder, NEVER, "?/repository/spoilers", Global, ALL, true));
     public static final SettingFolder SpoilerFolderLocal = (SettingFolder) settingsList.addSetting(new SettingFolder("SpoilerFolderLocal", Folder, NEVER, "", Local, ALL, true));
     public static final SettingFolder PocketQueryFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("PocketQueryFolder", Folder, NEVER, "?/pocketQuery", Global, ALL, true));
     public static final SettingFolder UserImageFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("UserImageFolder", Folder, NEVER, "?/user/media", Global, ALL, true));
-    public static final SettingBool StagingAPI = (SettingBool) settingsList.addSetting(new SettingBool("StagingAPI", Folder, NEVER, false, Global, ALL));
+    public static final SettingBool UseTestUrl = (SettingBool) settingsList.addSetting(new SettingBool("StagingAPI", Folder, NEVER, false, Global, ALL));
 
     public static final SettingInt socket_timeout = (SettingInt) settingsList.addSetting(new SettingInt("socket_timeout", Internal, NEVER, 60000, Global, ALL));
     public static final SettingDouble ParkingLatitude = (SettingDouble) settingsList.addSetting(new SettingDouble("ParkingLatitude", Positions, NEVER, 0, Global, ACB));

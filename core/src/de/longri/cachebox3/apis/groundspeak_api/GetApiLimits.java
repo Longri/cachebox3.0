@@ -19,7 +19,7 @@ public class GetApiLimits {
     // https://api.groundspeak.com/LiveV6/geocaching.svc/GetAPILimits?accessToken={ACCESSTOKEN}
 
     public static int getLimit() {
-        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+        String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
         Net.HttpRequest httpGet = new Net.HttpRequest(Net.HttpMethods.GET);
         httpGet.setUrl(URL + "GetAPILimits?AccessToken=" + getAccessToken(true) + "&format=json");

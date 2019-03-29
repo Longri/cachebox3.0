@@ -486,11 +486,11 @@ public abstract class Search extends PostRequest {
                         break;
                     case TRACKABLE_ARRAY:
                         if (CODE.equals(name)) {
-                            actTrackable.setGcCode(value);
+                            actTrackable.setTBCode(value);
                         } else if (CURRENT_GOAL.equals(name)) {
-                            actTrackable.setCurrenGoal(value);
+                            actTrackable.setCurrentGoal(value);
                         } else if (CURRENT_CACHE_CODE.equals(name)) {
-                            actTrackable.setCurrentCacheCode(value);
+                            actTrackable.setCurrentGeocacheCode(value);
                         } else if (DATE_CREATED.equals(name)) {
                             actTrackable.setDateCreated(getDateFromLongString(value));
                         } else if (DESCRIPTION.equals(name)) {

@@ -24,6 +24,9 @@ import java.util.Date;
  * Created by Longri on 23.10.2017.
  */
 public class MutableCache extends AbstractCache {
+    public final static byte NOT_LIVE = 0;
+    public final static byte IS_LITE = 1;
+    public final static byte IS_FULL = 2;
 
     private double latitude, longitude;
     private Array<Attributes> attributes;
@@ -305,7 +308,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setCorrectedCoordinates(boolean correctedCoordinates) {
+    public void setHasCorrectedCoordinates(boolean correctedCoordinates) {
         this.correctedCoordinates = correctedCoordinates;
     }
 

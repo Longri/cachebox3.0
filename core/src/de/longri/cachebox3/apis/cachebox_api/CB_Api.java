@@ -48,7 +48,7 @@ public class CB_Api {
 
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
         Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET)
-                .url(Config.StagingAPI.getValue() ? CB_API_URL_GET_URLS_Staging : CB_API_URL_GET_URLS).build();
+                .url(Config.UseTestUrl.getValue() ? CB_API_URL_GET_URLS_Staging : CB_API_URL_GET_URLS).build();
         Net.HttpResponseListener httpResponseListener = new Net.HttpResponseListener() {
             @Override
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
@@ -56,7 +56,7 @@ public class CB_Api {
                 JsonValue json = new JsonReader().parse(jsonResult);
 
                 String url;
-                if (Config.StagingAPI.getValue())
+                if (Config.UseTestUrl.getValue())
                     url = json.getString("GcAuth_ACB_Staging");
                 else
                     url = json.getString("GcAuth_ACB");

@@ -69,11 +69,15 @@ public enum CacheTypes implements SelectBoxItem {
     MyParking(true), // = 20
 
     Giga(true), // 22
+    APE(true),
+    AdventuresExhibit(true),
+    HQ(true),
 
-    LabCache(true);
+    LabCache(true),
+    ;
 
     private final static Logger log = LoggerFactory.getLogger(CacheTypes.class);
-
+    static CacheTypeStyle cacheListTypeStyle;
     private boolean isCache;
 
     CacheTypes(boolean isCache) {
@@ -174,6 +178,10 @@ public enum CacheTypes implements SelectBoxItem {
         }
     }
 
+    public static CacheTypes get(int index) {
+        return CacheTypes.values()[index];
+    }
+
     public CacheWidget getCacheWidget(CacheTypeStyle style,
                                       Drawable leftInfoIcon, Drawable rightInfoIcon,
                                       Drawable leftTopIcon, Drawable rightTopIcon) {
@@ -183,9 +191,6 @@ public enum CacheTypes implements SelectBoxItem {
     public String getName() {
         return this.name();
     }
-
-
-    static CacheTypeStyle cacheListTypeStyle;
 
     @Override
     public Drawable getDrawable() {
@@ -363,10 +368,6 @@ public enum CacheTypes implements SelectBoxItem {
 
         }
         return " ";
-    }
-
-    public static CacheTypes get(int index) {
-        return CacheTypes.values()[index];
     }
 
     public boolean isCache() {

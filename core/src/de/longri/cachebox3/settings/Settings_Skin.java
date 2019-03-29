@@ -29,17 +29,6 @@ import static de.longri.cachebox3.settings.types.SettingUsage.ACB;
  */
 public abstract class Settings_Skin extends Settings_Map {
 
-    // NORMAL visible
-
-
-    // EXPERT visible
-
-
-    // DEVELOPER visible
-
-
-    // NEVER visible
-
     public static final SettingFolder SkinFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("SkinFolder", Skin, NEVER, CB.WorkPath + "/skins", Global, ACB, false));
     public static final SettingBool nightMode = (SettingBool) settingsList.addSetting(new SettingBool("nightMode", Skin, NEVER, false, Global, ACB));
     public static final SettingString daySkinName = (SettingString) settingsList.addSetting(new SettingString("daySkinName", Skin, NEVER, "internalDefault", Global, ACB));

@@ -87,10 +87,10 @@ public class GroundspeakAPI {
 
     public static String getAccessToken(boolean Url_Codiert) {
         String act = "";
-        if (Config.StagingAPI.getValue()) {
-            act = Config.GcAPIStaging.getValue();
+        if (Config.UseTestUrl.getValue()) {
+            act = Config.AccessTokenForTest.getValue();
         } else {
-            act = Config.GcAPI.getValue();
+            act = Config.AccessToken.getValue();
         }
 
         // Prüfen, ob das AccessToken für ACB ist!!!
@@ -140,7 +140,7 @@ public class GroundspeakAPI {
         waitApiCallLimit();
 
 
-        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+        String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
         try {
             String requestString = "";
@@ -375,7 +375,7 @@ public class GroundspeakAPI {
         if (caches.size >= 110) throw new RuntimeException("Cache count must les then 110");
 
         waitApiCallLimit(icancel);
-        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+        String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
         Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
         httpPost.setUrl(URL + "getGeocacheStatus?format=json");
@@ -516,7 +516,7 @@ public class GroundspeakAPI {
         if (chk.isErrorState())
             return chk;
 
-        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+        String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
         if (list == null)
             list = new HashMap<String, URI>();
 
@@ -637,7 +637,7 @@ public class GroundspeakAPI {
      * @return
      */
     public static ApiResultState createTrackableLog(Trackable trackable, String cacheCode, int logTypeId, Date dateLogged, String note, ICancel icancel) {
-        return createTrackableLog(trackable.getGcCode(), trackable.getTrackingNumber(), cacheCode, logTypeId, dateLogged, note, icancel);
+        return createTrackableLog(trackable.getTBCode(), trackable.getTrackingCode(), cacheCode, logTypeId, dateLogged, note, icancel);
     }
 
     /**
@@ -653,7 +653,7 @@ public class GroundspeakAPI {
         ApiResultState chk = chkMembership(false);
         if (chk.isErrorState())
             return chk;
-        String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+        String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
         if (cacheCode == null)
             cacheCode = "";
 

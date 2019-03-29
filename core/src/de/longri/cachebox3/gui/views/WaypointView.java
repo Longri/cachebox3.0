@@ -376,8 +376,8 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             coordinate = EventHandler.getMyPosition();
         if ((coordinate == null) || (!coordinate.isValid()))
             coordinate = EventHandler.getSelectedCache();
-        AbstractWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint
-                , coordinate.getLatitude(), coordinate.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
+        AbstractWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint, "",
+                coordinate.getLatitude(), coordinate.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
         newWP.setUserWaypoint(true);
         showEditWpDialog(newWP, showCoords, false);
     }

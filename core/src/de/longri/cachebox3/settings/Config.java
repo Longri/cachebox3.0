@@ -23,7 +23,6 @@ import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqlite;
-import de.longri.gdx.sqlite.GdxSqliteCursor;
 import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Config extends Settings {
     static final Logger log = LoggerFactory.getLogger(Config.class);
+    static final AtomicBoolean inWrite = new AtomicBoolean(false);
 
     public static void AcceptChanges() {
         if (settingsList.dirtyList.size > 0)
@@ -44,9 +44,6 @@ public class Config extends Settings {
         else
             log.debug("no Setting are dirty, don't write to DB");
     }
-
-
-    static final AtomicBoolean inWrite = new AtomicBoolean(false);
 
     /**
      * Return true, if setting changes need restart
@@ -92,7 +89,7 @@ public class Config extends Settings {
             boolean isAPI = false;
             while (dirtyList.size > 0) {
                 SettingBase<?> setting = dirtyList.pop();
-                if (setting.name.equals("GcAPIStaging") || setting.name.equals("GcAPI")) {
+                if (setting.name.equals("AccessTokenForTest") || setting.name.equals("GcAPI")) {
                     isAPI = true;
                 }
                 if (setting.getStoreType() == SettingStoreType.Local) {

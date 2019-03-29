@@ -59,7 +59,7 @@ public class MutableWaypoint extends AbstractWaypoint {
         this.clue = waypoint.getClue(database).toString();
     }
 
-    public MutableWaypoint(String title, CacheTypes type, double latitude, double longitude, long cacheId, String s1, String gcCode) {
+    public MutableWaypoint(String gcCode, CacheTypes type, String description, double latitude, double longitude, long cacheId, String clue, String title) {
         super(latitude, longitude);
         this.latitude = latitude;
         this.longitude = longitude;
@@ -70,8 +70,8 @@ public class MutableWaypoint extends AbstractWaypoint {
         this.isStart = false;
         this.syncExclude = false;
         this.userWaypoint = false;
-        this.description = "";
-        this.clue = "";
+        this.description = description;
+        this.clue = clue;
     }
 
     @Override

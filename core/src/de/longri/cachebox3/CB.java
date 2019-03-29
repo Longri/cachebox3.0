@@ -520,7 +520,7 @@ public class CB {
     }
 
     public static boolean checkApiKeyNeeded() {
-        if (Config.GcAPI.getValue() == null || Config.GcAPI.getValue().isEmpty()) {
+        if (Config.AccessToken.getValue() == null || Config.AccessToken.getValue().isEmpty()) {
             postOnGlThread(new NamedRunnable("CB:checkApiKeyNeeded") {
                 @Override
                 public void run() {

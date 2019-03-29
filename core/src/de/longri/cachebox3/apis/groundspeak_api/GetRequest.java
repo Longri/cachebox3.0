@@ -59,7 +59,7 @@ public abstract class GetRequest {
                 }
 
                 if (iCancel != null && iCancel.cancel()) readyCallBack.callBack(ApiResultState.CANCELED);
-                String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
+                String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
 
 
                 final Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.GET);
