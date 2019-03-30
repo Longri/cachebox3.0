@@ -35,7 +35,7 @@ public class EXCLUDE_FROM_TRAVIS {
 
     static {
         //store api to config
-        Config.GcAPIStaging.setValue("A"+GcAPI);
-        Config.GcAPI.setValue("A"+GcAPI);
+        Config.AccessTokenForTest.setValue("A"+GcAPI);
+        Config.AccessToken.setValue("A"+GcAPI);
     }
 }
