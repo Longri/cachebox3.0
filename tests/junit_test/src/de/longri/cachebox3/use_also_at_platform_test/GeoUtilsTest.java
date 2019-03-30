@@ -29,8 +29,8 @@ class GeoUtilsTest {
         Coordinate coordinate = new Coordinate(coordStr);
 
         assertThat("Coordinate must valid", coordinate.isValid());
-        assertThat("Coordinate latitude must be", coordinate.latitude == 53.60225);
-        assertThat("Coordinate longitude must be", coordinate.longitude == 10.16695);
+        assertThat("Coordinate latitude must be", coordinate.getLatitude() == 53.60225);
+        assertThat("Coordinate longitude must be", coordinate.getLongitude() == 10.16695);
     }
 
 }

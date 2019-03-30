@@ -66,9 +66,9 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
         // the final not the the cache coordinates
         Coordinate toPos = this;
         if (waypoint != null) {
-            toPos = new Coordinate(waypoint.latitude, waypoint.longitude);
+            toPos = new Coordinate(waypoint.getLatitude(), waypoint.getLongitude());
             // nur sinnvolles Final, sonst vom Cache
-            if (waypoint.latitude == 0 && waypoint.longitude == 0)
+            if (waypoint.getLatitude() == 0 && waypoint.getLongitude() == 0)
                 toPos = this;
         }
         float[] dist = new float[4];

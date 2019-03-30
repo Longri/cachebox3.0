@@ -132,8 +132,8 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                 if (this.mapCenter == null) {
                     this.mapCenter = EventHandler.getMyPosition();
                 }
-                lon = this.mapCenter.longitude;
-                lat = this.mapCenter.latitude;
+                lon = this.mapCenter.getLongitude();
+                lat = this.mapCenter.getLatitude();
             } else {
                 if (this.myPosition == null) {
                     Coordinate myPos = EventHandler.getMyPosition();
@@ -153,8 +153,8 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                     }
                 }
                 if (this.myPosition != null) {
-                    lon = this.myPosition.longitude;
-                    lat = this.myPosition.latitude;
+                    lon = this.myPosition.getLongitude();
+                    lat = this.myPosition.getLatitude();
                 }
             }
             mapAnimator.position(

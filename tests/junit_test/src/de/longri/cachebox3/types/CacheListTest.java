@@ -174,7 +174,7 @@ class CacheListTest {
     }
 
     private void addCacheToList(CacheList caches, String gcCode, Coordinate coordinate) {
-        caches.add(new MutableCache(coordinate.latitude, coordinate.longitude, "dummy", CacheTypes.Traditional, gcCode));
+        caches.add(new MutableCache(coordinate.getLatitude(), coordinate.getLongitude(), "dummy", CacheTypes.Traditional, gcCode));
     }
 
 }

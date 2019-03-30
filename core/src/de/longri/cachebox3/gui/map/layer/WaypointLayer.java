@@ -496,11 +496,11 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             if (item instanceof Cluster) {
                 //the draw point is set to center of cluster
                 final Coordinate centerCoord = ((Cluster) item).getCenter();
-                lat = centerCoord.latitude;
-                lon = centerCoord.longitude;
+                lat = centerCoord.getLatitude();
+                lon = centerCoord.getLongitude();
             } else {
-                lat = item.latitude;
-                lon = item.longitude;
+                lat = item.getLatitude();
+                lon = item.getLongitude();
             }
             if (!boundingBox.contains(lat, lon))
                 continue;

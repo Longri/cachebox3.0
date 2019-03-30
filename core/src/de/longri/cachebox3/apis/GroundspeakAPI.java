@@ -1631,13 +1631,13 @@ public class GroundspeakAPI {
         }
 
         public Query searchInCircleOf100Miles(Coordinate center) {
-            addSearchFilter("location:[" + center.latitude + "," + center.longitude + "]"); // == +radius:100mi
+            addSearchFilter("location:[" + center.getLatitude() + "," + center.getLongitude() + "]"); // == +radius:100mi
             return this;
         }
 
         public Query searchInCircle(Coordinate center, int radiusInMeters) {
             if (radiusInMeters > 160934) radiusInMeters = 160934; // max 100 miles
-            addSearchFilter("location:[" + center.latitude + "," + center.longitude + "]");
+            addSearchFilter("location:[" + center.getLatitude() + "," + center.getLongitude()+ "]");
             addSearchFilter("radius:" + radiusInMeters + "m");
             return this;
         }

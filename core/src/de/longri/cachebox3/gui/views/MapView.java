@@ -185,8 +185,8 @@ public class MapView extends AbstractView {
                     final Coordinate myPos = EventHandler.getMyPosition();
                     if (myPos != null) {
                         positionChangedHandler.position(
-                                MercatorProjection.longitudeToX(myPos.longitude),
-                                MercatorProjection.latitudeToY(myPos.latitude)
+                                MercatorProjection.longitudeToX(myPos.getLongitude()),
+                                MercatorProjection.latitudeToY(myPos.getLatitude())
                         );
                     }
                     setCenterCrossLayerEnabled(false);
@@ -204,8 +204,8 @@ public class MapView extends AbstractView {
                     } else {
                         log.debug("Activate WP Mode");
                         positionChangedHandler.animateToPos(
-                                MercatorProjection.longitudeToX(wpCoord.longitude),
-                                MercatorProjection.latitudeToY(wpCoord.latitude)
+                                MercatorProjection.longitudeToX(wpCoord.getLongitude()),
+                                MercatorProjection.latitudeToY(wpCoord.getLatitude())
                         );
                         setCenterCrossLayerEnabled(false);
                     }
@@ -282,7 +282,7 @@ public class MapView extends AbstractView {
         mapPosition.bearing = mapState.getOrientation();
         mapPosition.tilt = mapState.getTilt();
         if (mapState.getFreePosition() != null)
-            mapPosition.setPosition(mapState.getFreePosition().latitude, mapState.getFreePosition().longitude);
+            mapPosition.setPosition(mapState.getFreePosition().getLatitude(), mapState.getFreePosition().getLongitude());
         mapStateButton.setMapMode(mapState.getMapMode(), true, selfEvent);
         infoPanel.setMapOrientationMode(mapState.getMapOrientationMode());
         map.setMapPosition(mapPosition);
@@ -415,7 +415,7 @@ public class MapView extends AbstractView {
         }
         if (myPos != null) {
             infoPanel.setNewValues(myPos, EventHandler.getHeading());
-            positionChangedHandler.setPositionWithoutAnimation(myPos.latitude, myPos.longitude);
+            positionChangedHandler.setPositionWithoutAnimation(myPos.getLatitude(), myPos.getLongitude());
         }
         if (!menuInShow) {
             if (CB.lastMapState.isEmpty()) {

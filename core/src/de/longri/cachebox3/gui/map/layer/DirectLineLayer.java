@@ -158,12 +158,12 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
 
         public void setLine(LatLong selectedCoordinate, LatLong ownPosition) {
             if (!layer.isEnabled()) return;
-            doubles[3] = (ownPosition.longitude + 180.0) / 360.0;
-            doubles[7] = Math.sin(ownPosition.latitude * (Math.PI / 180.0));
+            doubles[3] = (ownPosition.getLongitude() + 180.0) / 360.0;
+            doubles[7] = Math.sin(ownPosition.getLatitude() * (Math.PI / 180.0));
             doubles[4] = 0.5 - Math.log((1.0 + doubles[7]) / (1.0 - doubles[7])) / (4.0 * Math.PI);
 
-            doubles[5] = (selectedCoordinate.longitude + 180.0) / 360.0;
-            doubles[7] = Math.sin(selectedCoordinate.latitude * (Math.PI / 180.0));
+            doubles[5] = (selectedCoordinate.getLongitude() + 180.0) / 360.0;
+            doubles[7] = Math.sin(selectedCoordinate.getLatitude() * (Math.PI / 180.0));
             doubles[6] = 0.5 - Math.log((1.0 + doubles[7]) / (1.0 - doubles[7])) / (4.0 * Math.PI);
             this.invalidLine = false;
         }

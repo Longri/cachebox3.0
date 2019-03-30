@@ -193,8 +193,9 @@ class GpxFileImporterTest {
 
         GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(TEST_DB, importHandler);
         importer.doImport(gpxFile);
+        Thread.sleep(500);
         importer.doImport(gpxFile2);
-
+        Thread.sleep(500);
 
         assertThat("Cache count must be 500", TEST_DB.getCacheCountOnThisDB() == 500);
         AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2TNPV", true);

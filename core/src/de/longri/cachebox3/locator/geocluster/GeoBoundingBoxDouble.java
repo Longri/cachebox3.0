@@ -38,19 +38,19 @@ public class GeoBoundingBoxDouble {
     }
 
     public boolean contains(Coordinate point) {
-        return point.latitude <= topLeft.latitude && point.latitude >= bottomRight.latitude &&
-                point.longitude >= topLeft.longitude && point.longitude <= bottomRight.longitude;
+        return point.getLatitude()<= topLeft.getLatitude()&& point.getLatitude()>= bottomRight.getLatitude()&&
+                point.getLongitude()>= topLeft.getLongitude()&& point.getLongitude()<= bottomRight.getLongitude();
     }
 
     public boolean contains(double longitude, double latitude) {
-        return latitude <= topLeft.latitude && latitude >= bottomRight.latitude &&
-                longitude >= topLeft.longitude && longitude <= bottomRight.longitude;
+        return latitude <= topLeft.getLatitude()&& latitude >= bottomRight.getLatitude()&&
+                longitude >= topLeft.getLongitude()&& longitude <= bottomRight.getLongitude();
     }
 
     private void validate() {
-        if (topLeft.latitude < bottomRight.latitude || topLeft.longitude > bottomRight.longitude) {
+        if (topLeft.getLatitude()< bottomRight.getLatitude()|| topLeft.getLongitude()> bottomRight.getLongitude()) {
             throw new IllegalArgumentException("Wrong leftTop to rightBottom \n" +
-                    topLeft.latitude + " < " + bottomRight.latitude + " || " + topLeft.longitude + " > " + bottomRight.longitude);
+                    topLeft.getLatitude()+ " < " + bottomRight.getLatitude()+ " || " + topLeft.getLongitude()+ " > " + bottomRight.getLongitude());
         }
 
     }

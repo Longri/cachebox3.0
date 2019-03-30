@@ -282,12 +282,12 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         if (it.item instanceof Cluster) {
             //set draw point to center of cluster
             Coordinate centerCoord = ((Cluster) it.item).getCenter();
-            lat = centerCoord.latitude;
-            lon = centerCoord.longitude;
+            lat = centerCoord.getLatitude();
+            lon = centerCoord.getLongitude();
 
         } else {
-            lat = it.item.latitude;
-            lon = it.item.longitude;
+            lat = it.item.getLatitude();
+            lon = it.item.getLongitude();
         }
 
         mMapPoint.x = (lon + 180.0) / 360.0;
@@ -336,8 +336,8 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
             reuse = new Point();
         }
 
-        reuse.x = (p.longitude + 180.0D) / 360.0D;
-        double sinLatitude = Math.sin(p.latitude * 0.017453292519943295D);
+        reuse.x = (p.getLongitude() + 180.0D) / 360.0D;
+        double sinLatitude = Math.sin(p.getLatitude() * 0.017453292519943295D);
         reuse.y = 0.5D - Math.log((1.0D + sinLatitude) / (1.0D - sinLatitude)) / 12.566370614359172D;
         return reuse;
     }

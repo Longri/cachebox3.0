@@ -24,14 +24,14 @@ public class LatLong {
     /**
      * The latitude coordinate of this LatLong in degrees.
      */
-    public final double latitude;
+    protected double latitude;
 
     /**
      * The longitude coordinate of this LatLong in degrees.
      */
-    public final double longitude;
+    protected double longitude;
 
-    private int hash = 0;
+    protected int hash = 0;
 
     public LatLong(double latitude, double longitude) {
         this.latitude = latitude;

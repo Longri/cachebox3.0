@@ -87,8 +87,8 @@ public class Cluster extends MapWayPointItem {
         double avLon = 0;
 
         for (MapWayPointItem cluster : this.includedClusters) {
-            avLat += cluster.latitude;
-            avLon += cluster.longitude;
+            avLat += cluster.getLatitude();
+            avLon += cluster.getLongitude();
         }
         centerCoordinate = new Coordinate(avLat / this.includedClusters.size,
                 avLon / this.includedClusters.size);

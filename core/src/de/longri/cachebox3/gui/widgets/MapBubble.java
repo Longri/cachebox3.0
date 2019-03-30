@@ -171,20 +171,20 @@ public class MapBubble extends Catch_Table {
 
     public double getCoordX() {
         if (cache != null) {
-            return MercatorProjection.longitudeToX(cache.longitude);
+            return MercatorProjection.longitudeToX(cache.getLongitude());
         }
         if (waypoint != null) {
-            return MercatorProjection.longitudeToX(waypoint.longitude);
+            return MercatorProjection.longitudeToX(waypoint.getLongitude());
         }
         return 0;
     }
 
     public double getCoordY() {
         if (cache != null) {
-            return MercatorProjection.latitudeToY(cache.latitude);
+            return MercatorProjection.latitudeToY(cache.getLatitude());
         }
         if (waypoint != null) {
-            return MercatorProjection.latitudeToY(waypoint.latitude);
+            return MercatorProjection.latitudeToY(waypoint.getLatitude());
         }
         return 0;
     }

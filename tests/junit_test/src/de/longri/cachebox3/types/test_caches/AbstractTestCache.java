@@ -99,8 +99,8 @@ public abstract class AbstractTestCache {
 
     public void assertCache(AbstractCache other, Database database) {
         assertThat("Cache must not be NULL", other != null);
-        assertThat("Latitude must be " + latitude + " but was :" + other.latitude, latitude == other.latitude);
-        assertThat("Longitude must be " + longitude + " but was :" + other.longitude, longitude == other.longitude);
+        assertThat("Latitude must be " + latitude + " but was :" + other.getLatitude(), latitude == other.getLatitude());
+        assertThat("Longitude must be " + longitude + " but was :" + other.getLongitude(), longitude == other.getLongitude());
         assertThat("Cache type must be " + cacheType + " but was :" + other.getType(), cacheType == other.getType());
         assertThat("GcCode must be " + gcCode + " but was :" + other.getGcCode(), CharSequenceUtilTest.equals(gcCode, other.getGcCode()));
         assertThat("Cache id must be " + id + " but was :" + other.getId(), id == other.getId());

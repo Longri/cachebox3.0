@@ -39,8 +39,8 @@ public class MapWayPointItem extends Coordinate {
 
 
     public MapWayPointItem(Coordinate pos, Object obj, Regions regions, boolean selected) {
-        super(pos.latitude, pos.longitude);
-        geoPoint = new GeoPoint(pos.latitude, pos.longitude);
+        super(pos.getLatitude(), pos.getLongitude());
+        geoPoint = new GeoPoint(pos.getLatitude(), pos.getLongitude());
         this.dataObject = obj;
         cachedHash = hashCode();
         this.selected = selected;

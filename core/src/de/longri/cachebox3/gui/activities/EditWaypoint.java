@@ -180,8 +180,8 @@ public class EditWaypoint extends ActivityBase {
             public void clicked(InputEvent event, float x, float y) {
                 Coordinate coor = coordinateButton.getCoordinate();
                 AbstractWaypoint newWaypoint = new MutableWaypoint(Database.Data, waypoint);
-                newWaypoint.setLatitude(coor.latitude);
-                newWaypoint.setLongitude(coor.longitude);
+                newWaypoint.setLatitude(coor.getLatitude());
+                newWaypoint.setLongitude(coor.getLongitude());
                 newWaypoint.setTitle(titleTextArea.getText());
                 newWaypoint.setDescription(descriptionTextArea.getText());
                 newWaypoint.setClue(clueTextArea.getText());

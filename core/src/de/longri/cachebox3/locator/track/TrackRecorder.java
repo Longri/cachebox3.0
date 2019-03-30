@@ -131,7 +131,7 @@ public class TrackRecorder implements PositionChangedListener {
         if (gpxfile == null)
             return;
 
-        String xml = "<wpt lat=\"" + String.valueOf(location.latitude) + "\" lon=\"" + String.valueOf(location.longitude)
+        String xml = "<wpt lat=\"" + String.valueOf(location.getLatitude()) + "\" lon=\"" + String.valueOf(location.getLongitude())
                 + "\">\n" + "   <ele>" + String.valueOf(location.getElevation()) + "</ele>\n" + "   <time>" + timestamp + "</time>\n"
                 + "   <name>" + friendlyName + "</name>\n" + "   <link href=\"" + mediaPath + "\" />\n" + "</wpt>\n";
 
@@ -223,14 +223,14 @@ public class TrackRecorder implements PositionChangedListener {
             // zurückgelegt? Wenn nicht, dann nicht aufzeichnen.
             float[] dist = new float[1];
 
-            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, LastRecordedPosition.latitude,
-                    LastRecordedPosition.longitude, event.pos.latitude, event.pos.longitude, dist);
+            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, LastRecordedPosition.getLatitude(),
+                    LastRecordedPosition.getLongitude(), event.pos.getLatitude(), event.pos.getLongitude(), dist);
             float cachedDistance = dist[0];
 
             if (cachedDistance > Config.TrackDistance.getValue()) {
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("<trkpt lat=\"" + String.valueOf(event.pos.latitude) + "\" lon=\"" + String.valueOf(event.pos.longitude) + "\">\n");
+                sb.append("<trkpt lat=\"" + String.valueOf(event.pos.getLatitude()) + "\" lon=\"" + String.valueOf(event.pos.getLongitude()) + "\">\n");
                 sb.append("   <ele>" + String.valueOf(newCoord.getElevation()) + "</ele>\n");
                 sb.append("   <time>" + getDateTimeString() + "</time>\n");
                 sb.append("   <course>" + String.valueOf(newCoord.getHeading()) + "</course>\n");
@@ -264,7 +264,7 @@ public class TrackRecorder implements PositionChangedListener {
                     log.error("Trackrecorder", "IOException", e);
                 }
 
-                NewPoint = new TrackPoint(event.pos.longitude, event.pos.longitude, newCoord.getElevation(),
+                NewPoint = new TrackPoint(event.pos.getLongitude(), event.pos.getLongitude(), newCoord.getElevation(),
                         newCoord.getHeading(), new Date());
 
                 CB.actRoute.Points.add(NewPoint);

@@ -69,8 +69,11 @@ public enum CacheTypes implements SelectBoxItem {
     MyParking(true), // = 20
 
     Giga(true), // 22
+
     APE(true),
+
     AdventuresExhibit(true),
+
     HQ(true),
 
     LabCache(true),

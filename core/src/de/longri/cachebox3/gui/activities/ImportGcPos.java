@@ -250,13 +250,13 @@ public class ImportGcPos extends BlockGpsActivityBase {
             public void clicked(InputEvent event, float x, float y) {
                 LatLong lastStoredPos = CB.lastMapState.getFreePosition();
                 if (tglBtnMap.isDisabled()) {
-                    actSearchPos = new CoordinateGPS(lastStoredPos.latitude, lastStoredPos.longitude);
+                    actSearchPos = new CoordinateGPS(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
                     setToggleBtnState(0);
                     return;
                 }
                 Coordinate mapCenterPos = MapView.getLastCenterPos();
                 if (mapCenterPos == null) {
-                    actSearchPos = new CoordinateGPS(lastStoredPos.latitude, lastStoredPos.longitude);
+                    actSearchPos = new CoordinateGPS(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
                 } else {
                     actSearchPos = mapCenterPos;
                 }
@@ -283,7 +283,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
                 Coordinate mapCenterPos = MapView.getLastCenterPos();
                 if (mapCenterPos == null) {
                     LatLong lastStoredPos = CB.lastMapState.getFreePosition();
-                    actSearchPos = new CoordinateGPS(lastStoredPos.latitude, lastStoredPos.longitude);
+                    actSearchPos = new CoordinateGPS(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
                 } else {
                     actSearchPos = mapCenterPos;
                 }

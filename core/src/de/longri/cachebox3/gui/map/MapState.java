@@ -75,8 +75,8 @@ public class MapState {
             store.write(value);
             if (freePosition != null) {
                 store.write(true);
-                store.write((int) (freePosition.latitude * CONVERSION));
-                store.write((int) (freePosition.longitude * CONVERSION));
+                store.write((int) (freePosition.getLatitude() * CONVERSION));
+                store.write((int) (freePosition.getLongitude() * CONVERSION));
             } else {
                 store.write(false);
             }

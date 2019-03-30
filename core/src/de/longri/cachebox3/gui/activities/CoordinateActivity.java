@@ -115,8 +115,8 @@ public class CoordinateActivity extends ActivityBase {
             if (actValueTable != null) {
                 LatLong latLong = actValueTable.getValue();
                 if (latLong != null) {
-                    lat = latLong.latitude;
-                    lon = latLong.longitude;
+                    lat = latLong.getLatitude();
+                    lon = latLong.getLongitude();
                 }
             }
 
