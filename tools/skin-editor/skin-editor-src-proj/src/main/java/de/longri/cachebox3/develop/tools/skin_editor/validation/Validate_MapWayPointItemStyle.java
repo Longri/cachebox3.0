@@ -94,7 +94,7 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         //Check Cache, solved
         AbstractCache solvedAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
         solvedAbstractCache.setOwner("nicht meiner");
-        solvedAbstractCache.setCorrectedCoordinates(true);
+        solvedAbstractCache.setHasCorrectedCoordinates(true);
         checkCache(solvedAbstractCache);
 
 

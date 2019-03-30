@@ -244,7 +244,7 @@ public class IOS_LocationManager extends LocationManager {
 
         if (region instanceof CircularRegion) {
             CircularRegion circularRegion = (CircularRegion) region;
-            CLLocationCoordinate2D center = new CLLocationCoordinate2D(circularRegion.center.latitude, circularRegion.center.longitude);
+            CLLocationCoordinate2D center = new CLLocationCoordinate2D(circularRegion.center.getLatitude(), circularRegion.center.getLongitude());
             clRegion = new CLCircularRegion(center, circularRegion.radius, "");
             regionMap.put(clRegion, region);
         } else {
