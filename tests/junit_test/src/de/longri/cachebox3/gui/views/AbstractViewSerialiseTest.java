@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 public class AbstractViewSerialiseTest {
 
     @Test
-    public void AboutViewTest() throws de.longri.serializable.NotImplementedException {
+    public void AboutViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         AboutView aboutView = new AboutView();
@@ -33,7 +33,7 @@ public class AbstractViewSerialiseTest {
 
 
     @Test
-    public void CacheListViewTest() throws de.longri.serializable.NotImplementedException {
+    public void CacheListViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         CacheListView cacheListView = new CacheListView();
@@ -41,7 +41,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void CompassViewTest() throws de.longri.serializable.NotImplementedException {
+    public void CompassViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         CompassView compassView = new CompassView();
@@ -49,7 +49,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void CreditsViewTest() throws de.longri.serializable.NotImplementedException {
+    public void CreditsViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         CreditsView creditsView = new CreditsView();
@@ -57,7 +57,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void DescriptionViewTest() throws de.longri.serializable.NotImplementedException {
+    public void DescriptionViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         DescriptionView descriptionView = new DescriptionView();
@@ -65,7 +65,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void DraftsViewTest() throws de.longri.serializable.NotImplementedException {
+    public void DraftsViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         DraftsView draftsView = new DraftsView();
@@ -73,7 +73,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void LogListViewTest() throws de.longri.serializable.NotImplementedException {
+    public void LogListViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         LogListView logListView = new LogListView();
@@ -81,7 +81,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void MapViewTest() throws de.longri.serializable.NotImplementedException {
+    public void MapViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         MapView mapView = new MapView();
@@ -89,7 +89,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void NotesViewTest() throws de.longri.serializable.NotImplementedException {
+    public void NotesViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         NotesView notesView = new NotesView();
@@ -97,7 +97,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void SolverViewTest() throws de.longri.serializable.NotImplementedException {
+    public void SolverViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         SolverView solverView = new SolverView();
@@ -105,7 +105,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void SolverView2Test() throws de.longri.serializable.NotImplementedException {
+    public void SolverView2Test() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         SolverView2 solverView = new SolverView2();
@@ -113,7 +113,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void SpoilerViewTest() throws de.longri.serializable.NotImplementedException {
+    public void SpoilerViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         SpoilerView spoilerView = new SpoilerView();
@@ -121,7 +121,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void TestViewTest() throws de.longri.serializable.NotImplementedException {
+    public void TestViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         TestView testView = new TestView();
@@ -129,7 +129,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void TrackableListViewTest() throws de.longri.serializable.NotImplementedException {
+    public void TrackableListViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         TrackableListView trackableListView = new TrackableListView();
@@ -137,7 +137,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void TrackListViewTest() throws de.longri.serializable.NotImplementedException {
+    public void TrackListViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         TrackListView trackListView = new TrackListView();
@@ -145,7 +145,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void WaypointViewTest() throws de.longri.serializable.NotImplementedException {
+    public void WaypointViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         WaypointView waypointView = new WaypointView();

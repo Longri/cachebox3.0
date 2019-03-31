@@ -61,6 +61,10 @@ public class Assert {
         }
     }
 
+    public static void assertFalse(boolean assertion) throws PlatformAssertionError {
+        assertFalse(assertion, "");
+    }
+
     public static void assertFalse(boolean assertion, String reason) throws PlatformAssertionError {
         if (assertion) {
             throw new PlatformAssertionError(reason);

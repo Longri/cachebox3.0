@@ -71,7 +71,6 @@ import de.longri.cachebox3.utils.EQUALS;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
@@ -138,7 +137,7 @@ public class MapView extends AbstractView {
     private Point screenPoint = new Point();
     private final Event selfEvent = new Event();
 
-    public MapView(BitStore reader) throws NotImplementedException {
+    public MapView(BitStore reader) {
         super(reader);
         create();
     }

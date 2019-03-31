@@ -42,7 +42,6 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.converter.Base64;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.oscim.backend.GL;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
@@ -288,30 +287,22 @@ public class CacheboxMain extends ApplicationAdapter {
             if (CB.isQuitCalled()) {
                 log.debug("save instance state quit called");
                 BitStore saveInstanceStateWriter = new BitStore();
-                try {
-                    saveInstanceStateWriter.write(true); // nothing to restore
-                    Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
-                    prefs.putString(SAVE_INSTANCE_KEY, Base64.encodeBytes(saveInstanceStateWriter.getArray()));
-                    prefs.flush();
-                } catch (NotImplementedException e) {
-                    e.printStackTrace();
-                }
+                saveInstanceStateWriter.write(true); // nothing to restore
+                Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
+                prefs.putString(SAVE_INSTANCE_KEY, Base64.encodeBytes(saveInstanceStateWriter.getArray()));
+                prefs.flush();
             } else {
                 log.debug("save instance state");
                 BitStore saveInstanceStateWriter = new BitStore();
-                try {
-                    saveInstanceStateWriter.write(false); // nothing to restore
+                saveInstanceStateWriter.write(false); // nothing to restore
 
-                    //store DB name
-                    saveInstanceStateWriter.write(Config.DatabaseName.getValue());
-                    saveInstanceState(saveInstanceStateWriter);
+                //store DB name
+                saveInstanceStateWriter.write(Config.DatabaseName.getValue());
+                saveInstanceState(saveInstanceStateWriter);
 
-                    Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
-                    prefs.putString(SAVE_INSTANCE_KEY, Base64.encodeBytes(saveInstanceStateWriter.getArray()));
-                    prefs.flush();
-                } catch (NotImplementedException e) {
-                    e.printStackTrace();
-                }
+                Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
+                prefs.putString(SAVE_INSTANCE_KEY, Base64.encodeBytes(saveInstanceStateWriter.getArray()));
+                prefs.flush();
             }
         }
         checkLogger();
@@ -369,7 +360,7 @@ public class CacheboxMain extends ApplicationAdapter {
         }
     }
 
-    private void saveInstanceState(BitStore writer) throws NotImplementedException {
+    private void saveInstanceState(BitStore writer) {
         // save last actView
         AbstractView abstractView = viewManager.getActView();
         writer.write(abstractView.getClass().getName());

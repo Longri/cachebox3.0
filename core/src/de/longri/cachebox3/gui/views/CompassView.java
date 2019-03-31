@@ -51,7 +51,6 @@ import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +76,7 @@ public class CompassView extends AbstractView implements
     private boolean resetLayout, showMap, showName, showIcon, showAtt, showGcCode, showCoords, showWpDesc, showSatInfos, showSunMoon, showAnyContent, showTargetDirection, showSDT, showLastFound;
     private float accuracy;
 
-    public CompassView(BitStore reader) throws NotImplementedException {
+    public CompassView(BitStore reader) {
         super(reader);
     }
 

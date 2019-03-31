@@ -31,7 +31,7 @@ import de.longri.cachebox3.platform_test.Test;
 public class AbstractViewSerialiseTest {
 
     @Test
-    public void AboutViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void AboutViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         AboutView aboutView = new AboutView();
@@ -40,7 +40,7 @@ public class AbstractViewSerialiseTest {
 
 
     @Test
-    public void CacheListViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void CacheListViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         CacheListView cacheListView = new CacheListView();
@@ -48,7 +48,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void CompassViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void CompassViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         CompassView compassView = new CompassView();
@@ -56,7 +56,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void CreditsViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void CreditsViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         CreditsView creditsView = new CreditsView();
@@ -64,7 +64,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void DescriptionViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void DescriptionViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         DescriptionView descriptionView = new DescriptionView();
@@ -72,7 +72,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void DraftsViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void DraftsViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         DraftsView draftsView = new DraftsView();
@@ -80,7 +80,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void LogListViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void LogListViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         LogListView logListView = new LogListView();
@@ -88,7 +88,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void MapViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void MapViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         MapView mapView = new MapView();
@@ -96,7 +96,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void NotesViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void NotesViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         NotesView notesView = new NotesView();
@@ -104,7 +104,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void SolverViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void SolverViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         SolverView solverView = new SolverView();
@@ -112,7 +112,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void SolverView2Test() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void SolverView2Test() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         SolverView2 solverView = new SolverView2();
@@ -120,7 +120,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void SpoilerViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void SpoilerViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         SpoilerView spoilerView = new SpoilerView();
@@ -128,7 +128,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void TestViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void TestViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         TestView testView = new TestView();
@@ -136,7 +136,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void TrackableListViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void TrackableListViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         TrackableListView trackableListView = new TrackableListView();
@@ -144,7 +144,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void TrackListViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void TrackListViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         TrackListView trackListView = new TrackListView();
@@ -152,7 +152,7 @@ public class AbstractViewSerialiseTest {
     }
 
     @Test
-    public void WaypointViewTest() throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public void WaypointViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         WaypointView waypointView = new WaypointView();

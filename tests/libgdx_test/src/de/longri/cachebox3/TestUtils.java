@@ -43,7 +43,7 @@ public class TestUtils {
         return fileHandle;
     }
 
-    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz) throws de.longri.serializable.NotImplementedException, PlatformAssertionError {
+    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz)throws PlatformAssertionError {
         de.longri.serializable.BitStore store = abstractView.saveInstanceState();
         byte[] bytes = store.getArray();
 
