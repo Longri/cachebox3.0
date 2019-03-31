@@ -16,7 +16,9 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.util.Date;
 
@@ -36,15 +38,31 @@ public class MutableCache extends AbstractCache {
     // Masks
     private final static short MASK_HAS_HINT = 1 << 0;
     private final static short MASK_CORECTED_COORDS = 1 << 1; //   2
-    private final static short MASK_ARCHIVED = 1 << 2;        //   4
-    private final static short MASK_AVAILABLE = 1 << 3;       //   8
-    private final static short MASK_FAVORITE = 1 << 4;        //  16
-    private final static short MASK_FOUND = 1 << 5;           //  32
+    public final static short MASK_ARCHIVED = 1 << 2;        //   4
+    public final static short MASK_AVAILABLE = 1 << 3;       //   8
+    public final static short MASK_FAVORITE = 1 << 4;        //  16
+    public final static short MASK_FOUND = 1 << 5;           //  32
     private final static short MASK_IS_LIVE = 1 << 6;         //  64
     private final static short MASK_SOLVER1CHANGED = 1 << 7;  // 128
-    private final static short MASK_HAS_USER_DATA = 1 << 8;   // 256
-    private final static short MASK_LISTING_CHANGED = 1 << 9; // 512
+    public final static short MASK_HAS_USER_DATA = 1 << 8;   // 256
+    public final static short MASK_LISTING_CHANGED = 1 << 9; // 512
 
+    public static boolean getMaskValue(short mask, short bitFlags) {
+        return (bitFlags & mask) == mask;
+    }
+
+    public static short setMaskValue(short mask, boolean value, short bitFlags) {
+        if (getMaskValue(mask, bitFlags) == value) {
+            return bitFlags;
+        }
+
+        if (value) {
+            bitFlags |= mask;
+        } else {
+            bitFlags &= ~mask;
+        }
+        return bitFlags;
+    }
 
     public final static byte NOT_LIVE = 0;
     public final static byte IS_LITE = 1;
@@ -54,7 +72,7 @@ public class MutableCache extends AbstractCache {
 
     private double latitude, longitude;
     private Array<Attributes> attributes;
-    private String name, gcCode, placedBy, owner, gcId;
+    private CharSequence name, gcCode, placedBy, owner, gcId;
     private short rating, numTravelbugs;
     private int favPoints;
     private long id;
@@ -140,6 +158,58 @@ public class MutableCache extends AbstractCache {
         this.owner = "";
         this.gcId = "";
         this.favPoints = 0;
+    }
+
+    public MutableCache(GdxSqliteCursor cursor) {
+        super(cursor.getDouble(1), cursor.getDouble(2));
+        this.id = cursor.getLong(0);
+        this.size = CacheSizes.parseInt(cursor.getShort(3));
+        this.difficulty = (float) cursor.getShort(4) / 2.0f;
+        this.terrain = (float) cursor.getShort(5) / 2.0f;
+        this.type = CacheTypes.get(cursor.getShort(6));
+        this.rating = (short) (cursor.getShort(7) / 100);
+        this.numTravelbugs = cursor.getShort(8);
+
+        this.gcCode = new CharSequenceArray(cursor.getString(9));
+
+        String nameString = cursor.getString(10);
+        if (nameString != null) this.name = new CharSequenceArray(nameString.trim());
+        else this.name = null;
+
+        String placedByString = cursor.getString(11);
+        if (placedByString != null) this.placedBy = new CharSequenceArray(placedByString);
+        else this.placedBy = null;
+
+        String ownerString = cursor.getString(12);
+        if (ownerString != null) this.owner = new CharSequenceArray(ownerString);
+        else this.owner = null;
+
+        String gcIdString = cursor.getString(13);
+        if (gcIdString != null) this.gcId = new CharSequenceArray(gcIdString);
+        else this.gcId = null;
+
+        this.booleanStore = cursor.getShort(14);
+        this.favPoints = cursor.getInt(15);
+    }
+
+    public MutableCache(Object[] values) {
+        super((double) values[1], (double) values[2]);
+        this.id = (long) values[0];
+        this.size = CacheSizes.parseInt(((Long) values[3]).intValue());
+        this.difficulty = (float) ((Long) values[4]) / 2.0f;
+        this.terrain = (float) ((Long) values[5]) / 2.0f;
+        this.type = CacheTypes.get(((Long) values[6]).intValue());
+        this.rating = (short) (((Long) values[7]).shortValue() / 100);
+        this.numTravelbugs = ((Long) values[8]).shortValue();
+
+        this.gcCode = new CharSequenceArray((String) values[9]);
+        this.name = new CharSequenceArray((String) values[10]);
+        this.placedBy = new CharSequenceArray((String) values[11]);
+        this.owner = new CharSequenceArray((String) values[12]);
+        this.gcId = new CharSequenceArray((String) values[13]);
+
+        this.booleanStore = ((Long) values[14]).shortValue();
+        this.favPoints = values[15] == null ? 0 : ((Long) values[15]).intValue();
     }
 
     @Override

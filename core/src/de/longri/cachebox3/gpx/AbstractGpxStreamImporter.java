@@ -34,8 +34,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.types.ImmutableCache.MASK_FAVORITE;
-import static de.longri.cachebox3.types.ImmutableCache.MASK_FOUND;
+import static de.longri.cachebox3.types.MutableCache.MASK_FAVORITE;
+import static de.longri.cachebox3.types.MutableCache.MASK_FOUND;
 
 /**
  * Created by Longri on 04.04.2018.
@@ -414,8 +414,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             //get boolean store from Cache and check Favorite nad Found
                             Short booleanStore = booleanStoreMap.get(cache.getId());
                             if (booleanStore != null) {
-                                boolean inDbFavorite = ImmutableCache.getMaskValue(MASK_FOUND, booleanStore);
-                                boolean inDbFound = ImmutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
+                                boolean inDbFavorite = MutableCache.getMaskValue(MASK_FOUND, booleanStore);
+                                boolean inDbFound = MutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
                                 cache.setFavorite(inDbFavorite);
                                 if (inDbFound) {
                                     cache.setFound( true);

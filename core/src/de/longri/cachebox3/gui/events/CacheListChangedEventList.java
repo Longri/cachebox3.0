@@ -16,13 +16,11 @@
 package de.longri.cachebox3.gui.events;
 
 
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.ImmutableCache;
 import de.longri.cachebox3.types.MutableCache;
 
 import java.util.ArrayList;

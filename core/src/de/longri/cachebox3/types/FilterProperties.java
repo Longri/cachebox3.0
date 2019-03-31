@@ -303,34 +303,34 @@ public class FilterProperties {
             short bitstoreMustNot = 0;
 
             if (Finds.getInt() == 1)
-                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, true, bitstoreMust);//andParts.add("Found=1");
+                bitstoreMust = MutableCache.setMaskValue(MutableCache.MASK_FOUND, true, bitstoreMust);//andParts.add("Found=1");
             if (Finds.getInt() == -1)
-                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, true, bitstoreMustNot);//andParts.add("(Found=0 or Found is null)");
+                bitstoreMustNot = MutableCache.setMaskValue(MutableCache.MASK_FOUND, true, bitstoreMustNot);//andParts.add("(Found=0 or Found is null)");
 
             if (Favorites.getInt() == 1)
-                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, true, bitstoreMust);
+                bitstoreMust = MutableCache.setMaskValue(MutableCache.MASK_FAVORITE, true, bitstoreMust);
             if (Favorites.getInt() == -1)
-                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, true, bitstoreMustNot);
+                bitstoreMustNot = MutableCache.setMaskValue(MutableCache.MASK_FAVORITE, true, bitstoreMustNot);
 
             if (NotAvailable.getInt() == -1)
-                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMust);
+                bitstoreMust = MutableCache.setMaskValue(MutableCache.MASK_AVAILABLE, true, bitstoreMust);
             if (NotAvailable.getInt() == 1)
-                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, true, bitstoreMustNot);
+                bitstoreMustNot = MutableCache.setMaskValue(MutableCache.MASK_AVAILABLE, true, bitstoreMustNot);
 
             if (Archived.getInt() == 1)
-                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, true, bitstoreMust);
+                bitstoreMust = MutableCache.setMaskValue(MutableCache.MASK_ARCHIVED, true, bitstoreMust);
             if (Archived.getInt() == -1)
-                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, true, bitstoreMustNot);
+                bitstoreMustNot = MutableCache.setMaskValue(MutableCache.MASK_ARCHIVED, true, bitstoreMustNot);
 
             if (ListingChanged.getInt() == 1)
-                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, true, bitstoreMust);
+                bitstoreMust = MutableCache.setMaskValue(MutableCache.MASK_LISTING_CHANGED, true, bitstoreMust);
             if (ListingChanged.getInt() == -1)
-                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, true, bitstoreMustNot);
+                bitstoreMustNot = MutableCache.setMaskValue(MutableCache.MASK_LISTING_CHANGED, true, bitstoreMustNot);
 
             if (HasUserData.getInt() == 1)
-                bitstoreMust = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, bitstoreMust);
+                bitstoreMust = MutableCache.setMaskValue(MutableCache.MASK_HAS_USER_DATA, true, bitstoreMust);
             if (HasUserData.getInt() == -1)
-                bitstoreMustNot = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, bitstoreMustNot);
+                bitstoreMustNot = MutableCache.setMaskValue(MutableCache.MASK_HAS_USER_DATA, true, bitstoreMustNot);
 
             if (bitstoreMust > 0)
                 andParts.add("BooleanStore & " + bitstoreMust + "= " + bitstoreMust);

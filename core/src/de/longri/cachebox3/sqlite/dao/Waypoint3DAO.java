@@ -22,8 +22,8 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.ImmutableCache;
 import de.longri.cachebox3.types.ImmutableWaypoint;
+import de.longri.cachebox3.types.MutableCache;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
@@ -147,12 +147,12 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             cursor.moveToFirst();
             short booleanStore = cursor.getShort(0);
             cursor.close();
-            if (ImmutableCache.getMaskValue(ImmutableCache.MASK_HAS_USER_DATA, booleanStore)) {
+            if (MutableCache.getMaskValue(MutableCache.MASK_HAS_USER_DATA, booleanStore)) {
                 // HasUserData is set, return!
                 return;
             }
 
-            ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, booleanStore);
+            MutableCache.setMaskValue(MutableCache.MASK_HAS_USER_DATA, true, booleanStore);
 
             //Set 'HasUserData' on Cache table
             Database.Parameters args = new Database.Parameters();

@@ -30,7 +30,7 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheList;
-import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.cachebox3.types.MutableCache;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
@@ -39,8 +39,6 @@ import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -84,7 +82,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
                 @Override
                 public void newRow(String[] columnName, Object[] value, int[] types) {
-                    cacheList.add(new ImmutableCache(value));
+                    cacheList.add(new MutableCache(value));
                     actCacheCount++;
                     progressFireCount++;
                     if (progressFireCount >= progressEventcount) {
@@ -138,7 +136,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         int n = cacheList.size - 1;
         int i = 0;
         while (n-- >= 0) {
-            ImmutableCache cache = (ImmutableCache) cacheList.get(i++);
+            AbstractCache cache = cacheList.get(i++);
             Array<AbstractWaypoint> cachewaypoints = new Array<>();
             int m = waypoints.size - 1;
             int j = 0;
@@ -161,9 +159,9 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
         GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{Long.toString(cache.getId())});
         cursor.moveToFirst();
-        ImmutableCache newCache = null;
+        MutableCache newCache = null;
         while (!cursor.isAfterLast()) {
-            newCache = new ImmutableCache(cursor);
+            newCache = new MutableCache(cursor);
             cursor.moveToNext();
         }
         cursor.close();

@@ -29,7 +29,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.DatabaseSchema;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.cachebox3.types.MutableCache;
 import de.longri.cachebox3.types.Trackable;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -485,8 +485,8 @@ public class GroundspeakAPI {
                 if (cache != null) {
                     cache.isChanged.set(false);
                     short booleanStore = ((Long) value[1]).shortValue();
-                    boolean archieved = ImmutableCache.getMaskValue(ImmutableCache.MASK_ARCHIVED, booleanStore);
-                    boolean availeble = ImmutableCache.getMaskValue(ImmutableCache.MASK_AVAILABLE, booleanStore);
+                    boolean archieved = MutableCache.getMaskValue(MutableCache.MASK_ARCHIVED, booleanStore);
+                    boolean availeble = MutableCache.getMaskValue(MutableCache.MASK_AVAILABLE, booleanStore);
                     short tbCount = (short) ((Long) value[3]).intValue();
                     int favPoints = ((Long) value[2]).intValue();
 

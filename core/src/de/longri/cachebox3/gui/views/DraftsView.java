@@ -445,7 +445,8 @@ public class DraftsView extends AbstractView {
             newDraft.timestamp = new Date();
             newDraft.CacheId = abstractCache.getId();
             newDraft.comment = "";
-            newDraft.CacheUrl = abstractCache.getUrl().toString();
+            CharSequence url = abstractCache.getUrl();
+            newDraft.CacheUrl = url == null ? null : url.toString();
             newDraft.cacheType = abstractCache.getType();
             newDraft.fillType();
             // aktDraftIndex = -1;
