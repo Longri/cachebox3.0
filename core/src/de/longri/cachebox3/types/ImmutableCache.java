@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
@@ -31,7 +32,10 @@ import java.util.Date;
 /**
  * Created by Longri on 17.10.2017.
  */
-public class ImmutableCache extends AbstractCache {
+public class ImmutableCache extends AbstractCache implements Pool.Poolable {
+
+    private final static Logger log = LoggerFactory.getLogger(ImmutableCache.class);
+
 
     // ########################################################
     // Boolean Handling
@@ -52,7 +56,40 @@ public class ImmutableCache extends AbstractCache {
     public final static short MASK_SOLVER1CHANGED = 1 << 7;  // 128
     public final static short MASK_HAS_USER_DATA = 1 << 8;   // 256
     public final static short MASK_LISTING_CHANGED = 1 << 9; // 512
-    private Array<AbstractWaypoint> waypoints;
+
+
+    public static boolean getMaskValue(short mask, short bitFlags) {
+        return (bitFlags & mask) == mask;
+    }
+
+    public static short setMaskValue(short mask, boolean value, short bitFlags) {
+        if (getMaskValue(mask, bitFlags) == value) {
+            return bitFlags;
+        }
+
+        if (value) {
+            bitFlags |= mask;
+        } else {
+            bitFlags &= ~mask;
+        }
+        return bitFlags;
+    }
+
+
+    protected CharSequence name, gcCode, placedBy, owner, gcId, country, state, tmpNote, tmpSolver, url,
+            shortDescription, longDescription, hint, tourName;
+    protected short rating, numTravelbugs, booleanStore;
+    protected int favPoints;
+    protected long id;
+    protected CacheTypes type;
+    protected CacheSizes size;
+    protected float difficulty, terrain;
+    protected Array<AbstractWaypoint> waypoints;
+    protected Array<Attributes> attributes;
+    protected Date dateHidden;
+    protected byte apiState;
+    protected DLong attributesNegative;
+    protected DLong attributesPositive;
 
 
     public ImmutableCache(double latitude, double longitude) {
@@ -103,36 +140,6 @@ public class ImmutableCache extends AbstractCache {
         bitStore = setMaskValue(MASK_CORECTED_COORDS, cache.hasCorrectedCoordinates(), bitStore);
         this.booleanStore = bitStore;
     }
-
-
-    public static boolean getMaskValue(short mask, short bitFlags) {
-        return (bitFlags & mask) == mask;
-    }
-
-    public static short setMaskValue(short mask, boolean value, short bitFlags) {
-        if (getMaskValue(mask, bitFlags) == value) {
-            return bitFlags;
-        }
-
-        if (value) {
-            bitFlags |= mask;
-        } else {
-            bitFlags &= ~mask;
-        }
-        return bitFlags;
-    }
-
-
-    private final static Logger log = LoggerFactory.getLogger(ImmutableCache.class);
-
-    private final CharSequence name, gcCode, placedBy, owner, gcId;
-    private short rating, numTravelbugs, booleanStore;
-    private final int favPoints;
-    private final long id;
-    private final CacheTypes type;
-    private final CacheSizes size;
-    private final float difficulty, terrain;
-
 
     public ImmutableCache(GdxSqliteCursor cursor) {
         super(cursor.getDouble(1), cursor.getDouble(2));
@@ -197,49 +204,109 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public CharSequence getName() {
-        return name;
+    public void setId(long id) {
+        this.id = id;
     }
+
+
+    @Override
+    public CharSequence getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
     @Override
     public CacheSizes getSize() {
-        return size;
+        return this.size;
     }
+
+    @Override
+    public void setSize(CacheSizes size) {
+        this.size = size;
+    }
+
 
     @Override
     public float getDifficulty() {
-        return difficulty;
+        return this.difficulty;
     }
+
+    @Override
+    public void setDifficulty(float difficulty) {
+        this.difficulty = difficulty;
+    }
+
 
     @Override
     public float getTerrain() {
-        return terrain;
+        return this.terrain;
     }
+
+    @Override
+    public void setTerrain(float terrain) {
+        this.terrain = terrain;
+    }
+
 
     @Override
     public CacheTypes getType() {
-        return type;
+        return this.type;
     }
+
+    @Override
+    public void setType(CacheTypes type) {
+        this.type = type;
+    }
+
 
     @Override
     public CharSequence getGcCode() {
-        return gcCode;
+        return this.gcCode;
     }
+
+    @Override
+    public void setGcCode(String gcCode) {
+        this.gcCode = gcCode;
+    }
+
 
     @Override
     public CharSequence getPlacedBy() {
-        return placedBy;
+        return this.placedBy;
     }
+
+    @Override
+    public void setPlacedBy(String value) {
+        this.placedBy = placedBy;
+    }
+
 
     @Override
     public CharSequence getOwner() {
-        return owner;
+        return this.owner;
     }
 
     @Override
-    public CharSequence getGcId() {
-        return gcId;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
+
+
+    @Override
+    public CharSequence getGcId() {
+        return this.gcId;
+    }
+
+    @Override
+    public void setGcId(String gcId) {
+        this.gcId = gcId;
+    }
+
 
     @Override
     public boolean isAvailable() {
@@ -247,9 +314,21 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
+    public void setAvailable(boolean available) {
+        this.setMaskValue(MASK_AVAILABLE, available);
+    }
+
+
+    @Override
     public boolean isFound() {
         return this.getMaskValue(MASK_FOUND);
     }
+
+    @Override
+    public void setFound(boolean isFound) {
+        this.setMaskValue(MASK_FOUND, isFound);
+    }
+
 
     @Override
     public boolean isHasUserData() {
@@ -257,9 +336,21 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public int getNumTravelbugs() {
-        return numTravelbugs;
+    public void setHasUserData(boolean hasUserData) {
+        this.setMaskValue(MASK_HAS_USER_DATA, hasUserData);
     }
+
+
+    @Override
+    public int getNumTravelbugs() {
+        return this.numTravelbugs;
+    }
+
+    @Override
+    public void setNumTravelbugs(short numTravelbugs) {
+        this.numTravelbugs = numTravelbugs;
+    }
+
 
     @Override
     public boolean isArchived() {
@@ -267,9 +358,21 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
+    public void setArchived(boolean archived) {
+        this.setMaskValue(MASK_ARCHIVED, archived);
+    }
+
+
+    @Override
     public boolean hasCorrectedCoordinates() {
         return this.getMaskValue(MASK_CORECTED_COORDS);
     }
+
+    @Override
+    public void setHasCorrectedCoordinates(boolean correctedCoordinates) {
+        this.setMaskValue(MASK_CORECTED_COORDS, correctedCoordinates);
+    }
+
 
     @Override
     public boolean isFavorite() {
@@ -277,8 +380,19 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
+    public void setFavorite(boolean favorite) {
+        setMaskValue(MASK_FAVORITE, favorite);
+    }
+
+
+    @Override
     public boolean hasHint() {
         return this.getMaskValue(MASK_HAS_HINT);
+    }
+
+    @Override
+    public void setHasHint(boolean hasHint) {
+        setMaskValue(MASK_HAS_HINT, hasHint);
     }
 
     @Override
@@ -286,234 +400,123 @@ public class ImmutableCache extends AbstractCache {
         return this.getMaskValue(MASK_LISTING_CHANGED);
     }
 
-
-    private boolean getMaskValue(short mask) {
-        return getMaskValue(mask, booleanStore);
+    @Override
+    public void setListingChanged(boolean listingChanged) {
+        setMaskValue(MASK_LISTING_CHANGED, listingChanged);
     }
+
 
     @Override
     public Array<AbstractWaypoint> getWaypoints() {
         return this.waypoints;
     }
 
-
-    @Override
-    public String getCountry(Database database) {
-        return getStringFromDB(database, "SELECT country FROM CacheInfo WHERE Id=?");
-    }
-
-    @Override
-    public String getState(Database database) {
-        return getStringFromDB(database, "SELECT state FROM CacheInfo WHERE Id=?");
-    }
-
-
-    @Override
-    public Date getDateHidden(Database database) {
-        String dateString = getStringFromDB(database, "SELECT DateHidden FROM CacheInfo WHERE Id=?");
-        if (dateString == null || dateString.isEmpty()) return new Date();
-
-        try {
-            return Database.cbDbFormat.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return new Date();
-    }
-
-    @Override
-    public String getTmpNote(Database database) {
-        return getStringFromDB(database, "SELECT Notes FROM CacheText WHERE Id=?");
-    }
-
-    @Override
-    public String getTmpSolver(Database database) {
-        return getStringFromDB(database, "SELECT Solver FROM CacheText WHERE Id=?");
-    }
-
-
     @Override
     public void setWaypoints(Array<AbstractWaypoint> waypoints) {
         this.waypoints = waypoints;
     }
 
-    //################################################################################
-    //# method's that throws exceptions
-    ///###############################################################################
 
-    private void throwNotChangeable(String propertyName) {
-        throw new RuntimeException("'" + propertyName + "' is not changeable! Use MutableCache.class instead of ImmutableCache.class");
+    @Override
+    public CharSequence getCountry() {
+        return this.country;
     }
 
     @Override
-    public void setId(long id) {
-        throwNotChangeable("Id");
+    public CharSequence getState() {
+        return this.state;
     }
 
-    @Override
-    public void setName(String name) {
-        throwNotChangeable("Name");
-    }
 
     @Override
-    public void setSize(CacheSizes size) {
-        throwNotChangeable("Size");
-    }
-
-    @Override
-    public void setDifficulty(float difficulty) {
-        throwNotChangeable("Difficulty");
-    }
-
-    @Override
-    public void setTerrain(float terrain) {
-        throwNotChangeable("Terrain");
-    }
-
-    @Override
-    public void setType(CacheTypes type) {
-        throwNotChangeable("Type");
-    }
-
-    @Override
-    public void setGcCode(String gcCode) {
-        throwNotChangeable("GcCode");
-    }
-
-    @Override
-    public void setPlacedBy(String value) {
-        throwNotChangeable("PlacedBy");
-    }
-
-    @Override
-    public void setOwner(String owner) {
-        throwNotChangeable("Owner");
-    }
-
-    @Override
-    public void setGcId(String gcId) {
-        throwNotChangeable("GcId");
-    }
-
-    @Override
-    public void setAvailable(boolean available) {
-        throwNotChangeable("Available");
-    }
-
-    @Override
-    public void setHasUserData(boolean hasUserData) {
-        throwNotChangeable("HasUserData");
-    }
-
-    @Override
-    public void setNumTravelbugs(int numTravelbugs) {
-        throwNotChangeable("NumTravelbugs");
-    }
-
-    @Override
-    public void setArchived(boolean archived) {
-        throwNotChangeable("Archived");
-    }
-
-    @Override
-    public void setHasCorrectedCoordinates(boolean correctedCoordinates) {
-        throwNotChangeable("hasCorrectedCoordinates");
-    }
-
-    @Override
-    public void setLatLon(double latitude, double longitude) {
-        throwNotChangeable("LatLon");
-    }
-
-    @Override
-    public void setAttributesPositive(DLong dLong) {
-        throwNotChangeable("AttributesPositive");
-    }
-
-    @Override
-    public void setAttributesNegative(DLong dLong) {
-        throwNotChangeable("AttributesNegative");
-    }
-
-    @Override
-    public void setAttributes(Array<Attributes> attributes) {
-        throwNotChangeable("Attributes");
+    public Date getDateHidden() {
+        return this.dateHidden;
     }
 
     @Override
     public void setDateHidden(Date date) {
-        throwNotChangeable("DateHidden");
+        this.dateHidden = date;
+    }
+
+
+    @Override
+    public CharSequence getTmpNote() {
+        return this.tmpNote;
     }
 
     @Override
-    public void setRating(float rating) {
-        throwNotChangeable("Rating");
+    public CharSequence getTmpSolver() {
+        return this.tmpSolver;
+    }
+
+
+    @Override
+    public void setAttributesPositive(DLong dLong) {
+
+    }
+
+    @Override
+    public void setAttributesNegative(DLong dLong) {
+
+    }
+
+    @Override
+    public void setAttributes(Array<Attributes> attributes) {
+        this.attributes = attributes;
+    }
+
+
+    @Override
+    public void setRating(short rating) {
+        this.rating = rating;
     }
 
     @Override
     public void setFavoritePoints(int value) {
-        throwNotChangeable("FavoritePoints");
-    }
-
-    @Override
-    public void setHasHint(boolean hasHint) {
-        throwNotChangeable("HasHint");
-    }
-
-    @Override
-    public void setShortDescription(Database database, String value) {
-        throwNotChangeable("ShortDescription");
-    }
-
-    @Override
-    public void setLongDescription(Database database, String value) {
-        throwNotChangeable("LongDescription");
-    }
-
-    @Override
-    public void setHint(Database database, String hint) {
-        throwNotChangeable("Hint");
-    }
-
-    @Override
-    public void setListingChanged(boolean listingChanged) {
-        throwNotChangeable("ListingChanged");
-    }
-
-    @Override
-    public void setLatitude(double latitude) {
-        throwNotChangeable("Latitude");
-    }
-
-    @Override
-    public void setLongitude(double longitude) {
-        throwNotChangeable("Longitude");
-    }
-
-    @Override
-    public void setUrl(String value) {
-        throwNotChangeable("Url");
-    }
-
-    @Override
-    public void setState(String value) {
-        throwNotChangeable("State");
-    }
-
-    @Override
-    public void setCountry(String value) {
-        throwNotChangeable("Country");
+        this.favPoints = value;
     }
 
 
     @Override
-    public void setTmpNote(String value) {
-        throwNotChangeable("TempNote");
+    public void setShortDescription(CharSequence value) {
+        this.shortDescription = value;
     }
 
     @Override
-    public void setTmpSolver(Database database,String value) {
-            throwNotChangeable("TempSolver");
+    public void setLongDescription(CharSequence value) {
+        this.longDescription = value;
+    }
+
+    @Override
+    public void setHint(CharSequence hint) {
+        this.hint = hint;
+    }
+
+
+    @Override
+    public void setUrl(CharSequence value) {
+        this.url = value;
+    }
+
+    @Override
+    public void setState(CharSequence value) {
+        this.state = value;
+    }
+
+    @Override
+    public void setCountry(CharSequence value) {
+        this.country = value;
+    }
+
+
+    @Override
+    public void setTmpNote(CharSequence value) {
+        this.tmpNote = value;
+    }
+
+    @Override
+    public void setTmpSolver(CharSequence value) {
+        this.tmpSolver = value;
     }
 
     //################################################################################
@@ -522,70 +525,29 @@ public class ImmutableCache extends AbstractCache {
 
 
     @Override
-    public Array<Attributes> getAttributes(Database database) {
-        GdxSqliteCursor cursor = database.rawQuery("SELECT * FROM Attributes WHERE Id=?", new String[]{String.valueOf(this.id)});
-        DLong attributesPositive;
-        DLong attributesNegative;
-        if (cursor != null) {
-            cursor.moveToFirst();
-            if (!cursor.isNull(1)) {
-                attributesPositive = new DLong(cursor.getLong(3), cursor.getLong(1));
-                attributesNegative = new DLong(cursor.getLong(4), cursor.getLong(2));
-            } else {
-                attributesPositive = new DLong(0, 0);
-                attributesNegative = new DLong(0, 0);
-            }
-            cursor.close();
-        } else {
-            attributesPositive = new DLong(0, 0);
-            attributesNegative = new DLong(0, 0);
-        }
-        return Attributes.getAttributes(attributesPositive, attributesNegative);
+    public Array<Attributes> getAttributes() {
+        return this.attributes;
     }
 
     @Override
-    public String getLongDescription(Database database) {
-        return getStringFromDB(database, "SELECT Description FROM CacheText WHERE Id=?");
+    public CharSequence getLongDescription() {
+        return this.longDescription;
     }
 
 
     @Override
-    public String getShortDescription(Database database) {
-        return getStringFromDB(database, "SELECT ShortDescription FROM CacheText WHERE Id=?");
+    public CharSequence getShortDescription() {
+        return this.shortDescription;
     }
 
     @Override
-    public CharSequence getHint(Database database) {
-        return getCharSequenceFromDB(database, "SELECT Hint FROM CacheText WHERE Id=?");
+    public CharSequence getHint() {
+        return this.hint;
     }
 
     @Override
-    public String getUrl(Database database) {
-        return getStringFromDB(database, "SELECT Url FROM CacheText WHERE Id=?");
-    }
-
-    private CharSequence getCharSequenceFromDB(Database database, String statement) {
-        String[] args = new String[]{Long.toString(this.id)};
-        return database.getCharSequence(statement, args);
-    }
-
-    private String getStringFromDB(Database database, String statement) {
-        String[] args = new String[]{Long.toString(this.id)};
-        return database.getString(statement, args);
-    }
-
-    @Override
-    public void setFound(Database database, boolean found) {
-        //write direct to DB
-        booleanStore = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, found, booleanStore);
-        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
-    }
-
-    @Override
-    public void setFavorite(Database database, boolean favorite) {
-        //write direct to DB
-        booleanStore = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, favorite, booleanStore);
-        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
+    public CharSequence getUrl() {
+        return this.url;
     }
 
 
@@ -660,13 +622,8 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public byte getApiState(Database database) {
-        GdxSqliteCursor cursor = database.myDB.rawQuery("SELECT ApiStatus FROM CacheInfo WHERE Id='" + this.id + "'");
-        if (cursor != null) {
-            cursor.moveToFirst();
-            return cursor.getByte(0);
-        }
-        return 0;
+    public byte getApiState() {
+        return this.apiState;
     }
 
     @Override
@@ -717,23 +674,39 @@ public class ImmutableCache extends AbstractCache {
 
 
     @Override
-    public void setTourName(String value) {
-
+    public void setTourName(CharSequence value) {
+        this.tourName = value;
     }
 
     @Override
-    public String getTourName() {
-        return null;
+    public CharSequence getTourName() {
+        return this.tourName;
     }
 
     @Override
     public boolean isAttributePositiveSet(Attributes attribute) {
-        throw new RuntimeException("not Stored on ImmutableCache.class");
+        if (attributesPositive == null) {
+            if (this.attributes == null) return false;
+            for (Attributes at : this.attributes) {
+                if (at.isNegative()) this.addAttributeNegative(at);
+                else this.addAttributePositive(at);
+            }
+        }
+        if (attributesPositive == null) return false;
+        return attributesPositive.BitAndBiggerNull(Attributes.GetAttributeDlong(attribute));
     }
 
     @Override
     public boolean isAttributeNegativeSet(Attributes attribute) {
-        throw new RuntimeException("not Stored on ImmutableCache.class");
+        if (attributesNegative == null) {
+            if (this.attributes == null) return false;
+            for (Attributes at : this.attributes) {
+                if (at.isNegative()) this.addAttributeNegative(at);
+                else this.addAttributePositive(at);
+            }
+        }
+        if (attributesNegative == null) return false;
+        return attributesNegative.BitAndBiggerNull(Attributes.GetAttributeDlong(attribute));
     }
 
     @Override
@@ -754,29 +727,39 @@ public class ImmutableCache extends AbstractCache {
     }
 
     @Override
-    public boolean isMutable() {
-        return false;
-    }
-
-    @Override
-    public MutableCache getMutable(Database database) {
-        return new MutableCache(database, this);
-    }
-
-    @Override
-    public AbstractCache getImmutable() {
-        return this;
-    }
-
-    @Override
     public AbstractCache getCopy() {
         return new ImmutableCache(this);
     }
 
+    private boolean getMaskValue(short mask) {
+        return getMaskValue(mask, booleanStore);
+    }
+
+    private void setMaskValue(short mask, boolean value) {
+        booleanStore = setMaskValue(mask, value, booleanStore);
+    }
 
     @Override
     public short getBooleanStore() {
         return this.booleanStore;
     }
 
+    @Override //Pool.Poolable
+    public void reset() {
+        name = null;
+        gcCode = null;
+        placedBy = null;
+        owner = null;
+        gcId = null;
+        rating = 0;
+        numTravelbugs = 0;
+        booleanStore = 0;
+        favPoints = 0;
+        id = 0;
+        type = null;
+        size = null;
+        difficulty = 0;
+        terrain = 0;
+        waypoints = null; //TODO free waypoints if called Pool.free(Cache)
+    }
 }

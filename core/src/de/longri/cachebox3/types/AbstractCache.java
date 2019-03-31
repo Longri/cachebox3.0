@@ -17,7 +17,6 @@ package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
 
 import java.util.Date;
@@ -97,7 +96,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     }
 
 
-    public abstract Array<Attributes> getAttributes(Database database);
+    public abstract Array<Attributes> getAttributes();
 
     public abstract boolean ImTheOwner();
 
@@ -155,9 +154,9 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setGcId(String gcId);
 
-    public abstract CharSequence getHint(Database database);
+    public abstract CharSequence getHint();
 
-    public abstract void setHint(Database database, String hint);
+    public abstract void setHint(CharSequence hint);
 
     public abstract long getGPXFilename_ID();
 
@@ -179,7 +178,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract boolean isFavorite();
 
-    public abstract void setFavorite(Database database, boolean favorite);
+    public abstract void setFavorite(boolean favorite);
 
     public abstract float getDifficulty();
 
@@ -191,7 +190,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract boolean isFound();
 
-    public abstract void setFound(Database database, boolean found);
+    public abstract void setFound(boolean found);
 
     public abstract boolean isLive();
 
@@ -209,13 +208,13 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setPlacedBy(String value);
 
-    public abstract String getState(Database database);
+    public abstract CharSequence getState();
 
-    public abstract Date getDateHidden(Database database);
+    public abstract Date getDateHidden();
 
     public abstract void setDateHidden(Date date);
 
-    public abstract byte getApiState(Database database);
+    public abstract byte getApiState();
 
     public abstract void setApiState(byte value);
 
@@ -223,27 +222,27 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setNoteChecksum(int value);
 
-    public abstract String getTmpNote(Database database);
+    public abstract CharSequence getTmpNote();
 
-    public abstract void setTmpNote(String value);
+    public abstract void setTmpNote(CharSequence value);
 
     public abstract int getSolverChecksum();
 
     public abstract void setSolverChecksum(int value);
 
-    public abstract String getTmpSolver(Database database);
+    public abstract CharSequence getTmpSolver();
 
-    public abstract void setTmpSolver(Database database, String value);
+    public abstract void setTmpSolver(CharSequence value);
 
-    public abstract String getUrl(Database database);
+    public abstract CharSequence getUrl();
 
-    public abstract void setUrl(String value);
+    public abstract void setUrl(CharSequence value);
 
-    public abstract String getCountry(Database database);
+    public abstract CharSequence getCountry();
 
-    public abstract void setCountry(String value);
+    public abstract void setCountry(CharSequence value);
 
-    public abstract void setState(String value);
+    public abstract void setState(CharSequence value);
 
     public abstract void addAttributeNegative(Attributes attribute);
 
@@ -257,25 +256,22 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setAttributesNegative(DLong dLong);
 
-    public abstract void setLongDescription(Database database, String value);
+    public abstract void setLongDescription(CharSequence value);
 
-    public abstract String getLongDescription(Database database);
+    public abstract CharSequence getLongDescription();
 
-    public abstract void setShortDescription(Database database, String value);
+    public abstract void setShortDescription(CharSequence value);
 
-    public abstract String getShortDescription(Database database);
+    public abstract CharSequence getShortDescription();
 
-    public abstract void setTourName(String value);
+    public abstract void setTourName(CharSequence value);
 
-    public abstract String getTourName();
+    public abstract CharSequence getTourName();
 
     public abstract boolean isAttributePositiveSet(Attributes attribute);
 
     public abstract boolean isAttributeNegativeSet(Attributes attribute);
 
-    public abstract void setLatitude(double latitude);
-
-    public abstract void setLongitude(double longitude);
 
     /**
      * Returns true if the Cache a event like Giga, Cito, Event or Mega
@@ -319,7 +315,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
      */
     public abstract float getRating();
 
-    public abstract void setRating(float rating);
+    public abstract void setRating(short rating);
 
     /**
      * Groesse des Caches. Bei Wikipediaeintraegen enthaelt dieses Feld den Radius in m
@@ -340,23 +336,16 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
      */
     public abstract int getNumTravelbugs();
 
-    public abstract void setNumTravelbugs(int numTravelbugs);
+    public abstract void setNumTravelbugs(short numTravelbugs);
 
     public abstract void dispose();
-
-    public abstract boolean isMutable();
-
-    public abstract AbstractCache getMutable(Database database);
 
     public abstract void setAttributes(Array<Attributes> attributes);
 
     public abstract void setHasHint(boolean hasHint);
 
-    public abstract void setLatLon(double latitude, double longitude);
-
     public abstract short getBooleanStore();
 
-    public abstract AbstractCache getImmutable();
 
     public abstract AbstractCache getCopy();
 }

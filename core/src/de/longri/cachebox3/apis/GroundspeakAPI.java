@@ -1091,7 +1091,7 @@ public class GroundspeakAPI {
                         cache.setFavoritePoints(API1Cache.optInt(switchValue, 0));
                         break;
                     case "trackableCount":
-                        cache.setNumTravelbugs(API1Cache.optInt(switchValue, 0));
+                        cache.setNumTravelbugs((short) API1Cache.optInt(switchValue, 0));
                         break;
                     case "placedDate":
                         cache.setDateHidden(DateFromString(API1Cache.optString(switchValue, "")));
@@ -1141,7 +1141,7 @@ public class GroundspeakAPI {
                         // switch subValue
                         if (userData != null) {
                             // foundDate
-                            cache.setFound(null, userData.optString("foundDate", "").length() != 0);
+                            cache.setFound(userData.optString("foundDate", "").length() != 0);
                             // correctedCoordinates
                             JSONObject correctedCoordinates = userData.optJSONObject("correctedCoordinates");
                             if (correctedCoordinates != null) {
@@ -1172,7 +1172,7 @@ public class GroundspeakAPI {
                             }
                             cache.setTmpNote(userData.optString("note", ""));
                         } else {
-                            cache.setFound(null, false);
+                            cache.setFound(false);
                             JSONObject postedCoordinates = API1Cache.optJSONObject("postedCoordinates");
                             if (postedCoordinates != null) {
                                 cache.setLatLon(postedCoordinates.optDouble("latitude", 0), postedCoordinates.optDouble("longitude", 0));
@@ -1183,7 +1183,7 @@ public class GroundspeakAPI {
                         }
                         break;
                     case "hints":
-                        cache.setHint(null, API1Cache.optString(switchValue, ""));
+                        cache.setHint(API1Cache.optString(switchValue, ""));
                         break;
                     case "attributes":
                         JSONArray attributes = API1Cache.optJSONArray(switchValue);
@@ -1208,7 +1208,7 @@ public class GroundspeakAPI {
                             if (!tmp.contains("<")) {
                                 tmp = tmp.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
                             }
-                            cache.setLongDescription(null, tmp);
+                            cache.setLongDescription(tmp);
                             cache.setApiState(IS_FULL);
                         }
                         break;
@@ -1219,7 +1219,7 @@ public class GroundspeakAPI {
                             if (!tmp.contains("<")) {
                                 tmp = tmp.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
                             }
-                            cache.setShortDescription(null, tmp);
+                            cache.setShortDescription(tmp);
                             cache.setApiState(IS_FULL); // got a cache without LongDescription
                         }
                         break;
@@ -1411,7 +1411,7 @@ public class GroundspeakAPI {
 
         URI baseUri;
         try {
-            baseUri = URI.create(cache.getUrl(null));
+            baseUri = URI.create(cache.getUrl().toString());
         } catch (Exception exc) {
             baseUri = null;
         }
@@ -1419,14 +1419,14 @@ public class GroundspeakAPI {
         if (baseUri == null) {
             cache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + cache.getGcCode());
             try {
-                baseUri = URI.create(cache.getUrl(null));
+                baseUri = URI.create(cache.getUrl().toString());
             } catch (Exception exc) {
                 return images;
             }
         }
 
-        Array<DescriptionImageGrabber.Segment> imgTags = Segmentize(cache.getShortDescription(null), "<img", ">");
-        imgTags.addAll(Segmentize(cache.getLongDescription(null), "<img", ">"));
+        Array<DescriptionImageGrabber.Segment> imgTags = Segmentize(cache.getShortDescription().toString(), "<img", ">");
+        imgTags.addAll(Segmentize(cache.getLongDescription().toString(), "<img", ">"));
 
         for (int i = 0, n = imgTags.size; i < n; i++) {
             DescriptionImageGrabber.Segment img = imgTags.get(i);
@@ -1637,7 +1637,7 @@ public class GroundspeakAPI {
 
         public Query searchInCircle(Coordinate center, int radiusInMeters) {
             if (radiusInMeters > 160934) radiusInMeters = 160934; // max 100 miles
-            addSearchFilter("location:[" + center.getLatitude() + "," + center.getLongitude()+ "]");
+            addSearchFilter("location:[" + center.getLatitude() + "," + center.getLongitude() + "]");
             addSearchFilter("radius:" + radiusInMeters + "m");
             return this;
         }

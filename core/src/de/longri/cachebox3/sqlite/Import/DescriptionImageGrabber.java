@@ -166,18 +166,18 @@ public class DescriptionImageGrabber {
 
         URI baseUri;
         try {
-            baseUri = URI.create(abstractCache.getUrl(Database.Data));
+            baseUri = URI.create(abstractCache.getUrl().toString());
         } catch (Exception exc) {
-            log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(Database.Data), exc);
+            log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(), exc);
             baseUri = null;
         }
 
         if (baseUri == null) {
             abstractCache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + abstractCache.getGcCode());
             try {
-                baseUri = URI.create(abstractCache.getUrl(Database.Data));
+                baseUri = URI.create(abstractCache.getUrl().toString());
             } catch (Exception exc) {
-                log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(Database.Data), exc);
+                log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(), exc);
                 return html;
             }
         }

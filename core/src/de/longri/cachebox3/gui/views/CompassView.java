@@ -221,7 +221,7 @@ public class CompassView extends AbstractView implements
         // add Attribute
         if (actCacheNotNull && showAtt) {
             AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
-            Array<Attributes> attList = actAbstractCache.getAttributes(Database.Data);
+            Array<Attributes> attList = actAbstractCache.getAttributes();
             float iconWidth = 0, iconHeight = 0;
             int lineBreak = 0, lineBreakStep = 0;
             Table lineTable = null;

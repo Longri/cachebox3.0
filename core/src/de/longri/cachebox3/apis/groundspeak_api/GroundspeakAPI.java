@@ -487,7 +487,7 @@ public class GroundspeakAPI {
                     short booleanStore = ((Long) value[1]).shortValue();
                     boolean archieved = ImmutableCache.getMaskValue(ImmutableCache.MASK_ARCHIVED, booleanStore);
                     boolean availeble = ImmutableCache.getMaskValue(ImmutableCache.MASK_AVAILABLE, booleanStore);
-                    int tbCount = ((Long) value[3]).intValue();
+                    short tbCount = (short) ((Long) value[3]).intValue();
                     int favPoints = ((Long) value[2]).intValue();
 
                     if (cache.isArchived() != archieved
@@ -495,7 +495,6 @@ public class GroundspeakAPI {
                             || cache.getNumTravelbugs() != tbCount
                             || cache.getFavoritePoints() != favPoints) {
 
-                        cache = CheckCacheStateParser.replaceMutable(database, caches, cache.getGcCode().toString());
                         cache.isChanged.set(false);
                         cache.setArchived(archieved);
                         cache.setAvailable(availeble);

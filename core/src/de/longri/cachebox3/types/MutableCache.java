@@ -47,18 +47,18 @@ public class MutableCache extends AbstractCache {
     private boolean userData;
     private boolean listingChanged;
     private Array<AbstractWaypoint> waypoints = new Array<>();
-    private String longDescription;
-    private String shortDescription;
-    private String hint;
+    private CharSequence longDescription;
+    private CharSequence shortDescription;
+    private CharSequence hint;
     private Date dateHidden;
     private DLong attributesNegative;
     private DLong attributesPositive;
-    private String country;
-    private String url;
+    private CharSequence country;
+    private CharSequence url;
     private byte apiState;
-    private String state;
-    private String note;
-    private String solver;
+    private CharSequence state;
+    private CharSequence note;
+    private CharSequence solver;
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
@@ -66,11 +66,11 @@ public class MutableCache extends AbstractCache {
         this.longitude = longitude;
     }
 
-    public MutableCache(Database database, ImmutableCache cache) {
+    public MutableCache(ImmutableCache cache) {
         super(cache.getLatitude(), cache.getLongitude());
         this.latitude = cache.getLatitude();
         this.longitude = cache.getLongitude();
-        this.attributes = cache.getAttributes(database);
+        this.attributes = cache.getAttributes();
         if (cache.getName() != null) this.name = cache.getName().toString();
         if (cache.getGcCode() != null) this.gcCode = cache.getGcCode().toString();
         if (cache.getPlacedBy() != null) this.placedBy = cache.getPlacedBy().toString();
@@ -93,16 +93,16 @@ public class MutableCache extends AbstractCache {
         this.waypoints = cache.getWaypoints();
         this.correctedCoordinates = cache.hasCorrectedCoordinates();
 
-        this.longDescription = cache.getLongDescription(database);
-        this.shortDescription = cache.getShortDescription(database);
-        this.hint = cache.getHint(database).toString();
-        this.url = cache.getUrl(database);
-        this.dateHidden = cache.getDateHidden(database);
-        this.state = cache.getState(database);
-        this.country = cache.getCountry(database);
-        this.apiState = cache.getApiState(database);
-        this.note = cache.getTmpNote(database);
-        this.solver = cache.getTmpSolver(database);
+        this.longDescription = cache.getLongDescription();
+        this.shortDescription = cache.getShortDescription();
+        this.hint = cache.getHint().toString();
+        this.url = cache.getUrl();
+        this.dateHidden = cache.getDateHidden();
+        this.state = cache.getState();
+        this.country = cache.getCountry();
+        this.apiState = cache.getApiState();
+        this.note = cache.getTmpNote();
+        this.solver = cache.getTmpSolver();
     }
 
     public MutableCache(MutableCache cache) {
@@ -185,7 +185,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public Array<Attributes> getAttributes(Database database) {
+    public Array<Attributes> getAttributes() {
         if (this.attributes == null) {
             Attributes.getAttributes(attributesPositive, attributesNegative);
         }
@@ -278,12 +278,12 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public CharSequence getHint(Database database) {
+    public CharSequence getHint() {
         return this.hint;
     }
 
     @Override
-    public void setHint(Database database, String hint) {
+    public void setHint(CharSequence hint) {
         this.hint = hint;
     }
 
@@ -342,7 +342,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFavorite(Database databse, boolean favorite) {
+    public void setFavorite(boolean favorite) {
         this.favorite = favorite;
     }
 
@@ -372,7 +372,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setFound(Database databse, boolean found) {
+    public void setFound(boolean found) {
         this.found = found;
     }
 
@@ -417,7 +417,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public Date getDateHidden(Database database) {
+    public Date getDateHidden() {
         return this.dateHidden;
     }
 
@@ -427,7 +427,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public byte getApiState(Database database) {
+    public byte getApiState() {
         return this.apiState;
     }
 
@@ -447,12 +447,12 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getTmpNote(Database database) {
+    public CharSequence getTmpNote() {
         return this.note;
     }
 
     @Override
-    public void setTmpNote(String value) {
+    public void setTmpNote(CharSequence value) {
         this.note = value;
     }
 
@@ -467,42 +467,42 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getTmpSolver(Database database) {
+    public CharSequence getTmpSolver() {
         return this.solver;
     }
 
     @Override
-    public void setTmpSolver(Database database, String value) {
+    public void setTmpSolver(CharSequence value) {
         this.solver = value;
     }
 
     @Override
-    public String getUrl(Database database) {
+    public CharSequence getUrl() {
         return this.url;
     }
 
     @Override
-    public void setUrl(String value) {
+    public void setUrl(CharSequence value) {
         this.url = value;
     }
 
     @Override
-    public String getCountry(Database database) {
+    public CharSequence getCountry() {
         return this.country;
     }
 
     @Override
-    public void setCountry(String value) {
+    public void setCountry(CharSequence value) {
         this.country = value;
     }
 
     @Override
-    public String getState(Database database) {
+    public CharSequence getState() {
         return this.state;
     }
 
     @Override
-    public void setState(String value) {
+    public void setState(CharSequence value) {
         this.state = value;
     }
 
@@ -539,32 +539,32 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setLongDescription(Database database, String value) {
+    public void setLongDescription(CharSequence value) {
         this.longDescription = value;
     }
 
     @Override
-    public String getLongDescription(Database database) {
+    public CharSequence getLongDescription() {
         return this.longDescription;
     }
 
     @Override
-    public void setShortDescription(Database database, String value) {
+    public void setShortDescription(CharSequence value) {
         this.shortDescription = value;
     }
 
     @Override
-    public String getShortDescription(Database database) {
+    public CharSequence getShortDescription() {
         return this.shortDescription;
     }
 
     @Override
-    public void setTourName(String value) {
+    public void setTourName(CharSequence value) {
 
     }
 
     @Override
-    public String getTourName() {
+    public CharSequence getTourName() {
         return null;
     }
 
@@ -630,11 +630,11 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public float getRating() {
-        return rating / 2;
+        return rating / 2.0f;
     }
 
     @Override
-    public void setRating(float rating) {
+    public void setRating(short rating) {
         this.rating = (short) (rating * 2);
     }
 
@@ -664,10 +664,10 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setNumTravelbugs(int numTravelbugs) {
+    public void setNumTravelbugs(short numTravelbugs) {
         if (this.numTravelbugs != numTravelbugs)
             isChanged.set(true);
-        this.numTravelbugs = (short) numTravelbugs;
+        this.numTravelbugs = numTravelbugs;
     }
 
 
@@ -676,20 +676,6 @@ public class MutableCache extends AbstractCache {
 
     }
 
-    @Override
-    public boolean isMutable() {
-        return true;
-    }
-
-    @Override
-    public AbstractCache getMutable(Database database) {
-        return this;
-    }
-
-    @Override
-    public AbstractCache getImmutable() {
-        return new ImmutableCache(this);
-    }
 
     @Override
     public AbstractCache getCopy() {

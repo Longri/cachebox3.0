@@ -424,7 +424,7 @@ public abstract class Search extends PostRequest {
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (LONG_DESC.equals(name)) {
-                            actCache.setLongDescription(Search.this.database, value);
+                            actCache.setLongDescription(value);
                         } else if (CODE.equals(name)) {
                             actCache.setGcCode(value);
                             actCache.setId(AbstractCache.GenerateCacheId(actCache.getGcCode().toString()));
@@ -433,7 +433,7 @@ public abstract class Search extends PostRequest {
                         } else if (DATE_HIDDEN.equals(name)) {
                             actCache.setDateHidden(getDateFromLongString(value));
                         } else if (HINT.equals(name)) {
-                            actCache.setHint(Search.this.database, value);
+                            actCache.setHint(value);
                         } else if (ID.equals(name)) {
                             actCache.setGcId(value);
                         } else if (NAME.equals(name)) {
@@ -443,7 +443,7 @@ public abstract class Search extends PostRequest {
                         } else if (PLACED_BY.equals(name)) {
                             actCache.setPlacedBy(value);
                         } else if (SHORT_DESC.equals(name)) {
-                            actCache.setShortDescription(Search.this.database, value);
+                            actCache.setShortDescription(value);
                         } else if (URL.equals(name)) {
                             actCache.setUrl(value);
                         }
@@ -604,7 +604,7 @@ public abstract class Search extends PostRequest {
                 switch (SWITCH) {
                     case CACHE_ARRAY:
                         if (FOUND.equals(name)) {
-                            actCache.setFound(null, value);
+                            actCache.setFound(value);
                         } else if (ARCHIVED.equals(name)) {
                             actCache.setArchived(value);
                         } else if (AVAILABLE.equals(name)) {

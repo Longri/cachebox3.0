@@ -106,7 +106,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.clear();
         if (!update) args.put("Id", abstractCache.getId());
 
-        Date dateHidden = abstractCache.getDateHidden(database);
+        Date dateHidden = abstractCache.getDateHidden();
         if (dateHidden == null) dateHidden = new Date();
         String dateString = Database.cbDbFormat.format(dateHidden);
 
@@ -114,9 +114,9 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("FirstImported", Database.cbDbFormat.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
-        args.put("state", abstractCache.getState(database));
-        args.put("country", abstractCache.getCountry(database));
-        args.put("ApiStatus", abstractCache.getApiState(database));
+        args.put("state", abstractCache.getState());
+        args.put("country", abstractCache.getCountry());
+        args.put("ApiStatus", abstractCache.getApiState());
 
         if (args.size() > 0) {
             if (update) {
@@ -140,12 +140,12 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to CacheText table
         args.clear();
         if (!update) args.put("Id", abstractCache.getId());
-        args.put("Url", abstractCache.getUrl(database));
-        args.put("Hint", abstractCache.getHint(database));
-        args.put("Description", abstractCache.getLongDescription(database));
-        args.put("Notes", abstractCache.getTmpNote(database));
-        args.put("Solver", abstractCache.getTmpSolver(database));
-        args.put("ShortDescription", abstractCache.getShortDescription(database));
+        args.put("Url", abstractCache.getUrl());
+        args.put("Hint", abstractCache.getHint());
+        args.put("Description", abstractCache.getLongDescription());
+        args.put("Notes", abstractCache.getTmpNote());
+        args.put("Solver", abstractCache.getTmpSolver());
+        args.put("ShortDescription", abstractCache.getShortDescription());
 
         if (args.size() > 0) {
             if (update) {

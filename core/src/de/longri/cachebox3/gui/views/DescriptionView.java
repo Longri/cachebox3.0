@@ -39,6 +39,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -177,7 +178,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     private String getAttributesHtml(AbstractCache abstractCache) {
         StringBuilder sb = new StringBuilder();
         try {
-            Array<Attributes> attributes = abstractCache.getAttributes(Database.Data);
+            Array<Attributes> attributes = abstractCache.getAttributes();
             if (attributes == null) return "";
             Iterator<Attributes> attributesIterator = attributes.iterator();
             if (attributesIterator == null || !attributesIterator.hasNext())
@@ -253,15 +254,15 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             nonLocalImages.clear();
             nonLocalImagesUrl.clear();
 
-            String cacheHtml = actCache.getLongDescription(Database.Data) + actCache.getShortDescription(Database.Data);
+            CharSequence cacheHtml = new CompoundCharSequence(actCache.getLongDescription(), actCache.getShortDescription());
             String html = "";
-            if (actCache.getApiState(Database.Data) == 1)// GC.com API lite
+            if (actCache.getApiState() == 1)// GC.com API lite
             { // Load Standard HTML
                 log.debug("load is Lite html");
                 String nodesc = Translation.get("GC_NoDescription").toString();
                 html = "</br>" + nodesc + "</br></br></br><form action=\"download\"><input type=\"submit\" value=\" " + Translation.get("GC_DownloadDescription") + " \"></form>";
             } else {
-                html = DescriptionImageGrabber.resolveImages(actCache, cacheHtml, false, nonLocalImages, nonLocalImagesUrl);
+                html = DescriptionImageGrabber.resolveImages(actCache, cacheHtml.toString(), false, nonLocalImages, nonLocalImagesUrl);
                 if (!Config.DescriptionNoAttributes.getValue()) {
                     html = getAttributesHtml(actCache) + html;
                     log.debug("load html with Attributes");
@@ -390,9 +391,9 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                             return true;
                         }
 
-                        AbstractCache selectedCache = EventHandler.getSelectedCache().getMutable(Database.Data);
+                        AbstractCache selectedCache = EventHandler.getSelectedCache();
 
-                        selectedCache.setFavorite(Database.Data, !selectedCache.isFavorite());
+                        selectedCache.setFavorite(!selectedCache.isFavorite());
 
                         DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache, true);
 

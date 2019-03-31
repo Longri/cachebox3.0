@@ -40,7 +40,7 @@ public class HintDialog extends ButtonDialog {
     public HintDialog() {
         super("Hint", createContentBox(), Translation.get("hint"), MessageBoxButtons.RetryCancel, null);
         hintFromDB = EventHandler.getSelectedCache() == null ? ""
-                : UnitFormatter.rot13(EventHandler.getSelectedCache().getHint(Database.Data));
+                : UnitFormatter.rot13(EventHandler.getSelectedCache().getHint());
 
 
         hintLabel.setWrap(true);

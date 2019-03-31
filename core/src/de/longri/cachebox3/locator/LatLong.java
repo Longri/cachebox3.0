@@ -95,6 +95,14 @@ public class LatLong {
         return stringBuilder.toString();
     }
 
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     public double getLatitude() {
         return this.latitude;
     }
@@ -106,4 +114,11 @@ public class LatLong {
     public LatLong copy() {
         return new LatLong(this.latitude, this.longitude);
     }
+
+    public void setLatLon(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.hash = 0;
+    }
+
 }

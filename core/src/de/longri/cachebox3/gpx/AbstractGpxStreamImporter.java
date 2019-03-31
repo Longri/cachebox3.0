@@ -269,13 +269,13 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setTerrain(this.terrain);
         cache.setCountry(this.country);
         cache.setState(this.state);
-        cache.setHint(database, this.hint);
-        cache.setLongDescription(database, this.longDescription);
-        cache.setShortDescription(database, this.shortDescription);
-        cache.setFound(database, this.found);
-        cache.setNumTravelbugs(this.tbCount);
+        cache.setHint( this.hint);
+        cache.setLongDescription( this.longDescription);
+        cache.setShortDescription( this.shortDescription);
+        cache.setFound( this.found);
+        cache.setNumTravelbugs((short) this.tbCount);
         cache.setTmpNote(note);
-        cache.setTmpSolver(database, solver);
+        cache.setTmpSolver( solver);
         if (favPoints >= 0) cache.setFavoritePoints(favPoints);
 
 
@@ -416,9 +416,9 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             if (booleanStore != null) {
                                 boolean inDbFavorite = ImmutableCache.getMaskValue(MASK_FOUND, booleanStore);
                                 boolean inDbFound = ImmutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
-                                cache.setFavorite(database, inDbFavorite);
+                                cache.setFavorite(inDbFavorite);
                                 if (inDbFound) {
-                                    cache.setFound(database, true);
+                                    cache.setFound( true);
                                 }
                             }
 
@@ -452,7 +452,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             }
 
 
-                            Date dateHidden = cache.getDateHidden(database);
+                            Date dateHidden = cache.getDateHidden();
                             if (dateHidden == null) dateHidden = new Date();
                             String dateString = Database.cbDbFormat.format(dateHidden);
 
@@ -464,9 +464,9 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                         cache.getTourName(),
                                         cache.getGPXFilename_ID(),
                                         0,// TODO handle Listing CheckSum
-                                        cache.getState(null),
-                                        cache.getCountry(null),
-                                        cache.getApiState(null)
+                                        cache.getState(),
+                                        cache.getCountry(),
+                                        cache.getApiState()
                                 ).commit();
                             } catch (Exception e) {
                                 log.error("Can't write Cache Info" +
@@ -480,12 +480,12 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             try {
                                 REPLACE_CACHE_TEXT.bind(
                                         cache.getId(),
-                                        cache.getUrl(null),
-                                        cache.getHint(null),
-                                        cache.getLongDescription(null),
-                                        cache.getTmpNote(null),
-                                        cache.getTmpSolver(null),
-                                        cache.getShortDescription(null)
+                                        cache.getUrl(),
+                                        cache.getHint(),
+                                        cache.getLongDescription(),
+                                        cache.getTmpNote(),
+                                        cache.getTmpSolver(),
+                                        cache.getShortDescription()
                                 ).commit();
                             } catch (Exception e) {
                                 log.error("Can't write Cache Text" +
