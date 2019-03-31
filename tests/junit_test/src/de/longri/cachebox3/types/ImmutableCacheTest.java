@@ -50,19 +50,16 @@ class ImmutableCacheTest {
     @Test
     void getUrl() {
 
-        ImmutableCache cache = new ImmutableCache(0, 0);
+        MutableCache mutableCache = new MutableCache(0, 0);
         String url = "HTTP://team-cachebox.de";
-
-        MutableCache mutableCache = cache.getMutable(cb3Database);
-        mutableCache.setId(123456789l);
 
         mutableCache.setUrl(url);
         DaoFactory.CACHE_DAO.writeToDatabase(cb3Database, mutableCache,false);
 
 
-        cache = (ImmutableCache) DaoFactory.CACHE_DAO.getFromDbByCacheId(cb3Database, 123456789l, false);
+       AbstractCache cache = DaoFactory.CACHE_DAO.getFromDbByCacheId(cb3Database, 123456789l, false);
 
-        String testUrl = cache.getUrl(cb3Database);
+        String testUrl = cache.getUrl().toString();
         assertThat("Url must equals", url.equals(testUrl));
 
 

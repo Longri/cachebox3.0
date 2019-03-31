@@ -101,11 +101,6 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract boolean ImTheOwner();
 
     /**
-     * -- korrigierte Koordinaten (kommt nur aus GSAK? bzw CacheWolf-Import) -- oder Mystery mit gueltigem Final
-     */
-    public abstract boolean CorrectedCoordiantesOrMysterySolved();
-
-    /**
      * true, if a this mystery cache has a final waypoint
      */
     public abstract boolean HasFinalWaypoint();

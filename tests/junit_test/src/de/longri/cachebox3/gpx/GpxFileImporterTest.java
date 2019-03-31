@@ -133,7 +133,7 @@ class GpxFileImporterTest {
         assertEquals(logCount.get(), 20, "Imported Log count is wrong");
         assertEquals(mysteryList.size, 0, "Imported Mystery count is Wrong");
 
-// set Favorite and Found! check Conflict handling with reimport
+        // set Favorite and Found! check Conflict handling with reimport
         AbstractTestCache CHANGED_FAV_FOUND = new TestCache_GC52BKF_without_logs() {
             protected void setValues() {
                 super.setValues();
@@ -143,8 +143,8 @@ class GpxFileImporterTest {
         };
 
         //store changed
-        cache.setFound(TEST_DB, true);
-        cache.setFavorite(TEST_DB, true);
+        cache.setFound( true);
+        cache.setFavorite( true);
 
         //check if changes stored in DB
         cache = TEST_DB.getFromDbByGcCode("GC52BKF", true);

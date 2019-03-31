@@ -142,7 +142,7 @@ public class CacheList extends Array<AbstractCache> {
                                         if (nextAbstractCache.getType() != CacheTypes.Mystery) {
                                             break;
                                         } else {
-                                            if (nextAbstractCache.CorrectedCoordiantesOrMysterySolved()) {
+                                            if (nextAbstractCache.hasCorrectedCoordinates()) {
                                                 break;
                                             }
                                         }

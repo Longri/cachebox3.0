@@ -392,7 +392,7 @@ public class ImmutableCache extends AbstractCache implements Pool.Poolable {
 
     @Override
     public void setHasHint(boolean hasHint) {
-        setMaskValue(MASK_HAS_HINT, hasHint);
+        this.setMaskValue(MASK_HAS_HINT, hasHint);
     }
 
     @Override
@@ -557,11 +557,6 @@ public class ImmutableCache extends AbstractCache implements Pool.Poolable {
 
     @Override
     public boolean ImTheOwner() {
-        return false;
-    }
-
-    @Override
-    public boolean CorrectedCoordiantesOrMysterySolved() {
         return false;
     }
 
