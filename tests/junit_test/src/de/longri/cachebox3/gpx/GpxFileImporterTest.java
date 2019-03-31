@@ -80,7 +80,7 @@ class GpxFileImporterTest {
 
         new GroundspeakGpxStreamImporter(TEST_DB, importHandler).doImport(gpxFile);
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
-        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2T9RW", true);
+        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2T9RW", true, true);
         TEST_CACHES.GC2T9RW.assertCache(cache, TEST_DB);
 
         assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
@@ -125,7 +125,7 @@ class GpxFileImporterTest {
 
         new GroundspeakGpxStreamImporter(TEST_DB, importHandler).doImport(gpxFile);
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
-        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC52BKF", true);
+        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC52BKF", true, true);
         TEST_CACHES.GC52BKF.assertCache(cache, TEST_DB);
 
         assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
@@ -143,17 +143,17 @@ class GpxFileImporterTest {
         };
 
         //store changed
-        cache.setFound( true);
-        cache.setFavorite( true);
+        cache.setFound(true);
+        cache.setFavorite(true);
 
         //check if changes stored in DB
-        cache = TEST_DB.getFromDbByGcCode("GC52BKF", true);
+        cache = TEST_DB.getFromDbByGcCode("GC52BKF", true, true);
         CHANGED_FAV_FOUND.assertCache(cache, TEST_DB);
 
         //reimport
         new GroundspeakGpxStreamImporter(TEST_DB, importHandler).doImport(gpxFile);
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
-        cache = TEST_DB.getFromDbByGcCode("GC52BKF", true);
+        cache = TEST_DB.getFromDbByGcCode("GC52BKF", true, true);
         CHANGED_FAV_FOUND.assertCache(cache, TEST_DB);
 
 
@@ -198,10 +198,10 @@ class GpxFileImporterTest {
         Thread.sleep(500);
 
         assertThat("Cache count must be 500", TEST_DB.getCacheCountOnThisDB() == 500);
-        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2TNPV", true);
+        AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2TNPV", true, true);
         TEST_CACHES.GC2TNPV.assertCache(cache, TEST_DB);
 
-        cache = TEST_DB.getFromDbByGcCode("GCV272", true);
+        cache = TEST_DB.getFromDbByGcCode("GCV272", true, true);
         TEST_CACHES.GCV272.assertCache(cache, TEST_DB);
 
 
@@ -248,7 +248,7 @@ class GpxFileImporterTest {
         //=================================================================================
         importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/gsak-correctedCoords.gpx", true));
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
-        cache = TEST_DB.getFromDbByGcCode("GC250Q2", true);
+        cache = TEST_DB.getFromDbByGcCode("GC250Q2", true, true);
         TEST_CACHES.GC250Q2.assertCache(cache, TEST_DB);
         assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
         assertEquals(waypointCount.get(), 1, "Imported Waypoint count is wrong");
@@ -259,7 +259,7 @@ class GpxFileImporterTest {
         //=================================================================================
         importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/TestCache3_WP_Parents_1_1.gpx", true));
         assertThat("Cache count must be 2", TEST_DB.getCacheCountOnThisDB() == 2);
-        cache = TEST_DB.getFromDbByGcCode("ACWP003", true);
+        cache = TEST_DB.getFromDbByGcCode("ACWP003", true, true);
         TEST_CACHES.ACWP003.assertCache(cache, TEST_DB);
         assertEquals(cacheCount.get(), 2, "Imported Cache count is wrong");
         assertEquals(waypointCount.get(), 2, "Imported Waypoint count is wrong");
@@ -307,7 +307,7 @@ class GpxFileImporterTest {
         //=================================================================================
         importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/TestCache3_WP_Parents_1_0.gpx", true));
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
-        cache = TEST_DB.getFromDbByGcCode("ACWP003", true);
+        cache = TEST_DB.getFromDbByGcCode("ACWP003", true, true);
         TEST_CACHES.ACWP003.assertCache(cache, TEST_DB);
         assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
         assertEquals(waypointCount.get(), 1, "Imported Waypoint count is wrong");
@@ -355,7 +355,7 @@ class GpxFileImporterTest {
         //=================================================================================
         importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/acb_export.gpx", true));
         assertThat("Cache count must be 350", TEST_DB.getCacheCountOnThisDB() == 350);
-        cache = TEST_DB.getFromDbByGcCode("GC2V0NP", true);
+        cache = TEST_DB.getFromDbByGcCode("GC2V0NP", true, true);
         TEST_CACHES.GC2V0NP.assertCache(cache, TEST_DB);
         assertEquals(cacheCount.get(), 350, "Imported Cache count is wrong");
         assertEquals(waypointCount.get(), 435, "Imported Waypoint count is wrong");
@@ -403,7 +403,7 @@ class GpxFileImporterTest {
         //=================================================================================
         importer.doImport(TestUtils.getResourceFileHandle("testsResources/gpx/OCF19A.gpx", true));
         assertThat("Cache count must be 1", TEST_DB.getCacheCountOnThisDB() == 1);
-        cache = TEST_DB.getFromDbByGcCode("OCF19A", true);
+        cache = TEST_DB.getFromDbByGcCode("OCF19A", true, true);
         TEST_CACHES.OCF19A.assertCache(cache, TEST_DB);
         assertEquals(cacheCount.get(), 1, "Imported Cache count is wrong");
         assertEquals(waypointCount.get(), 3, "Imported Waypoint count is wrong");

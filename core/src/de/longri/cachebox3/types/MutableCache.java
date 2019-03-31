@@ -94,12 +94,15 @@ public class MutableCache extends AbstractCache {
     private CharSequence state;
     private CharSequence note;
     private CharSequence solver;
+    private CharSequence tourName;
+    private long gpxFilenameId;
 
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
         this.latitude = latitude;
         this.longitude = longitude;
+        type = CacheTypes.Undefined;
     }
 
     public MutableCache(AbstractCache cache) {
@@ -211,6 +214,50 @@ public class MutableCache extends AbstractCache {
         this.booleanStore = ((Long) values[14]).shortValue();
         this.favPoints = values[15] == null ? 0 : ((Long) values[15]).intValue();
     }
+
+    @Override
+    public void setInfo(GdxSqliteCursor cursor) {
+        // cursor include
+
+//        Id              BIGINT        PRIMARY KEY
+//        DateHidden      DATETIME,
+//        FirstImported   DATETIME,
+//        TourName        NCHAR (255),
+//        GPXFilename_Id  BIGINT,
+//        ListingCheckSum INT           DEFAULT 0,
+//        state           NVARCHAR (50),
+//        country         NVARCHAR (50),
+//        ApiStatus       SMALLINT      DEFAULT 0
+
+        this.dateHidden = Database.getDateFromDataBaseString(cursor.getString(1));
+        this.tourName = new CharSequenceArray(cursor.getString(3));
+        this.gpxFilenameId = cursor.getLong(4);
+        this.state = new CharSequenceArray(cursor.getString(6));
+        this.country = new CharSequenceArray(cursor.getString(7));
+        this.apiState = cursor.getByte(8);
+
+    }
+
+    @Override
+    public void setText(GdxSqliteCursor cursor) {
+        // cursor include
+//        Id               BIGINT         PRIMARY KEY
+//        Url              NVARCHAR (255),
+//        Hint             NTEXT,
+//        Description      NTEXT,
+//        Notes            NTEXT,
+//        Solver           NTEXT,
+//        ShortDescription NTEXT
+
+        this.url = new CharSequenceArray(cursor.getString(1));
+        this.hint = new CharSequenceArray(cursor.getString(2));
+        this.longDescription = new CharSequenceArray(cursor.getString(3));
+        this.note = new CharSequenceArray(cursor.getString(4));
+        this.solver = new CharSequenceArray(cursor.getString(5));
+        this.shortDescription = new CharSequenceArray(cursor.getString(6));
+
+    }
+
 
     @Override
     public void setLatitude(double latitude) {
@@ -332,12 +379,12 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public long getGPXFilename_ID() {
-        return 0;
+        return this.gpxFilenameId;
     }
 
     @Override
     public void setGPXFilename_ID(long gpxFilenameId) {
-
+        this.gpxFilenameId = gpxFilenameId;
     }
 
     @Override
@@ -605,12 +652,12 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public void setTourName(CharSequence value) {
-
+        this.tourName = value;
     }
 
     @Override
     public CharSequence getTourName() {
-        return null;
+        return this.tourName;
     }
 
     @Override

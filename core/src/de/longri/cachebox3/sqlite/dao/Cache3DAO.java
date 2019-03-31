@@ -221,7 +221,7 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints) {
+    public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints, boolean fullData) {
         String statement = "SELECT * from CacheCoreInfo WHERE Id=?";
         GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cacheID)});
         if (cursor == null) return null;
@@ -232,7 +232,7 @@ public class Cache3DAO extends AbstractCacheDAO {
                 cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cacheID, true));
             }
             cursor.close();
-            return cache;
+            return getFullData(database, cache);
         }
         cursor.close();
         return null;
@@ -248,7 +248,7 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints) {
+    public AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints, boolean fullData) {
         String statement = "SELECT * from CacheCoreInfo WHERE GcCode=?";
         GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(gcCode)});
         if (cursor == null) return null;
@@ -259,10 +259,29 @@ public class Cache3DAO extends AbstractCacheDAO {
                 cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cache.getId(), true));
             }
             cursor.close();
-            return cache;
+            return getFullData(database, cache);
         }
         cursor.close();
         return null;
+    }
+
+    private AbstractCache getFullData(Database database, AbstractCache cache) {
+        String statement = "SELECT * from CacheInfo WHERE Id=?";
+        GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cache.getId())});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            cache.setInfo(cursor);
+        }
+        cursor.close();
+
+        statement = "SELECT * from CacheText WHERE Id=?";
+        cursor = database.rawQuery(statement, new String[]{String.valueOf(cache.getId())});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            cache.setText(cursor);
+        }
+        cursor.close();
+        return cache;
     }
 
 }

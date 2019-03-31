@@ -25,13 +25,13 @@ public abstract class AbstractCacheDAO {
 
     public abstract AbstractWaypointDAO getWaypointDAO();
 
-    public abstract void writeToDatabase(Database database, AbstractCache abstractCache,boolean fireChangedEvent);
+    public abstract void writeToDatabase(Database database, AbstractCache abstractCache, boolean fireChangedEvent);
 
-    public abstract boolean updateDatabase(Database database, AbstractCache abstractCache,boolean fireChangedEvent);
+    public abstract boolean updateDatabase(Database database, AbstractCache abstractCache, boolean fireChangedEvent);
 
-    public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID, boolean withWaypoints);
+    public abstract AbstractCache getFromDbByCacheId(Database database, long CacheID, boolean withWaypoints, boolean fullData);
 
     public abstract void writeCacheBooleanStore(Database data, int newBooleanStore, long id);
 
-    public abstract AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints);
+    public abstract AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints, boolean fullData);
 }

@@ -18,6 +18,7 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -343,4 +344,8 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
 
     public abstract AbstractCache getCopy();
+
+    public abstract void setInfo(GdxSqliteCursor cursor);
+
+    public abstract void setText(GdxSqliteCursor cursor);
 }

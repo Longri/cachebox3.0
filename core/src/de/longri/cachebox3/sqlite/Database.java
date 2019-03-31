@@ -175,9 +175,9 @@ public class Database {
         return databasePath;
     }
 
-    public AbstractCache getFromDbByGcCode(String gcCode, boolean withWaypoints) {
+    public AbstractCache getFromDbByGcCode(String gcCode, boolean withWaypoints, boolean fullData) {
         if (this.databaseType != DatabaseType.CacheBox3) throw new RuntimeException("Is now Cachebox Data DB");
-        return DaoFactory.CACHE_DAO.getFromDbByGcCode(this, gcCode, withWaypoints);
+        return DaoFactory.CACHE_DAO.getFromDbByGcCode(this, gcCode, withWaypoints, fullData);
     }
 
     public enum DatabaseType {
@@ -642,7 +642,7 @@ public class Database {
                 try {
                     if (lastDatabaseSchemeVersion <= 0) {
                         // First Initialization of the Database
-                        final DatabaseSchema schema=new DatabaseSchema();
+                        final DatabaseSchema schema = new DatabaseSchema();
                         execSQL(schema.CONFIG_TABLE);
                         execSQL("CREATE INDEX [Key_idx] ON [Config] ([Key] ASC);");
                         return;
@@ -1340,6 +1340,18 @@ public class Database {
         } catch (SQLiteGdxException e) {
             logger.error("Create new DB", e);
         }
+    }
+
+
+    public static Date getDateFromDataBaseString(String dateString) {
+        if (dateString == null || dateString.isEmpty()) return new Date();
+
+        try {
+            return Database.cbDbFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new Date();
     }
 
 }
