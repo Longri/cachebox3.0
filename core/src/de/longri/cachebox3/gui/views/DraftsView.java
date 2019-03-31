@@ -49,7 +49,6 @@ import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +73,7 @@ public class DraftsView extends AbstractView {
 
     private Array<ListViewItem> items;
 
-    public DraftsView(BitStore reader) throws NotImplementedException {
+    public DraftsView(BitStore reader) {
         super(reader);
         create();
     }
@@ -1037,24 +1036,13 @@ public class DraftsView extends AbstractView {
     public void saveInstanceState(BitStore writer) {
         // we save only listView scroll pos
         float pos = listView == null ? -1 : listView.getScrollPos();
-        try {
-            writer.write(Float.floatToIntBits(pos));
-        } catch (NotImplementedException e) {
-            e.printStackTrace();
-        }
+        writer.write(Float.floatToIntBits(pos));
     }
 
     @Override
     protected void restoreInstanceState(BitStore reader) {
         // we save only listView scroll pos
-        float pos = -1;
-
-        try {
-            pos = Float.intBitsToFloat(reader.readInt());
-        } catch (NotImplementedException e) {
-            e.printStackTrace();
-        }
-
+        float pos = Float.intBitsToFloat(reader.readInt());
         if (pos > 0) {
             final float finalPos = pos;
             CB.postOnGLThreadDelayed(300, new NamedRunnable("restore ScrollPos") {

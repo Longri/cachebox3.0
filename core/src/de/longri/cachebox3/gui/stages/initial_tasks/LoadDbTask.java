@@ -26,7 +26,6 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.FileList;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

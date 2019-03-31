@@ -25,7 +25,7 @@ public abstract class AbstractTableView extends AbstractView {
 
     protected final VisTable contentTable = new VisTable();
 
-    public AbstractTableView(de.longri.serializable.BitStore reader) throws de.longri.serializable.NotImplementedException {
+    public AbstractTableView(de.longri.serializable.BitStore reader){
         super(reader);
     }
 

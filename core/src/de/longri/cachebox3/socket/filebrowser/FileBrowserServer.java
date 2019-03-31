@@ -23,7 +23,6 @@ import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,28 +116,24 @@ public class FileBrowserServer {
                         } else if (message.equals(FileBrowserClint.CLOSE)) {
                             if (closeReciver != null) closeReciver.close();
                         } else if (message.equals(FileBrowserClint.GETFILES)) {
-                            try {
-                                ServerFile root = ServerFile.getDirectory(workPath);
-                                BitStore writer = new BitStore();
-                                root.serialize(writer);
+                            ServerFile root = ServerFile.getDirectory(workPath);
+                            BitStore writer = new BitStore();
+                            root.serialize(writer);
 
-                                byte[] data = writer.getArray();
-                                int length = data.length;
-                                dos.writeInt(length);
-                                dos.flush();
+                            byte[] data = writer.getArray();
+                            int length = data.length;
+                            dos.writeInt(length);
+                            dos.flush();
 
-                                int offset = 0;
-                                while (offset < length) {
-                                    int writeLength = length - offset;
-                                    if (writeLength > BUFFER_SIZE) {
-                                        writeLength = BUFFER_SIZE;
-                                    }
-                                    dos.write(data, offset, writeLength);
-                                    dos.flush();
-                                    offset += writeLength;
+                            int offset = 0;
+                            while (offset < length) {
+                                int writeLength = length - offset;
+                                if (writeLength > BUFFER_SIZE) {
+                                    writeLength = BUFFER_SIZE;
                                 }
-                            } catch (NotImplementedException e) {
-                                e.printStackTrace();
+                                dos.write(data, offset, writeLength);
+                                dos.flush();
+                                offset += writeLength;
                             }
                         } else if (message.equals(FileBrowserClint.SENDFILE)) {
                             String path = dis.readUTF();

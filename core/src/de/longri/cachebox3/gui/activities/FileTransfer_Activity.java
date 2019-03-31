@@ -25,10 +25,7 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserServer;
-import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

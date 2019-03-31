@@ -17,14 +17,13 @@ package de.longri.cachebox3.gui.views;
 
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 
 /**
  * Created by Longri on 14.09.2016.
  */
 public class CreditsView extends AbstractView {
 
-    public CreditsView(BitStore reader) throws NotImplementedException {
+    public CreditsView(BitStore reader) {
         super(reader);
     }
 

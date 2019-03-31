@@ -23,7 +23,6 @@ import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -94,7 +93,7 @@ class LocalFileBrowserPane extends BorderPane {
                 root.getChildren().add(croot);
             }
         } else {
-            File path=new File("/");
+            File path = new File("/");
             TreeItem<String> croot = createNode(path);
             root.getChildren().add(croot);
         }
@@ -373,12 +372,7 @@ class LocalFileBrowserPane extends BorderPane {
             ByteBuffer byteBuffer = (ByteBuffer) db.getContent(MainPane.SERVER_FILE_DATA_FORMAT);
 
             final ServerFile deserializeServerFile = new ServerFile();
-            try {
-                deserializeServerFile.deserialize(new BitStore(byteBuffer.array()));
-            } catch (NotImplementedException e1) {
-                e1.printStackTrace();
-            }
-
+            deserializeServerFile.deserialize(new BitStore(byteBuffer.array()));
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -492,9 +486,7 @@ class LocalFileBrowserPane extends BorderPane {
 
         // in real life this method would get the result of the task
         // and update the UI based on its value:
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>()
-
-        {
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
                 pForm.getDialogStage().close();

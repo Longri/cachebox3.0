@@ -17,7 +17,6 @@ package de.longri.cachebox3.socket.filebrowser;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-import de.longri.serializable.NotImplementedException;
 import de.longri.serializable.Serializable;
 import de.longri.serializable.StoreBase;
 import javafx.scene.input.Dragboard;
@@ -47,7 +46,7 @@ public class ServerFile implements Serializable {
     }
 
     @Override
-    public void serialize(StoreBase storeBase) throws NotImplementedException {
+    public void serialize(StoreBase storeBase) {
         storeBase.write(name);
         storeBase.write(parent);
         storeBase.write(isDir);
@@ -59,7 +58,7 @@ public class ServerFile implements Serializable {
     }
 
     @Override
-    public void deserialize(StoreBase storeBase) throws NotImplementedException {
+    public void deserialize(StoreBase storeBase) {
         name = storeBase.readString();
         parent = storeBase.readString();
         isDir = storeBase.readBool();

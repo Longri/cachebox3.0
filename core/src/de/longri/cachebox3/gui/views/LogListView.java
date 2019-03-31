@@ -28,13 +28,11 @@ import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.LogEntry;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +51,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     private String actGcCode;
 
-    public LogListView(BitStore reader) throws NotImplementedException {
+    public LogListView(BitStore reader) {
         super(reader);
     }
 

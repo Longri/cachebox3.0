@@ -24,7 +24,6 @@ import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -481,9 +480,7 @@ public class CacheboxBrowserPane extends BorderPane {
 
         // in real life this method would get the result of the task
         // and update the UI based on its value:
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>()
-
-        {
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
                 pForm.getDialogStage().close();
@@ -553,22 +550,13 @@ public class CacheboxBrowserPane extends BorderPane {
         ClipboardContent content = new ClipboardContent();
 
         BitStore writer = new BitStore();
-        try {
-            file.serialize(writer);
-        } catch (NotImplementedException e) {
-            e.printStackTrace();
-        }
+        file.serialize(writer);
 
         ByteBuffer byteBuffer = null;
-        try {
-            byteBuffer = ByteBuffer.wrap(writer.getArray());
-        } catch (NotImplementedException e) {
-            e.printStackTrace();
-        }
+        byteBuffer = ByteBuffer.wrap(writer.getArray());
 
         content.put(SERVER_FILE_DATA_FORMAT, byteBuffer);
         dragboard.setContent(content);
-
 
         event.consume();
     }
@@ -584,7 +572,7 @@ public class CacheboxBrowserPane extends BorderPane {
         try {
 
             Clipboard clipboard = Clipboard.getSystemClipboard();
-        //TODO    Dragboard db = file.getDragBoard();
+            //TODO    Dragboard db = file.getDragBoard();
 
             ClipboardContent content = new ClipboardContent();
 
@@ -597,7 +585,7 @@ public class CacheboxBrowserPane extends BorderPane {
             fileWriter.write("Test Text");
 
             content.putFiles(java.util.Collections.singletonList(temp));
-       //TODO     db.setContent(content);
+            //TODO     db.setContent(content);
             clipboard.setContent(content);
 
             temp.deleteOnExit();

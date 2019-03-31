@@ -25,7 +25,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.interfaces.ProgressHandler;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,8 +135,6 @@ public class FileBrowserClint {
             return deserializeServerFile;
         } catch (IOException e) {
             Gdx.app.log("PingPongSocketExample", "an error occured", e);
-        } catch (NotImplementedException e) {
-            e.printStackTrace();
         }
         return root;
     }
@@ -249,13 +246,9 @@ public class FileBrowserClint {
 
                 //serialise ServerFile
                 BitStore store = new BitStore();
-                try {
-                    serverFile.serialize(store);
-                } catch (NotImplementedException e) {
-                    log.error("can't store ServerFile");
-                    progressHandler.success();
-                    return;
-                }
+
+                serverFile.serialize(store);
+
 
                 try {
                     byte[] serverFileBytes = store.getArray();
@@ -320,12 +313,6 @@ public class FileBrowserClint {
                     }
 
                     log.debug("got server message: " + response);
-
-                } catch (NotImplementedException e) {
-                    log.error("can't store ServerFile", e);
-                    progressHandler.success();
-                    WAIT.set(false);
-                    return;
                 } catch (IOException e) {
                     log.error("can't receive ServerFile", e);
                     progressHandler.success();
@@ -357,12 +344,7 @@ public class FileBrowserClint {
 
             //serialise ServerFile
             BitStore store = new BitStore();
-            try {
-                serverFile.serialize(store);
-            } catch (NotImplementedException e) {
-                log.error("can't store ServerFile");
-                return false;
-            }
+            serverFile.serialize(store);
 
             byte[] serverFileBytes = store.getArray();
             dos.writeUTF(DELETE_SERVER_FILE);
@@ -388,7 +370,7 @@ public class FileBrowserClint {
                 return true;
             }
 
-        } catch (IOException | NotImplementedException e) {
+        } catch (IOException e) {
             log.error("Can't delete ServerFile", e);
         }
         return false;

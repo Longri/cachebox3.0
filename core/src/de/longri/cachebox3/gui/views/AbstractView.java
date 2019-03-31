@@ -32,7 +32,7 @@ public abstract class AbstractView extends CB_View_Base {
     ColorWidget colorWidget;
     VisLabel nameLabel;
 
-    public AbstractView(BitStore reader) throws de.longri.serializable.NotImplementedException {
+    public AbstractView(BitStore reader) {
         super(reader.readString());
         restoreInstanceState(reader);
     }
@@ -75,7 +75,7 @@ public abstract class AbstractView extends CB_View_Base {
 
     public abstract Menu getContextMenu();
 
-    public final BitStore saveInstanceState() throws de.longri.serializable.NotImplementedException {
+    public final BitStore saveInstanceState() {
         BitStore store = new BitStore();
         store.write(this.getClass().getName());
         store.write(this.NAME);

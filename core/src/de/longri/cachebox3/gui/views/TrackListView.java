@@ -2,14 +2,13 @@ package de.longri.cachebox3.gui.views;
 
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 
 /**
  * Created by Longri on 24.07.16.
  */
 public class TrackListView extends AbstractView {
 
-    public TrackListView(BitStore reader) throws NotImplementedException {
+    public TrackListView(BitStore reader) {
         super(reader);
     }
 

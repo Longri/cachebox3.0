@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,40 +53,30 @@ public class MapState {
     public void deserialize(byte[] bytes) {
         if (bytes == null) return;
         BitStore store = new BitStore(bytes);
-        try {
-            value = store.readInt();
-            if (store.readBool()) {
-                double lat = (float) store.readInt() / CONVERSION;
-                double lon = (float) store.readInt() / CONVERSION;
-                freePosition = new LatLong(lat, lon);
-            }
-            orientation = (float) store.readInt() / CONVERSION;
-            tilt = (float) store.readInt() / CONVERSION;
 
-        } catch (NotImplementedException e) {
-            e.printStackTrace();
+        value = store.readInt();
+        if (store.readBool()) {
+            double lat = (float) store.readInt() / CONVERSION;
+            double lon = (float) store.readInt() / CONVERSION;
+            freePosition = new LatLong(lat, lon);
         }
+        orientation = (float) store.readInt() / CONVERSION;
+        tilt = (float) store.readInt() / CONVERSION;
     }
 
     public byte[] serialize() {
         BitStore store = new BitStore();
-        try {
-            store.write(value);
-            if (freePosition != null) {
-                store.write(true);
-                store.write((int) (freePosition.getLatitude() * CONVERSION));
-                store.write((int) (freePosition.getLongitude() * CONVERSION));
-            } else {
-                store.write(false);
-            }
-            store.write((int) (orientation * CONVERSION));
-            store.write((int) (tilt * CONVERSION));
-
-            return store.getArray();
-        } catch (NotImplementedException e) {
-
+        store.write(value);
+        if (freePosition != null) {
+            store.write(true);
+            store.write((int) (freePosition.getLatitude() * CONVERSION));
+            store.write((int) (freePosition.getLongitude() * CONVERSION));
+        } else {
+            store.write(false);
         }
-        return null;
+        store.write((int) (orientation * CONVERSION));
+        store.write((int) (tilt * CONVERSION));
+        return store.getArray();
     }
 
     //setter

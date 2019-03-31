@@ -40,7 +40,7 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
     public static final String teamLink = "www.team-cachebox.de";
     public static final String aboutMsg2 = "Cache Icons Copyright 2009,\nGroundspeak Inc. Used with permission";
 
-    public AboutView(de.longri.serializable.BitStore reader) throws de.longri.serializable.NotImplementedException {
+    public AboutView(de.longri.serializable.BitStore reader) {
         super(reader);
         create();
     }

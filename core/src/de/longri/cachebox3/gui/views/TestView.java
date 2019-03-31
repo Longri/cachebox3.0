@@ -41,7 +41,6 @@ import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
-import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -58,7 +57,6 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
-import de.longri.serializable.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +71,7 @@ public class TestView extends AbstractView {
 
     private final AtomicBoolean showing = new AtomicBoolean(true);
 
-    public TestView(BitStore reader) throws NotImplementedException {
+    public TestView(BitStore reader) {
         super(reader);
     }
 

@@ -339,7 +339,7 @@ public class TestUtils {
 
     }
 
-    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz) throws de.longri.serializable.NotImplementedException {
+    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz){
         de.longri.serializable.BitStore store = abstractView.saveInstanceState();
         byte[] bytes = store.getArray();
 
