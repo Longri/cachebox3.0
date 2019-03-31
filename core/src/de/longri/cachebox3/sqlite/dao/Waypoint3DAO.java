@@ -22,8 +22,8 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.ImmutableWaypoint;
 import de.longri.cachebox3.types.MutableCache;
+import de.longri.cachebox3.types.MutableWaypoint;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
@@ -47,7 +47,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                ImmutableWaypoint wp = new ImmutableWaypoint(cursor);
+                MutableWaypoint wp = new MutableWaypoint(cursor);
                 waypoints.add(wp);
                 cursor.moveToNext();
             }
@@ -84,8 +84,8 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         args.put("Title", wp.getTitle());
 
         if (!update) args2.put("GcCode", wp.getGcCode());
-        args2.put("Description", wp.getDescription(database));
-        args2.put("Clue", wp.getClue(database));
+        args2.put("Description", wp.getDescription());
+        args2.put("Clue", wp.getClue());
 
         boolean updated = false;
         if (update || database.insert("Waypoints", args) <= 0) {
@@ -127,9 +127,9 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         String sCheckSum = WP.getGcCode().toString();
         sCheckSum += UnitFormatter.formatLatitudeDM(WP.getLatitude());
         sCheckSum += UnitFormatter.formatLongitudeDM(WP.getLongitude());
-        sCheckSum += WP.getDescription(database);
+        sCheckSum += WP.getDescription();
         sCheckSum += WP.getType().ordinal();
-        sCheckSum += WP.getClue(database);
+        sCheckSum += WP.getClue();
         sCheckSum += WP.getTitle();
         if (WP.isStart())
             sCheckSum += "1";

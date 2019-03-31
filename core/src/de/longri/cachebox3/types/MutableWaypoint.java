@@ -15,7 +15,9 @@
  */
 package de.longri.cachebox3.types;
 
+import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 /**
  * A special class for Import, don't use that for hold and dispose if not used anymore!
@@ -24,17 +26,15 @@ import de.longri.cachebox3.sqlite.Database;
  */
 public class MutableWaypoint extends AbstractWaypoint {
 
-    private double latitude = 0;
-    private double longitude = 0;
     private long cacheId = 0L;
-    private String gcCode = "";
-    private String title = "";
+    private CharSequence gcCode = "";
+    private CharSequence title = "";
     private CacheTypes type = CacheTypes.Undefined;
     private boolean isStart = false;
     private boolean syncExclude = false;
     private boolean userWaypoint = false;
-    private String description = "";
-    private String clue = "";
+    private CharSequence description = "";
+    private CharSequence clue = "";
 
 
     public MutableWaypoint(double latitude, double longitude, long cacheId) {
@@ -55,8 +55,31 @@ public class MutableWaypoint extends AbstractWaypoint {
         this.isStart = waypoint.isStart();
         this.syncExclude = waypoint.isSyncExcluded();
         this.userWaypoint = waypoint.isUserWaypoint();
-        this.description = waypoint.getDescription(database).toString();
-        this.clue = waypoint.getClue(database).toString();
+        this.description = waypoint.getDescription().toString();
+        this.clue = waypoint.getClue().toString();
+    }
+
+    public MutableWaypoint(GdxSqliteCursor cursor) {
+        super(cursor.getDouble(2), cursor.getDouble(3));
+        this.cacheId = cursor.getLong(0);
+        this.gcCode = new CharSequenceArray(cursor.getString(1));
+        short typeOrigin = cursor.getShort(4);
+        this.type = CacheTypes.get(typeOrigin);
+        this.isStart = cursor.getInt(5) > 0;
+        this.syncExclude = cursor.getInt(6) > 0;
+        this.userWaypoint = cursor.getInt(7) > 0;
+        this.title = new CharSequenceArray(cursor.getString(8));
+    }
+
+    public MutableWaypoint(String gcCode, CacheTypes type, double latitude, double longitude, long cacheId, String title) {
+        super(latitude, longitude);
+        this.cacheId = cacheId;
+        this.gcCode = gcCode;
+        this.type = type;
+        this.isStart = false;
+        this.syncExclude = false;
+        this.userWaypoint = false;
+        this.title = title;
     }
 
     public MutableWaypoint(String gcCode, CacheTypes type, String description, double latitude, double longitude, long cacheId, String clue, String title) {
@@ -119,22 +142,22 @@ public class MutableWaypoint extends AbstractWaypoint {
     }
 
     @Override
-    public CharSequence getDescription(Database database) {
+    public CharSequence getDescription() {
         return this.description;
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(CharSequence description) {
         this.description = description;
     }
 
     @Override
-    public CharSequence getClue(Database cb3Database) {
+    public CharSequence getClue() {
         return this.clue;
     }
 
     @Override
-    public void setClue(String clue) {
+    public void setClue(CharSequence clue) {
         this.clue = clue;
     }
 
@@ -196,16 +219,6 @@ public class MutableWaypoint extends AbstractWaypoint {
     @Override
     public void setStart(boolean start) {
         this.isStart = start;
-    }
-
-    @Override
-    public boolean isMutable() {
-        return true;
-    }
-
-    @Override
-    public AbstractWaypoint getMutable(Database database) {
-        return this;
     }
 
     @Override

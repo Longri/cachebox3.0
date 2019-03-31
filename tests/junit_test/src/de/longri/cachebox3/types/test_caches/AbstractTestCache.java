@@ -259,13 +259,13 @@ public abstract class AbstractTestCache {
                 "was " + wp1.getCacheId() + " instead of " + wp2.getCacheId(), wp1.getCacheId() == wp2.getCacheId());
 
         assertThat("Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getClue(database) + " instead of " + wp2.getClue(database), CharSequenceUtilTest.equals(wp1.getClue(database), wp2.getClue(database)));
+                "was " + wp1.getClue() + " instead of " + wp2.getClue(), CharSequenceUtilTest.equals(wp1.getClue(), wp2.getClue()));
 
         assertThat("Waypoint Description of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getDescription(database) + " instead of " + wp2.getDescription(database), CharSequenceUtilTest.equals(wp1.getDescription(database), wp2.getDescription(database)));
+                "was " + wp1.getDescription() + " instead of " + wp2.getDescription(), CharSequenceUtilTest.equals(wp1.getDescription(), wp2.getDescription()));
 
         assertThat("Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getClue(database) + " instead of " + wp2.getClue(database), CharSequenceUtilTest.equals(wp1.getClue(database), wp2.getClue(database)));
+                "was " + wp1.getClue() + " instead of " + wp2.getClue(), CharSequenceUtilTest.equals(wp1.getClue(), wp2.getClue()));
 
         assertThat("Waypoint Title of " + wp1.getGcCode() + " are wrong! " +
                 "was " + wp1.getTitle() + " instead of " + wp2.getTitle(), CharSequenceUtilTest.equals(wp1.getTitle(), wp2.getTitle()));

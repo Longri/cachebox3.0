@@ -302,8 +302,8 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
                 REPLACE_WAYPOINTS_TEXT.bind(
                         wp.getGcCode(),
-                        wp.getDescription(database),
-                        wp.getClue(database)
+                        wp.getDescription(),
+                        wp.getClue()
                 ).commit().reset();
             }
         } finally {

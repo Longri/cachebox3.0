@@ -385,7 +385,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         CB.postOnGlThread(new NamedRunnable("WaypointView") {
             @Override
             public void run() {
-                AbstractWaypoint mutable = newWP.getMutable(Database.Data);
+                AbstractWaypoint mutable = newWP;
                 EditWaypoint editWaypoint = new EditWaypoint(mutable, showCoords, onlyShow, new GenericCallBack<AbstractWaypoint>() {
                     @Override
                     public void callBack(AbstractWaypoint value) {

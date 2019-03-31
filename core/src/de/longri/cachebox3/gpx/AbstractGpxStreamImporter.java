@@ -564,8 +564,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             try {
                                 REPLACE_WAYPOINT_TEXT.bind(
                                         wp.getGcCode(),
-                                        wp.getDescription(null),
-                                        wp.getClue(null)
+                                        wp.getDescription(),
+                                        wp.getClue()
                                 ).commit();
                             } catch (Exception e) {
                                 log.error("Can't write Waypoint Text with values: \n" +
@@ -573,8 +573,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                                 "Description:{}\n" +
                                                 "Clue:{}\n\n\n",
                                         wp.getGcCode(),
-                                        wp.getDescription(null),
-                                        wp.getClue(null)
+                                        wp.getDescription(),
+                                        wp.getClue()
                                 );
                             } finally {
                                 REPLACE_WAYPOINT_TEXT.reset();
@@ -625,14 +625,6 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                 e.printStackTrace();
                             }
                         }
-//                        else {
-//                            // commit every 100 operations
-//                            if (operationCount++ > 100) {
-//                                database.endTransactionExclusive(TRANSACTION_ID);
-//                                database.beginTransactionExclusive(TRANSACTION_ID);
-//                                operationCount = 0;
-//                            }
-//                        }
 
                         boolean cacheEmpty = false;
                         boolean waypointEmpty = false;

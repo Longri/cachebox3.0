@@ -146,8 +146,8 @@ public class EditWaypoint extends ActivityBase {
         descriptionTextArea.setMaxLineCount(lineCount);
         clueTextArea.setMaxLineCount(lineCount);
         titleTextArea.setText((waypoint.getTitle() == null) ? "" : waypoint.getTitle());
-        descriptionTextArea.setText(waypoint.getDescription(Database.Data) == null ? "" : waypoint.getDescription(Database.Data));
-        clueTextArea.setText(waypoint.getClue(Database.Data) == null ? "" : waypoint.getClue(Database.Data));
+        descriptionTextArea.setText(waypoint.getDescription() == null ? "" : waypoint.getDescription());
+        clueTextArea.setText(waypoint.getClue() == null ? "" : waypoint.getClue());
         selectBox.select(waypoint.getType());
     }
 
