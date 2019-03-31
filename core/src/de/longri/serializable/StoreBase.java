@@ -39,6 +39,10 @@ public abstract class StoreBase {
 
     protected abstract void _write(String s) ;
 
+    protected abstract void _write(Float s) ;
+
+    protected abstract void _write(Double s) ;
+
     public abstract boolean readBool() ;
 
     public abstract byte readByte() ;
@@ -51,7 +55,9 @@ public abstract class StoreBase {
 
     public abstract String readString() ;
 
+    public abstract double readDouble();
 
+    public abstract float readFloat();
 
 
     /*---------- public method's --------------*/
@@ -79,17 +85,17 @@ public abstract class StoreBase {
         _write(b.getByte());
     }
 
-    public final void write(short s)  {
+    public final void write(Short s)  {
         ensureCapacity(8);
         _write(s);
     }
 
-    public final void write(int i)  {
+    public final void write(Integer i)  {
         ensureCapacity(16);
         _write(i);
     }
 
-    public final void write(long l)  {
+    public final void write(Long l)  {
         ensureCapacity(32);
         _write(l);
     }
@@ -97,6 +103,16 @@ public abstract class StoreBase {
     public final void write(String s)  {
         ensureCapacity(s.length() * 2);
         _write(s);
+    }
+
+    public final void write(Float f)  {
+        ensureCapacity(16);
+        _write(f);
+    }
+
+    public final void write(Double d)  {
+        ensureCapacity(32);
+        _write(d);
     }
 
     public byte[] getArray()  {

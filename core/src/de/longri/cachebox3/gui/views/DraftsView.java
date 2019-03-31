@@ -1036,13 +1036,13 @@ public class DraftsView extends AbstractView {
     public void saveInstanceState(BitStore writer) {
         // we save only listView scroll pos
         float pos = listView == null ? -1 : listView.getScrollPos();
-        writer.write(Float.floatToIntBits(pos));
+        writer.write(pos);
     }
 
     @Override
     protected void restoreInstanceState(BitStore reader) {
         // we save only listView scroll pos
-        float pos = Float.intBitsToFloat(reader.readInt());
+        float pos = reader.readFloat();
         if (pos > 0) {
             final float finalPos = pos;
             CB.postOnGLThreadDelayed(300, new NamedRunnable("restore ScrollPos") {

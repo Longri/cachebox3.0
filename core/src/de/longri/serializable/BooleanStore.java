@@ -46,6 +46,10 @@ public class BooleanStore {
         return (mValue & bit.value) == bit.value;
     }
 
+    public byte getValue() {
+        return mValue;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other instanceof BooleanStore) {

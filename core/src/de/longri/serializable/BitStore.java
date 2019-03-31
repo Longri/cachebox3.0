@@ -48,7 +48,7 @@ public class BitStore extends StoreBase {
     }
 
     @Override
-    protected void _write(boolean b)  {
+    protected void _write(boolean b) {
         if (b) {
             buffer[pointer._Byte] |= getBitmask().value;
         } else {
@@ -59,7 +59,7 @@ public class BitStore extends StoreBase {
 
 
     @Override
-    protected void _write(Byte b)  {
+    protected void _write(Byte b) {
 
         boolean state = b > 15 || b < 0;
         if (state) write(true);
@@ -78,7 +78,7 @@ public class BitStore extends StoreBase {
 
 
     @Override
-    protected void _write(Short s)  {
+    protected void _write(Short s) {
         boolean negative = false;
         if (s < 0) {
             negative = true;
@@ -91,7 +91,7 @@ public class BitStore extends StoreBase {
     }
 
     @Override
-    protected void _write(Integer i)  {
+    protected void _write(Integer i) {
         boolean negative = false;
         if (i < 0) {
             negative = true;
@@ -105,7 +105,7 @@ public class BitStore extends StoreBase {
 
 
     @Override
-    protected void _write(Long l)  {
+    protected void _write(Long l) {
         boolean negative = false;
         if (l < 0) {
             negative = true;
@@ -120,7 +120,7 @@ public class BitStore extends StoreBase {
         writeValue(negative, bytes, LONG);
     }
 
-    private void writeValue(boolean negative, byte[] bytes, Number numberType)  {
+    private void writeValue(boolean negative, byte[] bytes, Number numberType) {
         // write one bit vor negative/positive value
         if (numberType.writeNegative) write(negative);
         ByteArray nineBytes = new ByteArray(bytes);
@@ -169,7 +169,7 @@ public class BitStore extends StoreBase {
 
 
     @Override
-    protected void _write(String s)  {
+    protected void _write(String s) {
 
         int length = s.length();
         char[] cars = new char[length];
@@ -210,7 +210,17 @@ public class BitStore extends StoreBase {
     }
 
     @Override
-    public boolean readBool()  {
+    protected void _write(Float s) {
+        write(Float.floatToIntBits(s));
+    }
+
+    @Override
+    protected void _write(Double s) {
+        write(Double.doubleToLongBits(s));
+    }
+
+    @Override
+    public boolean readBool() {
         Bitmask bit = getBitmask();
         boolean ret = (buffer[pointer._Byte] & bit.value) == bit.value;
         movePointer(1);
@@ -218,7 +228,7 @@ public class BitStore extends StoreBase {
     }
 
     @Override
-    public byte readByte()  {
+    public byte readByte() {
 
         boolean state = readBool();
 
@@ -260,21 +270,21 @@ public class BitStore extends StoreBase {
     }
 
     @Override
-    public short readShort()  {
+    public short readShort() {
         return (short) readValue(SHORT);
     }
 
     @Override
-    public int readInt()  {
+    public int readInt() {
         return (int) readValue(INTEGER);
     }
 
     @Override
-    public long readLong()  {
+    public long readLong() {
         return readValue(LONG);
     }
 
-    private long readValue(Number numberType)  {
+    private long readValue(Number numberType) {
         // read if Negative value
         boolean isNegative = numberType.writeNegative ? readBool() : false;
 
@@ -340,7 +350,7 @@ public class BitStore extends StoreBase {
     }
 
     @Override
-    public String readString()  {
+    public String readString() {
         boolean mustInt = readBool();
         boolean mustShort = readBool();
         int length = readInt();
@@ -360,6 +370,16 @@ public class BitStore extends StoreBase {
         String ret = String.copyValueOf(cars);
 
         return ret;
+    }
+
+    @Override
+    public double readDouble() {
+        return Double.longBitsToDouble(readValue(LONG));
+    }
+
+    @Override
+    public float readFloat() {
+        return Float.intBitsToFloat((int) readValue(INTEGER));
     }
 
     private Bitmask getBitmask() {

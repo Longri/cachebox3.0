@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 /**
  * Created by longri on 13.05.17.
  */
-public class GdxJsonReader extends JsonReader {
+public class GdxJsonReader extends JsonReaderCpy {
 
 
     public JsonValue parse(InputStream input, long length) {
