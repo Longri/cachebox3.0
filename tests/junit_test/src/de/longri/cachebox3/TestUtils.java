@@ -257,10 +257,6 @@ public class TestUtils {
         Iterator<Attributes> positiveIterator = positiveList.iterator();
         Iterator<Attributes> negativeIterator = negativeList.iterator();
 
-
-        abstractCache = abstractCache.getMutable(database);
-
-
         while (positiveIterator.hasNext()) {
             assertThat("Attribute wrong", abstractCache.isAttributePositiveSet((Attributes) positiveIterator.next()));
         }

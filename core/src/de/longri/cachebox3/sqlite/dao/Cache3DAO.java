@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.ImmutableCache;
+import de.longri.cachebox3.types.MutableCache;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,7 +106,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.clear();
         if (!update) args.put("Id", abstractCache.getId());
 
-        Date dateHidden = abstractCache.getDateHidden(database);
+        Date dateHidden = abstractCache.getDateHidden();
         if (dateHidden == null) dateHidden = new Date();
         String dateString = Database.cbDbFormat.format(dateHidden);
 
@@ -114,9 +114,9 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("FirstImported", Database.cbDbFormat.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
-        args.put("state", abstractCache.getState(database));
-        args.put("country", abstractCache.getCountry(database));
-        args.put("ApiStatus", abstractCache.getApiState(database));
+        args.put("state", abstractCache.getState());
+        args.put("country", abstractCache.getCountry());
+        args.put("ApiStatus", abstractCache.getApiState());
 
         if (args.size() > 0) {
             if (update) {
@@ -140,12 +140,12 @@ public class Cache3DAO extends AbstractCacheDAO {
         //Write to CacheText table
         args.clear();
         if (!update) args.put("Id", abstractCache.getId());
-        args.put("Url", abstractCache.getUrl(database));
-        args.put("Hint", abstractCache.getHint(database));
-        args.put("Description", abstractCache.getLongDescription(database));
-        args.put("Notes", abstractCache.getTmpNote(database));
-        args.put("Solver", abstractCache.getTmpSolver(database));
-        args.put("ShortDescription", abstractCache.getShortDescription(database));
+        args.put("Url", abstractCache.getUrl());
+        args.put("Hint", abstractCache.getHint());
+        args.put("Description", abstractCache.getLongDescription());
+        args.put("Notes", abstractCache.getTmpNote());
+        args.put("Solver", abstractCache.getTmpSolver());
+        args.put("ShortDescription", abstractCache.getShortDescription());
 
         if (args.size() > 0) {
             if (update) {
@@ -221,18 +221,18 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints) {
+    public AbstractCache getFromDbByCacheId(Database database, long cacheID, boolean withWaypoints, boolean fullData) {
         String statement = "SELECT * from CacheCoreInfo WHERE Id=?";
         GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cacheID)});
         if (cursor == null) return null;
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
-            AbstractCache cache = new ImmutableCache(cursor);
+            AbstractCache cache = new MutableCache(cursor);
             if (withWaypoints) {
-                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cacheID, true));
+                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cacheID, fullData));
             }
             cursor.close();
-            return cache;
+            return getFullData(database, cache);
         }
         cursor.close();
         return null;
@@ -248,21 +248,48 @@ public class Cache3DAO extends AbstractCacheDAO {
     }
 
     @Override
-    public AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints) {
+    public AbstractCache getFromDbByGcCode(Database database, String gcCode, boolean withWaypoints, boolean fullData) {
         String statement = "SELECT * from CacheCoreInfo WHERE GcCode=?";
         GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(gcCode)});
         if (cursor == null) return null;
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
-            AbstractCache cache = new ImmutableCache(cursor);
+            AbstractCache cache = new MutableCache(cursor);
             if (withWaypoints) {
-                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cache.getId(), true));
+                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cache.getId(), fullData));
             }
             cursor.close();
-            return cache;
+            return getFullData(database, cache);
         }
         cursor.close();
         return null;
+    }
+
+    private AbstractCache getFullData(Database database, AbstractCache cache) {
+        String statement = "SELECT * from CacheInfo WHERE Id=?";
+        GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(cache.getId())});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            cache.setInfo(cursor);
+        }
+        cursor.close();
+
+        statement = "SELECT * from CacheText WHERE Id=?";
+        cursor = database.rawQuery(statement, new String[]{String.valueOf(cache.getId())});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            cache.setText(cursor);
+        }
+        cursor.close();
+
+        statement = "SELECT * from Attributes WHERE Id=?";
+        cursor = database.rawQuery(statement, new String[]{String.valueOf(cache.getId())});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            cache.setAttributes(cursor);
+        }
+        cursor.close();
+        return cache;
     }
 
 }

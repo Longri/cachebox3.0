@@ -30,7 +30,7 @@ public class WayPointListItem extends ListViewItem implements Disposable {
 
     public static WayPointListItem getListItem(int listIndex, final AbstractWaypoint waypoint, float targetWidth) {
         WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.getType(),
-                waypoint.getGcCode().toString(), waypoint.getTitle().toString(), waypoint.getDescription(Database.Data), waypoint.FormatCoordinate());
+                waypoint.getGcCode().toString(), waypoint.getTitle().toString(), waypoint.getDescription(), waypoint.FormatCoordinate());
         listViewItem.setWidth(targetWidth);
         listViewItem.invalidate();
         listViewItem.pack();

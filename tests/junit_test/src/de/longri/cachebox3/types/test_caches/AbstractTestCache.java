@@ -110,24 +110,24 @@ public abstract class AbstractTestCache {
         assertThat("Owner must be " + owner + " but was :" + other.getOwner(), CharSequenceUtilTest.equals(owner, other.getOwner()));
         assertThat("Container must be " + container + " but was :" + other.getSize(), container == other.getSize());
         assetCacheAttributes(other, database);
-        assertThat("Cache Url must be " + url + " but was :" + other.getUrl(database), CharSequenceUtilTest.equals(url, other.getUrl(database)));
-        assertThat("Country must be " + country + " but was :" + other.getCountry(database), CharSequenceUtilTest.equals(country, other.getCountry(database)));
-        assertThat("State must be " + state + " but was :" + other.getState(database), CharSequenceUtilTest.equals(state, other.getState(database)));
+        assertThat("Cache Url must be " + url + " but was :" + other.getUrl(), CharSequenceUtilTest.equals(url, other.getUrl()));
+        assertThat("Country must be " + country + " but was :" + other.getCountry(), CharSequenceUtilTest.equals(country, other.getCountry()));
+        assertThat("State must be " + state + " but was :" + other.getState(), CharSequenceUtilTest.equals(state, other.getState()));
         assertThat("Cache difficulty must be " + difficulty + " but was :" + other.getDifficulty(), difficulty == other.getDifficulty());
         assertThat("Cache terrain must be " + terrain + " but was :" + other.getTerrain(), terrain == other.getTerrain());
         assertThat("Cache Found must be " + found + " but was :" + other.isFound(), found == other.isFound());
-        assertEquals(shortDescription, other.getShortDescription(database).replaceAll("\r\n", "\n"), "Short description should be equals");
-        assertEquals(longDescription, other.getLongDescription(database).replaceAll("\r\n", "\n"), "Long description should be equals");
-        assertEquals(hint, other.getHint(database).toString().replaceAll("\r\n", "\n"), "Hint should be equals");
+        assertEquals(shortDescription, other.getShortDescription().toString().replaceAll("\r\n", "\n"), "Short description should be equals");
+        assertEquals(longDescription, other.getLongDescription().toString().replaceAll("\r\n", "\n"), "Long description should be equals");
+        assertEquals(hint, other.getHint().toString().replaceAll("\r\n", "\n"), "Hint should be equals");
         assertThat("Cache Tb count must be " + tbCount + " but was :" + other.getNumTravelbugs(), tbCount == other.getNumTravelbugs());
         assertThat("Cache Favorite must be " + favorite + " but was :" + other.isFavorite(), favorite == other.isFavorite());
         assertThat("Cache FavoritePoints count must be " + favoritePoints + " but was :" + other.getFavoritePoints(), favoritePoints == other.getFavoritePoints());
-        assertEquals(note, other.getTmpNote(database) != null ? other.getTmpNote(database).replaceAll("\r\n", "\n") : null, "Cache note should be equals");
-        assertEquals(solver, other.getTmpSolver(database) != null ? other.getTmpSolver(database).replaceAll("\r\n", "\n") : null, "Cache solver should be equals");
+        assertEquals(note, other.getTmpNote() != null ? other.getTmpNote().toString().replaceAll("\r\n", "\n") : null, "Cache note should be equals");
+        assertEquals(solver, other.getTmpSolver() != null ? other.getTmpSolver().toString().replaceAll("\r\n", "\n") : null, "Cache solver should be equals");
         assertEquals(name, other.getName().toString(), "Cache name should be equals");
 
         String expectedDate = DATE_PATTERN.format(this.dateHidden);
-        String actualDate = DATE_PATTERN.format(other.getDateHidden(database));
+        String actualDate = DATE_PATTERN.format(other.getDateHidden());
         assertEquals(expectedDate, actualDate, "HiddenDate should be equals");
 
         if (testWaypoints) assertWaypoints(other, database);
@@ -171,7 +171,6 @@ public abstract class AbstractTestCache {
         Iterator<Attributes> positiveIterator = positiveList.iterator();
         Iterator<Attributes> negativeIterator = negativeList.iterator();
 
-        abstractCache = abstractCache.getMutable(database);
 
         while (positiveIterator.hasNext()) {
             Attributes att = positiveIterator.next();
@@ -260,13 +259,13 @@ public abstract class AbstractTestCache {
                 "was " + wp1.getCacheId() + " instead of " + wp2.getCacheId(), wp1.getCacheId() == wp2.getCacheId());
 
         assertThat("Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getClue(database) + " instead of " + wp2.getClue(database), CharSequenceUtilTest.equals(wp1.getClue(database), wp2.getClue(database)));
+                "was " + wp1.getClue() + " instead of " + wp2.getClue(), CharSequenceUtilTest.equals(wp1.getClue(), wp2.getClue()));
 
         assertThat("Waypoint Description of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getDescription(database) + " instead of " + wp2.getDescription(database), CharSequenceUtilTest.equals(wp1.getDescription(database), wp2.getDescription(database)));
+                "was " + wp1.getDescription() + " instead of " + wp2.getDescription(), CharSequenceUtilTest.equals(wp1.getDescription(), wp2.getDescription()));
 
         assertThat("Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getClue(database) + " instead of " + wp2.getClue(database), CharSequenceUtilTest.equals(wp1.getClue(database), wp2.getClue(database)));
+                "was " + wp1.getClue() + " instead of " + wp2.getClue(), CharSequenceUtilTest.equals(wp1.getClue(), wp2.getClue()));
 
         assertThat("Waypoint Title of " + wp1.getGcCode() + " are wrong! " +
                 "was " + wp1.getTitle() + " instead of " + wp2.getTitle(), CharSequenceUtilTest.equals(wp1.getTitle(), wp2.getTitle()));

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ImmutableCacheTest {
 
@@ -24,7 +23,7 @@ class ImmutableCacheTest {
         TestUtils.initialGdx();
 
         // copy testDb
-        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3",true);
+        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3", true);
         copyDbFileHandle = testDbFileHandle.parent().child("testImutableCache.db3");
         if (copyDbFileHandle.exists()) {
             // delete first
@@ -50,19 +49,17 @@ class ImmutableCacheTest {
     @Test
     void getUrl() {
 
-        ImmutableCache cache = new ImmutableCache(0, 0);
+        MutableCache mutableCache = new MutableCache(0, 0);
+        mutableCache.setId(123456789l);
         String url = "HTTP://team-cachebox.de";
 
-        MutableCache mutableCache = cache.getMutable(cb3Database);
-        mutableCache.setId(123456789l);
-
         mutableCache.setUrl(url);
-        DaoFactory.CACHE_DAO.writeToDatabase(cb3Database, mutableCache,false);
+        DaoFactory.CACHE_DAO.writeToDatabase(cb3Database, mutableCache, false);
 
 
-        cache = (ImmutableCache) DaoFactory.CACHE_DAO.getFromDbByCacheId(cb3Database, 123456789l, false);
+        AbstractCache cache = DaoFactory.CACHE_DAO.getFromDbByCacheId(cb3Database, 123456789l, false,true);
 
-        String testUrl = cache.getUrl(cb3Database);
+        String testUrl = cache.getUrl().toString();
         assertThat("Url must equals", url.equals(testUrl));
 
 

@@ -16,7 +16,10 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.util.Date;
 
@@ -24,13 +27,52 @@ import java.util.Date;
  * Created by Longri on 23.10.2017.
  */
 public class MutableCache extends AbstractCache {
+
+    // ########################################################
+    // Boolean Handling
+    // one Boolean use up to 4 Bytes
+    // Boolean data type represents one bit of information, but its "size" isn't something that's precisely defined. (Oracle Docs)
+    //
+    // so we use one Short for Store all Boolean and Use a BitMask
+    // ########################################################
+
+    // Masks
+    private final static short MASK_HAS_HINT = 1 << 0;
+    private final static short MASK_CORECTED_COORDS = 1 << 1; //   2
+    public final static short MASK_ARCHIVED = 1 << 2;        //   4
+    public final static short MASK_AVAILABLE = 1 << 3;       //   8
+    public final static short MASK_FAVORITE = 1 << 4;        //  16
+    public final static short MASK_FOUND = 1 << 5;           //  32
+    private final static short MASK_IS_LIVE = 1 << 6;         //  64
+    private final static short MASK_SOLVER1CHANGED = 1 << 7;  // 128
+    public final static short MASK_HAS_USER_DATA = 1 << 8;   // 256
+    public final static short MASK_LISTING_CHANGED = 1 << 9; // 512
+
+    public static boolean getMaskValue(short mask, short bitFlags) {
+        return (bitFlags & mask) == mask;
+    }
+
+    public static short setMaskValue(short mask, boolean value, short bitFlags) {
+        if (getMaskValue(mask, bitFlags) == value) {
+            return bitFlags;
+        }
+
+        if (value) {
+            bitFlags |= mask;
+        } else {
+            bitFlags &= ~mask;
+        }
+        return bitFlags;
+    }
+
     public final static byte NOT_LIVE = 0;
     public final static byte IS_LITE = 1;
     public final static byte IS_FULL = 2;
 
-    private double latitude, longitude;
+    private short booleanStore;
+
     private Array<Attributes> attributes;
-    private String name, gcCode, placedBy, owner, gcId;
+    private CharSequence name, gcCode, placedBy, owner, gcId;
     private short rating, numTravelbugs;
     private int favPoints;
     private long id;
@@ -38,39 +80,34 @@ public class MutableCache extends AbstractCache {
     private CacheSizes size;
     private float difficulty, terrain;
 
-    private boolean hasHint;
-    private boolean correctedCoordinates;
-    private boolean archived;
-    private boolean available;
-    private boolean favorite;
-    private boolean found;
-    private boolean userData;
-    private boolean listingChanged;
+
     private Array<AbstractWaypoint> waypoints = new Array<>();
-    private String longDescription;
-    private String shortDescription;
-    private String hint;
+    private CharSequence longDescription;
+    private CharSequence shortDescription;
+    private CharSequence hint;
     private Date dateHidden;
     private DLong attributesNegative;
     private DLong attributesPositive;
-    private String country;
-    private String url;
+    private CharSequence country;
+    private CharSequence url;
     private byte apiState;
-    private String state;
-    private String note;
-    private String solver;
+    private CharSequence state;
+    private CharSequence note;
+    private CharSequence solver;
+    private CharSequence tourName;
+    private long gpxFilenameId;
+
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
-        this.latitude = latitude;
-        this.longitude = longitude;
+        type = CacheTypes.Undefined;
     }
 
-    public MutableCache(Database database, ImmutableCache cache) {
+    public MutableCache(AbstractCache cache) {
         super(cache.getLatitude(), cache.getLongitude());
         this.latitude = cache.getLatitude();
         this.longitude = cache.getLongitude();
-        this.attributes = cache.getAttributes(database);
+        this.attributes = cache.getAttributes();
         if (cache.getName() != null) this.name = cache.getName().toString();
         if (cache.getGcCode() != null) this.gcCode = cache.getGcCode().toString();
         if (cache.getPlacedBy() != null) this.placedBy = cache.getPlacedBy().toString();
@@ -83,72 +120,30 @@ public class MutableCache extends AbstractCache {
         this.size = cache.getSize();
         this.difficulty = cache.getDifficulty();
         this.terrain = cache.getTerrain();
-        this.hasHint = cache.hasHint();
-        this.archived = cache.isArchived();
-        this.available = cache.isAvailable();
-        this.favorite = cache.isFavorite();
-        this.found = cache.isFound();
-        this.userData = cache.isHasUserData();
-        this.listingChanged = cache.isListingChanged();
+        this.setMaskValue(MASK_HAS_HINT, cache.hasHint());
+        this.setMaskValue(MASK_ARCHIVED, cache.isArchived());
+        this.setMaskValue(MASK_AVAILABLE, cache.isAvailable());
+        this.setMaskValue(MASK_FAVORITE, cache.isFavorite());
+        this.setMaskValue(MASK_FOUND, cache.isFound());
+        this.setMaskValue(MASK_HAS_USER_DATA, cache.isHasUserData());
+        this.setMaskValue(MASK_LISTING_CHANGED, cache.isListingChanged());
         this.waypoints = cache.getWaypoints();
-        this.correctedCoordinates = cache.hasCorrectedCoordinates();
+        this.setMaskValue(MASK_CORECTED_COORDS, cache.hasCorrectedCoordinates());
 
-        this.longDescription = cache.getLongDescription(database);
-        this.shortDescription = cache.getShortDescription(database);
-        this.hint = cache.getHint(database).toString();
-        this.url = cache.getUrl(database);
-        this.dateHidden = cache.getDateHidden(database);
-        this.state = cache.getState(database);
-        this.country = cache.getCountry(database);
-        this.apiState = cache.getApiState(database);
-        this.note = cache.getTmpNote(database);
-        this.solver = cache.getTmpSolver(database);
-    }
-
-    public MutableCache(MutableCache cache) {
-        super(cache.getLatitude(), cache.getLongitude());
-        this.latitude = cache.getLatitude();
-        this.longitude = cache.getLongitude();
-        this.attributes = cache.attributes;
-        this.name = cache.getName() == null ? null : cache.getName().toString();
-        this.gcCode = cache.getGcCode() == null ? null : cache.getGcCode().toString();
-        this.placedBy = cache.getPlacedBy() == null ? null : cache.getPlacedBy().toString();
-        this.owner = cache.getOwner() == null ? null : cache.getOwner().toString();
-        this.gcId = cache.getGcId() == null ? null : cache.getGcId().toString();
-        this.rating = (short) (cache.getRating() * 2);
-        this.favPoints = cache.getFavoritePoints();
-        this.id = cache.getId();
-        this.type = cache.getType();
-        this.size = cache.getSize();
-        this.difficulty = cache.getDifficulty();
-        this.terrain = cache.getTerrain();
-        this.hasHint = cache.hasHint();
-        this.archived = cache.isArchived();
-        this.available = cache.isAvailable();
-        this.favorite = cache.isFavorite();
-        this.found = cache.isFound();
-        this.userData = cache.isHasUserData();
-        this.listingChanged = cache.isListingChanged();
-        this.waypoints = cache.getWaypoints();
-        this.correctedCoordinates = cache.hasCorrectedCoordinates();
-        this.country = cache.country;
-        this.dateHidden = cache.dateHidden;
-        this.hint = cache.hint;
-        this.longDescription = cache.longDescription;
-        this.shortDescription = cache.shortDescription;
-        this.url = cache.url;
-        this.apiState = cache.apiState;
-        this.attributes = cache.attributes;
-        this.attributesNegative = cache.attributesNegative;
-        this.attributesPositive = cache.attributesPositive;
-        this.note = cache.note;
-        this.solver = cache.solver;
+        this.longDescription = cache.getLongDescription();
+        this.shortDescription = cache.getShortDescription();
+        this.hint = cache.getHint().toString();
+        this.url = cache.getUrl();
+        this.dateHidden = cache.getDateHidden();
+        this.state = cache.getState();
+        this.country = cache.getCountry();
+        this.apiState = cache.getApiState();
+        this.note = cache.getTmpNote();
+        this.solver = cache.getTmpSolver();
     }
 
     public MutableCache(double latitude, double longitude, String name, CacheTypes type, String gcCode) {
         super(latitude, longitude);
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.id = 0;
         this.size = CacheSizes.regular;
         this.difficulty = 0.0f;
@@ -162,6 +157,117 @@ public class MutableCache extends AbstractCache {
         this.owner = "";
         this.gcId = "";
         this.favPoints = 0;
+    }
+
+    public MutableCache(GdxSqliteCursor cursor) {
+        super(cursor.getDouble(1), cursor.getDouble(2));
+        this.id = cursor.getLong(0);
+        this.size = CacheSizes.parseInt(cursor.getShort(3));
+        this.difficulty = (float) cursor.getShort(4) / 2.0f;
+        this.terrain = (float) cursor.getShort(5) / 2.0f;
+        this.type = CacheTypes.get(cursor.getShort(6));
+        this.rating = (short) (cursor.getShort(7) / 100);
+        this.numTravelbugs = cursor.getShort(8);
+
+        this.gcCode = new CharSequenceArray(cursor.getString(9));
+
+        String nameString = cursor.getString(10);
+        if (nameString != null) this.name = new CharSequenceArray(nameString.trim());
+        else this.name = null;
+
+        String placedByString = cursor.getString(11);
+        if (placedByString != null) this.placedBy = new CharSequenceArray(placedByString);
+        else this.placedBy = null;
+
+        String ownerString = cursor.getString(12);
+        if (ownerString != null) this.owner = new CharSequenceArray(ownerString);
+        else this.owner = null;
+
+        String gcIdString = cursor.getString(13);
+        if (gcIdString != null) this.gcId = new CharSequenceArray(gcIdString);
+        else this.gcId = null;
+
+        this.booleanStore = cursor.getShort(14);
+        this.favPoints = cursor.getInt(15);
+    }
+
+    public MutableCache(Object[] values) {
+        super((double) values[1], (double) values[2]);
+        this.id = (long) values[0];
+        this.size = CacheSizes.parseInt(((Long) values[3]).intValue());
+        this.difficulty = (float) ((Long) values[4]) / 2.0f;
+        this.terrain = (float) ((Long) values[5]) / 2.0f;
+        this.type = CacheTypes.get(((Long) values[6]).intValue());
+        this.rating = (short) (((Long) values[7]).shortValue() / 100);
+        this.numTravelbugs = ((Long) values[8]).shortValue();
+
+        this.gcCode = new CharSequenceArray((String) values[9]);
+        this.name = new CharSequenceArray((String) values[10]);
+        this.placedBy = new CharSequenceArray((String) values[11]);
+        this.owner = new CharSequenceArray((String) values[12]);
+        this.gcId = new CharSequenceArray((String) values[13]);
+
+        this.booleanStore = ((Long) values[14]).shortValue();
+        this.favPoints = values[15] == null ? 0 : ((Long) values[15]).intValue();
+    }
+
+    @Override
+    public void setInfo(GdxSqliteCursor cursor) {
+        // cursor include
+
+//        Id              BIGINT        PRIMARY KEY
+//        DateHidden      DATETIME,
+//        FirstImported   DATETIME,
+//        TourName        NCHAR (255),
+//        GPXFilename_Id  BIGINT,
+//        ListingCheckSum INT           DEFAULT 0,
+//        state           NVARCHAR (50),
+//        country         NVARCHAR (50),
+//        ApiStatus       SMALLINT      DEFAULT 0
+
+        this.dateHidden = Database.getDateFromDataBaseString(cursor.getString(1));
+        this.tourName = new CharSequenceArray(cursor.getString(3));
+        this.gpxFilenameId = cursor.getLong(4);
+        this.state = new CharSequenceArray(cursor.getString(6));
+        this.country = new CharSequenceArray(cursor.getString(7));
+        this.apiState = cursor.getByte(8);
+
+    }
+
+    @Override
+    public void setText(GdxSqliteCursor cursor) {
+        // cursor include
+//        Id               BIGINT         PRIMARY KEY
+//        Url              NVARCHAR (255),
+//        Hint             NTEXT,
+//        Description      NTEXT,
+//        Notes            NTEXT,
+//        Solver           NTEXT,
+//        ShortDescription NTEXT
+
+        this.url = new CharSequenceArray(cursor.getString(1));
+        this.hint = new CharSequenceArray(cursor.getString(2));
+        this.longDescription = new CharSequenceArray(cursor.getString(3));
+        this.note = new CharSequenceArray(cursor.getString(4));
+        this.solver = new CharSequenceArray(cursor.getString(5));
+        this.shortDescription = new CharSequenceArray(cursor.getString(6));
+    }
+
+    @Override
+    public void setAttributes(GdxSqliteCursor cursor) {
+        // cursor include
+//        Id                     BIGINT PRIMARY KEY
+//        AttributesPositive     BIGINT,
+//        AttributesNegative     BIGINT,
+//        AttributesPositiveHigh BIGINT DEFAULT 0,
+//        AttributesNegativeHigh BIGINT DEFAULT 0
+        this.setAttributesPositive(new DLong(cursor.getLong(3),cursor.getLong(1)));
+        this.setAttributesNegative(new DLong(cursor.getLong(4),cursor.getLong(2)));
+    }
+
+    @Override
+    public void updateBooleanStore(Database database) {
+        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
     }
 
     @Override
@@ -185,7 +291,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public Array<Attributes> getAttributes(Database database) {
+    public Array<Attributes> getAttributes() {
         if (this.attributes == null) {
             Attributes.getAttributes(attributesPositive, attributesNegative);
         }
@@ -195,11 +301,6 @@ public class MutableCache extends AbstractCache {
     @Override
     public boolean ImTheOwner() {
         return false;
-    }
-
-    @Override
-    public boolean CorrectedCoordiantesOrMysterySolved() {
-        return this.correctedCoordinates;
     }
 
     @Override
@@ -278,72 +379,73 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public CharSequence getHint(Database database) {
+    public CharSequence getHint() {
         return this.hint;
     }
 
     @Override
-    public void setHint(Database database, String hint) {
+    public void setHint(CharSequence hint) {
         this.hint = hint;
     }
 
     @Override
     public long getGPXFilename_ID() {
-        return 0;
+        return this.gpxFilenameId;
     }
 
     @Override
     public void setGPXFilename_ID(long gpxFilenameId) {
-
+        this.gpxFilenameId = gpxFilenameId;
     }
 
     @Override
     public boolean hasHint() {
-        return hasHint;
+        return this.getMaskValue(MASK_HAS_HINT);
+    }
+
+    @Override
+    public void setHasHint(boolean hasHint) {
+        this.setMaskValue(MASK_HAS_HINT, hasHint);
     }
 
     @Override
     public boolean hasCorrectedCoordinates() {
-        return correctedCoordinates;
+        return this.getMaskValue(MASK_CORECTED_COORDS);
     }
 
     @Override
     public void setHasCorrectedCoordinates(boolean correctedCoordinates) {
-        this.correctedCoordinates = correctedCoordinates;
+        this.setMaskValue(MASK_CORECTED_COORDS, correctedCoordinates);
     }
 
     @Override
     public boolean isArchived() {
-        return archived;
+        return this.getMaskValue(MASK_ARCHIVED);
     }
 
     @Override
     public void setArchived(boolean archived) {
-        if (this.archived != archived)
-            isChanged.set(true);
-        this.archived = archived;
+        this.setMaskValue(MASK_ARCHIVED, archived);
     }
 
     @Override
     public boolean isAvailable() {
-        return this.available;
+        return this.getMaskValue(MASK_AVAILABLE);
     }
 
     @Override
     public void setAvailable(boolean available) {
-        if (this.available != available)
-            isChanged.set(true);
-        this.available = available;
+        this.setMaskValue(MASK_AVAILABLE, available);
     }
 
     @Override
     public boolean isFavorite() {
-        return this.favorite;
+        return this.getMaskValue(MASK_FAVORITE);
     }
 
     @Override
-    public void setFavorite(Database databse, boolean favorite) {
-        this.favorite = favorite;
+    public void setFavorite(boolean favorite) {
+        setMaskValue(MASK_FAVORITE, favorite);
     }
 
     @Override
@@ -368,12 +470,12 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public boolean isFound() {
-        return this.found;
+        return this.getMaskValue(MASK_FOUND);
     }
 
     @Override
-    public void setFound(Database databse, boolean found) {
-        this.found = found;
+    public void setFound(boolean isFound) {
+        this.setMaskValue(MASK_FOUND, isFound);
     }
 
     @Override
@@ -388,23 +490,24 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public boolean isHasUserData() {
-        return this.userData;
+        return this.getMaskValue(MASK_HAS_USER_DATA);
     }
 
     @Override
     public void setHasUserData(boolean hasUserData) {
-        this.userData = hasUserData;
+        this.setMaskValue(MASK_HAS_USER_DATA, hasUserData);
     }
 
     @Override
     public boolean isListingChanged() {
-        return this.listingChanged;
+        return this.getMaskValue(MASK_LISTING_CHANGED);
     }
 
     @Override
     public void setListingChanged(boolean listingChanged) {
-        this.listingChanged = listingChanged;
+        setMaskValue(MASK_LISTING_CHANGED, listingChanged);
     }
+
 
     @Override
     public CharSequence getPlacedBy() {
@@ -417,7 +520,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public Date getDateHidden(Database database) {
+    public Date getDateHidden() {
         return this.dateHidden;
     }
 
@@ -427,7 +530,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public byte getApiState(Database database) {
+    public byte getApiState() {
         return this.apiState;
     }
 
@@ -447,12 +550,12 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getTmpNote(Database database) {
+    public CharSequence getTmpNote() {
         return this.note;
     }
 
     @Override
-    public void setTmpNote(String value) {
+    public void setTmpNote(CharSequence value) {
         this.note = value;
     }
 
@@ -467,42 +570,42 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public String getTmpSolver(Database database) {
+    public CharSequence getTmpSolver() {
         return this.solver;
     }
 
     @Override
-    public void setTmpSolver(Database database, String value) {
+    public void setTmpSolver(CharSequence value) {
         this.solver = value;
     }
 
     @Override
-    public String getUrl(Database database) {
+    public CharSequence getUrl() {
         return this.url;
     }
 
     @Override
-    public void setUrl(String value) {
+    public void setUrl(CharSequence value) {
         this.url = value;
     }
 
     @Override
-    public String getCountry(Database database) {
+    public CharSequence getCountry() {
         return this.country;
     }
 
     @Override
-    public void setCountry(String value) {
+    public void setCountry(CharSequence value) {
         this.country = value;
     }
 
     @Override
-    public String getState(Database database) {
+    public CharSequence getState() {
         return this.state;
     }
 
     @Override
-    public void setState(String value) {
+    public void setState(CharSequence value) {
         this.state = value;
     }
 
@@ -539,33 +642,33 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setLongDescription(Database database, String value) {
+    public void setLongDescription(CharSequence value) {
         this.longDescription = value;
     }
 
     @Override
-    public String getLongDescription(Database database) {
+    public CharSequence getLongDescription() {
         return this.longDescription;
     }
 
     @Override
-    public void setShortDescription(Database database, String value) {
+    public void setShortDescription(CharSequence value) {
         this.shortDescription = value;
     }
 
     @Override
-    public String getShortDescription(Database database) {
+    public CharSequence getShortDescription() {
         return this.shortDescription;
     }
 
     @Override
-    public void setTourName(String value) {
-
+    public void setTourName(CharSequence value) {
+        this.tourName = value;
     }
 
     @Override
-    public String getTourName() {
-        return null;
+    public CharSequence getTourName() {
+        return this.tourName;
     }
 
     @Override
@@ -630,11 +733,11 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public float getRating() {
-        return rating / 2;
+        return rating / 2.0f;
     }
 
     @Override
-    public void setRating(float rating) {
+    public void setRating(short rating) {
         this.rating = (short) (rating * 2);
     }
 
@@ -664,10 +767,10 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setNumTravelbugs(int numTravelbugs) {
+    public void setNumTravelbugs(short numTravelbugs) {
         if (this.numTravelbugs != numTravelbugs)
             isChanged.set(true);
-        this.numTravelbugs = (short) numTravelbugs;
+        this.numTravelbugs = numTravelbugs;
     }
 
 
@@ -676,20 +779,6 @@ public class MutableCache extends AbstractCache {
 
     }
 
-    @Override
-    public boolean isMutable() {
-        return true;
-    }
-
-    @Override
-    public AbstractCache getMutable(Database database) {
-        return this;
-    }
-
-    @Override
-    public AbstractCache getImmutable() {
-        return new ImmutableCache(this);
-    }
 
     @Override
     public AbstractCache getCopy() {
@@ -725,11 +814,6 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setHasHint(boolean hasHint) {
-        this.hasHint = hasHint;
-    }
-
-    @Override
     public void setLatLon(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -737,20 +821,26 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public short getBooleanStore() {
-        short bitFlags = 0;
-        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_ARCHIVED, archived, bitFlags);
-        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_AVAILABLE, available, bitFlags);
-        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_FOUND, found, bitFlags);
-        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_FAVORITE, favorite, bitFlags);
-        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, userData, bitFlags);
-        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_LISTING_CHANGED, listingChanged, bitFlags);
-        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_CORECTED_COORDS, correctedCoordinates, bitFlags);
-        bitFlags = ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_HINT, hasHint, bitFlags);
-
-        return bitFlags;
+        return booleanStore;
     }
 
     public void reset() {
 
     }
+
+    private boolean getMaskValue(short mask) {
+        return (booleanStore & mask) == mask;
+    }
+
+    private void setMaskValue(short mask, boolean value) {
+        if (getMaskValue(mask) == value) return;
+
+        if (value) {
+            booleanStore |= mask;
+        } else {
+            booleanStore &= ~mask;
+        }
+
+    }
+
 }

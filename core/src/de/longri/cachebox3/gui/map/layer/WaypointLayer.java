@@ -359,7 +359,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             return "mapStar";
         else if (abstractCache.isFound())
             return "mapFound";
-        else if ((abstractCache.getType() == CacheTypes.Mystery) && abstractCache.CorrectedCoordiantesOrMysterySolved())
+        else if ((abstractCache.getType() == CacheTypes.Mystery) && abstractCache.hasCorrectedCoordinates())
             return "mapSolved";
         else if ((abstractCache.getType() == CacheTypes.Multi) && abstractCache.HasStartWaypoint())
             return "mapMultiStartP"; // Multi with start point

@@ -259,8 +259,6 @@ public class Coordinate extends LatLong {
 
     public Coordinate(double latitude, double longitude) {
         super(latitude, longitude);
-        if (latitude == 0 && longitude == 0)
-            return;
     }
 
     public Coordinate(int latitude, int longitude) {

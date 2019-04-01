@@ -22,8 +22,8 @@ import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.ImmutableCache;
-import de.longri.cachebox3.types.ImmutableWaypoint;
+import de.longri.cachebox3.types.MutableCache;
+import de.longri.cachebox3.types.MutableWaypoint;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
@@ -35,7 +35,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
     private final String GET_ALL_WAYPOINTS = "SELECT * FROM Waypoints";
     private final String GET_ALL_WAYPOINTS_FROM_CACHE = "SELECT * FROM Waypoints WHERE CacheId=?";
-
+    private final String GET_WAYPOINT_TEXT = "SELECT * FROM WaypointsText WHERE GcCode=?";
 
     @Override
     public Array<AbstractWaypoint> getWaypointsFromCacheID(Database database, Long cacheID, boolean full) {
@@ -47,7 +47,15 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                ImmutableWaypoint wp = new ImmutableWaypoint(cursor);
+                MutableWaypoint wp = new MutableWaypoint(cursor);
+                if (full) {
+                    GdxSqliteCursor wpTextCursor = database.rawQuery(GET_WAYPOINT_TEXT, new String[]{String.valueOf(wp.getGcCode())});
+                    if (wpTextCursor != null) {
+                        wpTextCursor.moveToFirst();
+                        wp.setText(wpTextCursor);
+                        wpTextCursor.close();
+                    }
+                }
                 waypoints.add(wp);
                 cursor.moveToNext();
             }
@@ -84,8 +92,8 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         args.put("Title", wp.getTitle());
 
         if (!update) args2.put("GcCode", wp.getGcCode());
-        args2.put("Description", wp.getDescription(database));
-        args2.put("Clue", wp.getClue(database));
+        args2.put("Description", wp.getDescription());
+        args2.put("Clue", wp.getClue());
 
         boolean updated = false;
         if (update || database.insert("Waypoints", args) <= 0) {
@@ -127,9 +135,9 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         String sCheckSum = WP.getGcCode().toString();
         sCheckSum += UnitFormatter.formatLatitudeDM(WP.getLatitude());
         sCheckSum += UnitFormatter.formatLongitudeDM(WP.getLongitude());
-        sCheckSum += WP.getDescription(database);
+        sCheckSum += WP.getDescription();
         sCheckSum += WP.getType().ordinal();
-        sCheckSum += WP.getClue(database);
+        sCheckSum += WP.getClue();
         sCheckSum += WP.getTitle();
         if (WP.isStart())
             sCheckSum += "1";
@@ -147,12 +155,12 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             cursor.moveToFirst();
             short booleanStore = cursor.getShort(0);
             cursor.close();
-            if (ImmutableCache.getMaskValue(ImmutableCache.MASK_HAS_USER_DATA, booleanStore)) {
+            if (MutableCache.getMaskValue(MutableCache.MASK_HAS_USER_DATA, booleanStore)) {
                 // HasUserData is set, return!
                 return;
             }
 
-            ImmutableCache.setMaskValue(ImmutableCache.MASK_HAS_USER_DATA, true, booleanStore);
+            MutableCache.setMaskValue(MutableCache.MASK_HAS_USER_DATA, true, booleanStore);
 
             //Set 'HasUserData' on Cache table
             Database.Parameters args = new Database.Parameters();

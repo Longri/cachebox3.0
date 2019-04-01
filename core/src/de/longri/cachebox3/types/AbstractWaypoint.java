@@ -18,6 +18,7 @@ package de.longri.cachebox3.types;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.CharSequenceUtil;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 /**
  * Created by Longri on 19.10.2017.
@@ -37,13 +38,13 @@ public abstract class AbstractWaypoint extends Coordinate {
 
     public abstract void setTitle(String title);
 
-    public abstract CharSequence getDescription(Database database);
+    public abstract CharSequence getDescription();
 
-    public abstract void setDescription(String description);
+    public abstract void setDescription(CharSequence description);
 
-    public abstract CharSequence getClue(Database cb3Database);
+    public abstract CharSequence getClue();
 
-    public abstract void setClue(String clue);
+    public abstract void setClue(CharSequence clue);
 
     public abstract void setCheckSum(int i);
 
@@ -69,17 +70,6 @@ public abstract class AbstractWaypoint extends Coordinate {
 
     public abstract void setStart(boolean start);
 
-    public abstract boolean isMutable();
-
-    public abstract AbstractWaypoint getMutable(Database database);
-
-    public abstract void setLatLon(double latitude, double longitude);
-
-
-    public abstract void setLatitude(double latitude);
-
-    public abstract void setLongitude(double longitude);
-
     public abstract void dispose();
 
     @Override
@@ -93,4 +83,6 @@ public abstract class AbstractWaypoint extends Coordinate {
         }
         return false;
     }
+
+    public abstract void setText(GdxSqliteCursor wpTextCursor);
 }

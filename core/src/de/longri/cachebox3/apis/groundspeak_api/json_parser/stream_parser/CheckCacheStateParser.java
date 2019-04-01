@@ -61,7 +61,8 @@ public class CheckCacheStateParser {
             int cacheIndex = 0;
             boolean archived, available, premium, newCache;
             String cacheCode, cacheName;
-            int cacheType, trackableCount;
+            int cacheType;
+            short trackableCount;
 
             @Override
             public void startArray(String name) {
@@ -76,7 +77,7 @@ public class CheckCacheStateParser {
                     if (CACHETYPE.equals(name)) {
                         cacheType = (int) value;
                     } else if (TRACKABLECOUNT.equals(name)) {
-                        trackableCount = (int) value;
+                        trackableCount = (short) value;
                     }
                 } else if (name.equals("StatusCode")) {
                     if (value != 0) {
@@ -111,8 +112,6 @@ public class CheckCacheStateParser {
                             || abstractCache.isAvailable() != available
                             || abstractCache.getNumTravelbugs() != trackableCount) {
 
-                        //we must replace imutable Cache with mutable
-                        abstractCache = replaceMutable(database, caches, cacheCode);
                         abstractCache.isChanged.set(false);
                         abstractCache.setArchived(archived);
                         abstractCache.setAvailable(available);
@@ -185,14 +184,14 @@ public class CheckCacheStateParser {
         return null;
     }
 
-    public static AbstractCache replaceMutable(Database database, Array<AbstractCache> caches, String gcCode) {
-        int idx = 0;
-        for (int n = caches.size; idx < n; idx++) {
-            if (caches.get(idx).getGcCode().equals(gcCode)) break;
-        }
-        AbstractCache mutable = caches.get(idx).getMutable(database);
-        caches.set(idx, mutable);
-        return mutable;
-    }
+//    public static AbstractCache replaceMutable(Database database, Array<AbstractCache> caches, String gcCode) {
+//        int idx = 0;
+//        for (int n = caches.size; idx < n; idx++) {
+//            if (caches.get(idx).getGcCode().equals(gcCode)) break;
+//        }
+//        AbstractCache mutable = caches.get(idx).getMutable(database);
+//        caches.set(idx, mutable);
+//        return mutable;
+//    }
 
 }
