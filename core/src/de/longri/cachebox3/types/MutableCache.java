@@ -18,6 +18,7 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.utils.CharSequenceArray;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 import java.util.Date;
@@ -70,7 +71,6 @@ public class MutableCache extends AbstractCache {
 
     private short booleanStore;
 
-    private double latitude, longitude;
     private Array<Attributes> attributes;
     private CharSequence name, gcCode, placedBy, owner, gcId;
     private short rating, numTravelbugs;
@@ -100,8 +100,6 @@ public class MutableCache extends AbstractCache {
 
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
-        this.latitude = latitude;
-        this.longitude = longitude;
         type = CacheTypes.Undefined;
     }
 
@@ -146,8 +144,6 @@ public class MutableCache extends AbstractCache {
 
     public MutableCache(double latitude, double longitude, String name, CacheTypes type, String gcCode) {
         super(latitude, longitude);
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.id = 0;
         this.size = CacheSizes.regular;
         this.difficulty = 0.0f;
@@ -255,9 +251,24 @@ public class MutableCache extends AbstractCache {
         this.note = new CharSequenceArray(cursor.getString(4));
         this.solver = new CharSequenceArray(cursor.getString(5));
         this.shortDescription = new CharSequenceArray(cursor.getString(6));
-
     }
 
+    @Override
+    public void setAttributes(GdxSqliteCursor cursor) {
+        // cursor include
+//        Id                     BIGINT PRIMARY KEY
+//        AttributesPositive     BIGINT,
+//        AttributesNegative     BIGINT,
+//        AttributesPositiveHigh BIGINT DEFAULT 0,
+//        AttributesNegativeHigh BIGINT DEFAULT 0
+        this.setAttributesPositive(new DLong(cursor.getLong(3),cursor.getLong(1)));
+        this.setAttributesNegative(new DLong(cursor.getLong(4),cursor.getLong(2)));
+    }
+
+    @Override
+    public void updateBooleanStore(Database database) {
+        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
+    }
 
     @Override
     public void setLatitude(double latitude) {

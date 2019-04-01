@@ -35,7 +35,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
     private final String GET_ALL_WAYPOINTS = "SELECT * FROM Waypoints";
     private final String GET_ALL_WAYPOINTS_FROM_CACHE = "SELECT * FROM Waypoints WHERE CacheId=?";
-
+    private final String GET_WAYPOINT_TEXT = "SELECT * FROM WaypointsText WHERE GcCode=?";
 
     @Override
     public Array<AbstractWaypoint> getWaypointsFromCacheID(Database database, Long cacheID, boolean full) {
@@ -48,6 +48,14 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 MutableWaypoint wp = new MutableWaypoint(cursor);
+                if (full) {
+                    GdxSqliteCursor wpTextCursor = database.rawQuery(GET_WAYPOINT_TEXT, new String[]{String.valueOf(wp.getGcCode())});
+                    if (wpTextCursor != null) {
+                        wpTextCursor.moveToFirst();
+                        wp.setText(wpTextCursor);
+                        wpTextCursor.close();
+                    }
+                }
                 waypoints.add(wp);
                 cursor.moveToNext();
             }

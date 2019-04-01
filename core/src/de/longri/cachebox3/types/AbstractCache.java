@@ -17,6 +17,7 @@ package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 
@@ -348,4 +349,8 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract void setInfo(GdxSqliteCursor cursor);
 
     public abstract void setText(GdxSqliteCursor cursor);
+
+    public abstract void setAttributes(GdxSqliteCursor cursor);
+
+    public abstract void updateBooleanStore(Database database);
 }

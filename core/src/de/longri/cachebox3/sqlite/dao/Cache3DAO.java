@@ -229,7 +229,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         if (!cursor.isAfterLast()) {
             AbstractCache cache = new MutableCache(cursor);
             if (withWaypoints) {
-                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cacheID, true));
+                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cacheID, fullData));
             }
             cursor.close();
             return getFullData(database, cache);
@@ -256,7 +256,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         if (!cursor.isAfterLast()) {
             AbstractCache cache = new MutableCache(cursor);
             if (withWaypoints) {
-                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cache.getId(), true));
+                cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cache.getId(), fullData));
             }
             cursor.close();
             return getFullData(database, cache);
@@ -279,6 +279,14 @@ public class Cache3DAO extends AbstractCacheDAO {
         if (cursor != null) {
             cursor.moveToFirst();
             cache.setText(cursor);
+        }
+        cursor.close();
+
+        statement = "SELECT * from Attributes WHERE Id=?";
+        cursor = database.rawQuery(statement, new String[]{String.valueOf(cache.getId())});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            cache.setAttributes(cursor);
         }
         cursor.close();
         return cache;

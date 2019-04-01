@@ -145,6 +145,8 @@ class GpxFileImporterTest {
         //store changed
         cache.setFound(true);
         cache.setFavorite(true);
+        cache.updateBooleanStore(TEST_DB);
+
 
         //check if changes stored in DB
         cache = TEST_DB.getFromDbByGcCode("GC52BKF", true, true);

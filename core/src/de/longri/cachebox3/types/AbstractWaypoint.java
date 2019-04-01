@@ -18,6 +18,7 @@ package de.longri.cachebox3.types;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.CharSequenceUtil;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
 
 /**
  * Created by Longri on 19.10.2017.
@@ -82,4 +83,6 @@ public abstract class AbstractWaypoint extends Coordinate {
         }
         return false;
     }
+
+    public abstract void setText(GdxSqliteCursor wpTextCursor);
 }

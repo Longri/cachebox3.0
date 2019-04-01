@@ -14,8 +14,6 @@
  */
 package de.longri.cachebox3.locator;
 
-import java.io.Serializable;
-
 /**
  * A LatLong represents an immutable pair of latitude and longitude coordinates.
  */

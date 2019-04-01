@@ -176,7 +176,7 @@ public class Database {
     }
 
     public AbstractCache getFromDbByGcCode(String gcCode, boolean withWaypoints, boolean fullData) {
-        if (this.databaseType != DatabaseType.CacheBox3) throw new RuntimeException("Is now Cachebox Data DB");
+        if (this.databaseType != DatabaseType.CacheBox3) throw new RuntimeException("Is no Cachebox Data DB");
         return DaoFactory.CACHE_DAO.getFromDbByGcCode(this, gcCode, withWaypoints, fullData);
     }
 

@@ -38,16 +38,12 @@ public class MutableWaypoint extends AbstractWaypoint {
 
 
     public MutableWaypoint(double latitude, double longitude, long cacheId) {
-        super(0, 0);
-        this.latitude = latitude;
-        this.longitude = longitude;
+        super(latitude, longitude);
         this.cacheId = cacheId;
     }
 
     public MutableWaypoint(Database database, AbstractWaypoint waypoint) {
-        super(0, 0);
-        this.latitude = waypoint.getLatitude();
-        this.longitude = waypoint.getLongitude();
+        super(waypoint.getLatitude(), waypoint.getLongitude());
         this.cacheId = waypoint.getCacheId();
         this.gcCode = waypoint.getGcCode().toString();
         this.title = waypoint.getTitle().toString();
@@ -95,6 +91,16 @@ public class MutableWaypoint extends AbstractWaypoint {
         this.userWaypoint = false;
         this.description = description;
         this.clue = clue;
+    }
+
+    @Override
+    public void setText(GdxSqliteCursor cursor) {
+        // cursor include
+//        GcCode      NVARCHAR (12) PRIMARY KEY
+//        Description NTEXT,
+//        Clue        NTEXT
+        this.description = new CharSequenceArray(cursor.getString(1));
+        this.clue = new CharSequenceArray(cursor.getString(2));
     }
 
     @Override
