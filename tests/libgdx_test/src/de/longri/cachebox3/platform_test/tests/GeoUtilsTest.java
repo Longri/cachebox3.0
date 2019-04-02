@@ -30,7 +30,7 @@ import static de.longri.cachebox3.platform_test.Assert.assertThat;
 public class GeoUtilsTest {
     @Test
     public void parseCoordinate() throws PlatformAssertionError {
-        String coordStr = "53° 36,135N / 10° 10,017E";
+        String coordStr = "53Â° 36,135N / 10Â° 10,017E";
         Coordinate coordinate = new Coordinate(coordStr);
 
         assertThat("Coordinate must valid", coordinate.isValid());

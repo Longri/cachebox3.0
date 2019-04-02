@@ -26,14 +26,15 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.widgets.list_view.*;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ import java.util.List;
 public class PlatformTestView extends AbstractView {
     final static Logger log = LoggerFactory.getLogger(PlatformTestView.class);
 
-    private VisScrollPane scrollPane;
+    private VisTable contentTable = new VisTable();
     private ListView testListView;
     private final Array<PlatformTestViewItem> itemArray = new Array<>();
     private final TestButton button = new TestButton();
@@ -61,9 +62,8 @@ public class PlatformTestView extends AbstractView {
         super("TestUnitView");
 
         float contentWidth = (Gdx.graphics.getWidth() - 20);
-        VisTable contentTable = new VisTable();
-        scrollPane = new VisScrollPane(contentTable);
-//        contentTable.setDebug(true);
+
+        contentTable.setDebug(true);
         contentTable.setRound(false);
 
 
@@ -139,17 +139,17 @@ public class PlatformTestView extends AbstractView {
             }
         });
 
-        contentTable.add(button).width(new Value.Fixed(contentWidth)).pad(20);
+        contentTable.add(button).width(new Value.Fixed(contentWidth));
         contentTable.row();
 
         testListView = new ListView(ListViewType.VERTICAL, false);
         testListView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
         testListView.setEmptyString("No Unit Test found");
         testListView.setAdapter(null);
-        contentTable.add(testListView).width(new Value.Fixed(contentWidth)).height(new Value.Fixed(contentWidth / 2)).pad(4);
+        contentTable.add(testListView).width(new Value.Fixed(contentWidth)).expandY().fillY();
         contentTable.row();
 
-        this.addActor(scrollPane);
+        this.addActor(contentTable);
 
         fillTestList();
     }
@@ -210,7 +210,7 @@ public class PlatformTestView extends AbstractView {
 
     @Override
     protected void sizeChanged() {
-        scrollPane.setBounds(0, 0, this.getWidth(), this.getHeight());
+        contentTable.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
 
 
