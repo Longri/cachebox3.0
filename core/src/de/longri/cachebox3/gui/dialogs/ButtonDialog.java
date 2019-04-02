@@ -30,7 +30,9 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
+import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.translation.Translation;
 
 /**
@@ -47,8 +49,8 @@ public class ButtonDialog extends Window {
 
     protected OnMsgBoxClickListener msgBoxClickListener;
     private ButtonDialogStyle style;
-    private Label msgLabel;
-    private Label titleLabel;
+    private CB_Label msgLabel;
+    private CB_Label titleLabel;
     private boolean dontRenderDialogBackground = false;
     private Object data;
     private boolean mHasTitle = false;
@@ -60,6 +62,7 @@ public class ButtonDialog extends Window {
     private ObjectMap<Actor, Object> values = new ObjectMap();
     private CharSequence titleText;
     private final MessageBoxButtons buttons;
+    private final boolean extendedHeight;
 
     public static Table getMsgContentTable(CharSequence msg, MessageBoxIcon icon) {
         Skin skin = VisUI.getSkin();
@@ -72,9 +75,38 @@ public class ButtonDialog extends Window {
         }
         contentTable.defaults().space(2).padLeft(3).padRight(3);
 
-        Label msgLabel = new Label(msg, new Label.LabelStyle(style.titleFont, style.titleFontColor));
+
+        final CB_Label msgLabel = new CB_Label(msg, new Label.LabelStyle(style.titleFont, style.titleFontColor));
         msgLabel.setWrap(true);
-        contentTable.add(msgLabel).expand().fill();
+
+        msgLabel.setWidth(Gdx.graphics.getWidth() * 0.7f);
+        msgLabel.pack();
+        if (msgLabel.getHeight() > Gdx.graphics.getHeight() * 0.6f) {
+            ListView labelListView = new ListView(ListViewType.VERTICAL);
+            labelListView.setAdapter(new ListViewAdapter() {
+                @Override
+                public int getCount() {
+                    return 1;
+                }
+
+                @Override
+                public ListViewItem getView(int index) {
+                    ListViewItem item = new ListViewItem(index);
+                    item.add(msgLabel);
+                    return item;
+                }
+
+                @Override
+                public void update(ListViewItem view) {
+
+                }
+            });
+            contentTable.setDebug(true);
+            contentTable.add(labelListView).expand().fill();
+        } else {
+            contentTable.add(msgLabel).expand().fill();
+        }
+
         contentTable.pack();
         contentTable.layout();
         return contentTable;
@@ -92,6 +124,11 @@ public class ButtonDialog extends Window {
     public ButtonDialog(String name, Table contentTable, CharSequence title, MessageBoxButtons buttons, OnMsgBoxClickListener listener, ButtonDialogStyle style) {
         super(name);
         this.contentBox = contentTable;
+        boolean ext = false;
+        for (Actor act : contentTable.getChildren()) {
+            if (act instanceof ListView) ext = true;
+        }
+        this.extendedHeight = ext;
 
         if (style == null)
             style = skin.get("default", ButtonDialogStyle.class);
@@ -104,7 +141,7 @@ public class ButtonDialog extends Window {
             titleTable.defaults().padLeft(style.title.getLeftWidth()).padRight(style.title.getLeftWidth())
                     .padTop(style.title.getTopHeight()).padBottom(style.title.getBottomHeight());
             row();
-            titleLabel = new Label(titleText, new Label.LabelStyle(style.titleFont, style.titleFontColor));
+            titleLabel = new CB_Label(titleText, new Label.LabelStyle(style.titleFont, style.titleFontColor));
             titleTable.add(titleLabel).left();
         } else {
             titleLabel = null;
@@ -113,9 +150,11 @@ public class ButtonDialog extends Window {
         add(this.contentBox).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN);
         row();
 
-        add(buttonTable = new Table(skin)).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN)
-                .padBottom(CB.scaledSizes.MARGIN / 2).padTop(CB.scaledSizes.MARGIN);
+//        add(buttonTable = new Table(skin)).expand().fill().padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN)
+//                .padBottom(CB.scaledSizes.MARGIN / 2).padTop(CB.scaledSizes.MARGIN);
 
+        add(buttonTable = new Table(skin)).padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN)
+                .padBottom(CB.scaledSizes.MARGIN / 2).padTop(CB.scaledSizes.MARGIN);
 
         buttonTable.defaults().padLeft(style.footer.getLeftWidth()).padRight(style.footer.getRightWidth()).padBottom(CB.scaledSizes.MARGIN);
 
@@ -321,6 +360,7 @@ public class ButtonDialog extends Window {
 
     @Override
     public float getPrefHeight() {
+      if(extendedHeight)  return Gdx.graphics.getHeight() * 0.9f;
         return Gdx.graphics.getWidth() * 0.8f;
     }
 }

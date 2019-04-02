@@ -66,12 +66,13 @@ public class CacheboxMain extends ApplicationAdapter {
         COORD_SCALE = 1;
         EventHandler.INIT();
 
+        INCLUDE_LIST.add(CB.class.getName());
         INCLUDE_LIST.add(CacheboxMain.class.getName());
         INCLUDE_LIST.add(PlatformTestView.class.getName());
         INCLUDE_LIST.add(ViewManager.class.getName());
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
+        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
+        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
 //        INCLUDE_LIST.add(BlockUiProgress_Activity.class.getName());
 //        INCLUDE_LIST.add(CircularProgressWidget.class.getName());
