@@ -29,18 +29,20 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.widgets.list_view.ListView;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
+import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -119,7 +121,7 @@ public class PlatformTestView extends AbstractView {
                             } catch (Exception e) {
                                 log.error("TestFailed", e);
                                 annyFaildOnContainer = true;
-                                item.setState(PlatformTestViewItem.State.TEST_FAIL);
+                                item.setState(PlatformTestViewItem.State.TEST_FAIL, printStackTrace(e));
                             }
                             item.stop();
 
@@ -146,12 +148,52 @@ public class PlatformTestView extends AbstractView {
         testListView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
         testListView.setEmptyString("No Unit Test found");
         testListView.setAdapter(null);
+        testListView.setSelectable(SelectableType.SINGLE);
+        testListView.addSelectionChangedEventListner(new SelectionChangedEvent() {
+            @Override
+            public void selectionChanged() {
+                PlatformTestViewItem item = (PlatformTestViewItem) testListView.getSelectedItem();
+                if (item == null) return;
+                final String msg = item.getMsg();
+                if (msg == null) return;
+                CB.postOnNextGlThread(new NamedRunnable("showMsgBox") {
+                    @Override
+                    public void run() {
+                        MessageBox.show("MessageBox with \n"+msg, null, MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+//                        if (msg != null) {
+//                            MessageBox.show(msg, "MessageBoxTitle", MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+//                        }
+                    }
+                });
+                item.setSelected(false);
+                testListView.getSelectedItems().clear();
+            }
+        });
+
+
         contentTable.add(testListView).width(new Value.Fixed(contentWidth)).expandY().fillY();
         contentTable.row();
 
         this.addActor(contentTable);
 
         fillTestList();
+    }
+
+    private String printStackTrace(Throwable t) {
+        StringBuffer buf = new StringBuffer(32);
+        try {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            t.printStackTrace(pw);
+
+            buf.append(sw.toString()); // stack trace as a string
+
+            sw.close();
+            pw.close();
+        } catch (IOException e) {
+            t.printStackTrace();
+        }
+        return buf.toString();
     }
 
     private void fillTestList() {

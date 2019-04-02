@@ -46,6 +46,7 @@ public class PlatformTestViewItem extends ListViewItem {
     public final Type type;
     public final TimeLabel timeLabel = new TimeLabel(false);
 
+    private String testMsg = null;
 
     public PlatformTestViewItem(int index, Type type, String containerName) {
         this(index, type, containerName, null);
@@ -83,9 +84,18 @@ public class PlatformTestViewItem extends ListViewItem {
     }
 
     public void setState(State state) {
-        testStateWidget.setState(state);
+        setState(state, null);
     }
 
+    public void setState(State state, String msg) {
+        testStateWidget.setState(state);
+        this.testMsg = msg;
+    }
+
+
+    public String getMsg() {
+        return this.testMsg ;
+    }
     public void start() {
         timeLabel.start();
     }

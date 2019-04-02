@@ -128,9 +128,7 @@ public class main {
                     throw new RuntimeException("Can't generate/(delete) target file:" + source.name());
                 }
             }
-            json.writeObjectStart("de.longri.cachebox3.platform_test.tests." + source.nameWithoutExtension());
-            targetFileHandle.writeString(generateTestFile(source, json), false, "utf-8");
-            json.writeObjectEnd();
+            targetFileHandle.writeString(generateTestFile(source, json), false);
         }
         json.writeObjectEnd();
         String jsonString = stringWriter.toString();
@@ -215,6 +213,7 @@ public class main {
         boolean assertFalseReplace = false;
         boolean assertNotNullReplace = false;
         boolean publicClassReplace = false;
+        boolean fileObjStartWritten = false;
 
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
@@ -266,7 +265,7 @@ public class main {
                 assertNotNullReplace = true;
                 sb.appendLine(ASSERT_NOT_NULL_LINE);
                 continue;
-            }  else if (!publicClassReplace && line.contains(CLASS)) {
+            } else if (!publicClassReplace && line.contains(CLASS)) {
                 publicClassReplace = true;
                 //maybe class is public
                 if (line.contains(PUBLIC + CLASS)) {
@@ -288,6 +287,12 @@ public class main {
                     int pos = line.indexOf(VOID) + VOID.length();
                     int nameEnd = line.indexOf("(", pos);
                     String methodName = line.substring(pos, nameEnd);
+
+                    if (!fileObjStartWritten) {
+                        json.writeObjectStart("de.longri.cachebox3.platform_test.tests." + fileHandle.nameWithoutExtension());
+                        fileObjStartWritten = true;
+                    }
+
                     json.writeObjectStart(methodName);
                     json.writeObjectEnd();
                 }
@@ -300,8 +305,8 @@ public class main {
                     if (lines[j].contains("assertThat(") ||
                             lines[j].contains("assertEquals(") ||
                             lines[j].contains("assertTrue(") ||
-                            lines[j].contains("assertFalse(")||
-                            lines[j].contains("assertNotNull(")||
+                            lines[j].contains("assertFalse(") ||
+                            lines[j].contains("assertNotNull(") ||
                             lines[j].contains("assertAbstractViewSerialation(")) {
                         hasAssertCall = true;
                         break;
@@ -328,6 +333,7 @@ public class main {
             sb.appendLine(line);
         }
 
+        if (fileObjStartWritten) json.writeObjectEnd();
 
         return sb.toString();
     }

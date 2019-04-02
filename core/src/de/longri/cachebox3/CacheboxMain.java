@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.platform_test.gui.PlatformTestView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -66,7 +67,7 @@ public class CacheboxMain extends ApplicationAdapter {
         EventHandler.INIT();
 
         INCLUDE_LIST.add(CacheboxMain.class.getName());
-        INCLUDE_LIST.add(CB.class.getName());
+        INCLUDE_LIST.add(PlatformTestView.class.getName());
         INCLUDE_LIST.add(ViewManager.class.getName());
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
 

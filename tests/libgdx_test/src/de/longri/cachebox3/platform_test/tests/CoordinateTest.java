@@ -50,12 +50,12 @@ public class CoordinateTest {
 
     @Test
     public void stringConstructor() throws PlatformAssertionError {
-        String str = "N 48Â° 40.441 E 009Â° 23.470";
+        String str = "N 48° 40.441 E 009° 23.470";
         Coordinate coord = new Coordinate(str);
         assertEquals(48.674017, coord.getLatitude());
         assertEquals(9.391167, coord.getLongitude());
 
-        str = "52Â°34â€²49.7316â€³N 13Â°23â€²8.3364â€³E";
+        str = "52°34′49.7316″N 13°23′8.3364″E";
         coord = new Coordinate(str);
         assertEquals(52.580481, coord.getLatitude());
         assertEquals(13.385649, coord.getLongitude());
@@ -64,15 +64,15 @@ public class CoordinateTest {
 
     @Test
     public void equalsTest() throws PlatformAssertionError {
-        Coordinate corrd1 = new Coordinate("N 52Â° 36.307 E 013Â° 21.517");
-        Coordinate corrd2 = new Coordinate("N 52Â° 36.435 E 013Â° 21.821");
-        Coordinate corrd3 = new Coordinate("N 52Â° 36.045 E 013Â° 21.760");
+        Coordinate corrd1 = new Coordinate("N 52° 36.307 E 013° 21.517");
+        Coordinate corrd2 = new Coordinate("N 52° 36.435 E 013° 21.821");
+        Coordinate corrd3 = new Coordinate("N 52° 36.045 E 013° 21.760");
 
-        Coordinate corrd4 = new Coordinate("N 52Â° 36.307 E 013Â° 21.517");
-        Coordinate corrd5 = new Coordinate("N 52Â° 36.435 E 013Â° 21.821");
-        Coordinate corrd6 = new Coordinate("N 52Â° 36.045 E 013Â° 21.760");
+        Coordinate corrd4 = new Coordinate("N 52° 36.307 E 013° 21.517");
+        Coordinate corrd5 = new Coordinate("N 52° 36.435 E 013° 21.821");
+        Coordinate corrd6 = new Coordinate("N 52° 36.045 E 013° 21.760");
 
-        Coordinate corrd7 = new Coordinate("N 52Â° 36.045000005 E 013Â° 21.760000002");
+        Coordinate corrd7 = new Coordinate("N 52° 36.045000005 E 013° 21.760000002");
 
 
         assertTrue(corrd1.equals(corrd1), "Coordinates.equals() must be true");

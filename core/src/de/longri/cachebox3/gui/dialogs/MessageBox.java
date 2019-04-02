@@ -29,7 +29,7 @@ public class MessageBox {
 
 
     public static void show(CharSequence message) {
-        show(message, null, MessageBoxButtons.OK, null, null);
+        show(message, "", MessageBoxButtons.OK, null, null);
     }
 
     public static void show(final CharSequence message, final CharSequence title, final MessageBoxButtons buttons, final MessageBoxIcon icon,
