@@ -65,9 +65,13 @@ public class ButtonDialog extends Window {
     private final boolean extendedHeight;
 
     public static Table getMsgContentTable(CharSequence msg, MessageBoxIcon icon) {
+        return getMsgContentTable(msg, icon, null);
+    }
+
+    public static Table getMsgContentTable(CharSequence msg, MessageBoxIcon icon, ButtonDialogStyle style) {
         Skin skin = VisUI.getSkin();
 
-        ButtonDialogStyle style = skin.get("default", ButtonDialogStyle.class);
+        if (style == null) style = skin.get("default", ButtonDialogStyle.class);
         Table contentTable = new Table(skin);
         if (icon != MessageBoxIcon.None && icon != null) {
             Image iconImage = new Image(getIcon(icon));
@@ -91,7 +95,18 @@ public class ButtonDialog extends Window {
 
                 @Override
                 public ListViewItem getView(int index) {
-                    ListViewItem item = new ListViewItem(index);
+                    ListViewItem item = new ListViewItem(index) {
+                        @Override
+                        public void layout() {
+                            msgLabel.setBounds(0, 0, this.getWidth(), this.getHeight());
+                        }
+
+                        @Override
+                        public void sizeChanged() {
+                            msgLabel.setDebug(true);
+                            msgLabel.setBounds(0, 0, this.getWidth(), this.getHeight());
+                        }
+                    };
                     item.add(msgLabel);
                     return item;
                 }
@@ -360,7 +375,7 @@ public class ButtonDialog extends Window {
 
     @Override
     public float getPrefHeight() {
-      if(extendedHeight)  return Gdx.graphics.getHeight() * 0.9f;
+        if (extendedHeight) return Gdx.graphics.getHeight() * 0.9f;
         return Gdx.graphics.getWidth() * 0.8f;
     }
 }

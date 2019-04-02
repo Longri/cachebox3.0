@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.views;
 
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.platform_test.RunOnGL;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -64,7 +65,7 @@ public class AbstractViewSerialiseTest {
         DescriptionView newDescriptionView = (DescriptionView) TestUtils.assertAbstractViewSerialation(descriptionView, DescriptionView.class);
     }
 
-    @Test
+    @Test @RunOnGL
     public void DraftsViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
@@ -72,20 +73,12 @@ public class AbstractViewSerialiseTest {
         DraftsView newDraftsView = (DraftsView) TestUtils.assertAbstractViewSerialation(draftsView, DraftsView.class);
     }
 
-    @Test
+    @Test @RunOnGL
     public void LogListViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         LogListView logListView = new LogListView();
         LogListView newLogListView = (LogListView) TestUtils.assertAbstractViewSerialation(logListView, LogListView.class);
-    }
-
-    @Test
-    public void MapViewTest() {
-        TestUtils.initialVisUI();
-        // About view have no member! check only serialization/deserialization!
-        MapView mapView = new MapView();
-        MapView newMapView = (MapView) TestUtils.assertAbstractViewSerialation(mapView, MapView.class);
     }
 
     @Test
@@ -120,7 +113,7 @@ public class AbstractViewSerialiseTest {
         SpoilerView newSpoilerView = (SpoilerView) TestUtils.assertAbstractViewSerialation(spoilerView, SpoilerView.class);
     }
 
-    @Test
+    @Test @RunOnGL
     public void TestViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!

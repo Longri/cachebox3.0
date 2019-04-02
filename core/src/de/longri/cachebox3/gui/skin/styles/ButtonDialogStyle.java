@@ -30,4 +30,17 @@ public class ButtonDialogStyle {
     public Drawable stageBackground;
     public BitmapFont titleFont;
     public Color titleFontColor;
+
+    public ButtonDialogStyle() {
+    }
+
+    public ButtonDialogStyle(ButtonDialogStyle other) {
+        title = other.title;
+        header = other.header;
+        center = other.center;
+        footer = other.footer;
+        stageBackground = other.stageBackground;
+        titleFont = other.titleFont;
+        titleFontColor = other.titleFontColor;
+    }
 }

@@ -18,6 +18,7 @@ package de.longri.cachebox3.platform_test.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
@@ -25,14 +26,14 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
-import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 18.03.2019.
@@ -85,7 +87,7 @@ public class PlatformTestView extends AbstractView {
                         }
 
                         PlatformTestViewItem actContainer = null;
-                        boolean annyFaildOnContainer = false;
+                        AtomicBoolean annyFaildOnContainer = new AtomicBoolean(false);
 
                         int count = 0;
                         for (PlatformTestViewItem item : itemArray) {
@@ -98,7 +100,7 @@ public class PlatformTestView extends AbstractView {
                             }
 
                             if (item.type == PlatformTestViewItem.Type.CONTAINER) {
-                                if (annyFaildOnContainer) {
+                                if (annyFaildOnContainer.get()) {
                                     actContainer.setState(PlatformTestViewItem.State.TEST_FAIL);
                                     anyTestFaild = true;
                                 } else {
@@ -106,7 +108,7 @@ public class PlatformTestView extends AbstractView {
                                 }
                                 actContainer.stop();
                                 actContainer = item;
-                                annyFaildOnContainer = false;
+                                annyFaildOnContainer.set(false);
                                 continue;
                             }
 
@@ -116,18 +118,44 @@ public class PlatformTestView extends AbstractView {
 
                                 Method method = ClassReflection.getMethod(refClass, item.testName);
                                 method.setAccessible(true);
-                                method.invoke(instance);
-                                item.setState(PlatformTestViewItem.State.TEST_OK);
+
+                                if (item.runOnGL) {
+                                    CB.postOnGlThread(new NamedRunnable("PlatformTestOnGL") {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                method.invoke(instance);
+                                                item.setState(PlatformTestViewItem.State.TEST_OK);
+                                            } catch (ReflectionException e) {
+                                                log.error("TestFailed", e);
+                                                annyFaildOnContainer.set(true);
+                                                item.setState(PlatformTestViewItem.State.TEST_FAIL, printStackTrace(e));
+                                            }
+
+                                        }
+                                    }, true);
+                                } else {
+                                    method.invoke(instance);
+                                    item.setState(PlatformTestViewItem.State.TEST_OK);
+                                }
                             } catch (Exception e) {
                                 log.error("TestFailed", e);
-                                annyFaildOnContainer = true;
+                                annyFaildOnContainer.set(true);
                                 item.setState(PlatformTestViewItem.State.TEST_FAIL, printStackTrace(e));
                             }
+
+//                            while (wait.get()) {
+//                                try {
+//                                    Thread.sleep(100);
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
                             item.stop();
 
                         }
                         actContainer.stop();
-                        if (annyFaildOnContainer) {
+                        if (annyFaildOnContainer.get()) {
                             actContainer.setState(PlatformTestViewItem.State.TEST_FAIL);
                             anyTestFaild = true;
                         } else {
@@ -159,10 +187,16 @@ public class PlatformTestView extends AbstractView {
                 CB.postOnNextGlThread(new NamedRunnable("showMsgBox") {
                     @Override
                     public void run() {
-                        MessageBox.show("MessageBox with \n"+msg, null, MessageBoxButtons.OK, MessageBoxIcon.Error, null);
-//                        if (msg != null) {
-//                            MessageBox.show(msg, "MessageBoxTitle", MessageBoxButtons.OK, MessageBoxIcon.Error, null);
-//                        }
+                        if (msg != null) {
+
+                            //post msg with smaller font
+                            ButtonDialogStyle buttonDialogStyle = new ButtonDialogStyle(VisUI.getSkin().get("default", ButtonDialogStyle.class));
+                            buttonDialogStyle.titleFont = CB.getSkin().getFont("AboutInfo");
+                            ButtonDialog dialog = new ButtonDialog("PlatformTestMassageDialog",
+                                    ButtonDialog.getMsgContentTable(msg, null, buttonDialogStyle), null,
+                                    MessageBoxButtons.OK, null, buttonDialogStyle);
+                            dialog.show();
+                        }
                     }
                 });
                 item.setSelected(false);
@@ -181,10 +215,17 @@ public class PlatformTestView extends AbstractView {
 
     private String printStackTrace(Throwable t) {
         StringBuffer buf = new StringBuffer(32);
+
+        Throwable printTrowable = null;
+        for (Throwable e = t.getCause(); e != null; e = e.getCause()) {
+            printTrowable = e;
+        }
+
+
         try {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
-            t.printStackTrace(pw);
+            printTrowable.printStackTrace(pw);
 
             buf.append(sw.toString()); // stack trace as a string
 
@@ -193,7 +234,11 @@ public class PlatformTestView extends AbstractView {
         } catch (IOException e) {
             t.printStackTrace();
         }
-        return buf.toString();
+        String result = buf.toString();
+        if (result.length() > 500) {
+            result = result.substring(0, 500);
+        }
+        return result;
     }
 
     private void fillTestList() {
@@ -213,7 +258,8 @@ public class PlatformTestView extends AbstractView {
             for (int i = 0; i < jsonValue.size; i++) {
                 JsonValue child = jsonValue.get(i);
                 log.debug("   --" + child.name);
-                itemArray.add(new PlatformTestViewItem(idx++, PlatformTestViewItem.Type.TEST, jsonValue.name, child.name));
+                itemArray.add(new PlatformTestViewItem(idx++, PlatformTestViewItem.Type.TEST, jsonValue.name,
+                        child.name, (child.child() != null && child.child().asString().equals("RunOnGL"))));
             }
         }
         button.setTestCount(itemArray.size);

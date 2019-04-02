@@ -312,19 +312,19 @@ public class MapView extends AbstractView {
         log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
 
 
-        CacheboxMain.drawMap = true;
+        CacheboxMain.drawMap.set(true);
         map = new CacheboxMapAdapter() {
 
             @Override
             public void beginFrame() {
-                if (!CacheboxMain.drawMap) return;
+                if (!CacheboxMain.drawMap.get()) return;
                 super.beginFrame();
                 if (positionChangedHandler != null) positionChangedHandler.update(Gdx.graphics.getDeltaTime());
             }
 
             @Override
             public void onMapEvent(Event e, final MapPosition mapPosition) {
-                if (!CacheboxMain.drawMap) return;
+                if (!CacheboxMain.drawMap.get()) return;
                 super.onMapEvent(e, mapPosition);
                 if (e == Map.MOVE_EVENT) {
 //                    log.debug("Map.MOVE_EVENT");
@@ -438,7 +438,7 @@ public class MapView extends AbstractView {
     @Override
     public void dispose() {
         log.debug("Dispose MapView");
-        CacheboxMain.drawMap = false;
+        CacheboxMain.drawMap.set(false);
 
         positionChangedHandler.dispose();
         positionChangedHandler = null;

@@ -22,6 +22,7 @@ package de.longri.cachebox3.platform_test.tests;
 import de.longri.cachebox3.gui.views.*;
 
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.platform_test.RunOnGL;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
 
@@ -71,7 +72,7 @@ public class AbstractViewSerialiseTest {
         DescriptionView newDescriptionView = (DescriptionView) TestUtils.assertAbstractViewSerialation(descriptionView, DescriptionView.class);
     }
 
-    @Test
+    @Test @RunOnGL
     public void DraftsViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
@@ -79,22 +80,14 @@ public class AbstractViewSerialiseTest {
         DraftsView newDraftsView = (DraftsView) TestUtils.assertAbstractViewSerialation(draftsView, DraftsView.class);
     }
 
-    @Test
+    @Test @RunOnGL
     public void LogListViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
         LogListView logListView = new LogListView();
         LogListView newLogListView = (LogListView) TestUtils.assertAbstractViewSerialation(logListView, LogListView.class);
     }
-
-    @Test
-    public void MapViewTest() throws PlatformAssertionError {
-        TestUtils.initialVisUI();
-        // About view have no member! check only serialization/deserialization!
-        MapView mapView = new MapView();
-        MapView newMapView = (MapView) TestUtils.assertAbstractViewSerialation(mapView, MapView.class);
-    }
-
+    
     @Test
     public void NotesViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
@@ -127,7 +120,7 @@ public class AbstractViewSerialiseTest {
         SpoilerView newSpoilerView = (SpoilerView) TestUtils.assertAbstractViewSerialation(spoilerView, SpoilerView.class);
     }
 
-    @Test
+    @Test @RunOnGL
     public void TestViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!

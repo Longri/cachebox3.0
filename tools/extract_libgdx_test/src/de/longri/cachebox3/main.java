@@ -294,6 +294,9 @@ public class main {
                     }
 
                     json.writeObjectStart(methodName);
+                    if (lines[i - 1].contains("@RunOnGL")) {
+                        json.writeValue("@", "RunOnGL");
+                    }
                     json.writeObjectEnd();
                 }
 

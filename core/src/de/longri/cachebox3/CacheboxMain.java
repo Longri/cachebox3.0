@@ -51,6 +51,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.NumberFormat;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
@@ -111,7 +112,7 @@ public class CacheboxMain extends ApplicationAdapter {
     protected int FpsInfoPos = 0;
 
     protected Sprite FpsInfoSprite;
-    public static boolean drawMap = false;
+    public static AtomicBoolean drawMap = new AtomicBoolean(false);
     public MapRenderer mMapRenderer;
 
     private BitStore instanceStateReader;
@@ -207,7 +208,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
         CB.stateTime += Gdx.graphics.getDeltaTime();
 
-        if (drawMap && mMapRenderer != null && CB.stageManager.isMainStageOnlyDrawing()) {
+        if (drawMap.get() && mMapRenderer != null && CB.stageManager.isMainStageOnlyDrawing()) {
             GLState.enableVertexArrays(-1, -1);
 
             // set map position and size

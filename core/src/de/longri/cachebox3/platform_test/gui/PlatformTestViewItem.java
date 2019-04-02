@@ -16,9 +16,7 @@
 package de.longri.cachebox3.platform_test.gui;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
@@ -45,17 +43,18 @@ public class PlatformTestViewItem extends ListViewItem {
     public final String testName;
     public final Type type;
     public final TimeLabel timeLabel = new TimeLabel(false);
+    public final boolean runOnGL;
 
     private String testMsg = null;
 
     public PlatformTestViewItem(int index, Type type, String containerName) {
-        this(index, type, containerName, null);
+        this(index, type, containerName, null, false);
     }
 
-    public PlatformTestViewItem(int index, Type type, String containerName, String testName) {
+    public PlatformTestViewItem(int index, Type type, String containerName, String testName, boolean runOnGL) {
         super(index);
         this.type = type;
-
+        this.runOnGL = runOnGL;
         this.testName = testName;
         this.className = containerName;
         int pos = containerName.lastIndexOf('.');
@@ -94,8 +93,9 @@ public class PlatformTestViewItem extends ListViewItem {
 
 
     public String getMsg() {
-        return this.testMsg ;
+        return this.testMsg;
     }
+
     public void start() {
         timeLabel.start();
     }
