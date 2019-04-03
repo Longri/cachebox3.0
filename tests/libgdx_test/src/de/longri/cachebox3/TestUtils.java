@@ -77,7 +77,7 @@ public class TestUtils {
         FileHandle file = Gdx.files.absolute(path);
 
         if (!file.exists()) {
-            file = Gdx.files.absolute("platform_test/"+path);
+            file = Gdx.files.absolute("platform_test/" + path);
         }
         if (!file.exists()) throw new FileNotFoundException("can't find file: " + path);
 
@@ -106,7 +106,7 @@ public class TestUtils {
         FileHandle file = Gdx.files.absolute(path);
 
         if (!file.exists()) {
-            file = Gdx.files.absolute("platform_test/"+path);
+            file = Gdx.files.absolute("platform_test/" + path);
         }
         if (!file.exists()) throw new FileNotFoundException("can't find file: " + path);
         return file.read();
