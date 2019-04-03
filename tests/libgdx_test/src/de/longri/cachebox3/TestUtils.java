@@ -44,7 +44,7 @@ public class TestUtils {
         return fileHandle;
     }
 
-    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz)throws PlatformAssertionError {
+    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz) throws PlatformAssertionError {
         de.longri.serializable.BitStore store = abstractView.saveInstanceState();
         byte[] bytes = store.getArray();
 
@@ -74,15 +74,14 @@ public class TestUtils {
     }
 
     public static String getResourceRequestString(String path, String apiKey) throws IOException {
-        File file = new File(path);
+        FileHandle file = Gdx.files.absolute(path);
 
         if (!file.exists()) {
-            //try set /tests path
-            path = "tests/" + path;
-            file = new File(path);
+            file = Gdx.files.absolute("platform_test/"+path);
         }
+        if (!file.exists()) throw new FileNotFoundException("can't find file: " + path);
 
-        InputStream stream = getResourceRequestStream(path);
+        InputStream stream = file.read();
 
         byte[] b = new byte[(int) file.length()];
         int len = b.length;
@@ -104,16 +103,12 @@ public class TestUtils {
     }
 
     public static InputStream getResourceRequestStream(String path) throws FileNotFoundException {
-        File file = new File(path);
+        FileHandle file = Gdx.files.absolute(path);
 
         if (!file.exists()) {
-            //try set /core path
-            path = "tests/" + path;
-            file = new File(path);
+            file = Gdx.files.absolute("platform_test/"+path);
         }
-
-        FileInputStream stream = new FileInputStream(file);
-
-        return stream;
+        if (!file.exists()) throw new FileNotFoundException("can't find file: " + path);
+        return file.read();
     }
 }

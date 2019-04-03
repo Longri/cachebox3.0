@@ -43,21 +43,22 @@ public class TestButton extends Button {
     final VisLabel labelActName;
     private int testCount;
     private final VisLabel labelCount;
+    private final CB_ProgressBar progressBar;
 
 
-    TestButton() {
+    TestButton(int size) {
         super(VisUI.getSkin().get(VisTextButton.VisTextButtonStyle.class));
-
+        testCount = size;
 
         VisTable contentTable = new VisTable();
         VisTable rightContentTable = new VisTable();
         VisLabel labelTitle = new VisLabel("Run Platform Tests");
-        labelCount = new VisLabel("0/100", "AboutInfo", Color.BLACK);
+        labelCount = new VisLabel("0/" + size, "AboutInfo", Color.BLACK);
         labelTime = new TimeLabel(true);
         labelActName = new VisLabel("            ", "AboutInfo", Color.BLACK);
 
 
-        CB_ProgressBar progressBar = new CB_ProgressBar(0, 100, 1, false, "default");
+        progressBar = new CB_ProgressBar(0, size, 1, false, "default");
 
         rightContentTable.defaults().pad(CB.scaledSizes.MARGIN);
         rightContentTable.add(labelTitle);
@@ -93,23 +94,19 @@ public class TestButton extends Button {
 
     public void testFinish(boolean anyTestFaild) {
         labelTime.stop();
-        if (anyTestFaild) {
-
-        } else {
-            circularProgressWidget.setVisible(false);
-        }
+        circularProgressWidget.setVisible(false);
     }
 
     public void setActTestName(String name) {
         labelActName.setText(name);
     }
 
-    public void setTestCount(int size) {
-        labelCount.setText("0/" + size);
-        testCount = size;
+    public void setreadyTestCount(int count) {
+        labelCount.setText(count + "/" + testCount);
+        progressBar.setValue(count);
     }
 
-    public void setreadyTestCount(int count) {
+    public void setreadyTestCountIO(int count) {
         labelCount.setText(count + "/" + testCount);
     }
 }

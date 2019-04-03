@@ -73,6 +73,7 @@ public class main {
     private static final String ASSET_DIR = "./launcher/android/assets/platform_test/";
     private static final String TEST_JSON = "tests.json";
     private static final String TEST_SRC_DIR = "./tests/junit_test/src";
+    private static final String TEST_RESOURCES_DIR = "./tests/junit_test/testsResources";
     private static final String TEST_TARGET_DIR = "./tests/libgdx_test/src/de/longri/cachebox3/platform_test/tests";
     private static final String TARGET_PACKAGE_LINE = "package de.longri.cachebox3.platform_test.tests;";
     private static final String GENERATE = "\n\n//  Don't modify this file, it's created by tool 'extract_libgdx_test\n\n";
@@ -114,6 +115,9 @@ public class main {
             }
         }
 
+        //copy resources
+        FileHandle testResourcesDir = Gdx.files.absolute(TEST_RESOURCES_DIR);
+        testResourcesDir.copyTo(assetDir);
 
         StringWriter stringWriter = new StringWriter();
         JsonWriter writer = new JsonWriter(stringWriter);
@@ -141,7 +145,7 @@ public class main {
         FileHandle assetDir = Gdx.files.absolute(ASSET_DIR);
         assetDir.deleteDirectory();
 
-        // delete asset dir for Android
+        // delete asset dir for Desktop
         FileHandle assetDirDesk = Gdx.files.absolute("./launcher/desktop/workingDir/platform_test");
         assetDirDesk.deleteDirectory();
 

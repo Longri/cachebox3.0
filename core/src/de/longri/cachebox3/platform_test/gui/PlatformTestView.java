@@ -60,16 +60,21 @@ public class PlatformTestView extends AbstractView {
     private VisTable contentTable = new VisTable();
     private ListView testListView;
     private final Array<PlatformTestViewItem> itemArray = new Array<>();
-    private final TestButton button = new TestButton();
+    private final TestButton button;
 
     public PlatformTestView() {
         super("TestUnitView");
 
         float contentWidth = (Gdx.graphics.getWidth() - 20);
 
-        contentTable.setDebug(true);
-        contentTable.setRound(false);
+        fillTestList();
 
+        int count = 0;
+        for (PlatformTestViewItem item : itemArray) {
+            if (item.testName != null) count++;
+        }
+
+        button = new TestButton(count);
 
         // add button for start Unit-test
         button.addListener(new ClickListener() {
@@ -90,9 +95,9 @@ public class PlatformTestView extends AbstractView {
                         AtomicBoolean annyFaildOnContainer = new AtomicBoolean(false);
 
                         int count = 0;
+                        int countIO = 0;
                         for (PlatformTestViewItem item : itemArray) {
                             item.start();
-                            button.setreadyTestCount(++count);
                             if (item.testName != null) button.setActTestName(item.testName);
                             if (actContainer == null && item.type == PlatformTestViewItem.Type.CONTAINER) {
                                 actContainer = item;
@@ -111,7 +116,7 @@ public class PlatformTestView extends AbstractView {
                                 annyFaildOnContainer.set(false);
                                 continue;
                             }
-
+                            button.setreadyTestCount(++count);
                             try {
                                 Class refClass = ClassReflection.forName(actContainer.className);
                                 Object instance = ClassReflection.newInstance(refClass);
@@ -138,21 +143,13 @@ public class PlatformTestView extends AbstractView {
                                     method.invoke(instance);
                                     item.setState(PlatformTestViewItem.State.TEST_OK);
                                 }
+                                button.setreadyTestCountIO(countIO++);
                             } catch (Exception e) {
                                 log.error("TestFailed", e);
                                 annyFaildOnContainer.set(true);
                                 item.setState(PlatformTestViewItem.State.TEST_FAIL, printStackTrace(e));
                             }
-
-//                            while (wait.get()) {
-//                                try {
-//                                    Thread.sleep(100);
-//                                } catch (InterruptedException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
                             item.stop();
-
                         }
                         actContainer.stop();
                         if (annyFaildOnContainer.get()) {
@@ -161,7 +158,6 @@ public class PlatformTestView extends AbstractView {
                         } else {
                             actContainer.setState(PlatformTestViewItem.State.TEST_OK);
                         }
-
                         button.testFinish(anyTestFaild);
                     }
 
@@ -175,7 +171,6 @@ public class PlatformTestView extends AbstractView {
         testListView = new ListView(ListViewType.VERTICAL, false);
         testListView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
         testListView.setEmptyString("No Unit Test found");
-        testListView.setAdapter(null);
         testListView.setSelectable(SelectableType.SINGLE);
         testListView.addSelectionChangedEventListner(new SelectionChangedEvent() {
             @Override
@@ -203,6 +198,22 @@ public class PlatformTestView extends AbstractView {
                 testListView.getSelectedItems().clear();
             }
         });
+        testListView.setAdapter(new ListViewAdapter() {
+            @Override
+            public int getCount() {
+                return itemArray.size;
+            }
+
+            @Override
+            public ListViewItem getView(int index) {
+                return itemArray.get(index);
+            }
+
+            @Override
+            public void update(ListViewItem view) {
+
+            }
+        });
 
 
         contentTable.add(testListView).width(new Value.Fixed(contentWidth)).expandY().fillY();
@@ -210,7 +221,7 @@ public class PlatformTestView extends AbstractView {
 
         this.addActor(contentTable);
 
-        fillTestList();
+
     }
 
     private String printStackTrace(Throwable t) {
@@ -262,23 +273,6 @@ public class PlatformTestView extends AbstractView {
                         child.name, (child.child() != null && child.child().asString().equals("RunOnGL"))));
             }
         }
-        button.setTestCount(itemArray.size);
-        testListView.setAdapter(new ListViewAdapter() {
-            @Override
-            public int getCount() {
-                return itemArray.size;
-            }
-
-            @Override
-            public ListViewItem getView(int index) {
-                return itemArray.get(index);
-            }
-
-            @Override
-            public void update(ListViewItem view) {
-
-            }
-        });
     }
 
     @Override
