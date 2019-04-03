@@ -22,9 +22,12 @@ import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
-import org.apache.commons.codec.Charsets;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static de.longri.cachebox3.platform_test.Assert.assertNotNull;
 import static de.longri.cachebox3.platform_test.Assert.assertTrue;
@@ -40,7 +43,8 @@ public class TestUtils {
     }
 
     public static FileHandle getResourceFileHandle(String path, boolean mustexist) {
-        FileHandle fileHandle = Gdx.files.absolute(path);
+        boolean iOS = CanvasAdapter.platform == Platform.IOS;
+        FileHandle fileHandle = iOS ? Gdx.files.internal(path) : Gdx.files.absolute(path);
         return fileHandle;
     }
 
@@ -74,10 +78,12 @@ public class TestUtils {
     }
 
     public static String getResourceRequestString(String path, String apiKey) throws IOException {
-        FileHandle file = Gdx.files.absolute(path);
+        boolean iOS = CanvasAdapter.platform == Platform.IOS;
+
+        FileHandle file = iOS ? Gdx.files.internal(path) : Gdx.files.absolute(path);
 
         if (!file.exists()) {
-            file = Gdx.files.absolute("platform_test/" + path);
+            file = iOS ? Gdx.files.internal("platform_test/" + path) : Gdx.files.absolute("platform_test/" + path);
         }
         if (!file.exists()) throw new FileNotFoundException("can't find file: " + path);
 
@@ -94,7 +100,7 @@ public class TestUtils {
             }
             total += result;
         }
-        String expected = new String(b, Charsets.UTF_8);
+        String expected = new String(b);
         if (apiKey != null && !apiKey.isEmpty()) {
             expected = expected.replace("\"AccessToken\":\"+DummyKEY\"",
                     "\"AccessToken\":\"" + apiKey + "\"");
@@ -103,10 +109,12 @@ public class TestUtils {
     }
 
     public static InputStream getResourceRequestStream(String path) throws FileNotFoundException {
-        FileHandle file = Gdx.files.absolute(path);
+        boolean iOS = CanvasAdapter.platform == Platform.IOS;
+
+        FileHandle file = iOS ? Gdx.files.internal(path) : Gdx.files.absolute(path);
 
         if (!file.exists()) {
-            file = Gdx.files.absolute("platform_test/" + path);
+            file = iOS ? Gdx.files.internal("platform_test/" + path) : Gdx.files.absolute("platform_test/" + path);
         }
         if (!file.exists()) throw new FileNotFoundException("can't find file: " + path);
         return file.read();

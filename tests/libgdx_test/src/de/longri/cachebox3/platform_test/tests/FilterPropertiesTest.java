@@ -837,7 +837,7 @@ public class FilterPropertiesTest {
 
         // Cachelist is Async loading, so wait a moment
         try {
-            Thread.sleep(4000);
+            Thread.sleep(400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

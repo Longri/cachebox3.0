@@ -19,8 +19,8 @@
         </resource>
     </resources>
     <forceLinkClasses>
-        <pattern>de.longri.cachebox3.*</pattern>
-        <pattern>com.kotcrab.vis.*</pattern>
+        <pattern>de.longri.**</pattern>
+        <pattern>com.kotcrab.vis.**</pattern>
         <pattern>com.badlogic.gdx.scenes.scene2d.ui.*</pattern>
         <pattern>com.badlogic.gdx.graphics.g3d.particles.**</pattern>
         <pattern>com.android.okhttp.HttpHandler</pattern>
