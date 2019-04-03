@@ -29,13 +29,12 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
@@ -179,7 +178,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
                 AbstractCache actCache = EventHandler.getSelectedCache();
                 if (actCache != null) {
-                    final SearchGC searchGC = new SearchGC(Database.Data, GroundspeakAPI.getAccessToken(), actCache.getGcCode().toString(),
+                    final SearchGC searchGC = new SearchGC(Database.Data, GroundspeakLiveAPI.getAccessToken(), actCache.getGcCode().toString(),
                             new ICancel() {
                                 @Override
                                 public boolean cancel() {

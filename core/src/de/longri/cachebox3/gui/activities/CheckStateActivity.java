@@ -30,7 +30,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.ActivityBase;
@@ -41,7 +41,6 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
@@ -163,7 +162,7 @@ public class CheckStateActivity extends ActivityBase {
     }
 
     private void importNow() {
-        if (GroundspeakAPI.chkMembership(false).isErrorState()) {
+        if (GroundspeakLiveAPI.chkMembership(false).isErrorState()) {
             finish();
             return;
         }
@@ -242,7 +241,7 @@ public class CheckStateActivity extends ActivityBase {
                     log.debug("CheckState {} call start: {} stop: {}  from:{}", withFavPoi ? "with FavePoints" : "without FavePoints", start, stop, chkList.size);
 
                     if (withFavPoi) {
-                        result = GroundspeakAPI.getGeocacheStatusFavoritePoints(Database.Data, chkList100, new ICancel() {
+                        result = GroundspeakLiveAPI.getGeocacheStatusFavoritePoints(Database.Data, chkList100, new ICancel() {
                             @Override
                             public boolean cancel() {
                                 return canceled.get();
@@ -257,7 +256,7 @@ public class CheckStateActivity extends ActivityBase {
                             }
                         });
                     } else {
-                        result = GroundspeakAPI.getGeocacheStatus(Database.Data, chkList100, new ICancel() {
+                        result = GroundspeakLiveAPI.getGeocacheStatus(Database.Data, chkList100, new ICancel() {
                             @Override
                             public boolean cancel() {
                                 return canceled.get();

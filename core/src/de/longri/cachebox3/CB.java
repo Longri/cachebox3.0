@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
@@ -533,7 +533,7 @@ public class CB {
         //check if expired or invalid
         final AtomicBoolean wait = new AtomicBoolean(true);
         final AtomicBoolean errror = new AtomicBoolean(false);
-        GroundspeakAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
+        GroundspeakLiveAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
                 errror.set(checkApiResultState(value));

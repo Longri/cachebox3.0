@@ -26,6 +26,7 @@ public class Connection {
     public Net.HttpResponse httpResponse;
     public int statusCode;
     public String responseMessage;
+    public AtomicBoolean waitForStreamHandled;
 
     public Connection(Request.Method method) {
         switch (method) {
@@ -113,6 +114,7 @@ public class Connection {
     void connect(ICancel icancel) {
         log.debug("Send httpRequest");
         final AtomicBoolean WAIT = new AtomicBoolean(true);
+        waitForStreamHandled = new AtomicBoolean(true);
 
         if (icancel != null) {
             CB.postAsync(new NamedRunnable("connect1") {
@@ -137,10 +139,9 @@ public class Connection {
             public void handleHttpResponse(Net.HttpResponse r) {
                 httpResponse = r;
                 statusCode = r.getStatus().getStatusCode();
-                // todo responseMessage = getResponseMessage(); from header
-                final AtomicBoolean HANDEL_WAIT = new AtomicBoolean(true);
+                waitForStreamHandled.set(true);
                 WAIT.set(false);
-                CB.wait(HANDEL_WAIT);
+                CB.wait(waitForStreamHandled);
                 log.debug("httpResponse handled");
             }
 
@@ -153,6 +154,7 @@ public class Connection {
             @Override
             public void cancelled() {
                 log.debug("Request cancelled");
+                WAIT.set(false);
             }
         });
 
@@ -170,6 +172,10 @@ public class Connection {
 
     public InputStream getResultAsStream() {
         return httpResponse.getResultAsStream();
+    }
+
+    public String getResponseMessage() {
+        return httpResponse.getHeader(null);
     }
 
     public  <T> void parseErrorResponse(Class<T> clazz, Response<T> response, InputStream responseBodyStream)

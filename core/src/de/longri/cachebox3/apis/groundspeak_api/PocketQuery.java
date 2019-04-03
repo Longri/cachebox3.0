@@ -63,7 +63,7 @@ public class PocketQuery {
         }
 
         final AtomicBoolean WAIT = new AtomicBoolean(true);
-        GetPocketQuery getPocketQuery = new GetPocketQuery(GroundspeakAPI.getAccessToken(true),
+        GetPocketQuery getPocketQuery = new GetPocketQuery(GroundspeakLiveAPI.getAccessToken(true),
                 this.guid, localFile, listener, iCancel);
         getPocketQuery.post(new GenericCallBack<ApiResultState>() {
             @Override

@@ -299,6 +299,7 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_activities.Action_Show_Settings(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
+        misc_button.addAction(new ActionButton(new Action_GetFriends(),false));
         misc_button.addAction(new ActionButton(action_show_quit, false, GestureDirection.Down));
 
 //        actionShowAboutView.execute();

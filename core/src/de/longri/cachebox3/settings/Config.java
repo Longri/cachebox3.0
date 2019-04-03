@@ -18,7 +18,7 @@ package de.longri.cachebox3.settings;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -150,7 +150,7 @@ public class Config extends Settings {
                     @Override
                     public void run() {
                         //reset ApiKey validation
-                        GroundspeakAPI.resetApiIsChecked();
+                        GroundspeakLiveAPI.resetApiIsChecked();
 
                         //set config stored MemberChipType as expired
                         Calendar cal = Calendar.getInstance();

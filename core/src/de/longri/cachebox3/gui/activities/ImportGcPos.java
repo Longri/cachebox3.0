@@ -28,7 +28,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextArea;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchCoordinate;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
@@ -36,7 +36,6 @@ import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.BlockGpsActivityBase;
 import de.longri.cachebox3.gui.events.CacheListChangedEventList;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
@@ -419,7 +418,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
 
                 log.debug("Ask for API state");
                 byte apiState;
-                if (GroundspeakAPI.isPremiumMember()) {
+                if (GroundspeakLiveAPI.isPremiumMember()) {
                     apiState = 2;
                 } else {
                     apiState = 1;
@@ -427,7 +426,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
 
                 log.debug("Api state = {}", apiState);
                 log.debug("Search at Coordinate:{}", actSearchPos);
-                final SearchCoordinate searchC = new SearchCoordinate(Database.Data, GroundspeakAPI.getAccessToken(),
+                final SearchCoordinate searchC = new SearchCoordinate(Database.Data, GroundspeakLiveAPI.getAccessToken(),
                         50, actSearchPos, radius * 1000,
                         apiState, new ICancel() {
                     @Override

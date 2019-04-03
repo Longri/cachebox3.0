@@ -125,26 +125,22 @@ public class Webb {
             }
             connection.connect(request.icancel);
 
-            response.httpRequest = connection.httpRequest;
             response.statusCode = connection.statusCode;
-            response.responseMessage = connection.responseMessage;
+            response.responseMessage = connection.getResponseMessage();
 
             // get the response body (if any)
             is = response.isSuccess() ? connection.getResultAsStream() : connection.getResultAsStream();
             is = WebbUtils.wrapStream(connection.getContentEncoding(), is);
-
             if (clazz == InputStream.class) {
                 is = new AutoDisconnectInputStream(connection, is);
+                closeStream = false;
             }
+
             if (response.isSuccess()) {
                 WebbUtils.parseResponseBody(clazz, response, is);
             } else {
                 connection.parseErrorResponse(clazz, response, is);
             }
-            if (clazz == InputStream.class) {
-                closeStream = false;
-            }
-
             return response;
 
         } catch (WebbException e) {
@@ -163,6 +159,7 @@ public class Webb {
                     } catch (Exception ignored) {
                     }
                 }
+                connection.waitForStreamHandled.set(false);
                 if (connection.httpRequest != null) {
                     try {
                         connection.httpRequest.reset();
@@ -226,12 +223,12 @@ public class Webb {
     }
 
     /**
-     * Disconnect the underlying <code>HttpURLConnection</code> on close.
+     * Disconnect the underlying <code>Connection</code> on close.
      */
     private static class AutoDisconnectInputStream extends FilterInputStream {
 
         /**
-         * The underlying <code>HttpURLConnection</code>.
+         * The underlying <code>Connection</code>.
          */
         private final Connection connection;
 
@@ -255,7 +252,7 @@ public class Webb {
             try {
                 super.close();
             } finally {
-                connection.httpRequest.reset();
+                connection.waitForStreamHandled.set(false);
             }
         }
     }

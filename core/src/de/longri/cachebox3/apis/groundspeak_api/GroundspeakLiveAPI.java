@@ -50,9 +50,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.GS_LIVE_URL;
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.STAGING_GS_LIVE_URL;
 
-public class GroundspeakAPI {
+public class GroundspeakLiveAPI {
 
-    private static final Logger log = LoggerFactory.getLogger(GroundspeakAPI.class);
+    private static final Logger log = LoggerFactory.getLogger(GroundspeakLiveAPI.class);
 
 
     public static String LastAPIError = "";
@@ -326,7 +326,7 @@ public class GroundspeakAPI {
 
         // try to get type from settings
         if (Config.memberChipType.isExpired()) {
-            CB.postAsync(new NamedRunnable("GroundspeakAPI") {
+            CB.postAsync(new NamedRunnable("GroundspeakLiveAPI") {
                 @Override
                 public void run() {
                     final GetYourUserProfile getYourUserProfile = new GetYourUserProfile(getAccessToken());

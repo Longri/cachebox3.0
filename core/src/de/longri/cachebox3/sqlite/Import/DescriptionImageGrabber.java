@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
@@ -396,7 +396,7 @@ public class DescriptionImageGrabber {
                 ApiResultState result = ApiResultState.UNKNOWN;
                 long startTs = System.currentTimeMillis();
 
-                result = GroundspeakAPI.getAllImageLinks(gcCode, allimgDict, null);
+                result = GroundspeakLiveAPI.getAllImageLinks(gcCode, allimgDict, null);
 
                 if (result.isErrorState()) {
                     return result;

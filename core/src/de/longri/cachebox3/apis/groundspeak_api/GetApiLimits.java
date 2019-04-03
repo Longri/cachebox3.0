@@ -2,11 +2,10 @@ package de.longri.cachebox3.apis.groundspeak_api;
 
 import com.badlogic.gdx.Net;
 import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.ApiLimitParser;
-import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.NetUtils;
 
-import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI.getAccessToken;
+import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI.getAccessToken;
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.GS_LIVE_URL;
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.STAGING_GS_LIVE_URL;
 

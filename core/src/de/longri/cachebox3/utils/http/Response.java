@@ -8,7 +8,6 @@ public class Response<T> {
     String responseMessage;
     T body;
     Object errorBody;
-    Net.HttpRequest httpRequest;
 
     Response(Request request) {
         this.request = request;

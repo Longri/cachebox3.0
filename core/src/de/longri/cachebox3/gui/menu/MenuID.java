@@ -267,4 +267,7 @@ public class MenuID {
     public static final int MI_DELETE_FILTER = 215;
     public static final int MI_DELETE_FOUNDS = 216;
 
+    public static final int AID_GET_FRIENDS = 217;
+
+
 }

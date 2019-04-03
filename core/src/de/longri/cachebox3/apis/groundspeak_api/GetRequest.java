@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI.waitApiCallLimit;
+import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI.waitApiCallLimit;
 
 /**
  * Created by Longri on 14.04.17.

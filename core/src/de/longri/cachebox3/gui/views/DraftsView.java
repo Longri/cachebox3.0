@@ -23,7 +23,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.gcvote_api.GCVote;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.EditDrafts;
@@ -276,10 +276,10 @@ public class DraftsView extends AbstractView {
                                 ApiResultState result = ApiResultState.UNKNOWN;
 
                                 if (fieldNote.isTbDraft) {
-                                    result = GroundspeakAPI.createTrackableLog(fieldNote.TravelBugCode, fieldNote.TrackingNumber, fieldNote.gcCode, LogTypes.CB_LogType2GC(fieldNote.type), fieldNote.timestamp, fieldNote.comment, iCancel);
+                                    result = GroundspeakLiveAPI.createTrackableLog(fieldNote.TravelBugCode, fieldNote.TrackingNumber, fieldNote.gcCode, LogTypes.CB_LogType2GC(fieldNote.type), fieldNote.timestamp, fieldNote.comment, iCancel);
                                 } else {
                                     boolean dl = fieldNote.isDirectLog;
-                                    result = GroundspeakAPI.createDraftAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, iCancel);
+                                    result = GroundspeakLiveAPI.createDraftAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, iCancel);
                                 }
 
                                 if (CB.checkApiResultState(result)) {
@@ -288,7 +288,7 @@ public class DraftsView extends AbstractView {
                                 }
 
                                 if (result.isErrorState()) {
-                                    UploadMeldung += fieldNote.gcCode + "\n" + GroundspeakAPI.LastAPIError + "\n";
+                                    UploadMeldung += fieldNote.gcCode + "\n" + GroundspeakLiveAPI.LastAPIError + "\n";
                                 } else {
                                     // set Draft as uploaded
                                     fieldNote.uploaded = true;
@@ -637,19 +637,19 @@ public class DraftsView extends AbstractView {
 //
 //            @Override
 //            public void run() {
-//                GroundspeakAPI.LastAPIError = "";
+//                GroundspeakLiveAPI.LastAPIError = "";
 //
 //                boolean dl = fieldNote.isDirectLog;
-//                int result = GroundspeakAPI.createDraftAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, this);
+//                int result = GroundspeakLiveAPI.createDraftAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, this);
 //
-//                if (result == GroundspeakAPI.IO) {
+//                if (result == GroundspeakLiveAPI.IO) {
 //                    fieldNote.uploaded = true;
 //
 //                    // after direct Log create a fieldNote with uploded state
 //                    addOrChangeDraft(fieldNote, isNewDraft, false);
 //                }
 //
-//                if (result == GroundspeakAPI.CONNECTION_TIMEOUT) {
+//                if (result == GroundspeakLiveAPI.CONNECTION_TIMEOUT) {
 //                    GL.that.Toast(ConnectionError.INSTANCE);
 //                    if (wd != null)
 //                        wd.close();
@@ -674,7 +674,7 @@ public class DraftsView extends AbstractView {
 //                    });
 //                    return;
 //                }
-//                if (result == GroundspeakAPI.API_IS_UNAVAILABLE) {
+//                if (result == GroundspeakLiveAPI.API_IS_UNAVAILABLE) {
 //                    GL.that.Toast(ApiUnavailable.INSTANCE);
 //                    if (wd != null)
 //                        wd.close();
@@ -700,11 +700,11 @@ public class DraftsView extends AbstractView {
 //                    return;
 //                }
 //
-//                if (GroundspeakAPI.LastAPIError.length() > 0) {
+//                if (GroundspeakLiveAPI.LastAPIError.length() > 0) {
 //                    Gdx.app.postRunnable(new Runnable() {
 //                        @Override
 //                        public void run() {
-//                            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("Error"), MessageBoxIcon.Error);
+//                            MessageBox.show(GroundspeakLiveAPI.LastAPIError, Translation.get("Error"), MessageBoxIcon.Error);
 //                        }
 //                    });
 //                }

@@ -223,10 +223,10 @@ public class Settings_Activity extends ActivityBase {
         valueStyle.fontColor = style.valueFontColor;
 
 
-        final Array<de.longri.cachebox3.settings.types.SettingCategory> settingCategories = new Array<de.longri.cachebox3.settings.types.SettingCategory>();
-        de.longri.cachebox3.settings.types.SettingCategory[] tmp = de.longri.cachebox3.settings.types.SettingCategory.values();
-        for (de.longri.cachebox3.settings.types.SettingCategory item : tmp) {
-            if (item != de.longri.cachebox3.settings.types.SettingCategory.Button) {
+        final Array<SettingCategory> settingCategories = new Array<>();
+        SettingCategory[] tmp = SettingCategory.values();
+        for (SettingCategory item : tmp) {
+            if (item != SettingCategory.Button) {
 
                 //add only non empty
                 if (getSettingsOfCategory(item).size > 0)
@@ -243,7 +243,7 @@ public class Settings_Activity extends ActivityBase {
 
             @Override
             public ListViewItem getView(int index) {
-                final de.longri.cachebox3.settings.types.SettingCategory category = settingCategories.get(index);
+                final SettingCategory category = settingCategories.get(index);
                 return getCategoryItem(index, category);
             }
 
@@ -377,7 +377,7 @@ public class Settings_Activity extends ActivityBase {
 
         if (itemCountChanged) {
             Object object = actListView.getUserObject();
-            if (object instanceof de.longri.cachebox3.settings.types.SettingCategory) {
+            if (object instanceof SettingCategory) {
                 WidgetGroup group = listViews.pop();
                 listViewsNames.pop();
 
@@ -387,7 +387,7 @@ public class Settings_Activity extends ActivityBase {
                         actor.removeListener(listener);
 
                 this.removeActor(group);
-                showCategory((de.longri.cachebox3.settings.types.SettingCategory) object, false);
+                showCategory((SettingCategory) object, false);
             }
         }
 
@@ -519,27 +519,27 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getSettingItem(int listIndex, SettingBase<?> setting) {
-        if (setting instanceof de.longri.cachebox3.settings.types.SettingBool) {
-            return getBoolView(listIndex, (de.longri.cachebox3.settings.types.SettingBool) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingIntArray) {
-            return getIntArrayView(listIndex, (de.longri.cachebox3.settings.types.SettingIntArray) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingStringArray) {
-            return getStringArrayView(listIndex, (de.longri.cachebox3.settings.types.SettingStringArray) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingTime) {
-            return getTimeView(listIndex, (de.longri.cachebox3.settings.types.SettingTime) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingInt) {
-            return getIntView(listIndex, (de.longri.cachebox3.settings.types.SettingInt) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingDouble) {
-            return getDblView(listIndex, (de.longri.cachebox3.settings.types.SettingDouble) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingFloat) {
-            return getFloatView(listIndex, (de.longri.cachebox3.settings.types.SettingFloat) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingFolder) {
-            return getFolderView(listIndex, (de.longri.cachebox3.settings.types.SettingFolder) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingFile) {
-            return getFileView(listIndex, (de.longri.cachebox3.settings.types.SettingFile) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingEnum<?>) {
+        if (setting instanceof SettingBool) {
+            return getBoolView(listIndex, (SettingBool) setting);
+        } else if (setting instanceof SettingIntArray) {
+            return getIntArrayView(listIndex, (SettingIntArray) setting);
+        } else if (setting instanceof SettingStringArray) {
+            return getStringArrayView(listIndex, (SettingStringArray) setting);
+        } else if (setting instanceof SettingTime) {
+            return getTimeView(listIndex, (SettingTime) setting);
+        } else if (setting instanceof SettingInt) {
+            return getIntView(listIndex, (SettingInt) setting);
+        } else if (setting instanceof SettingDouble) {
+            return getDblView(listIndex, (SettingDouble) setting);
+        } else if (setting instanceof SettingFloat) {
+            return getFloatView(listIndex, (SettingFloat) setting);
+        } else if (setting instanceof SettingFolder) {
+            return getFolderView(listIndex, (SettingFolder) setting);
+        } else if (setting instanceof SettingFile) {
+            return getFileView(listIndex, (SettingFile) setting);
+        } else if (setting instanceof SettingEnum<?>) {
             return getEnumView(listIndex, (SettingEnum<?>) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingString) {
+        } else if (setting instanceof SettingString) {
             return getStringView(listIndex, (SettingString) setting);
 //        } else if (setting instanceof SettingsListCategoryButton) {
 //            return getButtonView((SettingsListCategoryButton<?>) setting);
@@ -549,10 +549,10 @@ public class Settings_Activity extends ActivityBase {
 //            return getLangSpinnerView((SettingsListButtonLangSpinner<?>) setting);
 //        } else if (setting instanceof SettingsListButtonSkinSpinner) {
 //            return getSkinSpinnerView((SettingsListButtonSkinSpinner<?>) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingsAudio) {
-            return getAudioView(listIndex, (de.longri.cachebox3.settings.types.SettingsAudio) setting);
-        } else if (setting instanceof de.longri.cachebox3.settings.types.SettingColor) {
-            return getColorView(listIndex, (de.longri.cachebox3.settings.types.SettingColor) setting);
+        } else if (setting instanceof SettingsAudio) {
+            return getAudioView(listIndex, (SettingsAudio) setting);
+        } else if (setting instanceof SettingColor) {
+            return getColorView(listIndex, (SettingColor) setting);
         }
         return null;
     }
@@ -584,11 +584,11 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getColorView(int listIndex, de.longri.cachebox3.settings.types.SettingColor setting) {
+    private ListViewItem getColorView(int listIndex, SettingColor setting) {
         return null;
     }
 
-    private ListViewItem getAudioView(int listIndex, final de.longri.cachebox3.settings.types.SettingsAudio setting) {
+    private ListViewItem getAudioView(int listIndex, final SettingsAudio setting) {
         ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {
@@ -848,11 +848,11 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getFileView(int listIndex, de.longri.cachebox3.settings.types.SettingFile setting) {
+    private ListViewItem getFileView(int listIndex, SettingFile setting) {
         return null;
     }
 
-    private ListViewItem getFolderView(int listIndex, final de.longri.cachebox3.settings.types.SettingFolder setting) {
+    private ListViewItem getFolderView(int listIndex, final SettingFolder setting) {
         ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {
@@ -965,7 +965,7 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getFloatView(int listIndex, final de.longri.cachebox3.settings.types.SettingFloat setting) {
+    private ListViewItem getFloatView(int listIndex, final SettingFloat setting) {
         final VisLabel valueLabel = new VisLabel(Float.toString(setting.getValue()), valueStyle);
         ListViewItem table = getNumericItemTable(listIndex, valueLabel, setting);
 
@@ -1001,7 +1001,7 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getDblView(int listIndex, final de.longri.cachebox3.settings.types.SettingDouble setting) {
+    private ListViewItem getDblView(int listIndex, final SettingDouble setting) {
         final VisLabel valueLabel = new VisLabel(Double.toString(setting.getValue()), valueStyle);
         ListViewItem table = getNumericItemTable(listIndex, valueLabel, setting);
 
@@ -1037,7 +1037,7 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getIntView(int listIndex, final de.longri.cachebox3.settings.types.SettingInt setting) {
+    private ListViewItem getIntView(int listIndex, final SettingInt setting) {
         final VisLabel valueLabel = new VisLabel(Integer.toString(setting.getValue()), valueStyle);
         final ListViewItem table = getNumericItemTable(listIndex, valueLabel, setting);
 
@@ -1085,19 +1085,19 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    private ListViewItem getTimeView(int listIndex, de.longri.cachebox3.settings.types.SettingTime setting) {
+    private ListViewItem getTimeView(int listIndex, SettingTime setting) {
         return null;
     }
 
-    private ListViewItem getStringArrayView(int listIndex, de.longri.cachebox3.settings.types.SettingStringArray setting) {
+    private ListViewItem getStringArrayView(int listIndex, SettingStringArray setting) {
         return null;
     }
 
-    private ListViewItem getIntArrayView(int listIndex, de.longri.cachebox3.settings.types.SettingIntArray setting) {
+    private ListViewItem getIntArrayView(int listIndex, SettingIntArray setting) {
         return null;
     }
 
-    private ListViewItem getBoolView(int listIndex, final de.longri.cachebox3.settings.types.SettingBool setting) {
+    private ListViewItem getBoolView(int listIndex, final SettingBool setting) {
         ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {

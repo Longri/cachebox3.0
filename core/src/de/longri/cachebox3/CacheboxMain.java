@@ -141,32 +141,29 @@ public class CacheboxMain extends ApplicationAdapter {
         final Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
         final Batch batch = new SpriteBatch();
 
-        Splash splash = new Splash(new Splash.LoadReady() {
-            @Override
-            public void ready() {
-                log.debug("Splash ready");
-                Config.AppRaterlaunchCount.setValue(Config.AppRaterlaunchCount.getValue() + 1);
-                Config.AcceptChanges();
+        Splash splash = new Splash(() -> {
+            log.debug("Splash ready");
+            Config.AppRaterlaunchCount.setValue(Config.AppRaterlaunchCount.getValue() + 1);
+            Config.AcceptChanges();
 
-                // Splash is ready with initialisation
-                // now switch Stage to ViewManager
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        log.debug("switch Stage to ViewManager");
+            // Splash is ready with initialisation
+            // now switch Stage to ViewManager
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    log.debug("switch Stage to ViewManager");
 
-                        viewManager = new ViewManager(
-                                CacheboxMain.this, CB.stageManager.viewport, CB.stageManager.batch);
+                    viewManager = new ViewManager(
+                            CacheboxMain.this, CB.stageManager.viewport, CB.stageManager.batch);
 
-                        CB.stageManager.setMainStage(viewManager);
-                        batch.dispose();
+                    CB.stageManager.setMainStage(viewManager);
+                    batch.dispose();
 
-                        FpsInfoSprite = null;
-                        Gdx.graphics.setContinuousRendering(true);
-                        restoreInstanceState(instanceStateReader);
-                    }
-                });
-            }
+                    FpsInfoSprite = null;
+                    Gdx.graphics.setContinuousRendering(true);
+                    restoreInstanceState(instanceStateReader);
+                }
+            });
         }, viewport, batch, instanceStateReader);
 
         CB.stageManager.setMainStage(splash);

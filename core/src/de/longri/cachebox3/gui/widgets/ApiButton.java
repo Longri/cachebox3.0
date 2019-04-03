@@ -21,7 +21,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.skin.styles.ApiButtonStyle;
 import de.longri.cachebox3.settings.Config;
@@ -73,7 +73,7 @@ public class ApiButton extends IconButton {
         }
 
         if (Entry) {
-            ApiResultState state = GroundspeakAPI.chkMembership(true);
+            ApiResultState state = GroundspeakLiveAPI.chkMembership(true);
 
             switch (state) {
                 case API_ERROR:
@@ -116,8 +116,8 @@ public class ApiButton extends IconButton {
             public void callBack(String accessToken) {
                 log.debug("return create ApiKey :{}", accessToken);
 
-                GroundspeakAPI.CacheStatusValid = false;
-                GroundspeakAPI.CacheStatusLiteValid = false;
+                GroundspeakLiveAPI.CacheStatusValid = false;
+                GroundspeakLiveAPI.CacheStatusLiteValid = false;
 
                 // store the encrypted AccessToken in the Config file
                 if (Config.UseTestUrl.getValue()) {
@@ -127,7 +127,7 @@ public class ApiButton extends IconButton {
                 }
 
                 //reset ApiKey validation
-                GroundspeakAPI.resetApiIsChecked();
+                GroundspeakLiveAPI.resetApiIsChecked();
 
                 //set config stored MemberChipType as expired
                 Calendar cal = Calendar.getInstance();
@@ -135,19 +135,19 @@ public class ApiButton extends IconButton {
 
 
                 Config.AcceptChanges();
-                String act = GroundspeakAPI.getAccessToken();
+                String act = GroundspeakLiveAPI.getAccessToken();
                 if (act.length() > 0) {
-                    GroundspeakAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
+                    GroundspeakLiveAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
                         @Override
                         public void callBack(ApiResultState status) {
                             if (!status.isErrorState()) {
-                                log.debug("Read User name/State {}/{}", GroundspeakAPI.memberName, status);
-                                Config.GcLogin.setValue(GroundspeakAPI.memberName);
+                                log.debug("Read User name/State {}/{}", GroundspeakLiveAPI.memberName, status);
+                                Config.GcLogin.setValue(GroundspeakLiveAPI.memberName);
                                 Config.AcceptChanges();
-                                CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
+                                CB.viewmanager.toast("Welcome : " + GroundspeakLiveAPI.memberName);
                             } else {
-                                CB.viewmanager.toast("Welcome : " + GroundspeakAPI.memberName);
-                                log.debug("Can't read UserName State: {}", GroundspeakAPI.memberName, status);
+                                CB.viewmanager.toast("Welcome : " + GroundspeakLiveAPI.memberName);
+                                log.debug("Can't read UserName State: {}", GroundspeakLiveAPI.memberName, status);
                             }
                         }
                     });

@@ -62,7 +62,7 @@ public class Settings extends Settings_Skin {
     public static final SettingInt socket_timeout = (SettingInt) settingsList.addSetting(new SettingInt("socket_timeout", Internal, NEVER, 60000, Global, ALL));
     public static final SettingDouble ParkingLatitude = (SettingDouble) settingsList.addSetting(new SettingDouble("ParkingLatitude", Positions, NEVER, 0, Global, ACB));
     public static final SettingDouble ParkingLongitude = (SettingDouble) settingsList.addSetting(new SettingDouble("ParkingLongitude", Positions, NEVER, 0, Global, ACB));
-    public static final SettingString Friends = (SettingString) settingsList.addSetting(new SettingString("Friends", Login, NEVER, "", Global, ACB));
+    public static final SettingString Friends = (SettingString) settingsList.addSetting(new SettingString("Friends", Login, SettingMode.Normal, "", Global, ACB));
 
     public static final SettingBool DirectOnlineLog = (SettingBool) settingsList.addSetting(new SettingBool("DirectOnlineLog", Fieldnotes, NEVER, false, Global, ACB));
 

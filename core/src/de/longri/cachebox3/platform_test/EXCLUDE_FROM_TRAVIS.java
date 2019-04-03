@@ -15,12 +15,12 @@
  */
 package de.longri.cachebox3.platform_test;
 
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 
 /**
  * Created by Longri on 03.04.2019.
  */
 public class EXCLUDE_FROM_TRAVIS {
     public static final String DUMMY_API_KEY = "+DummyKEY";
-    public static String GcAPI(){return GroundspeakAPI.getAccessToken();}
+    public static String GcAPI(){return GroundspeakLiveAPI.getAccessToken();}
 }

@@ -27,7 +27,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GetPocketQueryList;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gpx.PqImport;
@@ -243,7 +243,7 @@ public class ImportPQActivity extends BlockGpsActivityBase {
             public void run() {
                 itemArray.clear();
                 Array<PocketQuery> list = new Array<>();
-                GetPocketQueryList pocketQuery = new GetPocketQueryList(GroundspeakAPI.getAccessToken(true), iCancel, list);
+                GetPocketQueryList pocketQuery = new GetPocketQueryList(GroundspeakLiveAPI.getAccessToken(true), iCancel, list);
 
                 final AtomicBoolean WAIT = new AtomicBoolean(true);
                 final ApiResultState[] state = new ApiResultState[1];
