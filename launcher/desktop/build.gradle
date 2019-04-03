@@ -27,8 +27,15 @@ dependencies {
     implementation 'com.kitfox.svg:svg-salamander:1.0'
     implementation 'commons-cli:commons-cli:1.3.1'
     implementation "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
-    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
     implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+    
+
+    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    
+    
     //vtm
     implementation "org.mapsforge:vtm-gdx:$vtmVersion"
     implementation("org.mapsforge:vtm-desktop:$vtmVersion") {

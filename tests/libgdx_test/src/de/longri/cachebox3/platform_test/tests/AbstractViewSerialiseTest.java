@@ -87,7 +87,7 @@ public class AbstractViewSerialiseTest {
         LogListView logListView = new LogListView();
         LogListView newLogListView = (LogListView) TestUtils.assertAbstractViewSerialation(logListView, LogListView.class);
     }
-    
+
     @Test
     public void NotesViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();

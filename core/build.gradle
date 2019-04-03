@@ -2,7 +2,7 @@ apply plugin: 'java'
 
 
 dependencies {
-    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // libgdx
@@ -35,7 +35,7 @@ sourceSets.test.resources.srcDirs = ["testsResources/"]
 //sourceSets with including LibGdx Tests for run unit tests on device
 sourceSets.main.java.srcDirs = ["src/","../tests/libgdx_test/src"]
 
-////sourceSets without LibGdx tests (aka release)
+//sourceSets without LibGdx tests (aka release)
 //sourceSets.main.java.srcDirs = ["src/"]
 
 
