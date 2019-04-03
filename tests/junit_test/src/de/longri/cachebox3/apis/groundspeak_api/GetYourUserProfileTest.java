@@ -145,13 +145,19 @@ class GetYourUserProfileTest {
                 return null;
             }
         };
+        final ApiResultState[] state = new ApiResultState[1];
+        AtomicBoolean WAIT = new AtomicBoolean(true);
         getYourUserProfile.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
-                assertThat("Type should be 3", getYourUserProfile.getMembershipType() == ApiResultState.MEMBERSHIP_TYPE_PREMIUM);
-                assertEquals(getYourUserProfile.getMemberName(), "LONGRI", "name should be LONGRI");
+                state[0] = value;
+                WAIT.set(false);
             }
         });
+
+        assertThat("ResultState should not be a ERROR_STATE", !state[0].isErrorState());
+        assertThat("Type should be 3", getYourUserProfile.getMembershipType() == ApiResultState.MEMBERSHIP_TYPE_PREMIUM);
+        assertEquals(getYourUserProfile.getMemberName(), "LONGRI", "name should be LONGRI");
     }
 
     @Test

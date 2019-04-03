@@ -99,7 +99,7 @@ public class DraftList extends Array<DraftEntry> {
                         sql += " OFFSET " + String.valueOf(Offset);
                 }
             }
-
+            if (Database.Drafts == null) return;
             GdxSqliteCursor reader = null;
             try {
                 reader = Database.Drafts.rawQuery(sql, (String[]) null);

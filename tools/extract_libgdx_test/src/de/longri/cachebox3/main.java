@@ -96,7 +96,8 @@ public class main {
     private static final String PUBLIC = "public ";
     private static final String THROWS = ") throws ";
     private static final String ASSERTATION_ERROR = "PlatformAssertionError";
-
+    private static final String TRAVIS = "travis.EXCLUDE_FROM_TRAVIS";
+    private static final String IMPORT_TRAVIS = "import de.longri.cachebox3.platform_test.EXCLUDE_FROM_TRAVIS;";
 
     private static void enable() {
         readIgnoreFile();
@@ -206,6 +207,7 @@ public class main {
         String[] lines = source.split("\n");
 
         boolean packageReplace = false;
+        boolean travisReplace = false;
         boolean jupiterTestReplace = false;
         boolean assertThatReplace = false;
         boolean assertEqualseReplace = false;
@@ -244,6 +246,10 @@ public class main {
             } else if (!jupiterTestReplace && line.startsWith(IMPORT) && line.contains(JUPITER_TEST)) {
                 jupiterTestReplace = true;
                 sb.appendLine(IMPORT_TEST_ANNOTATION);
+                continue;
+            } else if (!travisReplace && line.startsWith(IMPORT) && line.contains(TRAVIS)) {
+                travisReplace = true;
+                sb.appendLine(IMPORT_TRAVIS);
                 continue;
             } else if (!assertEqualseReplace && line.endsWith(ASSERT_EQUALS)) {
                 assertEqualseReplace = true;
