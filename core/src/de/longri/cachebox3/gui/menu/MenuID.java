@@ -269,5 +269,5 @@ public class MenuID {
 
     public static final int AID_GET_FRIENDS = 217;
 
-
+    public static final int MI_UploadCorrectedCoordinates = 218;
 }

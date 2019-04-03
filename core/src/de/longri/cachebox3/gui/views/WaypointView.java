@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
@@ -34,10 +35,7 @@ import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.activities.ProjectionCoordinate;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
+import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -62,6 +60,7 @@ import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static de.longri.cachebox3.gui.menu.MenuID.MI_UploadCorrectedCoordinates;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 
@@ -480,6 +479,17 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                     case MenuID.MI_FROM_GPS:
                         addMeasure();
                         return true;
+                    case MI_UploadCorrectedCoordinates:
+                        if (actAbstractCache.hasCorrectedCoordinates())
+                            GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
+                        else if (isCorrectedFinal())
+                            GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
+                        if (GroundspeakAPI.APIError == 0) {
+                            MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                        } else {
+                            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                        }
+                        return true;
 
                 }
                 return false;
@@ -497,10 +507,17 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         if (actWaypoint != null || actAbstractCache != null)
             cm.addItem(MenuID.MI_PROJECTION, "Projection", CB.getSkin().getMenuIcon.projectWp);
 
+        MenuItem mi = cm.addItem(MI_UploadCorrectedCoordinates, "UploadCorrectedCoordinates");
+        mi.setEnabled(actAbstractCache.hasCorrectedCoordinates() || isCorrectedFinal());
+
         //ISSUE (#129 add measure WP from GPS)
         cm.addItem(MenuID.MI_FROM_GPS, "FromGps", CB.getSkin().getMenuIcon.mesureWp);
 
         return cm;
     }
 
+    private boolean isCorrectedFinal() {
+        // return new String(Title, (UTF_8)).equals("Final GSAK Corrected");
+        return actWaypoint.getType() == CacheTypes.Final && actWaypoint.isUserWaypoint() && actWaypoint.isValid();
+    }
 }

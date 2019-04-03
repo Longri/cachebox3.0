@@ -824,10 +824,10 @@ public class GroundspeakAPI {
         return "";
     }
 
-    public static void uploadCorrectedCoordinates(String GcCode, Coordinate Pos) {
+    public static void uploadCorrectedCoordinates(String GcCode, double lat, double lon) {
         try {
             getNetz().put(getUrl(1, "geocaches/" + GcCode + "/correctedcoordinates"))
-                    .body(new JSONObject().put("latitude", Pos.getLatitude()).put("longitude", Pos.getLongitude()))
+                    .body(new JSONObject().put("latitude", lat).put("longitude", lon))
                     .ensureSuccess().asVoid();
         } catch (Exception ex) {
             retry(ex);
