@@ -220,31 +220,38 @@ public class CompassView extends AbstractView implements
         // add Attribute
         if (actCacheNotNull && showAtt) {
             AttributesStyle attStyle = VisUI.getSkin().get("CompassView", AttributesStyle.class);
-            Array<Attributes> attList = actAbstractCache.getAttributes();
-            float iconWidth = 0, iconHeight = 0;
-            int lineBreak = 0, lineBreakStep = 0;
-            Table lineTable = null;
-            for (int i = 0, n = attList.size; i < n; i++) {
-                Drawable attDrawable = attList.get(i).getDrawable(attStyle);
-                if (attDrawable != null) {
-                    if (iconWidth == 0) {
-                        iconWidth = attDrawable.getMinWidth();
-                        iconHeight = attDrawable.getMinHeight();
-                        lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + CB.scaledSizes.MARGINx2));
-                        lineTable = new Table();
-                        lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-                    }
-                    lineTable.add(new Image(attDrawable)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
-                    if (i >= lineBreak) {
-                        topTable.add(lineTable).left();
-                        topTable.row();
-                        lineTable = new Table();
-                        lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
-                        lineBreak += lineBreakStep;
+            Array<Attributes> attList = null;
+            try {
+                attList = actAbstractCache.getAttributes();
+            } catch (Exception e) {
+                log.error("can't get attributes from Cache" + actAbstractCache, e);
+            }
+            if (attList != null) {
+                float iconWidth = 0, iconHeight = 0;
+                int lineBreak = 0, lineBreakStep = 0;
+                Table lineTable = null;
+                for (int i = 0, n = attList.size; i < n; i++) {
+                    Drawable attDrawable = attList.get(i).getDrawable(attStyle);
+                    if (attDrawable != null) {
+                        if (iconWidth == 0) {
+                            iconWidth = attDrawable.getMinWidth();
+                            iconHeight = attDrawable.getMinHeight();
+                            lineBreakStep = lineBreak = (int) (Gdx.graphics.getWidth() / (iconWidth + CB.scaledSizes.MARGINx2));
+                            lineTable = new Table();
+                            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+                        }
+                        lineTable.add(new Image(attDrawable)).width(new Value.Fixed(iconWidth)).height(new Value.Fixed(iconHeight));
+                        if (i >= lineBreak) {
+                            topTable.add(lineTable).left();
+                            topTable.row();
+                            lineTable = new Table();
+                            lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
+                            lineBreak += lineBreakStep;
+                        }
                     }
                 }
+                topTable.add(lineTable).left();
             }
-            topTable.add(lineTable).left();
             topTable.row();
 
         }
