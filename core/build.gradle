@@ -8,7 +8,7 @@ dependencies {
     // libgdx
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    // implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
+    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
 
     //vtm
     implementation "org.mapsforge:vtm:$vtmVersion"
@@ -19,7 +19,6 @@ dependencies {
     implementation "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
 
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
-
 
 
 }
@@ -33,7 +32,7 @@ targetCompatibility = "1.8"
 sourceSets.test.resources.srcDirs = ["testsResources/"]
 
 //sourceSets with including LibGdx Tests for run unit tests on device
-sourceSets.main.java.srcDirs = ["src/","../tests/libgdx_test/src"]
+sourceSets.main.java.srcDirs = ["src/", "../tests/libgdx_test/src"]
 
 //sourceSets without LibGdx tests (aka release)
 //sourceSets.main.java.srcDirs = ["src/"]
