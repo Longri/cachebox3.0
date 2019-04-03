@@ -44,7 +44,7 @@ class GetYourUserProfileTest {
         TestUtils.initialGdx();
     }
 
-    final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;
+    final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI();
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
 
     private final String API_RESULT_JSON = "{\n" +
@@ -177,7 +177,5 @@ class GetYourUserProfileTest {
             assertThat("Type should be 3", getYourUserProfile.getMembershipType() == ApiResultState.MEMBERSHIP_TYPE_PREMIUM);
             assertEquals(getYourUserProfile.getMemberName(), "Katipa", "name should be Katipa");
         }
-
-
     }
 }

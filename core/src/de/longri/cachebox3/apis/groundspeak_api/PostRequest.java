@@ -51,7 +51,7 @@ public abstract class PostRequest {
 
     protected abstract void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack);
 
-    protected void post(final GenericCallBack<ApiResultState> readyCallBack) {
+    public void post(final GenericCallBack<ApiResultState> readyCallBack) {
         post(readyCallBack, this.iCancel);
     }
 

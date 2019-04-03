@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -18,7 +18,8 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.GroundspeakAPI;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.apis.groundspeak_api.GroundspeakAPI;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
@@ -40,16 +41,7 @@ public class Action_Show_Help extends AbstractAction {
 
     @Override
     public void execute() {
-        //PlatformConnector.callUrl("http://www.team-cachebox.de/index.php/de/kurzanleitung");
-        String friends = GroundspeakAPI.fetchFriends();
-        if (GroundspeakAPI.APIError == 0) {
-            Config.Friends.setValue(friends);
-            Config.AcceptChanges();
-            MessageBox.show(Translation.get("ok") + ":\n" + friends, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
-        } else {
-            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
-        }
-
+        PlatformConnector._openUrlExtern("http://www.team-cachebox.de/index.php/de/kurzanleitung");
     }
 
 

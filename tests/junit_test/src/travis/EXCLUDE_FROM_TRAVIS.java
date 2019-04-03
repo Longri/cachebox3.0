@@ -31,11 +31,13 @@ public class EXCLUDE_FROM_TRAVIS {
     }
 
     public static final boolean VALUE = readFailer || p.getProperty("ExcludeOnTravis", "true").equals("true");
-    public static final String GcAPI = p.getProperty("GcAPI", DUMMY_API_KEY);
+    private static final String GCAPI = p.getProperty("GcAPI", DUMMY_API_KEY);
+
+    public static String GcAPI(){return GCAPI;}
 
     static {
         //store api to config
-        Config.AccessTokenForTest.setValue("A"+GcAPI);
-        Config.AccessToken.setValue("A"+GcAPI);
+        Config.AccessTokenForTest.setValue("A"+GCAPI);
+        Config.AccessToken.setValue("A"+GCAPI);
     }
 }

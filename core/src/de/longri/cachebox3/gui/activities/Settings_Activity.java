@@ -581,8 +581,6 @@ public class Settings_Activity extends ActivityBase {
                 }
             }
         });
-
-
         return table;
     }
 

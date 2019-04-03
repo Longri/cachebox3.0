@@ -22,8 +22,9 @@ import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import org.apache.commons.codec.Charsets;
 
-import java.io.File;
+import java.io.*;
 
 import static de.longri.cachebox3.platform_test.Assert.assertNotNull;
 import static de.longri.cachebox3.platform_test.Assert.assertTrue;
@@ -70,5 +71,49 @@ public class TestUtils {
         assertNotNull(newInstanceAbstractView);
         assertTrue(expectedClazz.isInstance(obj));
         return newInstanceAbstractView;
+    }
+
+    public static String getResourceRequestString(String path, String apiKey) throws IOException {
+        File file = new File(path);
+
+        if (!file.exists()) {
+            //try set /tests path
+            path = "tests/" + path;
+            file = new File(path);
+        }
+
+        InputStream stream = getResourceRequestStream(path);
+
+        byte[] b = new byte[(int) file.length()];
+        int len = b.length;
+        int total = 0;
+
+        while (total < len) {
+            int result = stream.read(b, total, len - total);
+            if (result == -1) {
+                break;
+            }
+            total += result;
+        }
+        String expected = new String(b, Charsets.UTF_8);
+        if (apiKey != null && !apiKey.isEmpty()) {
+            expected = expected.replace("\"AccessToken\":\"+DummyKEY\"",
+                    "\"AccessToken\":\"" + apiKey + "\"");
+        }
+        return expected;
+    }
+
+    public static InputStream getResourceRequestStream(String path) throws FileNotFoundException {
+        File file = new File(path);
+
+        if (!file.exists()) {
+            //try set /core path
+            path = "tests/" + path;
+            file = new File(path);
+        }
+
+        FileInputStream stream = new FileInputStream(file);
+
+        return stream;
     }
 }

@@ -37,7 +37,7 @@ public class GetYourUserProfile extends PostRequest {
     }
 
     @Override
-    protected void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
+    public void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
         String result = httpResponse.getResultAsString();
         int status = getApiStatus(result);
 
@@ -89,7 +89,7 @@ public class GetYourUserProfile extends PostRequest {
      * @param json
      */
     @Override
-    protected void getRequest(Json json) {
+    public void getRequest(Json json) {
         json.writeValue("AccessToken", this.gcApiKey);
         json.writeObjectStart("ProfileOptions");
         json.writeObjectEnd();

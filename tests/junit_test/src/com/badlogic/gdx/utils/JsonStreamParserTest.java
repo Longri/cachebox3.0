@@ -35,7 +35,7 @@ class JsonStreamParserTest {
         TestUtils.initialGdx();
     }
 
-    final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI;
+    final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI();
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
     final static org.slf4j.Logger log = LoggerFactory.getLogger(JsonStreamParserTest.class);
 
@@ -126,7 +126,7 @@ class JsonStreamParserTest {
 
         jtp.parse(testArray);
 
-        String expected="startObject: null\n" +
+        String expected = "startObject: null\n" +
                 "startObject: Status\n" +
                 "StringValue: ImageURL = http://www.geocaching.com/images/wpttypes/2.gif\n" +
                 "longValue: StatusCode = 0\n" +
@@ -400,7 +400,6 @@ class JsonStreamParserTest {
                 if (!isExclude.get()) {
                     sb.appendLine("pop ");
                 }
-
 
 
                 if (ex.size > 0 && this.root != null && this.root.name != null && this.root.name.equals(ex.peek())) {
