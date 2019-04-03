@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.utils.BuildInfo;
 import org.junit.jupiter.api.Test;
 import travis.EXCLUDE_FROM_TRAVIS;
 
@@ -108,6 +109,12 @@ class GetYourUserProfileTest {
 
         //remove "DeviceOperatingSystem"
         expected = expected.replace("UNKNOWN", GetYourUserProfile.getDeviceOperatingSystem());
+
+
+        //set Rev, if platform test
+        if (!BuildInfo.getRevision().equals("JUnitTest"))
+            expected = expected.replace("JUnitTest", BuildInfo.getRevision());
+
         assertEquals(expected, actual, "Should be equals");
     }
 

@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -36,6 +37,7 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.list_view.*;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -225,14 +227,24 @@ public class PlatformTestView extends AbstractView {
     }
 
     private String printStackTrace(Throwable t) {
-        StringBuffer buf = new StringBuffer(32);
+
 
         Throwable printTrowable = null;
         for (Throwable e = t.getCause(); e != null; e = e.getCause()) {
             printTrowable = e;
         }
 
-
+        if (printTrowable instanceof PlatformAssertionError) {
+            StringBuilder sb = new StringBuilder();
+            sb.appendLine(printTrowable.getMessage());
+            sb.append(" @ ");
+            StackTraceElement ele = printTrowable.getStackTrace()[1];
+            sb.append(ele.getFileName());
+            sb.append(':');
+            sb.append(ele.getLineNumber());
+            return sb.toString();
+        }
+        StringBuffer buf = new StringBuffer(500);
         try {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
