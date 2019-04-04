@@ -25,10 +25,13 @@ import com.badlogic.gdx.utils.CharArray;
 import de.longri.cachebox3.translation.word.MutableString;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -113,7 +116,7 @@ public class CharSequenceUtilTest {
 
         boolean throwedException = false;
         try {
-           CharSequenceUtil.parseInteger(PARSE_ARRAY, 11, 18);
+            CharSequenceUtil.parseInteger(PARSE_ARRAY, 11, 18);
         } catch (ArithmeticException e) {
             throwedException = true;
         }
@@ -150,6 +153,13 @@ public class CharSequenceUtilTest {
     @Test
     public void parseDate() throws ParseException, PlatformAssertionError {
         Date expected = DATE_PATTERN_3.parse("2011-07-05T12:54:02.308107Z");
+        if (CanvasAdapter.platform == Platform.ANDROID) {
+            //Android ignored parsing of milliseconds, so we add manuel!
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(expected);
+            cal.add(Calendar.MILLISECOND, 308107);
+            expected = cal.getTime();
+        }
         Date actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 30, 27, STRING_PATTERN3.toCharArray());
         assertThat("Date should not NULL", actual != null);
 

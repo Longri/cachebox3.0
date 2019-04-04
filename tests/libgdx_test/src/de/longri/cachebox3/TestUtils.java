@@ -43,8 +43,8 @@ public class TestUtils {
     }
 
     public static FileHandle getResourceFileHandle(String path, boolean mustexist) {
-        boolean iOS = CanvasAdapter.platform == Platform.IOS;
-        FileHandle fileHandle = iOS ? Gdx.files.internal(path) : Gdx.files.absolute(path);
+        boolean isDevice = CanvasAdapter.platform == Platform.IOS;
+        FileHandle fileHandle = isDevice ? Gdx.files.internal(path) : Gdx.files.absolute(path);
         return fileHandle;
     }
 
@@ -78,12 +78,12 @@ public class TestUtils {
     }
 
     public static String getResourceRequestString(String path, String apiKey) throws IOException {
-        boolean iOS = CanvasAdapter.platform == Platform.IOS;
+        boolean isDevice = CanvasAdapter.platform == Platform.IOS||CanvasAdapter.platform == Platform.ANDROID;
 
-        FileHandle file = iOS ? Gdx.files.internal(path) : Gdx.files.absolute(path);
+        FileHandle file = isDevice ? Gdx.files.internal(path) : Gdx.files.absolute(path);
 
         if (!file.exists()) {
-            file = iOS ? Gdx.files.internal("platform_test/" + path) : Gdx.files.absolute("platform_test/" + path);
+            file = isDevice ? Gdx.files.internal("platform_test/" + path) : Gdx.files.absolute("platform_test/" + path);
         }
         if (!file.exists()) throw new FileNotFoundException("can't find file: " + path);
 
@@ -109,12 +109,12 @@ public class TestUtils {
     }
 
     public static InputStream getResourceRequestStream(String path) throws FileNotFoundException {
-        boolean iOS = CanvasAdapter.platform == Platform.IOS;
+        boolean isDevice = CanvasAdapter.platform == Platform.IOS||CanvasAdapter.platform == Platform.ANDROID;
 
-        FileHandle file = iOS ? Gdx.files.internal(path) : Gdx.files.absolute(path);
+        FileHandle file = isDevice ? Gdx.files.internal(path) : Gdx.files.absolute(path);
 
         if (!file.exists()) {
-            file = iOS ? Gdx.files.internal("platform_test/" + path) : Gdx.files.absolute("platform_test/" + path);
+            file = isDevice ? Gdx.files.internal("platform_test/" + path) : Gdx.files.absolute("platform_test/" + path);
         }
         if (!file.exists()) throw new FileNotFoundException("can't find file: " + path);
         return file.read();
