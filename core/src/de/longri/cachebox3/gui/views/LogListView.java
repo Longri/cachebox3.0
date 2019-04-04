@@ -58,6 +58,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
     Array<LogEntry> logEntries;
 
     private String actGcCode;
+    // todo possibly store in settings?
     private boolean logsOfFriendsAreShown;
     private ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
@@ -78,7 +79,6 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     };
 
-    // todo possibly store in settings?
     public LogListView(BitStore reader) {
         super(reader);
     }
@@ -194,6 +194,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
         return cm;
     }
 
+    // todo perhaps ask for number of logs to fetch
     private void reloadLogs(boolean loadAllLogs) {
         // todo animation while waiting
         ArrayList<LogEntry> logList = GroundspeakAPI.fetchGeoCacheLogs(EventHandler.getSelectedCache(), loadAllLogs, null);
