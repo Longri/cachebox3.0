@@ -529,14 +529,8 @@ public class GroundspeakAPI {
         }
     }
 
-    public static ArrayList<LogEntry> fetchGeoCacheLogs(MutableCache cache, boolean all, ICancel iCancel) {
+    public static ArrayList<LogEntry> fetchGeoCacheLogs(AbstractCache cache, boolean all, ICancel iCancel) {
         ArrayList<LogEntry> logList = new ArrayList<>();
-
-        // let the calling thread run to an end
-        try {
-            sleep(1000);
-        } catch (InterruptedException ignored) {
-        }
 
         LinkedList<String> friendList = new LinkedList<>();
         if (!all) {
@@ -549,7 +543,7 @@ public class GroundspeakAPI {
         int start = 0;
         int count = 50;
 
-        while (!iCancel.cancel())
+        while (iCancel == null || !iCancel.cancel())
         // Schleife, solange bis entweder keine Logs mehr geladen werden oder bis Logs aller Freunde geladen sind.
         {
             boolean doRetry;
@@ -1298,7 +1292,7 @@ public class GroundspeakAPI {
         return logList;
     }
 
-    private static LogEntry createLog(JSONObject geocacheLog, MutableCache cache) {
+    private static LogEntry createLog(JSONObject geocacheLog, AbstractCache cache) {
         LogEntry logEntry = new LogEntry();
         logEntry.CacheId = cache.getId();
         logEntry.Comment = geocacheLog.optString("text", "");

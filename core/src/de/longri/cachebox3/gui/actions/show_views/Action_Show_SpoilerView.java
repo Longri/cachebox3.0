@@ -29,7 +29,7 @@ public class Action_Show_SpoilerView extends Abstract_Action_ShowView {
     private final Color DISABLE_COLOR = new Color(0.2f, 0.2f, 0.2f, 0.2f);
 
     public Action_Show_SpoilerView() {
-        super(SpoilerView.class, NOT_IMPLEMENTED, "ShowSpoiler", MenuID.AID_SHOW_SOLVER);
+        super(SpoilerView.class, IMPLEMENTED, "ShowSpoiler", MenuID.AID_SHOW_SPOILER);
     }
 
     @Override
