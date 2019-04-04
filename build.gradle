@@ -40,7 +40,7 @@ allprojects {
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
-        visUiVersion = '1.4.0-SNAPSHOT'
+        visUiVersion = '1.4.2-SNAPSHOT'
         vtmVersion = 'master-SNAPSHOT'
 //        vtmVersion = '0.9.0'
         slf4jLibgdxVersion = '1.9.9-SNAPSHOT'
