@@ -25,7 +25,6 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.StringBuilder;
 import org.apache.commons.cli.*;
 
-import java.io.IOException;
 import java.io.StringWriter;
 
 import static java.lang.System.exit;
@@ -53,13 +52,17 @@ public class main {
         libgdxTestSrcDir = Gdx.files.absolute(TEST_TARGET_DIR);
 
         if (cmd.hasOption("e")) {
+            long start = System.currentTimeMillis();
+            System.out.println("Start enabling Platform tests !");
             enable();
-
-            System.out.println("Platform tests enabled!");
+            long duration = System.currentTimeMillis() - start;
+            System.out.println("Platform tests enabled! (" + duration / 1000 + " sec)");
         } else if (cmd.hasOption('d')) {
+            long start = System.currentTimeMillis();
+            System.out.println("Start disabling Platform tests !");
             disable();
-
-            System.out.println("Platform tests disabled!");
+            long duration = System.currentTimeMillis() - start;
+            System.out.println("Platform tests disabled! (" + duration / 1000 + " sec)");
         }
 
         exit(0);
@@ -79,6 +82,11 @@ public class main {
     private static final String GENERATE = "\n\n//  Don't modify this file, it's created by tool 'extract_libgdx_test\n\n";
     private static final String IMPORT = "import";
     private static final String JUPITER_TEST = "org.junit.jupiter.api.Test";
+    private static final String AFTER_ALL = "AfterAll";
+    private static final String BEFORE_ALL = "BeforeAll";
+    private static final String IMPORT_AFTER_ALL = "import de.longri.cachebox3.platform_test.AfterAll;";
+    private static final String IMPORT_BEFORE_ALL = "import de.longri.cachebox3.platform_test.BeforeAll;";
+
     private static final String IMPORT_TEST_ANNOTATION = "import de.longri.cachebox3.platform_test.PlatformAssertionError;\n" +
             "import de.longri.cachebox3.platform_test.Test;";
     private static final String ASSERT_THAT = "Assert.assertThat;";
@@ -99,6 +107,8 @@ public class main {
     private static final String ASSERTATION_ERROR = "PlatformAssertionError";
     private static final String TRAVIS = "travis.EXCLUDE_FROM_TRAVIS";
     private static final String IMPORT_TRAVIS = "import de.longri.cachebox3.platform_test.EXCLUDE_FROM_TRAVIS;";
+
+    private static boolean onlyFlagSet = false;
 
     private static void enable() {
         readIgnoreFile();
@@ -155,8 +165,18 @@ public class main {
     private static void readIgnoreFile() {
         FileHandle ignoreFile = junitSrcDir.child("libgdx_test.ignore");
         String[] lines = ignoreFile.readString().split("\n");
+
+        onlyFlagSet = false;
+
         for (String line : lines) {
             line = line.replace("\r", "");
+
+            if (line.startsWith("only ")) {
+                onlyFlagSet = true;
+            }
+
+            if (onlyFlagSet && !line.startsWith("only ")) continue;
+            if (onlyFlagSet) line = line.replace("only ", "");
 
             if (line.endsWith("/")) {
                 ignoredDirs.add(line.replace(".", "/"));
@@ -175,6 +195,20 @@ public class main {
 
         for (FileHandle file : listAll) {
             boolean isIgnored = false;
+
+            if (onlyFlagSet) {
+                for (String name : ignoredFiles) {
+                    if (file.path().endsWith(name)) {
+                        isIgnored = true;
+                        break;
+                    }
+                }
+                if (!isIgnored) continue;
+                sourceFilesToCopy.add(file);
+                continue;
+            }
+
+
             for (String dir : ignoredDirs) {
                 if (file.path().contains(dir)) {
                     isIgnored = true;
@@ -220,6 +254,36 @@ public class main {
         boolean assertNotNullReplace = false;
         boolean publicClassReplace = false;
         boolean fileObjStartWritten = false;
+        boolean beforeReplace = false;
+        boolean afterReplace = false;
+
+        //search Before/After All methode if exist
+        String beforeMethodeName = null;
+        String afterMethodeName = null;
+        if (source.contains("@AfterAll") || source.contains("@BeforeAll")) {
+            for (int i = 0; i < lines.length; i++) {
+                String line = lines[i];
+                line = line.replace("\r", "");
+                if (line.contains("@AfterAll")) {
+                    try {
+                        int pos = lines[i + 1].indexOf(VOID) + VOID.length();
+                        int nameEnd = lines[i + 1].indexOf("(", pos);
+                        afterMethodeName = lines[i + 1].substring(pos, nameEnd);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (line.contains("@BeforeAll")) {
+                    try {
+                        int pos = lines[i + 1].indexOf(VOID) + VOID.length();
+                        int nameEnd = lines[i + 1].indexOf("(", pos);
+                        beforeMethodeName = lines[i + 1].substring(pos, nameEnd);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
 
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
@@ -244,8 +308,14 @@ public class main {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
+                continue;
+            } else if (!beforeReplace && line.startsWith(IMPORT) && line.contains(BEFORE_ALL)) {
+                beforeReplace = true;
+                sb.appendLine(IMPORT_BEFORE_ALL);
+                continue;
+            } else if (!afterReplace && line.startsWith(IMPORT) && line.contains(AFTER_ALL)) {
+                afterReplace = true;
+                sb.appendLine(IMPORT_AFTER_ALL);
                 continue;
             } else if (!jupiterTestReplace && line.startsWith(IMPORT) && line.contains(JUPITER_TEST)) {
                 jupiterTestReplace = true;
@@ -300,6 +370,13 @@ public class main {
 
                     if (!fileObjStartWritten) {
                         json.writeObjectStart("de.longri.cachebox3.platform_test.tests." + fileHandle.nameWithoutExtension());
+
+                        //write Before/After methodeNames
+                        if (beforeMethodeName != null)
+                            json.writeValue("BeforeAllName", beforeMethodeName);
+                        if (afterMethodeName != null)
+                            json.writeValue("AfterAllName", afterMethodeName);
+
                         fileObjStartWritten = true;
                     }
 

@@ -28,6 +28,10 @@ dependencies {
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
     
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
+    //vtm
+    implementation "org.mapsforge:vtm:$vtmVersion"
+    implementation "org.mapsforge:vtm-gdx:$vtmVersion"
+    implementation "org.mapsforge:vtm-themes:$vtmVersion"
     
 }
 

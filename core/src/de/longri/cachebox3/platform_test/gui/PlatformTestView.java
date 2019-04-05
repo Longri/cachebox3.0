@@ -18,7 +18,6 @@ package de.longri.cachebox3.platform_test.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
@@ -32,7 +31,8 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
-import de.longri.cachebox3.gui.dialogs.*;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -46,6 +46,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -103,6 +104,16 @@ public class PlatformTestView extends AbstractView {
                             if (item.testName != null) button.setActTestName(item.testName);
                             if (actContainer == null && item.type == PlatformTestViewItem.Type.CONTAINER) {
                                 actContainer = item;
+
+                                //maybe call before
+                                if (actContainer.beforeAllName != null) {
+                                    try {
+                                        Class refClass = ClassReflection.forName(actContainer.className);
+                                        refClass.getMethod(actContainer.beforeAllName).invoke(null);
+                                    } catch (ReflectionException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                                 continue;
                             }
 
@@ -113,8 +124,26 @@ public class PlatformTestView extends AbstractView {
                                 } else {
                                     actContainer.setState(PlatformTestViewItem.State.TEST_OK);
                                 }
+                                //maybe call after
+                                if (actContainer.afterAllName != null) {
+                                    try {
+                                        Class refClass = ClassReflection.forName(actContainer.className);
+                                        refClass.getMethod(actContainer.afterAllName).invoke(null);
+                                    } catch (ReflectionException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                                 actContainer.stop();
                                 actContainer = item;
+                                //maybe call before
+                                if (actContainer.beforeAllName != null) {
+                                    try {
+                                        Class refClass = ClassReflection.forName(actContainer.className);
+                                        refClass.getMethod(actContainer.beforeAllName).invoke(null);
+                                    } catch (ReflectionException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                                 annyFaildOnContainer.set(false);
                                 continue;
                             }
@@ -154,6 +183,15 @@ public class PlatformTestView extends AbstractView {
                             item.stop();
                         }
                         actContainer.stop();
+                        //maybe call after
+                        if (actContainer.afterAllName != null) {
+                            try {
+                                Class refClass = ClassReflection.forName(actContainer.className);
+                                refClass.getMethod(actContainer.afterAllName).invoke(null);
+                            } catch (ReflectionException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         if (annyFaildOnContainer.get()) {
                             actContainer.setState(PlatformTestViewItem.State.TEST_FAIL);
                             anyTestFaild = true;
@@ -222,13 +260,9 @@ public class PlatformTestView extends AbstractView {
         contentTable.row();
 
         this.addActor(contentTable);
-
-
     }
 
     private String printStackTrace(Throwable t) {
-
-
         Throwable printTrowable = null;
         for (Throwable e = t.getCause(); e != null; e = e.getCause()) {
             printTrowable = e;
@@ -254,7 +288,7 @@ public class PlatformTestView extends AbstractView {
 
             sw.close();
             pw.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             t.printStackTrace();
         }
         String result = buf.toString();
@@ -277,9 +311,15 @@ public class PlatformTestView extends AbstractView {
         for (Iterator<JsonValue> it = result.iterator().iterator(); it.hasNext(); ) {
             JsonValue jsonValue = it.next();
             log.debug(jsonValue.name);
-            itemArray.add(new PlatformTestViewItem(idx++, PlatformTestViewItem.Type.CONTAINER, jsonValue.name));
+            JsonValue beforeNameValue = jsonValue.get("BeforeAllName");
+            JsonValue afterNameValue = jsonValue.get("AfterAllName");
+            String beforeName = beforeNameValue != null ? beforeNameValue.asString() : null;
+            String afterName = afterNameValue != null ? afterNameValue.asString() : null;
+            itemArray.add(new PlatformTestViewItem(idx++, PlatformTestViewItem.Type.CONTAINER, jsonValue.name,
+                    null, false, beforeName, afterName));
             for (int i = 0; i < jsonValue.size; i++) {
                 JsonValue child = jsonValue.get(i);
+                if (child.name.equals("BeforeAllName") || child.name.equals("AfterAllName")) continue;
                 log.debug("   --" + child.name);
                 itemArray.add(new PlatformTestViewItem(idx++, PlatformTestViewItem.Type.TEST, jsonValue.name,
                         child.name, (child.child() != null && child.child().asString().equals("RunOnGL"))));

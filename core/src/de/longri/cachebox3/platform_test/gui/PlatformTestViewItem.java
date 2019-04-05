@@ -44,6 +44,7 @@ public class PlatformTestViewItem extends ListViewItem {
     public final Type type;
     public final TimeLabel timeLabel = new TimeLabel(false);
     public final boolean runOnGL;
+    public final String beforeAllName, afterAllName;
 
     private String testMsg = null;
 
@@ -52,6 +53,10 @@ public class PlatformTestViewItem extends ListViewItem {
     }
 
     public PlatformTestViewItem(int index, Type type, String containerName, String testName, boolean runOnGL) {
+        this(index, type, containerName, testName, runOnGL, null, null);
+    }
+
+    public PlatformTestViewItem(int index, Type type, String containerName, String testName, boolean runOnGL, String beforeAllName, String afterAllName) {
         super(index);
         this.type = type;
         this.runOnGL = runOnGL;
@@ -59,6 +64,8 @@ public class PlatformTestViewItem extends ListViewItem {
         this.className = containerName;
         int pos = containerName.lastIndexOf('.');
         this.containerName = containerName.substring(pos + 1, containerName.length());
+        this.beforeAllName = beforeAllName;
+        this.afterAllName = afterAllName;
 
         contentTable.setRound(false);
 

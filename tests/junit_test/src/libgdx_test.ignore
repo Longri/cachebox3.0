@@ -1,7 +1,6 @@
 libgdx_test.ignore
 com.badlogic.gdx/
 travis/
-ISSUE_Tests/
 gdx.utils/
 de.longri.cachebox3.TestUtils.java
 de.longri.cachebox3.types/

@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.platform_test;
 
+import com.badlogic.gdx.utils.StringBuilder;
+
 /**
  * Created by Longri on 18.03.2019.
  */
@@ -34,13 +36,26 @@ public class Assert {
 
     public static void assertEquals(Object expected, Object actual, String reason) throws PlatformAssertionError {
         if (!objectsAreEqual(expected, actual)) {
-            throw new PlatformAssertionError(reason);
+            StringBuilder sb = new StringBuilder(reason);
+            sb.appendLine("");
+            sb.appendLine("expected:");
+            sb.appendLine(String.valueOf(expected));
+            sb.appendLine("");
+            sb.appendLine("actual:");
+            sb.appendLine(String.valueOf(actual));
+            throw new PlatformAssertionError(sb.toString());
         }
     }
 
     public static void assertEquals(Object expected, Object actual) throws PlatformAssertionError {
         if (!objectsAreEqual(expected, actual)) {
-            throw new PlatformAssertionError("");
+            StringBuilder sb = new StringBuilder();
+            sb.appendLine("expected:");
+            sb.appendLine(String.valueOf(expected));
+            sb.appendLine("");
+            sb.appendLine("actual:");
+            sb.appendLine(String.valueOf(actual));
+            throw new PlatformAssertionError(sb.toString());
         }
     }
 

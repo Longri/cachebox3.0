@@ -36,15 +36,15 @@ public class CreateCbDirectoryStructure {
         this.workPath = workPath;
         this.replaceWorkPath = !this.workPath.equals(CB.WorkPath);
 
-        ini_Dir(workPath + "/user", false);
+        ini_Dir(CB.WorkPath + "/user", false);
         ini_Dir(Config.PocketQueryFolder.getDefaultValue(), false);
         ini_Dir(Config.TileCacheFolder.getDefaultValue(), nomedia);
         ini_Dir(Config.TrackFolder.getDefaultValue(), false);
         ini_Dir(Config.UserImageFolder.getDefaultValue(), nomedia);
-        ini_Dir(workPath + "/repository", nomedia);
-        ini_Dir(workPath + "/repositories", nomedia);
-        ini_Dir(workPath + "/data", nomedia);
-        ini_Dir(workPath + "/user/temp", nomedia);
+        ini_Dir(CB.WorkPath + "/repository", nomedia);
+        ini_Dir(CB.WorkPath + "/repositories", nomedia);
+        ini_Dir(CB.WorkPath + "/data", nomedia);
+        ini_Dir(CB.WorkPath + "/user/temp", nomedia);
         ini_Dir(Config.DescriptionImageFolder.getDefaultValue(), nomedia);
         ini_Dir(Config.MapPackFolder.getDefaultValue(), nomedia);
         ini_Dir(Config.SpoilerFolder.getDefaultValue(), nomedia);

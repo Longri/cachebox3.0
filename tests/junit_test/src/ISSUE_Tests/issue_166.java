@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 10.11.2017.
@@ -37,24 +38,43 @@ public class issue_166 {
 //      /user-selected-directory
 
 
-    private static FileHandle workpath;
+    private static FileHandle testWorkpath;
+    private static String lastConfigValue = null;
 
     @BeforeAll
-    static void setUp() {
+    public static void setUp() {
         TestUtils.initialGdx();
-        workpath = TestUtils.getResourceFileHandle("testsResources",false).child("TestMapDirs");
-        workpath.mkdirs();
+
+
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        testWorkpath.deleteDirectory();
+        Config.MapPackFolder.setValue(lastConfigValue);
+        Config.AcceptChanges();
+    }
+
+    @Test
+    public void testMapCount() {
+
+
+        testWorkpath = TestUtils.getResourceFileHandle((TestUtils.isPlatformTest() ? CB.WorkPath : "") + "testsResources", false).child("TestMapDirs");
+
+        if (testWorkpath.exists()) testWorkpath.deleteDirectory();
+
+        testWorkpath.mkdirs();
 
 
         //create CB3 folder struct on workPath
-        new CreateCbDirectoryStructure(workpath.file().getAbsolutePath(), true);
+        new CreateCbDirectoryStructure(testWorkpath.file().getAbsolutePath(), true);
 
         // check created directory structure
-        assertThat("Folder must exist '/user'", workpath.child("user").exists());
-        assertThat("Folder must exist '/repository'", workpath.child("repository").exists());
-        assertThat("Folder must exist '/repositories'", workpath.child("repositories").exists());
-        assertThat("Folder must exist '/data'", workpath.child("data").exists());
-        assertThat("Folder must exist '/user/temp'", workpath.child("user").child("temp").exists());
+        assertThat("Folder must exist '/user'", testWorkpath.child("user").exists());
+        assertThat("Folder must exist '/repository'", testWorkpath.child("repository").exists());
+        assertThat("Folder must exist '/repositories'", testWorkpath.child("repositories").exists());
+        assertThat("Folder must exist '/data'", testWorkpath.child("data").exists());
+        assertThat("Folder must exist '/user/temp'", testWorkpath.child("user").child("temp").exists());
 
         String PocketQueryFolder = Config.PocketQueryFolder.getDefaultValue().replace(CB.WorkPath, "");
         String TileCacheFolder = Config.TileCacheFolder.getDefaultValue().replace(CB.WorkPath, "");
@@ -64,47 +84,45 @@ public class issue_166 {
         String MapPackFolder = Config.MapPackFolder.getDefaultValue().replace(CB.WorkPath, "");
         String SpoilerFolder = Config.SpoilerFolder.getDefaultValue().replace(CB.WorkPath, "");
 
-        assertThat("Folder must exist '" + PocketQueryFolder + "'", workpath.child(PocketQueryFolder).exists());
-        assertThat("Folder must exist '" + TileCacheFolder + "'", workpath.child(TileCacheFolder).exists());
-        assertThat("Folder must exist '" + TrackFolder + "'", workpath.child(TrackFolder).exists());
-        assertThat("Folder must exist '" + UserImageFolder + "'", workpath.child(UserImageFolder).exists());
-        assertThat("Folder must exist '" + DescriptionImageFolder + "'", workpath.child(DescriptionImageFolder).exists());
-        assertThat("Folder must exist '" + MapPackFolder + "'", workpath.child(MapPackFolder).exists());
-        assertThat("Folder must exist '" + SpoilerFolder + "'", workpath.child(SpoilerFolder).exists());
+        assertThat("Folder must exist '" + PocketQueryFolder + "'", testWorkpath.child(PocketQueryFolder).exists());
+        assertThat("Folder must exist '" + TileCacheFolder + "'", testWorkpath.child(TileCacheFolder).exists());
+        assertThat("Folder must exist '" + TrackFolder + "'", testWorkpath.child(TrackFolder).exists());
+        assertThat("Folder must exist '" + UserImageFolder + "'", testWorkpath.child(UserImageFolder).exists());
+        assertThat("Folder must exist '" + DescriptionImageFolder + "'", testWorkpath.child(DescriptionImageFolder).exists());
+        assertThat("Folder must exist '" + MapPackFolder + "'", testWorkpath.child(MapPackFolder).exists());
+        assertThat("Folder must exist '" + SpoilerFolder + "'", testWorkpath.child(SpoilerFolder).exists());
 
 
         //copy some test maps to test folder
-        FileHandle pankowMap = TestUtils.getResourceFileHandle("testsResources/pankow.map",true);
-        FileHandle repositotyCopy = workpath.child("repository").child("maps").child("reposetoryMap.map");
+        FileHandle pankowMap = TestUtils.getResourceFileHandle("testsResources/pankow.map", true);
+        assertThat("File 'testsResources/pankow.map' must exist ", pankowMap.exists());
+
+        FileHandle repositotyCopy = testWorkpath.child("repository").child("maps").child("reposetoryMap.map");
         repositotyCopy.parent().mkdirs();
+        assertThat("Folder must exist", repositotyCopy.parent().exists());
+
         pankowMap.copyTo(repositotyCopy);
 
-        FileHandle repositorieTestCopy = workpath.child("Repositories").child("test").child("maps").child("reposetorieTestMap.map");
+        FileHandle repositorieTestCopy = testWorkpath.child("Repositories").child("test").child("maps").child("reposetorieTestMap.map");
         repositorieTestCopy.parent().mkdirs();
+        assertThat("Folder must exist", repositorieTestCopy.parent().exists());
         pankowMap.copyTo(repositorieTestCopy);
 
         Config.DatabaseName.setValue("test.db3");
 
-        FileHandle myMapPacks = workpath.child("MyMapPack");
+        FileHandle myMapPacks = testWorkpath.child("MyMapPack");
         FileHandle myTestCopy = myMapPacks.child("MyTestMap.map");
         myTestCopy.parent().mkdirs();
         pankowMap.copyTo(myTestCopy);
 
+        lastConfigValue = Config.MapPackFolder.getValue();
         Config.MapPackFolder.setValue(myMapPacks.file().getAbsolutePath());
+        Config.AcceptChanges();
 
-    }
-
-    @AfterAll
-    static void tearDown() {
-        workpath.deleteDirectory();
-    }
-
-    @Test
-    void testMapCount() {
         BaseMapManager manager = new BaseMapManager();
-        manager.refreshMaps(workpath);
+        manager.refreshMaps(testWorkpath);
 
-        assertThat("BasManager must found 10 maps", manager.size == 11);
+        assertEquals(11, manager.size, "BasManager must found 11 maps");
         assertThat("Map 'Hike Bike' notFound", findMap(manager, "Hike Bike"));
         assertThat("Map 'Stamen Water Color' notFound", findMap(manager, "Stamen Water Color"));
         assertThat("Map 'Stamen Toner' notFound", findMap(manager, "Stamen Toner"));

@@ -34,6 +34,10 @@ import static de.longri.cachebox3.platform_test.Assert.assertTrue;
 
 public class TestUtils {
 
+    public static boolean isPlatformTest() {
+        return true;
+    }
+
     public static void initialGdx() {
         // we don't need to initial GDX on PlatformTest Gdx are initial!
     }
@@ -43,8 +47,13 @@ public class TestUtils {
     }
 
     public static FileHandle getResourceFileHandle(String path, boolean mustexist) {
-        boolean isDevice = CanvasAdapter.platform == Platform.IOS;
+        boolean isDevice = mustexist && (CanvasAdapter.platform == Platform.IOS || CanvasAdapter.platform == Platform.ANDROID);
         FileHandle fileHandle = isDevice ? Gdx.files.internal(path) : Gdx.files.absolute(path);
+
+        if (mustexist && !fileHandle.exists()) {
+            fileHandle = isDevice ? Gdx.files.internal("platform_test/" + path) : Gdx.files.absolute("platform_test/" + path);
+        }
+
         return fileHandle;
     }
 
@@ -78,7 +87,7 @@ public class TestUtils {
     }
 
     public static String getResourceRequestString(String path, String apiKey) throws IOException {
-        boolean isDevice = CanvasAdapter.platform == Platform.IOS||CanvasAdapter.platform == Platform.ANDROID;
+        boolean isDevice = CanvasAdapter.platform == Platform.IOS || CanvasAdapter.platform == Platform.ANDROID;
 
         FileHandle file = isDevice ? Gdx.files.internal(path) : Gdx.files.absolute(path);
 
@@ -109,7 +118,7 @@ public class TestUtils {
     }
 
     public static InputStream getResourceRequestStream(String path) throws FileNotFoundException {
-        boolean isDevice = CanvasAdapter.platform == Platform.IOS||CanvasAdapter.platform == Platform.ANDROID;
+        boolean isDevice = CanvasAdapter.platform == Platform.IOS || CanvasAdapter.platform == Platform.ANDROID;
 
         FileHandle file = isDevice ? Gdx.files.internal(path) : Gdx.files.absolute(path);
 

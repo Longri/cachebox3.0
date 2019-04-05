@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2017 - 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -62,6 +62,10 @@ import static org.mockito.Mockito.mock;
  */
 public class TestUtils {
 
+    public static boolean isPlatformTest() {
+        return false;
+    }
+
     private static boolean gdxIsInitial = false;
 
     public static void initialGdx() {
@@ -76,7 +80,7 @@ public class TestUtils {
         });
         Gdx.files = Gdx.app.getFiles();
         Gdx.net = Gdx.app.getNet();
-        CB.WorkPath = "!!!";
+        CB.WorkPath = new File("./").getAbsolutePath();
         VisUI.load(new Skin());
         CB.initThreadCheck();
         Gdx.gl = mock(GL20.class);
@@ -199,7 +203,7 @@ public class TestUtils {
         VisUI.getSkin().add("mapCompassStyle", compassStyle, CompassStyle.class);
 
         //de.longri.cachebox3.gui.widgets.ZoomButton$ZoomButtonStyle registered with name: default
-        ZoomButton.ZoomButtonStyle zoomButtonStyle=new ZoomButton.ZoomButtonStyle();
+        ZoomButton.ZoomButtonStyle zoomButtonStyle = new ZoomButton.ZoomButtonStyle();
         VisUI.getSkin().add("default", zoomButtonStyle, ZoomButton.ZoomButtonStyle.class);
     }
 
@@ -335,7 +339,7 @@ public class TestUtils {
 
     }
 
-    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz){
+    public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz) {
         de.longri.serializable.BitStore store = abstractView.saveInstanceState();
         byte[] bytes = store.getArray();
 

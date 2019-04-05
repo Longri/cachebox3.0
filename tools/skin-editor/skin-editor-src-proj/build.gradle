@@ -17,7 +17,7 @@ dependencies {
 
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
-    implementation group: 'org.json', name: 'json', version: '20160810'
+    implementation group: 'org.json', name: 'json', version: '20180813'
 
     //vtm
     implementation "org.mapsforge:vtm-gdx:$vtmVersion"
