@@ -27,7 +27,6 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
@@ -35,6 +34,7 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.LogEntry;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
@@ -42,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.APIError;
 import static de.longri.cachebox3.apis.GroundspeakAPI.LastAPIError;
@@ -105,16 +104,18 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
         CB.postOnNextGlThread((new NamedRunnable("LogListView") {
             @Override
             public void run() {
-                if (actGcCode == null || !actGcCode.equals(EventHandler.getSelectedCache().getGcCode())) {
-                    logEntries = Database.Data.getLogs(EventHandler.getSelectedCache());
-                    actGcCode = EventHandler.getSelectedCache() == null ? "" : EventHandler.getSelectedCache().getGcCode().toString();
-
-                    logEntries.sort(new Comparator<LogEntry>() {
-                        @Override
-                        public int compare(LogEntry o1, LogEntry o2) {
-                            return o1.Timestamp.compareTo(o2.Timestamp) * -1;
-                        }
-                    });
+                AbstractCache selectedCache = EventHandler.getSelectedCache();
+                String selectedGcCode = selectedCache == null ? "" : selectedCache.getGcCode().toString();
+                if (actGcCode == null || !actGcCode.equals(selectedGcCode)) {
+                    if (selectedCache != null) {
+                        actGcCode = selectedGcCode;
+                        logEntries = Database.Data.getLogs(selectedCache);
+                        logEntries.sort((o1, o2) -> o1.Timestamp.compareTo(o2.Timestamp) * -1);
+                    }
+                    else {
+                        // todo or set actGcCode to null ?
+                        actGcCode = ""; // = selectedGcCode
+                    }
                 }
                 listView.setAdapter(listViewAdapter);
             }
@@ -149,24 +150,20 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
     public Menu getContextMenu() {
         Menu cm = new Menu("LogViewContextMenu");
 
-        cm.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public boolean onItemClick(MenuItem item) {
-                switch (item.getMenuItemId()) {
-                    case MenuID.MI_LOAD_FRIENDS_LOGS:
-                        reloadLogs(false);
-                        return true;
-                    case MenuID.MI_RELOADLOGS:
-                        reloadLogs(true);
-                        return true;
-                    case MenuID.MI_FILTERLOGS:
-                        logsOfFriendsAreShown = !logsOfFriendsAreShown;
-                        //todo this filter logs;
-                        break;
-                }
-                return false;
+        cm.setOnItemClickListener(item -> {
+            switch (item.getMenuItemId()) {
+                case MenuID.MI_LOAD_FRIENDS_LOGS:
+                    reloadLogs(false);
+                    return true;
+                case MenuID.MI_RELOADLOGS:
+                    reloadLogs(true);
+                    return true;
+                case MenuID.MI_FILTERLOGS:
+                    logsOfFriendsAreShown = !logsOfFriendsAreShown;
+                    //todo this filter logs;
+                    break;
             }
+            return false;
         });
 
         MenuItem mi;
@@ -208,8 +205,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
                 LogDAO dao = new LogDAO();
                 if (loadAllLogs)
                     dao.deleteLogs(EventHandler.getSelectedCache().getId());
-                for (LogEntry writeTmp: logList)
-                {
+                for (LogEntry writeTmp : logList) {
                     // ChangedCount++;
                     dao.WriteToDatabase(writeTmp);
                 }
