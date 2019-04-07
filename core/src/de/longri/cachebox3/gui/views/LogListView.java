@@ -45,6 +45,7 @@ import java.util.ArrayList;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.APIError;
 import static de.longri.cachebox3.apis.GroundspeakAPI.LastAPIError;
+import static de.longri.cachebox3.gui.menu.MenuID.MI_LoadLogImages;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
@@ -111,8 +112,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
                         actGcCode = selectedGcCode;
                         logEntries = Database.Data.getLogs(selectedCache);
                         logEntries.sort((o1, o2) -> o1.Timestamp.compareTo(o2.Timestamp) * -1);
-                    }
-                    else {
+                    } else {
                         // todo or set actGcCode to null ?
                         actGcCode = ""; // = selectedGcCode
                     }
@@ -148,7 +148,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     @Override
     public Menu getContextMenu() {
-        Menu cm = new Menu("LogViewContextMenu");
+        Menu cm = new Menu("LogListViewContextMenu");
 
         cm.setOnItemClickListener(item -> {
             switch (item.getMenuItemId()) {
@@ -160,25 +160,28 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
                     return true;
                 case MenuID.MI_FILTERLOGS:
                     logsOfFriendsAreShown = !logsOfFriendsAreShown;
-                    //todo this filter logs;
+                    // todo implement filter friends logs;
+                    break;
+                case MI_LoadLogImages:
+                    // todo implement
                     break;
             }
             return false;
         });
 
         MenuItem mi;
-
         boolean isSelected = (EventHandler.getSelectedCache() != null);
-        boolean selectedCacheIsNoGC = false;
-
-        if (isSelected)
-            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
-        mi = cm.addItem(MenuID.MI_RELOADLOGS, "ReloadLogs", CB.getSkin().getMenuIcon.logViewIcon);
+        if (isSelected) {
+            boolean selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
+            // menu only for GC caches
+            if (selectedCacheIsNoGC) return cm;
+        } else {
+            // no menuitem without selected cache
+            return cm;
+        }
+        // now a GC Cache is selected
         // todo change icon logViewIcon
-        if (!isSelected)
-            mi.setEnabled(false);
-        if (selectedCacheIsNoGC)
-            mi.setEnabled(false);
+        cm.addItem(MenuID.MI_RELOADLOGS, "ReloadLogs", CB.getSkin().getMenuIcon.logViewIcon);
         if (Config.Friends.getValue().length() > 0) {
             cm.addItem(MenuID.MI_LOAD_FRIENDS_LOGS, "LoadLogsOfFriends", CB.getSkin().getMenuIcon.logViewIcon);
             // todo change icon logViewIcon Sprites.getSprite(IconName.importIcon.name()));
@@ -187,6 +190,8 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             mi.setCheckable(true);
             mi.setChecked(logsOfFriendsAreShown);
         }
+        // todo change icon logViewIcon Sprites.getSprite(IconName.filter.name()));
+        cm.addItem(MI_LoadLogImages, "", CB.getSkin().getMenuIcon.logViewIcon);
 
         return cm;
     }
