@@ -1060,6 +1060,14 @@
       "path": "svg/frame_user.svg",
       "scale": 0.145
     },
+    "friends": {
+      "path": "svg/friends.svg",
+      "scale": 1.5
+    },
+    "friendsLogs": {
+      "path": "svg/friendsLogs.svg",
+      "scale": 1.5
+    },
     "gb": {
       "path": "svg/gb.svg",
       "scale": 0.08
@@ -1994,12 +2002,6 @@
       "b": 0.9,
       "a": 1
     },
-    "nePqColor": {
-      "r": 1,
-      "g": 0.9411765,
-      "b": 0.5019608,
-      "a": 1
-    },
     "notAvailable": {
       "r": 0.6784314,
       "a": 1
@@ -2849,7 +2851,9 @@
       "deleteFilter": "delete_Filter",
       "deleteArchieved": "delete_Archieved",
       "deleteFounds": "delete_Founds",
-      "gpxFile": "gpxFileIcon"
+      "gpxFile": "gpxFileIcon",
+      "friends": "friends",
+      "friendsLogs": "friendsLogs"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
@@ -3337,11 +3341,7 @@
       "nameFont": "normal_font",
       "nameFontColor": "font_color",
       "infoFont": "mapPanelUnit",
-      "infoFontColor": "font_color",
-      "newFontColor": "nePqColor",
-      "newBackgroundColor": "circleProgressTextBack",
-      "readyFontColor": "coordinateValuesFocus",
-      "neverFontColor": "notAvailable"
+      "infoFontColor": "font_color"
     }
   }
 }

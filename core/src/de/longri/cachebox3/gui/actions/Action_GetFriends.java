@@ -1,6 +1,7 @@
 package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
@@ -30,6 +31,6 @@ public class Action_GetFriends extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return null;
+        return CB.getSkin().getMenuIcon.friends;
     }
 }

@@ -92,6 +92,8 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable deleteArchieved;
     public Drawable deleteFounds;
     public Drawable gpxFile;
+    public Drawable friends;
+    public Drawable friendsLogs;
 
 
     @Override
