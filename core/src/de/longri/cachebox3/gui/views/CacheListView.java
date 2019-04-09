@@ -106,7 +106,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     private void addNewListView() {
         log.debug("Start Thread add new listView");
 
-        CacheListView.this.clear();
+        this.clear();
         createdItems = new ListViewItem[Database.Data.Query.size];
         ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
@@ -169,23 +169,24 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
         };
 
-        if (CacheListView.this.listView != null) {
+        if (this.listView != null) {
             log.warn("Dispose ListView");
             disposeListView();
         }
 
-        CacheListView.this.listView = new ListView(VERTICAL);
-        CacheListView.this.addActor(listView);
-        CacheListView.this.listView.setAdapter(listViewAdapter);
+        this.listView = new ListView(VERTICAL);
+        this.listView.setEmptyString(Translation.get("EmptyCacheList"));
+        this.addActor(listView);
+        this.listView.setAdapter(listViewAdapter);
 
-        CacheListView.this.listView.setEmptyString(Translation.get("EmptyCacheList"));
-        CacheListView.this.listView.setBounds(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight());
+        this.listView.setEmptyString(Translation.get("EmptyCacheList"));
+        this.listView.setBounds(0, 0, this.getWidth(), this.getHeight());
 
-        CacheListView.this.listView.setCullingArea(new Rectangle(0, 0, CacheListView.this.getWidth(), CacheListView.this.getHeight()));
-        CacheListView.this.listView.setSelectable(SINGLE);
+        this.listView.setCullingArea(new Rectangle(0, 0, this.getWidth(), this.getHeight()));
+        this.listView.setSelectable(SINGLE);
 
         // add selection changed event listener
-        CacheListView.this.listView.addSelectionChangedEventListner(new SelectionChangedEvent() {
+        this.listView.addSelectionChangedEventListner(new SelectionChangedEvent() {
             @Override
             public void selectionChanged() {
                 CacheListItem selectedItem = (CacheListItem) CacheListView.this.listView.getSelectedItem();

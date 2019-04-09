@@ -424,6 +424,7 @@ public class ListView extends Catch_WidgetGroup {
         log.debug("Set selected item to index {}", index);
         this.selectedItemList.clear();
         ListViewItemInterface item = itemList.getItem(index);
+        if (item == null) return;
         this.selectedItemList.add(item);
         item.setSelected(true);
         CB.requestRendering();

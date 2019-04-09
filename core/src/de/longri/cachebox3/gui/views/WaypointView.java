@@ -132,7 +132,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
         log.debug("Start Thread add new listView");
 
-        WaypointView.this.clear();
+        this.clear();
         ListViewAdapter listViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
@@ -204,17 +204,20 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
         };
 
-        if (WaypointView.this.listView != null) {
+        if (this.listView != null) {
             disposeListView();
         }
 
-        WaypointView.this.listView = new ListView(VERTICAL);
-        WaypointView.this.listView.setAdapter(listViewAdapter);
+        this.listView = new ListView(VERTICAL);
 
-        synchronized (WaypointView.this.listView) {
-            listView.setBounds(0, 0, WaypointView.this.getWidth(), WaypointView.this.getHeight());
+        this.listView.setEmptyString(Translation.get("NoCacheSelect"));
+
+        this.listView.setAdapter(listViewAdapter);
+
+        synchronized (this.listView) {
+            listView.setBounds(0, 0, this.getWidth(), this.getHeight());
             addActor(listView);
-            listView.setCullingArea(new Rectangle(0, 0, WaypointView.this.getWidth(), WaypointView.this.getHeight()));
+            listView.setCullingArea(new Rectangle(0, 0, this.getWidth(), this.getHeight()));
             listView.setSelectable(SINGLE);
             CB.requestRendering();
         }
