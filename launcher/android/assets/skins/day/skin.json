@@ -1062,11 +1062,11 @@
     },
     "friends": {
       "path": "svg/friends.svg",
-      "scale": 1.5
+      "scale": 0.22
     },
-    "friendsLogs": {
-      "path": "svg/friendsLogs.svg",
-      "scale": 1.5
+    "friends-logs": {
+      "path": "svg/friends-logs.svg",
+      "scale": 0.22
     },
     "gb": {
       "path": "svg/gb.svg",
@@ -2852,8 +2852,7 @@
       "deleteArchieved": "delete_Archieved",
       "deleteFounds": "delete_Founds",
       "gpxFile": "gpxFileIcon",
-      "friends": "friends",
-      "friendsLogs": "friendsLogs"
+      "friends": "friends"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
