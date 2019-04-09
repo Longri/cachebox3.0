@@ -187,7 +187,6 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             mi.setCheckable(true);
             mi.setChecked(logsOfFriendsAreShown);
         }
-        // todo change icon logViewIcon Sprites.getSprite(IconName.filter.name()));
         cm.addItem(MI_LoadLogImages, "LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages);
 
         return cm;

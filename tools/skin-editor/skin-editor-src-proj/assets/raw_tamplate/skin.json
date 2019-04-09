@@ -1064,8 +1064,8 @@
       "path": "svg/friends.svg",
       "scale": 0.22
     },
-    "friends-logs": {
-      "path": "svg/friends-logs.svg",
+    "friendsLogs": {
+      "path": "svg/friendsLogs.svg",
       "scale": 0.22
     },
     "gb": {
@@ -2853,6 +2853,7 @@
       "deleteFounds": "delete_Founds",
       "gpxFile": "gpxFileIcon",
       "friends": "friends"
+      "friendsLogs": "friendsLogs"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
