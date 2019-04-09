@@ -84,8 +84,10 @@ public class main {
     private static final String JUPITER_TEST = "org.junit.jupiter.api.Test";
     private static final String AFTER_ALL = "AfterAll";
     private static final String BEFORE_ALL = "BeforeAll";
+    private static final String BEFORE_EACH = "BeforeEach";
     private static final String IMPORT_AFTER_ALL = "import de.longri.cachebox3.platform_test.AfterAll;";
     private static final String IMPORT_BEFORE_ALL = "import de.longri.cachebox3.platform_test.BeforeAll;";
+    private static final String IMPORT_BEFORE_EACH = "import de.longri.cachebox3.platform_test.BeforeEach;";
 
     private static final String IMPORT_TEST_ANNOTATION = "import de.longri.cachebox3.platform_test.PlatformAssertionError;\n" +
             "import de.longri.cachebox3.platform_test.Test;";
@@ -99,6 +101,8 @@ public class main {
     private static final String ASSERT_FALSE_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertFalse;";
     private static final String ASSERT_NOT_NULL = "Assertions.assertNotNull;";
     private static final String ASSERT_NOT_NULL_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertNotNull;";
+    private static final String TEST_CACHE_NAME_SPACE = "import de.longri.cachebox3.types.test_caches.";
+
 
     private static final String CLASS = "class ";
     private static final String VOID = "void ";
@@ -109,6 +113,7 @@ public class main {
     private static final String IMPORT_TRAVIS = "import de.longri.cachebox3.platform_test.EXCLUDE_FROM_TRAVIS;";
 
     private static boolean onlyFlagSet = false;
+    private static boolean mustCopyTestCacheNameSpace = false;
 
     private static void enable() {
         readIgnoreFile();
@@ -148,6 +153,13 @@ public class main {
         json.writeObjectEnd();
         String jsonString = stringWriter.toString();
         testJsonFile.writeString(jsonString, false);
+
+        if (mustCopyTestCacheNameSpace) {
+            FileHandle testCacheSourceDir = junitSrcDir.child("de/longri/cachebox3/types/test_caches");
+            FileHandle testCacheTargetDir = libgdxTestSrcDir.child("../../types");
+            testCacheSourceDir.copyTo(testCacheTargetDir);
+        }
+
     }
 
     private static void disable() {
@@ -254,7 +266,8 @@ public class main {
         boolean assertNotNullReplace = false;
         boolean publicClassReplace = false;
         boolean fileObjStartWritten = false;
-        boolean beforeReplace = false;
+        boolean beforeAllReplace = false;
+        boolean beforeEachReplace = false;
         boolean afterReplace = false;
 
         //search Before/After All methode if exist
@@ -290,6 +303,9 @@ public class main {
 
             line = line.replace("\r", "");
 
+            if (!mustCopyTestCacheNameSpace && line.contains(TEST_CACHE_NAME_SPACE))
+                mustCopyTestCacheNameSpace = true;
+
             if (!packageReplace && (line.startsWith("package") || line.contains(" package "))) {
                 packageReplace = true;
 
@@ -309,9 +325,13 @@ public class main {
                     e.printStackTrace();
                 }
                 continue;
-            } else if (!beforeReplace && line.startsWith(IMPORT) && line.contains(BEFORE_ALL)) {
-                beforeReplace = true;
+            } else if (!beforeAllReplace && line.startsWith(IMPORT) && line.contains(BEFORE_ALL)) {
+                beforeAllReplace = true;
                 sb.appendLine(IMPORT_BEFORE_ALL);
+                continue;
+            } else if (!beforeEachReplace && line.startsWith(IMPORT) && line.contains(BEFORE_EACH)) {
+                beforeEachReplace = true;
+                sb.appendLine(IMPORT_BEFORE_EACH);
                 continue;
             } else if (!afterReplace && line.startsWith(IMPORT) && line.contains(AFTER_ALL)) {
                 afterReplace = true;

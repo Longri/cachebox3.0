@@ -317,9 +317,7 @@ public class TestUtils {
     }
 
     static int dbCount = 0;
-
     public static Database getTestDB(boolean inMemory) {
-
         if (inMemory) {
             Database database = new Database(Database.DatabaseType.CacheBox3);
             Database.createNewInMemoryDB(database, "createNewDB" + Integer.toString(dbCount++));
@@ -335,8 +333,6 @@ public class TestUtils {
 
             return database;
         }
-
-
     }
 
     public static AbstractView assertAbstractViewSerialation(AbstractView abstractView, Class<?> expectedClazz) {

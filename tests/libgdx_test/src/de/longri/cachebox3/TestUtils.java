@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.sqlite.Database;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 
@@ -127,5 +128,24 @@ public class TestUtils {
         }
         if (!file.exists()) throw new FileNotFoundException("can't find file: " + path);
         return file.read();
+    }
+
+    static int dbCount = 0;
+    public static Database getTestDB(boolean inMemory) {
+        if (inMemory) {
+            Database database = new Database(Database.DatabaseType.CacheBox3);
+            Database.createNewInMemoryDB(database, "createNewDB" + Integer.toString(dbCount++));
+            return database;
+        } else {
+            FileHandle dbFiileHandle = Gdx.files.local("testDBfile" + Integer.toString(dbCount++) + ".db3");
+
+            //delete if exist
+            dbFiileHandle.delete();
+
+            Database database = new Database(Database.DatabaseType.CacheBox3);
+            database.startUp(dbFiileHandle);
+
+            return database;
+        }
     }
 }

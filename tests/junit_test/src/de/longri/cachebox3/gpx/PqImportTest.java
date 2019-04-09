@@ -9,6 +9,8 @@ import de.longri.cachebox3.gui.widgets.list_view.ListViewItemInterface;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.DatabaseVersions;
 import de.longri.cachebox3.utils.ICancel;
+import de.longri.gdx.sqlite.SQLiteGdxException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -17,9 +19,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 class PqImportTest {
 
-    static {
+    @BeforeAll
+    static void setUp() throws SQLiteGdxException {
         TestUtils.initialGdx();
     }
+
 
     @Test
     void importNow() {
@@ -37,7 +41,7 @@ class PqImportTest {
         PocketQuery pq = new PocketQuery() {
             @Override
             public FileHandle download(FileHandle folder, ICancel iCancel, final IncrementProgressBytesListener listener) {
-                FileHandle oriFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ.zip");
+                FileHandle oriFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ.zip",true);
                 testFile[0] = oriFile.parent().child("TestPQ.zip");
                 oriFile.copyTo(testFile[0]);
                 if (testFile[0].exists()) return testFile[0];
@@ -48,7 +52,7 @@ class PqImportTest {
         PocketQuery pq2 = new PocketQuery() {
             @Override
             public FileHandle download(FileHandle folder, ICancel iCancel, final IncrementProgressBytesListener listener) {
-                FileHandle oriFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ.zip");
+                FileHandle oriFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ.zip",true);
                 testFile[0] = oriFile.parent().child("TestPQ2.zip");
                 oriFile.copyTo(testFile[0]);
                 if (testFile[0].exists()) return testFile[0];
