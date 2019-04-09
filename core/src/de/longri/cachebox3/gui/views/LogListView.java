@@ -180,18 +180,15 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             return cm;
         }
         // now a GC Cache is selected
-        // todo change icon logViewIcon
-        cm.addItem(MenuID.MI_RELOADLOGS, "ReloadLogs", CB.getSkin().getMenuIcon.logViewIcon);
+        cm.addItem(MenuID.MI_RELOADLOGS, "ReloadLogs", CB.getSkin().getMenuIcon.downloadLogs);
         if (Config.Friends.getValue().length() > 0) {
-            cm.addItem(MenuID.MI_LOAD_FRIENDS_LOGS, "LoadLogsOfFriends", CB.getSkin().getMenuIcon.friendsLogs);
-            // todo change icon logViewIcon Sprites.getSprite(IconName.importIcon.name()));
-            mi = cm.addItem(MenuID.MI_FILTERLOGS, "FilterLogsOfFriends", CB.getSkin().getMenuIcon.logViewIcon);
-            // todo change icon logViewIcon Sprites.getSprite(IconName.filter.name()));
+            cm.addItem(MenuID.MI_LOAD_FRIENDS_LOGS, "LoadLogsOfFriends", CB.getSkin().getMenuIcon.downloadFriendsLogs);
+            mi = cm.addItem(MenuID.MI_FILTERLOGS, "FilterLogsOfFriends", CB.getSkin().getMenuIcon.friendsLogs);
             mi.setCheckable(true);
             mi.setChecked(logsOfFriendsAreShown);
         }
         // todo change icon logViewIcon Sprites.getSprite(IconName.filter.name()));
-        cm.addItem(MI_LoadLogImages, "LoadLogImages", CB.getSkin().getMenuIcon.logViewIcon);
+        cm.addItem(MI_LoadLogImages, "LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages);
 
         return cm;
     }

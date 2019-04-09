@@ -261,7 +261,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 String nodesc = Translation.get("GC_NoDescription").toString();
                 html = "</br>" + nodesc + "</br></br></br><form action=\"download\"><input type=\"submit\" value=\" " + Translation.get("GC_DownloadDescription") + " \"></form>";
             } else {
-                html = DescriptionImageGrabber.resolveImages(actCache, cacheHtml.toString(), false, nonLocalImages, nonLocalImagesUrl);
+                html = DescriptionImageGrabber.ResolveImages(actCache,cacheHtml.toString(),false,nonLocalImages,nonLocalImagesUrl);
                 if (!Config.DescriptionNoAttributes.getValue()) {
                     html = getAttributesHtml(actCache) + html;
                     log.debug("load html with Attributes");

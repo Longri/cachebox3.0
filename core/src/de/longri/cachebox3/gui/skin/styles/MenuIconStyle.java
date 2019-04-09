@@ -94,7 +94,9 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable gpxFile;
     public Drawable friends;
     public Drawable friendsLogs;
-
+    public Drawable downloadLogs;
+    public Drawable downloadFriendsLogs;
+    public Drawable downloadLogImages;
 
     @Override
     public int getPrefWidth() {

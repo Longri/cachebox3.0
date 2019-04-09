@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 team-cachebox.de
+ * Copyright (C) 2014 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,35 +18,29 @@ package de.longri.cachebox3.sqlite.Import;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.NetUtils;
-import de.longri.cachebox3.utils.lists.CB_List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
+
+import static de.longri.cachebox3.Utils.sdbm;
+import static de.longri.cachebox3.apis.GroundspeakAPI.*;
 
 public class DescriptionImageGrabber {
     final static Logger log = LoggerFactory.getLogger(DescriptionImageGrabber.class);
 
-    public static class Segment {
-        public int start;
-        public int ende;
-        public String text;
-    }
-
     public static Array<Segment> Segmentize(String text, String leftSeperator, String rightSeperator) {
-        Array<Segment> result = new CB_List<Segment>();
+        Array<Segment> result = new Array<Segment>();
 
         if (text == null) {
             return result;
@@ -99,12 +93,19 @@ public class DescriptionImageGrabber {
         return result;
     }
 
+    public static String RemoveSpaces(String line) {
+        String dummy = line.replace("\n", "");
+        dummy = dummy.replace("\r", "");
+        dummy = dummy.replace(" ", "");
+        return dummy;
+    }
+
     /**
-     * @param gcCode
+     * @param GcCode
      * @param _uri
      * @return
      */
-    public static String BuildImageFilename(CharSequence gcCode, URI _uri) {
+    public static String BuildDescriptionImageFilename(String GcCode, URI _uri) {
         // in der DB stehts ohne large. der Dateiname wurde aber mit large gebildet. Ev auch nur ein Handy / PC Problem.
         String path = _uri.getPath();
         String authority = _uri.getAuthority();
@@ -113,8 +114,9 @@ public class DescriptionImageGrabber {
                 path = path.replace("/large/", "/");
             }
         }
-
-        StringBuilder imagePath = getStringBuilderPathforGcCode(gcCode);
+        String imagePath = Config.DescriptionImageFolder.getValue() + "/" + GcCode.substring(0, 4);
+        if (Config.DescriptionImageFolderLocal.getValue().length() > 0)
+            imagePath = Config.DescriptionImageFolderLocal.getValue() + "/" + GcCode.substring(0, 4);
 
         // String uriName = url.Substring(url.LastIndexOf('/') + 1);
         // int idx = uri.AbsolutePath.LastIndexOf('.');
@@ -126,58 +128,42 @@ public class DescriptionImageGrabber {
 
         // return imagePath + "\\" + GcCode +
         // Global.sdbm(uri.AbsolutePath).ToString() + extension;!!!!!!!!!!!!!
-        imagePath.append("/").append(gcCode).append(Utils.sdbm(path)).append(extension);
-        return imagePath.toString();
-    }
-
-    public static String getImageFolderPath(CharSequence gcCode) {
-        return getStringBuilderPathforGcCode(gcCode).toString();
-    }
-
-    private static StringBuilder getStringBuilderPathforGcCode(CharSequence gcCode) {
-        StringBuilder imagePath;
-        if (Config.DescriptionImageFolderLocal.getValue().length() > 0) {
-            imagePath = new StringBuilder(Config.DescriptionImageFolderLocal.getValue());
-        } else {
-            imagePath = new StringBuilder(Config.DescriptionImageFolder.getValue());
-        }
-
-        imagePath.append("/");
-        for (int i = 0; i <= 4; i++)
-            imagePath.append(gcCode.charAt(i));
-
-        imagePath.append("/");
-        imagePath.append(gcCode);
-        return imagePath;
+        return imagePath + "/" + GcCode + sdbm(path) + extension;
     }
 
     /**
-     * @param abstractCache
+     * @param Cache
      * @param html
      * @param suppressNonLocalMedia
-     * @param nonLocalImages
-     * @param nonLocalImagesUrl
+     * @param NonLocalImages
+     * @param NonLocalImagesUrl
      * @return
      */
-    public static String resolveImages(AbstractCache abstractCache, String html, boolean suppressNonLocalMedia, LinkedList<String> nonLocalImages, LinkedList<String> nonLocalImagesUrl) {
+    public static String ResolveImages(AbstractCache Cache, String html, boolean suppressNonLocalMedia, LinkedList<String> NonLocalImages, LinkedList<String> NonLocalImagesUrl) {
         /*
          * NonLocalImages = new List<string>(); NonLocalImagesUrl = new List<string>();
          */
 
         URI baseUri;
         try {
-            baseUri = URI.create(abstractCache.getUrl().toString());
+            baseUri = URI.create(Cache.getUrl().toString());
         } catch (Exception exc) {
-            log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(), exc);
+            /*
+             * #if DEBUG Global.AddLog( "DescriptionImageGrabber.ResolveImages: failed to resolve '" + Cache.Url + "': " + exc.ToString());
+             * #endif
+             */
             baseUri = null;
         }
 
         if (baseUri == null) {
-            abstractCache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + abstractCache.getGcCode());
+            Cache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + Cache.getGcCode());
             try {
-                baseUri = URI.create(abstractCache.getUrl().toString());
+                baseUri = URI.create(Cache.getUrl().toString());
             } catch (Exception exc) {
-                log.error("DescriptionImageGrabber.resolveImages: failed to resolve {}", abstractCache.getUrl(), exc);
+                /*
+                 * #if DEBUG Global.AddLog( "DescriptionImageGrabber.ResolveImages: failed to resolve '" + Cache.Url + "': " +
+                 * exc.ToString()); #endif
+                 */
                 return html;
             }
         }
@@ -195,13 +181,10 @@ public class DescriptionImageGrabber {
             int srcEnd = img.text.indexOf('"', srcStart + 1);
 
             if (srcIdx != -1 && srcStart != -1 && srcEnd != -1) {
-                String src = img.text.substring(srcStart + 1, srcEnd/*
-                 * - srcStart - 1
-                 */);
+                String src = img.text.substring(srcStart + 1, srcEnd);
                 try {
-                    URI imgUri = URI.create(/* baseUri, */src); // NICHT
-                    // ORGINAL!!!!!!!!!
-                    String localFile = BuildImageFilename(abstractCache.getGcCode().toString(), imgUri);
+                    URI imgUri = URI.create(/* baseUri, */src);
+                    String localFile = BuildDescriptionImageFilename(Cache.getGcCode().toString(), imgUri);
 
                     if (Utils.FileExistsNotEmpty(localFile)) {
                         int idx = 0;
@@ -210,7 +193,7 @@ public class DescriptionImageGrabber {
                             if (idx >= (img.start + delta) && (idx <= img.ende + delta)) {
                                 String head = html.substring(0, img.start + delta);
                                 String tail = html.substring(img.ende + delta);
-                                String uri = new File(localFile).toURI().toString();
+                                String uri = "file://" + localFile;
                                 String body = img.text.replace(src, uri);
 
                                 delta += (uri.length() - src.length());
@@ -219,13 +202,11 @@ public class DescriptionImageGrabber {
                             idx++;
                         }
                     } else {
-                        nonLocalImages.add(localFile);
-                        nonLocalImagesUrl.add(imgUri.toString());
+                        NonLocalImages.add(localFile);
+                        NonLocalImagesUrl.add(imgUri.toString());
 
                         if (suppressNonLocalMedia) {
-                            // Wenn nicht-lokale Inhalte unterdrückt werden
-                            // sollen,
-                            // wird das <img>-Tag vollständig entfernt
+                            // Wenn nicht-lokale Inhalte unterdrückt werden sollen, wird das <img>-Tag vollständig entfernt
                             html = html.substring(0, img.start - 4 + delta) + html.substring(img.ende + 1 + delta);
                             delta -= 5 + img.ende - img.start;
                         }
@@ -233,7 +214,7 @@ public class DescriptionImageGrabber {
                     }
                 } catch (Exception exc) {
                     /*
-                     * #if DEBUG Global.AddLog( "DescriptionImageGrabber.resolveImages: failed to resolve relative uri. Base '" + baseUri +
+                     * #if DEBUG Global.AddLog( "DescriptionImageGrabber.ResolveImages: failed to resolve relative uri. Base '" + baseUri +
                      * "', relative '" + src + "': " + exc.ToString()); #endif
                      */
                 }
@@ -243,58 +224,9 @@ public class DescriptionImageGrabber {
         return html;
     }
 
-//    public static LinkedList<String> GetAllImages(AbstractCache AbstractCache) {
-//
-//        LinkedList<String> images = new LinkedList<String>();
-//
-//        URI baseUri;
-//        try {
-//            baseUri = URI.create(AbstractCache.getUrl());
-//        } catch (Exception exc) {
-//            baseUri = null;
-//        }
-//
-//        if (baseUri == null) {
-//            AbstractCache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + AbstractCache.getGcCode());
-//            try {
-//                baseUri = URI.create(AbstractCache.getUrl());
-//            } catch (Exception exc) {
-//                return images;
-//            }
-//        }
-//
-//        CB_List<Segment> imgTags = Segmentize(AbstractCache.getShortDescription(), "<img", ">");
-//
-//        imgTags.addAll(Segmentize(AbstractCache.getLongDescription(), "<img", ">"));
-//
-//        for (int i = 0, n = imgTags.size; i < n; i++) {
-//            Segment img = imgTags.get(i);
-//            int srcStart = -1;
-//            int srcEnd = -1;
-//            int srcIdx = img.text.toLowerCase().indexOf("src=");
-//            if (srcIdx != -1)
-//                srcStart = img.text.indexOf('"', srcIdx + 4);
-//            if (srcStart != -1)
-//                srcEnd = img.text.indexOf('"', srcStart + 1);
-//
-//            if (srcIdx != -1 && srcStart != -1 && srcEnd != -1) {
-//                String src = img.text.substring(srcStart + 1, srcEnd);
-//                try {
-//                    URI imgUri = URI.create(src);
-//
-//                    images.add(imgUri.toString());
-//
-//                } catch (Exception exc) {
-//                }
-//            }
-//        }
-//
-//        return images;
-//    }
-
     public static LinkedList<URI> GetImageUris(String html, String baseUrl) {
 
-        LinkedList<URI> images = new LinkedList<URI>();
+        LinkedList<URI> images = new LinkedList<>();
 
         // chk baseUrl
         try {
@@ -322,7 +254,7 @@ public class DescriptionImageGrabber {
 
                     images.add(imgUri);
 
-                } catch (Exception exc) {
+                } catch (Exception ignored) {
                 }
             }
         }
@@ -330,38 +262,38 @@ public class DescriptionImageGrabber {
         return images;
     }
 
-
-    public static ApiResultState GrabImagesSelectedByCache(ImporterProgress ip, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String name, String description, String url) {
+    public static int GrabImagesSelectedByCache(ImporterProgress ip, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String description, String url, boolean withLogImages) {
         boolean imageLoadError = false;
 
         if (!descriptionImagesUpdated) {
-            if (ip != null) ip.ProgressChangeMsg("importImages", "Importing Description Images for " + gcCode);
+            log.debug("GrabImagesSelectedByCache -> grab description images");
+            ip.ProgressChangeMsg("importImages", Translation.get("DescriptionImageImportForGC") + gcCode);
 
             LinkedList<URI> imgUris = GetImageUris(description, url);
 
             for (URI uri : imgUris) {
-                try {// for cancel/interupt Thread
+                try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
-                    return ApiResultState.CANCELED;
+                    return 0;
                 }
 
                 if (BreakawayImportThread.isCanceled())
-                    return ApiResultState.CANCELED;
+                    return 0;
 
-                String local = BuildImageFilename(gcCode, uri);
+                String local = BuildDescriptionImageFilename(gcCode, uri);
 
-                if (ip != null)
-                    ip.ProgressChangeMsg("importImages", "Importing Description Images for " + gcCode + " - download: " + uri);
+                ip.ProgressChangeMsg("importImages", Translation.get("DescriptionImageImportForGC") + gcCode + Translation.get("ImageDownloadFrom") + uri);
 
-                // build URL
+                // direkt download
                 for (int j = 0; j < 1 /* && !parent.Cancel */; j++) {
+                    // todo replace NetUtils.download
                     if (NetUtils.download(uri.toString(), local)) {
                         // Next image
                         DeleteMissingImageInformation(local);
                         break;
                     } else {
-                        imageLoadError = HandleMissingImages(imageLoadError, uri, local);
+                        imageLoadError = HandleMissingImages(imageLoadError, uri.toString(), local);
                     }
                 }
             }
@@ -373,99 +305,72 @@ public class DescriptionImageGrabber {
                 args.put("DescriptionImagesUpdated", descriptionImagesUpdated);
                 Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(id)});
             }
+            log.debug("GrabImagesSelectedByCache done");
         }
 
         if (!additionalImagesUpdated) {
-            // get additional images (Spoiler)
+            log.debug("GrabImagesSelectedByCache -> grab spoiler images");
+            // Get additional images (Spoiler)
 
-            // Liste aller Spoiler Images für diesen Cache erstellen
-            // anhand dieser Liste kann überprüft werden, ob ein Spoiler schon geladen ist und muss nicht ein 2. mal geladen werden.
-            // Außerdem können anhand dieser Liste veraltete Spoiler identifiziert werden, die gelöscht werden können / müssen
             FileHandle[] files = getFilesInDirectory(Config.SpoilerFolder.getValue(), gcCode);
-            FileHandle[] filesLocal = getFilesInDirectory(Config.SpoilerFolderLocal.getValue(), gcCode);
-            ArrayList<String> afiles = new ArrayList<String>();
+            ArrayList<String> allSpoilers = new ArrayList<>();
             for (FileHandle file : files)
-                afiles.add(file.name());
+                allSpoilers.add(file.name());
+            FileHandle[] filesLocal = getFilesInDirectory(Config.SpoilerFolderLocal.getValue(), gcCode);
             for (FileHandle file : filesLocal)
-                afiles.add(file.name());
+                allSpoilers.add(file.name());
 
             {
-                if (ip != null) ip.ProgressChangeMsg("importImages", "Importing Spoiler Images for " + gcCode);
-                HashMap<String, URI> allimgDict = new HashMap<String, URI>();
+                ip.ProgressChangeMsg("importImages", Translation.get("SpoilerImageImportForGC") + gcCode);
 
-                ApiResultState result = ApiResultState.UNKNOWN;
-                long startTs = System.currentTimeMillis();
-
-                result = GroundspeakLiveAPI.getAllImageLinks(gcCode, allimgDict, null);
-
-                if (result.isErrorState()) {
-                    return result;
+                // todo always take from database. They are not downloaded yet
+                // todo else don't write them to database on fetch/update cache
+                ArrayList<ImageEntry> imageEntries = downloadImageListForGeocache(gcCode, withLogImages);
+                if (APIError != OK) {
+                    return ERROR;
                 }
 
-                for (String key : allimgDict.keySet()) {
+                for (ImageEntry imageEntry : imageEntries) {
 
                     try {// for cancel/interupt Thread
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
-                        return ApiResultState.IO;
+                        return 0;
                     }
 
                     if (BreakawayImportThread.isCanceled())
-                        return ApiResultState.CANCELED;
+                        return 0;
 
-                    URI uri = allimgDict.get(key);
-                    if (uri.toString().contains("/cache/log/"))
-                        continue; // LOG-Image
+                    String uri = imageEntry.ImageUrl;
 
-                    if (ip != null)
-                        ip.ProgressChangeMsg("importImages", "Importing Spoiler Images for " + gcCode + " - download: " + uri);
+                    ip.ProgressChangeMsg("importImages", Translation.get("SpoilerImageImportForGC") + gcCode + Translation.get("ImageDownloadFrom") + uri);
 
-                    String decodedImageName = key;
+                    imageEntry = BuildAdditionalImageFilenameHashNew(gcCode, imageEntry);
+                    if (imageEntry != null) {
+                        // todo ? should write or update database
+                        String filename = imageEntry.LocalPath.substring(imageEntry.LocalPath.lastIndexOf('/') + 1);
 
-                    String local = buildAdditionalImageFilename(gcCode, decodedImageName, uri);
-                    if (Gdx.files.local(local).exists()) {
-                        // Spoiler ohne den Hash im Dateinamen löschen
-                        Gdx.files.local(local).delete();
-                    }
-                    // Local Filename mit Hash erzeugen, damit Änderungen der Datei ohne Änderungen des Dateinamens erkannt werden können
-                    // Hier erst die alten Version mit den Klammern als Eingrenzung des Hash
-                    // Dies hier machen, damit die Namen der Spoiler ins neue System Konvertiert werden können.
-                    String localOld = BuildAdditionalImageFilenameHashNew(gcCode, decodedImageName, uri);
-                    // Neuen Local Filename mit Hash erzeugen, damit Änderungen der Datei ohne Änderungen des Dateinamens erkannt werden können
-                    // Hier jetzt mit @ als Eingrenzung des Hashs
-                    local = BuildAdditionalImageFilenameHashNew(gcCode, decodedImageName, uri);
-                    String filename = local.substring(local.lastIndexOf('/') + 1);
-                    FileHandle oldFile = Gdx.files.local(localOld);
-                    if (oldFile.exists()) {
-                        try {
-                            oldFile.file().renameTo(Gdx.files.local(local).file());
-                            afiles.add(filename);
-                        } catch (Exception ex) {
-                            log.error("Error trying to rename Spoiler with old name format", ex);
-                        }
-                    }
-
-                    // überprüfen, ob dieser Spoiler bereits geladen wurde
-                    if (afiles.contains(filename)) {
-                        // wenn ja, dann aus der Liste der aktuell vorhandenen Spoiler entfernen und mit dem nächsten Spoiler weiter
-                        // machen
-                        // dieser Spoiler muss jetzt nicht mehr geladen werden da er schon vorhanden ist.
-                        afiles.remove(filename);
-                        continue;
-                    }
-
-                    // build URL
-                    for (int j = 0; j < 1; j++) {
-                        if (NetUtils.download(uri.toString(), local)) {
-                            // Next image
-                            DeleteMissingImageInformation(local);
-                            break;
-                        } else {
-                            imageLoadError = HandleMissingImages(imageLoadError, uri, local);
+                        // todo to test allSpoilers content
+                        if (allSpoilers.contains(filename)) {
+                            // wenn ja, dann aus der Liste der aktuell vorhandenen Spoiler entfernen und mit dem nächsten Spoiler weitermachen
+                            allSpoilers.remove(filename);
+                            continue; // dieser Spoiler muss jetzt nicht mehr geladen werden da er schon vorhanden ist.
                         }
 
+                        for (int j = 0; j < 1; j++) {
+                            // todo replace NetUtils.download
+                            if (NetUtils.download(imageEntry.ImageUrl, imageEntry.LocalPath)) {
+                                // Next image
+                                DeleteMissingImageInformation(imageEntry.LocalPath);
+                                break;
+                            } else {
+                                imageLoadError = HandleMissingImages(imageLoadError, uri, imageEntry.LocalPath);
+                            }
+
+                        }
                     }
                 }
+                log.debug("images download done");
 
                 additionalImagesUpdated = true;
 
@@ -473,11 +378,11 @@ public class DescriptionImageGrabber {
                     Database.Parameters args = new Database.Parameters();
                     args.put("ImagesUpdated", additionalImagesUpdated);
                     Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(id)});
-                    // jetzt können noch alle "alten" Spoiler gelöscht werden. "alte" Spoiler sind die, die auf der SD vorhanden sind,
-                    // aber
-                    // nicht als Link über die API gemeldet wurden
-                    // Alle Spoiler in der Liste afiles sind "alte"
-                    for (String file : afiles) {
+                    // jetzt können noch alle "alten" Spoiler gelöscht werden.
+                    // "alte" Spoiler sind die, die auf der SD vorhanden sind, aber nicht als Link über die API gemeldet wurden.
+                    // Alle Spoiler in der Liste allSpoilers sind "alte"
+                    log.debug("Delete old spoilers.");
+                    for (String file : allSpoilers) {
                         String fileNameWithOutExt = file.replaceFirst("[.][^.]+$", "");
                         // Testen, ob dieser Dateiname einen gültigen ACB Hash hat (eingeschlossen zwischen @....@>
                         if (fileNameWithOutExt.endsWith("@") && fileNameWithOutExt.contains("@")) {
@@ -495,8 +400,9 @@ public class DescriptionImageGrabber {
                 }
 
             }
+            log.debug("GrabImagesSelectedByCache done");
         }
-        return ApiResultState.IO;
+        return 0;
     }
 
     private static FileHandle[] getFilesInDirectory(String path, final String GcCode) {
@@ -529,55 +435,54 @@ public class DescriptionImageGrabber {
         return imagePath;
     }
 
-    /**
-     * @param GcCode
-     * @param ImageName
-     * @param uri
-     * @return
-     */
-    public static String buildAdditionalImageFilename(String GcCode, String ImageName, URI uri) {
-        String imagePath = getSpoilerPath(GcCode);
+    public static String getImageFolderPath(CharSequence gcCode) {
+        return getStringBuilderPathforGcCode(gcCode).toString();
+    }
 
-        ImageName = ImageName.replace("[/:*?\"<>|]", "");
-        ImageName = ImageName.replace("\\", "");
-        ImageName = ImageName.replace("\n", "");
-        ImageName = ImageName.replace("\"", "");
-        ImageName = ImageName.trim();
+    private static StringBuilder getStringBuilderPathforGcCode(CharSequence gcCode) {
+        StringBuilder imagePath;
+        if (Config.DescriptionImageFolderLocal.getValue().length() > 0) {
+            imagePath = new StringBuilder(Config.DescriptionImageFolderLocal.getValue());
+        } else {
+            imagePath = new StringBuilder(Config.DescriptionImageFolder.getValue());
+        }
 
-        int idx = uri.toString().lastIndexOf('.');
-        String extension = (idx >= 0) ? uri.toString().substring(idx) : ".";
+        imagePath.append("/");
+        for (int i = 0; i <= 4; i++)
+            imagePath.append(gcCode.charAt(i));
 
-        return imagePath + "/" + GcCode + " - " + ImageName + extension;
+        imagePath.append("/");
+        imagePath.append(gcCode);
+        return imagePath;
     }
 
     /**
      * Neue Version, mit @ als Eingrenzung des Hashs, da die Klammern nicht als URL's verwendet werden dürfen
      *
-     * @param GcCode
-     * @param ImageName
-     * @param uri
-     * @return
      */
-    public static String BuildAdditionalImageFilenameHashNew(String GcCode, String ImageName, URI uri) {
-        String imagePath = Config.SpoilerFolder.getValue() + "/" + GcCode.substring(0, 4);
+    public static ImageEntry BuildAdditionalImageFilenameHashNew(String GcCode, ImageEntry imageEntry) {
+        try {
+            String uriPath = new URI(imageEntry.ImageUrl).getPath();
+            String imagePath = Config.SpoilerFolder.getValue() + "/" + GcCode.substring(0, 4);
 
-        if (Config.SpoilerFolderLocal.getValue().length() > 0)
-            imagePath = Config.SpoilerFolderLocal.getValue() + "/" + GcCode.substring(0, 4);
+            if (Config.SpoilerFolderLocal.getValue().length() > 0)
+                imagePath = Config.SpoilerFolderLocal.getValue() + "/" + GcCode.substring(0, 4);
+            imageEntry.Name = imageEntry.Description.trim();
+            imageEntry.Name = imageEntry.Name.replaceAll("[^a-zA-Z0-9_\\.\\-]", "_");
 
-        ImageName = ImageName.replace("[/:*?\"<>|]", "");
-        ImageName = ImageName.replace("\\", "");
-        ImageName = ImageName.replace("\n", "");
-        ImageName = ImageName.replace("\"", "");
-        ImageName = ImageName.trim();
+            int idx = imageEntry.ImageUrl.lastIndexOf('.');
+            String extension = (idx >= 0) ? imageEntry.ImageUrl.substring(idx) : ".";
 
-        int idx = uri.toString().lastIndexOf('.');
-        String extension = (idx >= 0) ? uri.toString().substring(idx) : ".";
-
-        // Create sdbm Hash from Path of URI, not from complete URI
-        return imagePath + "/" + GcCode + " - " + ImageName + " @" + Utils.sdbm(uri.getPath().toString()) + "@" + extension;
+            // Create sdbm Hash from Path of URI, not from complete URI
+            imageEntry.LocalPath = imagePath + "/" + GcCode + " - " + imageEntry.Name + " @" + sdbm(uriPath) + "@" + extension;
+            return imageEntry;
+        }
+        catch (Exception ex) {
+            return null;
+        }
     }
 
-    private static boolean HandleMissingImages(boolean imageLoadError, URI uri, String local) {
+    private static boolean HandleMissingImages(boolean imageLoadError, String uri, String local) {
         try {
             FileHandle file = Gdx.files.local(local + "_broken_link.txt");
             if (!file.exists()) {
@@ -587,8 +492,8 @@ public class DescriptionImageGrabber {
                     // At this point mark the image as loaded and go ahead.
                     file2.file().renameTo(file.file());
                 } else {
-                    // Crate a local file for marking it that it could not load one time.
-                    // Maybe the link is broken temporarely. So try it next time once again.
+                    // Crate a local file for marking it that it could not loaded one time.
+                    // Maybe the link is broken temporarily. So try it next time once again.
                     try {
                         String text = "Could not load image from:" + uri;
                         BufferedWriter out = new BufferedWriter(new FileWriter(local + ".1st"));
@@ -600,8 +505,7 @@ public class DescriptionImageGrabber {
                     }
                 }
             }
-        } catch (Exception ex) {
-            // Global.AddLog("HandleMissingImages (uri=" + uri + ") (local=" + local + ") - " + ex.ToString());
+        } catch (Exception ignored) {
         }
         return imageLoadError;
     }
@@ -616,6 +520,12 @@ public class DescriptionImageGrabber {
         if (file.exists()) {
             file.delete();
         }
+    }
+
+    public static class Segment {
+        public int start;
+        public int ende;
+        public String text;
     }
 
 }

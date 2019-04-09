@@ -2852,7 +2852,8 @@
       "deleteArchieved": "delete_Archieved",
       "deleteFounds": "delete_Founds",
       "gpxFile": "gpxFileIcon",
-      "friends": "friends"
+      "friends": "friends",
+      "friendsLogs": "friends-logs"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {

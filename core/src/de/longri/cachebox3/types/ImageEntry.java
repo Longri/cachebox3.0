@@ -80,7 +80,7 @@ public class ImageEntry implements Serializable {
 		ImageUrl = reader.getString(4);
 		IsCacheImage = reader.getInt(5) == 1 ? true : false;
 
-		LocalPath = DescriptionImageGrabber.BuildImageFilename(GcCode, URI.create(ImageUrl));
+		LocalPath = DescriptionImageGrabber.BuildDescriptionImageFilename(GcCode, URI.create(ImageUrl));
 	}
 
 	public void clear() {
