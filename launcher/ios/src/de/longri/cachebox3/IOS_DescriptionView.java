@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,56 +20,56 @@ import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
-import org.robovm.apple.foundation.NSError;
-import org.robovm.apple.foundation.NSURLRequest;
+import org.robovm.apple.foundation.*;
 import org.robovm.apple.uikit.UIViewController;
-import org.robovm.apple.uikit.UIWebView;
-import org.robovm.apple.uikit.UIWebViewDelegate;
-import org.robovm.apple.uikit.UIWebViewNavigationType;
+
+import org.robovm.apple.webkit.*;
+import org.robovm.objc.block.VoidBlock1;
+import org.robovm.objc.block.VoidBlock2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Created by longri on 27.04.17.
  */
-public class IOS_DescriptionView extends UIViewController implements UIWebViewDelegate, PlatformDescriptionView {
+public class IOS_DescriptionView extends UIViewController implements PlatformDescriptionView, WKNavigationDelegate {
 
     private static final Logger log = LoggerFactory.getLogger(IOS_DescriptionView.class);
 
 
-    private final UIWebView webView;
+    private final WKWebView webView;
     private final UIViewController mainViewController;
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
 
     public IOS_DescriptionView(UIViewController mainViewController) {
-        webView = new UIWebView(getView().getFrame());
-        webView.setDelegate(this);
+        webView = new WKWebView(getView().getFrame());
+        webView.setNavigationDelegate(this);
         getView().addSubview(webView);
         this.mainViewController = mainViewController;
     }
 
-    @Override
-    public boolean shouldStartLoad(UIWebView uiWebView, NSURLRequest nsurlRequest, UIWebViewNavigationType uiWebViewNavigationType) {
-        String url = nsurlRequest.getURL().getAbsoluteString();
-        boolean shouldOverride = !shouldOverrideUrlLoadingCallBack.callBack(url);
-        log.debug("Should override {} Url: {}", shouldOverride, url);
-        return shouldOverride;
-    }
-
-    @Override
-    public void didStartLoad(UIWebView uiWebView) {
-
-    }
-
-    @Override
-    public void didFinishLoad(UIWebView uiWebView) {
-
-    }
-
-    @Override
-    public void didFailLoad(UIWebView uiWebView, NSError nsError) {
-
-    }
+//    @Override
+//    public boolean shouldStartLoad(UIWebView uiWebView, NSURLRequest nsurlRequest, UIWebViewNavigationType uiWebViewNavigationType) {
+//        String url = nsurlRequest.getURL().getAbsoluteString();
+//        boolean shouldOverride = !shouldOverrideUrlLoadingCallBack.callBack(url);
+//        log.debug("Should override {} Url: {}", shouldOverride, url);
+//        return shouldOverride;
+//    }
+//
+//    @Override
+//    public void didStartLoad(UIWebView uiWebView) {
+//
+//    }
+//
+//    @Override
+//    public void didFinishLoad(UIWebView uiWebView) {
+//
+//    }
+//
+//    @Override
+//    public void didFailLoad(UIWebView uiWebView, NSError nsError) {
+//
+//    }
 
     @Override
     public void setBounding(float x, float y, float width, float height, int screenHeight) {
@@ -115,7 +115,7 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
     @Override
     public void setHtml(String html) {
         log.debug("show html");
-        webView.loadHTML(html, null);
+        webView.loadHTMLString(html, NSBundle.getMainBundle().getBundleURL());
     }
 
     @Override
@@ -144,11 +144,60 @@ public class IOS_DescriptionView extends UIViewController implements UIWebViewDe
 
 
     public void disposing() {
-        webView.setDelegate(null);
+        webView.setNavigationDelegate(null);
         webView.dispose();
         shouldOverrideUrlLoadingCallBack = null;
         super.dispose();
     }
 
 
+    @Override
+    public void decidePolicyForNavigationAction(WKWebView wkWebView, WKNavigationAction wkNavigationAction, VoidBlock1<WKNavigationActionPolicy> voidBlock1) {
+
+    }
+
+    @Override
+    public void decidePolicyForNavigationResponse(WKWebView wkWebView, WKNavigationResponse wkNavigationResponse, VoidBlock1<WKNavigationResponsePolicy> voidBlock1) {
+
+    }
+
+    @Override
+    public void didStartProvisionalNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
+
+    }
+
+    @Override
+    public void didReceiveServerRedirectForProvisionalNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
+
+    }
+
+    @Override
+    public void didFailProvisionalNavigation(WKWebView wkWebView, WKNavigation wkNavigation, NSError nsError) {
+
+    }
+
+    @Override
+    public void didCommitNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
+
+    }
+
+    @Override
+    public void didFinishNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
+
+    }
+
+    @Override
+    public void didFailNavigation(WKWebView wkWebView, WKNavigation wkNavigation, NSError nsError) {
+
+    }
+
+    @Override
+    public void didReceiveAuthenticationChallenge(WKWebView wkWebView, NSURLAuthenticationChallenge nsurlAuthenticationChallenge, VoidBlock2<NSURLSessionAuthChallengeDisposition, NSURLCredential> voidBlock2) {
+
+    }
+
+    @Override
+    public void webContentProcessDidTerminate(WKWebView wkWebView) {
+
+    }
 }
