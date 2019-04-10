@@ -966,15 +966,15 @@
     },
     "downloadFriendsLogs": {
       "path": "svg/downloadFriendsLogs.svg",
-      "scale": 0.22
+      "scale": 0.2
     },
     "downloadLogImages": {
       "path": "svg/downloadLogImages.svg",
-      "scale": 0.22
+      "scale": 0.2
     },
     "downloadLogs": {
       "path": "svg/downloadLogs.svg",
-      "scale": 0.22
+      "scale": 0.2
     },
     "earth": {
       "path": "svg/earth.svg",
@@ -2866,7 +2866,9 @@
       "gpxFile": "gpxFileIcon",
       "friends": "friends",
       "friendsLogs": "friendsLogs",
-      "downloadLogs": "downloadLogs"
+      "downloadLogs": "downloadLogs",
+      "downloadFriendsLogs": "downloadFriendsLogs",
+      "downloadLogImages": "downloadLogImages"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
