@@ -71,7 +71,15 @@ public class CompoundCharSequence implements CharSequence {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0, n = items.size; i < n; i++) {
-            sb.append(items.get(i).toString());
+            CharSequence item = items.get(i);
+            if (item != null) {
+                try {
+                    String str = item.toString();
+                    sb.append(str);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return sb.toString();
     }
@@ -88,7 +96,7 @@ public class CompoundCharSequence implements CharSequence {
         //remove all without first
         int end = items.size;
         if (end > 1)
-            items.removeRange(1, end-1);
+            items.removeRange(1, end - 1);
     }
 
 
