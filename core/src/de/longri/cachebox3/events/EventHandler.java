@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2017 - 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.location.*;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
@@ -204,6 +203,12 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             //load new
             if (newCache != null)
                 newCache.setWaypoints(DaoFactory.WAYPOINT_DAO.getWaypointsFromCacheID(Database.Data, newCache.getId(), true));
+        }
+
+        //remove loaded description
+        if (oldCache != null) {
+            oldCache.setShortDescription(null);
+            oldCache.setLongDescription(null);
         }
 
     }
