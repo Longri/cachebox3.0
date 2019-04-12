@@ -17,6 +17,7 @@ package de.longri.cachebox3.use_also_at_platform_test;
 
 import de.longri.cachebox3.locator.Coordinate;
 import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**

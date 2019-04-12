@@ -16,8 +16,8 @@
 package de.longri.cachebox3.use_also_at_platform_test;
 
 import de.longri.cachebox3.TestUtils;
-import org.junit.jupiter.api.Test;
 import de.longri.cachebox3.utils.MathUtils;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

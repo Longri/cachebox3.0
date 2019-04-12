@@ -18,8 +18,8 @@ package de.longri.cachebox3.gui.animations.map;
 import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by Longri on 28.03.2017.

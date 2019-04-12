@@ -146,7 +146,6 @@ class SearchGcOwnerTest {
         list3DAO.readCacheList(testDB, cacheList, null, true, true);
 
 
-
         assertEquals(23, cacheList.size);
         AbstractCache abstractCache = cacheList.get(0);
 
@@ -252,8 +251,6 @@ class SearchGcOwnerTest {
         assertEquals("http://www.geocaching.com/images/wpttypes/21.gif", trackable.getIconUrl());
         assertEquals("André's First ", trackable.getName());
         assertEquals("http://coord.info/TBZ070", trackable.getUrl());
-
-
 
 
         testDB.close();

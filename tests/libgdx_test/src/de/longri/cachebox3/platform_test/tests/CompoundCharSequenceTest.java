@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -13,21 +17,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.translation.word;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.translation.word.*;
 
 import com.badlogic.gdx.utils.CharArray;
 import de.longri.cachebox3.utils.CharSequenceUtil;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by Longri on 28.10.2017.
  */
-class CompoundCharSequenceTest {
+public class CompoundCharSequenceTest {
 
     @Test
-    void add() {
+    public void add() throws PlatformAssertionError {
 
         String t1 = "Test";
         StringBuilder sb = new StringBuilder();

@@ -26,7 +26,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 08.11.2017.
@@ -40,7 +39,7 @@ class FileBrowserClintTest {
     @BeforeAll
     static void setUp() {
         TestUtils.initialGdx();
-        workpath = TestUtils.getResourceFileHandle("testsResources",true).child("lang");
+        workpath = TestUtils.getResourceFileHandle("testsResources", true).child("lang");
         clint = new FileBrowserClint("", 0);
     }
 
@@ -61,7 +60,7 @@ class FileBrowserClintTest {
         ObjectMap<String, FileHandle> fileMap = new ObjectMap<>();
         clint.addToFileList(fileMap, path, workingDir, files);
 
-        assertThat("Map size must be 8, not "+fileMap.size, fileMap.size == 8);
+        assertThat("Map size must be 8, not " + fileMap.size, fileMap.size == 8);
 
     }
 

@@ -20,9 +20,6 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.gdx.sqlite.SQLiteGdxException;
-import org.junit.jupiter.api.Test;
-
-import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

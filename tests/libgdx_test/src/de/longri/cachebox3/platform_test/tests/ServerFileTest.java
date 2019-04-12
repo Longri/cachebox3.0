@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -13,21 +17,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.socket.filebrowser;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.socket.filebrowser.*;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.serializable.BitStore;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.BeforeEach;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by Longri on 30.10.2017.
  */
-class ServerFileTest {
+public class ServerFileTest {
 
 
     private FileHandle workpath;
@@ -40,14 +47,14 @@ class ServerFileTest {
 
 
     @Test
-    void getDirectory() {
+    public void getDirectory() throws PlatformAssertionError {
         ServerFile root = ServerFile.getDirectory(workpath);
         assertThat("Root must be a Directory", root.isDirectory());
         assertRecursiveDir(workpath, root, workpath.parent().path());
     }
 
     @Test
-    void serialize() {
+    public void serialize() {
 
         ServerFile root = ServerFile.getDirectory(workpath);
 
@@ -67,7 +74,7 @@ class ServerFileTest {
     }
 
 
-    public static void assertRecursiveDir(FileHandle fileHandle, ServerFile serverFile, String rootPath) {
+    public static void assertRecursiveDir(FileHandle fileHandle, ServerFile serverFile, String rootPath) throws PlatformAssertionError {
         if (!fileHandle.isDirectory()) {
             assertThat("FileName must Equals", fileHandle.name().equals(serverFile.getName()));
 

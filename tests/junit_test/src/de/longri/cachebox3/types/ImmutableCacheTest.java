@@ -57,7 +57,7 @@ class ImmutableCacheTest {
         DaoFactory.CACHE_DAO.writeToDatabase(cb3Database, mutableCache, false);
 
 
-        AbstractCache cache = DaoFactory.CACHE_DAO.getFromDbByCacheId(cb3Database, 123456789l, false,true);
+        AbstractCache cache = DaoFactory.CACHE_DAO.getFromDbByCacheId(cb3Database, 123456789l, false, true);
 
         String testUrl = cache.getUrl().toString();
         assertThat("Url must equals", url.equals(testUrl));

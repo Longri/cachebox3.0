@@ -45,7 +45,7 @@ class Waypoint3DAOTest {
         TestUtils.initialGdx();
 
         // copy testDb
-        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3",true);
+        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3", true);
         copyDbFileHandle = testDbFileHandle.parent().child("testWaypointDAO.db3");
         if (copyDbFileHandle.exists()) {
             // delete first

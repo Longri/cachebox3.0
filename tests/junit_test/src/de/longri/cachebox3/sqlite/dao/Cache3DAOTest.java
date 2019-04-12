@@ -21,7 +21,9 @@ import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
 import de.longri.gdx.sqlite.SQLiteGdxException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 
@@ -41,7 +43,7 @@ class Cache3DAOTest {
         TestUtils.initialGdx();
 
         // copy testDb
-        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3",true);
+        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3", true);
         copyDbFileHandle = testDbFileHandle.parent().child("testCacheDAO.db3");
         if (copyDbFileHandle.exists()) {
             // delete first
@@ -123,13 +125,13 @@ class Cache3DAOTest {
         cache.setHasCorrectedCoordinates(should_correctedCoordinates);
         cache.setArchived(should_archived);
         cache.setAvailable(should_available);
-        cache.setFavorite( should_favorite);
+        cache.setFavorite(should_favorite);
         cache.setFound(should_found);
         cache.setHasUserData(should_userData);
         cache.setListingChanged(should_listingChanged);
         cache.setWaypoints(should_waypoints);
-        cache.setLongDescription( should_LongDescription);
-        cache.setShortDescription( should_ShortDescription);
+        cache.setLongDescription(should_LongDescription);
+        cache.setShortDescription(should_ShortDescription);
         cache.setHint(should_Hint);
 
         assertCache("MutableCache", cache);
@@ -137,7 +139,7 @@ class Cache3DAOTest {
         AbstractCacheDAO DAO = new Cache3DAO();
         DAO.writeToDatabase(cb3Database, cache, false);
 
-        AbstractCache storedCache = DAO.getFromDbByCacheId(cb3Database, should_id, true,true);
+        AbstractCache storedCache = DAO.getFromDbByCacheId(cb3Database, should_id, true, true);
         assertCache("StoredCache", storedCache);
     }
 

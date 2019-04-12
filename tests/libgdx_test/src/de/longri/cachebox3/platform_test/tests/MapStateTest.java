@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -13,27 +17,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.map;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.gui.map.*;
 
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.locator.LatLong;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertEquals;
 
 /**
  * Created by Longri on 08.03.2017.
  */
-class MapStateTest {
+public class MapStateTest {
 
     static {
         TestUtils.initialGdx();
     }
 
     @Test
-    void setMapMode() {
+    public void setMapMode() throws PlatformAssertionError {
 
         MapState state = new MapState();
         state.setMapMode(MapMode.CAR);
@@ -54,7 +61,7 @@ class MapStateTest {
     }
 
     @Test
-    void setMapOrientationMode() {
+    public void setMapOrientationMode() throws PlatformAssertionError {
 
         MapState state = new MapState();
         state.setMapOrientationMode(MapOrientationMode.COMPASS);
@@ -68,7 +75,7 @@ class MapStateTest {
     }
 
     @Test
-    void setZoom() {
+    public void setZoom() throws PlatformAssertionError {
         MapState state = new MapState();
         state.setZoom(12);
         assertThat("Must zoom Level 12", state.getZoom() == 12);
@@ -84,7 +91,7 @@ class MapStateTest {
 
 
     @Test
-    void setMixed() {
+    public void setMixed() throws PlatformAssertionError {
         MapState state = new MapState();
         state.setMapMode(MapMode.CAR);
         state.setMapOrientationMode(MapOrientationMode.COMPASS);
@@ -109,7 +116,7 @@ class MapStateTest {
     }
 
     @Test
-    void serialize() {
+    public void serialize() throws PlatformAssertionError {
         MapState state = new MapState();
         state.setMapMode(MapMode.CAR);
         state.setMapOrientationMode(MapOrientationMode.COMPASS);

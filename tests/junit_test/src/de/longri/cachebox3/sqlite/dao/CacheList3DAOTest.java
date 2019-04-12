@@ -78,7 +78,7 @@ class CacheList3DAOTest {
         TestUtils.initialGdx();
 
         // copy testDb
-        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3",true);
+        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3", true);
         copyDbFileHandle = testDbFileHandle.parent().child("testCacheListDAO.db3");
         if (copyDbFileHandle.exists()) {
             // delete first
@@ -190,14 +190,14 @@ class CacheList3DAOTest {
         cache.setHasCorrectedCoordinates(should_correctedCoordinates);
         cache.setArchived(should_archived);
         cache.setAvailable(should_available);
-        cache.setFavorite( should_favorite);
-        cache.setFound( should_found);
+        cache.setFavorite(should_favorite);
+        cache.setFound(should_found);
         cache.setHasUserData(should_userData);
         cache.setListingChanged(should_listingChanged);
         cache.setWaypoints(should_waypoints);
         cache.setLongDescription(should_LongDescription);
         cache.setShortDescription(should_ShortDescription);
-        cache.setHint( should_Hint);
+        cache.setHint(should_Hint);
 
         assertCache("MutableCache", cache);
 
@@ -208,7 +208,7 @@ class CacheList3DAOTest {
         AbstractCacheListDAO dao = new CacheList3DAO();
         dao.writeToDB(writeDatabase, cacheList);
 
-        AbstractCache storedCache = new Cache3DAO().getFromDbByCacheId(writeDatabase, should_id, true,true);
+        AbstractCache storedCache = new Cache3DAO().getFromDbByCacheId(writeDatabase, should_id, true, true);
         assertCache("StoredCache", storedCache);
 
         //clean up

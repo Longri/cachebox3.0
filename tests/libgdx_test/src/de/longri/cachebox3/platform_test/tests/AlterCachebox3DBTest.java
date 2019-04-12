@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2018 team-cachebox.de
  *
@@ -13,23 +17,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.sqlite;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.sqlite.*;
 
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import de.longri.gdx.sqlite.SQLiteGdxException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.AfterAll;
+import de.longri.cachebox3.platform_test.BeforeAll;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by Longri on 17.01.2018.
  */
-class AlterCachebox3DBTest {
+public class AlterCachebox3DBTest {
 
 
     static FileHandle testDbFileHandle;
@@ -37,7 +44,7 @@ class AlterCachebox3DBTest {
     static Database cb3Database;
 
     @BeforeAll
-    static void beforeAll() throws SQLiteGdxException {
+    static void beforeAll() throws SQLiteGdxException, PlatformAssertionError {
 
         TestUtils.initialGdx();
 
@@ -59,7 +66,7 @@ class AlterCachebox3DBTest {
     }
 
     @Test
-    void alterCachebox3DB() {
+    public void alterCachebox3DB() throws PlatformAssertionError {
 
 
         GdxSqlite tempDB = new GdxSqlite(testDbFileHandle);

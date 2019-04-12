@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -13,26 +17,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.apis.groundspeak_api;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.apis.groundspeak_api.*;
 
 import de.longri.cachebox3.TestUtils;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
 import java.util.Calendar;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by longri on 01.07.17.
  */
-class LimitTest {
+public class LimitTest {
 
     static {
         TestUtils.initialGdx();
     }
 
     @Test
-    void waitForCall() {
+    public void waitForCall() throws PlatformAssertionError {
 
         int calendarField = Calendar.SECOND;
         int calendarAmount = 10;

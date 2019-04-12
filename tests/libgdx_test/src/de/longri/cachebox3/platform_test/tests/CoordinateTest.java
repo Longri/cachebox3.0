@@ -26,9 +26,8 @@ import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
 
 import static de.longri.cachebox3.platform_test.Assert.assertEquals;
-import static de.longri.cachebox3.platform_test.Assert.assertFalse;
 import static de.longri.cachebox3.platform_test.Assert.assertTrue;
-
+import static de.longri.cachebox3.platform_test.Assert.assertFalse;
 
 /**
  * Created by Longri on 25.10.2017.

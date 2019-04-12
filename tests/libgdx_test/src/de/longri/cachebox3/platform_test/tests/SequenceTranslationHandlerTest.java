@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -13,30 +17,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.translation;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.translation.*;
 
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.utils.CharSequenceUtil;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.BeforeAll;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
 import java.io.IOException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by Longri on 28.10.2017.
  */
-class SequenceTranslationHandlerTest {
+public class SequenceTranslationHandlerTest {
 
 
     static SequenceTranslationHandler translationHandler;
 
 
     @BeforeAll
-    static void loadTranslation() throws IOException {
+    static void loadTranslation() throws IOException, PlatformAssertionError {
         TestUtils.initialGdx();
         FileHandle workPath = TestUtils.getResourceFileHandle("testsResources/lang", true);
         translationHandler = new SequenceTranslationHandler(workPath, "en-GB");
@@ -46,7 +53,7 @@ class SequenceTranslationHandlerTest {
     }
 
     @Test
-    void getTranslation() {
+    public void getTranslation() throws PlatformAssertionError {
 
         CompoundCharSequence trans = translationHandler.getTranslation("abort");
         String txt = "Abbrechen";

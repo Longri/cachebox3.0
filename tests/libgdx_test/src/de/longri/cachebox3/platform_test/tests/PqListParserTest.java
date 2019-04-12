@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2018 team-cachebox.de
  *
@@ -13,27 +17,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.*;
 
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Date;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by Longri on 26.03.2018.
  */
-class PqListParserTest {
+public class PqListParserTest {
 
     @Test
-    void parsePqList() throws FileNotFoundException {
+    public void parsePqList() throws FileNotFoundException, PlatformAssertionError {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPqListResult.json");
         PqListParser parser = new PqListParser(null);
 

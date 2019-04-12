@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -13,22 +17,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.gui.*;
 
 import de.longri.cachebox3.TestUtils;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
 /**
  * Created by Longri on 28.01.17.
  */
-class GUI_Test {
+public class GUI_Test {
 
     static {
         TestUtils.initialGdx();
     }
 
     @Test
-    void getDrawableTest() {
+    public void getDrawableTest() throws PlatformAssertionError {
 
 //        assertThat("Implement test if anny GUI code calls Skin.getDrawable() Must replace with access over Style", false);
     }

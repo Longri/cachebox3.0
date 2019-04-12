@@ -104,7 +104,7 @@ class HashAtlasWriterTest {
 
     @Test
     void save() {
-        if (EXCLUDE_FROM_TRAVIS.VALUE||EXCLUDE_FROM_TRAVIS.REPAIR) return;
+        if (EXCLUDE_FROM_TRAVIS.VALUE || EXCLUDE_FROM_TRAVIS.REPAIR) return;
 
         String testSkinName = "TestSkin";
         SvgSkin testSkin = new SvgSkin(testSkinName);

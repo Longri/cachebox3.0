@@ -52,7 +52,7 @@ class FileBrowserTest {
     static void setUp() {
         TestUtils.initialGdx();
 
-        workpath = TestUtils.getResourceFileHandle("testsResources",true);
+        workpath = TestUtils.getResourceFileHandle("testsResources", true);
         server = new FileBrowserServer(workpath, PORT, null);
         clint = new FileBrowserClint(SERVER_ADRESS, PORT);
         server.startListening();

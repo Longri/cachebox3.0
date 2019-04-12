@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -13,20 +17,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.sqlite;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.sqlite.*;
 
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.AfterAll;
+import de.longri.cachebox3.platform_test.BeforeAll;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by Longri on 08.11.2017.
  */
-class DatabaseTest {
+public class DatabaseTest {
 
     private static FileHandle workpath;
 
@@ -44,7 +51,7 @@ class DatabaseTest {
 
 
     @Test
-    void createNewDB() {
+    public void createNewDB() throws PlatformAssertionError {
         // test for issue #165
 
         Database testDb = new Database(Database.DatabaseType.CacheBox3);
@@ -73,7 +80,7 @@ class DatabaseTest {
     }
 
     @Test
-    void createNewInMemoryDB() {
+    public void createNewInMemoryDB() throws PlatformAssertionError {
         // test for issue #165
 
         Database testDb = new Database(Database.DatabaseType.CacheBox3);

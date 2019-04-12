@@ -55,10 +55,12 @@ public class GpxFileImporterTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        waitSec();
     }
 
     @Test
-    public void testGpxStreamImport_GC2T9RW() throws Exception, PlatformAssertionError {
+    public void testGpxStreamImport_GC2T9RW() throws PlatformAssertionError {
+        waitSec();
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
@@ -103,7 +105,8 @@ public class GpxFileImporterTest {
     }
 
     @Test
-    public void testGpxStreamImport_GC52BKF() throws Exception, PlatformAssertionError {
+    public void testGpxStreamImport_GC52BKF() throws PlatformAssertionError {
+        waitSec();
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
@@ -172,7 +175,8 @@ public class GpxFileImporterTest {
     }
 
     @Test
-    public void testGpxStreamImport_PQ() throws Exception, PlatformAssertionError {
+    public void testGpxStreamImport_PQ() throws PlatformAssertionError {
+        waitSec();
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
@@ -202,9 +206,9 @@ public class GpxFileImporterTest {
 
         GroundspeakGpxStreamImporter importer = new GroundspeakGpxStreamImporter(TEST_DB, importHandler);
         importer.doImport(gpxFile);
-        Thread.sleep(1000);
+        waitSec();
         importer.doImport(gpxFile2);
-        Thread.sleep(1000);
+        waitSec();
 
         assertThat("Cache count must be 500", TEST_DB.getCacheCountOnThisDB() == 500);
         AbstractCache cache = TEST_DB.getFromDbByGcCode("GC2TNPV", true, true);
@@ -226,7 +230,8 @@ public class GpxFileImporterTest {
     }
 
     @Test
-    public void testGpxStreamImport_GSAK_correctedCoords() throws Exception, PlatformAssertionError {
+    public void testGpxStreamImport_GSAK_correctedCoords() throws PlatformAssertionError {
+        waitSec();
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
@@ -284,7 +289,8 @@ public class GpxFileImporterTest {
     }
 
     @Test
-    public void testGpxStreamImport_GSAK_correctedCoords_1_0() throws Exception, PlatformAssertionError {
+    public void testGpxStreamImport_GSAK_correctedCoords_1_0() throws PlatformAssertionError {
+        waitSec();
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
@@ -332,7 +338,8 @@ public class GpxFileImporterTest {
     }
 
     @Test
-    public void testGpxStreamImport_cachebox_extension() throws Exception, PlatformAssertionError {
+    public void testGpxStreamImport_cachebox_extension() throws PlatformAssertionError {
+        waitSec();
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
@@ -380,7 +387,8 @@ public class GpxFileImporterTest {
     }
 
     @Test
-    public void testGpxStreamImport_OC() throws Exception, PlatformAssertionError {
+    public void testGpxStreamImport_OC() throws PlatformAssertionError {
+        waitSec();
         long start = System.currentTimeMillis();
 
         Database TEST_DB = TestUtils.getTestDB(true);
@@ -425,5 +433,13 @@ public class GpxFileImporterTest {
 
         long elapseTime = System.currentTimeMillis() - start;
         System.out.println("Gpx Stream import time: " + elapseTime + "ms");
+    }
+
+    private void waitSec() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

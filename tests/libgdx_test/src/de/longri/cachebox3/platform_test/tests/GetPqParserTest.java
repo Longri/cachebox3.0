@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2018 team-cachebox.de
  *
@@ -13,14 +17,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.*;
 
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.utils.ICancel;
-import org.junit.jupiter.api.Test;
-import travis.EXCLUDE_FROM_TRAVIS;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
+import de.longri.cachebox3.platform_test.EXCLUDE_FROM_TRAVIS;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,12 +35,12 @@ import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by Longri on 28.03.2018.
  */
-class GetPqParserTest {
+public class GetPqParserTest {
 
     static {
         TestUtils.initialGdx();
@@ -43,7 +50,7 @@ class GetPqParserTest {
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
 
     @Test
-    void parseTest() throws FileNotFoundException {
+    public void parseTest() throws FileNotFoundException, PlatformAssertionError {
         if (isDummy) return;
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPQResult.json");
         GetPqParser parser = new GetPqParser(null);
@@ -86,7 +93,7 @@ class GetPqParserTest {
     }
 
     @Test
-    void parseCancelTest() throws FileNotFoundException {
+    public void parseCancelTest() throws FileNotFoundException, PlatformAssertionError {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPQResult.json");
         final AtomicBoolean cancel = new AtomicBoolean(false);
         GetPqParser parser = new GetPqParser(new ICancel() {

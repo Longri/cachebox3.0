@@ -15,7 +15,10 @@
  */
 package de.longri.cachebox3.types.test_caches;
 
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.types.CacheSizes;
+import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.MutableWaypoint;
 
 import java.text.ParseException;
 

@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 team-cachebox.de
  *
@@ -13,21 +17,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.translation.word;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.translation.word.*;
 
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.gdx.sqlite.SQLiteGdxException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import de.longri.cachebox3.platform_test.BeforeAll;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by Longri on 27.10.2017.
  */
-class TranslationListTest {
+public class TranslationListTest {
 
     @BeforeAll
     static void setUp() throws SQLiteGdxException {
@@ -36,7 +43,7 @@ class TranslationListTest {
 
 
     @Test
-    void load() {
+    public void load() throws PlatformAssertionError {
         FileHandle fileHandle = TestUtils.getResourceFileHandle("testsResources/strings.ini", true);
 
         TranslationList translationList = new TranslationList();

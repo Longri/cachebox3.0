@@ -19,24 +19,30 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.*;
+
+import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
- * Created by Longri on 20.06.2017.
+ * Created by longri on 01.07.17.
  */
-public class GeoUtilsTest {
-    @Test
-    public void parseCoordinate() throws PlatformAssertionError {
-        String coordStr = "53° 36,135N / 10° 10,017E";
-        Coordinate coordinate = new Coordinate(coordStr);
+public class ApiLimitsParserTest {
 
-        assertThat("Coordinate must valid", coordinate.isValid());
-        assertThat("Coordinate latitude must be", coordinate.getLatitude() == 53.60225);
-        assertThat("Coordinate longitude must be", coordinate.getLongitude() == 10.16695);
+    @Test
+    public void parseLimitResultStream() throws FileNotFoundException, PlatformAssertionError {
+        InputStream stream = TestUtils.getResourceRequestStream("testsResources/ApiLimitsResult.json");
+        ApiLimitParser parser = new ApiLimitParser();
+
+        int result = parser.parseCallsPerMinute(stream);
+
+        assertThat("Result must be 30", result == 30);
     }
 
 }

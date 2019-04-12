@@ -17,14 +17,14 @@ package com.badlogic.gdx.utils;
 
 import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.Test;
-import org.slf4j.*;
+import org.slf4j.LoggerFactory;
 import travis.EXCLUDE_FROM_TRAVIS;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 18.04.2017.
