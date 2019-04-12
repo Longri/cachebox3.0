@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2018 team-cachebox.de
+ * Copyright (C) 2016 - 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -253,7 +253,23 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             nonLocalImages.clear();
             nonLocalImagesUrl.clear();
 
-            CharSequence cacheHtml = new CompoundCharSequence(actCache.getLongDescription(), actCache.getShortDescription());
+            CharSequence longDescription = actCache.getLongDescription();
+            CharSequence shortDescription = actCache.getShortDescription();
+
+            // try to load from Db if NULL
+            if (longDescription == null) {
+                longDescription = getStringFromDB(Database.Data, "SELECT Description FROM CacheText WHERE Id=?", actCache.getId());
+                //set on Cache Object for next showing
+                actCache.setLongDescription(longDescription);
+            }
+
+            if (shortDescription == null) {
+                shortDescription = getStringFromDB(Database.Data, "SELECT ShortDescription FROM CacheText WHERE Id=?", actCache.getId());
+                //set on Cache Object for next showing
+                actCache.setShortDescription(shortDescription);
+            }
+
+            CharSequence cacheHtml = new CompoundCharSequence(longDescription, shortDescription);
             String html = "";
             if (actCache.getApiState() == 1)// GC.com API lite
             { // Load Standard HTML
@@ -261,7 +277,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 String nodesc = Translation.get("GC_NoDescription").toString();
                 html = "</br>" + nodesc + "</br></br></br><form action=\"download\"><input type=\"submit\" value=\" " + Translation.get("GC_DownloadDescription") + " \"></form>";
             } else {
-                html = DescriptionImageGrabber.ResolveImages(actCache,cacheHtml.toString(),false,nonLocalImages,nonLocalImagesUrl);
+                html = DescriptionImageGrabber.ResolveImages(actCache, cacheHtml.toString(), false, nonLocalImages, nonLocalImagesUrl);
                 if (!Config.DescriptionNoAttributes.getValue()) {
                     html = getAttributesHtml(actCache) + html;
                     log.debug("load html with Attributes");
@@ -436,5 +452,10 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             mi.setEnabled(false);
 
         return cm;
+    }
+
+    private static String getStringFromDB(Database database, String statement, long cacheID) {
+        String[] args = new String[]{Long.toString(cacheID)};
+        return database.getString(statement, args);
     }
 }

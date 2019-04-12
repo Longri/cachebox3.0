@@ -205,6 +205,16 @@ public class TestUtils {
         //de.longri.cachebox3.gui.widgets.ZoomButton$ZoomButtonStyle registered with name: default
         ZoomButton.ZoomButtonStyle zoomButtonStyle = new ZoomButton.ZoomButtonStyle();
         VisUI.getSkin().add("default", zoomButtonStyle, ZoomButton.ZoomButtonStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle registered with name: default
+        ButtonDialogStyle buttonDialogStyle = new ButtonDialogStyle();
+        buttonDialogStyle.titleFont = new BitmapFont();
+        VisUI.getSkin().add("default", buttonDialogStyle, ButtonDialogStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle registered with name: default
+        IconsStyle iconsStyle = new IconsStyle();
+        VisUI.getSkin().add("default", iconsStyle, IconsStyle.class);
+
     }
 
     public static double roundDoubleCoordinate(double value) {
@@ -317,6 +327,7 @@ public class TestUtils {
     }
 
     static int dbCount = 0;
+
     public static Database getTestDB(boolean inMemory) {
         if (inMemory) {
             Database database = new Database(Database.DatabaseType.CacheBox3);

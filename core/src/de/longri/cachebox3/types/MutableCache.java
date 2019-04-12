@@ -107,7 +107,9 @@ public class MutableCache extends AbstractCache {
         super(cache.getLatitude(), cache.getLongitude());
         this.latitude = cache.getLatitude();
         this.longitude = cache.getLongitude();
-        this.attributes = cache.getAttributes();
+        this.attributes = null;
+        this.attributesPositive = cache.getAttributesPositive();
+        this.attributesNegative = cache.getAttributesNegative();
         if (cache.getName() != null) this.name = cache.getName().toString();
         if (cache.getGcCode() != null) this.gcCode = cache.getGcCode().toString();
         if (cache.getPlacedBy() != null) this.placedBy = cache.getPlacedBy().toString();
@@ -261,8 +263,8 @@ public class MutableCache extends AbstractCache {
 //        AttributesNegative     BIGINT,
 //        AttributesPositiveHigh BIGINT DEFAULT 0,
 //        AttributesNegativeHigh BIGINT DEFAULT 0
-        this.setAttributesPositive(new DLong(cursor.getLong(3),cursor.getLong(1)));
-        this.setAttributesNegative(new DLong(cursor.getLong(4),cursor.getLong(2)));
+        this.setAttributesPositive(new DLong(cursor.getLong(3), cursor.getLong(1)));
+        this.setAttributesNegative(new DLong(cursor.getLong(4), cursor.getLong(2)));
     }
 
     @Override
@@ -293,7 +295,7 @@ public class MutableCache extends AbstractCache {
     @Override
     public Array<Attributes> getAttributes() {
         if (this.attributes == null) {
-            Attributes.getAttributes(attributesPositive, attributesNegative);
+            this.attributes = Attributes.getAttributes(attributesPositive, attributesNegative);
         }
         return this.attributes;
     }

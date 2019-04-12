@@ -153,8 +153,10 @@ public class ButtonDialog extends Window {
             this.mHasTitle = true;
             this.titleText = title;
             add(titleTable = new Table(skin)).left();
-            titleTable.defaults().padLeft(style.title.getLeftWidth()).padRight(style.title.getLeftWidth())
-                    .padTop(style.title.getTopHeight()).padBottom(style.title.getBottomHeight());
+            if (style.title != null) {
+                titleTable.defaults().padLeft(style.title.getLeftWidth()).padRight(style.title.getLeftWidth())
+                        .padTop(style.title.getTopHeight()).padBottom(style.title.getBottomHeight());
+            }
             row();
             titleLabel = new CB_Label(titleText, new Label.LabelStyle(style.titleFont, style.titleFontColor));
             titleTable.add(titleLabel).left();
@@ -171,7 +173,9 @@ public class ButtonDialog extends Window {
         add(buttonTable = new Table(skin)).padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN)
                 .padBottom(CB.scaledSizes.MARGIN / 2).padTop(CB.scaledSizes.MARGIN);
 
-        buttonTable.defaults().padLeft(style.footer.getLeftWidth()).padRight(style.footer.getRightWidth()).padBottom(CB.scaledSizes.MARGIN);
+        if (style.footer != null) {
+            buttonTable.defaults().padLeft(style.footer.getLeftWidth()).padRight(style.footer.getRightWidth()).padBottom(CB.scaledSizes.MARGIN);
+        }
 
         buttonTable.addListener(new ChangeListener() {
             @Override

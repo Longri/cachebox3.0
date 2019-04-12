@@ -17,6 +17,7 @@ package de.longri.cachebox3.sqlite.dao;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.LongArray;
+import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
@@ -120,6 +121,57 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (fullDetails) {
+            // load all data from CacheInfo
+            StringBuilder sb = new StringBuilder("SELECT * from CacheInfo WHERE id IN(");
+            boolean first = false;
+            for (int i = 0; i < cacheList.size; i++) {
+                AbstractCache ac = cacheList.get(i);
+                if (first) {
+                    sb.append(",");
+                }
+                first = true;
+                sb.append(ac.getId());
+            }
+            sb.append(")");
+
+            String statment = sb.toString();
+            GdxSqliteCursor cursor = database.rawQuery(statment, (String[]) null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    cacheList.getCacheById(cursor.getLong(0)).setInfo(cursor);
+                    cursor.next();
+                }
+            }
+            cursor.close();
+
+            // load all data from CacheText table
+            statment = statment.replace("SELECT * from CacheInfo WHERE", "SELECT * from CacheText WHERE");
+            cursor = database.rawQuery(statment, (String[]) null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    cacheList.getCacheById(cursor.getLong(0)).setText(cursor);
+                    cursor.next();
+                }
+            }
+            cursor.close();
+
+            // load all data from Attributes and CacheText table
+            statment = statment.replace("SELECT * from CacheText WHERE", "SELECT * from Attributes WHERE");
+            cursor = database.rawQuery(statment, (String[]) null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    cacheList.getCacheById(cursor.getLong(0)).setAttributes(cursor);
+                    cursor.next();
+                }
+            }
+            cursor.close();
+        }
+
 
         EventHandler.fire(new IncrementProgressEvent(count, msg, count));
         log.debug("CacheLoadReady after {} ms", System.currentTimeMillis() - startTime);
