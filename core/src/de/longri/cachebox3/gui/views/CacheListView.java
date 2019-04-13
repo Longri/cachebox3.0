@@ -20,6 +20,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.CacheListChangedEvent;
+import de.longri.cachebox3.events.CacheListChangedListener;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.location.OrientationChangedEvent;
@@ -32,8 +34,6 @@ import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings
 import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
 import de.longri.cachebox3.gui.activities.CheckStateActivity;
 import de.longri.cachebox3.gui.activities.EditCache;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
-import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -63,7 +63,7 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 /**
  * Created by Longri on 24.07.16.
  */
-public class CacheListView extends AbstractView implements CacheListChangedEventListener, PositionChangedListener, OrientationChangedListener {
+public class CacheListView extends AbstractView implements CacheListChangedListener, PositionChangedListener, OrientationChangedListener {
     private final static Logger log = LoggerFactory.getLogger(CacheListView.class);
     private ListView listView;
     private final float result[] = new float[4];
@@ -79,10 +79,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public CacheListView() {
         super("CacheListView CacheCount: ");
 
-        //register as cacheListChanged eventListener
-        CacheListChangedEventList.Add(this);
-
-        //register as positionChanged eventListener
+        //register as positionChanged, CacheListChanged, and OrientationChanged eventListener
         EventHandler.add(this);
     }
 
@@ -250,7 +247,6 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     public void dispose() {
         if (this.listView != null) this.listView.dispose();
         this.listView = null;
-        CacheListChangedEventList.Remove(this);
         EventHandler.remove(this);
         if (listView != null) listView.dispose();
         listView = null;
@@ -272,7 +268,7 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
     }
 
     @Override
-    public void CacheListChangedEvent() {
+    public void cacheListChanged(CacheListChangedEvent event) {
         CB.postOnGlThread(new NamedRunnable("CacheListView: CacheListChanged") {
             @Override
             public void run() {
@@ -452,4 +448,5 @@ public class CacheListView extends AbstractView implements CacheListChangedEvent
 
         return cm;
     }
+
 }

@@ -40,7 +40,6 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
@@ -321,7 +320,7 @@ public class CheckStateActivity extends ActivityBase {
                     @Override
                     public void run() {
                         //Give feedback and say what updated!
-                        CacheListChangedEventList.Call();
+                        EventHandler.fire(new CacheListChangedEvent());
                         CharSequence title = Translation.get("chkState");
                         CharSequence msg = new CompoundCharSequence(Translation.get("CachesUpdatet")
                                 , " ", Integer.toString(changedCount.get()), "/", Integer.toString(Database.Data.Query.size));

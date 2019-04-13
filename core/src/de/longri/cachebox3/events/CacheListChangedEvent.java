@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 team-cachebox.de
+ * Copyright (C) 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.events;
+package de.longri.cachebox3.events;
 
-// this is an interface for all Objects which sould receive the selectedCacheChanged Event
+import de.longri.cachebox3.locator.Coordinate;
 
-public interface CacheListChangedEventListener {
-	public void CacheListChangedEvent();
+/**
+ * Created by Longri on 23.03.2017.
+ */
+public class CacheListChangedEvent extends AbstractEvent {
+
+    public CacheListChangedEvent() {
+        super(CacheListChangedEvent.class);
+    }
+
+    @Override
+    public Class getListenerClass() {
+        return CacheListChangedListener.class;
+    }
 }

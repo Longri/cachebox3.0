@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
@@ -34,7 +35,6 @@ import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
@@ -650,7 +650,7 @@ public class CB {
         }
 
         CB.setAutoResort(Config.StartWithAutoSelect.getValue());
-        CacheListChangedEventList.Call();
+        EventHandler.fire(new CacheListChangedEvent());
 
         if (CB.viewmanager != null && CB.viewmanager.getActView() instanceof CacheListView) {
             CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();

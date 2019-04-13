@@ -18,7 +18,8 @@ package de.longri.cachebox3.sqlite.dao;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
+import de.longri.cachebox3.events.CacheListChangedEvent;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
@@ -181,7 +182,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
                 CB.postAsyncDelayd(100, new NamedRunnable("Call CacheListChanged Event") {
                     @Override
                     public void run() {
-                        CacheListChangedEventList.Call();
+                        EventHandler.fire(new CacheListChangedEvent());
                     }
                 });
             }

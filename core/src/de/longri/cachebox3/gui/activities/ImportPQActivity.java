@@ -30,9 +30,10 @@ import de.longri.cachebox3.apis.groundspeak_api.GetPocketQueryList;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.events.CacheListChangedEvent;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gpx.PqImport;
 import de.longri.cachebox3.gui.BlockGpsActivityBase;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
@@ -205,7 +206,7 @@ public class ImportPQActivity extends BlockGpsActivityBase {
                                 CB.postOnNextGlThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        CacheListChangedEventList.Call();
+                                        EventHandler.fire(new CacheListChangedEvent());
                                     }
                                 });
                             }

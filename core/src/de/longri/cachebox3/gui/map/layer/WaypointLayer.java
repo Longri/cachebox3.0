@@ -23,10 +23,10 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.events.CacheListChangedEvent;
+import de.longri.cachebox3.events.CacheListChangedListener;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
-import de.longri.cachebox3.gui.events.CacheListChangedEventListener;
 import de.longri.cachebox3.gui.map.layer.renderer.WaypointLayerRenderer;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.views.MapView;
@@ -63,7 +63,7 @@ import java.util.LinkedHashMap;
 /**
  * Created by Longri on 27.11.16.
  */
-public class WaypointLayer extends Layer implements GestureListener, CacheListChangedEventListener, Disposable, de.longri.cachebox3.events.SelectedCacheChangedListener, de.longri.cachebox3.events.SelectedWayPointChangedListener {
+public class WaypointLayer extends Layer implements GestureListener, CacheListChangedListener, Disposable, de.longri.cachebox3.events.SelectedCacheChangedListener, de.longri.cachebox3.events.SelectedWayPointChangedListener {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(WaypointLayer.class);
 
     private static final String ERROR_MSG = "No de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle registered with name: ";
@@ -118,18 +118,13 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         middleDisabled = disabledStyle.middle != null ? textureRegionMap.get(((GetName) disabledStyle.middle).getName()) : null;
         largeDisabled = disabledStyle.large != null ? textureRegionMap.get(((GetName) disabledStyle.large).getName()) : null;
 
-
-        //register as cacheListChanged eventListener
-        CacheListChangedEventList.Add(this);
-        CacheListChangedEvent();
-
         //register SelectedCacheChangedEvent
-        de.longri.cachebox3.events.EventHandler.add(this);
-
+        EventHandler.add(this);
+        cacheListChanged(null);
         Settings.ShowAllWaypoints.addChangedEventListener(new IChanged() {
             @Override
             public void isChanged() {
-                CacheListChangedEvent();
+                cacheListChanged(null);
             }
         });
     }
@@ -146,16 +141,15 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     @Override
     public void dispose() {
-        CacheListChangedEventList.Remove(this);
         clickedItems.clear();
         mClusterRenderer.dispose();
         clusterWorker.dispose();
-        de.longri.cachebox3.events.EventHandler.remove(this);
+        EventHandler.remove(this);
 //        TODO dispose ClusterList and ThreadStack
     }
 
     @Override
-    public void CacheListChangedEvent() {
+    public void cacheListChanged(CacheListChangedEvent event) {
         log.debug("Call cacheList changed event handler");
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -399,14 +393,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     public void selectedCacheChanged(de.longri.cachebox3.events.SelectedCacheChangedEvent event) {
         selectedAbstractCache = event.cache;
         selectedWaypoint = null;
-        CacheListChangedEvent();
+        cacheListChanged(null);
     }
 
     @Override
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
         selectedAbstractCache = de.longri.cachebox3.events.EventHandler.getSelectedCache();
         selectedWaypoint = event.wayPoint;
-        CacheListChangedEvent();
+        cacheListChanged(null);
     }
 
     public interface ActiveItem {
