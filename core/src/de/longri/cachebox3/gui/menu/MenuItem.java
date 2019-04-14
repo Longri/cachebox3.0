@@ -21,7 +21,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -29,35 +28,28 @@ import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
-import de.longri.cachebox3.utils.SizeF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MenuItem extends ListViewItem {
     final static Logger log = LoggerFactory.getLogger(MenuItem.class);
-
-    private MenuItemStyle style;
-
     private final String name;
+    private final int mID;
+    private final Menu parentMenu;
     protected Label mLabel;
     protected Image checkImage;
     protected Drawable mIcon;
-
     protected String mTitle;
     protected boolean mIsEnabled = true;
-
-    private boolean mIsCheckable = false;
     protected boolean mIsChecked = false;
-    private boolean mLeft = false;
-
-    private final int mID;
-
     protected boolean isPressed = false;
+    private MenuItemStyle style;
+    private boolean mIsCheckable = false;
+    private boolean mLeft = false;
     private Image iconImage;
     private Object data;
-
     private Menu moreMenu;
-    private final Menu parentMenu;
+    private boolean backgroundOverrides = false;
 
     public MenuItem(int Index, int ID, String name, Menu parentMenu) {
         super(Index);
@@ -67,13 +59,13 @@ public class MenuItem extends ListViewItem {
         setDefaultStyle();
     }
 
+
     public MenuItem(int Index, Menu parentMenu) {
         super(Index);
         mID = -1;
         name = "";
         this.parentMenu = parentMenu;
     }
-
 
     private void setDefaultStyle() {
         this.style = VisUI.getSkin().get("default", MenuItemStyle.class);
@@ -82,7 +74,6 @@ public class MenuItem extends ListViewItem {
     public int getMenuItemId() {
         return mID;
     }
-
 
     @Override
     public void pack() {
@@ -116,7 +107,6 @@ public class MenuItem extends ListViewItem {
     public boolean addListener(EventListener listener) {
         return super.addListener(listener);
     }
-
 
     protected synchronized void initial() {
         this.reset();
@@ -192,6 +182,15 @@ public class MenuItem extends ListViewItem {
     }
 
     /**
+     * Retrieve the current title of the item.
+     *
+     * @return The title.
+     */
+    public String getTitle() {
+        return mTitle;
+    }
+
+    /**
      * Change the title associated with this item.
      *
      * @param title The new text to be displayed.
@@ -201,15 +200,6 @@ public class MenuItem extends ListViewItem {
         mTitle = title;
         initial();
         return this;
-    }
-
-    /**
-     * Retrieve the current title of the item.
-     *
-     * @return The title.
-     */
-    public String getTitle() {
-        return mTitle;
     }
 
     /**
@@ -225,20 +215,17 @@ public class MenuItem extends ListViewItem {
         return this;
     }
 
-
-    public void setEnabled(boolean enabled) {
-        mIsEnabled = enabled;
-    }
-
-
     public boolean isEnabled() {
         initial();
         return mIsEnabled;
     }
 
-    public void setCheckable(boolean isCheckable) {
-        mIsCheckable = isCheckable;
-        initial();
+    public void setEnabled(boolean enabled) {
+        mIsEnabled = enabled;
+    }
+
+    public boolean isChecked() {
+        return mIsChecked;
     }
 
     public void setChecked(boolean checked) {
@@ -246,12 +233,13 @@ public class MenuItem extends ListViewItem {
         initial();
     }
 
-    public boolean isChecked() {
-        return mIsChecked;
-    }
-
     public boolean isCheckable() {
         return mIsCheckable;
+    }
+
+    public void setCheckable(boolean isCheckable) {
+        mIsCheckable = isCheckable;
+        initial();
     }
 
     public void setLeft(boolean value) {
@@ -264,14 +252,13 @@ public class MenuItem extends ListViewItem {
         return "MenuItem " + name;
     }
 
-    public void setData(Object data) {
-        this.data = data;
-    }
-
     public Object getData() {
         return this.data;
     }
 
+    public void setData(Object data) {
+        this.data = data;
+    }
 
     public void setMoreMenu(Menu moreMenu) {
         this.moreMenu = moreMenu;
@@ -292,8 +279,6 @@ public class MenuItem extends ListViewItem {
     public void setHeight(float height) {
         super.setHeight(height);
     }
-
-    private boolean backgroundOverrides = false;
 
     public void overrideBackground(Drawable drawable) {
         setBackground(drawable);
@@ -318,14 +303,14 @@ public class MenuItem extends ListViewItem {
         moreMenu = null;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
     public static class MenuItemStyle {
         public BitmapFont font;
         public Color fontColor;
         public Drawable option_select, option_back;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }

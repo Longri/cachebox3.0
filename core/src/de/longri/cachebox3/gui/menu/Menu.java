@@ -34,7 +34,6 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
@@ -51,37 +50,28 @@ import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
  * Created by Longri on 13.08.16.
  */
 public class Menu extends Window {
+    public final static float MORE_MENU_ANIMATION_TIME = 0.3f;
     final static Logger log = LoggerFactory.getLogger(Menu.class);
     final static boolean ALL = true;
-    public final static float MORE_MENU_ANIMATION_TIME = 0.3f;
+    final CharSequence name;
+    public MenuStyle style;
+    protected ListView listView;
+    protected Menu parentMenu;
+    protected boolean hideWithItemClick;
+    CB_List<ListViewItem> mItems = new CB_List();
+    OnItemClickListener onItemClickListener;
     private Menu compoundMenu;
+    private VisLabel titleLabel, parentTitleLabel;
+    private WidgetGroup titleGroup;
+    private WidgetGroup mainMenuWidgetGroup;
+    private boolean isShowing = false;
+    private OnHideListener onHideListener;
     private final ClickListener backClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             hide(false);
             CB.stageManager.unRegisterForBackKey(this);
         }
     };
-
-    public void setCompoundMenu(Menu compoundMenu) {
-        this.compoundMenu = compoundMenu;
-    }
-
-    public interface OnHideListener {
-        void onHide();
-    }
-
-    CB_List<ListViewItem> mItems = new CB_List();
-    public MenuStyle style;
-    final CharSequence name;
-    protected ListView listView;
-    OnItemClickListener onItemClickListener;
-    private VisLabel titleLabel, parentTitleLabel;
-    protected Menu parentMenu;
-    private WidgetGroup titleGroup;
-    protected boolean hideWithItemClick;
-    private WidgetGroup mainMenuWidgetGroup;
-    private boolean isShowing = false;
-    private OnHideListener onHideListener;
 
     public Menu(CharSequence name) {
         super(name.toString());
@@ -103,10 +93,28 @@ public class Menu extends Window {
         this(name, VisUI.getSkin().get(styleName, MenuStyle.class));
     }
 
+    public void setCompoundMenu(Menu compoundMenu) {
+        this.compoundMenu = compoundMenu;
+    }
+
+    public void setHideWithItemClick(boolean heideWithItemClick) {
+        this.hideWithItemClick = heideWithItemClick;
+    }
+
     public MenuItem addItem(int ID, CharSequence StringId, Drawable icon) {
         MenuItem item = addItem(ID, StringId);
         if (icon != null)
             item.setIcon(icon);
+        return item;
+    }
+
+    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, ClickListener onClickListener) {
+        MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
+        item.setTitle(String.valueOf(Translation.get(titleTranlationId.toString())));
+        if (icon != null)
+            item.setIcon(icon);
+        item.addListener(onClickListener);
+        mItems.add(item);
         return item;
     }
 
@@ -414,8 +422,19 @@ public class Menu extends Window {
         return listView;
     }
 
-    public void setHideWithItemClick(boolean heideWithItemClick) {
-        this.hideWithItemClick = heideWithItemClick;
+    public boolean mustHandle(InputEvent event) {
+        if (event.isHandled()) {
+            return false;
+        } else {
+            event.cancel(); // to set event is handled, ...
+            if (hideWithItemClick)
+                hide(ALL);
+            return true;
+        }
+    }
+
+    public interface OnHideListener {
+        void onHide();
     }
 
     public static class MenuStyle {
