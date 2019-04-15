@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static travis.EXCLUDE_FROM_TRAVIS.LONGRI_HOME_COORDS;
 
 /**
  * Created by longri on 14.04.17.
@@ -61,7 +60,7 @@ class SearchCoordinateTest {
 
         Database testDB = TestUtils.getTestDB(true);
         SearchCoordinate searchCoordinate = new SearchCoordinate(testDB, apiKey, 50
-                , LONGRI_HOME_COORDS, 50000, apiState);
+                , TestUtils.LONGRI_HOME_COORDS, 50000, apiState);
 
         StringWriter writer = new StringWriter();
         Json json = new Json(JsonWriter.OutputType.json);

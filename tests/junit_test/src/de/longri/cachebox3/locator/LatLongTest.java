@@ -38,29 +38,29 @@ public class LatLongTest {
 
         LatLong latLong7 = new LatLong(52.6007500001, 13.362667000002);
 
-        assertTrue(latLong1.equals(latLong1), "Coordinates.equals() must be true");
-        assertTrue(latLong2.equals(latLong2), "Coordinates.equals() must be true");
-        assertTrue(latLong3.equals(latLong3), "Coordinates.equals() must be true");
+        assertTrue(latLong1.equals(latLong1), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(latLong2.equals(latLong2), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(latLong3.equals(latLong3), "Coordinates.charSequenceEquals() must be true");
 
-        assertTrue(latLong4.equals(latLong4), "Coordinates.equals() must be true");
-        assertTrue(latLong5.equals(latLong5), "Coordinates.equals() must be true");
-        assertTrue(latLong6.equals(latLong6), "Coordinates.equals() must be true");
+        assertTrue(latLong4.equals(latLong4), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(latLong5.equals(latLong5), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(latLong6.equals(latLong6), "Coordinates.charSequenceEquals() must be true");
 
-        assertTrue(latLong1.equals(latLong4), "Coordinates.equals() must be true");
-        assertTrue(latLong2.equals(latLong5), "Coordinates.equals() must be true");
-        assertTrue(latLong3.equals(latLong6), "Coordinates.equals() must be true");
+        assertTrue(latLong1.equals(latLong4), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(latLong2.equals(latLong5), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(latLong3.equals(latLong6), "Coordinates.charSequenceEquals() must be true");
 
-        assertFalse(latLong7.equals(latLong6), "Coordinates.equals() must be false");
-        assertFalse(latLong6.equals(latLong7), "Coordinates.equals() must be false");
+        assertFalse(latLong7.equals(latLong6), "Coordinates.charSequenceEquals() must be false");
+        assertFalse(latLong6.equals(latLong7), "Coordinates.charSequenceEquals() must be false");
 
-        assertFalse(latLong2.equals(latLong1), "Coordinates.equals() must be false");
-        assertFalse(latLong1.equals(latLong2), "Coordinates.equals() must be false");
+        assertFalse(latLong2.equals(latLong1), "Coordinates.charSequenceEquals() must be false");
+        assertFalse(latLong1.equals(latLong2), "Coordinates.charSequenceEquals() must be false");
 
-        assertFalse(latLong3.equals(latLong1), "Coordinates.equals() must be false");
-        assertFalse(latLong1.equals(latLong3), "Coordinates.equals() must be false");
+        assertFalse(latLong3.equals(latLong1), "Coordinates.charSequenceEquals() must be false");
+        assertFalse(latLong1.equals(latLong3), "Coordinates.charSequenceEquals() must be false");
 
-        assertFalse(latLong2.equals(latLong3), "Coordinates.equals() must be false");
-        assertFalse(latLong3.equals(latLong2), "Coordinates.equals() must be false");
+        assertFalse(latLong2.equals(latLong3), "Coordinates.charSequenceEquals() must be false");
+        assertFalse(latLong3.equals(latLong2), "Coordinates.charSequenceEquals() must be false");
 
     }
 }

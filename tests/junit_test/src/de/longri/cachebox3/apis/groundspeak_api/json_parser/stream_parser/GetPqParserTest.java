@@ -75,7 +75,7 @@ class GetPqParserTest {
         }
 
         assertThat("File must exist", targetFile.exists());
-        assertThat("File size must equals", targetFile.length() == streamedBytes.get());
+        assertThat("File size must charSequenceEquals", targetFile.length() == streamedBytes.get());
 
         try {
             Thread.sleep(500);

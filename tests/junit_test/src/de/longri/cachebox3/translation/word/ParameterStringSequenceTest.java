@@ -31,43 +31,43 @@ class ParameterStringSequenceTest {
         String replaced = "Error: Function first/Parameter second (third) is no valid fourth: [fifth]";
 
         ParameterStringSequence pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
 
 
         pss.replace("first", "second", "third", "fourth", "fifth");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
 
         txt = "text {2} Test {1}";
         replaced = "text second Test first";
         pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
         pss.replace("first", "second", "third", "fourth", "fifth");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
 
         txt = "text {} Test {}";
         replaced = "text first Test second";
         pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
         pss.replace("first", "second", "third", "fourth", "fifth");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
 
         txt = "text ";
         replaced = "text ";
         pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
         pss.replace("first", "second", "third", "fourth", "fifth");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
 
         txt = "Error: Function {1}/Parameter {2} ({3}) is no valid {4}: [{5}]";
         replaced = "Error: Function first/Parameter second (third) is no valid : []";
         pss = new ParameterStringSequence(txt);
-        assertThat("ParameterStringSequence must equals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + txt + "' : '" + pss + "'", CharSequenceUtil.equals(txt, pss));
         pss.replace("first", "second", "third");
-        assertThat("ParameterStringSequence must equals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
+        assertThat("ParameterStringSequence must charSequenceEquals  '" + replaced + "' : '" + pss + "'", CharSequenceUtil.equals(replaced, pss));
 
     }
 }

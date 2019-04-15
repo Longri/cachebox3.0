@@ -28,8 +28,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * Created by Longri on 27.10.2017.
@@ -53,44 +54,44 @@ public class CharSequenceUtilTest {
 
     @Test
     void contains() {
-        assertThat("Length must equals  '" + shouldString.length() + "' : '" + m1.length() + "'", shouldString.length() == m1.length());
-        assertThat("MutableString must equals  '" + shouldString + "' : '" + m1 + "'", equals(shouldString, m1));
-        assertThat("toString() must equals  '" + shouldString + "' : '" + m1 + "'", shouldString.equals(m1.toString()));
+        assertTrue(shouldString.length() == m1.length(), "Length must charSequenceEquals  '" + shouldString.length() + "' : '" + m1.length() + "'");
+        assertTrue(CharSequenceUtil.equals(shouldString, m1), "MutableString must charSequenceEquals  '" + shouldString + "' : '" + m1 + "'");
+        assertTrue(shouldString.equals(m1.toString()), "toString() must charSequenceEquals  '" + shouldString + "' : '" + m1 + "'");
 
-        assertThat("Must contains 'Tes", CharSequenceUtil.contains(m1, "Tes"));
-        assertThat("Must contains 'stStr", CharSequenceUtil.contains(m1, "stStr"));
-        assertThat("Must contains 'rin", CharSequenceUtil.contains(m1, "rin"));
-        assertThat("Must contains 'ngAdd", CharSequenceUtil.contains(m1, "ngAdd"));
-        assertThat("Must contains 'stStringAdde", CharSequenceUtil.contains(m1, "stStringAdde"));
-        assertThat("Must contains 'TestStringAdded", CharSequenceUtil.contains(m1, "TestStringAdded"));
+        assertTrue(CharSequenceUtil.contains(m1, "Tes"), "Must contains 'Tes");
+        assertTrue(CharSequenceUtil.contains(m1, "stStr"), "Must contains 'stStr");
+        assertTrue(CharSequenceUtil.contains(m1, "rin"), "Must contains 'rin");
+        assertTrue(CharSequenceUtil.contains(m1, "ngAdd"), "Must contains 'ngAdd");
+        assertTrue(CharSequenceUtil.contains(m1, "stStringAdde"), "Must contains 'stStringAdde");
+        assertTrue(CharSequenceUtil.contains(m1, "TestStringAdded"), "Must contains 'TestStringAdded");
     }
 
     @Test
     void startsWith() {
-        assertThat("Length must equals  '" + shouldString.length() + "' : '" + m1.length() + "'", shouldString.length() == m1.length());
-        assertThat("MutableString must equals  '" + shouldString + "' : '" + m1 + "'", equals(shouldString, m1));
-        assertThat("toString() must equals  '" + shouldString + "' : '" + m1 + "'", shouldString.equals(m1.toString()));
+        assertTrue(shouldString.length() == m1.length(), "Length must charSequenceEquals  '" + shouldString.length() + "' : '" + m1.length() + "'");
+        assertTrue(CharSequenceUtil.equals(shouldString, m1), "MutableString must charSequenceEquals  '" + shouldString + "' : '" + m1 + "'");
+        assertTrue(shouldString.equals(m1.toString()), "toString() must charSequenceEquals  '" + shouldString + "' : '" + m1 + "'");
 
-        assertThat("Must starts with 'Tes", CharSequenceUtil.startsWith(m1, "Tes"));
-        assertThat("Must not starts with 'stStr", !CharSequenceUtil.startsWith(m1, "stStr"));
-        assertThat("Must not starts with 'rin", !CharSequenceUtil.startsWith(m1, "rin"));
-        assertThat("Must not starts with 'ngAdd", !CharSequenceUtil.startsWith(m1, "ngAdd"));
-        assertThat("Must not starts with 'stStringAdde", !CharSequenceUtil.startsWith(m1, "stStringAdde"));
-        assertThat("Must starts with 'TestStringAdded", CharSequenceUtil.startsWith(m1, "TestStringAdded"));
+        assertTrue(CharSequenceUtil.startsWith(m1, "Tes"), "Must starts with 'Tes");
+        assertTrue(!CharSequenceUtil.startsWith(m1, "stStr"), "Must not starts with 'stStr");
+        assertTrue(!CharSequenceUtil.startsWith(m1, "rin"), "Must not starts with 'rin");
+        assertTrue(!CharSequenceUtil.startsWith(m1, "ngAdd"), "Must not starts with 'ngAdd");
+        assertTrue(!CharSequenceUtil.startsWith(m1, "stStringAdde"), "Must not starts with 'stStringAdde");
+        assertTrue(CharSequenceUtil.startsWith(m1, "TestStringAdded"), "Must starts with 'TestStringAdded");
     }
 
     @Test
     void indexOf() {
-        assertThat("Length must equals  '" + shouldString.length() + "' : '" + m1.length() + "'", shouldString.length() == m1.length());
-        assertThat("MutableString must equals  '" + shouldString + "' : '" + m1 + "'", equals(shouldString, m1));
-        assertThat("toString() must equals  '" + shouldString + "' : '" + m1 + "'", shouldString.equals(m1.toString()));
+        assertTrue(shouldString.length() == m1.length(), "Length must charSequenceEquals  '" + shouldString.length() + "' : '" + m1.length() + "'");
+        assertTrue(CharSequenceUtil.equals(shouldString, m1), "MutableString must charSequenceEquals  '" + shouldString + "' : '" + m1 + "'");
+        assertTrue(shouldString.equals(m1.toString()), "toString() must charSequenceEquals  '" + shouldString + "' : '" + m1 + "'");
 
-        assertThat("Index of 'Tes' must be 0", CharSequenceUtil.indexOf(m1, "Tes") == 0);
-        assertThat("Index of 'stStr' must be 2", CharSequenceUtil.indexOf(m1, "stStr") == 2);
-        assertThat("Index of 'rin' must be 6", CharSequenceUtil.indexOf(m1, "rin") == 6);
-        assertThat("Index of 'ngAdd' must be 8", CharSequenceUtil.indexOf(m1, "ngAdd") == 8);
-        assertThat("Index of 'stStringAdde' must be 2", CharSequenceUtil.indexOf(m1, "stStringAdde") == 2);
-        assertThat("Index of 'TestStringAdded' must be 0", CharSequenceUtil.indexOf(m1, "TestStringAdded") == 0);
+        assertTrue(CharSequenceUtil.indexOf(m1, "Tes") == 0, "Index of 'Tes' must be 0");
+        assertTrue(CharSequenceUtil.indexOf(m1, "stStr") == 2, "Index of 'stStr' must be 2");
+        assertTrue(CharSequenceUtil.indexOf(m1, "rin") == 6, "Index of 'rin' must be 6");
+        assertTrue(CharSequenceUtil.indexOf(m1, "ngAdd") == 8, "Index of 'ngAdd' must be 8");
+        assertTrue(CharSequenceUtil.indexOf(m1, "stStringAdde") == 2, "Index of 'stStringAdde' must be 2");
+        assertTrue(CharSequenceUtil.indexOf(m1, "TestStringAdded") == 0, "Index of 'TestStringAdded' must be 0");
     }
 
 
@@ -99,13 +100,13 @@ public class CharSequenceUtilTest {
     @Test
     void parseDouble() {
         double d = CharSequenceUtil.parseDouble(PARSE_ARRAY, 1, 9);
-        assertThat("Value should be 49.349817", d == 49.349817);
+        assertTrue(d == 49.349817, "Value should be 49.349817");
     }
 
     @Test
     void parseInteger() {
         int i = CharSequenceUtil.parseInteger(PARSE_ARRAY, 31, 7);
-        assertThat("Value should be 3810940", i == 3810940);
+        assertTrue(i == 3810940, "Value should be 3810940");
 
         boolean throwedException = false;
         try {
@@ -113,22 +114,22 @@ public class CharSequenceUtilTest {
         } catch (ArithmeticException e) {
             throwedException = true;
         }
-        assertThat("must throw exception", throwedException);
+        assertTrue(throwedException, "must throw exception");
     }
 
     @Test
     void parseLong() {
         long l = CharSequenceUtil.parseLong(PARSE_ARRAY, 11, 18);
-        assertThat("Value should be 219011721901171232", l == 219011721901171232L);
+        assertTrue(l == 219011721901171232L, "Value should be 219011721901171232");
     }
 
     @Test
     void parseBoolean() {
         boolean b = CharSequenceUtil.parseBoolean(PARSE_ARRAY, 39, 4);
-        assertThat("Value should be true", b);
+        assertTrue(b, "Value should be true");
 
         b = CharSequenceUtil.parseBoolean(PARSE_ARRAY, 44, 5);
-        assertThat("Value should be false", !b);
+        assertTrue(!b, "Value should be false");
     }
 
 
@@ -154,48 +155,48 @@ public class CharSequenceUtilTest {
             expected = cal.getTime();
         }
         Date actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 30, 27, STRING_PATTERN3.toCharArray());
-        assertThat("Date should not NULL", actual != null);
+        assertTrue(actual != null, "Date should not NULL");
 
         String expectedString = iso8601Format.format(expected);
         String actualString = iso8601Format.format(actual);
 
-        assertEquals(expectedString, actualString, "Date String should be equals");
+        assertEquals(expectedString, actualString, "Date String should be charSequenceEquals");
 
         //-------------------------------------------------------------------------------------------------------------------------------
         expected = DATE_PATTERN_2.parse("2011-04-16T07:00:00Z");
         actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 66, 20, STRING_PATTERN2.toCharArray());
-        assertThat("Date should not NULL", actual != null);
+        assertTrue(actual != null, "Date should not NULL");
 
         expectedString = iso8601Format.format(expected);
         actualString = iso8601Format.format(actual);
 
-        assertEquals(expectedString, actualString, "Date String should be equals");
+        assertEquals(expectedString, actualString, "Date String should be charSequenceEquals");
 
         //-------------------------------------------------------------------------------------------------------------------------------
 
         // is unparseable date, return dat must be null
         actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 66, 20, STRING_PATTERN3.toCharArray());
-        assertThat("Date should not NULL", actual == null);
+        assertTrue(actual != null, "Date should not NULL");
 
         //-------------------------------------------------------------------------------------------------------------------------------
         expected = DATE_PATTERN_2.parse("2011-04-17T03:39:24.4");
         actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 92, 21, STRING_PATTERN2.toCharArray());
-        assertThat("Date should not NULL", actual != null);
+        assertTrue(actual != null, "Date should not NULL");
 
         expectedString = iso8601Format.format(expected);
         actualString = iso8601Format.format(actual);
 
-        assertEquals(expectedString, actualString, "Date String should be equals");
+        assertEquals(expectedString, actualString, "Date String should be charSequenceEquals");
 
         //-------------------------------------------------------------------------------------------------------------------------------
         expected = DATE_PATTERN_3.parse("2011-04-17T03:39:24.4");
         actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 92, 21, STRING_PATTERN3.toCharArray());
-        assertThat("Date should not NULL", actual != null);
+        assertTrue(actual != null, "Date should not NULL");
 
         expectedString = iso8601Format.format(expected);
         actualString = iso8601Format.format(actual);
 
-        assertEquals(expectedString, actualString, "Date String should be equals");
+        assertEquals(expectedString, actualString, "Date String should be charSequenceEquals");
 
     }
 
@@ -216,24 +217,7 @@ public class CharSequenceUtilTest {
 
         String result = CharSequenceUtil.getHtmlString(source, 0, source.length);
 
-        assertEquals(target, result, "Should be equals");
+        assertEquals(target, result, "Should be charSequenceEquals");
 
     }
-
-
-    //##################################################################
-    //# Helper
-    //##################################################################
-
-    public static boolean equals(CharSequence s1, CharSequence s2) {
-        if (s1 == null || s2 == null) return false;
-        if (s1.length() != s2.length()) return false;
-        int n = s1.length();
-        while (n-- > 0) {
-            if (s1.charAt(n) != s2.charAt(n)) return false;
-        }
-        return true;
-    }
-
-
 }

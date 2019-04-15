@@ -54,17 +54,17 @@ public class WordStoreTest {
         WordStore store = new WordStore();
 
         StringSequence m1 = store.add(t1);
-        assertThat("MutableString must equals  '" + t1 + "' : '" + m1 + "'", CharSequenceUtil.equals(t1, m1));
-        assertThat("toString() must equals  '" + t1 + "' : '" + m1 + "'", t1.equals(m1.toString()));
+        assertThat("MutableString must charSequenceEquals  '" + t1 + "' : '" + m1 + "'", CharSequenceUtil.equals(t1, m1));
+        assertThat("toString() must charSequenceEquals  '" + t1 + "' : '" + m1 + "'", t1.equals(m1.toString()));
 
 
         StringSequence m2 = store.add(t2);
-        assertThat("MutableString must equals  '" + t2 + "' : '" + m2 + "'", CharSequenceUtil.equals(t2, m2));
-        assertThat("toString() must equals  '" + t2 + "' : '" + m2 + "'", t2.equals(m2.toString()));
+        assertThat("MutableString must charSequenceEquals  '" + t2 + "' : '" + m2 + "'", CharSequenceUtil.equals(t2, m2));
+        assertThat("toString() must charSequenceEquals  '" + t2 + "' : '" + m2 + "'", t2.equals(m2.toString()));
 
         StringSequence m3 = store.add(t3);
-        assertThat("MutableString must equals  '" + t3 + "' : '" + m3 + "'", CharSequenceUtil.equals(t3, m3));
-        assertThat("toString() must equals  '" + t3 + "' : '" + m3 + "'", t3.equals(m3.toString()));
+        assertThat("MutableString must charSequenceEquals  '" + t3 + "' : '" + m3 + "'", CharSequenceUtil.equals(t3, m3));
+        assertThat("toString() must charSequenceEquals  '" + t3 + "' : '" + m3 + "'", t3.equals(m3.toString()));
 
     }
 
@@ -102,8 +102,8 @@ public class WordStoreTest {
             String line = clearedLines[i];
             StringSequence sequence = sequences[i];
             if (line == null || line.isEmpty()) continue;
-            assertThat("MutableString must equals  '" + line + "' : '" + sequence + "'", CharSequenceUtil.equals(line, sequence));
-            assertThat("toString() must equals  '" + line + "' : '" + sequence + "'", line.equals(sequence.toString()));
+            assertThat("MutableString must charSequenceEquals  '" + line + "' : '" + sequence + "'", CharSequenceUtil.equals(line, sequence));
+            assertThat("toString() must charSequenceEquals  '" + line + "' : '" + sequence + "'", line.equals(sequence.toString()));
         }
     }
 }

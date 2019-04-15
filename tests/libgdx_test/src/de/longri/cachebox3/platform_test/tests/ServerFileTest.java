@@ -19,14 +19,15 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
+import de.longri.cachebox3.socket.filebrowser.*;
+
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
+import de.longri.serializable.BitStore;
 import de.longri.cachebox3.platform_test.BeforeEach;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
-import de.longri.cachebox3.socket.filebrowser.ServerFile;
-import de.longri.serializable.BitStore;
 
 import static de.longri.cachebox3.platform_test.Assert.assertThat;
 

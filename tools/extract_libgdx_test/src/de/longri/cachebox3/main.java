@@ -417,6 +417,7 @@ public class main {
                             lines[j].contains("assertTrue(") ||
                             lines[j].contains("assertFalse(") ||
                             lines[j].contains("assertNotNull(") ||
+                            lines[j].contains("assertRecursiveDir(") ||
                             lines[j].contains("assertAbstractViewSerialation(")) {
                         hasAssertCall = true;
                         break;

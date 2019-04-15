@@ -122,7 +122,7 @@ public class GetYourUserProfileTest {
         if (!BuildInfo.getRevision().equals("JUnitTest"))
             expected = expected.replace("JUnitTest", BuildInfo.getRevision());
 
-        assertEquals(expected, actual, "Should be equals");
+        assertEquals(expected, actual, "Should be charSequenceEquals");
     }
 
     @Test

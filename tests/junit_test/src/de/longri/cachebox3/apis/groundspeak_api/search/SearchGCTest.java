@@ -72,7 +72,7 @@ class SearchGCTest {
         searchGC.getRequest(json);
 
         String actual = writer.toString();
-        assertEquals(expected, actual, "Should be equals");
+        assertEquals(expected, actual, "Should be charSequenceEquals");
 
         testDB.close();
         if (!testDB.isInMemory()) testDB.getFileHandle().delete();

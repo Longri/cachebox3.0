@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.AbstractTranslationHandler;
 import de.longri.cachebox3.translation.Translation;
@@ -61,6 +62,8 @@ import static org.mockito.Mockito.mock;
  * Created by longri on 14.04.17.
  */
 public class TestUtils {
+
+    public static final Coordinate LONGRI_HOME_COORDS = new Coordinate(52.581892, 13.398128);
 
     public static boolean isPlatformTest() {
         return false;

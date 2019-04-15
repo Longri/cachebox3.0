@@ -91,7 +91,7 @@ public class DraftEntryTest {
 //        fieldNoteEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
 //        assertThat("DraftList size must be 1", fieldNoteEntries.size == 1);
 //        DraftEntry fne2 = fieldNoteEntries.get(0);
-//        assertThat("Drafts must be equals", fne2.equals(fne));
+//        assertThat("Drafts must be charSequenceEquals", fne2.charSequenceEquals(fne));
 //
 //        //read non uploaded Draft from DB
 //        DraftList lDrafts = new DraftList();
@@ -99,7 +99,7 @@ public class DraftEntryTest {
 //
 //        assertThat("DraftList size must be 1", lDrafts.size == 1);
 //        DraftEntry fne3 = lDrafts.get(0);
-//        assertThat("Drafts must be equals", fne3.equals(fne));
+//        assertThat("Drafts must be charSequenceEquals", fne3.charSequenceEquals(fne));
 //
 //
 //        // set uploaded flag and write to DB
@@ -111,9 +111,9 @@ public class DraftEntryTest {
 //
 //        assertThat("DraftList size must be 1", lDrafts2.size == 1);
 //        DraftEntry fne4 = lDrafts2.get(0);
-//        assertThat("Drafts must not equals", !fne4.equals(fne));
+//        assertThat("Drafts must not charSequenceEquals", !fne4.charSequenceEquals(fne));
 //
-//        assertThat("Drafts must equals", fne4.equals(fne3));
+//        assertThat("Drafts must charSequenceEquals", fne4.charSequenceEquals(fne3));
 //
 //        assertThat("Drafts must have uploaded flag", fne4.uploaded);
 //    }

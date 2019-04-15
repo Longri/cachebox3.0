@@ -47,9 +47,9 @@ public class CompoundCharSequenceTest {
         CompoundCharSequence sequence = new CompoundCharSequence();
         sequence.add(mutable1, t1, sb);
 
-        assertThat("Length must equals  '" + shouldSequence.length() + "' : '" + sequence.length() + "'", shouldSequence.length() == sequence.length());
-        assertThat("Sequence must equals  '" + shouldSequence + "' : '" + sequence + "'", CharSequenceUtil.equals(shouldSequence, sequence));
-        assertThat("toString() must equals  '" + shouldSequence + "' : '" + sequence + "'", shouldSequence.equals(sequence.toString()));
+        assertThat("Length must charSequenceEquals  '" + shouldSequence.length() + "' : '" + sequence.length() + "'", shouldSequence.length() == sequence.length());
+        assertThat("Sequence must charSequenceEquals  '" + shouldSequence + "' : '" + sequence + "'", CharSequenceUtil.equals(shouldSequence, sequence));
+        assertThat("toString() must charSequenceEquals  '" + shouldSequence + "' : '" + sequence + "'", shouldSequence.equals(sequence.toString()));
 
 
     }

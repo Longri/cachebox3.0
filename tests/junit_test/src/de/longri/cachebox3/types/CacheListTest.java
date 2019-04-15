@@ -159,9 +159,9 @@ class CacheListTest {
         }
 
 
-        assertThat("Must not equals", !shuffledCacheList.equals(caches));
+        assertThat("Must not charSequenceEquals", !shuffledCacheList.equals(caches));
         shuffledCacheList.resort(myPosition, new CacheWithWP(null, null));
-        assertThat("Must equals", shuffledCacheList.equals(caches));
+        assertThat("Must charSequenceEquals", shuffledCacheList.equals(caches));
 
 
     }

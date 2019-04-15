@@ -144,35 +144,35 @@ class Cache3DAOTest {
     }
 
     private void assertCache(String msg, AbstractCache cache) {
-        assertThat(msg + " Latitude must equals", TestUtils.roundDoubleCoordinate(cache.getLatitude()) == should_latitude);
-        assertThat(msg + " Longitude must equals", TestUtils.roundDoubleCoordinate(cache.getLongitude()) == should_longitude);
-        assertThat(msg + " Attributes must equals", cache.getAttributes().equals(should_attributes));
-        assertThat(msg + " Name must equals", cache.getName().equals(should_name));
-        assertThat(msg + " GcCode must equals", cache.getGcCode().equals(should_gcCode));
-        assertThat(msg + " PlacedBy must equals", cache.getPlacedBy().equals(should_placedBy));
-        assertThat(msg + " Owner must equals", cache.getOwner().equals(should_owner));
-        assertThat(msg + " GcID must equals", cache.getGcId().equals(should_gcId));
-        assertThat(msg + " Rating must equals", cache.getRating() == should_rating);
-        assertThat(msg + " NumTravelbugs must equals", cache.getNumTravelbugs() == should_numTravelbugs);
-        assertThat(msg + " FavPoints must equals", cache.getFavoritePoints() == should_favPoints);
-        assertThat(msg + " Id must equals", cache.getId() == should_id);
-        assertThat(msg + " Type must equals", cache.getType() == should_type);
-        assertThat(msg + " Size must equals", cache.getSize() == should_size);
-        assertThat(msg + " Difficulty must equals", cache.getDifficulty() == should_difficulty);
-        assertThat(msg + " Terrain must equals", cache.getTerrain() == should_terrain);
-        assertThat(msg + " HasHint must equals", cache.hasHint() == should_hint);
-        assertThat(msg + " HasCorrectedCoordinates must equals", cache.hasCorrectedCoordinates() == should_correctedCoordinates);
-        assertThat(msg + " Archived must equals", cache.isArchived() == should_archived);
-        assertThat(msg + " Available must equals", cache.isAvailable() == should_available);
-        assertThat(msg + " Favorite must equals", cache.isFavorite() == should_favorite);
-        assertThat(msg + " IsFound must equals", cache.isFound() == should_found);
-        assertThat(msg + " HasUserData must equals", cache.isHasUserData() == should_userData);
-        assertThat(msg + " ListingChanged must equals", cache.isListingChanged() == should_listingChanged);
-        assertThat(msg + " Waypoints must equals", cache.getWaypoints().equals(should_waypoints));
-        assertThat(msg + " LongDescription must equals", cache.getLongDescription().equals(should_LongDescription));
-        assertThat(msg + " ShortDescription must equals", cache.getShortDescription().equals(should_ShortDescription));
-        assertThat(msg + " Hint must equals", cache.getHint().equals(should_Hint));
-        assertThat(msg + " Attributes must equals", cache.getAttributes().equals(should_attributes));
+        assertThat(msg + " Latitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(cache.getLatitude()) == should_latitude);
+        assertThat(msg + " Longitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(cache.getLongitude()) == should_longitude);
+        assertThat(msg + " Attributes must charSequenceEquals", cache.getAttributes().equals(should_attributes));
+        assertThat(msg + " Name must charSequenceEquals", cache.getName().equals(should_name));
+        assertThat(msg + " GcCode must charSequenceEquals", cache.getGcCode().equals(should_gcCode));
+        assertThat(msg + " PlacedBy must charSequenceEquals", cache.getPlacedBy().equals(should_placedBy));
+        assertThat(msg + " Owner must charSequenceEquals", cache.getOwner().equals(should_owner));
+        assertThat(msg + " GcID must charSequenceEquals", cache.getGcId().equals(should_gcId));
+        assertThat(msg + " Rating must charSequenceEquals", cache.getRating() == should_rating);
+        assertThat(msg + " NumTravelbugs must charSequenceEquals", cache.getNumTravelbugs() == should_numTravelbugs);
+        assertThat(msg + " FavPoints must charSequenceEquals", cache.getFavoritePoints() == should_favPoints);
+        assertThat(msg + " Id must charSequenceEquals", cache.getId() == should_id);
+        assertThat(msg + " Type must charSequenceEquals", cache.getType() == should_type);
+        assertThat(msg + " Size must charSequenceEquals", cache.getSize() == should_size);
+        assertThat(msg + " Difficulty must charSequenceEquals", cache.getDifficulty() == should_difficulty);
+        assertThat(msg + " Terrain must charSequenceEquals", cache.getTerrain() == should_terrain);
+        assertThat(msg + " HasHint must charSequenceEquals", cache.hasHint() == should_hint);
+        assertThat(msg + " HasCorrectedCoordinates must charSequenceEquals", cache.hasCorrectedCoordinates() == should_correctedCoordinates);
+        assertThat(msg + " Archived must charSequenceEquals", cache.isArchived() == should_archived);
+        assertThat(msg + " Available must charSequenceEquals", cache.isAvailable() == should_available);
+        assertThat(msg + " Favorite must charSequenceEquals", cache.isFavorite() == should_favorite);
+        assertThat(msg + " IsFound must charSequenceEquals", cache.isFound() == should_found);
+        assertThat(msg + " HasUserData must charSequenceEquals", cache.isHasUserData() == should_userData);
+        assertThat(msg + " ListingChanged must charSequenceEquals", cache.isListingChanged() == should_listingChanged);
+        assertThat(msg + " Waypoints must charSequenceEquals", cache.getWaypoints().equals(should_waypoints));
+        assertThat(msg + " LongDescription must charSequenceEquals", cache.getLongDescription().equals(should_LongDescription));
+        assertThat(msg + " ShortDescription must charSequenceEquals", cache.getShortDescription().equals(should_ShortDescription));
+        assertThat(msg + " Hint must charSequenceEquals", cache.getHint().equals(should_Hint));
+        assertThat(msg + " Attributes must charSequenceEquals", cache.getAttributes().equals(should_attributes));
     }
 
     @Test

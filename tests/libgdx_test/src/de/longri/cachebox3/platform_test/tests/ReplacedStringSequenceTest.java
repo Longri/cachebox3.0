@@ -42,12 +42,12 @@ public class ReplacedStringSequenceTest {
         ReplacedStringSequence mutable2 = new ReplacedStringSequence(mutable1);
         ReplacedStringSequence mutable3 = new ReplacedStringSequence(sb);
 
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(t1, mutable1));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(t1, mutable2));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(t1, mutable3));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable1, mutable2));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable1, mutable3));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable2, mutable3));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(t1, mutable1));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(t1, mutable2));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(t1, mutable3));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable1, mutable2));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable1, mutable3));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable2, mutable3));
 
     }
 
@@ -67,9 +67,9 @@ public class ReplacedStringSequenceTest {
         ReplacedStringSequence mutable1 = new ReplacedStringSequence(t1);
         ReplacedStringSequence mutable2 = new ReplacedStringSequence(mutable1);
 
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(t1, mutable1));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(t1, mutable2));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable1, mutable2));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(t1, mutable1));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(t1, mutable2));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable1, mutable2));
     }
 
     @Test
@@ -82,8 +82,8 @@ public class ReplacedStringSequenceTest {
         CharSequence sub1 = mutable1.subSequence(4, 10);
         CharSequence sub2 = mutable2.subSequence(4, 10);
 
-        assertThat("MutableSubString must equals", CharSequenceUtil.equals(sub, sub1));
-        assertThat("MutableSubString must equals", CharSequenceUtil.equals(sub, sub2));
+        assertThat("MutableSubString must charSequenceEquals", CharSequenceUtil.equals(sub, sub1));
+        assertThat("MutableSubString must charSequenceEquals", CharSequenceUtil.equals(sub, sub2));
     }
 
 
@@ -93,13 +93,13 @@ public class ReplacedStringSequenceTest {
         ReplacedStringSequence mutable1 = new ReplacedStringSequence(t1);
         ReplacedStringSequence mutable2 = new ReplacedStringSequence(mutable1);
 
-        assertThat("ReplacedStringSequence must equals", t1.equals(mutable1.toString()));
-        assertThat("ReplacedStringSequence must equals", t1.equals(mutable2.toString()));
-        assertThat("ReplacedStringSequence must equals", mutable1.toString().equals(mutable2.toString()));
+        assertThat("ReplacedStringSequence must charSequenceEquals", t1.equals(mutable1.toString()));
+        assertThat("ReplacedStringSequence must charSequenceEquals", t1.equals(mutable2.toString()));
+        assertThat("ReplacedStringSequence must charSequenceEquals", mutable1.toString().equals(mutable2.toString()));
 
-        assertThat("ReplacedStringSequence must equals", mutable1.toString().equals(t1));
-        assertThat("ReplacedStringSequence must equals", mutable2.toString().equals(t1));
-        assertThat("ReplacedStringSequence must equals", mutable1.toString().equals(mutable2.toString()));
+        assertThat("ReplacedStringSequence must charSequenceEquals", mutable1.toString().equals(t1));
+        assertThat("ReplacedStringSequence must charSequenceEquals", mutable2.toString().equals(t1));
+        assertThat("ReplacedStringSequence must charSequenceEquals", mutable1.toString().equals(mutable2.toString()));
     }
 
 
@@ -112,12 +112,12 @@ public class ReplacedStringSequenceTest {
         ReplacedStringSequence mutable2 = new ReplacedStringSequence(mutable1);
         ReplacedStringSequence mutable3 = new ReplacedStringSequence(sb);
 
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(t1, mutable1));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(t1, mutable2));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(t1, mutable3));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable1, mutable2));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable1, mutable3));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable2, mutable3));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(t1, mutable1));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(t1, mutable2));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(t1, mutable3));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable1, mutable2));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable1, mutable3));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable2, mutable3));
 
         String replaceString = "Replaced string";
         StringBuilder sb2 = new StringBuilder(replaceString);
@@ -126,12 +126,12 @@ public class ReplacedStringSequenceTest {
         mutable2.replace(mutable1);
         mutable3.replace(sb2);
 
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(replaceString, mutable1));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(replaceString, mutable2));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(replaceString, mutable3));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable1, mutable2));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable1, mutable3));
-        assertThat("ReplacedStringSequence must equals", CharSequenceUtil.equals(mutable2, mutable3));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(replaceString, mutable1));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(replaceString, mutable2));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(replaceString, mutable3));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable1, mutable2));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable1, mutable3));
+        assertThat("ReplacedStringSequence must charSequenceEquals", CharSequenceUtil.equals(mutable2, mutable3));
 
     }
 

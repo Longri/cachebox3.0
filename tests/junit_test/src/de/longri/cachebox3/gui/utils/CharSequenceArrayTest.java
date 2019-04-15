@@ -29,7 +29,7 @@ class CharSequenceArrayTest {
         String testString = "Test String <?>";
         CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
 
-        assertThat("length must equals", testString.length() == charSequenceArray.length());
+        assertThat("length must charSequenceEquals", testString.length() == charSequenceArray.length());
 
     }
 
@@ -39,7 +39,7 @@ class CharSequenceArrayTest {
         CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
 
         for (int i = 0, n = testString.length(); i < n; i++) {
-            assertThat("Char at: " + i + " must equals",
+            assertThat("Char at: " + i + " must charSequenceEquals",
                     testString.charAt(i) == charSequenceArray.charAt(i));
         }
 
@@ -54,7 +54,7 @@ class CharSequenceArrayTest {
         CharSequence subCharArray = charSequenceArray.subSequence(3, 6);
 
         for (int i = 0, n = subString.length(); i < n; i++) {
-            assertThat("Char at: " + i + " must equals",
+            assertThat("Char at: " + i + " must charSequenceEquals",
                     subString.charAt(i) == subCharArray.charAt(i));
         }
 
@@ -70,7 +70,7 @@ class CharSequenceArrayTest {
         int[] charArrayInt = charSequenceArray.chars().toArray();
 
         for (int i = 0, n = stringInt.length; i < n; i++) {
-            assertThat("Int at: " + i + " must equals",
+            assertThat("Int at: " + i + " must charSequenceEquals",
                     stringInt[i] == charArrayInt[i]);
         }
 
@@ -85,7 +85,7 @@ class CharSequenceArrayTest {
         int[] charArrayInt = charSequenceArray.codePoints().toArray();
 
         for (int i = 0, n = stringInt.length; i < n; i++) {
-            assertThat("Int at: " + i + " must equals",
+            assertThat("Int at: " + i + " must charSequenceEquals",
                     stringInt[i] == charArrayInt[i]);
         }
     }
@@ -95,14 +95,14 @@ class CharSequenceArrayTest {
     void hash() {
         String testString = "Test String <?>";
         CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
-        assertThat("must equals", charSequenceArray.hashCode() == testString.hashCode());
+        assertThat("must charSequenceEquals", charSequenceArray.hashCode() == testString.hashCode());
     }
 
     @Test
     void toStringTest() {
         String testString = "Test String <?>";
         CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
-        assertThat("must equals", charSequenceArray.toString().equals(testString));
+        assertThat("must charSequenceEquals", charSequenceArray.toString().equals(testString));
     }
 
 
@@ -112,16 +112,16 @@ class CharSequenceArrayTest {
         CharSequenceArray charSequenceArray = new CharSequenceArray(testString);
         CharSequenceArray charSequenceArray2 = new CharSequenceArray(testString);
 
-        assertThat("must equals", charSequenceArray.equals(testString));
-        assertThat("must equals", charSequenceArray2.equals(charSequenceArray));
-        assertThat("must equals", testString.equals(charSequenceArray.toString()));
+        assertThat("must charSequenceEquals", charSequenceArray.equals(testString));
+        assertThat("must charSequenceEquals", charSequenceArray2.equals(charSequenceArray));
+        assertThat("must charSequenceEquals", testString.equals(charSequenceArray.toString()));
 
         charSequenceArray = new CharSequenceArray("test");
         charSequenceArray2 = new CharSequenceArray("tested");
 
-        assertThat("must not equals", !charSequenceArray.equals(testString));
-        assertThat("must not equals", !charSequenceArray2.equals(charSequenceArray));
-        assertThat("must not equals", !testString.equals(charSequenceArray.toString()));
+        assertThat("must not charSequenceEquals", !charSequenceArray.equals(testString));
+        assertThat("must not charSequenceEquals", !charSequenceArray2.equals(charSequenceArray));
+        assertThat("must not charSequenceEquals", !testString.equals(charSequenceArray.toString()));
 
 
     }

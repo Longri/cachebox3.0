@@ -21,8 +21,10 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.utils.GeoUtils;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 
@@ -34,6 +36,8 @@ import static de.longri.cachebox3.platform_test.Assert.assertNotNull;
 import static de.longri.cachebox3.platform_test.Assert.assertTrue;
 
 public class TestUtils {
+
+    public static final Coordinate LONGRI_HOME_COORDS = new Coordinate(52.581892, 13.398128);
 
     public static boolean isPlatformTest() {
         return true;
@@ -147,5 +151,11 @@ public class TestUtils {
 
             return database;
         }
+    }
+
+    public static double roundDoubleCoordinate(double value) {
+        value = Math.round(GeoUtils.degreesToMicrodegrees(value));
+        value = GeoUtils.microdegreesToDegrees((int) value);
+        return value;
     }
 }

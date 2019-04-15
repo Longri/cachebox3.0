@@ -43,7 +43,7 @@ public class CoordinateTest {
         Coordinate c2 = Coordinate.Project(c1, 12, distance);
         int calculatedDistance = Math.round(c1.distance(c2, MathUtils.CalculationType.FAST));
 
-        assertEquals(distance, calculatedDistance, "Distance must equals");
+        assertEquals(distance, calculatedDistance, "Distance must charSequenceEquals");
 
     }
 
@@ -74,29 +74,29 @@ public class CoordinateTest {
         Coordinate corrd7 = new Coordinate("N 52° 36.045000005 E 013° 21.760000002");
 
 
-        assertTrue(corrd1.equals(corrd1), "Coordinates.equals() must be true");
-        assertTrue(corrd2.equals(corrd2), "Coordinates.equals() must be true");
-        assertTrue(corrd3.equals(corrd3), "Coordinates.equals() must be true");
+        assertTrue(corrd1.equals(corrd1), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(corrd2.equals(corrd2), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(corrd3.equals(corrd3), "Coordinates.charSequenceEquals() must be true");
 
-        assertTrue(corrd4.equals(corrd4), "Coordinates.equals() must be true");
-        assertTrue(corrd5.equals(corrd5), "Coordinates.equals() must be true");
-        assertTrue(corrd6.equals(corrd6), "Coordinates.equals() must be true");
+        assertTrue(corrd4.equals(corrd4), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(corrd5.equals(corrd5), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(corrd6.equals(corrd6), "Coordinates.charSequenceEquals() must be true");
 
-        assertTrue(corrd1.equals(corrd4), "Coordinates.equals() must be true");
-        assertTrue(corrd2.equals(corrd5), "Coordinates.equals() must be true");
-        assertTrue(corrd3.equals(corrd6), "Coordinates.equals() must be true");
+        assertTrue(corrd1.equals(corrd4), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(corrd2.equals(corrd5), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(corrd3.equals(corrd6), "Coordinates.charSequenceEquals() must be true");
 
-        assertTrue(corrd7.equals(corrd6), "Coordinates.equals() must be true");
-        assertTrue(corrd6.equals(corrd7), "Coordinates.equals() must be true");
+        assertTrue(corrd7.equals(corrd6), "Coordinates.charSequenceEquals() must be true");
+        assertTrue(corrd6.equals(corrd7), "Coordinates.charSequenceEquals() must be true");
 
-        assertFalse(corrd2.equals(corrd1), "Coordinates.equals() must be false");
-        assertFalse(corrd1.equals(corrd2), "Coordinates.equals() must be false");
+        assertFalse(corrd2.equals(corrd1), "Coordinates.charSequenceEquals() must be false");
+        assertFalse(corrd1.equals(corrd2), "Coordinates.charSequenceEquals() must be false");
 
-        assertFalse(corrd3.equals(corrd1), "Coordinates.equals() must be false");
-        assertFalse(corrd1.equals(corrd3), "Coordinates.equals() must be false");
+        assertFalse(corrd3.equals(corrd1), "Coordinates.charSequenceEquals() must be false");
+        assertFalse(corrd1.equals(corrd3), "Coordinates.charSequenceEquals() must be false");
 
-        assertFalse(corrd2.equals(corrd3), "Coordinates.equals() must be false");
-        assertFalse(corrd3.equals(corrd2), "Coordinates.equals() must be false");
+        assertFalse(corrd2.equals(corrd3), "Coordinates.charSequenceEquals() must be false");
+        assertFalse(corrd3.equals(corrd2), "Coordinates.charSequenceEquals() must be false");
 
     }
 
