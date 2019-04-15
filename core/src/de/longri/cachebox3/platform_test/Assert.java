@@ -33,6 +33,18 @@ public class Assert {
         }
     }
 
+    public static void assertEquals(double expected, double actual,double toleranz, String reason) throws PlatformAssertionError {
+        if (!objectsAreEqual(expected, actual)) {
+            StringBuilder sb = new StringBuilder(reason);
+            sb.appendLine("");
+            sb.appendLine("expected:");
+            sb.appendLine(String.valueOf(expected));
+            sb.appendLine("");
+            sb.appendLine("actual:");
+            sb.appendLine(String.valueOf(actual));
+            throw new PlatformAssertionError(sb.toString());
+        }
+    }
 
     public static void assertEquals(Object expected, Object actual, String reason) throws PlatformAssertionError {
         if (!objectsAreEqual(expected, actual)) {

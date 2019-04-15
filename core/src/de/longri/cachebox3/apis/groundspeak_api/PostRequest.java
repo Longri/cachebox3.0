@@ -142,6 +142,6 @@ public abstract class PostRequest {
 
     protected abstract String getCallUrl();
 
-    protected abstract void getRequest(Json json);
+    public abstract void getRequest(Json json);
 
 }

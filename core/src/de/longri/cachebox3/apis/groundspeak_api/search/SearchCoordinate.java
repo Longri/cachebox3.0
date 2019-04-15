@@ -47,7 +47,7 @@ public class SearchCoordinate extends Search {
     }
 
     @Override
-    protected void getRequest(Json json) {
+    public void getRequest(Json json) {
         boolean hasStart = false;
 
         try {

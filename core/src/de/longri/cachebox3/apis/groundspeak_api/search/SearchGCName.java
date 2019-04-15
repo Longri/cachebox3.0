@@ -33,7 +33,7 @@ public class SearchGCName extends SearchCoordinate {
     }
 
     @Override
-    protected void getRequest(Json json) {
+    public void getRequest(Json json) {
         super.getRequest(json);
         //TODO change to JsonWriter
 //		JSONObject jgc = new JSONObject();

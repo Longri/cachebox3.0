@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 - 2018 team-cachebox.de
  *
@@ -13,7 +17,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.apis.groundspeak_api.search;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.apis.groundspeak_api.search.*;
 
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.net.HttpStatus;
@@ -29,8 +35,9 @@ import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
 import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.lists.CB_List;
-import org.junit.jupiter.api.Test;
-import travis.EXCLUDE_FROM_TRAVIS;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
+import de.longri.cachebox3.platform_test.EXCLUDE_FROM_TRAVIS;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,14 +48,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertEquals;
+import static de.longri.cachebox3.platform_test.Assert.assertTrue;
 
 /**
  * Created by Longri on 14.04.17.
  */
-class SearchGCTest {
+public class SearchGCTest {
 
     static {
         TestUtils.initialGdx();
@@ -58,7 +65,7 @@ class SearchGCTest {
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
 
     @Test
-    void getRequest() throws IOException {
+    public void getRequest() throws IOException, PlatformAssertionError {
         String expected = TestUtils.getResourceRequestString("testsResources/SearchGc_request.txt",
                 isDummy ? null : apiKey);
 
@@ -80,7 +87,7 @@ class SearchGCTest {
 
 
     @Test
-    void parseJsonResult() throws IOException {
+    public void parseJsonResult() throws IOException, PlatformAssertionError {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGc_result.txt");
         final Database testDB = TestUtils.getTestDB(true);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
@@ -223,7 +230,7 @@ class SearchGCTest {
 
 
     @Test
-    void parseJsonExpiredResult() throws IOException {
+    public void parseJsonExpiredResult() throws IOException, PlatformAssertionError {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGc_ExpiredResult.txt");
         final CB_List<AbstractCache> cacheList = new CB_List<>();
         final CB_List<LogEntry> logList = new CB_List<>();
@@ -304,7 +311,7 @@ class SearchGCTest {
 
 
     @Test
-    void testOnline() {
+    public void testOnline() throws PlatformAssertionError {
         if (isDummy) return;
         final Database testDB = TestUtils.getTestDB(true);
         final SearchGC searchGC = new SearchGC(testDB, apiKey, "GC1T33T") {
@@ -399,7 +406,7 @@ class SearchGCTest {
     }
 
     @Test
-    public void testOnlineLite() {
+    public void testOnlineLite() throws PlatformAssertionError {
         if (isDummy) return;
 
         final Database testDB = TestUtils.getTestDB(true);

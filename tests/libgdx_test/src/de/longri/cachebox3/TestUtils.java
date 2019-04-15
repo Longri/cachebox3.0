@@ -24,6 +24,8 @@ import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.GeoUtils;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
@@ -31,9 +33,10 @@ import org.oscim.backend.Platform;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import static de.longri.cachebox3.platform_test.Assert.assertNotNull;
-import static de.longri.cachebox3.platform_test.Assert.assertTrue;
+import static de.longri.cachebox3.platform_test.Assert.*;
 
 public class TestUtils {
 
@@ -135,6 +138,7 @@ public class TestUtils {
     }
 
     static int dbCount = 0;
+
     public static Database getTestDB(boolean inMemory) {
         if (inMemory) {
             Database database = new Database(Database.DatabaseType.CacheBox3);
@@ -158,4 +162,51 @@ public class TestUtils {
         value = GeoUtils.microdegreesToDegrees((int) value);
         return value;
     }
+
+    public static void assetCacheAttributes(Database database, AbstractCache abstractCache, ArrayList<Attributes> positiveList, ArrayList<Attributes> negativeList) throws PlatformAssertionError {
+        Iterator<Attributes> positiveIterator = positiveList.iterator();
+        Iterator<Attributes> negativeIterator = negativeList.iterator();
+
+        while (positiveIterator.hasNext()) {
+            assertThat("Attribute wrong", abstractCache.isAttributePositiveSet((Attributes) positiveIterator.next()));
+        }
+
+        while (negativeIterator.hasNext()) {
+            Attributes tmp = negativeIterator.next();
+            assertThat(tmp.name() + " negative Attribute wrong", abstractCache.isAttributeNegativeSet((tmp)));
+        }
+
+        // f�lle eine Liste mit allen Attributen
+        ArrayList<Attributes> attributes = new ArrayList<Attributes>();
+        Attributes[] tmp = Attributes.values();
+        for (Attributes item : tmp) {
+            attributes.add(item);
+        }
+
+        // L�sche die vergebenen Atribute aus der Kommplett Liste
+        positiveIterator = positiveList.iterator();
+        negativeIterator = negativeList.iterator();
+
+        while (positiveIterator.hasNext()) {
+            attributes.remove(positiveIterator.next());
+        }
+
+        while (negativeIterator.hasNext()) {
+            attributes.remove(negativeIterator.next());
+        }
+
+        attributes.remove(Attributes.getAttributeEnumByGcComId(64));
+        attributes.remove(Attributes.getAttributeEnumByGcComId(65));
+        attributes.remove(Attributes.getAttributeEnumByGcComId(66));
+
+        // Teste ob die �brig gebliebenen Atributte auch nicht vergeben wurden.
+        Iterator<Attributes> RestInterator = attributes.iterator();
+
+        while (RestInterator.hasNext()) {
+            Attributes attr = (Attributes) RestInterator.next();
+            assertThat(attr.name() + "Attribute wrong", !abstractCache.isAttributePositiveSet(attr));
+            assertThat(attr.name() + "Attribute wrong", !abstractCache.isAttributeNegativeSet(attr));
+        }
+    }
+
 }

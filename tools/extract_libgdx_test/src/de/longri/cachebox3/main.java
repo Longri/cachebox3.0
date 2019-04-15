@@ -158,6 +158,23 @@ public class main {
             FileHandle testCacheSourceDir = junitSrcDir.child("de/longri/cachebox3/types/test_caches");
             FileHandle testCacheTargetDir = libgdxTestSrcDir.child("../../types");
             testCacheSourceDir.copyTo(testCacheTargetDir);
+
+            // must replace 'Assertions.assertEquals;' on AbstractTestCache
+            FileHandle AbstractTestCache_Java = testCacheTargetDir.child("test_caches/AbstractTestCache.java");
+            String strAbstractTestCache = AbstractTestCache_Java.readString();
+            strAbstractTestCache = strAbstractTestCache.replace("import static org.junit.jupiter.api.Assertions.assertEquals;", "import static de.longri.cachebox3.platform_test.Assert.assertEquals;");
+            strAbstractTestCache = strAbstractTestCache.replace("import static org.junit.jupiter.api.Assertions.assertTrue;", "import static de.longri.cachebox3.platform_test.Assert.assertTrue;\n" +
+                    "import de.longri.cachebox3.platform_test.PlatformAssertionError;");
+            strAbstractTestCache = strAbstractTestCache.replace(" public void assertCache(AbstractCache other, Database database) {", " public void assertCache(AbstractCache other, Database database) throws PlatformAssertionError {");
+            strAbstractTestCache = strAbstractTestCache.replace(" private void assertLogs(Database database) {", " private void assertLogs(Database database) throws PlatformAssertionError {");
+            strAbstractTestCache = strAbstractTestCache.replace(" private void assetCacheAttributes(AbstractCache abstractCache, Database database) {", "  private void assetCacheAttributes(AbstractCache abstractCache, Database database) throws PlatformAssertionError {");
+            strAbstractTestCache = strAbstractTestCache.replace(" private void assertWaypoints(AbstractCache other, Database database) {", " private void assertWaypoints(AbstractCache other, Database database) throws PlatformAssertionError {");
+            strAbstractTestCache = strAbstractTestCache.replace(" private boolean fullWaypointEquals(AbstractWaypoint wp1, AbstractWaypoint wp2, Database database) {", " private boolean fullWaypointEquals(AbstractWaypoint wp1, AbstractWaypoint wp2, Database database) throws PlatformAssertionError {");
+            strAbstractTestCache = strAbstractTestCache.replace(" protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) {", "  protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) throws PlatformAssertionError {");
+
+
+
+            AbstractTestCache_Java.writeString(strAbstractTestCache, false);
         }
 
     }
@@ -418,6 +435,7 @@ public class main {
                             lines[j].contains("assertFalse(") ||
                             lines[j].contains("assertNotNull(") ||
                             lines[j].contains("assertRecursiveDir(") ||
+                            lines[j].contains("assertCache(") ||
                             lines[j].contains("assertAbstractViewSerialation(")) {
                         hasAssertCall = true;
                         break;

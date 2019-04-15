@@ -1,3 +1,7 @@
+
+
+//  Don't modify this file, it's created by tool 'extract_libgdx_test
+
 /*
  * Copyright (C) 2017 - 2018 team-cachebox.de
  *
@@ -13,7 +17,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.apis.groundspeak_api.search;
+package de.longri.cachebox3.platform_test.tests;
+
+import de.longri.cachebox3.apis.groundspeak_api.search.*;
 
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.net.HttpStatus;
@@ -31,8 +37,9 @@ import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
 import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.sqlite.dao.TrackableDao;
 import de.longri.cachebox3.types.*;
-import org.junit.jupiter.api.Test;
-import travis.EXCLUDE_FROM_TRAVIS;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.Test;
+import de.longri.cachebox3.platform_test.EXCLUDE_FROM_TRAVIS;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,14 +50,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertEquals;
+import static de.longri.cachebox3.platform_test.Assert.assertTrue;
 
 /**
  * Created by Longri on 17.04.17.
  */
-class SearchGcOwnerTest {
+public class SearchGcOwnerTest {
 
     static {
         TestUtils.initialGdx();
@@ -60,7 +67,7 @@ class SearchGcOwnerTest {
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
 
     @Test
-    void getRequest() throws IOException {
+    public void getRequest() throws IOException, PlatformAssertionError {
         String expected = TestUtils.getResourceRequestString("testsResources/SearchGcOwner_request.txt",
                 isDummy ? null : apiKey);
 
@@ -81,7 +88,7 @@ class SearchGcOwnerTest {
 
 
     @Test
-    void parseJsonResult() throws IOException {
+    public void parseJsonResult() throws IOException, PlatformAssertionError {
         final InputStream resultStream = TestUtils.getResourceRequestStream("testsResources/SearchGcOwner_result.txt");
         Coordinate searchCoord = new CoordinateGPS(52.581892, 13.398128); // Home of Katipa(like Longri)
 
@@ -265,7 +272,7 @@ class SearchGcOwnerTest {
 
 
     @Test
-    void testOnline() {
+    public void testOnline() throws PlatformAssertionError {
         if (isDummy) return;
         Coordinate searchCoord = new CoordinateGPS(52.616667, 13.366667);
 

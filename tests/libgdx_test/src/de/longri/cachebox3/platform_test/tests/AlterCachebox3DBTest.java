@@ -44,7 +44,7 @@ public class AlterCachebox3DBTest {
     static Database cb3Database;
 
     @BeforeAll
-    static void beforeAll() throws SQLiteGdxException, PlatformAssertionError {
+    public static void beforeAll() throws SQLiteGdxException, PlatformAssertionError {
 
         TestUtils.initialGdx();
 
@@ -61,7 +61,7 @@ public class AlterCachebox3DBTest {
     }
 
     @AfterAll
-    static void cleanUpRecources() {
+    public static void cleanUpRecources() {
         cb3Database.close();
     }
 

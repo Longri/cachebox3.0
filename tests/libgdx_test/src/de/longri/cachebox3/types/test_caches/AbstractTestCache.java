@@ -16,7 +16,6 @@
 package de.longri.cachebox3.types.test_caches;
 
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.CharSequenceUtil;
@@ -30,7 +29,7 @@ import java.util.Locale;
 
 import static de.longri.cachebox3.platform_test.Assert.assertEquals;
 import static de.longri.cachebox3.platform_test.Assert.assertTrue;
-
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
 
 /**
  * Created by Longri on 31.03.18.
@@ -169,7 +168,7 @@ public abstract class AbstractTestCache {
         }
     }
 
-    private void assetCacheAttributes(AbstractCache abstractCache, Database database) throws PlatformAssertionError {
+     private void assetCacheAttributes(AbstractCache abstractCache, Database database) throws PlatformAssertionError {
         Iterator<Attributes> positiveIterator = positiveList.iterator();
         Iterator<Attributes> negativeIterator = negativeList.iterator();
 
@@ -287,7 +286,7 @@ public abstract class AbstractTestCache {
         return true;
     }
 
-    protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) throws PlatformAssertionError {
+     protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) throws PlatformAssertionError {
         if (!log1.equals(log2)) return false; // check GcCode
 
         assertTrue(log1.Type == log2.Type, "LogEntry Type of " + log1.Id + " are wrong! " +

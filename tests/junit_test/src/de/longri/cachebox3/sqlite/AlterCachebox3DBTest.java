@@ -37,7 +37,7 @@ class AlterCachebox3DBTest {
     static Database cb3Database;
 
     @BeforeAll
-    static void beforeAll() throws SQLiteGdxException {
+    public static void beforeAll() throws SQLiteGdxException {
 
         TestUtils.initialGdx();
 
@@ -54,12 +54,12 @@ class AlterCachebox3DBTest {
     }
 
     @AfterAll
-    static void cleanUpRecources() {
+    public static void cleanUpRecources() {
         cb3Database.close();
     }
 
     @Test
-    void alterCachebox3DB() {
+    public void alterCachebox3DB() {
 
 
         GdxSqlite tempDB = new GdxSqlite(testDbFileHandle);
