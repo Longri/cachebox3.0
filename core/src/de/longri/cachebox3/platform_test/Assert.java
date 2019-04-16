@@ -33,8 +33,12 @@ public class Assert {
         }
     }
 
-    public static void assertEquals(double expected, double actual, double toleranz, String reason) throws PlatformAssertionError {
-        if (!objectsAreEqual(expected, actual)) {
+    public static void assertEquals(double expected, double actual, double tolerance, String reason) throws PlatformAssertionError {
+        double a = expected - actual;
+        if (a < 0)
+            a *= -1;
+
+        if (a > tolerance) {
             StringBuilder sb = new StringBuilder(reason);
             sb.appendLine("");
             sb.appendLine("expected:");
