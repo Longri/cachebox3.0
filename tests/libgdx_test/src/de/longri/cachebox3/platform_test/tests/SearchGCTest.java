@@ -354,12 +354,12 @@ public class SearchGCTest {
         assertEquals("GC1T33T", abstractCache.getGcCode().toString());
         assertEquals(0, abstractCache.getWaypoints().size);
         assertEquals(CacheTypes.Traditional, abstractCache.getType());
-        assertEquals(CacheSizes.other, abstractCache.getSize());
+        assertEquals(CacheSizes.micro, abstractCache.getSize());
         assertEquals("Germany", abstractCache.getCountry().toString());
         assertEquals(new Date(1243753200000L), abstractCache.getDateHidden());
         assertEquals(3f, abstractCache.getDifficulty());
         assertEquals("", abstractCache.getHint().toString());
-        assertEquals(12, abstractCache.getFavoritePoints());
+        assertEquals(13, abstractCache.getFavoritePoints());
         assertEquals(true, abstractCache.isFound());
         assertEquals("1260177", abstractCache.getGcId().toString());
         assertTrue(abstractCache.getLongDescription().toString().startsWith("<div style=\"text-align:center;\">Eine Hunderunde gedreht und mal "));
@@ -368,7 +368,7 @@ public class SearchGCTest {
         assertEquals("Wurzellisel", abstractCache.getPlacedBy().toString());
         assertEquals("\r\n", abstractCache.getShortDescription().toString());
         assertEquals(2f, abstractCache.getTerrain());
-        assertEquals("http://coord.info/GC1T33T", abstractCache.getUrl());
+        assertEquals("http://coord.info/GC1T33T", abstractCache.getUrl().toString());
         assertEquals(2, abstractCache.getApiState());
         assertEquals(52.579267, abstractCache.getLatitude());
         assertEquals(13.381983, abstractCache.getLongitude());
@@ -456,11 +456,11 @@ public class SearchGCTest {
         assertEquals("GC1T33T", abstractCache.getGcCode().toString());
         assertEquals(0, abstractCache.getWaypoints().size);
         assertEquals(CacheTypes.Traditional, abstractCache.getType());
-        assertEquals(CacheSizes.other, abstractCache.getSize());
+        assertEquals(CacheSizes.micro, abstractCache.getSize());
         assertEquals("", abstractCache.getCountry().toString());
         assertEquals(3f, abstractCache.getDifficulty());
         assertEquals("", abstractCache.getHint().toString());
-        assertEquals(12, abstractCache.getFavoritePoints());
+        assertEquals(13, abstractCache.getFavoritePoints());
         assertEquals(true, abstractCache.isFound());
         assertEquals("1260177", abstractCache.getGcId().toString());
         assertEquals("", abstractCache.getLongDescription().toString());
