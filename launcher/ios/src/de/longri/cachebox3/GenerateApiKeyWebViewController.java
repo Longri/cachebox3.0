@@ -51,6 +51,9 @@ public class GenerateApiKeyWebViewController extends UIViewController implements
         this.callBack = callBack;
         this.mainViewController = mainViewController;
 
+
+        NSHTTPCookieStorage.getSharedHTTPCookieStorage().setCookieAcceptPolicy(NSHTTPCookieAcceptPolicy.Always);
+
         if (Config.OverrideUrl.getValue().equals("")) {
             CB_Api.getGcAuthUrl(new GenericCallBack<String>() {
                 @Override
