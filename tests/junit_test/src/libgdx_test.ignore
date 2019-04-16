@@ -1,3 +1,7 @@
+only de.longri.cachebox3.socket.filebrowser.FileBrowserClintTest.java
+only de.longri.cachebox3.socket.filebrowser.ServerFileTest.java
+only ISSUE_Tests.issue_166.java
+
 libgdx_test.ignore
 com.badlogic.gdx/
 travis/
