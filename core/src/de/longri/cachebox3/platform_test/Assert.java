@@ -33,7 +33,7 @@ public class Assert {
         }
     }
 
-    public static void assertEquals(double expected, double actual,double toleranz, String reason) throws PlatformAssertionError {
+    public static void assertEquals(double expected, double actual, double toleranz, String reason) throws PlatformAssertionError {
         if (!objectsAreEqual(expected, actual)) {
             StringBuilder sb = new StringBuilder(reason);
             sb.appendLine("");
@@ -75,7 +75,14 @@ public class Assert {
         if (obj1 == null) {
             return (obj2 == null);
         }
+        if (obj1 instanceof Number || obj2 instanceof Number) return numberEqualse((Number) obj1, (Number) obj2);
         return obj1.equals(obj2);
+    }
+
+    private static boolean numberEqualse(Number obj1, Number obj2) {
+        if (obj1 instanceof Double || obj1 instanceof Float || obj2 instanceof Double || obj2 instanceof Float)
+            return obj1.doubleValue() == obj2.doubleValue();
+        return obj1.longValue() == obj2.longValue();
     }
 
     public static void assertTrue(boolean assertion) throws PlatformAssertionError {
