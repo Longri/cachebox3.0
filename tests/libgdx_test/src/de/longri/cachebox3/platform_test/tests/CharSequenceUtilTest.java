@@ -181,9 +181,9 @@ public class CharSequenceUtilTest {
 
         //-------------------------------------------------------------------------------------------------------------------------------
 
-        // is unparseable date, return dat must be null
+        // is unparsable date, return date must be null
         actual = CharSequenceUtil.parseDate(locale, PARSE_DATE_ARRAY, 66, 20, STRING_PATTERN3.toCharArray());
-        assertTrue(actual != null, "Date should not NULL");
+        assertTrue(actual == null, "Date must be NULL");
 
         //-------------------------------------------------------------------------------------------------------------------------------
         expected = DATE_PATTERN_2.parse("2011-04-17T03:39:24.4");

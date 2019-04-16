@@ -37,14 +37,14 @@ class FileBrowserClintTest {
 
 
     @BeforeAll
-    static void setUp() {
+    public static void setUp() {
         TestUtils.initialGdx();
         workpath = TestUtils.getResourceFileHandle("testsResources", true).child("lang");
         clint = new FileBrowserClint("", 0);
     }
 
     @AfterAll
-    static void tearDown() {
+    public static void tearDown() {
     }
 
 

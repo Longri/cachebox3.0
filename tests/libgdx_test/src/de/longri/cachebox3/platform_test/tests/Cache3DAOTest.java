@@ -46,7 +46,7 @@ public class Cache3DAOTest {
     static Database cb3Database;
 
     @BeforeAll
-    static void setUp() throws SQLiteGdxException, PlatformAssertionError {
+    public static void setUp() throws SQLiteGdxException, PlatformAssertionError {
         TestUtils.initialGdx();
 
         // copy testDb
@@ -66,7 +66,7 @@ public class Cache3DAOTest {
     }
 
     @AfterAll
-    static void tearDown() {
+    public static void tearDown() {
         cb3Database.close();
         try {
             Thread.sleep(500);

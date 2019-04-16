@@ -73,7 +73,7 @@ class CacheList3DAOTest {
     private final Date should_DateHidden = new Date();
 
     @BeforeAll
-    static void beforeAll() throws SQLiteGdxException {
+    public static void beforeAll() throws SQLiteGdxException {
 
         TestUtils.initialGdx();
 
@@ -101,7 +101,7 @@ class CacheList3DAOTest {
     }
 
     @AfterAll
-    static void cleanUpRecources() {
+    public static void cleanUpRecources() {
         cb3Database.close();
         try {
             Thread.sleep(500);
@@ -112,7 +112,7 @@ class CacheList3DAOTest {
 
 
     @Test
-    void readCacheList() {
+    public void readCacheList() {
 
         AbstractCacheListDAO DAO = new CacheList3DAO();
         CacheList caches = new CacheList();

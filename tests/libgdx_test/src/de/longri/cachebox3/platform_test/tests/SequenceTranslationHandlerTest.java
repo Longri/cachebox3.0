@@ -43,7 +43,7 @@ public class SequenceTranslationHandlerTest {
 
 
     @BeforeAll
-    static void loadTranslation() throws IOException, PlatformAssertionError {
+    public static void loadTranslation() throws IOException, PlatformAssertionError {
         TestUtils.initialGdx();
         FileHandle workPath = TestUtils.getResourceFileHandle("testsResources/lang", true);
         translationHandler = new SequenceTranslationHandler(workPath, "en-GB");

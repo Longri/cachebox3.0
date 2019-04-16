@@ -80,7 +80,7 @@ public class CacheList3DAOTest {
     private final Date should_DateHidden = new Date();
 
     @BeforeAll
-    static void beforeAll() throws SQLiteGdxException, PlatformAssertionError {
+    public static void beforeAll() throws SQLiteGdxException, PlatformAssertionError {
 
         TestUtils.initialGdx();
 
@@ -108,7 +108,7 @@ public class CacheList3DAOTest {
     }
 
     @AfterAll
-    static void cleanUpRecources() {
+    public static void cleanUpRecources() {
         cb3Database.close();
         try {
             Thread.sleep(500);

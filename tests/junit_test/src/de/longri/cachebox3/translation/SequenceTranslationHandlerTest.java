@@ -36,7 +36,7 @@ class SequenceTranslationHandlerTest {
 
 
     @BeforeAll
-    static void loadTranslation() throws IOException {
+    public static void loadTranslation() throws IOException {
         TestUtils.initialGdx();
         FileHandle workPath = TestUtils.getResourceFileHandle("testsResources/lang", true);
         translationHandler = new SequenceTranslationHandler(workPath, "en-GB");

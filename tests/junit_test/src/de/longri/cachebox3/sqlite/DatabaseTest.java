@@ -31,14 +31,14 @@ class DatabaseTest {
     private static FileHandle workpath;
 
     @BeforeAll
-    static void setUp() {
+    public static void setUp() {
         TestUtils.initialGdx();
         workpath = TestUtils.getResourceFileHandle("testsResources", true).child("TestNewDB");
         workpath.mkdirs();
     }
 
     @AfterAll
-    static void tearDown() {
+    public static void tearDown() {
         workpath.deleteDirectory();
     }
 

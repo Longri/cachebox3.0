@@ -39,7 +39,7 @@ class Cache3DAOTest {
     static Database cb3Database;
 
     @BeforeAll
-    static void setUp() throws SQLiteGdxException {
+    public static void setUp() throws SQLiteGdxException {
         TestUtils.initialGdx();
 
         // copy testDb
@@ -59,7 +59,7 @@ class Cache3DAOTest {
     }
 
     @AfterAll
-    static void tearDown() {
+    public static void tearDown() {
         cb3Database.close();
         try {
             Thread.sleep(500);

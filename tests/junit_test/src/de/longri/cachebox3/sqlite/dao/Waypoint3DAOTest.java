@@ -40,7 +40,7 @@ class Waypoint3DAOTest {
     static Database cb3Database;
 
     @BeforeAll
-    static void beforeAll() throws SQLiteGdxException {
+    public static void beforeAll() throws SQLiteGdxException {
 
         TestUtils.initialGdx();
 
@@ -61,7 +61,7 @@ class Waypoint3DAOTest {
     }
 
     @AfterAll
-    static void cleanUpRecources() {
+    public static void cleanUpRecources() {
         cb3Database.close();
         try {
             Thread.sleep(500);
@@ -72,7 +72,7 @@ class Waypoint3DAOTest {
 
 
     @Test
-    void getWaypointsFromCacheID() {
+    public void getWaypointsFromCacheID() {
 
         Waypoint3DAO dao = new Waypoint3DAO();
         Array<AbstractWaypoint> waypoints = dao.getWaypointsFromCacheID(cb3Database, null, true);

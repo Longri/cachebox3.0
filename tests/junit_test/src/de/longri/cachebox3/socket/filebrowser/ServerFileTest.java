@@ -30,10 +30,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class ServerFileTest {
 
 
-    private FileHandle workpath;
+    private static FileHandle workpath;
 
     @BeforeEach
-    void setUp() {
+    public static void setUp() {
         TestUtils.initialGdx();
         workpath = TestUtils.getResourceFileHandle("testsResources", false);
     }

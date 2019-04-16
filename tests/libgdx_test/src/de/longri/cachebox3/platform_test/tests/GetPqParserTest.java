@@ -61,6 +61,7 @@ public class GetPqParserTest {
             assertThat("Target file must deleted", targetFile.delete());
         }
 
+        targetFile.parent().mkdirs();
 
         final AtomicInteger streamedBytes = new AtomicInteger(0);
         try {
