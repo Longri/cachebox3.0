@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -355,8 +355,10 @@ public class FilterProperties {
                 andParts.add(" NOT ID in (select CacheId FROM Waypoints WHERE UserWaypoint = 1)");
 
 
-            if (MinDifficulty.getInt() / 2f > 1) andParts.add("Difficulty >= " + String.valueOf(MinDifficulty.getInt()));
-            if (MaxDifficulty.getInt() / 2f < 5) andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty.getInt()));
+            if (MinDifficulty.getInt() / 2f > 1)
+                andParts.add("Difficulty >= " + String.valueOf(MinDifficulty.getInt()));
+            if (MaxDifficulty.getInt() / 2f < 5)
+                andParts.add("Difficulty <= " + String.valueOf(MaxDifficulty.getInt()));
             if (MinTerrain.getInt() / 2f > 1) andParts.add("Terrain >= " + String.valueOf(MinTerrain.getInt()));
             if (MaxTerrain.getInt() / 2f < 5) andParts.add("Terrain <= " + String.valueOf(MaxTerrain.getInt()));
             if (MinContainerSize.getInt() > 0) andParts.add("Size >= " + String.valueOf(MinContainerSize.getInt()));
@@ -430,9 +432,9 @@ public class FilterProperties {
             if (mustJoin) {
                 statement = "SELECT * FROM CacheCoreInfo core JOIN Attributes attr ON attr.Id = core.Id WHERE " + join(" and ", andParts);
             } else {
-                if(andParts.size()==0){
+                if (andParts.size() == 0) {
                     statement = "SELECT * FROM CacheCoreInfo";
-                }else{
+                } else {
                     statement = "SELECT * FROM CacheCoreInfo core WHERE " + join(" and ", andParts);
                 }
             }
@@ -506,15 +508,22 @@ public class FilterProperties {
         for (int i = 0; i < cacheTypes.length; i++) {
             if (filter.cacheTypes.length <= i)
                 break;
-            if (filter.cacheTypes[i].get() != this.cacheTypes[i].get())
-                return false; // nicht gleich!!!
+
+            BooleanProperty otherProperty = filter.cacheTypes[i];
+            BooleanProperty thisProperty = this.cacheTypes[i];
+
+            if ((otherProperty == null || thisProperty == null) && (thisProperty != null || otherProperty != null))
+                return false;
+
+            if (otherProperty.get() != thisProperty.get())
+                return false;
         }
 
         for (int i = 1; i < attributes.length; i++) {
             if (filter.attributes.length <= i)
                 break;
             if (filter.attributes[i].getInt() != this.attributes[i].getInt())
-                return false; // nicht gleich!!!
+                return false;
         }
 
         if (GPXFilenameIds.size != filter.GPXFilenameIds.size)
@@ -569,8 +578,10 @@ public class FilterProperties {
         if (this.MaxContainerSize.getInt() < abstractCache.getSize().ordinal()) return false;
         if (this.MinRating.getInt() / 2f > abstractCache.getRating()) return false;
         if (this.MaxRating.getInt() / 2f < abstractCache.getRating()) return false;
-        if (this.MinFavPoints.getInt() >= 0 && this.MinFavPoints.getInt() > abstractCache.getFavoritePoints()) return false;
-        if (this.MaxFavPoints.getInt() >= 0 && this.MaxFavPoints.getInt() < abstractCache.getFavoritePoints()) return false;
+        if (this.MinFavPoints.getInt() >= 0 && this.MinFavPoints.getInt() > abstractCache.getFavoritePoints())
+            return false;
+        if (this.MaxFavPoints.getInt() >= 0 && this.MaxFavPoints.getInt() < abstractCache.getFavoritePoints())
+            return false;
 
 
         if (!this.cacheTypes[abstractCache.getType().ordinal()].get())
