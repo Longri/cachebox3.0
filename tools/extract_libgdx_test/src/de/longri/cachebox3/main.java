@@ -173,7 +173,6 @@ public class main {
             strAbstractTestCache = strAbstractTestCache.replace(" protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) {", "  protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) throws PlatformAssertionError {");
 
 
-
             AbstractTestCache_Java.writeString(strAbstractTestCache, false);
         }
 
@@ -199,6 +198,8 @@ public class main {
 
         for (String line : lines) {
             line = line.replace("\r", "");
+
+            if (line.isEmpty()) continue;
 
             if (line.startsWith("only ")) {
                 onlyFlagSet = true;
