@@ -375,7 +375,8 @@ public class FilterProperties {
             String csvTypes = "";
             int count = 0;
             for (int i = 0; i < cacheTypes.length; i++) {
-                if (cacheTypes[i].get()) {
+                BooleanProperty property = cacheTypes[i];
+                if (property != null && property.get()) {
                     csvTypes += String.valueOf(i) + ",";
                     count++;
                 }
@@ -389,17 +390,19 @@ public class FilterProperties {
 
             boolean mustJoin = false;
             for (int i = 1; i < attributes.length; i++) {
-                if (attributes[i].getInt() != 0) {
+                IntProperty attProperty = attributes[i];
+
+                if (attProperty != null && attProperty.getInt() != 0) {
                     mustJoin = true;
                     if (i < 62) {
                         long shift = DLong.UL1 << (i);
-                        if (attributes[i].getInt() == 1)
+                        if (attProperty.getInt() == 1)
                             andParts.add("(attr.AttributesPositive & " + shift + ") > 0");
                         else
                             andParts.add("(attr.AttributesNegative &  " + shift + ") > 0");
                     } else {
                         long shift = DLong.UL1 << (i - 61);
-                        if (attributes[i].getInt() == 1)
+                        if (attProperty.getInt() == 1)
                             andParts.add("(attr.AttributesPositiveHigh &  " + shift + ") > 0");
                         else
                             andParts.add("(attr.AttributesNegativeHigh & " + shift + ") > 0");
@@ -407,7 +410,7 @@ public class FilterProperties {
                 }
             }
 
-            if (GPXFilenameIds.size != 0) {
+            if (GPXFilenameIds != null && GPXFilenameIds.size != 0) {
                 String s = "";
                 for (long id : GPXFilenameIds.items) {
                     s += String.valueOf(id) + ",";
@@ -418,13 +421,13 @@ public class FilterProperties {
                 }
             }
 
-            if (!filterName.equals("")) {
+            if (filterName != null && !filterName.equals("")) {
                 andParts.add("name like '%" + filterName + "%'");
             }
-            if (!filterGcCode.equals("")) {
+            if (filterGcCode != null && !filterGcCode.equals("")) {
                 andParts.add("GcCode like '%" + filterGcCode + "%'");
             }
-            if (!filterOwner.equals("")) {
+            if (filterOwner != null && !filterOwner.equals("")) {
                 andParts.add("( PlacedBy like '%" + filterOwner + "%' or Owner like '%" + filterOwner + "%' )");
             }
 
@@ -715,8 +718,10 @@ public class FilterProperties {
 
             // GPX Filenames
             tmp = "";
-            for (int i = 0; i <= GPXFilenameIds.size - 1; i++) {
-                tmp += GPXSEPARATOR + String.valueOf(GPXFilenameIds.get(i));
+            if (GPXFilenameIds != null) {
+                for (int i = 0; i <= GPXFilenameIds.size - 1; i++) {
+                    tmp += GPXSEPARATOR + String.valueOf(GPXFilenameIds.get(i));
+                }
             }
             json.writeValue("gpxfilenameids", tmp);
 

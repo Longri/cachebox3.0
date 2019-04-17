@@ -323,9 +323,10 @@ public class StageManager {
     }
 
     public  void addMapMultiplexer(InputMultiplexer mapInputHandler) {
-        if (!inputMultiplexer.getProcessors().contains(mapInputHandler, true)) {
-            inputMultiplexer.addProcessor(mapInputHandler);
+        if (inputMultiplexer.getProcessors().contains(mapInputHandler, true)) {
+            inputMultiplexer.removeProcessor(mapInputHandler);
         }
+        inputMultiplexer.addProcessor(mapInputHandler);
     }
 
     public  void removeMapMultiplexer(InputMultiplexer mapInputHandler) {
