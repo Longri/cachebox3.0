@@ -114,16 +114,15 @@ class MapStateTest {
         state.setMapMode(MapMode.CAR);
         state.setMapOrientationMode(MapOrientationMode.COMPASS);
         state.setZoom(12);
-        state.setPosition(new LatLong(53.0,13.0));
+        state.setPosition(new LatLong(53.0, 13.0));
         state.setTilt(17.02f);
         state.setOrientation(28.456f);
         assertThat("Must zoom Level 12", state.getZoom() == 12);
         assertThat("Must MapOrientationMode.COMPASS", state.getMapOrientationMode() == MapOrientationMode.COMPASS);
         assertThat("Must MapMode.CAR", state.getMapMode() == MapMode.CAR);
-        assertEquals(new LatLong(53.0,13.0), state.getFreePosition() ,"Must position 53.0,13.0");
-        assertEquals(17.02f, state.getTilt() ,"Must tilt of 17.02f");
-        assertEquals(28.456f, state.getOrientation() ,"Must oriantation of 28.456f");
-
+        assertEquals(new LatLong(53.0, 13.0), state.getFreePosition(), "Must position 53.0,13.0");
+        assertEquals(17.02f, state.getTilt(), "Must tilt of 17.02f");
+        assertEquals(28.456f, state.getOrientation(), "Must oriantation of 28.456f");
 
 
         byte[] bytes = state.serialize();
@@ -132,9 +131,9 @@ class MapStateTest {
         assertThat("Must zoom Level 12", mapState.getZoom() == 12);
         assertThat("Must MapOrientationMode.COMPASS", mapState.getMapOrientationMode() == MapOrientationMode.COMPASS);
         assertThat("Must MapMode.CAR", mapState.getMapMode() == MapMode.CAR);
-        assertEquals(new LatLong(53.0,13.0), mapState.getFreePosition() ,"Must position 53.0,13.0");
-        assertEquals(17.02f, mapState.getTilt() ,"Must tilt of 17.02f");
-        assertEquals(28.456f, mapState.getOrientation() ,"Must oriantation of 28.456f");
+        assertEquals(new LatLong(53.0, 13.0), mapState.getFreePosition(), "Must position 53.0,13.0");
+        assertEquals(17.02f, mapState.getTilt(), "Must tilt of 17.02f");
+        assertEquals(28.456f, mapState.getOrientation(), "Must oriantation of 28.456f");
 
 
     }

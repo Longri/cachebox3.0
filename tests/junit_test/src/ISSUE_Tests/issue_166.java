@@ -44,8 +44,6 @@ public class issue_166 {
     @BeforeAll
     public static void setUp() {
         TestUtils.initialGdx();
-
-
     }
 
     @AfterAll
@@ -57,14 +55,10 @@ public class issue_166 {
 
     @Test
     public void testMapCount() {
-
-
-        testWorkpath = TestUtils.getResourceFileHandle((TestUtils.isPlatformTest() ? CB.WorkPath : "") + "testsResources", false).child("TestMapDirs");
+        testWorkpath = TestUtils.getResourceFileHandle((TestUtils.isPlatformTest() ? CB.WorkPath : "") + "/testsResources", false).child("TestMapDirs");
 
         if (testWorkpath.exists()) testWorkpath.deleteDirectory();
-
         testWorkpath.mkdirs();
-
 
         //create CB3 folder struct on workPath
         new CreateCbDirectoryStructure(testWorkpath.file().getAbsolutePath(), true);

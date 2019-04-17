@@ -72,7 +72,8 @@ public class AbstractViewSerialiseTest {
         DescriptionView newDescriptionView = (DescriptionView) TestUtils.assertAbstractViewSerialation(descriptionView, DescriptionView.class);
     }
 
-    @Test @RunOnGL
+    @Test
+    @RunOnGL
     public void DraftsViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
@@ -80,7 +81,8 @@ public class AbstractViewSerialiseTest {
         DraftsView newDraftsView = (DraftsView) TestUtils.assertAbstractViewSerialation(draftsView, DraftsView.class);
     }
 
-    @Test @RunOnGL
+    @Test
+    @RunOnGL
     public void LogListViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
@@ -120,7 +122,8 @@ public class AbstractViewSerialiseTest {
         SpoilerView newSpoilerView = (SpoilerView) TestUtils.assertAbstractViewSerialation(spoilerView, SpoilerView.class);
     }
 
-    @Test @RunOnGL
+    @Test
+    @RunOnGL
     public void TestViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!

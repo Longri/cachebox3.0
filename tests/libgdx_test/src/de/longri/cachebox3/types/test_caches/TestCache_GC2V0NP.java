@@ -45,7 +45,7 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
         this.hint = "Finale - Mikado";
         this.favoritePoints = 0;
         this.note = "Cachebox Note";
-        this.solver="Cachebox Solver";
+        this.solver = "Cachebox Solver";
         try {
             this.dateHidden = DATE_PATTERN.parse("2011-04-25T09:00:00Z");
         } catch (ParseException e) {

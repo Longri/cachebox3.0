@@ -52,7 +52,7 @@ class FileBrowserTest {
     static void setUp() {
         TestUtils.initialGdx();
 
-        workpath = TestUtils.getResourceFileHandle("testsResources",true);
+        workpath = TestUtils.getResourceFileHandle("testsResources", true);
         server = new FileBrowserServer(workpath, PORT, null);
         clint = new FileBrowserClint(SERVER_ADRESS, PORT);
         server.startListening();
@@ -98,13 +98,13 @@ class FileBrowserTest {
         Thread.sleep(100);
 
         assertThat("transmitted File must exist", targetFile.exists());
-        assertThat("File.length must equals", targetFile.length() == file.length());
+        assertThat("File.length must charSequenceEquals", targetFile.length() == file.length());
 
         ByteArray a1 = new ByteArray(targetFile.readBytes());
         ByteArray a2 = new ByteArray(file.readBytes());
 
 
-        assertThat("File Content must equals", a1.equals(a2));
+        assertThat("File Content must charSequenceEquals", a1.equals(a2));
 
 
         // delete test file
@@ -164,7 +164,7 @@ class FileBrowserTest {
         assertThat("Must started", start.get());
 
         FileHandle file = workpath.child("pankow.map");
-        assertThat("File length must equals", target.length() == file.length());
+        assertThat("File length must charSequenceEquals", target.length() == file.length());
 
         target.deleteOnExit();
 

@@ -31,11 +31,11 @@ import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
 import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.apis.groundspeak_api.search.SearchCoordinate;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.BlockGpsActivityBase;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
@@ -474,7 +474,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
                                             CB.postOnNextGlThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    CacheListChangedEventList.Call();
+                                                    EventHandler.fire(new CacheListChangedEvent());
                                                 }
                                             });
                                         }
@@ -493,8 +493,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
                             //close Dialog
                             finish();
 
-                            //fire CacheList changed event
-                            CacheListChangedEventList.Call();
+                            EventHandler.fire(new CacheListChangedEvent());
                         }
                     }
                 }, gpxFilename.Id);

@@ -62,14 +62,10 @@ public class issue_166 {
 
     @Test
     public void testMapCount() throws PlatformAssertionError {
-
-
-        testWorkpath = TestUtils.getResourceFileHandle((TestUtils.isPlatformTest() ? CB.WorkPath : "") + "testsResources", false).child("TestMapDirs");
+        testWorkpath = TestUtils.getResourceFileHandle((TestUtils.isPlatformTest() ? CB.WorkPath : "") + "/testsResources", false).child("TestMapDirs");
 
         if (testWorkpath.exists()) testWorkpath.deleteDirectory();
-
         testWorkpath.mkdirs();
-
 
         //create CB3 folder struct on workPath
         new CreateCbDirectoryStructure(testWorkpath.file().getAbsolutePath(), true);

@@ -16,10 +16,9 @@
 package de.longri.cachebox3.types.test_caches;
 
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.platform_test.PlatformAssertionError;
-import de.longri.cachebox3.platform_test.tests.CharSequenceUtilTest;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,8 +28,8 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import static de.longri.cachebox3.platform_test.Assert.assertEquals;
-import static de.longri.cachebox3.platform_test.Assert.assertThat;
-
+import static de.longri.cachebox3.platform_test.Assert.assertTrue;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
 
 /**
  * Created by Longri on 31.03.18.
@@ -100,37 +99,37 @@ public abstract class AbstractTestCache {
 
 
     public void assertCache(AbstractCache other, Database database) throws PlatformAssertionError {
-        assertThat("Cache must not be NULL", other != null);
-        assertThat("Latitude must be " + latitude + " but was :" + other.getLatitude(), latitude == other.getLatitude());
-        assertThat("Longitude must be " + longitude + " but was :" + other.getLongitude(), longitude == other.getLongitude());
-        assertThat("Cache type must be " + cacheType + " but was :" + other.getType(), cacheType == other.getType());
-        assertThat("GcCode must be " + gcCode + " but was :" + other.getGcCode(), CharSequenceUtilTest.equals(gcCode, other.getGcCode()));
-        assertThat("Cache id must be " + id + " but was :" + other.getId(), id == other.getId());
-        assertThat("Cache available must be " + available + " but was :" + other.isAvailable(), available == other.isAvailable());
-        assertThat("Cache archived must be " + archived + " but was :" + other.isArchived(), archived == other.isArchived());
-        assertThat("Placed by must be " + placed_by + " but was :" + other.getPlacedBy(), CharSequenceUtilTest.equals(placed_by, other.getPlacedBy()));
-        assertThat("Owner must be " + owner + " but was :" + other.getOwner(), CharSequenceUtilTest.equals(owner, other.getOwner()));
-        assertThat("Container must be " + container + " but was :" + other.getSize(), container == other.getSize());
+        assertTrue(other != null, "Cache must not be NULL");
+        assertTrue(latitude == other.getLatitude(), "Latitude must be " + latitude + " but was :" + other.getLatitude());
+        assertTrue(longitude == other.getLongitude(), "Longitude must be " + longitude + " but was :" + other.getLongitude());
+        assertTrue(cacheType == other.getType(), "Cache type must be " + cacheType + " but was :" + other.getType());
+        assertTrue(CharSequenceUtil.equals(gcCode, other.getGcCode()), "GcCode must be " + gcCode + " but was :" + other.getGcCode());
+        assertTrue(id == other.getId(), "Cache id must be " + id + " but was :" + other.getId());
+        assertTrue(available == other.isAvailable(), "Cache available must be " + available + " but was :" + other.isAvailable());
+        assertTrue(archived == other.isArchived(), "Cache archived must be " + archived + " but was :" + other.isArchived());
+        assertTrue(CharSequenceUtil.equals(placed_by, other.getPlacedBy()), "Placed by must be " + placed_by + " but was :" + other.getPlacedBy());
+        assertTrue(CharSequenceUtil.equals(owner, other.getOwner()), "Owner must be " + owner + " but was :" + other.getOwner());
+        assertTrue(container == other.getSize(), "Container must be " + container + " but was :" + other.getSize());
         assetCacheAttributes(other, database);
-        assertThat("Cache Url must be " + url + " but was :" + other.getUrl(), CharSequenceUtilTest.equals(url, other.getUrl()));
-        assertThat("Country must be " + country + " but was :" + other.getCountry(), CharSequenceUtilTest.equals(country, other.getCountry()));
-        assertThat("State must be " + state + " but was :" + other.getState(), CharSequenceUtilTest.equals(state, other.getState()));
-        assertThat("Cache difficulty must be " + difficulty + " but was :" + other.getDifficulty(), difficulty == other.getDifficulty());
-        assertThat("Cache terrain must be " + terrain + " but was :" + other.getTerrain(), terrain == other.getTerrain());
-        assertThat("Cache Found must be " + found + " but was :" + other.isFound(), found == other.isFound());
-        assertEquals(shortDescription, other.getShortDescription().toString().replaceAll("\r\n", "\n"), "Short description should be equals");
-        assertEquals(longDescription, other.getLongDescription().toString().replaceAll("\r\n", "\n"), "Long description should be equals");
-        assertEquals(hint, other.getHint().toString().replaceAll("\r\n", "\n"), "Hint should be equals");
-        assertThat("Cache Tb count must be " + tbCount + " but was :" + other.getNumTravelbugs(), tbCount == other.getNumTravelbugs());
-        assertThat("Cache Favorite must be " + favorite + " but was :" + other.isFavorite(), favorite == other.isFavorite());
-        assertThat("Cache FavoritePoints count must be " + favoritePoints + " but was :" + other.getFavoritePoints(), favoritePoints == other.getFavoritePoints());
-        assertEquals(note, other.getTmpNote() != null ? other.getTmpNote().toString().replaceAll("\r\n", "\n") : null, "Cache note should be equals");
-        assertEquals(solver, other.getTmpSolver() != null ? other.getTmpSolver().toString().replaceAll("\r\n", "\n") : null, "Cache solver should be equals");
-        assertEquals(name, other.getName().toString(), "Cache name should be equals");
+        assertTrue(CharSequenceUtil.equals(url, other.getUrl()), "Cache Url must be " + url + " but was :" + other.getUrl());
+        assertTrue(CharSequenceUtil.equals(country, other.getCountry()), "Country must be " + country + " but was :" + other.getCountry());
+        assertTrue(CharSequenceUtil.equals(state, other.getState()), "State must be " + state + " but was :" + other.getState());
+        assertTrue(difficulty == other.getDifficulty(), "Cache difficulty must be " + difficulty + " but was :" + other.getDifficulty());
+        assertTrue(terrain == other.getTerrain(), "Cache terrain must be " + terrain + " but was :" + other.getTerrain());
+        assertTrue(found == other.isFound(), "Cache Found must be " + found + " but was :" + other.isFound());
+        assertEquals(shortDescription, other.getShortDescription().toString().replaceAll("\r\n", "\n"), "Short description should be charSequenceEquals");
+        assertEquals(longDescription, other.getLongDescription().toString().replaceAll("\r\n", "\n"), "Long description should be charSequenceEquals");
+        assertEquals(hint, other.getHint().toString().replaceAll("\r\n", "\n"), "Hint should be charSequenceEquals");
+        assertTrue(tbCount == other.getNumTravelbugs(), "Cache Tb count must be " + tbCount + " but was :" + other.getNumTravelbugs());
+        assertTrue(favorite == other.isFavorite(), "Cache Favorite must be " + favorite + " but was :" + other.isFavorite());
+        assertTrue(favoritePoints == other.getFavoritePoints(), "Cache FavoritePoints count must be " + favoritePoints + " but was :" + other.getFavoritePoints());
+        assertEquals(note, other.getTmpNote() != null ? other.getTmpNote().toString().replaceAll("\r\n", "\n") : null, "Cache note should be charSequenceEquals");
+        assertEquals(solver, other.getTmpSolver() != null ? other.getTmpSolver().toString().replaceAll("\r\n", "\n") : null, "Cache solver should be charSequenceEquals");
+        assertEquals(name, other.getName().toString(), "Cache name should be charSequenceEquals");
 
         String expectedDate = DATE_PATTERN.format(this.dateHidden);
         String actualDate = DATE_PATTERN.format(other.getDateHidden());
-        assertEquals(expectedDate, actualDate, "HiddenDate should be equals");
+        assertEquals(expectedDate, actualDate, "HiddenDate should be charSequenceEquals");
 
         if (testWaypoints) assertWaypoints(other, database);
 
@@ -140,7 +139,7 @@ public abstract class AbstractTestCache {
     private void assertLogs(Database database) throws PlatformAssertionError {
         Array<LogEntry> otherLogEntries = database.getLogs(this.id);
 
-        assertThat("LogEntries size must be " + logEntries.size + " but was :" + otherLogEntries.size, logEntries.size == otherLogEntries.size);
+        assertTrue(logEntries.size == otherLogEntries.size, "LogEntries size must be " + logEntries.size + " but was :" + otherLogEntries.size);
 
 
         if (logEntries.size == 0) return;
@@ -154,7 +153,7 @@ public abstract class AbstractTestCache {
                     break;
                 }
             }
-            assertThat("LogEntry not found", found);
+            assertTrue(found, "LogEntry not found");
         }
 
         for (LogEntry otherLog : logEntries) {
@@ -165,23 +164,23 @@ public abstract class AbstractTestCache {
                     break;
                 }
             }
-            assertThat("LogEntry not found", found);
+            assertTrue(found, "LogEntry not found");
         }
     }
 
-    private void assetCacheAttributes(AbstractCache abstractCache, Database database) throws PlatformAssertionError {
+     private void assetCacheAttributes(AbstractCache abstractCache, Database database) throws PlatformAssertionError {
         Iterator<Attributes> positiveIterator = positiveList.iterator();
         Iterator<Attributes> negativeIterator = negativeList.iterator();
 
 
         while (positiveIterator.hasNext()) {
             Attributes att = positiveIterator.next();
-            assertThat("positive Attribute " + att + " wrong", abstractCache.isAttributePositiveSet(att));
+            assertTrue(abstractCache.isAttributePositiveSet(att), "positive Attribute " + att + " wrong");
         }
 
         while (negativeIterator.hasNext()) {
             Attributes tmp = negativeIterator.next();
-            assertThat(tmp.name() + " negative Attribute wrong", abstractCache.isAttributeNegativeSet((tmp)));
+            assertTrue(abstractCache.isAttributeNegativeSet((tmp)), tmp.name() + " negative Attribute wrong");
         }
 
         // f�lle eine Liste mit allen Attributen
@@ -212,14 +211,14 @@ public abstract class AbstractTestCache {
 
         while (RestInterator.hasNext()) {
             Attributes attr = (Attributes) RestInterator.next();
-            assertThat(attr.name() + " Attribute wrong", !abstractCache.isAttributePositiveSet(attr));
-            assertThat(attr.name() + " Attribute wrong", !abstractCache.isAttributeNegativeSet(attr));
+            assertTrue(!abstractCache.isAttributePositiveSet(attr), attr.name() + " Attribute wrong");
+            assertTrue(!abstractCache.isAttributeNegativeSet(attr), attr.name() + " Attribute wrong");
         }
     }
 
     private void assertWaypoints(AbstractCache other, Database database) throws PlatformAssertionError {
         int wpSize = other.getWaypoints() != null ? other.getWaypoints().size : 0;
-        assertThat("Waypoint size must be " + waypoints.size + " but was :" + wpSize, waypoints.size == wpSize);
+        assertTrue(waypoints.size == wpSize, "Waypoint size must be " + waypoints.size + " but was :" + wpSize);
 
 
         if (waypoints.size == 0) return;
@@ -234,7 +233,7 @@ public abstract class AbstractTestCache {
                     break;
                 }
             }
-            assertThat("Wp not found", found);
+            assertTrue(found, "Wp not found");
         }
 
         for (AbstractWaypoint thisWp : waypoints) {
@@ -245,7 +244,7 @@ public abstract class AbstractTestCache {
                     break;
                 }
             }
-            assertThat("Wp not found", found);
+            assertTrue(found, "Wp not found");
         }
 
     }
@@ -254,56 +253,56 @@ public abstract class AbstractTestCache {
         if (!wp1.equals(wp2)) return false; // check GcCode
 
 
-        assertThat("Waypoint Type of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getType() + " instead of " + wp2.getType(), wp1.getType() == wp2.getType());
+        assertTrue(wp1.getType() == wp2.getType(), "Waypoint Type of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getType() + " instead of " + wp2.getType());
 
-        assertThat("Waypoint Cache id of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getCacheId() + " instead of " + wp2.getCacheId(), wp1.getCacheId() == wp2.getCacheId());
+        assertTrue(wp1.getCacheId() == wp2.getCacheId(), "Waypoint Cache id of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getCacheId() + " instead of " + wp2.getCacheId());
 
-        assertThat("Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getClue() + " instead of " + wp2.getClue(), CharSequenceUtilTest.equals(wp1.getClue(), wp2.getClue()));
+        assertTrue(CharSequenceUtil.equals(wp1.getClue(), wp2.getClue()), "Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getClue() + " instead of " + wp2.getClue());
 
-        assertThat("Waypoint Description of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getDescription() + " instead of " + wp2.getDescription(), CharSequenceUtilTest.equals(wp1.getDescription(), wp2.getDescription()));
+        assertTrue(CharSequenceUtil.equals(wp1.getDescription(), wp2.getDescription()), "Waypoint Description of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getDescription() + " instead of " + wp2.getDescription());
 
-        assertThat("Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getClue() + " instead of " + wp2.getClue(), CharSequenceUtilTest.equals(wp1.getClue(), wp2.getClue()));
+        assertTrue(CharSequenceUtil.equals(wp1.getClue(), wp2.getClue()), "Waypoint Clue of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getClue() + " instead of " + wp2.getClue());
 
-        assertThat("Waypoint Title of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getTitle() + " instead of " + wp2.getTitle(), CharSequenceUtilTest.equals(wp1.getTitle(), wp2.getTitle()));
+        assertTrue(CharSequenceUtil.equals(wp1.getTitle(), wp2.getTitle()), "Waypoint Title of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getTitle() + " instead of " + wp2.getTitle());
 
-        assertThat("Waypoint Latitude of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getLatitude() + " instead of " + wp2.getLatitude(), wp1.getLatitude() == wp2.getLatitude());
+        assertTrue(wp1.getLatitude() == wp2.getLatitude(), "Waypoint Latitude of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getLatitude() + " instead of " + wp2.getLatitude());
 
-        assertThat("Waypoint Longitude of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.getLongitude() + " instead of " + wp2.getLongitude(), wp1.getLongitude() == wp2.getLongitude());
+        assertTrue(wp1.getLongitude() == wp2.getLongitude(), "Waypoint Longitude of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.getLongitude() + " instead of " + wp2.getLongitude());
 
-        assertThat("Waypoint is Start of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.isStart() + " instead of " + wp2.isStart(), wp1.isStart() == wp2.isStart());
+        assertTrue(wp1.isStart() == wp2.isStart(), "Waypoint is Start of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.isStart() + " instead of " + wp2.isStart());
 
-        assertThat("Waypoint is UserWaypoint of " + wp1.getGcCode() + " are wrong! " +
-                "was " + wp1.isUserWaypoint() + " instead of " + wp2.isUserWaypoint(), wp1.isUserWaypoint() == wp2.isUserWaypoint());
+        assertTrue(wp1.isUserWaypoint() == wp2.isUserWaypoint(), "Waypoint is UserWaypoint of " + wp1.getGcCode() + " are wrong! " +
+                "was " + wp1.isUserWaypoint() + " instead of " + wp2.isUserWaypoint());
 
         return true;
     }
 
-    protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) throws PlatformAssertionError {
+     protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) throws PlatformAssertionError {
         if (!log1.equals(log2)) return false; // check GcCode
 
-        assertThat("LogEntry Type of " + log1.Id + " are wrong! " +
-                "was " + log1.Type + " instead of " + log2.Type, log1.Type == log2.Type);
+        assertTrue(log1.Type == log2.Type, "LogEntry Type of " + log1.Id + " are wrong! " +
+                "was " + log1.Type + " instead of " + log2.Type);
 
-        assertThat("LogEntry Finder of " + log1.Id + " are wrong! " +
-                "was " + log1.Finder + " instead of " + log2.Finder, log1.Finder.equals(log2.Finder));
+        assertTrue(log1.Finder.equals(log2.Finder), "LogEntry Finder of " + log1.Id + " are wrong! " +
+                "was " + log1.Finder + " instead of " + log2.Finder);
 
-        assertThat("LogEntry CacheId of " + log1.Id + " are wrong! " +
-                "was " + log1.CacheId + " instead of " + log2.CacheId, log1.CacheId == log2.CacheId);
+        assertTrue(log1.CacheId == log2.CacheId, "LogEntry CacheId of " + log1.Id + " are wrong! " +
+                "was " + log1.CacheId + " instead of " + log2.CacheId);
 
         assertEquals(log1.Comment, log2.Comment, "LogEntry Comment of " + log1.Id + " are wrong! ");
 
         String expectedDate = DATE_PATTERN.format(log1.Timestamp);
         String actualDate = DATE_PATTERN.format(log2.Timestamp);
-        assertEquals(expectedDate, actualDate, "Timestamp of LogEntry " + log1.Id + " should be equals");
+        assertEquals(expectedDate, actualDate, "Timestamp of LogEntry " + log1.Id + " should be charSequenceEquals");
 
         return true;
     }

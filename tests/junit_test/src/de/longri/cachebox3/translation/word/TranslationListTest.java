@@ -37,7 +37,7 @@ class TranslationListTest {
 
     @Test
     void load() {
-        FileHandle fileHandle = TestUtils.getResourceFileHandle("testsResources/strings.ini",true);
+        FileHandle fileHandle = TestUtils.getResourceFileHandle("testsResources/strings.ini", true);
 
         TranslationList translationList = new TranslationList();
         translationList.load(fileHandle);

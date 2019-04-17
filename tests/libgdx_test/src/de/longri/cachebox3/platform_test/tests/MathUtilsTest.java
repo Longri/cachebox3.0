@@ -20,9 +20,9 @@
 package de.longri.cachebox3.platform_test.tests;
 
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
-import de.longri.cachebox3.utils.MathUtils;
 
 import static de.longri.cachebox3.platform_test.Assert.assertThat;
 

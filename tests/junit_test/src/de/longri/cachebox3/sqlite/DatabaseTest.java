@@ -19,11 +19,9 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 08.11.2017.
@@ -33,14 +31,14 @@ class DatabaseTest {
     private static FileHandle workpath;
 
     @BeforeAll
-    static void setUp() {
+    public static void setUp() {
         TestUtils.initialGdx();
-        workpath = TestUtils.getResourceFileHandle("testsResources",true).child("TestNewDB");
+        workpath = TestUtils.getResourceFileHandle("testsResources", true).child("TestNewDB");
         workpath.mkdirs();
     }
 
     @AfterAll
-    static void tearDown() {
+    public static void tearDown() {
         workpath.deleteDirectory();
     }
 
@@ -50,7 +48,7 @@ class DatabaseTest {
         // test for issue #165
 
         Database testDb = new Database(Database.DatabaseType.CacheBox3);
-        Database.createNewDB(testDb, workpath, "createNewDB", true,true);
+        Database.createNewDB(testDb, workpath, "createNewDB", true, true);
 
         assertThat("Database schema version must be last version", testDb.getDatabaseSchemeVersion() == DatabaseVersions.LatestDatabaseChange);
 
@@ -79,7 +77,7 @@ class DatabaseTest {
         // test for issue #165
 
         Database testDb = new Database(Database.DatabaseType.CacheBox3);
-        Database.createNewInMemoryDB(testDb,"createNewDB");
+        Database.createNewInMemoryDB(testDb, "createNewDB");
 
         assertThat("Database schema version must be last version", testDb.getDatabaseSchemeVersion() == DatabaseVersions.LatestDatabaseChange);
 

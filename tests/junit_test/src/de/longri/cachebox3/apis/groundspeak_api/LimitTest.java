@@ -36,7 +36,7 @@ class LimitTest {
 
         int calendarField = Calendar.SECOND;
         int calendarAmount = 10;
-        
+
         Limit limit = new Limit(2, calendarField, calendarAmount);
 
         Calendar cal = Calendar.getInstance();

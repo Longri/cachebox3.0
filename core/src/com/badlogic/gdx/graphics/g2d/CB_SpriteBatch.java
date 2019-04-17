@@ -96,6 +96,7 @@ public class CB_SpriteBatch extends PolygonSpriteBatch {
 
     @Override
     public void draw(TextureRegion region, float x, float y, float width, float height) {
+        if (region == null) return;
         if (!NORMAL) {
             if (region instanceof TextureAtlas.AtlasRegion) {
                 String name = ((TextureAtlas.AtlasRegion) region).name;

@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.gui.actions.show_views;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.MenuID;
@@ -26,7 +25,6 @@ import de.longri.cachebox3.gui.views.SpoilerView;
  * Created by Longri on 14.09.2016.
  */
 public class Action_Show_SpoilerView extends Abstract_Action_ShowView {
-    private final Color DISABLE_COLOR = new Color(0.2f, 0.2f, 0.2f, 0.2f);
 
     public Action_Show_SpoilerView() {
         super(SpoilerView.class, IMPLEMENTED, "ShowSpoiler", MenuID.AID_SHOW_SPOILER);
@@ -45,16 +43,15 @@ public class Action_Show_SpoilerView extends Abstract_Action_ShowView {
     @Override
     public void execute() {
         if (isActVisible()) return;
-        SpoilerView view = new SpoilerView();
-        CB.viewmanager.showView(view);
+        CB.viewmanager.showView(new SpoilerView());
     }
 
     @Override
     public Drawable getIcon() {
         boolean hasSpoiler = CB.selectedCachehasSpoiler();
-        if (hasSpoiler) {
+        if (hasSpoiler)
             return CB.getSkin().getMenuIcon.imagesIcon;
-        }
-        return CB.getSkin().getMenuIcon.imagesIconOff;
+        else
+            return CB.getSkin().getMenuIcon.imagesIconOff;
     }
 }

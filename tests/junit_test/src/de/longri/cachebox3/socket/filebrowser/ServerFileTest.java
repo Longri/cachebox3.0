@@ -15,26 +15,28 @@
  */
 package de.longri.cachebox3.socket.filebrowser;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.serializable.BitStore;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+
 /**
  * Created by Longri on 30.10.2017.
  */
 class ServerFileTest {
 
 
-    private FileHandle workpath;
+    private static FileHandle workpath;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    public static void setUp() {
         TestUtils.initialGdx();
-        workpath = TestUtils.getResourceFileHandle("testsResources",false);
+        workpath = TestUtils.getResourceFileHandle("testsResources", false);
     }
 
 
@@ -42,11 +44,11 @@ class ServerFileTest {
     void getDirectory() {
         ServerFile root = ServerFile.getDirectory(workpath);
         assertThat("Root must be a Directory", root.isDirectory());
-        assertRecursiveDir(workpath, root, workpath.parent().path());
+        assertRecursiveDir(workpath, root, Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath());
     }
 
     @Test
-    void serialize(){
+    void serialize() {
 
         ServerFile root = ServerFile.getDirectory(workpath);
 
@@ -58,7 +60,7 @@ class ServerFileTest {
         deserializeServerFile.deserialize(new BitStore(writer.getArray()));
 
 
-        String rootPath = workpath.parent().path();
+        String rootPath = Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath();
 
         assertRecursiveDir(workpath, root, rootPath);
         assertRecursiveDir(workpath, deserializeServerFile, rootPath);
@@ -70,8 +72,13 @@ class ServerFileTest {
         if (!fileHandle.isDirectory()) {
             assertThat("FileName must Equals", fileHandle.name().equals(serverFile.getName()));
 
-            String handleAbsolut = fileHandle.path().replace(rootPath, "");
+            String handleAbsolut = fileHandle.file().getAbsolutePath();
             String serverAbsolute = serverFile.getAbsolute();
+
+            handleAbsolut = handleAbsolut.replace("\\", "/");
+            serverAbsolute = serverAbsolute.replace("\\", "/");
+
+            handleAbsolut = handleAbsolut.replace(rootPath, "");
 
             assertThat("FileAbsolute must Equals", handleAbsolut.equals(serverAbsolute));
 

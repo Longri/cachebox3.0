@@ -41,7 +41,7 @@ class PqImportTest {
         PocketQuery pq = new PocketQuery() {
             @Override
             public FileHandle download(FileHandle folder, ICancel iCancel, final IncrementProgressBytesListener listener) {
-                FileHandle oriFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ.zip",true);
+                FileHandle oriFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ.zip", true);
                 testFile[0] = oriFile.parent().child("TestPQ.zip");
                 oriFile.copyTo(testFile[0]);
                 if (testFile[0].exists()) return testFile[0];
@@ -52,7 +52,7 @@ class PqImportTest {
         PocketQuery pq2 = new PocketQuery() {
             @Override
             public FileHandle download(FileHandle folder, ICancel iCancel, final IncrementProgressBytesListener listener) {
-                FileHandle oriFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ.zip",true);
+                FileHandle oriFile = TestUtils.getResourceFileHandle("testsResources/gpx/GS_PQ.zip", true);
                 testFile[0] = oriFile.parent().child("TestPQ2.zip");
                 oriFile.copyTo(testFile[0]);
                 if (testFile[0].exists()) return testFile[0];
@@ -77,7 +77,7 @@ class PqImportTest {
         });
 
 
-        while (WAIT.get()){
+        while (WAIT.get()) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {

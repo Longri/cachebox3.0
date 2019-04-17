@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.CacheListChangedEvent;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gpx.GpxWptCounter;
 import de.longri.cachebox3.gpx.GroundspeakGpxStreamImporter;
 import de.longri.cachebox3.gpx.ImportHandler;
@@ -25,7 +27,6 @@ import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.activities.ImportGcPos;
 import de.longri.cachebox3.gui.activities.ImportPQActivity;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -196,7 +197,7 @@ public class ShowImportMenu extends Menu {
                                 });
                                 importer.doImport(fileHandle);
 
-                                CacheListChangedEventList.Call();
+                                EventHandler.fire(new CacheListChangedEvent());
                                 String msg;
                                 if (!iCancel.cancel()) {
                                     long importTime = System.currentTimeMillis() - importStart;
@@ -223,7 +224,7 @@ public class ShowImportMenu extends Menu {
                                                 CB.postOnNextGlThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        CacheListChangedEventList.Call();
+                                                        EventHandler.fire(new CacheListChangedEvent());
                                                     }
                                                 });
                                             }

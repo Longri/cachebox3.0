@@ -177,7 +177,7 @@ public abstract class Search extends PostRequest {
     }
 
     @Override
-    protected void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<ApiResultState> readyCallBack) {
+    public void handleHttpResponse(Net.HttpResponse httpResponse, final GenericCallBack<ApiResultState> readyCallBack) {
 //        String debugResult = httpResponse.getResultAsString();
 
         final InputStream stream = httpResponse.getResultAsStream();
@@ -663,7 +663,8 @@ public abstract class Search extends PostRequest {
      *
      * @param json
      */
-    protected void getRequest(Json json) {
+    @Override
+    public void getRequest(Json json) {
         json.writeValue("AccessToken", this.gcApiKey);
         json.writeValue("MaxPerPage", this.number);
         json.writeValue("StartIndex", 0);

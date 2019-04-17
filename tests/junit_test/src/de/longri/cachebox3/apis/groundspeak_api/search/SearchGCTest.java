@@ -72,7 +72,7 @@ class SearchGCTest {
         searchGC.getRequest(json);
 
         String actual = writer.toString();
-        assertEquals(expected, actual, "Should be equals");
+        assertEquals(expected, actual, "Should be charSequenceEquals");
 
         testDB.close();
         if (!testDB.isInMemory()) testDB.getFileHandle().delete();
@@ -120,10 +120,11 @@ class SearchGCTest {
             }
         };
 
+        final ApiResultState[] resultState = {null};
         searchGC.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
-                assertEquals(value, ApiResultState.IO);
+                resultState[0] = value;
                 WAIT.set(false);
             }
         });
@@ -135,6 +136,7 @@ class SearchGCTest {
                 e.printStackTrace();
             }
         }
+        assertEquals(resultState[0], ApiResultState.IO);
 
         CacheList3DAO list3DAO = new CacheList3DAO();
         CacheList cacheList = new CacheList();
@@ -215,7 +217,6 @@ class SearchGCTest {
         assertEquals("kerbholz", logEntry.Finder);
 
 
-
         testDB.close();
         if (!testDB.isInMemory()) testDB.getFileHandle().delete();
     }
@@ -275,10 +276,11 @@ class SearchGCTest {
             }
         };
 
+        final ApiResultState[] resultState = {null};
         searchGC.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
-                assertTrue(value == ApiResultState.EXPIRED_API_KEY, "ApiResult must be 'Key Expired'");
+                resultState[0] = value;
                 WAIT.set(false);
             }
         });
@@ -290,6 +292,7 @@ class SearchGCTest {
                 e.printStackTrace();
             }
         }
+        assertTrue(resultState[0] == ApiResultState.EXPIRED_API_KEY, "ApiResult must be 'Key Expired'");
         testDB.close();
         try {
             Thread.sleep(100);
@@ -344,12 +347,12 @@ class SearchGCTest {
         assertEquals("GC1T33T", abstractCache.getGcCode().toString());
         assertEquals(0, abstractCache.getWaypoints().size);
         assertEquals(CacheTypes.Traditional, abstractCache.getType());
-        assertEquals(CacheSizes.other, abstractCache.getSize());
+        assertEquals(CacheSizes.micro, abstractCache.getSize());
         assertEquals("Germany", abstractCache.getCountry().toString());
         assertEquals(new Date(1243753200000L), abstractCache.getDateHidden());
         assertEquals(3f, abstractCache.getDifficulty());
         assertEquals("", abstractCache.getHint().toString());
-        assertEquals(12, abstractCache.getFavoritePoints());
+        assertEquals(13, abstractCache.getFavoritePoints());
         assertEquals(true, abstractCache.isFound());
         assertEquals("1260177", abstractCache.getGcId().toString());
         assertTrue(abstractCache.getLongDescription().toString().startsWith("<div style=\"text-align:center;\">Eine Hunderunde gedreht und mal "));
@@ -358,7 +361,7 @@ class SearchGCTest {
         assertEquals("Wurzellisel", abstractCache.getPlacedBy().toString());
         assertEquals("\r\n", abstractCache.getShortDescription().toString());
         assertEquals(2f, abstractCache.getTerrain());
-        assertEquals("http://coord.info/GC1T33T", abstractCache.getUrl());
+        assertEquals("http://coord.info/GC1T33T", abstractCache.getUrl().toString());
         assertEquals(2, abstractCache.getApiState());
         assertEquals(52.579267, abstractCache.getLatitude());
         assertEquals(13.381983, abstractCache.getLongitude());
@@ -446,11 +449,11 @@ class SearchGCTest {
         assertEquals("GC1T33T", abstractCache.getGcCode().toString());
         assertEquals(0, abstractCache.getWaypoints().size);
         assertEquals(CacheTypes.Traditional, abstractCache.getType());
-        assertEquals(CacheSizes.other, abstractCache.getSize());
+        assertEquals(CacheSizes.micro, abstractCache.getSize());
         assertEquals("", abstractCache.getCountry().toString());
         assertEquals(3f, abstractCache.getDifficulty());
         assertEquals("", abstractCache.getHint().toString());
-        assertEquals(12, abstractCache.getFavoritePoints());
+        assertEquals(13, abstractCache.getFavoritePoints());
         assertEquals(true, abstractCache.isFound());
         assertEquals("1260177", abstractCache.getGcId().toString());
         assertEquals("", abstractCache.getLongDescription().toString());

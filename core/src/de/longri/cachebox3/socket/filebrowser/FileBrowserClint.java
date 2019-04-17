@@ -207,7 +207,7 @@ public class FileBrowserClint {
         return !error;
     }
 
-    protected void addToFileList(ObjectMap<String, FileHandle> map, ServerFile path, ServerFile workingDir, List<File> files) {
+    public void addToFileList(ObjectMap<String, FileHandle> map, ServerFile path, ServerFile workingDir, List<File> files) {
         for (File file : files) {
             if (file.isFile()) {
                 if (file.getName().equals(".DS_Store")) continue; //don't store

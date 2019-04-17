@@ -40,12 +40,12 @@ class Waypoint3DAOTest {
     static Database cb3Database;
 
     @BeforeAll
-    static void beforeAll() throws SQLiteGdxException {
+    public static void beforeAll() throws SQLiteGdxException {
 
         TestUtils.initialGdx();
 
         // copy testDb
-        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3",true);
+        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/testACB2.db3", true);
         copyDbFileHandle = testDbFileHandle.parent().child("testWaypointDAO.db3");
         if (copyDbFileHandle.exists()) {
             // delete first
@@ -61,7 +61,7 @@ class Waypoint3DAOTest {
     }
 
     @AfterAll
-    static void cleanUpRecources() {
+    public static void cleanUpRecources() {
         cb3Database.close();
         try {
             Thread.sleep(500);
@@ -72,7 +72,7 @@ class Waypoint3DAOTest {
 
 
     @Test
-    void getWaypointsFromCacheID() {
+    public void getWaypointsFromCacheID() {
 
         Waypoint3DAO dao = new Waypoint3DAO();
         Array<AbstractWaypoint> waypoints = dao.getWaypointsFromCacheID(cb3Database, null, true);
@@ -180,31 +180,31 @@ class Waypoint3DAOTest {
     }
 
     private void assertWp(String msg, AbstractWaypoint wp) {
-        assertThat(msg + " Id must equals", wp.getCacheId() == should_cacheId);
-        assertThat(msg + " Latitude must equals", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == should_Latitude);
-        assertThat(msg + " Longitude must equals", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == should_Longitude);
-        assertThat(msg + " GcCode must equals", wp.getGcCode().equals(should_GcCode));
-        assertThat(msg + " Type must equals", wp.getType() == should_Type);
-        assertThat(msg + " IsStart must equals", wp.isStart() == should_isStart);
-        assertThat(msg + " SyncExclude must equals", wp.isSyncExcluded() == should_syncExclude);
-        assertThat(msg + " IsUserWaypoint must equals", wp.isUserWaypoint() == should_userWaypoint);
-        assertThat(msg + " Title must equals", wp.getTitle().equals(should_Title));
-        assertThat(msg + " Description must equals", wp.getDescription().equals(should_Description));
-        assertThat(msg + " Clue must equals", wp.getClue().equals(should_Clue));
+        assertThat(msg + " Id must charSequenceEquals", wp.getCacheId() == should_cacheId);
+        assertThat(msg + " Latitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == should_Latitude);
+        assertThat(msg + " Longitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == should_Longitude);
+        assertThat(msg + " GcCode must charSequenceEquals", wp.getGcCode().equals(should_GcCode));
+        assertThat(msg + " Type must charSequenceEquals", wp.getType() == should_Type);
+        assertThat(msg + " IsStart must charSequenceEquals", wp.isStart() == should_isStart);
+        assertThat(msg + " SyncExclude must charSequenceEquals", wp.isSyncExcluded() == should_syncExclude);
+        assertThat(msg + " IsUserWaypoint must charSequenceEquals", wp.isUserWaypoint() == should_userWaypoint);
+        assertThat(msg + " Title must charSequenceEquals", wp.getTitle().equals(should_Title));
+        assertThat(msg + " Description must charSequenceEquals", wp.getDescription().equals(should_Description));
+        assertThat(msg + " Clue must charSequenceEquals", wp.getClue().equals(should_Clue));
     }
 
     private void assertWp2(String msg, AbstractWaypoint wp) {
-        assertThat(msg + " Id must equals", wp.getCacheId() == should_cacheId);
-        assertThat(msg + " Latitude must equals", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == should2_Latitude);
-        assertThat(msg + " Longitude must equals", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == should2_Longitude);
-        assertThat(msg + " GcCode must equals", wp.getGcCode().equals(should_GcCode));
-        assertThat(msg + " Type must equals", wp.getType() == should2_Type);
-        assertThat(msg + " IsStart must equals", wp.isStart() == should2_isStart);
-        assertThat(msg + " SyncExclude must equals", wp.isSyncExcluded() == should2_syncExclude);
-        assertThat(msg + " IsUserWaypoint must equals", wp.isUserWaypoint() == should2_userWaypoint);
-        assertThat(msg + " Title must equals", wp.getTitle().equals(should2_Title));
-        assertThat(msg + " Description must equals", wp.getDescription().equals(should2_Description));
-        assertThat(msg + " Clue must equals", wp.getClue().equals(should2_Clue));
+        assertThat(msg + " Id must charSequenceEquals", wp.getCacheId() == should_cacheId);
+        assertThat(msg + " Latitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(wp.getLatitude()) == should2_Latitude);
+        assertThat(msg + " Longitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(wp.getLongitude()) == should2_Longitude);
+        assertThat(msg + " GcCode must charSequenceEquals", wp.getGcCode().equals(should_GcCode));
+        assertThat(msg + " Type must charSequenceEquals", wp.getType() == should2_Type);
+        assertThat(msg + " IsStart must charSequenceEquals", wp.isStart() == should2_isStart);
+        assertThat(msg + " SyncExclude must charSequenceEquals", wp.isSyncExcluded() == should2_syncExclude);
+        assertThat(msg + " IsUserWaypoint must charSequenceEquals", wp.isUserWaypoint() == should2_userWaypoint);
+        assertThat(msg + " Title must charSequenceEquals", wp.getTitle().equals(should2_Title));
+        assertThat(msg + " Description must charSequenceEquals", wp.getDescription().equals(should2_Description));
+        assertThat(msg + " Clue must charSequenceEquals", wp.getClue().equals(should2_Clue));
     }
 
 

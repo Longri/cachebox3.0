@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 28.10.2017.
@@ -37,9 +36,9 @@ class SequenceTranslationHandlerTest {
 
 
     @BeforeAll
-    static void loadTranslation() throws IOException {
+    public static void loadTranslation() throws IOException {
         TestUtils.initialGdx();
-        FileHandle workPath = TestUtils.getResourceFileHandle("testsResources/lang",true);
+        FileHandle workPath = TestUtils.getResourceFileHandle("testsResources/lang", true);
         translationHandler = new SequenceTranslationHandler(workPath, "en-GB");
         translationHandler.loadTranslation("de");
         assertThat("TranslationCount must be 1142", translationHandler.getCount() == 1142);

@@ -22,13 +22,11 @@ import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 25.10.2017.
@@ -161,9 +159,9 @@ class CacheListTest {
         }
 
 
-        assertThat("Must not equals", !shuffledCacheList.equals(caches));
+        assertThat("Must not charSequenceEquals", !shuffledCacheList.equals(caches));
         shuffledCacheList.resort(myPosition, new CacheWithWP(null, null));
-        assertThat("Must equals", shuffledCacheList.equals(caches));
+        assertThat("Must charSequenceEquals", shuffledCacheList.equals(caches));
 
 
     }

@@ -15,9 +15,7 @@
  */
 package de.longri.cachebox3.sqlite;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
 import de.longri.gdx.sqlite.GdxSqlite;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
@@ -27,7 +25,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 17.01.2018.
@@ -40,12 +37,12 @@ class AlterCachebox3DBTest {
     static Database cb3Database;
 
     @BeforeAll
-    static void beforeAll() throws SQLiteGdxException {
+    public static void beforeAll() throws SQLiteGdxException {
 
         TestUtils.initialGdx();
 
         // copy testDb
-        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/cacheboxV2.db3",true);
+        testDbFileHandle = TestUtils.getResourceFileHandle("testsResources/Database/cacheboxV2.db3", true);
         copyDbFileHandle = testDbFileHandle.parent().child("alterDBtest.db3");
         if (copyDbFileHandle.exists()) {
             // delete first
@@ -57,12 +54,12 @@ class AlterCachebox3DBTest {
     }
 
     @AfterAll
-    static void cleanUpRecources() {
+    public static void cleanUpRecources() {
         cb3Database.close();
     }
 
     @Test
-    void alterCachebox3DB() {
+    public void alterCachebox3DB() {
 
 
         GdxSqlite tempDB = new GdxSqlite(testDbFileHandle);

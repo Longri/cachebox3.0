@@ -134,7 +134,7 @@ public class MutableCache extends AbstractCache {
 
         this.longDescription = cache.getLongDescription();
         this.shortDescription = cache.getShortDescription();
-        this.hint = cache.getHint().toString();
+        this.hint = cache.getHint();
         this.url = cache.getUrl();
         this.dateHidden = cache.getDateHidden();
         this.state = cache.getState();

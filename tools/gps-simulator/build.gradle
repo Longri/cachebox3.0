@@ -10,11 +10,11 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
-    implementation 'org.mapsforge:mapsforge-core:0.8.0'
-    implementation 'org.mapsforge:mapsforge-themes:0.8.0'
-    implementation 'org.mapsforge:mapsforge-map:0.8.0'
-    implementation 'org.mapsforge:mapsforge-map-reader:0.8.0'
-    implementation("org.mapsforge:mapsforge-map-awt:0.8.0")
+    implementation 'org.mapsforge:mapsforge-core:0.11.0'
+    implementation 'org.mapsforge:mapsforge-themes:0.11.0'
+    implementation 'org.mapsforge:mapsforge-map:0.11.0'
+    implementation 'org.mapsforge:mapsforge-map-reader:0.11.0'
+    implementation("org.mapsforge:mapsforge-map-awt:0.11.0")
     implementation 'com.kitfox.svg:svg-salamander:1.0'
     implementation 'net.sf.kxml:kxml2:2.3.0'
 

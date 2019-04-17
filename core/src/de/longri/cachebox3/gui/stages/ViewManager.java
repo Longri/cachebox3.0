@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
+import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.actions.*;
 import de.longri.cachebox3.gui.actions.show_views.*;
 import de.longri.cachebox3.gui.views.AboutView;
@@ -43,9 +44,7 @@ import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.locator.GlobalLocationReceiver;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.FilterInstances;
-import de.longri.cachebox3.types.FilterProperties;
+import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +56,8 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 /**
  * Created by Longri on 20.07.2016.
  */
-public class ViewManager extends NamedStage implements de.longri.cachebox3.events.SelectedCacheChangedListener, de.longri.cachebox3.events.SelectedWayPointChangedListener {
+public class ViewManager extends NamedStage
+        implements SelectedCacheChangedListener, SelectedWayPointChangedListener, CacheListChangedListener {
 
     final static Logger log = LoggerFactory.getLogger(ViewManager.class);
     final static CharSequence EMPTY = "";
@@ -135,8 +135,8 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
         showView(new AboutView());
 
 
-        //register SelectedCacheChangedEvent
-        de.longri.cachebox3.events.EventHandler.add(this);
+        //register SelectedCacheChangedEvent/ CacheListChangedEvent
+        EventHandler.add(this);
 
         //set selected Cache to slider
         selectedCacheChanged(new de.longri.cachebox3.events.SelectedCacheChangedEvent(de.longri.cachebox3.events.EventHandler.getSelectedCache()));
@@ -406,6 +406,32 @@ public class ViewManager extends NamedStage implements de.longri.cachebox3.event
 
     public boolean isTop(Stage stage) {
         return CB.stageManager.isTop(stage);
+    }
+
+    @Override
+    public void cacheListChanged(CacheListChangedEvent event) {
+        if (Database.Data == null | Database.Data.Query == null) return;
+        AbstractCache abstractCache = Database.Data.Query.GetCacheByGcCode("CBPark");
+
+        if (abstractCache != null)
+            Database.Data.Query.removeValue(abstractCache, false);
+
+        // add Parking Cache
+        if (Config.ParkingLatitude.getValue() != 0) {
+            abstractCache = new MutableCache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
+            Database.Data.Query.insert(0, abstractCache);
+        }
+
+
+        //if selected Cache not into Query, reset selected Cache
+        AbstractCache selectedCache = EventHandler.getSelectedCache();
+        if (selectedCache != null) {
+            AbstractCache selectedInQuery = Database.Data.Query.GetCacheById(selectedCache.getId());
+            if (selectedInQuery == null) {
+                //reset
+                EventHandler.setSelectedWaypoint(null, null);
+            }
+        }
     }
 
 

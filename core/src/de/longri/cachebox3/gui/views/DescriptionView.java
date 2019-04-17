@@ -22,6 +22,7 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
+import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
@@ -29,7 +30,6 @@ import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -419,7 +419,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
                         //update EventHandler
                         EventHandler.updateSelectedCache(selectedCache);
-                        CacheListChangedEventList.Call();
+                        EventHandler.fire(new CacheListChangedEvent());
                         return true;
                     case MenuID.MI_RELOAD_CACHE:
                         new ReloadCacheActivity().show();

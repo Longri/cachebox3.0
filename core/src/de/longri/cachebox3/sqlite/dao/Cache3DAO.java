@@ -24,8 +24,6 @@ import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**

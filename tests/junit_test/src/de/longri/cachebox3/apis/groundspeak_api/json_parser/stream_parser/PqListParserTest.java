@@ -18,7 +18,6 @@ package de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GetPocketQueryList;
 import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import org.junit.jupiter.api.Test;
 
@@ -53,7 +52,7 @@ class PqListParserTest {
                     assertThat("wrong value", pq.name.equals("Birkenwerder"));
                     assertThat("wrong value", pq.lastGenerated.equals(new Date(1521969736000L)));
                     assertThat("wrong value", pq.downloadAvailable == false);
-                    assertThat("wrong value", pq.sizeMB == 1899174/ 1048576.0);
+                    assertThat("wrong value", pq.sizeMB == 1899174 / 1048576.0);
                     assertThat("wrong value", pq.cacheCount == 1000);
                     break;
                 case 1:
@@ -61,7 +60,7 @@ class PqListParserTest {
                     assertThat("wrong value", pq.name.equals("H&#246;now"));
                     assertThat("wrong value", pq.lastGenerated.equals(new Date(1521971482000L)));
                     assertThat("wrong value", pq.downloadAvailable == true);
-                    assertThat("wrong value", pq.sizeMB == 1753293/ 1048576.0);
+                    assertThat("wrong value", pq.sizeMB == 1753293 / 1048576.0);
                     assertThat("wrong value", pq.cacheCount == 1000);
                     break;
                 case 5:
@@ -69,7 +68,7 @@ class PqListParserTest {
                     assertThat("wrong value", pq.name.equals("Wandlitz"));
                     assertThat("wrong value", pq.lastGenerated.equals(new Date(1522049839000L)));
                     assertThat("wrong value", pq.downloadAvailable == true);
-                    assertThat("wrong value", pq.sizeMB == 1847508/ 1048576.0);
+                    assertThat("wrong value", pq.sizeMB == 1847508 / 1048576.0);
                     assertThat("wrong value", pq.cacheCount == 1000);
             }
         }

@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -33,7 +34,7 @@ import de.longri.cachebox3.utils.UnitFormatter;
  */
 public class HintDialog extends ButtonDialog {
     private final CharSequence hintFromDB;
-    private static final VisLabel hintLabel = new VisLabel();
+    private final VisLabel hintLabel;
     private final CharSequenceButton encodeButton;
     private boolean encoded = false;
 
@@ -42,6 +43,8 @@ public class HintDialog extends ButtonDialog {
         hintFromDB = EventHandler.getSelectedCache() == null ? ""
                 : UnitFormatter.rot13(EventHandler.getSelectedCache().getHint());
 
+
+        hintLabel = (VisLabel) ((ScrollPane) this.contentBox.getCells().get(0).getActor()).getActor();
 
         hintLabel.setWrap(true);
 
@@ -54,7 +57,7 @@ public class HintDialog extends ButtonDialog {
 
     private static Table createContentBox() {
         Table contentBox = new Table();
-        VisScrollPane scrollPane = new VisScrollPane(hintLabel);
+        VisScrollPane scrollPane = new VisScrollPane(new VisLabel());
         contentBox.defaults().pad(CB.scaledSizes.MARGIN);
         contentBox.add(scrollPane).expand().fill();
         contentBox.pack();

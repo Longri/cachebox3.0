@@ -20,9 +20,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.LongArray;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.CacheListChangedEvent;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.*;
-import de.longri.cachebox3.gui.events.CacheListChangedEventList;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -138,7 +139,7 @@ public class ShowDeleteMenu extends Menu {
             Database.Data.endTransaction();
 
             Database.Data.Query.clear();
-            CacheListChangedEventList.Call();
+            EventHandler.fire(new CacheListChangedEvent());
         } else {
             log.debug("delete {} Caches", filteredCacheCount);
 

@@ -124,11 +124,11 @@ class SearchGcOwnerTest {
             }
         };
 
+        final ApiResultState[] resultState = {null};
         searchGC.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
-                assertEquals(value, ApiResultState.IO);
-
+                resultState[0] = value;
                 WAIT.set(false);
             }
         });
@@ -141,10 +141,10 @@ class SearchGcOwnerTest {
             }
         }
 
+        assertEquals(resultState[0], ApiResultState.IO);
         CacheList3DAO list3DAO = new CacheList3DAO();
         CacheList cacheList = new CacheList();
         list3DAO.readCacheList(testDB, cacheList, null, true, true);
-
 
 
         assertEquals(23, cacheList.size);
@@ -252,8 +252,6 @@ class SearchGcOwnerTest {
         assertEquals("http://www.geocaching.com/images/wpttypes/21.gif", trackable.getIconUrl());
         assertEquals("André's First ", trackable.getName());
         assertEquals("http://coord.info/TBZ070", trackable.getUrl());
-
-
 
 
         testDB.close();

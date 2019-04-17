@@ -33,6 +33,22 @@ public class Assert {
         }
     }
 
+    public static void assertEquals(double expected, double actual, double tolerance, String reason) throws PlatformAssertionError {
+        double a = expected - actual;
+        if (a < 0)
+            a *= -1;
+
+        if (a > tolerance) {
+            StringBuilder sb = new StringBuilder(reason);
+            sb.appendLine("");
+            sb.appendLine("expected:");
+            sb.appendLine(String.valueOf(expected));
+            sb.appendLine("");
+            sb.appendLine("actual:");
+            sb.appendLine(String.valueOf(actual));
+            throw new PlatformAssertionError(sb.toString());
+        }
+    }
 
     public static void assertEquals(Object expected, Object actual, String reason) throws PlatformAssertionError {
         if (!objectsAreEqual(expected, actual)) {
@@ -63,7 +79,14 @@ public class Assert {
         if (obj1 == null) {
             return (obj2 == null);
         }
+        if (obj1 instanceof Number || obj2 instanceof Number) return numberEqualse((Number) obj1, (Number) obj2);
         return obj1.equals(obj2);
+    }
+
+    private static boolean numberEqualse(Number obj1, Number obj2) {
+        if (obj1 instanceof Double || obj1 instanceof Float || obj2 instanceof Double || obj2 instanceof Float)
+            return obj1.doubleValue() == obj2.doubleValue();
+        return obj1.longValue() == obj2.longValue();
     }
 
     public static void assertTrue(boolean assertion) throws PlatformAssertionError {

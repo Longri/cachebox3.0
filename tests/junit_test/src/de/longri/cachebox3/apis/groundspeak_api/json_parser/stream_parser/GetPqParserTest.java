@@ -48,12 +48,13 @@ class GetPqParserTest {
         InputStream stream = TestUtils.getResourceRequestStream("testsResources/GetPQResult.json");
         GetPqParser parser = new GetPqParser(null);
 
-        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/streamedPq.zipTest",true);
+        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/streamedPq.zipTest", true);
 
         if (targetFile.exists()) {
             assertThat("Target file must deleted", targetFile.delete());
         }
 
+        targetFile.parent().mkdirs();
 
         final AtomicInteger streamedBytes = new AtomicInteger(0);
         try {
@@ -75,7 +76,7 @@ class GetPqParserTest {
         }
 
         assertThat("File must exist", targetFile.exists());
-        assertThat("File size must equals", targetFile.length() == streamedBytes.get());
+        assertThat("File size must charSequenceEquals", targetFile.length() == streamedBytes.get());
 
         try {
             Thread.sleep(500);
@@ -96,7 +97,7 @@ class GetPqParserTest {
             }
         });
 
-        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/GetPQResult.json",true)
+        FileHandle targetFile = TestUtils.getResourceFileHandle("testsResources/GetPQResult.json", true)
                 .parent().child("streamedPqCancel.zipTest");
 
 

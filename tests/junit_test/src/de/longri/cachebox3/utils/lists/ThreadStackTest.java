@@ -283,7 +283,7 @@ class ThreadStackTest {
             testStringBuilder.append("Start Runnable Runnable 5\n");
             testStringBuilder.append("Finish Runnable Runnable 5\n\n");
 
-            assertEquals( testStringBuilder,stringBuilder,"Runnable1 must start and finish before Runnable3," +
+            assertEquals(testStringBuilder, stringBuilder, "Runnable1 must start and finish before Runnable3," +
                     " Runnable2 must ignored");
         }
     }
