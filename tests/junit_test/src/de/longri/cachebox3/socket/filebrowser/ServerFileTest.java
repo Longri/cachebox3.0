@@ -72,11 +72,13 @@ class ServerFileTest {
         if (!fileHandle.isDirectory()) {
             assertThat("FileName must Equals", fileHandle.name().equals(serverFile.getName()));
 
-            String handleAbsolut = fileHandle.file().getAbsolutePath().replace(rootPath, "");
+            String handleAbsolut = fileHandle.file().getAbsolutePath();
             String serverAbsolute = serverFile.getAbsolute();
 
             handleAbsolut = handleAbsolut.replace("\\", "/");
             serverAbsolute = serverAbsolute.replace("\\", "/");
+
+            handleAbsolut = handleAbsolut.replace(rootPath, "");
 
             assertThat("FileAbsolute must Equals", handleAbsolut.equals(serverAbsolute));
 
