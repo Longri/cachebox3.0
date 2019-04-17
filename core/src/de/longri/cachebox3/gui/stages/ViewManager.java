@@ -33,6 +33,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.actions.*;
+import de.longri.cachebox3.gui.actions.show_activities.Action_Show_Settings;
 import de.longri.cachebox3.gui.actions.show_views.*;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -296,7 +297,7 @@ public class ViewManager extends NamedStage
 
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
         misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
-        misc_button.addAction(new ActionButton(new de.longri.cachebox3.gui.actions.show_activities.Action_Show_Settings(), false, GestureDirection.Left));
+        misc_button.addAction(new ActionButton(new Action_Show_Settings(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
         misc_button.addAction(new ActionButton(new Action_GetFriends(),false));
