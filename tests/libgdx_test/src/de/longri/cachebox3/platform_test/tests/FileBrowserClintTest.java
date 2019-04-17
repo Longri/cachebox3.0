@@ -47,6 +47,9 @@ public class FileBrowserClintTest {
     public static void setUp() {
         TestUtils.initialGdx();
         workpath = TestUtils.getResourceFileHandle("testsResources", true).child("lang");
+        if(!workpath.exists()){
+            workpath = TestUtils.getResourceFileHandle("./", true).child("lang");
+        }
         clint = new FileBrowserClint("", 0);
     }
 
