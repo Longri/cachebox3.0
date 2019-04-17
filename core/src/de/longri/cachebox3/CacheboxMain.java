@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2018 team-cachebox.de
+ * Copyright (C) 2016 - 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import de.longri.cachebox3.events.CacheListChangedEvent;
+import de.longri.cachebox3.events.CacheListChangedListener;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;

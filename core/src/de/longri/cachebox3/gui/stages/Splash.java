@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 team-cachebox.de
+ * Copyright (C) 2016-2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.

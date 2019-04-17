@@ -18,6 +18,7 @@ import org.mapsforge.map.layer.cache.InMemoryTileCache;
 import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.layer.cache.TwoLevelTileCache;
 import org.mapsforge.map.layer.renderer.TileRendererLayer;
+import org.mapsforge.map.model.IMapViewPosition;
 import org.mapsforge.map.model.MapViewPosition;
 import org.mapsforge.map.model.Model;
 import org.mapsforge.map.model.common.PreferencesFacade;
@@ -78,7 +79,7 @@ public class MapPanel extends JPanel implements ActionListener {
         layers.add(createTileRendererLayer(tileCache, mapView.getModel().mapViewPosition, layerManager, MapPath));
     }
 
-    private static Layer createTileRendererLayer(TileCache tileCache, MapViewPosition mapViewPosition, LayerManager layerManager, String MapPath) {
+    private static Layer createTileRendererLayer(TileCache tileCache, IMapViewPosition mapViewPosition, LayerManager layerManager, String MapPath) {
         java.io.File mapFile = new java.io.File(MapPath);
         TileRendererLayer tileRendererLayer = new TileRendererLayer(tileCache, new MapFile(mapFile), mapViewPosition, false, false, true, GRAPHIC_FACTORY);
         tileRendererLayer.setXmlRenderTheme(InternalRenderTheme.OSMARENDER);

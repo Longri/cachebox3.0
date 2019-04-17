@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 package de.longri.cachebox3.events;
 
-import de.longri.cachebox3.locator.Coordinate;
 
 /**
- * Created by Longri on 23.03.2017.
+ * Created by Longri on 13.04.2019.
  */
 public class CacheListChangedEvent extends AbstractEvent {
 
