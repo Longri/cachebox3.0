@@ -264,8 +264,7 @@ public class DraftsView extends AbstractView {
 
                                 if (sendGCVote && !fieldNote.isTbDraft) {
                                     try {
-                                        if (!GCVote.sendVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue()
-                                                , fieldNote.gc_Vote, fieldNote.CacheUrl, fieldNote.gcCode, iCancel)) {
+                                        if (!GCVote.sendVote(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), fieldNote.gc_Vote, fieldNote.CacheUrl, fieldNote.gcCode)) {
                                             UploadMeldung += fieldNote.gcCode + "\n" + "GC-Vote Error" + "\n";
                                         }
                                     } catch (Exception e) {

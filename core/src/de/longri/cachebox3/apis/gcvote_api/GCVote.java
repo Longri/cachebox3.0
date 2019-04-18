@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -15,67 +15,44 @@
  */
 package de.longri.cachebox3.apis.gcvote_api;
 
-import com.badlogic.gdx.Net;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.utils.ICancel;
-import de.longri.cachebox3.utils.NetUtils;
+import de.longri.cachebox3.utils.http.Webb;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.StringReader;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
 public class GCVote {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(GCVote.class);
+    private final static org.slf4j.Logger log = LoggerFactory.getLogger(GCVote.class);
 
-    public static RatingData getRating(String user, String password, String waypoint, ICancel icancel) {
-        ArrayList<String> waypointList = new ArrayList<String>();
-        waypointList.add(waypoint);
-        ArrayList<RatingData> result = getRating(user, password, waypointList, icancel);
 
-        if (result == null || result.size() == 0) {
-            return new RatingData();
-        } else {
-            return result.get(0);
-        }
+    public static ArrayList<RatingData> getVotes(String User, String password, ArrayList<String> Waypoints) {
+        ArrayList<RatingData> result = new ArrayList<>();
 
-    }
-
-    public static ArrayList<RatingData> getRating(String User, String password, ArrayList<String> Waypoints, ICancel icancel) {
-        ArrayList<RatingData> result = new ArrayList<RatingData>();
-
-        String data = "userName=" + User + "&password=" + password + "&waypoints=";
+        StringBuilder data = new StringBuilder("userName=" + User + "&password=" + password + "&waypoints=");
         for (int i = 0; i < Waypoints.size(); i++) {
-            data += Waypoints.get(i);
+            data.append(Waypoints.get(i));
             if (i < (Waypoints.size() - 1))
-                data += ",";
+                data.append(",");
         }
-
 
         try {
-
-            Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
-            httpPost.setUrl("http://gcvote.de/getVotes.php");
-            httpPost.setTimeOut(Config.socket_timeout.getValue());
-            httpPost.setContent(data);
-
-
-            String responseString = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpPost, icancel);
-
-            log.debug("GCVOTE-Response: ", responseString);
+            InputStream is = Webb.create()
+                    .get("http://gcvote.com/getVotes.php?" + data)
+                    .setTimeout(Config.socket_timeout.getValue())
+                    .ensureSuccess()
+                    .asStream()
+                    .getBody();
 
             DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            InputSource is = new InputSource();
-            is.setCharacterStream(new StringReader(responseString));
-
             Document doc = db.parse(is);
-
+            is.close();
             NodeList nodelist = doc.getElementsByTagName("vote");
 
             for (Integer i = 0; i < nodelist.getLength(); i++) {
@@ -91,40 +68,55 @@ public class GCVote {
             }
 
         } catch (Exception e) {
-            String Ex = "";
-            if (e != null) {
-                if (e != null && e.getMessage() != null)
-                    Ex = "Ex = [" + e.getMessage() + "]";
-                else if (e != null && e.getLocalizedMessage() != null)
-                    Ex = "Ex = [" + e.getLocalizedMessage() + "]";
-                else
-                    Ex = "Ex = [" + e.toString() + "]";
-            }
-            log.error("GcVote-Error", Ex);
+            log.error("getVotes", e);
             return null;
         }
         return result;
 
     }
 
-    public static Boolean sendVotes(String User, String password, int vote, String url, String waypoint, ICancel icancel) {
-        String guid = url.substring(url.indexOf("guid=") + 5).trim();
+    public static boolean sendVote(String User, String password, int vote, String url, String waypoint) {
+        url = url.replace("http:", "https:"); // automatic redirect doesn't work from http to https
+        int pos = url.indexOf("guid=");
+        String guid = "";
+        if (pos > -1) {
+            guid = url.substring(pos + 5).trim();
+        } else {
+            // fetch guid from gc : works without login
+            try {
+                String page = Webb.create()
+                        .get(url)
+                        .ensureSuccess()
+                        .asString()
+                        .getBody();
+                String toSearch = "cache_details.aspx?guid=";
+                pos = page.indexOf(toSearch);
+                if (pos > -1) {
+                    int start = pos + toSearch.length();
+                    int stop = page.indexOf("\"", start);
+                    guid = page.substring(start, stop);
+                }
+            } catch (Exception e) {
+                log.error("Send GCVote: Can't get GUID for " + waypoint, e);
+            }
+        }
+        if (guid.length() == 0) return false;
 
         String data = "userName=" + User + "&password=" + password + "&voteUser=" + String.valueOf(vote / 100.0) + "&cacheId=" + guid + "&waypoint=" + waypoint;
 
         try {
-            Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
-            httpPost.setUrl("http://gcvote.de/getVotes.php");
-            httpPost.setTimeOut(Config.socket_timeout.getValue());
-            httpPost.setContent(data);
-
-
-            String responseString = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpPost, icancel);
-
-            return responseString.equals("OK\n");
+            String responseString = Webb.create()
+                    .get("http://gcvote.com/setVote.php?" + data)
+                    .setTimeout(Config.socket_timeout.getValue())
+                    .ensureSuccess()
+                    .asString()
+                    .getBody();
+            return responseString.equals("OK");
 
         } catch (Exception ex) {
             return false;
         }
+
     }
+
 }
