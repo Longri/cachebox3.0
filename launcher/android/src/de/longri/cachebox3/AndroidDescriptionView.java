@@ -182,6 +182,11 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     }
 
     @Override
+    public void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack) {
+        //todo call this CallBack if Html is finish loaded
+    }
+
+    @Override
     public boolean isPageVisible() {
         return pageVisible.get();
     }

@@ -18,12 +18,14 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
-import org.robovm.apple.foundation.*;
-import org.robovm.apple.uikit.NSLayoutConstraint;
+import org.robovm.apple.foundation.NSError;
+import org.robovm.apple.foundation.NSURLAuthenticationChallenge;
+import org.robovm.apple.foundation.NSURLCredential;
+import org.robovm.apple.foundation.NSURLSessionAuthChallengeDisposition;
 import org.robovm.apple.uikit.UIViewController;
-
 import org.robovm.apple.webkit.*;
 import org.robovm.objc.block.VoidBlock1;
 import org.robovm.objc.block.VoidBlock2;
@@ -41,38 +43,13 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     private final WKWebView webView;
     private final UIViewController mainViewController;
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
+    private GenericHandleCallBack<String> finishLoadingCallBack;
 
     public IOS_DescriptionView(UIViewController mainViewController) {
         webView = new WKWebView(getView().getFrame());
         webView.setNavigationDelegate(this);
         getView().addSubview(webView);
-
         this.mainViewController = mainViewController;
-
-
-        String html = "<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "<style>\n" +
-                "body {\n" +
-                "    background-color: #93B874;\n" +
-                "}\n" +
-                "h1 {\n" +
-                "    background-color: orange;\n" +
-                "}\n" +
-                "p {\n" +
-                "    background-color: rgb(255,0,0);\n" +
-                "}\n" +
-                "</style>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "<h1>Diese Überschrift hat einen orangefarbenen Hintergrund</h1>\n" +
-                "<p>Dieser Absatz hat einen roten Hintergrund </p>\n" +
-                "</body>\n" +
-                "</html>";
-        
-        webView.loadHTMLString(html, null);
-
     }
 
 //    @Override
@@ -131,18 +108,24 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
 
     @Override
     public float getScale() {
-        return 0;
+        return (float)webView.getScrollView().getZoomScale();
     }
 
     @Override
     public void setScale(float scale) {
-
+        CB.postAsyncDelayd(3000, new NamedRunnable("") {
+            @Override
+            public void run() {
+                webView.getScrollView().setZoomScale(scale,false);
+            }
+        });
     }
 
     @Override
     public void setHtml(String html) {
-        log.debug("show html");
-
+        log.debug("setHtml");
+        html = "<meta name=\"viewport\" content=\"initial-scale=1.0\" />" + html;
+        webView.loadHTMLString(html, null);
     }
 
     @Override
@@ -165,6 +148,11 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     }
 
     @Override
+    public void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack) {
+        this.finishLoadingCallBack = finishLoadingCallBack;
+    }
+
+    @Override
     public boolean isPageVisible() {
         return true;
     }
@@ -180,53 +168,62 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
 
     @Override
     public void decidePolicyForNavigationAction(WKWebView wkWebView, WKNavigationAction wkNavigationAction, VoidBlock1<WKNavigationActionPolicy> voidBlock1) {
-        voidBlock1.invoke( WKNavigationActionPolicy.Allow);
+        log.debug("decidePolicyForNavigationAction");
+        voidBlock1.invoke(WKNavigationActionPolicy.Allow);
     }
 
     @Override
     public void decidePolicyForNavigationResponse(WKWebView wkWebView, WKNavigationResponse wkNavigationResponse, VoidBlock1<WKNavigationResponsePolicy> voidBlock1) {
-        voidBlock1.invoke( WKNavigationResponsePolicy.Allow);
+        log.debug("decidePolicyForNavigationResponse");
+        voidBlock1.invoke(WKNavigationResponsePolicy.Allow);
     }
 
     @Override
     public void didStartProvisionalNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
+        log.debug("didStartProvisionalNavigation");
         wkWebView.getBounds();
     }
 
     @Override
     public void didReceiveServerRedirectForProvisionalNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
+        log.debug("didReceiveServerRedirectForProvisionalNavigation");
+
         wkWebView.getBounds();
     }
 
     @Override
     public void didFailProvisionalNavigation(WKWebView wkWebView, WKNavigation wkNavigation, NSError nsError) {
+        log.debug("didFailProvisionalNavigation");
         wkWebView.getBounds();
     }
 
     @Override
     public void didCommitNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
+        log.debug("didCommitNavigation");
         wkWebView.getBounds();
     }
 
     @Override
     public void didFinishNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
-        wkWebView.getBounds();
+        log.debug("didFinishNavigation");
+        this.finishLoadingCallBack.callBack(wkNavigation.description());
     }
 
     @Override
     public void didFailNavigation(WKWebView wkWebView, WKNavigation wkNavigation, NSError nsError) {
+        log.debug("didFailNavigation");
         wkWebView.getBounds();
     }
 
     @Override
     public void didReceiveAuthenticationChallenge(WKWebView wkWebView, NSURLAuthenticationChallenge nsurlAuthenticationChallenge, VoidBlock2<NSURLSessionAuthChallengeDisposition, NSURLCredential> voidBlock2) {
-
-        wkWebView.getBounds();
+        log.debug("didReceiveAuthenticationChallenge");
+        voidBlock2.invoke(NSURLSessionAuthChallengeDisposition.UseCredential, null);
     }
 
     @Override
     public void webContentProcessDidTerminate(WKWebView wkWebView) {
-
+        log.debug("webContentProcessDidTerminate");
         wkWebView.getBounds();
     }
 }
