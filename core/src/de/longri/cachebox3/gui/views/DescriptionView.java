@@ -290,23 +290,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 html += "</br></br>";
             }
 
-
-            //set HtmlBackground to #93B874 TODO set over style
-            html = "<!DOCTYPE html>\n" +
-                    "<html>\n" +
-                    "<head>\n" +
-                    "<style>\n" +
-                    "body {\n" +
-                    "    background-color: #93B874;\n" +
-                    "    color: #000000;\n" +
-                    "    link=\"orange\" vlink=\"red\" \n" +
-                    "}\n" +
-                    "</style>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    html +
-                    "</body>\n" +
-                    "</html>";
+            html = setDescriptionViewColorStyle(html);
 
 
             if (lastCacheId == actCache.getId()) {
@@ -359,6 +343,29 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         }
 
         boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
+    }
+
+    private String setDescriptionViewColorStyle(String html) {
+        if (true) return html;
+
+
+        //set HtmlBackground to #93B874 TODO set over style
+        html = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<style>\n" +
+                "body {\n" +
+                "    background-color: #93B874;\n" +
+                "    color: #000000;\n" +
+                "    link=\"orange\" vlink=\"red\" \n" +
+                "}\n" +
+                "</style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                html +
+                "</body>\n" +
+                "</html>";
+        return html;
     }
 
     @Override
