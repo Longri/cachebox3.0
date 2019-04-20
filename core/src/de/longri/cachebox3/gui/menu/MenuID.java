@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 team-cachebox.de
+ * Copyright (C) 2011-2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -271,4 +271,5 @@ public class MenuID {
 
     public static final int MI_UploadCorrectedCoordinates = 218;
     public static final int MI_LoadLogImages = 219;
+    public static final int MI_SHOW_ORIGINAL_HTML_COLOR = 220;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2017 - 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ public class MutableCache extends AbstractCache {
     private final static short MASK_SOLVER1CHANGED = 1 << 7;  // 128
     public final static short MASK_HAS_USER_DATA = 1 << 8;   // 256
     public final static short MASK_LISTING_CHANGED = 1 << 9; // 512
+    public final static short MASK_SHOW_ORIGINAL_HTML_COLOR = 1 << 10; // 1024
 
     public static boolean getMaskValue(short mask, short bitFlags) {
         return (bitFlags & mask) == mask;
@@ -775,6 +776,15 @@ public class MutableCache extends AbstractCache {
         this.numTravelbugs = numTravelbugs;
     }
 
+    @Override
+    public void setShowOriginalHtmlColor(boolean value) {
+        this.setMaskValue(MASK_SHOW_ORIGINAL_HTML_COLOR, value);
+    }
+
+    @Override
+    public boolean getShowOriginalHtmlColor() {
+        return this.getMaskValue(MASK_SHOW_ORIGINAL_HTML_COLOR);
+    }
 
     @Override
     public void dispose() {

@@ -3358,5 +3358,11 @@
       "infoFont": "mapPanelUnit",
       "infoFontColor": "font_color"
     }
+  },
+  "de.longri.cachebox3.gui.skin.styles.DescriptionViewStyle": {
+    "default": {
+      "backgroundColor": "background_color",
+      "foregroundColor": "font_color"
+    }
   }
 }

@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
@@ -34,6 +35,7 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.skin.styles.DescriptionViewStyle;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
@@ -290,7 +292,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 html += "</br></br>";
             }
 
-            html = setDescriptionViewColorStyle(html);
+            if (!actCache.getShowOriginalHtmlColor())
+                html = setDescriptionViewColorStyle(html);
 
 
             if (lastCacheId == actCache.getId()) {
@@ -346,26 +349,36 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     }
 
     private String setDescriptionViewColorStyle(String html) {
-        if (true) return html;
 
+        DescriptionViewStyle style = CB.getSkin().get(DescriptionViewStyle.class);
+        if (style == null) return html;
 
         //set HtmlBackground to #93B874 TODO set over style
-        html = "<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "<style>\n" +
-                "body {\n" +
-                "    background-color: #93B874;\n" +
-                "    color: #000000;\n" +
-                "    link=\"orange\" vlink=\"red\" \n" +
-                "}\n" +
-                "</style>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                html +
-                "</body>\n" +
-                "</html>";
-        return html;
+
+        StringBuilder sb = new StringBuilder("<!DOCTYPE html><html><head><style>body {");
+
+        if (style.backgroundColor != null) {
+            sb.append("background-color: #");
+            sb.append(style.backgroundColor.toString());
+            sb.append(";");
+        }
+
+        if (style.foregroundColor != null) {
+            sb.append("color: #");
+            sb.append(style.foregroundColor.toString());
+            sb.append(";");
+        }
+
+        if (style.linkColor != null) {
+            sb.append("link: #");
+            sb.append(style.linkColor.toString());
+            sb.append(";");
+        }
+
+        sb.append("}</style></head><body>");
+        sb.append(html);
+        sb.append("</body></html>");
+        return sb.toString();
     }
 
     @Override
@@ -438,6 +451,29 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                     case MenuID.MI_RELOAD_CACHE:
                         new ReloadCacheActivity().show();
                         return true;
+                    case MenuID.MI_SHOW_ORIGINAL_HTML_COLOR:
+                        AbstractCache actCache = EventHandler.getSelectedCache();
+
+                        actCache.setShowOriginalHtmlColor(!actCache.getShowOriginalHtmlColor());
+                        actCache.updateBooleanStore(Database.Data);
+
+                        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, actCache, true);
+
+                        // Update Query
+                        Database.Data.Query.removeValue(EventHandler.getSelectedCache(), true);
+                        Database.Data.Query.add(actCache);
+
+                        //update EventHandler
+                        EventHandler.updateSelectedCache(actCache);
+
+                        //reload html
+                        CB.postOnGlThread(new NamedRunnable("reload DescriptionView") {
+                            @Override
+                            public void run() {
+                                showPlatformWebView();
+                            }
+                        });
+                        return true;
                 }
                 return false;
             }
@@ -455,6 +491,12 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         } else {
             mi.setEnabled(false);
         }
+
+
+        mi = cm.addItem(MenuID.MI_SHOW_ORIGINAL_HTML_COLOR, "ShowOriginalHtmlColor", CB.getSkin().getMenuIcon.showOriginalHtmlColor);
+        mi.setCheckable(true);
+        mi.setChecked(EventHandler.getSelectedCache().getShowOriginalHtmlColor());
+
 
         boolean selectedCacheIsNoGC = false;
         if (isSelected)
