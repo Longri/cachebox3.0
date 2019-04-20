@@ -389,7 +389,7 @@ public class DescriptionImageGrabber {
                             // file enthält nur den Dateinamen, nicht den Pfad. Diesen Dateinamen um den Pfad erweitern, in dem hier die
                             // Spoiler gespeichert wurden
                             String path = getSpoilerPath(gcCode);
-                            FileHandle f = Gdx.files.local(path + '/' + file);
+                            FileHandle f = Gdx.files.absolute(path + '/' + file);
                             try {
                                 f.delete();
                             } catch (Exception ex) {
@@ -408,8 +408,8 @@ public class DescriptionImageGrabber {
     private static FileHandle[] getFilesInDirectory(String path, final String GcCode) {
         String imagePath = path + "/" + GcCode.substring(0, 4);
 
-        if (Gdx.files.local(imagePath).exists()) {
-            FileHandle dir = Gdx.files.local(imagePath);
+        if (Gdx.files.absolute(imagePath).exists()) {
+            FileHandle dir = Gdx.files.absolute(imagePath);
             FileFilter filter = new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
@@ -484,15 +484,15 @@ public class DescriptionImageGrabber {
 
     private static boolean HandleMissingImages(boolean imageLoadError, String uri, String local) {
         try {
-            FileHandle file = Gdx.files.local(local + "_broken_link.txt");
+            FileHandle file = Gdx.files.absolute(local + "_broken_link.txt");
             if (!file.exists()) {
-                FileHandle file2 = Gdx.files.local(local + ".1st");
+                FileHandle file2 = Gdx.files.absolute(local + ".1st");
                 if (file2.exists()) {
                     // After first try, we can be sure that the image cannot be loaded.
                     // At this point mark the image as loaded and go ahead.
                     file2.file().renameTo(file.file());
                 } else {
-                    // Crate a local file for marking it that it could not loaded one time.
+                    // Create a local file for marking it that it could not loaded one time.
                     // Maybe the link is broken temporarily. So try it next time once again.
                     try {
                         String text = "Could not load image from:" + uri;
@@ -511,12 +511,12 @@ public class DescriptionImageGrabber {
     }
 
     private static void DeleteMissingImageInformation(String local) {
-        FileHandle file = Gdx.files.local(local + "_broken_link.txt");
+        FileHandle file = Gdx.files.absolute(local + "_broken_link.txt");
         if (file.exists()) {
             file.delete();
         }
 
-        file = Gdx.files.local(local + ".1st");
+        file = Gdx.files.absolute(local + ".1st");
         if (file.exists()) {
             file.delete();
         }

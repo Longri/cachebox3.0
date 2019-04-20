@@ -31,6 +31,11 @@ public class Request {
         this.followRedirects = webb.followRedirects;
     }
 
+    public Request setTimeout(int timeout) {
+        this.timeout = timeout;
+        return this;
+    }
+
     public Request param(String name, Object value) {
         if (params == null) {
             params = new LinkedHashMap<>();

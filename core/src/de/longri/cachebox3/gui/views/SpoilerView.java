@@ -18,11 +18,15 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.sqlite.Import.ImporterProgress;
 import de.longri.serializable.BitStore;
+
+import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.GrabImagesSelectedByCache;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -56,28 +60,25 @@ public class SpoilerView extends AbstractView {
         contextMenu.addMenuItem("reloadSpoiler", CB.getSkin().getMenuIcon.importIcon, new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (contextMenu.mustHandle(event)) {
-                    MessageBox.show("Would Download now", "Not implemented", MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                    // todo inform the user about progress and give him the possibility to abort the image downloads
+                    GrabImagesSelectedByCache(new ImporterProgress(), true, false, EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(), "", "", false);
+                }
+            }
+        });
+
+        contextMenu.addMenuItem("LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages, new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (contextMenu.mustHandle(event)) {
+                    // todo inform the user about progress and give him the possibility to abort the image downloads
+                    GrabImagesSelectedByCache(new ImporterProgress(), true, false, EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(), "", "", true);
                 }
             }
         });
 
 
         /*
-                contextMenu.addMenuItem("reloadSpoiler", null, (v, x, y, pointer, button) -> {
-                    GlobalCore.ImportSpoiler(false).setReadyListener(() -> {
-                        // do after import
-                        if (GlobalCore.isSetSelectedCache()) {
-                            GlobalCore.getSelectedCache().loadSpoilerRessources();
-                            SpoilerView.getInstance().ForceReload();
-                            TabMainView.leftTab.ShowView(SpoilerView.getInstance());
-                            SpoilerView.getInstance().onShow();
-                        }
-                    });
-                    return true;
-                });
-
-        contextMenu.addMenuItem("LoadLogImages", Sprites.getSprite(IconName.downloadLogImages.name()), (v, x, y, pointer, button) -> {
-            GlobalCore.ImportSpoiler(true).setReadyListener(() -> {
+        contextMenu.addMenuItem("reloadSpoiler", null, (v, x, y, pointer, button) -> {
+            GlobalCore.ImportSpoiler(false).setReadyListener(() -> {
                 // do after import
                 if (GlobalCore.isSetSelectedCache()) {
                     GlobalCore.getSelectedCache().loadSpoilerRessources();
