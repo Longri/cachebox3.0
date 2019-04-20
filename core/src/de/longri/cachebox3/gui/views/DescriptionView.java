@@ -152,7 +152,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 //                thread.start();
                 log.debug("get Basic Member description clicked, don't load URL");
                 return true;
-            } else if (url.startsWith("http://")) {
+            } else if (url.startsWith("http://") || url.startsWith("https://")) {
                 // Load Url in ext Browser
                 log.debug("Link clicked, don't load URL! show on ext browser");
                 PlatformConnector._openUrlExtern(url);
@@ -290,47 +290,38 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 html += "</br></br>";
             }
 
-            view.display();
-            view.setHtml(html);
+            html = setDescriptionViewColorStyle(html);
+
 
             if (lastCacheId == actCache.getId()) {
                 // restore last scroll position
                 if (view != null) {
-                    CB.postAsync(new NamedRunnable("Test Add") {
-                        @Override
-                        public void run() {
-
-                            while (view != null && !view.isPageVisible()) {
-                                try {
-                                    Thread.sleep(20);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                    //Wait for html is loaded
+                    view.setFinishLoadingCallBack(value -> {
+                        CB.postOnMainThreadDelayed(100, new NamedRunnable("DescriptionView:set scale") {
+                            @Override
+                            public void run() {
+                                log.debug("Set scale: {}", lastScale);
+                                if (view != null) {
+                                    view.setScale(lastScale);
+                                    CB.postOnMainThreadDelayed(200, new NamedRunnable("DescriptionView:set pos") {
+                                        @Override
+                                        public void run() {
+                                            if (view != null) {
+                                                log.debug("Set x: {} y: {} ", lastX, lastY);
+                                                view.setScrollPosition(lastX, lastY);
+                                            }
+                                        }
+                                    });
                                 }
                             }
-                            if (view == null) return;
-
-                            CB.postOnMainThreadDelayed(100, new NamedRunnable("DescriptionView:set scale") {
-                                @Override
-                                public void run() {
-                                    log.debug("Set scale: {}", lastScale);
-                                    if (view != null) {
-                                        view.setScale(lastScale);
-                                        CB.postOnMainThreadDelayed(200, new NamedRunnable("DescriptionView:set pos") {
-                                            @Override
-                                            public void run() {
-                                                if (view != null) {
-                                                    log.debug("Set x: {} y: {} ", lastX, lastY);
-                                                    view.setScrollPosition(lastX, lastY);
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                        }
+                        });
+                        return true;
                     });
                 }
             }
+            view.display();
+            view.setHtml(html);
         }
 
 
@@ -352,6 +343,29 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         }
 
         boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
+    }
+
+    private String setDescriptionViewColorStyle(String html) {
+        if (true) return html;
+
+
+        //set HtmlBackground to #93B874 TODO set over style
+        html = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<style>\n" +
+                "body {\n" +
+                "    background-color: #93B874;\n" +
+                "    color: #000000;\n" +
+                "    link=\"orange\" vlink=\"red\" \n" +
+                "}\n" +
+                "</style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                html +
+                "</body>\n" +
+                "</html>";
+        return html;
     }
 
     @Override

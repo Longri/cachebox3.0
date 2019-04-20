@@ -140,7 +140,6 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected void descriptionViewToNull() {
-//TODO set descriptionViewToNull
         log.debug("Set description view to NULL");
         descriptionView.disposing();
         descriptionView = null;

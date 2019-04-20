@@ -42,6 +42,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     final String encoding = "utf-8";
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
     private final AtomicBoolean pageVisible = new AtomicBoolean(false);
+    private GenericHandleCallBack<String> finishLoadingCallBack;
 
     public AndroidDescriptionView(Context context) {
         super(AndroidLauncher.androidLauncher, null, android.R.attr.webViewStyle);
@@ -68,6 +69,9 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
         public void onPageFinished(WebView view, String url) {
             log.debug("onPageFinished URL: {}", url);
+            if (AndroidDescriptionView.this.finishLoadingCallBack != null) {
+                AndroidDescriptionView.this.finishLoadingCallBack.callBack(url);
+            }
         }
 
         public void onLoadResource(WebView view, String url) {
@@ -179,6 +183,11 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     @Override
     public void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
+    }
+
+    @Override
+    public void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack) {
+        this.finishLoadingCallBack = finishLoadingCallBack;
     }
 
     @Override

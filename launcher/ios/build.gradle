@@ -18,7 +18,7 @@ dependencies {
     natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-ios"
 
     //include libs
-//        compile fileTree(dir: 'libs', include: ['*.jar'])
+        compile fileTree(dir: 'libs', include: ['*.jar'])
 
     //vtm
     implementation("org.mapsforge:vtm-ios:$vtmVersion") {

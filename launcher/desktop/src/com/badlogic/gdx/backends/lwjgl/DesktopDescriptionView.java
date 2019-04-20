@@ -182,6 +182,11 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     }
 
     @Override
+    public void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack) {
+        //todo call this CallBack if Html is finish loaded
+    }
+
+    @Override
     public boolean isPageVisible() {
         return true;
     }
