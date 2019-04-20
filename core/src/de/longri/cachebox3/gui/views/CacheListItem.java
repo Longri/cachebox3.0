@@ -75,16 +75,6 @@ public class CacheListItem extends ListViewItem implements Disposable {
         this.cacheId = cacheId;
     }
 
-    public void pack() {
-        this.setPrefWidth(this.getWidth());
-        cacheItem.setWidth(this.getWidth());
-        cacheItem.invalidate();
-        cacheItem.pack();
-        this.setHeight(cacheItem.getHeight());
-        this.setPrefHeight(cacheItem.getHeight());
-    }
-
-
     public boolean update(float bearing, CharSequence distance) {
         if (!cacheItem.distanceOrBearingChanged) return false;
         cacheItem.arrowImage.setRotation(bearing);
