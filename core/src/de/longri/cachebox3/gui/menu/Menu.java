@@ -400,15 +400,9 @@ public class Menu extends Window {
     }
 
     public void addDivider(int listIndex) {
-
         if (this.style.divider != null) {
-            MenuItem item = new MenuItem(listIndex, this);
-            item.overrideBackground(this.style.divider);
-            addItem(item);
+            addItem(new DividerItem(listIndex,this,this.style));
         }
-
-        log.debug("add Divider");
-        //TODO add divider item
     }
 
     public void reorganizeListIndexes() {
