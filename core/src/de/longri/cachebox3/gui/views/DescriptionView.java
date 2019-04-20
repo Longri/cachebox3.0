@@ -152,7 +152,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 //                thread.start();
                 log.debug("get Basic Member description clicked, don't load URL");
                 return true;
-            } else if (url.startsWith("http://")) {
+            } else if (url.startsWith("http://") || url.startsWith("https://")) {
                 // Load Url in ext Browser
                 log.debug("Link clicked, don't load URL! show on ext browser");
                 PlatformConnector._openUrlExtern(url);
@@ -298,6 +298,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                     "<style>\n" +
                     "body {\n" +
                     "    background-color: #93B874;\n" +
+                    "    color: #000000;\n" +
+                    "    link=\"orange\" vlink=\"red\" \n" +
                     "}\n" +
                     "</style>\n" +
                     "</head>\n" +
@@ -306,9 +308,6 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                     "</body>\n" +
                     "</html>";
 
-
-            view.display();
-            view.setHtml(html);
 
             if (lastCacheId == actCache.getId()) {
                 // restore last scroll position
@@ -337,6 +336,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                     });
                 }
             }
+            view.display();
+            view.setHtml(html);
         }
 
 

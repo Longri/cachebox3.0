@@ -39,7 +39,6 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
 
     private static final Logger log = LoggerFactory.getLogger(IOS_DescriptionView.class);
 
-
     private final WKWebView webView;
     private final UIViewController mainViewController;
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
@@ -52,41 +51,17 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
         this.mainViewController = mainViewController;
     }
 
-//    @Override
-//    public boolean shouldStartLoad(UIWebView uiWebView, NSURLRequest nsurlRequest, UIWebViewNavigationType uiWebViewNavigationType) {
-//        String url = nsurlRequest.getURL().getAbsoluteString();
-//        boolean shouldOverride = !shouldOverrideUrlLoadingCallBack.callBack(url);
-//        log.debug("Should override {} Url: {}", shouldOverride, url);
-//        return shouldOverride;
-//    }
-//
-//    @Override
-//    public void didStartLoad(UIWebView uiWebView) {
-//
-//    }
-//
-//    @Override
-//    public void didFinishLoad(UIWebView uiWebView) {
-//
-//    }
-//
-//    @Override
-//    public void didFailLoad(UIWebView uiWebView, NSError nsError) {
-//
-//    }
-
     @Override
     public void setBounding(float x, float y, float width, float height, int screenHeight) {
 
-        log.debug("SetBounds x,y width,height {},{} {},{}", x, y, width, height);
+        log.debug("SetBounds x,y width,height /screenHeight {},{} {},{} / {}", x, y, width, height, screenHeight);
 
-        CGRect rect = new CGRect(x, y, width / 2, height / 2);
-//        webView.setAccessibilityFrame(rect);
+        CGRect rect = new CGRect(x, y, width / 2.0f, height / 2);
         webView.setBounds(rect);
 
-        float versatz = (screenHeight - height) / 2 - y;
+        float offset = ((screenHeight - height) / 2.0f) - y;
 
-        CGPoint point = new CGPoint(width / 4, (screenHeight / 4) + (versatz / 2));
+        CGPoint point = new CGPoint(width / 4.0f, ((float) screenHeight / 4) + (offset / 2.0f));
         webView.setCenter(point);
     }
 
@@ -108,7 +83,7 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
 
     @Override
     public float getScale() {
-        return (float)webView.getScrollView().getZoomScale();
+        return (float) webView.getScrollView().getZoomScale();
     }
 
     @Override
@@ -116,7 +91,7 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
         CB.postAsyncDelayd(3000, new NamedRunnable("") {
             @Override
             public void run() {
-                webView.getScrollView().setZoomScale(scale,false);
+                webView.getScrollView().setZoomScale(scale, false);
             }
         });
     }
@@ -157,19 +132,20 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
         return true;
     }
 
-
-    public void disposing() {
+    void disposing() {
         webView.setNavigationDelegate(null);
         webView.dispose();
         shouldOverrideUrlLoadingCallBack = null;
         super.dispose();
     }
 
-
     @Override
     public void decidePolicyForNavigationAction(WKWebView wkWebView, WKNavigationAction wkNavigationAction, VoidBlock1<WKNavigationActionPolicy> voidBlock1) {
         log.debug("decidePolicyForNavigationAction");
-        voidBlock1.invoke(WKNavigationActionPolicy.Allow);
+        String url = wkNavigationAction.getRequest().getURL().getAbsoluteString();
+        boolean shouldOverride = !shouldOverrideUrlLoadingCallBack.callBack(url);
+        log.debug("Should override {} Url: {}", shouldOverride, url);
+        voidBlock1.invoke(shouldOverride ? WKNavigationActionPolicy.Allow : WKNavigationActionPolicy.Cancel);
     }
 
     @Override
@@ -181,32 +157,27 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     @Override
     public void didStartProvisionalNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
         log.debug("didStartProvisionalNavigation");
-        wkWebView.getBounds();
     }
 
     @Override
     public void didReceiveServerRedirectForProvisionalNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
         log.debug("didReceiveServerRedirectForProvisionalNavigation");
-
-        wkWebView.getBounds();
     }
 
     @Override
     public void didFailProvisionalNavigation(WKWebView wkWebView, WKNavigation wkNavigation, NSError nsError) {
         log.debug("didFailProvisionalNavigation");
-        wkWebView.getBounds();
     }
 
     @Override
     public void didCommitNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
         log.debug("didCommitNavigation");
-        wkWebView.getBounds();
     }
 
     @Override
     public void didFinishNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
-        log.debug("didFinishNavigation");
-        this.finishLoadingCallBack.callBack(wkNavigation.description());
+        log.debug("didFinishNavigation: " + wkNavigation.description());
+        if (this.finishLoadingCallBack != null) this.finishLoadingCallBack.callBack(wkNavigation.description());
     }
 
     @Override
