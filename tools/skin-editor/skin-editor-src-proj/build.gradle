@@ -1,5 +1,11 @@
 apply plugin: 'java'
 
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+[compileJava]*.options*.encoding = 'UTF-8'
+sourceSets.main.java.srcDirs = ["src/"] 
+
 dependencies {
     implementation project(":core")
     implementation project(":desktop")
@@ -29,5 +35,3 @@ dependencies {
     implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
 }
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"

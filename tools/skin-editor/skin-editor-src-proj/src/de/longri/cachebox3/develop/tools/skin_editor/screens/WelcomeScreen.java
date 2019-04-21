@@ -311,7 +311,7 @@ public class WelcomeScreen implements Screen {
                 // We delete it
                 FileHandle projectFolder = Gdx.files.local("projects/" + (String) listProjects.getSelected());
                 projectFolder.deleteDirectory();
-
+                projectFolder.delete();
                 refreshProjects();
             }
 
