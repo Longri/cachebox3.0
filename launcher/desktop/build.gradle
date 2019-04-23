@@ -42,6 +42,11 @@ dependencies {
     implementation("org.mapsforge:vtm-desktop:$vtmVersion") {
         exclude group: 'com.metsci.ext.com.kitfox.svg'
     }
+
+    implementation("org.mapsforge:vtm-desktop-lwjgl:$vtmVersion")
+
+    
+    
     implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
     implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
     implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
