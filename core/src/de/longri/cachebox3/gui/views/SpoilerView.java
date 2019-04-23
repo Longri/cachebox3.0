@@ -19,11 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.widgets.GalleryView;
 import de.longri.cachebox3.sqlite.Import.ImporterProgress;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.serializable.BitStore;
 
 import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.GrabImagesSelectedByCache;
@@ -33,14 +32,37 @@ import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.GrabImag
  */
 public class SpoilerView extends AbstractView {
 
+    private final GalleryView galleryView = new GalleryView();
+    private AbstractCache actCache;
+    private boolean forceReload = false;
+
     public SpoilerView(BitStore reader) {
         super(reader);
     }
 
     public SpoilerView() {
         super("SpoilerView");
-        MessageBox.show("Not implemented yet", "Not implemented", MessageBoxButtons.Cancel, MessageBoxIcon.Information, null);
     }
+
+    public void forceReload() {
+        this.forceReload = true;
+    }
+
+    @Override
+    public void onShow() {
+
+        if (!forceReload && EventHandler.getSelectedCache().equals(actCache)) return;
+
+        forceReload = false;
+        actCache = EventHandler.getSelectedCache();
+        if (actCache.hasSpoiler()) {
+
+        }else{
+            galleryView.clearGalery();
+        }
+
+    }
+
 
     @Override
     public void dispose() {
