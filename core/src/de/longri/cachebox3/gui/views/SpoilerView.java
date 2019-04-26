@@ -15,8 +15,6 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
@@ -57,22 +55,13 @@ public class SpoilerView extends AbstractView {
     public Menu getContextMenu() {
         Menu contextMenu = new Menu("SpoilerViewContextMenu");
 
-        contextMenu.addMenuItem("reloadSpoiler", CB.getSkin().getMenuIcon.importIcon, new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (contextMenu.mustHandle(event)) {
-                    // todo inform the user about progress and give him the possibility to abort the image downloads
-                    GrabImagesSelectedByCache(new ImporterProgress(), true, false, EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(), "", "", false);
-                }
-            }
+        contextMenu.addMenuItem("reloadSpoiler", CB.getSkin().getMenuIcon.importIcon, () -> {
+            // todo inform the user about progress and give him the possibility to abort the image downloads
+            GrabImagesSelectedByCache(new ImporterProgress(), true, false, EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(), "", "", false);
         });
-
-        contextMenu.addMenuItem("LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages, new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (contextMenu.mustHandle(event)) {
-                    // todo inform the user about progress and give him the possibility to abort the image downloads
-                    GrabImagesSelectedByCache(new ImporterProgress(), true, false, EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(), "", "", true);
-                }
-            }
+        contextMenu.addMenuItem("LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages, () -> {
+            // todo inform the user about progress and give him the possibility to abort the image downloads
+            GrabImagesSelectedByCache(new ImporterProgress(), true, false, EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(), "", "", true);
         });
 
 

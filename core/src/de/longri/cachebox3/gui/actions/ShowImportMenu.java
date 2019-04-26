@@ -17,8 +17,6 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.gcvote_api.GCVote;
 import de.longri.cachebox3.apis.gcvote_api.RatingData;
@@ -31,6 +29,9 @@ import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.activities.ImportGcPos;
 import de.longri.cachebox3.gui.activities.ImportPQActivity;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -62,35 +63,30 @@ public class ShowImportMenu extends Menu {
 
         //ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
 
-        addMenuItem("API_IMPORT", CB.getSkin().getMenuIcon.GC_Live, new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (mustHandle(event)) {
-                    // will not come here, if a MoreMenu exists
+        addMenuItem("API_IMPORT", CB.getSkin().getMenuIcon.GC_Live, () -> { }).setMoreMenu(getGcImportMenu());
+        addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
+        addMenuItem("GCVoteRatings", null, () -> {
+            // todo create a importGCVote(): this is only a simple test for inputstream function;
+            ArrayList<String> waypoints = new ArrayList<>();
+            for (AbstractCache cache : Database.Data.Query) {
+                // todo only x caches at a time
+                if (cache.getRating() <= 0) {
+                    waypoints.add(cache.getGcCode().toString());
                 }
             }
-        }).setMoreMenu(getGcImportMenu());
-
-        addMenuItem( "GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (mustHandle(event)) {
-                    importGpxFile();
-                }
+            ArrayList<RatingData> ratingData;
+            try {
+                ratingData = GCVote.getVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
+            } catch (Exception e) {
+                // The NPE I got is due to a problem with classes for Json are not loaded
+                // the thread can't throw an exception !!! Must be handled there
+                ratingData = new ArrayList<>();
             }
-        });
-
-        addMenuItem("GCVoteRatings", null, new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (mustHandle(event)) {
-                    // todo create a importGCVote(): this is only a simple test for inputstream function;
-                    ArrayList<String> waypoints = new ArrayList<>();
-                    for (AbstractCache cache : Database.Data.Query) {
-                        waypoints.add(cache.getGcCode().toString());
-                    }
-                    ArrayList<RatingData> ratingData = GCVote.getVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
-                    if (ratingData.size() > 0) {
-                        // todo write to db
-                    }
-                }
+            if (ratingData.size() > 0) {
+                MessageBox.show("Got " + ratingData.size() + " ratings. Write to db not implemented yet", "Not implemented", MessageBoxButtons.Cancel, MessageBoxIcon.Information, null);
+                // todo write to db
+            } else {
+                MessageBox.show("Did not fetch any vote!", "Got no votes", MessageBoxButtons.Cancel, MessageBoxIcon.Information, null);
             }
         }); // todo create icon: CB.getSkin().getMenuIcon.importGCVote
 

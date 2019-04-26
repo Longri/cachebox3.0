@@ -108,12 +108,18 @@ public class Menu extends Window {
         return item;
     }
 
-    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, ClickListener onClickListener) {
+    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, Runnable runnable) {
         MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
         item.setTitle(String.valueOf(Translation.get(titleTranlationId.toString())));
         if (icon != null)
             item.setIcon(icon);
-        item.addListener(onClickListener);
+        item.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (mustHandle(event)) {
+                    runnable.run();
+                }
+            }
+        });
         mItems.add(item);
         return item;
     }
