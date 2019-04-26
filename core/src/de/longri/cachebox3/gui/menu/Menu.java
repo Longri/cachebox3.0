@@ -316,7 +316,7 @@ public class Menu extends Window {
             titleGroup.addActor(backImage);
         }
 
-        titleLabel = new VisLabel(this.name, "menu_title_act");
+        titleLabel = new VisLabel(Translation.get(name.toString()).toString(), "menu_title_act");
 
         if (parentMenu != null) {
             parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");
@@ -421,9 +421,16 @@ public class Menu extends Window {
             return false;
         } else {
             event.cancel(); // to set event is handled, ...
-            if (hideWithItemClick)
-                hide(ALL);
-            return true;
+            MenuItem menuItem = (MenuItem) event.getListenerActor();
+            if (menuItem.hasMoreMenu()) {
+                menuItem.getMoreMenu(compoundMenu != null ? compoundMenu : this).show();
+                return false;
+            }
+            else {
+                if (hideWithItemClick)
+                    hide(ALL);
+                return true;
+            }
         }
     }
 

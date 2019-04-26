@@ -21,21 +21,21 @@ public class BreakawayImportThread extends Thread {
 
 	private static BreakawayImportThread that;
 
-	private static AtomicBoolean isCanceld = new AtomicBoolean(false);
+	private static AtomicBoolean isCanceled = new AtomicBoolean(false);
 
 	public BreakawayImportThread() {
 		if (that != null && that.isAlive())
-			throw new IllegalStateException("Import is running");
+			throw new IllegalStateException("Is running");
 		that = this;
-		isCanceld.set(false);
+		isCanceled.set(false);
 	}
 
 	public static boolean isCanceled() {
-		return isCanceld.get();
+		return isCanceled.get();
 	}
 
 	public void cancel() {
-		isCanceld.set(true);
+		isCanceled.set(true);
 		this.interrupt();
 	}
 
@@ -45,7 +45,7 @@ public class BreakawayImportThread extends Thread {
 			that = null;
 		}
 
-		isCanceld.set(false);
+		isCanceled.set(false);
 	}
 
 }
