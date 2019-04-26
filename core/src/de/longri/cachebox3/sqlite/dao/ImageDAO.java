@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -15,14 +15,13 @@
  */
 package de.longri.cachebox3.sqlite.dao;
 
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Database.Parameters;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 
 public class ImageDAO {
     final static Logger log = LoggerFactory.getLogger(ImageDAO.class);
@@ -50,14 +49,14 @@ public class ImageDAO {
         }
     }
 
-    /**
-     * @param GcCode
-     * @return
-     */
-    public ArrayList<ImageEntry> getImagesForCache(String GcCode) {
-        ArrayList<ImageEntry> images = new ArrayList<ImageEntry>();
+    public Array<ImageEntry> getImagesForCache(CharSequence gcCode) {
+        return getImagesForCache(gcCode.toString());
+    }
 
-        GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=?", new String[]{GcCode});
+    public Array<ImageEntry> getImagesForCache(String gcCode) {
+        Array<ImageEntry> images = new Array<>();
+
+        GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=?", new String[]{gcCode});
         if (reader.getCount() > 0) {
             reader.moveToFirst();
             while (!reader.isAfterLast()) {
@@ -81,8 +80,8 @@ public class ImageDAO {
      * @param GcCode
      * @return
      */
-    public ArrayList<ImageEntry> getDescriptionImagesForCache(String GcCode) {
-        ArrayList<ImageEntry> images = new ArrayList<ImageEntry>();
+    public Array<ImageEntry> getDescriptionImagesForCache(String GcCode) {
+        Array<ImageEntry> images = new Array<ImageEntry>();
 
         GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=? and IsCacheImage=1", new String[]{GcCode});
 
@@ -100,8 +99,8 @@ public class ImageDAO {
         return images;
     }
 
-    public ArrayList<String> getImageURLsForCache(String GcCode) {
-        ArrayList<String> images = new ArrayList<String>();
+    public Array<String> getImageURLsForCache(String GcCode) {
+        Array<String> images = new Array<String>();
 
         GdxSqliteCursor reader = Database.Data.rawQuery("select ImageUrl from Images where GcCode=?", new String[]{GcCode});
 

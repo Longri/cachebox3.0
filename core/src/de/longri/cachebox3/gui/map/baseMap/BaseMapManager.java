@@ -56,7 +56,7 @@ public final class BaseMapManager extends CB_List<AbstractManagedMapLayer> {
         FileFilter mapFileFilter = new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                return Utils.GetFileExtension(pathname.getAbsolutePath()).toLowerCase().equals("map");
+                return Utils.getFileExtension(pathname.getAbsolutePath()).toLowerCase().equals("map");
             }
         };
         FileHandle[] mapFiles = workPath.list(mapFileFilter);

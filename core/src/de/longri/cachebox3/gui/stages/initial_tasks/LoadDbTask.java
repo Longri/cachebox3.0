@@ -110,7 +110,7 @@ public class LoadDbTask extends AbstractInitTask {
                                     } else if (fileList.size == 0) {
                                         Config.DatabaseName.setValue("cachebox.db3");
                                     } else {
-                                        Config.DatabaseName.setValue(Utils.GetFileName(fileList.get(0).getName()));
+                                        Config.DatabaseName.setValue(Utils.getFileName(fileList.get(0).getName()));
                                     }
                                     EventHandler.fire(new IncrementProgressEvent(10, "load db"));
                                     selectDbDialog.loadSelectedDB();

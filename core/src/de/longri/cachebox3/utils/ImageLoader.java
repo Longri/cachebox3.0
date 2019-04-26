@@ -141,7 +141,7 @@ public class ImageLoader {
         textureSettings.fast = false;
         textureSettings.debug = false;
 
-        String inputFolder = Utils.GetDirectoryName(ImagePath);
+        String inputFolder = Utils.getDirectoryName(ImagePath);
         String outputFolder = Settings.ImageCacheFolder.getValue();
         String Name = getCachedAtlasName(inputFolder);
 
@@ -172,12 +172,12 @@ public class ImageLoader {
         if (Atlanten == null)
             Atlanten = new HashMap<String, TextureAtlas>();
 
-        String inputFolder = Utils.GetDirectoryName(ImagePath);
-        String ImageName = Utils.GetFileNameWithoutExtension(ImagePath);
+        String inputFolder = Utils.getDirectoryName(ImagePath);
+        String ImageName = Utils.getFileNameWithoutExtension(ImagePath);
         String Name = getCachedAtlasName(inputFolder);
 
         final String AtlasPath = Settings.ImageCacheFolder.getValue() + "/" + Name;
-        if (!Utils.FileExistsNotEmpty(AtlasPath))
+        if (!Utils.fileExistsNotEmpty(AtlasPath))
             return null;
         TextureAtlas atlas = null;
         if (Atlanten.containsKey(AtlasPath)) {
@@ -287,7 +287,7 @@ public class ImageLoader {
                 final String LocalPath = iconUrl.substring(slashPos);
 
                 // check if Image exist on Cache
-                if (Utils.FileExistsNotEmpty(CachePath + LocalPath)) {
+                if (Utils.fileExistsNotEmpty(CachePath + LocalPath)) {
                     setImage(CachePath + LocalPath);
                     return;
                 }
@@ -307,7 +307,7 @@ public class ImageLoader {
                             inLoad = false;
 
                             // chk if Download complied
-                            if (!Utils.FileExistsNotEmpty(CachePath + LocalPath)) {
+                            if (!Utils.fileExistsNotEmpty(CachePath + LocalPath)) {
                                 // Download Error
                                 ImageLoadError = true;
                                 return;

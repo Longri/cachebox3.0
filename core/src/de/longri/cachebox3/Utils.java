@@ -18,14 +18,11 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.utils.converter.Base64;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -46,6 +43,9 @@ import java.util.Date;
 public class Utils {
     static final Logger log = LoggerFactory.getLogger(Utils.class);
 
+    public static final String THUMB = "thumb_";
+    public static final String THUMB_OVERVIEW = "overview";
+
     /**
      * Returns a @Pixmap from given Bitmap
      *
@@ -57,7 +57,6 @@ public class Utils {
         return new Pixmap(encodedData, 0, encodedData.length);
     }
 
-
     public static TextureRegion getTextureRegion(InputStream inputStream) {
         try {
             Bitmap svgBitmap = PlatformConnector.getSvg("", inputStream, PlatformConnector.SvgScaleType.DPI_SCALED, 1f);
@@ -68,7 +67,6 @@ public class Utils {
         }
         return null;
     }
-
 
     /**
      * List all Files inside a FileHandle (Directory)
@@ -98,7 +96,7 @@ public class Utils {
             e.printStackTrace();
         }
 
-        RC4(b, Key);
+        rc4(b, Key);
         String decrypted = "";
 
         char[] c = new char[b.length];
@@ -146,7 +144,7 @@ public class Utils {
         String encrypted = "";
         try {
             int[] b = byte2intArray(value.getBytes());
-            RC4(b, Key);
+            rc4(b, Key);
             encrypted = Base64.encodeBytes(int2byteArray(b));
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,7 +152,7 @@ public class Utils {
         return encrypted;
     }
 
-    public static void RC4(int[] bytes, int[] key) {
+    public static void rc4(int[] bytes, int[] key) {
         int[] s = new int[256];
         int[] k = new int[256];
         int temp;
@@ -185,7 +183,7 @@ public class Utils {
         }
     }
 
-    public static String GetFileExtension(String filename) {
+    public static String getFileExtension(String filename) {
         int dotposition = filename.lastIndexOf(".");
         String ext = "";
         if (dotposition > -1) {
@@ -195,7 +193,7 @@ public class Utils {
         return ext;
     }
 
-    public static String GetFileNameWithoutExtension(String filename) {
+    public static String getFileNameWithoutExtension(String filename) {
         int dotposition = filename.lastIndexOf(".");
         if (dotposition >= 0)
             filename = filename.substring(0, dotposition);
@@ -206,7 +204,7 @@ public class Utils {
 
     }
 
-    public static String GetFileName(String filename) {
+    public static String getFileName(String filename) {
         int slashposition = Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\"));
         if (slashposition >= 0)
             filename = filename.substring(slashposition + 1, filename.length());
@@ -214,7 +212,7 @@ public class Utils {
 
     }
 
-    public static String GetDirectoryName(String filename) {
+    public static String getDirectoryName(String filename) {
         int slashposition = Math.max(filename.lastIndexOf("/"), filename.lastIndexOf("\\"));
         if (slashposition >= 0)
             filename = filename.substring(0, slashposition);
@@ -227,7 +225,7 @@ public class Utils {
      * @param filename
      * @return true, wenn das File existiert, ansonsten false.
      */
-    public static boolean FileExistsNotEmpty(String filename) {
+    public static boolean fileExistsNotEmpty(String filename) {
         File file = new File(filename);
         if (!file.exists())
             return false;
@@ -370,8 +368,8 @@ public class Utils {
         return result;
     }
 
-    public static String GetFileName(FileHandle fileHandle) {
-        return GetFileName(fileHandle.name());
+    public static String getFileName(FileHandle fileHandle) {
+        return getFileName(fileHandle.name());
     }
 
 

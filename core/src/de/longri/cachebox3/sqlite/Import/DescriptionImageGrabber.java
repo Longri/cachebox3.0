@@ -186,7 +186,7 @@ public class DescriptionImageGrabber {
                     URI imgUri = URI.create(/* baseUri, */src);
                     String localFile = BuildDescriptionImageFilename(Cache.getGcCode().toString(), imgUri);
 
-                    if (Utils.FileExistsNotEmpty(localFile)) {
+                    if (Utils.fileExistsNotEmpty(localFile)) {
                         int idx = 0;
 
                         while ((idx = html.indexOf(src, idx)) >= 0) {

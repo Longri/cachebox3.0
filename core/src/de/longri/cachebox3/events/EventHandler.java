@@ -15,24 +15,32 @@
  */
 package de.longri.cachebox3.events;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.location.*;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.lang.reflect.Type;
+import java.util.Locale;
 
 /**
  * Created by Longri on 23.03.2017.
@@ -152,11 +160,131 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         add(this);
     }
 
+    private final Array<ImageEntry> spoilerResources = new Array<>();
     private AbstractCache selectedCache;
     private AbstractWaypoint selectedWayPoint;
     private Coordinate selectedCoordinate;
     private Coordinate myPosition;
     private float heading;
+    private boolean spoilerLoaded = false;
+
+    public static boolean actCacheHasSpoiler() {
+        if (!INSTANCE.spoilerLoaded) INSTANCE.reloadCacheSpoiler();
+        return INSTANCE.spoilerResources.size > 0;
+    }
+
+    public static Array<ImageEntry> getSelectedCacheSpoiler() {
+        return actCacheHasSpoiler() ? INSTANCE.spoilerResources : null;
+    }
+
+    private void reloadCacheSpoiler() {
+
+        AbstractCache actCache = getSelectedCache();
+        spoilerResources.clear();
+
+        String directory = "";
+        String gcCode = actCache.getGcCode().toString();
+        if (gcCode.length() < 4)
+            return; // don't load spoiler
+
+        // from own Repository
+        String path = Settings.SpoilerFolderLocal.getValue();
+        log.debug("from SpoilerFolderLocal: " + path);
+        try {
+            if (path != null && path.length() > 0) {
+                directory = path + "/" + gcCode.substring(0, 4);
+                loadSpoilerResourcesFromPath(directory, actCache, spoilerResources);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // from Description own Repository
+        try {
+            path = Settings.DescriptionImageFolderLocal.getValue();
+            log.debug("from DescriptionImageFolderLocal: " + path);
+            directory = path + "/" + gcCode.substring(0, 4);
+            loadSpoilerResourcesFromPath(directory, actCache, spoilerResources);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // from Description Global Repository
+        try {
+            path = Settings.DescriptionImageFolder.getValue();
+            log.debug("from DescriptionImageFolder: " + path);
+            directory = path + "/" + gcCode.substring(0, 4);
+            loadSpoilerResourcesFromPath(directory, actCache, spoilerResources);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // from Spoiler Global Repository
+        try {
+            path = Settings.SpoilerFolder.getValue();
+            log.debug("from SpoilerFolder: " + path);
+            directory = path + "/" + gcCode.substring(0, 4);
+            loadSpoilerResourcesFromPath(directory, actCache, spoilerResources);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+
+        // Add own taken photo
+        directory = Settings.UserImageFolder.getValue();
+        if (directory != null) {
+            try {
+                loadSpoilerResourcesFromPath(directory, actCache, spoilerResources);
+            } catch (Exception e) {
+                log.error("", e);
+            }
+        }
+
+        spoilerLoaded = true;
+    }
+
+    private static void loadSpoilerResourcesFromPath(final String directory, final AbstractCache cache, Array<ImageEntry> spoilerResources) {
+        log.debug("LoadSpoilerResourcesFromPath from " + directory);
+
+        FileHandle dir = Gdx.files.absolute(directory);
+
+        if (dir.isDirectory()) return;
+
+        FileFilter filter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                String filename = pathname.getAbsolutePath();
+                filename = filename.toLowerCase(Locale.getDefault());
+                if (filename.indexOf(cache.getGcCode().toString().toLowerCase(Locale.getDefault())) >= 0) {
+                    if (filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".bmp") || filename.endsWith(".png") || filename.endsWith(".gif")) {
+                        // don't load Thumbs
+                        if (filename.startsWith(Utils.THUMB) || filename.startsWith(Utils.THUMB_OVERVIEW + Utils.THUMB)) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        };
+        FileHandle[] files = dir.list(filter);
+
+        if (!(files == null)) {
+            if (files.length > 0) {
+                for (FileHandle file : files) {
+                    String ext = file.extension();
+                    if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("bmp") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("gif")) {
+                        ImageEntry imageEntry = new ImageEntry();
+                        imageEntry.LocalPath = directory + "/" + file;
+                        imageEntry.Name = file.name();
+                        log.debug(imageEntry.Name);
+                        spoilerResources.add(imageEntry);
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
@@ -186,6 +314,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     private void load_unload_Cache_Waypoints(AbstractCache oldCache, AbstractCache newCache) {
+        // clear loaded spoiler resources
+        spoilerLoaded = false;
+        spoilerResources.clear();
 
         //with show all waypoints, must all waypoints loaded, so do nothing
         if (!Config.ShowAllWaypoints.getValue()) {
