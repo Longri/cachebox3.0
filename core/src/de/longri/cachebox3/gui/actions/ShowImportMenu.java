@@ -70,9 +70,7 @@ public class ShowImportMenu extends Menu {
             ArrayList<String> waypoints = new ArrayList<>();
             for (AbstractCache cache : Database.Data.Query) {
                 // todo only x caches at a time
-                if (cache.getRating() <= 0) {
-                    waypoints.add(cache.getGcCode().toString());
-                }
+                waypoints.add(cache.getGcCode().toString());
             }
             ArrayList<RatingData> ratingData;
             try {

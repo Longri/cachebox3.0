@@ -108,9 +108,9 @@ public class Menu extends Window {
         return item;
     }
 
-    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, Runnable runnable) {
+    public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Runnable runnable) {
         MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
-        item.setTitle(String.valueOf(Translation.get(titleTranlationId.toString())));
+        item.setTitle(Translation.get(titleTranlationId.toString()) + titleExtension);
         if (icon != null)
             item.setIcon(icon);
         item.addListener(new ClickListener() {
@@ -122,6 +122,10 @@ public class Menu extends Window {
         });
         mItems.add(item);
         return item;
+    }
+
+    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, Runnable runnable) {
+        return addMenuItem(titleTranlationId, "", icon, runnable);
     }
 
     public void addItem(final MenuItem menuItem) {
@@ -407,7 +411,7 @@ public class Menu extends Window {
 
     public void addDivider(int listIndex) {
         if (this.style.divider != null) {
-            addItem(new DividerItem(listIndex,this,this.style));
+            addItem(new DividerItem(listIndex, this, this.style));
         }
     }
 
@@ -431,8 +435,7 @@ public class Menu extends Window {
             if (menuItem.hasMoreMenu()) {
                 menuItem.getMoreMenu(compoundMenu != null ? compoundMenu : this).show();
                 return false;
-            }
-            else {
+            } else {
                 if (hideWithItemClick)
                     hide(ALL);
                 return true;
