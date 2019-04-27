@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 -2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,37 @@
  */
 package de.longri.cachebox3.gui.actions;
 
-
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.menu.MenuID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * Created by Longri on 16.08.16.
+ * Created by Longri on 14.09.2016.
  */
-public class Action_Show_Help extends AbstractAction {
-    final static Logger log = LoggerFactory.getLogger(Action_Show_Help.class);
+public class Action_SearchDialog extends AbstractAction {
 
-    public Action_Show_Help() {
-        super(IMPLEMENTED, "Help Online", MenuID.AID_HELP);
+    public Action_SearchDialog() {
+        super(NOT_IMPLEMENTED, "search", MenuID.AID_SEARCH);
     }
 
     @Override
     public void execute() {
-        PlatformConnector._openUrlExtern("http://www.team-cachebox.de/index.php/de/kurzanleitung");
-    }
+        CB.viewmanager.toast("Show Search not implemented");
 
+
+//        if (TabMainView.cacheListView == null || !TabMainView.cacheListView.isVisible()) {
+//            TabMainView.actionShowCacheList.Execute();
+//        }
+//
+//        if (SearchDialog.that == null) {
+//            new SearchDialog();
+//        }
+//
+//        SearchDialog.that.showNotCloseAutomaticly();
+    }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.Help;
+        return CB.getSkin().getMenuIcon.searchIcon;
     }
 }

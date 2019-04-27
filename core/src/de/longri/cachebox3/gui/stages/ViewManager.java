@@ -33,7 +33,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.actions.*;
-import de.longri.cachebox3.gui.actions.show_activities.Action_Show_Settings;
+import de.longri.cachebox3.gui.actions.show_activities.Action_Settings_Activity;
 import de.longri.cachebox3.gui.actions.show_views.*;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -81,7 +81,7 @@ public class ViewManager extends NamedStage
     private final Action_Show_SpoilerView action_show_spoilerView = new Action_Show_SpoilerView();
     private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
     private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
-    private final Action_Show_Quit action_show_quit = new Action_Show_Quit();
+    private final Action_Quit action_quit = new Action_Quit();
     private final Action_Show_DraftsView action_show_fieldNotesView = new Action_Show_DraftsView();
 
     private FilterProperties actFilter = FilterInstances.ALL;
@@ -267,7 +267,7 @@ public class ViewManager extends NamedStage
         cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
         cache_button.addAction(new ActionButton(action_show_waypointView, false, GestureDirection.Right));
         cache_button.addAction(new ActionButton(action_show_logView, false, GestureDirection.Down));
-        cache_button.addAction(new ActionButton(new Action_Show_Hint(), false));
+        cache_button.addAction(new ActionButton(new Action_HintDialog(), false));
 //        cache_button.addAction(new ActionButton(actionShowDescExt, false));
         cache_button.addAction(new ActionButton(action_show_spoilerView, false));
         cache_button.addAction(new ActionButton(action_show_noteView, false));
@@ -297,11 +297,11 @@ public class ViewManager extends NamedStage
 
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
         misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
-        misc_button.addAction(new ActionButton(new Action_Show_Settings(), false, GestureDirection.Left));
+        misc_button.addAction(new ActionButton(new Action_Settings_Activity(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
-        misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
+        misc_button.addAction(new ActionButton(new Action_Help(), false));
         misc_button.addAction(new ActionButton(new Action_GetFriends(),false));
-        misc_button.addAction(new ActionButton(action_show_quit, false, GestureDirection.Down));
+        misc_button.addAction(new ActionButton(action_quit, false, GestureDirection.Down));
 
 //        actionShowAboutView.execute();
     }
@@ -402,7 +402,7 @@ public class ViewManager extends NamedStage
     }
 
     public AbstractAction getAction_Show_Quit() {
-        return action_show_quit;
+        return action_quit;
     }
 
     public boolean isTop(Stage stage) {

@@ -27,10 +27,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Longri on 16.08.16.
  */
-public class Action_Show_Settings extends AbstractAction {
-    final static Logger log = LoggerFactory.getLogger(Action_Show_Settings.class);
+public class Action_Settings_Activity extends AbstractAction {
+    final static Logger log = LoggerFactory.getLogger(Action_Settings_Activity.class);
 
-    public Action_Show_Settings() {
+    public Action_Settings_Activity() {
         super(IMPLEMENTED, "settings", MenuID.AID_SHOW_SETTINGS);
     }
 

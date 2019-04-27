@@ -22,9 +22,9 @@ import de.longri.cachebox3.gui.menu.MenuID;
 /**
  * Created by Longri on 14.09.2016.
  */
-public class Action_Upload_Fieldnotes extends AbstractAction {
+public class Action_Upload_Drafts extends AbstractAction {
 
-    public Action_Upload_Fieldnotes() {
+    public Action_Upload_Drafts() {
         super(NOT_IMPLEMENTED, "uploadDrafts", MenuID.AID_UPLOAD_FIELD_NOTE);
     }
 

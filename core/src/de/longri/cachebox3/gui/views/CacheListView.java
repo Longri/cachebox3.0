@@ -30,8 +30,8 @@ import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.actions.ShowDeleteMenu;
 import de.longri.cachebox3.gui.actions.ShowImportMenu;
-import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
-import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
+import de.longri.cachebox3.gui.actions.show_activities.Action_EditFilterSettings;
+import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.activities.CheckStateActivity;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -350,9 +350,9 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
 
         MenuItem mi;
         cm.addMenuItem("ResortList", CB.getSkin().getMenuIcon.sortIcon, () -> cacheListView.resort());
-        cm.addMenuItem("Filter", CB.getSkin().getMenuIcon.filterIcon, () -> new Action_ShowFilterSettings().execute());
+        cm.addMenuItem("Filter", CB.getSkin().getMenuIcon.filterIcon, () -> new Action_EditFilterSettings().execute());
         cm.addMenuItem("MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon, () -> CB.viewmanager.setNewFilter(FilterInstances.ALL));
-        cm.addMenuItem("search", CB.getSkin().getMenuIcon.searchIcon, () -> CB.viewmanager.toast("NOT IMPLEMENTED"));// todo ISSUE (#115 Add search Dialog for ListView)
+        cm.addMenuItem("Search", CB.getSkin().getMenuIcon.searchIcon, () -> CB.viewmanager.toast("NOT IMPLEMENTED"));// todo ISSUE (#115 Add search Dialog for ListView)
         /*
         if (SearchDialog.that == null) {
             new SearchDialog();
@@ -364,7 +364,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 new NamedRunnable("CacheListView:showSelectDbDialog") {
                     @Override
                     public void run() {
-                        new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK).execute();
+                        new Action_SelectDB_Dialog(Action_SelectDB_Dialog.ViewMode.ASK).execute();
                     }
                 })
         );

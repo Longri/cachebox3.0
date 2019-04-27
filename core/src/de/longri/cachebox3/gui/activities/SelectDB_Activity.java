@@ -27,13 +27,12 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
-import de.longri.cachebox3.gui.actions.Action_Show_Quit;
+import de.longri.cachebox3.gui.actions.Action_Quit;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
@@ -42,12 +41,7 @@ import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.translation.word.CompoundCharSequence;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.CacheList;
-import de.longri.cachebox3.types.DraftList;
 import de.longri.cachebox3.utils.FileList;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqlite;
@@ -217,7 +211,7 @@ public class SelectDB_Activity extends ActivityBase {
         public void clicked(InputEvent event, float x, float y) {
             stopTimer();
             if (mustSelect) {
-                new Action_Show_Quit().execute();
+                new Action_Quit().execute();
             } else {
                 finish();
             }
