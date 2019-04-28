@@ -331,7 +331,7 @@ public class ViewManager extends NamedStage
 
     @Override
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
-        if (event.wayPoint != null) setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.getCacheId()));
+        if (event.wayPoint != null) setCacheName(Database.Data.cacheList.GetCacheById(event.wayPoint.getCacheId()));
     }
 
     AbstractCache lastAbstractCache = null;
@@ -414,23 +414,23 @@ public class ViewManager extends NamedStage
 
     @Override
     public void cacheListChanged(CacheListChangedEvent event) {
-        if (Database.Data == null | Database.Data.Query == null) return;
-        AbstractCache abstractCache = Database.Data.Query.GetCacheByGcCode("CBPark");
+        if (Database.Data == null | Database.Data.cacheList == null) return;
+        AbstractCache abstractCache = Database.Data.cacheList.GetCacheByGcCode("CBPark");
 
         if (abstractCache != null)
-            Database.Data.Query.removeValue(abstractCache, false);
+            Database.Data.cacheList.removeValue(abstractCache, false);
 
         // add Parking Cache
         if (Config.ParkingLatitude.getValue() != 0) {
             abstractCache = new MutableCache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
-            Database.Data.Query.insert(0, abstractCache);
+            Database.Data.cacheList.insert(0, abstractCache);
         }
 
 
-        //if selected Cache not into Query, reset selected Cache
+        //if selected Cache not into cacheList, reset selected Cache
         AbstractCache selectedCache = EventHandler.getSelectedCache();
         if (selectedCache != null) {
-            AbstractCache selectedInQuery = Database.Data.Query.GetCacheById(selectedCache.getId());
+            AbstractCache selectedInQuery = Database.Data.cacheList.GetCacheById(selectedCache.getId());
             if (selectedInQuery == null) {
                 //reset
                 EventHandler.setSelectedWaypoint(null, null);

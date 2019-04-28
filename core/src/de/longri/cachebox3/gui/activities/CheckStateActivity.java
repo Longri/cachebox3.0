@@ -41,8 +41,8 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
+import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -189,11 +189,11 @@ public class CheckStateActivity extends ActivityBase {
                 ApiResultState result = ApiResultState.UNKNOWN;
                 final Array<AbstractCache> chkList = new Array<>();
 
-                synchronized (Database.Data.Query) {
-                    if (Database.Data.Query == null || Database.Data.Query.size == 0)
+                synchronized (Database.Data.cacheList) {
+                    if (Database.Data.cacheList == null || Database.Data.cacheList.size == 0)
                         return;
-                    for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
-                        chkList.add(Database.Data.Query.get(i));
+                    for (int i = 0, n = Database.Data.cacheList.size; i < n; i++) {
+                        chkList.add(Database.Data.cacheList.get(i));
                     }
 
                 }
@@ -323,7 +323,7 @@ public class CheckStateActivity extends ActivityBase {
                         EventHandler.fire(new CacheListChangedEvent());
                         CharSequence title = Translation.get("chkState");
                         CharSequence msg = new CompoundCharSequence(Translation.get("CachesUpdatet")
-                                , " ", Integer.toString(changedCount.get()), "/", Integer.toString(Database.Data.Query.size));
+                                , " ", Integer.toString(changedCount.get()), "/", Integer.toString(Database.Data.cacheList.size));
                         Window dialog = new ButtonDialog("chkState", msg, title, MessageBoxButtons.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {

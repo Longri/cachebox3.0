@@ -239,7 +239,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
                 } else {
                     CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
-                    AbstractCache cache = Database.Data.Query.getCacheById(selectedItem.getId());
+                    AbstractCache cache = Database.Data.cacheList.getCacheById(selectedItem.getId());
                     log.debug("Cache selection changed to: " + cache.toString());
                     //set selected Cache global
                     EventHandler.fire(new SelectedCacheChangedEvent(cache));

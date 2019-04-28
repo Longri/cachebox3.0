@@ -79,7 +79,7 @@ public class Action_SelectDB_Dialog extends AbstractAction {
 
     public void loadSelectedDB() {
         if (Database.Data != null) {
-            if (Database.Data.Query != null) Database.Data.Query.clear();
+            if (Database.Data.cacheList != null) Database.Data.cacheList.clear();
             if (Database.Data.isStarted()) Database.Data.close();
         }
 
@@ -95,7 +95,7 @@ public class Action_SelectDB_Dialog extends AbstractAction {
         CB.postAsync(new NamedRunnable("Action_SelectDB_Dialog") {
             @Override
             public void run() {
-                Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
                 log.debug("Call loadFilteredCacheList()");
                 CB.loadFilteredCacheList(null);
             }

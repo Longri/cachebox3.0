@@ -122,7 +122,7 @@ public class SelectDB_Activity extends ActivityBase {
                                 Config.AcceptChanges();
                                 Config.DatabaseName.setValue(NewDB_Name + ".db3");
 
-                                Database.Data.Query.clear();
+                                Database.Data.cacheList.clear();
 
                                 finish();
                                 break;

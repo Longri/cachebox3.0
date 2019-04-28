@@ -74,7 +74,7 @@ public class EditWaypoint extends ActivityBase {
 
         btnOk = new CharSequenceButton(Translation.get("save"));
         btnCancel = new CharSequenceButton(Translation.get("cancel"));
-        cacheTitelLabel = new VisLabel(Database.Data.Query.GetCacheById(waypoint.getCacheId()).getName());
+        cacheTitelLabel = new VisLabel(Database.Data.cacheList.GetCacheById(waypoint.getCacheId()).getName());
         typeLabel = new VisLabel(Translation.get("type"));
         titleLabel = new VisLabel(Translation.get("Title"));
         descriptionLabel = new VisLabel(Translation.get("Description"));

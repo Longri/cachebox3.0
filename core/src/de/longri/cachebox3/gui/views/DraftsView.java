@@ -393,7 +393,7 @@ public class DraftsView extends AbstractView {
                 if (!EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(true);
                     EventHandler.getSelectedCache().updateBooleanStore(Database.Data);
-                    AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.Query, EventHandler.getSelectedCache());
+                    AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
                     EventHandler.fire(new SelectedCacheChangedEvent(newCache));
                     QuickDraftFeedbackPopUp pop = new QuickDraftFeedbackPopUp(true);
                     pop.show();
@@ -403,7 +403,7 @@ public class DraftsView extends AbstractView {
                 if (EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(false);
                     EventHandler.getSelectedCache().updateBooleanStore(Database.Data);
-                    AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.Query, EventHandler.getSelectedCache());
+                    AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
                     EventHandler.fire(new SelectedCacheChangedEvent(newCache));
                     QuickDraftFeedbackPopUp pop2 = new QuickDraftFeedbackPopUp(false);
                     pop2.show();
@@ -515,7 +515,7 @@ public class DraftsView extends AbstractView {
                 if (!EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(true);
                     EventHandler.getSelectedCache().updateBooleanStore(Database.Data);
-                    AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.Query, EventHandler.getSelectedCache());
+                    AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
                     EventHandler.fire(new SelectedCacheChangedEvent(newCache));
                     Config.FoundOffset.setValue(aktDraft.foundNumber);
                     Config.AcceptChanges();
@@ -527,7 +527,7 @@ public class DraftsView extends AbstractView {
                 if (EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(false);
                     EventHandler.getSelectedCache().updateBooleanStore(Database.Data);
-                    AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.Query, EventHandler.getSelectedCache());
+                    AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
                     EventHandler.fire(new SelectedCacheChangedEvent(newCache));
                     Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                     Config.AcceptChanges();
@@ -593,7 +593,7 @@ public class DraftsView extends AbstractView {
                     if (!EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(true);
                         EventHandler.getSelectedCache().updateBooleanStore(Database.Data);
-                        DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.Query, EventHandler.getSelectedCache());
+                        DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
                         Config.FoundOffset.setValue(aktDraft.foundNumber);
                         Config.AcceptChanges();
                     }
@@ -602,7 +602,7 @@ public class DraftsView extends AbstractView {
                     if (EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(false);
                         EventHandler.getSelectedCache().updateBooleanStore(Database.Data);
-                        AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.Query, EventHandler.getSelectedCache());
+                        AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
                         EventHandler.fire(new SelectedCacheChangedEvent(newCache));
                         Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                         Config.AcceptChanges();
@@ -738,11 +738,11 @@ public class DraftsView extends AbstractView {
         if (aktDraft == null)
             return;
         // final Cache cache =
-        // Database.Data.Query.GetCacheByGcCode(aktDraft.gcCode);
+        // Database.Data.cacheList.GetCacheByGcCode(aktDraft.gcCode);
 
         AbstractCache tmpAbstractCache = null;
         // suche den Cache aus der DB.
-        // Nicht aus der aktuellen Query, da dieser herausgefiltert sein könnte
+        // Nicht aus der aktuellen cacheList, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
 
         String statement = "SELECT * FROM CacheCoreInfo core WHERE Id = " + aktDraft.CacheId;
@@ -771,13 +771,13 @@ public class DraftsView extends AbstractView {
                             if (abstractCache.isFound()) {
                                 abstractCache.setFound(false);
                                 abstractCache.updateBooleanStore(Database.Data);
-                                DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.Query, abstractCache);
+                                DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, abstractCache);
                                 Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                                 Config.AcceptChanges();
                                 // jetzt noch diesen Cache in der aktuellen CacheListe suchen und auch da den Found-Status zurücksetzen
                                 // damit das Smiley Symbol aus der Map und der CacheList verschwindet
-                                synchronized (Database.Data.Query) {
-                                    AbstractCache tc = Database.Data.Query.GetCacheById(abstractCache.getId());
+                                synchronized (Database.Data.cacheList) {
+                                    AbstractCache tc = Database.Data.cacheList.GetCacheById(abstractCache.getId());
                                     if (tc != null) {
                                         tc.setFound(false);
                                         tc.updateBooleanStore(Database.Data);
@@ -859,7 +859,7 @@ public class DraftsView extends AbstractView {
             return;
 
         // suche den Cache aus der DB.
-        // Nicht aus der aktuellen Query, da dieser herausgefiltert sein könnte
+        // Nicht aus der aktuellen cacheList, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
         String statement = "SELECT * FROM CacheCoreInfo core WHERE Id = " + aktDraft.CacheId;
         DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, lCaches, statement, false, false);
@@ -875,13 +875,13 @@ public class DraftsView extends AbstractView {
             return;
         }
 
-        synchronized (Database.Data.Query) {
-            cache = Database.Data.Query.GetCacheByGcCode(aktDraft.gcCode);
+        synchronized (Database.Data.cacheList) {
+            cache = Database.Data.cacheList.GetCacheByGcCode(aktDraft.gcCode);
         }
 
         if (cache == null) {
-            Database.Data.Query.add(tmpCache);
-            cache = Database.Data.Query.GetCacheByGcCode(aktDraft.gcCode);
+            Database.Data.cacheList.add(tmpCache);
+            cache = Database.Data.cacheList.GetCacheByGcCode(aktDraft.gcCode);
         }
 
         AbstractWaypoint finalWp = null;

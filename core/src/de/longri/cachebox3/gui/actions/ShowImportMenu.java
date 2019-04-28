@@ -68,7 +68,7 @@ public class ShowImportMenu extends Menu {
         addMenuItem("GCVoteRatings", null, () -> {
             // todo create a importGCVote(): this is only a simple test for inputstream function;
             ArrayList<String> waypoints = new ArrayList<>();
-            for (AbstractCache cache : Database.Data.Query) {
+            for (AbstractCache cache : Database.Data.cacheList) {
                 // todo only x caches at a time
                 waypoints.add(cache.getGcCode().toString());
             }
@@ -247,10 +247,10 @@ public class ShowImportMenu extends Menu {
                                 CB.postOnNextGlThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        CB.postAsync(new NamedRunnable("Reload Query after import") {
+                                        CB.postAsync(new NamedRunnable("Reload cacheList after import") {
                                             @Override
                                             public void run() {
-                                                Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                                                Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
                                                 log.debug("Call loadFilteredCacheList()");
                                                 CB.loadFilteredCacheList(null);
                                                 CB.postOnNextGlThread(new Runnable() {

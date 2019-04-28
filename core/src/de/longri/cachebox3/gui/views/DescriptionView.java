@@ -440,9 +440,9 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
                         DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache, true);
 
-                        // Update Query
-                        Database.Data.Query.removeValue(EventHandler.getSelectedCache(), true);
-                        Database.Data.Query.add(selectedCache);
+                        // Update cacheList
+                        Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
+                        Database.Data.cacheList.add(selectedCache);
 
                         //update EventHandler
                         EventHandler.updateSelectedCache(selectedCache);
@@ -459,9 +459,9 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
                         DaoFactory.CACHE_DAO.updateDatabase(Database.Data, actCache, true);
 
-                        // Update Query
-                        Database.Data.Query.removeValue(EventHandler.getSelectedCache(), true);
-                        Database.Data.Query.add(actCache);
+                        // Update cacheList
+                        Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
+                        Database.Data.cacheList.add(actCache);
 
                         //update EventHandler
                         EventHandler.updateSelectedCache(actCache);

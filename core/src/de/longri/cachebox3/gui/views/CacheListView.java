@@ -90,10 +90,10 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
     }
 
     public void resort() {
-        log.debug("resort Query");
-        Database.Data.Query.resort(EventHandler.getSelectedCoord(),
+        log.debug("resort cacheList");
+        Database.Data.cacheList.resort(EventHandler.getSelectedCoord(),
                 new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
-        log.debug("Finish resort Query");
+        log.debug("Finish resort cacheList");
     }
 
 
@@ -101,7 +101,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         log.debug("Start Thread add new listView");
 
         this.clear();
-        createdItems = new ListViewItem[Database.Data.Query.size];
+        createdItems = new ListViewItem[Database.Data.cacheList.size];
         ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
             boolean outDated = false;
@@ -109,17 +109,17 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
             @Override
             public int getCount() {
                 if (outDated) return 0;
-                return Database.Data.Query.size;
+                return Database.Data.cacheList.size;
             }
 
             @Override
 
             public ListViewItem getView(int index) {
-                if (outDated || Database.Data.Query.size == 0) {
+                if (outDated || Database.Data.cacheList.size == 0) {
                     createdItems[index] = null;
                     return null;
                 }
-                ListViewItem item = CacheListItem.getListItem(index, Database.Data.Query.get(index), getWidth());
+                ListViewItem item = CacheListItem.getListItem(index, Database.Data.cacheList.get(index), getWidth());
                 createdItems[index] = item;
                 return item;
             }
@@ -131,7 +131,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 //get index from item
                 int idx = view.getListIndex();
 
-                if (idx > Database.Data.Query.getSize()) {
+                if (idx > Database.Data.cacheList.getSize()) {
                     // Cachelist is changed, reload!
                     outDated = true;
                     addNewListView();
@@ -139,7 +139,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 }
 
                 // get Cache
-                AbstractCache abstractCache = Database.Data.Query.get(idx);
+                AbstractCache abstractCache = Database.Data.cacheList.get(idx);
 
                 //get actPos and heading
                 Coordinate position = EventHandler.getMyPosition();
@@ -186,7 +186,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 CacheListItem selectedItem = (CacheListItem) CacheListView.this.listView.getSelectedItem();
                 int selectedItemListIndex = selectedItem.getListIndex();
 
-                AbstractCache cache = Database.Data.Query.get(selectedItemListIndex);
+                AbstractCache cache = Database.Data.cacheList.get(selectedItemListIndex);
                 log.debug("Cache selection changed to: " + cache.toString());
                 //set selected Cache global
                 EventHandler.fire(new SelectedCacheChangedEvent(cache));
@@ -197,16 +197,16 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
             @Override
             public void run() {
                 int selectedIndex = 0;
-                for (AbstractCache abstractCache : Database.Data.Query) {
+                for (AbstractCache abstractCache : Database.Data.cacheList) {
                     if (abstractCache.equals(EventHandler.getSelectedCache())) {
                         break;
                     }
                     selectedIndex++;
                 }
                 try {
-                    if (selectedIndex >= Database.Data.Query.size)
+                    if (selectedIndex >= Database.Data.cacheList.size)
                         selectedIndex = 0;// select first item, if Cache not found
-                    if (Database.Data.Query.size > 0) {
+                    if (Database.Data.cacheList.size > 0) {
                         CacheListView.this.listView.setSelection(selectedIndex);
                         CacheListView.this.listView.setSelectedItemVisible(false);
                     }
@@ -372,8 +372,8 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         /*
         CB.setAutoResort(!CB.getAutoResort());
         if (CB.getAutoResort()) {
-            synchronized (Database.Data.Query) {
-                Database.Data.Query.resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
+            synchronized (Database.Data.cacheList) {
+                Database.Data.cacheList.resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
             }
         }
          */
