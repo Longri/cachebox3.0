@@ -80,8 +80,8 @@ public class MutableWaypoint extends AbstractWaypoint {
 
     public MutableWaypoint(String gcCode, CacheTypes type, String description, double latitude, double longitude, long cacheId, String clue, String title) {
         super(latitude, longitude);
-        this.latitude = latitude;
-        this.longitude = longitude;
+        // this.latitude = latitude; is redundant
+        // this.longitude = longitude; is redundant
         this.type = type;
         this.cacheId = cacheId;
         this.gcCode = gcCode;

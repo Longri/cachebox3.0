@@ -18,7 +18,7 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.actions.show_activities.Action_EditFilterSettings;
+import de.longri.cachebox3.gui.actions.show_activities.*;
 import de.longri.cachebox3.gui.widgets.QuickButtonItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;

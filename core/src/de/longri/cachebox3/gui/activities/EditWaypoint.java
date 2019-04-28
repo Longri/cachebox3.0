@@ -30,7 +30,6 @@ import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
@@ -99,7 +98,7 @@ public class EditWaypoint extends ActivityBase {
         itemList.add(CacheTypes.Final);
 
         selectBox = new SelectBox();
-        selectBox.setHideWithItemClick(false);
+        selectBox.setHideWithItemClick(true);
         selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -160,12 +159,7 @@ public class EditWaypoint extends ActivityBase {
     @Override
     public void onShow() {
         if (this.showCoordsOnShow) {
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    Utils.triggerButtonClicked(coordinateButton);
-                }
-            });
+            Gdx.app.postRunnable(() -> Utils.triggerButtonClicked(coordinateButton));
         }
         CB.stageManager.registerForBackKey(cancelClickListener);
     }

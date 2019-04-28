@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,34 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions;
+package de.longri.cachebox3.gui.actions.show_activities;
+
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.MenuID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Created by Longri on 14.09.2016.
+ * Created by Longri on 16.08.16.
  */
-public class Action_Switch_Torch extends AbstractAction {
-    public Action_Switch_Torch() {
-        super(!PlatformConnector.isTorchAvailable(), "Torch", MenuID.AID_TORCH);
-    }
+public class Action_Help extends AbstractAction {
+    final static Logger log = LoggerFactory.getLogger(Action_Help.class);
 
-    @Override
-    public Drawable getIcon() {
-        if (!PlatformConnector.isTorchAvailable())
-            return CB.getSkin().getMenuIcon.torchDisabled;
-        if (PlatformConnector.isTorchOn()) {
-            return CB.getSkin().getMenuIcon.torchOn;
-        } else {
-            return CB.getSkin().getMenuIcon.torchOff;
-        }
+    public Action_Help() {
+        super(IMPLEMENTED, "Help Online", MenuID.AID_HELP);
     }
 
     @Override
     public void execute() {
-        PlatformConnector.switchTorch();
+        PlatformConnector._openUrlExtern("http://www.team-cachebox.de/index.php/de/kurzanleitung");
+    }
+
+
+    @Override
+    public Drawable getIcon() {
+        return CB.getSkin().getIcon.Help;
     }
 }
