@@ -275,7 +275,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                     String ext = file.extension();
                     if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("bmp") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("gif")) {
                         ImageEntry imageEntry = new ImageEntry();
-                        imageEntry.LocalPath = directory + "/" + file;
+                        imageEntry.LocalPath = file.file().getAbsolutePath();
                         imageEntry.Name = file.name();
                         log.debug(imageEntry.Name);
                         spoilerResources.add(imageEntry);
