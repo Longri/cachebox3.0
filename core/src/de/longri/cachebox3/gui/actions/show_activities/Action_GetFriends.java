@@ -1,8 +1,9 @@
-package de.longri.cachebox3.gui.actions;
+package de.longri.cachebox3.gui.actions.show_activities;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
+import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
@@ -20,7 +21,7 @@ public class Action_GetFriends extends AbstractAction {
     @Override
     public void execute() {
         String friends = GroundspeakAPI.fetchFriends();
-        if (GroundspeakAPI.APIError == 0) {
+        if (GroundspeakAPI.APIError == GroundspeakAPI.OK) {
             Config.Friends.setValue(friends);
             Config.AcceptChanges();
             MessageBox.show(Translation.get("ok") + ":\n" + friends, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);

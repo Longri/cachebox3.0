@@ -15,19 +15,17 @@
  */
 package de.longri.cachebox3.gui.actions.show_activities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.NamedRunnable;
 
-public class Action_ShowFilterSettings extends AbstractAction {
+public class Action_EditFilterSettings extends AbstractAction {
 
-    public Action_ShowFilterSettings() {
+    public Action_EditFilterSettings() {
         super(IMPLEMENTED, "filter", MenuID.AID_SHOW_FILTER_DIALOG);
     }
 
@@ -40,7 +38,7 @@ public class Action_ShowFilterSettings extends AbstractAction {
     public void execute() {
         EditFilterSettings edFi = new EditFilterSettings(CB.viewmanager.getActFilter()) {
             public void callBack(final FilterProperties properties) {
-                CB.postAsync(new NamedRunnable("Action_ShowFilterSettings") {
+                CB.postAsync(new NamedRunnable("Action_EditFilterSettings") {
                     @Override
                     public void run() {
                         CB.viewmanager.setNewFilter(properties);

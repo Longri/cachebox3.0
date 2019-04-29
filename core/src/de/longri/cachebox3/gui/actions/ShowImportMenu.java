@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.gcvote_api.GCVote;
+import de.longri.cachebox3.apis.gcvote_api.RatingData;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gpx.GpxWptCounter;
@@ -27,19 +29,25 @@ import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.activities.ImportGcPos;
 import de.longri.cachebox3.gui.activities.ImportPQActivity;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -51,12 +59,34 @@ public class ShowImportMenu extends Menu {
 
     public ShowImportMenu() {
         super("ImportMenu");
-        this.setOnItemClickListener(clickListener);
+        // this.setOnItemClickListener(clickListener);
 
         //ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
 
-        addItem(MenuID.MI_IMPORT_GS, "API_IMPORT", CB.getSkin().getMenuIcon.GC_Live).setMoreMenu(getGcImportMenu());
-        addItem(MenuID.MI_IMPORT_GPX, "GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile);
+        addMenuItem("API_IMPORT", CB.getSkin().getMenuIcon.GC_Live, () -> { }).setMoreMenu(getGcImportMenu());
+        addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
+        addMenuItem("GCVoteRatings", null, () -> {
+            // todo create a importGCVote(): this is only a simple test for inputstream function;
+            ArrayList<String> waypoints = new ArrayList<>();
+            for (AbstractCache cache : Database.Data.cacheList) {
+                // todo only x caches at a time
+                waypoints.add(cache.getGcCode().toString());
+            }
+            ArrayList<RatingData> ratingData;
+            try {
+                ratingData = GCVote.getVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
+            } catch (Exception e) {
+                // The NPE I got is due to a problem with classes for Json are not loaded
+                // the thread can't throw an exception !!! Must be handled there
+                ratingData = new ArrayList<>();
+            }
+            if (ratingData.size() > 0) {
+                MessageBox.show("Got " + ratingData.size() + " ratings. Write to db not implemented yet", "Not implemented", MessageBoxButtons.Cancel, MessageBoxIcon.Information, null);
+                // todo write to db
+            } else {
+                MessageBox.show("Did not fetch any vote!", "Got no votes", MessageBoxButtons.Cancel, MessageBoxIcon.Information, null);
+            }
+        }); // todo create icon: CB.getSkin().getMenuIcon.importGCVote
 
 
 //        if (!StringH.isEmpty(Config.CBS_IP.getValue()))
@@ -67,6 +97,7 @@ public class ShowImportMenu extends Menu {
 
     }
 
+    /*
     private final OnItemClickListener clickListener = new OnItemClickListener() {
         @Override
         public boolean onItemClick(MenuItem item) {
@@ -75,12 +106,13 @@ public class ShowImportMenu extends Menu {
                     //do nothing, will show more menu
                     break;
                 case MenuID.MI_IMPORT_GPX:
-                    importGpxFile();
                     break;
             }
             return true;
         }
     };
+
+     */
 
 
     private Menu getGcImportMenu() {
@@ -215,10 +247,10 @@ public class ShowImportMenu extends Menu {
                                 CB.postOnNextGlThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        CB.postAsync(new NamedRunnable("Reload Query after import") {
+                                        CB.postAsync(new NamedRunnable("Reload cacheList after import") {
                                             @Override
                                             public void run() {
-                                                Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                                                Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
                                                 log.debug("Call loadFilteredCacheList()");
                                                 CB.loadFilteredCacheList(null);
                                                 CB.postOnNextGlThread(new Runnable() {

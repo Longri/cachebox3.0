@@ -52,11 +52,11 @@ public class Database {
     public static Database Drafts;
     public static Database Settings;
     public GdxSqlite myDB;
-    public final CacheList Query;
+    public final CacheList cacheList;
     private String inMemoryName;
 
     public Database(GdxSqlite db) {
-        Query = new CacheList();
+        cacheList = new CacheList();
         myDB = db;
     }
 
@@ -193,18 +193,18 @@ public class Database {
         switch (databaseType) {
             case CacheBox3:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseChange;
-                Query = new CacheList();
+                cacheList = new CacheList();
                 break;
             case Drafts:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseDraftChange;
-                Query = null;
+                cacheList = null;
                 break;
             case Settings:
                 latestDatabaseChange = DatabaseVersions.LatestDatabaseSettingsChange;
-                Query = null;
+                cacheList = null;
                 break;
             default:
-                Query = null;
+                cacheList = null;
         }
     }
 

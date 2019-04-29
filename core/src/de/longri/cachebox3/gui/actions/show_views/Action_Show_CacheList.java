@@ -37,12 +37,12 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
     public String getNameExtention() {
 
-        int unFiltered = Database.Data.Query.getUnFilteredSize();
+        int unFiltered = Database.Data.cacheList.getUnFilteredSize();
 
         sb.length = 0; // reset StringBuilder
         sb.append("  (");
-        sb.append(Integer.toString(Database.Data.Query.size));
-        if (unFiltered != Database.Data.Query.size) {
+        sb.append(Integer.toString(Database.Data.cacheList.size));
+        if (unFiltered != Database.Data.cacheList.size) {
             sb.append("/");
             sb.append(Integer.toString(unFiltered));
         }

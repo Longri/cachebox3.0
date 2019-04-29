@@ -20,7 +20,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
-import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
+import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.FileList;
@@ -50,7 +50,7 @@ public class LoadDbTask extends AbstractInitTask {
                 // initial DB
                 Database.Data = new Database(Database.DatabaseType.CacheBox3);
 
-                final Action_Show_SelectDB_Dialog selectDbDialog = new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.FORCE_SHOW);
+                final Action_SelectDB_Dialog selectDbDialog = new Action_SelectDB_Dialog(Action_SelectDB_Dialog.ViewMode.FORCE_SHOW);
 
                 // search number of DB3 files
                 final FileList fileList = new FileList(CB.WorkPath, "DB3");

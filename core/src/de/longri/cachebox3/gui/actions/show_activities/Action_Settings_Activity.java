@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014-2017 team-cachebox.de
+ * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,30 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions;
+package de.longri.cachebox3.gui.actions.show_activities;
 
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.dialogs.ParkingDialog;
+import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.activities.Settings_Activity;
 import de.longri.cachebox3.gui.menu.MenuID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Created by Longri on 14.09.2016.
+ * Created by Longri on 16.08.16.
  */
-public class Action_Show_ParkingDialog extends AbstractAction {
-    public Action_Show_ParkingDialog() {
-        super(IMPLEMENTED, "MyParking", MenuID.AID_SHOW_PARKING_DIALOG);
+public class Action_Settings_Activity extends AbstractAction {
+    final static Logger log = LoggerFactory.getLogger(Action_Settings_Activity.class);
+
+    public Action_Settings_Activity() {
+        super(IMPLEMENTED, "settings", MenuID.AID_SHOW_SETTINGS);
     }
 
     @Override
     public void execute() {
-        ParkingDialog d = new ParkingDialog();
-        d.show();
+        new Settings_Activity().show();
     }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.my_parking;
+        return CB.getSkin().getMenuIcon.settingsIcon;
     }
 }

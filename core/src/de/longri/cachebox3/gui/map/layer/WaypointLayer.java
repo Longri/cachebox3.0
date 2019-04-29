@@ -166,7 +166,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                         boolean hasSelectedWP = EventHandler.getSelectedWaypoint() != null;
 
                         //set selected Cache at front
-                        for (AbstractCache cache : Database.Data.Query) {
+                        for (AbstractCache cache : Database.Data.cacheList) {
                             addCache(missingIconList, hasSelectedWP, cache);
                         }
 

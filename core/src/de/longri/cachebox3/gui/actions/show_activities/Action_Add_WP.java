@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions;
+package de.longri.cachebox3.gui.actions.show_activities;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
+import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.MapView;
@@ -28,7 +28,6 @@ import de.longri.cachebox3.gui.views.WaypointView;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
-import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.MutableWaypoint;
 
@@ -61,13 +60,14 @@ public class Action_Add_WP extends AbstractAction {
             coord = mv.getMapCenter();
         }
 
-        String newGcCode = "";
+        String newGcCode;
         try {
             newGcCode = Database.createFreeGcCode(Database.Data, EventHandler.getSelectedCache().getGcCode().toString());
         } catch (Exception e) {
             log.error("can't generate GcCode! can't show EditWaypoint Activity");
             return;
         }
+
         if (coord == null) {
             coord = EventHandler.getSelectedCoord();
             if (coord == null)
@@ -76,31 +76,21 @@ public class Action_Add_WP extends AbstractAction {
                 coord = EventHandler.getSelectedCache();
         }
 
-        MutableWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint, "",
-                coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
-
+        MutableWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint, "", coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
         newWP.setUserWaypoint(true);
-        EditWaypoint editWaypoint = new EditWaypoint(newWP, false, false, new GenericCallBack<AbstractWaypoint>() {
-            @Override
-            public void callBack(final AbstractWaypoint value) {
-                if (value != null) {
-                    if (value.isStart()) {
-                        //It must be ensured here that this waypoint is the only one of these Cache,
-                        //which is defined as starting point !!!
-                        DaoFactory.WAYPOINT_DAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
-                    }
-                    DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value,true);
-
-                    // add WP to Cache
-                    EventHandler.getSelectedCache().getWaypoints().add(value);
-                    EventHandler.fire(new SelectedCacheChangedEvent(EventHandler.getSelectedCache()));
-                    CB.postOnNextGlThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            EventHandler.fire(new SelectedWayPointChangedEvent(value));
-                        }
-                    });
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, false, false, abstractWaypoint -> {
+            if (abstractWaypoint != null) {
+                if (abstractWaypoint.isStart()) {
+                    //It must be ensured here that this waypoint is the only one of these Cache,
+                    //which is defined as starting point !!!
+                    DaoFactory.WAYPOINT_DAO.resetStartWaypoint(EventHandler.getSelectedCache(), abstractWaypoint);
                 }
+                DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, abstractWaypoint, true);
+
+                // add WP to Cache
+                EventHandler.getSelectedCache().getWaypoints().add(abstractWaypoint);
+                EventHandler.fire(new SelectedCacheChangedEvent(EventHandler.getSelectedCache()));
+                CB.postOnNextGlThread(() -> EventHandler.fire(new SelectedWayPointChangedEvent(abstractWaypoint)));
             }
         });
         editWaypoint.show();

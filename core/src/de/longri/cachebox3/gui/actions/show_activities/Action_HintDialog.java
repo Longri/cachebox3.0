@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -15,32 +15,38 @@
  */
 package de.longri.cachebox3.gui.actions.show_activities;
 
-
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.activities.Settings_Activity;
+import de.longri.cachebox3.gui.dialogs.HintDialog;
 import de.longri.cachebox3.gui.menu.MenuID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * Created by Longri on 16.08.16.
+ * Created by Longri on 14.09.2016.
  */
-public class Action_Show_Settings extends AbstractAction {
-    final static Logger log = LoggerFactory.getLogger(Action_Show_Settings.class);
+public class Action_HintDialog extends AbstractAction {
 
-    public Action_Show_Settings() {
-        super(IMPLEMENTED, "settings", MenuID.AID_SHOW_SETTINGS);
+    public Action_HintDialog() {
+        super(IMPLEMENTED, "hint", MenuID.AID_SHOW_HINT);
     }
 
     @Override
     public void execute() {
-        new Settings_Activity().show();
+        if (hasHint()) {
+            new HintDialog().show();
+        }
     }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.settingsIcon;
+        return hasHint() ? CB.getSkin().getMenuIcon.hintIconOn : CB.getSkin().getMenuIcon.hintIconOff;
+    }
+
+    public boolean hasHint() {
+        // return true if any Cache selected and this Cache has a Hint
+        if (EventHandler.getSelectedCache() == null)
+            return false;
+        return EventHandler.getSelectedCache().hasHint();
     }
 }

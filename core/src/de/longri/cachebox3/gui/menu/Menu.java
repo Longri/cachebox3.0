@@ -108,14 +108,24 @@ public class Menu extends Window {
         return item;
     }
 
-    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, ClickListener onClickListener) {
+    public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Runnable runnable) {
         MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
-        item.setTitle(String.valueOf(Translation.get(titleTranlationId.toString())));
+        item.setTitle(Translation.get(titleTranlationId.toString()) + titleExtension);
         if (icon != null)
             item.setIcon(icon);
-        item.addListener(onClickListener);
+        item.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (mustHandle(event)) {
+                    runnable.run();
+                }
+            }
+        });
         mItems.add(item);
         return item;
+    }
+
+    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, Runnable runnable) {
+        return addMenuItem(titleTranlationId, "", icon, runnable);
     }
 
     public void addItem(final MenuItem menuItem) {
@@ -316,7 +326,7 @@ public class Menu extends Window {
             titleGroup.addActor(backImage);
         }
 
-        titleLabel = new VisLabel(this.name, "menu_title_act");
+        titleLabel = new VisLabel(Translation.get(name.toString()).toString(), "menu_title_act");
 
         if (parentMenu != null) {
             parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");
@@ -401,7 +411,7 @@ public class Menu extends Window {
 
     public void addDivider(int listIndex) {
         if (this.style.divider != null) {
-            addItem(new DividerItem(listIndex,this,this.style));
+            addItem(new DividerItem(listIndex, this, this.style));
         }
     }
 
@@ -421,9 +431,15 @@ public class Menu extends Window {
             return false;
         } else {
             event.cancel(); // to set event is handled, ...
-            if (hideWithItemClick)
-                hide(ALL);
-            return true;
+            MenuItem menuItem = (MenuItem) event.getListenerActor();
+            if (menuItem.hasMoreMenu()) {
+                menuItem.getMoreMenu(compoundMenu != null ? compoundMenu : this).show();
+                return false;
+            } else {
+                if (hideWithItemClick)
+                    hide(ALL);
+                return true;
+            }
         }
     }
 

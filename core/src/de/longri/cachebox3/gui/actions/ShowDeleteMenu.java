@@ -138,7 +138,7 @@ public class ShowDeleteMenu extends Menu {
             Database.Data.execSQL("DELETE FROM WaypointsText;");
             Database.Data.endTransaction();
 
-            Database.Data.Query.clear();
+            Database.Data.cacheList.clear();
             EventHandler.fire(new CacheListChangedEvent());
         } else {
             log.debug("delete {} Caches", filteredCacheCount);
@@ -157,7 +157,7 @@ public class ShowDeleteMenu extends Menu {
             Database.Data.beginTransaction();
             for (int i = deleteCacheIdList.size - 1; i >= 0; i--) {
                 long cacheId = deleteCacheIdList.get(i);
-                queryDeleteList.add(Database.Data.Query.getCacheById(cacheId));
+                queryDeleteList.add(Database.Data.cacheList.getCacheById(cacheId));
                 attributesStatement.bind(cacheId).commit().reset();
                 cacheCoreInfoStatement.bind(cacheId).commit().reset();
                 cacheInfoStatement.bind(cacheId).commit().reset();
@@ -179,9 +179,9 @@ public class ShowDeleteMenu extends Menu {
 
             while (queryDeleteList.size > 0) {
                 AbstractCache delCache = queryDeleteList.pop();
-                Database.Data.Query.removeValue(delCache, true);
+                Database.Data.cacheList.removeValue(delCache, true);
             }
-            Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+            Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
         }
         Database.Data.execSQL("VACUUM;");
         deleteImages(deleteCacheGcCodeList);

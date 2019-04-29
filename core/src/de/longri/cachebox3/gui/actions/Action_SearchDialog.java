@@ -22,9 +22,9 @@ import de.longri.cachebox3.gui.menu.MenuID;
 /**
  * Created by Longri on 14.09.2016.
  */
-public class Action_Show_Search extends AbstractAction {
+public class Action_SearchDialog extends AbstractAction {
 
-    public Action_Show_Search() {
+    public Action_SearchDialog() {
         super(NOT_IMPLEMENTED, "search", MenuID.AID_SEARCH);
     }
 

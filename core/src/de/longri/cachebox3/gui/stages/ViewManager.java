@@ -32,8 +32,11 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.*;
-import de.longri.cachebox3.gui.actions.*;
-import de.longri.cachebox3.gui.actions.show_activities.Action_Show_Settings;
+import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.actions.Action_NavigateExt;
+import de.longri.cachebox3.gui.actions.Action_NavigateInt;
+import de.longri.cachebox3.gui.actions.Action_Toggle_Day_Night;
+import de.longri.cachebox3.gui.actions.show_activities.*;
 import de.longri.cachebox3.gui.actions.show_views.*;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -81,7 +84,7 @@ public class ViewManager extends NamedStage
     private final Action_Show_SpoilerView action_show_spoilerView = new Action_Show_SpoilerView();
     private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
     private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
-    private final Action_Show_Quit action_show_quit = new Action_Show_Quit();
+    private final Action_Quit action_quit = new Action_Quit();
     private final Action_Show_DraftsView action_show_fieldNotesView = new Action_Show_DraftsView();
 
     private FilterProperties actFilter = FilterInstances.ALL;
@@ -267,7 +270,7 @@ public class ViewManager extends NamedStage
         cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
         cache_button.addAction(new ActionButton(action_show_waypointView, false, GestureDirection.Right));
         cache_button.addAction(new ActionButton(action_show_logView, false, GestureDirection.Down));
-        cache_button.addAction(new ActionButton(new Action_Show_Hint(), false));
+        cache_button.addAction(new ActionButton(new Action_HintDialog(), false));
 //        cache_button.addAction(new ActionButton(actionShowDescExt, false));
         cache_button.addAction(new ActionButton(action_show_spoilerView, false));
         cache_button.addAction(new ActionButton(action_show_noteView, false));
@@ -297,11 +300,11 @@ public class ViewManager extends NamedStage
 
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
         misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
-        misc_button.addAction(new ActionButton(new Action_Show_Settings(), false, GestureDirection.Left));
+        misc_button.addAction(new ActionButton(new Action_Settings_Activity(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
-        misc_button.addAction(new ActionButton(new Action_Show_Help(), false));
+        misc_button.addAction(new ActionButton(new Action_Help(), false));
         misc_button.addAction(new ActionButton(new Action_GetFriends(),false));
-        misc_button.addAction(new ActionButton(action_show_quit, false, GestureDirection.Down));
+        misc_button.addAction(new ActionButton(action_quit, false, GestureDirection.Down));
 
 //        actionShowAboutView.execute();
     }
@@ -328,7 +331,7 @@ public class ViewManager extends NamedStage
 
     @Override
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
-        if (event.wayPoint != null) setCacheName(Database.Data.Query.GetCacheById(event.wayPoint.getCacheId()));
+        if (event.wayPoint != null) setCacheName(Database.Data.cacheList.GetCacheById(event.wayPoint.getCacheId()));
     }
 
     AbstractCache lastAbstractCache = null;
@@ -402,7 +405,7 @@ public class ViewManager extends NamedStage
     }
 
     public AbstractAction getAction_Show_Quit() {
-        return action_show_quit;
+        return action_quit;
     }
 
     public boolean isTop(Stage stage) {
@@ -411,23 +414,23 @@ public class ViewManager extends NamedStage
 
     @Override
     public void cacheListChanged(CacheListChangedEvent event) {
-        if (Database.Data == null | Database.Data.Query == null) return;
-        AbstractCache abstractCache = Database.Data.Query.GetCacheByGcCode("CBPark");
+        if (Database.Data == null | Database.Data.cacheList == null) return;
+        AbstractCache abstractCache = Database.Data.cacheList.GetCacheByGcCode("CBPark");
 
         if (abstractCache != null)
-            Database.Data.Query.removeValue(abstractCache, false);
+            Database.Data.cacheList.removeValue(abstractCache, false);
 
         // add Parking Cache
         if (Config.ParkingLatitude.getValue() != 0) {
             abstractCache = new MutableCache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
-            Database.Data.Query.insert(0, abstractCache);
+            Database.Data.cacheList.insert(0, abstractCache);
         }
 
 
-        //if selected Cache not into Query, reset selected Cache
+        //if selected Cache not into cacheList, reset selected Cache
         AbstractCache selectedCache = EventHandler.getSelectedCache();
         if (selectedCache != null) {
-            AbstractCache selectedInQuery = Database.Data.Query.GetCacheById(selectedCache.getId());
+            AbstractCache selectedInQuery = Database.Data.cacheList.GetCacheById(selectedCache.getId());
             if (selectedInQuery == null) {
                 //reset
                 EventHandler.setSelectedWaypoint(null, null);

@@ -621,15 +621,15 @@ public class CB {
         Database.Data.gpxFilenameUpdateCacheCount();
 
         log.debug("Read CacheList");
-        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, Database.Data.Query, sqlWhere, false, Config.ShowAllWaypoints.getValue());
-        log.debug("Readed " + Database.Data.Query.size + " Caches into CacheList");
+        DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, Database.Data.cacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
+        log.debug("Readed " + Database.Data.cacheList.size + " Caches into CacheList");
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();
         AbstractCache lastSelectedAbstractCache = null;
         if (sGc != null && !sGc.equals("")) {
-            for (int i = 0, n = Database.Data.Query.size; i < n; i++) {
-                AbstractCache c = Database.Data.Query.get(i);
+            for (int i = 0, n = Database.Data.cacheList.size; i < n; i++) {
+                AbstractCache c = Database.Data.cacheList.get(i);
 
                 if (c.getGcCode().toString().equalsIgnoreCase(sGc)) {
                     try {
@@ -644,9 +644,9 @@ public class CB {
             }
         }
         // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
-        if ((lastSelectedAbstractCache == null) && (Database.Data.Query.size > 0)) {
-            log.debug("Set selectedCache to " + Database.Data.Query.get(0).getGcCode() + " from firstInDB");
-            EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.Query.get(0)));
+        if ((lastSelectedAbstractCache == null) && (Database.Data.cacheList.size > 0)) {
+            log.debug("Set selectedCache to " + Database.Data.cacheList.get(0).getGcCode() + " from firstInDB");
+            EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.cacheList.get(0)));
         }
 
         CB.setAutoResort(Config.StartWithAutoSelect.getValue());
