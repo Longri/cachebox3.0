@@ -35,6 +35,7 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import org.oscim.android.canvas.AndroidRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -64,6 +65,10 @@ public class AndroidPlatformConnector extends PlatformConnector {
         this.flashLight = new AndroidFlashLight(this.context);
     }
 
+    @Override
+    protected String _createThumb(String path, int scaledWidth, String thumbPrefix) {
+        throw new NotImplementedException("Create Thump is not implemented");
+    }
 
     @Override
     protected boolean _isTorchAvailable() {

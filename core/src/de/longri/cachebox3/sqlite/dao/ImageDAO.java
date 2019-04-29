@@ -57,15 +57,17 @@ public class ImageDAO {
         Array<ImageEntry> images = new Array<>();
 
         GdxSqliteCursor reader = Database.Data.rawQuery("select CacheId, GcCode, name, Description, ImageUrl, IsCacheImage from Images where GcCode=?", new String[]{gcCode});
-        if (reader.getCount() > 0) {
-            reader.moveToFirst();
-            while (!reader.isAfterLast()) {
-                ImageEntry image = new ImageEntry(reader);
-                images.add(image);
-                reader.moveToNext();
+        if (reader != null) {
+            if (reader.getCount() > 0) {
+                reader.moveToFirst();
+                while (!reader.isAfterLast()) {
+                    ImageEntry image = new ImageEntry(reader);
+                    images.add(image);
+                    reader.moveToNext();
+                }
             }
+            reader.close();
         }
-        reader.close();
         return images;
     }
 

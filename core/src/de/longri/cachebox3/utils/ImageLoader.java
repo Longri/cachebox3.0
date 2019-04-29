@@ -31,6 +31,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.utils.exceptions.NotImplementedException;
@@ -453,14 +454,13 @@ public class ImageLoader {
     private String originalPath = null;
 
     private void createThumb() {
-        throw new NotImplementedException("Create Thump is not implemented");
-//		String tmp = FileFactory.createThumb(mPath, (int) resizeWidth, ThumbPräfix);
-//		if (tmp != null) {
-//			originalPath = mPath;
-//			mPath = tmp;
-//		} else {
-//			log.error( "Thumb not generated for " + mPath + " ! " + ThumbPräfix);
-//		}
+		String tmp = PlatformConnector.createThumb(mPath, (int) resizeWidth, ThumbPräfix);
+		if (tmp != null) {
+			originalPath = mPath;
+			mPath = tmp;
+		} else {
+			log.error( "Thumb not generated for " + mPath + " ! " + ThumbPräfix);
+		}
     }
 
     /**

@@ -22,6 +22,7 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.ios.backend.IOS_RealSvgBitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
@@ -56,6 +57,11 @@ public class IOS_PlatformConnector extends PlatformConnector {
     public IOS_PlatformConnector(IOS_Launcher_BackgroundHandling ios_launcher) {
         super();
         this.ios_launcher = ios_launcher;
+    }
+
+    @Override
+    protected String _createThumb(String path, int scaledWidth, String thumbPrefix) {
+        throw new NotImplementedException("Create Thump is not implemented");
     }
 
     @Override

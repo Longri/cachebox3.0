@@ -26,6 +26,7 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -65,6 +66,10 @@ public class DesktopPlatformConnector extends PlatformConnector {
         // is not implemented, do nothing
     }
 
+    @Override
+    protected String _createThumb(String path, int scaledWidth, String thumbPrefix) {
+        throw new NotImplementedException("Create Thump is not implemented");
+    }
 
     @Override
     public Bitmap getRealScaledSVG(String name, InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {

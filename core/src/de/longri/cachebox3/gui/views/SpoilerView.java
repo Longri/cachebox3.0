@@ -68,6 +68,11 @@ public class SpoilerView extends AbstractView {
         if (!forceReload && EventHandler.getSelectedCache().equals(actCache)) return true;
         forceReload = false;
 
+        actCache = EventHandler.getSelectedCache();
+        if(actCache==null) return true; // don't load spoiler from NULL!
+
+        // load spoiler resources for act selected Cache on EventHandler!
+        EventHandler.actCacheHasSpoiler();
         return false;
     }
 
@@ -77,7 +82,7 @@ public class SpoilerView extends AbstractView {
 
         if (cacheLoaded()) return;
 
-        Array<ImageEntry> spoilerResources= EventHandler.getSelectedCacheSpoiler();
+        Array<ImageEntry> spoilerResources = EventHandler.getSelectedCacheSpoiler();
 
         if (EventHandler.actCacheHasSpoiler()) {
             ImageDAO imageDAO = new ImageDAO();
@@ -116,7 +121,7 @@ public class SpoilerView extends AbstractView {
                 else {
                     label = removeHashFromLabel(Utils.getFileNameWithoutExtension(imageEntry.Name));
                 }
-                galleryView.addItem(imageEntry,label);
+                galleryView.addItem(imageEntry, label);
             }
         } else {
             galleryView.clearGallery();

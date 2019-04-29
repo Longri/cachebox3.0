@@ -247,7 +247,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
         FileHandle dir = Gdx.files.absolute(directory);
 
-        if (dir.isDirectory()) return;
+        if (!dir.isDirectory()) return;
 
         FileFilter filter = new FileFilter() {
             @Override
