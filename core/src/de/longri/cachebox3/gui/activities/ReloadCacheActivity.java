@@ -67,7 +67,7 @@ public class ReloadCacheActivity extends ActivityBase {
     private final AtomicBoolean canceled = new AtomicBoolean(false);
 
     public ReloadCacheActivity() {
-        super("CheckStateActivity");
+        super("UpdateStatusAndOthers");
         bCancel = new CharSequenceButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("ReloadCacheAPI"));

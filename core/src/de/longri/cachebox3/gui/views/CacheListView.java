@@ -32,7 +32,6 @@ import de.longri.cachebox3.gui.actions.ShowDeleteMenu;
 import de.longri.cachebox3.gui.actions.ShowImportMenu;
 import de.longri.cachebox3.gui.actions.show_activities.Action_EditFilterSettings;
 import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
-import de.longri.cachebox3.gui.activities.CheckStateActivity;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -379,8 +378,6 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
          */
         mi.setCheckable(true);
         mi.setChecked(CB.getAutoResort());
-        cm.addMenuItem("chkState", CB.getSkin().getMenuIcon.GC_Live,() -> new CheckStateActivity(false).show()); // todo change to API 1.0 + ?CB.postAsync();
-        cm.addMenuItem("chkFavPoints", CB.getSkin().getMenuIcon.favPoint, () -> new CheckStateActivity(true).show() );// todo change to API 1.0 + ?CB.postAsync();
         cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon, () -> (new EditCache("editCache")).create()); //todo ISSUE (#118 add new Cache)
         cm.addMenuItem("DeleteCaches", CB.getSkin().getMenuIcon.deleteCaches, () -> {}).setMoreMenu(new ShowDeleteMenu());
         return cm;

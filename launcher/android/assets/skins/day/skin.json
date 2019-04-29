@@ -1096,6 +1096,10 @@
       "path": "svg/gc_liveIcon.svg",
       "scale": 0.8
     },
+    "gc_logo": {
+      "path": "svg/gc_logo.svg",
+      "scale": 1.8
+    },
     "giga": {
       "path": "svg/giga.svg",
       "scale": 0.2
@@ -2857,6 +2861,7 @@
       "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveMenuIcon",
+      "gc_logo": "gc_logo",
       "viewSettings": "view",
       "reloadCacheIcon": "reload_cache",
       "deleteCaches": "delete_Caches",

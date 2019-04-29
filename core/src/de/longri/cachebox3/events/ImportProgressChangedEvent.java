@@ -26,15 +26,15 @@ public class ImportProgressChangedEvent extends AbstractEvent<ImportProgressChan
     }
 
 
-    public final ImportProgressChangedEvent.ImportProgress progress;
+    public final ImportProgress progress;
 
-    public ImportProgressChangedEvent(ImportProgressChangedEvent.ImportProgress progress) {
-        super(ImportProgressChangedEvent.ImportProgress.class);
+    public ImportProgressChangedEvent(ImportProgress progress) {
+        super(ImportProgress.class);
         this.progress = progress;
     }
 
-    public ImportProgressChangedEvent(ImportProgressChangedEvent.ImportProgress progress, short id) {
-        super(ImportProgressChangedEvent.ImportProgress.class, id);
+    public ImportProgressChangedEvent(ImportProgress progress, short id) {
+        super(ImportProgress.class, id);
         this.progress = progress;
     }
 

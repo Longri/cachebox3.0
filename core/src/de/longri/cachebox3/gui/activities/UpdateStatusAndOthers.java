@@ -29,10 +29,11 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
-import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
-import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.apis.GroundspeakAPI;
+import de.longri.cachebox3.events.CacheListChangedEvent;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.ImportProgressChangedEvent;
+import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
@@ -40,49 +41,50 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import static de.longri.cachebox3.apis.GroundspeakAPI.*;
 
 
 /**
  * Created by Longri on 28.06.2017.
  */
-public class CheckStateActivity extends ActivityBase {
+public class UpdateStatusAndOthers extends ActivityBase {
 
-    private static final Logger log = LoggerFactory.getLogger(CheckStateActivity.class);
+    private static final Logger log = LoggerFactory.getLogger(UpdateStatusAndOthers.class);
 
 
-    private final int blockSize;
+    private final int BlockSize = 50; // API 1.0 has a limit of 50, handled in GroundspeakAPI but want to write to DB after Blocksize fetched
     private final CharSequenceButton bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;
-    private boolean importRuns = false;
-    private boolean needLayout = true;
     private final Image workAnimation;
     private final CB_ProgressBar CBProgressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
-    private final boolean withFavPoi;
+    private boolean importRuns = false;
+    private final ClickListener cancelListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (importRuns) {
+                canceled.set(true);
+            }
+            finish();
+        }
+    };
+    private boolean needLayout = true;
 
-    public CheckStateActivity(boolean withFavPoi) {
-        super("CheckStateActivity");
-
-        // The API leaves only a maximum of 110 per request or 50 with search(Favepoint)!
-        blockSize = withFavPoi ? 48 : 108;
+    public UpdateStatusAndOthers() {
+        super("UpdateStatusAndOthers");
 
         bCancel = new CharSequenceButton(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
@@ -98,7 +100,6 @@ public class CheckStateActivity extends ActivityBase {
         setWorkAnimationVisible(false);
 
         this.setStageBackground(new ColorDrawable(VisUI.getSkin().getColor("dialog_background")));
-        this.withFavPoi = withFavPoi;
     }
 
     @Override
@@ -134,21 +135,10 @@ public class CheckStateActivity extends ActivityBase {
         needLayout = false;
     }
 
-
     private void setWorkAnimationVisible(boolean visible) {
         workAnimation.setVisible(visible);
         CBProgressBar.setVisible(visible);
     }
-
-
-    private final ClickListener cancelListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            if (importRuns) {
-                canceled.set(true);
-            }
-            finish();
-        }
-    };
 
     private void createOkCancelBtn() {
         bCancel.addListener(cancelListener);
@@ -161,177 +151,110 @@ public class CheckStateActivity extends ActivityBase {
     }
 
     private void importNow() {
-        if (GroundspeakLiveAPI.chkMembership(false).isErrorState()) {
-            finish();
-            return;
-        }
 
         setWorkAnimationVisible(true);
         CBProgressBar.setAnimateDuration(0);
-        final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
+        final ImportProgressChangedListener progressListener = event -> CB.postOnGlThread(new NamedRunnable("UpdateStatusAndOthers") {
             @Override
-            public void progressChanged(final ImportProgressChangedEvent event) {
-                CB.postOnGlThread(new NamedRunnable("CheckStateActivity") {
-                    @Override
-                    public void run() {
-                        CBProgressBar.setValue(event.progress.progress);
-                    }
-                });
+            public void run() {
+                CBProgressBar.setValue(event.progress.progress);
             }
-        };
+        });
         EventHandler.add(progressListener);
         importRuns = true;
 
-        CB.postAsync(new NamedRunnable("CheckStateActivitie") {
+        CB.postAsync(new NamedRunnable("UpdateStatusAndOthers") {
             @Override
             public void run() {
-
-                ApiResultState result = ApiResultState.UNKNOWN;
-                final Array<AbstractCache> chkList = new Array<>();
+                int changedCount;
+                Array<AbstractCache> chkList = new Array<>();
 
                 synchronized (Database.Data.cacheList) {
                     if (Database.Data.cacheList == null || Database.Data.cacheList.size == 0)
                         return;
+                    changedCount = 0;
                     for (int i = 0, n = Database.Data.cacheList.size; i < n; i++) {
                         chkList.add(Database.Data.cacheList.get(i));
                     }
 
                 }
-                final AtomicInteger progressIncrement = new AtomicInteger(0);
+                float progressInkrement = 100.0f / (chkList.size / BlockSize); // 100% durch Anzahl Schleifen
+                ImportProgressChangedEvent.ImportProgress importProgress = new ImportProgressChangedEvent.ImportProgress();
+                ImportProgressChangedEvent importProgressChangedEvent = new ImportProgressChangedEvent(importProgress);
 
-                // in Blöcke Teilen
-                int start = 0;
-                int stop = blockSize;
-                Array<AbstractCache> addedReturnList = new Array<>();
-                Array<AbstractCache> chkList100;
+                int skip = 0;
 
-                ApiCallLimitListener limitListener = new ApiCallLimitListener() {
-                    @Override
-                    public void waitForCall(ApiCallLimitEvent event) {
-                        int sec = (int) (event.getWaitTime() / 1000);
-                        if (sec > 1) {
-                            CB.viewmanager.toast(Translation.get("ApiLimit"
-                                    , Integer.toString(Config.apiCallLimit.getValue()), Integer.toString(sec))
-                                    , ViewManager.ToastLength.LONG);
-                        }
-                    }
-                };
+                Array<AbstractCache> caches = new Array<>();
 
-                EventHandler.add(limitListener);
+                float progress = 0;
 
-                do {
-                    chkList100 = new Array<>();
-                    if (chkList == null || chkList.size == 0) {
-                        break;
-                    }
-
-                    Iterator<AbstractCache> Iterator2 = chkList.iterator();
-
-                    int index = 0;
-                    do {
-                        if (index >= start && index <= stop) {
-                            chkList100.add(Iterator2.next());
-                        } else {
-                            Iterator2.next();
-                        }
-                        index++;
-                    } while (Iterator2.hasNext());
-
-                    log.debug("CheckState {} call start: {} stop: {}  from:{}", withFavPoi ? "with FavePoints" : "without FavePoints", start, stop, chkList.size);
-
-                    if (withFavPoi) {
-                        result = GroundspeakLiveAPI.getGeocacheStatusFavoritePoints(Database.Data, chkList100, new ICancel() {
-                            @Override
-                            public boolean cancel() {
-                                return canceled.get();
-                            }
-                        }, new CheckCacheStateParser.ProgressIncrement() {
-                            @Override
-                            public void increment() {
-                                // send Progress Change Msg
-                                ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
-                                progress.progress = (int) (100f / ((float) chkList.size / (float) progressIncrement.incrementAndGet()));
-                                EventHandler.fire(new ImportProgressChangedEvent(progress));
-                            }
-                        });
-                    } else {
-                        result = GroundspeakLiveAPI.getGeocacheStatus(Database.Data, chkList100, new ICancel() {
-                            @Override
-                            public boolean cancel() {
-                                return canceled.get();
-                            }
-                        }, new CheckCacheStateParser.ProgressIncrement() {
-                            @Override
-                            public void increment() {
-                                // send Progress Change Msg
-                                ImportProgressChangedEvent.ImportProgress progress = new ImportProgressChangedEvent.ImportProgress();
-                                progress.progress = (int) (100f / ((float) chkList.size / (float) progressIncrement.incrementAndGet()));
-                                EventHandler.fire(new ImportProgressChangedEvent(progress));
-                            }
-                        });
-                    }
-
-                    if (result.isErrorState())
-                        break;// API Error
-                    addedReturnList.addAll(chkList100);
-                    start += blockSize + 1;
-                    stop += blockSize + 1;
-
-                } while (chkList100.size == blockSize + 1);
-
-                if (addedReturnList.size == 0) {
-                    //no result
-                    if (result.isErrorState()) {
-                        CB.checkApiResultState(result);
-                    }
-                    EventHandler.remove(limitListener);
-                    finish();
-                    return;
-                }
-
-
-                //Write changes to DB
-                final AtomicInteger changedCount = new AtomicInteger(0);
+                // prepare for changes to DB
                 String sql = "UPDATE CacheCoreInfo SET BooleanStore = ? , NumTravelbugs = ? , FavPoints = ? WHERE id = ? ;";
                 GdxSqlitePreparedStatement REPLACE_STATUS = Database.Data.myDB.prepare(sql);
-
                 Database.Data.myDB.beginTransaction();
+
                 try {
-                    for (AbstractCache ca : addedReturnList) {
-                        if (ca.isChanged.get()) {
-                            changedCount.incrementAndGet();
+                    do {
+
+                        caches.clear();
+
+                        if (chkList == null || chkList.size == 0) {
+                            break;
+                        }
+
+                        for (int i = skip; i < skip + BlockSize && i < chkList.size; i++) {
+                            caches.add(chkList.get(i));
+                        }
+                        skip += BlockSize;
+
+                        for (GroundspeakAPI.GeoCacheRelated ci : updateStatusOfGeoCaches(caches)) {
+                            AbstractCache ca = ci.cache;
+                            // todo in ACB2 the DAO checks for changes by reading the database
+                            // todo and goes the setting for replication to WCB
+                            // todo implement now since API from 11. march 2019, we can do a API query for searchable / not searchable caches
+                            // todo and Requests that only include the reference code in the fields do not count against the daily geocache limit.
                             REPLACE_STATUS.bind(
                                     ca.getBooleanStore(),
                                     ca.getNumTravelbugs(),
                                     ca.getFavoritePoints(),
                                     ca.getId()
                             ).commit().reset();
+                            changedCount++; // is all without compare
                         }
-                    }
+
+                        if (APIError != OK) {
+                            CB.viewmanager.toast(LastAPIError);
+                            break;
+                        }
+
+                        progress += progressInkrement;
+                        importProgress.progress = (int) progress;
+                        EventHandler.fire(importProgressChangedEvent);
+
+                    } while (skip < chkList.size);
                 } finally {
                     Database.Data.myDB.endTransaction();
                 }
 
-                //state check complete, close activity
-                EventHandler.remove(limitListener);
                 finish();
 
-                CB.postOnGlThread(new NamedRunnable("CheckStateActivity:") {
+                final int completeCount = changedCount;
+                CB.postOnGlThread(new NamedRunnable("UpdateStatusAndOthers:") {
                     @Override
                     public void run() {
                         //Give feedback and say what updated!
                         EventHandler.fire(new CacheListChangedEvent());
                         CharSequence title = Translation.get("chkState");
-                        CharSequence msg = new CompoundCharSequence(Translation.get("CachesUpdatet")
-                                , " ", Integer.toString(changedCount.get()), "/", Integer.toString(Database.Data.cacheList.size));
+                        CharSequence msg = new CompoundCharSequence(Translation.get("CachesUpdated")
+                                , " ", Integer.toString(completeCount), "/", Integer.toString(Database.Data.cacheList.size));
                         Window dialog = new ButtonDialog("chkState", msg, title, MessageBoxButtons.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {
                                 if (which == ButtonDialog.BUTTON_POSITIVE) {
                                     hide();
                                     //Reload Cachelist if any changed
-                                    if (changedCount.get() > 0) {
-                                        CB.postAsync(new NamedRunnable("CheckStateActivity:finish reload cachelist") {
+                                    if (completeCount > 0) {
+                                        CB.postAsync(new NamedRunnable("UpdateStatusAndOthers:finish reload cachelist") {
                                             @Override
                                             public void run() {
                                                 CB.loadFilteredCacheList(null);
