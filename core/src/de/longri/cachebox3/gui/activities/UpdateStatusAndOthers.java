@@ -209,10 +209,12 @@ public class UpdateStatusAndOthers extends ActivityBase {
 
                         for (GroundspeakAPI.GeoCacheRelated ci : updateStatusOfGeoCaches(caches)) {
                             AbstractCache ca = ci.cache;
-                            // todo in ACB2 the DAO checks for changes by reading the database
-                            // todo and goes the setting for replication to WCB
-                            // todo implement now since API from 11. march 2019, we can do a API query for searchable / not searchable caches
-                            // todo and Requests that only include the reference code in the fields do not count against the daily geocache limit.
+                            /*
+                             todo in ACB2 the DAO checks for changes by reading the database
+                             and does the setting for replication to WCB
+                             todo implement: since API from 11. march 2019, we can do a API query for searchable / not searchable caches
+                             Requests that only include the reference code in the fields do not count against the daily geocache limit.
+                             */
                             REPLACE_STATUS.bind(
                                     ca.getBooleanStore(),
                                     ca.getNumTravelbugs(),

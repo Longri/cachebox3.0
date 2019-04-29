@@ -56,7 +56,7 @@ public class GroundspeakAPI {
     private static int nrOfApiCalls;
     private static int retryCount;
     private static boolean active = false;
-    // with API form 15. april 2019 :
+    // with API from 15. april 2019 :
     // Geocache daily limit per user is now tracked by unique geocache codes (e.g. the same call to GetGeocache on GCK25B will count as one)
     private static Webb getNetz() {
         if (netz == null) {
