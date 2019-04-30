@@ -15,6 +15,8 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.kotcrab.vis.ui.building.utilities.Alignment;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.gui.widgets.Image;
@@ -37,13 +39,13 @@ public class GalleryItem extends ListViewItem {
     public GalleryItem(int index, ImageLoader loader, String label) {
         super(index);
         iloader = loader;
-        CB_RectF imgRec = new CB_RectF();
+        CB_RectF imgRec = new CB_RectF(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
         img = new Image(iloader, imgRec.ScaleCenter(0.95f), "", false);
         img.setHAlignment(Alignment.CENTER);
 
         if (label == null) lbl = null;
         else lbl = new VisLabel(label);
-
+        fillContent();
     }
 
     private void fillContent() {
@@ -56,7 +58,17 @@ public class GalleryItem extends ListViewItem {
     }
 
     @Override
-    public void layout() {
-        super.layout();
+    public float getPrefHeight() {
+        return Gdx.graphics.getWidth();
+    }
+
+    @Override
+    public float getPrefWidth() {
+        return Gdx.graphics.getWidth();
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
     }
 }

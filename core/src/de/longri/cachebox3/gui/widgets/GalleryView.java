@@ -15,6 +15,10 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.kotcrab.vis.ui.util.value.PrefHeightIfVisibleValue;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.gui.widgets.list_view.DefaultListViewAdapter;
@@ -22,6 +26,7 @@ import de.longri.cachebox3.gui.widgets.list_view.GalleryItem;
 import de.longri.cachebox3.gui.widgets.list_view.GalleryListView;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.ImageLoader;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
  * Created by Longri on 23.04.2019.
@@ -40,6 +45,13 @@ public class GalleryView extends Catch_Table {
     public GalleryView() {
         overview = new GalleryListView();
         gallery = new GalleryListView();
+
+        this.add(gallery).expandX().fillX().height(new Value.Fixed(Gdx.graphics.getWidth()));
+        this.row();
+        this.add(overview).expandX().fillX().fillY();
+
+
+        this.setDebug(true);
     }
 
     public void clearGallery() {
@@ -50,11 +62,9 @@ public class GalleryView extends Catch_Table {
     public void addItem(ImageEntry imageEntry, String label) {
         int index = overViewAdapter.size;
 
-
         ImageLoader loader = new ImageLoader(true); // image loader with thumb
         loader.setThumbWidth(MAX_THUMB_WIDTH, "");
         loader.setImage(imageEntry.LocalPath);
-
 
         GalleryItem item = new GalleryItem(index, loader, label);
 //        item.setOnDoubleClickListener(onGalleryItemDoubleClicked);
@@ -67,5 +77,24 @@ public class GalleryView extends Catch_Table {
 //        overviewItem.setOnClickListener(onIconClicked);
 
         overViewAdapter.add(overviewItem);
+    }
+
+//    @Override
+//    protected void sizeChanged() {
+//        super.sizeChanged();
+//        overview.setSize(this.getWidth(), this.getHeight());
+//        gallery.setSize(this.getWidth(), this.getHeight());
+//    }
+//
+    public void galleryChanged() {
+        overview.setAdapter(overViewAdapter);
+        gallery.setAdapter(galleryAdapter);
+
+//        CB.postOnMainThreadDelayed(10000, new NamedRunnable("tets") {
+//            @Override
+//            public void run() {
+//                GalleryView.this.layout();
+//            }
+//        });
     }
 }

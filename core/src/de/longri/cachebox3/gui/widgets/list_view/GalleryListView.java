@@ -15,11 +15,69 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import de.longri.cachebox3.CB;
+
 /**
  * Created by Longri on 23.04.2019.
  */
 public class GalleryListView extends ListView {
     public GalleryListView() {
-        super(ListViewType.HORIZONTAL);
+//        super(ListViewType.HORIZONTAL);
+        super(ListViewType.VERTICAL);
+        this.setDebug(true, true);
+    }
+
+
+    //    @Override
+//    public void setWidth(float newWidth) {
+//        super.setWidth(newWidth);
+//    }
+//
+//    @Override
+//    public void setHeight(float newHeight) {
+//        super.setHeight(newHeight);
+//    }
+//
+//    public void setSize(float width, float height) {
+//        super.setSize(width, height);
+//    }
+//
+//    /**
+//     * Adds the specified size to the current size.
+//     */
+//    public void sizeBy(float size) {
+//        super.sizeBy(size);
+//    }
+//
+//    /**
+//     * Adds the specified size to the current size.
+//     */
+//    public void sizeBy(float width, float height) {
+//        super.sizeBy(width, height);
+//    }
+//
+//    /**
+//     * Set bounds the x, y, width, and height.
+//     */
+//    public void setBounds(float x, float y, float width, float height) {
+//        super.setBounds(x, y, width, height);
+//    }
+//
+//
+//    @Override
+//    public void draw(Batch batch, float parentAlpha) {
+//        super.draw(batch, parentAlpha);
+//    }
+//
+//    @Override
+//    public float getPrefWidth(){
+//        return 100;
+//    }
+//
+//
+    @Override
+    public float getPrefHeight() {
+        return CB.getScaledFloat(75);
     }
 }

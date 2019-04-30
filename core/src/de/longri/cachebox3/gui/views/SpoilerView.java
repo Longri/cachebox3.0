@@ -58,6 +58,7 @@ public class SpoilerView extends AbstractView {
 
     public SpoilerView() {
         super("SpoilerView");
+        this.addChild(galleryView);
     }
 
     public void forceReload() {
@@ -69,7 +70,7 @@ public class SpoilerView extends AbstractView {
         forceReload = false;
 
         actCache = EventHandler.getSelectedCache();
-        if(actCache==null) return true; // don't load spoiler from NULL!
+        if (actCache == null) return true; // don't load spoiler from NULL!
 
         // load spoiler resources for act selected Cache on EventHandler!
         EventHandler.actCacheHasSpoiler();
@@ -123,16 +124,24 @@ public class SpoilerView extends AbstractView {
                 }
                 galleryView.addItem(imageEntry, label);
             }
+            galleryView.galleryChanged();
         } else {
             galleryView.clearGallery();
         }
 
     }
 
-
     @Override
     public void dispose() {
 
+    }
+
+    @Override
+    protected void sizeChanged() {
+        super.sizeChanged();
+        galleryView.setSize(this.getWidth(), this.getHeight());
+        invalidateHierarchy();
+        layout();
     }
 
     //################### Context menu implementation ####################################
