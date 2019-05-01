@@ -25,11 +25,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GetPocketQueryList;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
-import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
-import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gpx.PqImport;
@@ -58,9 +54,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ImportPQActivity extends BlockGpsActivityBase {
 
     private final static Logger log = LoggerFactory.getLogger(ImportPQActivity.class);
-    private final ListView pqList = new ListView(ListViewType.VERTICAL, false);
+    private final ListView pqListView = new ListView(ListViewType.VERTICAL, false);
     private final CharSequenceButton bOK, bCancel;
-    private final DefaultListViewAdapter itemArray = new DefaultListViewAdapter();
+    private final DefaultListViewAdapter pqListViewItemArray = new DefaultListViewAdapter();
     private final AtomicBoolean canceled = new AtomicBoolean(false);
     private final ICancel iCancel = new ICancel() {
         @Override
@@ -83,8 +79,8 @@ public class ImportPQActivity extends BlockGpsActivityBase {
 
         float contentWidth = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4;
 
-        pqList.setBackground(this.style.background);
-        this.add(pqList).width(new Value.Fixed(contentWidth)).expandY().fillY();
+        pqListView.setBackground(this.style.background);
+        this.add(pqListView).width(new Value.Fixed(contentWidth)).expandY().fillY();
         this.row();
 
         // line for selected PocketQuery's
@@ -92,10 +88,10 @@ public class ImportPQActivity extends BlockGpsActivityBase {
         selectedLabelStyle.font = itemStyle.infoFont;
         selectedLabelStyle.fontColor = itemStyle.infoFontColor;
         final AligmentLabel selectedLabel = new AligmentLabel(Translation.get("PQnoSelection"), selectedLabelStyle, Align.left);
-        pqList.addSelectionChangedEventListner(new SelectionChangedEvent() {
+        pqListView.addSelectionChangedEventListner(new SelectionChangedEvent() {
             @Override
             public void selectionChanged() {
-                Array<ListViewItemInterface> selectedItems = pqList.getSelectedItems();
+                Array<ListViewItemInterface> selectedItems = pqListView.getSelectedItems();
                 if (selectedItems == null) {
                     selectedLabel.setText(Translation.get("PQnoSelection"));
                     bOK.setDisabled(true);
@@ -218,7 +214,7 @@ public class ImportPQActivity extends BlockGpsActivityBase {
         };
 
 
-        pqImport.importNow(pqList.getSelectedItems(), iCancel,
+        pqImport.importNow(pqListView.getSelectedItems(), iCancel,
                 downloadLabel, downloadProgress,
                 extractLabel, extractProgress,
                 importLabel, importProgress,
@@ -236,35 +232,16 @@ public class ImportPQActivity extends BlockGpsActivityBase {
     }
 
     private void refreshPQList() {
-        pqList.setEmptyString(Translation.get("EmptyPqList"));
-        pqList.showWorkAnimationUntilSetAdapter();
+        pqListView.setEmptyString(Translation.get("EmptyPqList"));
+        pqListView.showWorkAnimationUntilSetAdapter();
 
         CB.postAsync(new NamedRunnable("refreshPQList") {
             @Override
             public void run() {
-                itemArray.clear();
-                Array<PocketQuery> list = new Array<>();
-                GetPocketQueryList pocketQuery = new GetPocketQueryList(GroundspeakLiveAPI.getAccessToken(true), iCancel, list);
-
-                final AtomicBoolean WAIT = new AtomicBoolean(true);
-                final ApiResultState[] state = new ApiResultState[1];
-                pocketQuery.post(new GenericCallBack<ApiResultState>() {
-                    @Override
-                    public void callBack(ApiResultState value) {
-                        state[0] = value;
-                        WAIT.set(false);
-                    }
-                });
-                CB.wait(WAIT);
-
-                if (CB.checkApiResultState(state[0])) {
-                    ImportPQActivity.this.finish();
-                }
-
-                if (canceled.get()) return;
+                pqListViewItemArray.clear();
 
                 int idx = 0;
-                for (PocketQuery pq : list) {
+                for (GroundspeakAPI.PQ pq : GroundspeakAPI.fetchPocketQueryList()) {
                     //Check last import
                     GdxSqliteCursor cursor = Database.Data.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
                     if (cursor != null) {
@@ -277,15 +254,15 @@ public class ImportPQActivity extends BlockGpsActivityBase {
                         }
                     }
 
-                    //add only PocketQuery's their download available
-                    if (pq.downloadAvailable)
-                        itemArray.add(new PqListItem(idx++, pq, itemStyle));
+                    // add only PocketQuery's their download available
+                    // if (pq.downloadAvailable) // later compare last imported with last generated
+                    pqListViewItemArray.add(new PqListItem(idx++, pq, itemStyle));
                 }
                 CB.postOnGlThread(new NamedRunnable("SetAdapter") {
                     @Override
                     public void run() {
                         if (canceled.get()) return;
-                        pqList.setAdapter(itemArray);
+                        pqListView.setAdapter(pqListViewItemArray);
                     }
                 });
             }

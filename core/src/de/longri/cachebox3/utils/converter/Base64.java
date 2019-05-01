@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.utils.converter;
 
-import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
 import de.longri.cachebox3.utils.ICancel;
 
 import java.io.BufferedOutputStream;
@@ -357,6 +356,12 @@ public class Base64 {
     /* ******** D E T E R M I N E W H I C H A L H A B E T ******** */
 
     /**
+     * Defeats instantiation.
+     */
+    private Base64() {
+    }
+
+    /**
      * Returns one of the _SOMETHING_ALPHABET byte arrays depending on the options specified. It's possible, though silly, to specify
      * ORDERED <b>and</b> URLSAFE in which case one of them will be picked, though there is no guarantee as to which one will be picked.
      */
@@ -383,12 +388,6 @@ public class Base64 {
             return _STANDARD_DECODABET;
         }
     } // end getAlphabet
-
-    /**
-     * Defeats instantiation.
-     */
-    private Base64() {
-    }
 
     /* ******** E N C O D I N G M E T H O D S ******** */
 
@@ -1224,7 +1223,7 @@ public class Base64 {
      * im Buffer
      */
     public static boolean decodeStreamToStream(java.io.InputStream inputStream, byte[] buff,
-                                               PocketQuery.IncrementProgressBytesListener listener,
+                                               IncrementProgressBytesListener listener,
                                                int buffCount, int buffPos, BufferedOutputStream os,
                                                ICancel iCancel) throws java.io.IOException {
         if (os == null) {
@@ -1594,6 +1593,10 @@ public class Base64 {
             }
         } // end finally
     } // end decodeFileToFile
+
+    public interface IncrementProgressBytesListener {
+        void increment(int bytes);
+    }
 
     /* ******** I N N E R C L A S S I N P U T S T R E A M ******** */
 

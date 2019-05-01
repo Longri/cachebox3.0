@@ -40,15 +40,8 @@ public class GroundspeakLiveAPI {
     private static final Logger log = LoggerFactory.getLogger(GroundspeakLiveAPI.class);
     public static String LastAPIError = "";
     public static boolean CacheStatusValid = false;
-    public static int CachesLeft = -1;
-    public static int CurrentCacheCount = -1;
-    public static int MaxCacheCount = -1;
     public static boolean CacheStatusLiteValid = false;
-    public static int CachesLeftLite = -1;
-    public static int CurrentCacheCountLite = -1;
-    public static int MaxCacheCountLite = -1;
     public static String memberName = ""; // this will be filled by
-    private static boolean DownloadLimit = false;
     private static boolean API_isChecked = false;
     private static Limit apiCallLimit;
     private static ApiResultState membershipType = ApiResultState.UNKNOWN;
