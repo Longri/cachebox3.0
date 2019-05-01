@@ -241,7 +241,9 @@ public class ImportPQActivity extends BlockGpsActivityBase {
                 pqListViewItemArray.clear();
 
                 int idx = 0;
-                for (GroundspeakAPI.PQ pq : GroundspeakAPI.fetchPocketQueryList()) {
+                Array<GroundspeakAPI.PQ> pqList = GroundspeakAPI.fetchPocketQueryList();
+                pqList.sort();
+                for (GroundspeakAPI.PQ pq : pqList) {
                     //Check last import
                     GdxSqliteCursor cursor = Database.Data.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
                     if (cursor != null) {
@@ -258,6 +260,7 @@ public class ImportPQActivity extends BlockGpsActivityBase {
                     // if (pq.downloadAvailable) // later compare last imported with last generated
                     pqListViewItemArray.add(new PqListItem(idx++, pq, itemStyle));
                 }
+
                 CB.postOnGlThread(new NamedRunnable("SetAdapter") {
                     @Override
                     public void run() {

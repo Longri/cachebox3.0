@@ -1561,7 +1561,7 @@ public class GroundspeakAPI {
 
     private enum MemberShipTypes {Unknown, Basic, Charter, Premium}
 
-    public static class PQ implements Serializable {
+    public static class PQ implements Serializable, Comparable {
         private static final long serialVersionUID = 8308386638170255124L;
         public String name;
         public int cacheCount;
@@ -1569,6 +1569,11 @@ public class GroundspeakAPI {
         public double sizeMB;
         public Date lastImported;
         public String GUID;
+
+        @Override
+        public int compareTo(Object o) {
+            return name.compareTo(((PQ) o).name);
+        }
     }
 
     public static class UserInfos {
