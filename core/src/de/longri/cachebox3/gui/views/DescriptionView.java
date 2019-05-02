@@ -32,7 +32,9 @@ import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
+import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.DescriptionViewStyle;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -62,10 +64,12 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     private static long lastCacheId;
     private static float lastX, lastY, lastScale;
+    private PlatformDescriptionView view;
+
     private final LinkedList<String> nonLocalImages = new LinkedList<String>();
     private final LinkedList<String> nonLocalImagesUrl = new LinkedList<String>();
+
     private final AtomicBoolean FIRST = new AtomicBoolean(true);
-    private PlatformDescriptionView view;
     private final GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack = new GenericHandleCallBack<String>() {
         @Override
         public boolean callBack(String url) {
@@ -172,11 +176,6 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         EventHandler.add(this);
     }
 
-    private static String getStringFromDB(Database database, String statement, long cacheID) {
-        String[] args = new String[]{Long.toString(cacheID)};
-        return database.getString(statement, args);
-    }
-
     private String getAttributesHtml(AbstractCache abstractCache) {
         StringBuilder sb = new StringBuilder();
         try {
@@ -221,6 +220,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     protected void boundsChanged(float x, float y, float width, float height) {
         if (view != null) view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
     }
+
 
     @Override
     public void onShow() {
@@ -410,6 +410,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         });
     }
 
+
     //################### Context menu implementation ####################################
     @Override
     public boolean hasContextMenu() {
@@ -420,41 +421,70 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     public Menu getContextMenu() {
         Menu cm = new Menu("DescriptionViewContextMenu");
 
-        MenuItem mi;
-        boolean isSelected = (EventHandler.getSelectedCache() != null);
+        cm.setOnItemClickListener(new OnItemClickListener() {
 
-        boolean selectedCacheIsNoGC = false;
-        if (isSelected)
-            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
-        mi = cm.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> {
-            new ReloadCacheActivity().show();
-        });
-        if (!isSelected)
-            mi.setEnabled(false);
-        if (selectedCacheIsNoGC)
-            mi.setEnabled(false);
+            @Override
+            public boolean onItemClick(MenuItem item) {
+                switch (item.getMenuItemId()) {
+                    case MenuID.MI_FAVORIT:
+                        if (EventHandler.getSelectedCache() == null) {
+                            new ButtonDialog("NoCacheSelect", Translation.get("NoCacheSelect"), Translation.get("Error"),
+                                    MessageBoxButtons.OKCancel, MessageBoxIcon.Error, null).show();
+                            return true;
+                        }
 
-        mi = cm.addMenuItem("Favorite", CB.getSkin().getMenuIcon.favorit, () -> {
-            if (EventHandler.getSelectedCache() == null) {
-                new ButtonDialog("NoCacheSelect", Translation.get("NoCacheSelect"), Translation.get("Error"),
-                        MessageBoxButtons.OKCancel, MessageBoxIcon.Error, null).show();
-            } else {
-                AbstractCache selectedCache = EventHandler.getSelectedCache();
+                        AbstractCache selectedCache = EventHandler.getSelectedCache();
 
-                selectedCache.setFavorite(!selectedCache.isFavorite());
-                selectedCache.updateBooleanStore(Database.Data);
+                        selectedCache.setFavorite(!selectedCache.isFavorite());
+                        selectedCache.updateBooleanStore(Database.Data);
 
-                DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache, true);
+                        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache, true);
 
-                // Update cacheList
-                Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
-                Database.Data.cacheList.add(selectedCache);
+                        // Update cacheList
+                        Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
+                        Database.Data.cacheList.add(selectedCache);
 
-                //update EventHandler
-                EventHandler.updateSelectedCache(selectedCache);
-                EventHandler.fire(new CacheListChangedEvent());
+                        //update EventHandler
+                        EventHandler.updateSelectedCache(selectedCache);
+                        EventHandler.fire(new CacheListChangedEvent());
+                        return true;
+                    case MenuID.MI_RELOAD_CACHE:
+                        new ReloadCacheActivity().show();
+                        return true;
+                    case MenuID.MI_SHOW_ORIGINAL_HTML_COLOR:
+                        AbstractCache actCache = EventHandler.getSelectedCache();
+
+                        actCache.setShowOriginalHtmlColor(!actCache.getShowOriginalHtmlColor());
+                        actCache.updateBooleanStore(Database.Data);
+
+                        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, actCache, true);
+
+                        // Update cacheList
+                        Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
+                        Database.Data.cacheList.add(actCache);
+
+                        //update EventHandler
+                        EventHandler.updateSelectedCache(actCache);
+
+                        //reload html
+                        CB.postOnGlThread(new NamedRunnable("reload DescriptionView") {
+                            @Override
+                            public void run() {
+                                showPlatformWebView();
+                            }
+                        });
+                        return true;
+                }
+                return false;
             }
         });
+
+        MenuItem mi;
+
+        boolean isSelected = (EventHandler.getSelectedCache() != null);
+
+        //ISSUE (#126 handle own favorites)
+        mi = cm.addItem(MenuID.MI_FAVORIT, "Favorite", CB.getSkin().getMenuIcon.favorit);
         mi.setCheckable(true);
         if (isSelected) {
             mi.setChecked(EventHandler.getSelectedCache().isFavorite());
@@ -462,46 +492,26 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             mi.setEnabled(false);
         }
 
-        cm.addMenuItem("AddToWatchList", CB.getSkin().getMenuIcon.todo, () -> {
-        }).setEnabled(false);
-        cm.addMenuItem("RemoveFromWatchList", CB.getSkin().getMenuIcon.todo, () -> {
-        }).setEnabled(false);
-        cm.addMenuItem("Solver", CB.getSkin().getMenuIcon.todo, () -> {
-            // replace icon with CB.getSkin().getMenuIcon.solverIcon
-            SolverView view = new SolverView();
-            CB.viewmanager.showView(view);
-        }).setEnabled(false);
-        cm.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
-        }).setEnabled(false);
-        cm.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
-        }).setEnabled(false);
 
-        mi = cm.addMenuItem("ShowOriginalHtmlColor", CB.getSkin().getMenuIcon.showOriginalHtmlColor, () -> {
-            AbstractCache actCache = EventHandler.getSelectedCache();
-
-            actCache.setShowOriginalHtmlColor(!actCache.getShowOriginalHtmlColor());
-            actCache.updateBooleanStore(Database.Data);
-
-            DaoFactory.CACHE_DAO.updateDatabase(Database.Data, actCache, true);
-
-            // Update cacheList
-            Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
-            Database.Data.cacheList.add(actCache);
-
-            //update EventHandler
-            EventHandler.updateSelectedCache(actCache);
-
-            //reload html
-            CB.postOnGlThread(new NamedRunnable("reload DescriptionView") {
-                @Override
-                public void run() {
-                    showPlatformWebView();
-                }
-            });
-        });
+        mi = cm.addItem(MenuID.MI_SHOW_ORIGINAL_HTML_COLOR, "ShowOriginalHtmlColor", CB.getSkin().getMenuIcon.showOriginalHtmlColor);
         mi.setCheckable(true);
         mi.setChecked(EventHandler.getSelectedCache().getShowOriginalHtmlColor());
 
+
+        boolean selectedCacheIsNoGC = false;
+        if (isSelected)
+            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
+        mi = cm.addItem(MenuID.MI_RELOAD_CACHE, "ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon);
+        if (!isSelected)
+            mi.setEnabled(false);
+        if (selectedCacheIsNoGC)
+            mi.setEnabled(false);
+
         return cm;
+    }
+
+    private static String getStringFromDB(Database database, String statement, long cacheID) {
+        String[] args = new String[]{Long.toString(cacheID)};
+        return database.getString(statement, args);
     }
 }

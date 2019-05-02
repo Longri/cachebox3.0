@@ -41,8 +41,6 @@ import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-
 import static de.longri.cachebox3.apis.GroundspeakAPI.APIError;
 import static de.longri.cachebox3.apis.GroundspeakAPI.LastAPIError;
 import static de.longri.cachebox3.gui.menu.MenuID.MI_LoadLogImages;
@@ -195,11 +193,11 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
     // todo perhaps ask for number of logs to fetch
     private void reloadLogs(boolean loadAllLogs) {
         // todo animation while waiting
-        ArrayList<LogEntry> logList = GroundspeakAPI.fetchGeoCacheLogs(EventHandler.getSelectedCache(), loadAllLogs, null);
+        Array<LogEntry> logList = GroundspeakAPI.fetchGeoCacheLogs(EventHandler.getSelectedCache(), loadAllLogs, null);
         if (APIError != 0) {
             MessageBox.show(LastAPIError, Translation.get("errorAPI"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
         } else {
-            if (logList.size() > 0) {
+            if (logList.size > 0) {
 
                 Database.Data.beginTransaction();
 

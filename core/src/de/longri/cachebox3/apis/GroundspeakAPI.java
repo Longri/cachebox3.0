@@ -16,6 +16,7 @@
 package de.longri.cachebox3.apis;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
@@ -35,7 +36,10 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 
 import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.Segmentize;
 import static de.longri.cachebox3.types.MutableCache.IS_FULL;
@@ -302,7 +306,7 @@ public class GroundspeakAPI {
 
             do {
                 // preparing the next block of max 50 caches to update
-                Map<String, AbstractCache> mapOfCaches = new HashMap<>();
+                ObjectMap<String, AbstractCache> mapOfCaches = new ObjectMap<>();
                 StringBuilder CacheCodes = new StringBuilder();
                 int took = 0;
                 for (int i = skip; i < Math.min(skip + take, caches.size); i++) {
@@ -359,7 +363,7 @@ public class GroundspeakAPI {
         return fetchResults;
     }
 
-    public static Array<GeoCacheRelated> getGeoCacheRelateds(JSONArray fetchedCaches, Array<String> fields, Map<String, AbstractCache> mapOfCaches) {
+    public static Array<GeoCacheRelated> getGeoCacheRelateds(JSONArray fetchedCaches, Array<String> fields, ObjectMap<String, AbstractCache> mapOfCaches) {
         Array<GeoCacheRelated> fetchResults = new Array<>();
         for (int ii = 0; ii < fetchedCaches.length(); ii++) {
             JSONObject fetchedCache = (JSONObject) fetchedCaches.get(ii);
@@ -371,8 +375,8 @@ public class GroundspeakAPI {
             }
             AbstractCache cache = createGeoCache(fetchedCache, fields, originalCache);
             if (cache != null) {
-                ArrayList<LogEntry> logs = createLogs(cache, fetchedCache.optJSONArray("geocacheLogs"));
-                ArrayList<ImageEntry> images = createImageList(fetchedCache.optJSONArray("images"), cache.getGcCode().toString(), false);
+                Array<LogEntry> logs = createLogs(cache, fetchedCache.optJSONArray("geocacheLogs"));
+                Array<ImageEntry> images = createImageList(fetchedCache.optJSONArray("images"), cache.getGcCode().toString(), false);
                 images = addDescriptionImageList(images, cache);
                 fetchResults.add(new GeoCacheRelated(cache, logs, images));
             }
@@ -526,10 +530,10 @@ public class GroundspeakAPI {
         }
     }
 
-    public static ArrayList<LogEntry> fetchGeoCacheLogs(AbstractCache cache, boolean all, ICancel iCancel) {
-        ArrayList<LogEntry> logList = new ArrayList<>();
+    public static Array<LogEntry> fetchGeoCacheLogs(AbstractCache cache, boolean all, ICancel iCancel) {
+        Array<LogEntry> logList = new Array<>();
 
-        LinkedList<String> friendList = new LinkedList<>();
+        Array<String> friendList = new Array<>();
         if (!all) {
             String friends = Config.Friends.getValue().replace(", ", "|").replace(",", "|");
             for (String f : friends.split("\\|")) {
@@ -562,17 +566,17 @@ public class GroundspeakAPI {
                         JSONObject geocacheLog = (JSONObject) geocacheLogs.get(ii);
                         if (!all) {
                             String finder = getStringValue(geocacheLog, "owner", "username");
-                            if (finder.length() == 0 || !friendList.contains(finder.toLowerCase(Locale.US))) {
+                            if (finder.length() == 0 || !friendList.contains(finder.toLowerCase(Locale.US), false)) {
                                 continue;
                             }
-                            friendList.remove(finder.toLowerCase(Locale.US));
+                            friendList.removeValue(finder.toLowerCase(Locale.US), false);
                         }
 
                         logList.add(createLog(geocacheLog, cache));
                     }
 
                     // all logs loaded or all friends found
-                    if ((geocacheLogs.length() < count) || (!all && (friendList.size() == 0))) {
+                    if ((geocacheLogs.length() < count) || (!all && (friendList.size == 0))) {
                         APIError = OK;
                         return logList;
                     }
@@ -594,9 +598,9 @@ public class GroundspeakAPI {
         return (logList);
     }
 
-    public static ArrayList<ImageEntry> downloadImageListForGeocache(String cacheCode, boolean withLogImages) {
+    public static Array<ImageEntry> downloadImageListForGeocache(String cacheCode, boolean withLogImages) {
 
-        ArrayList<ImageEntry> imageEntries = new ArrayList<>();
+        Array<ImageEntry> imageEntries = new Array<>();
         LastAPIError = "";
 
         if (cacheCode == null || isAccessTokenInvalid()) {
@@ -1283,8 +1287,8 @@ public class GroundspeakAPI {
         }
     }
 
-    private static ArrayList<LogEntry> createLogs(AbstractCache cache, JSONArray geocacheLogs) {
-        ArrayList<LogEntry> logList = new ArrayList<>();
+    private static Array<LogEntry> createLogs(AbstractCache cache, JSONArray geocacheLogs) {
+        Array<LogEntry> logList = new Array<>();
         if (geocacheLogs != null) {
             for (int ii = 0; ii < geocacheLogs.length(); ii++) {
                 logList.add(createLog((JSONObject) geocacheLogs.get(ii), cache));
@@ -1341,8 +1345,8 @@ public class GroundspeakAPI {
         return r;
     }
 
-    private static ArrayList<ImageEntry> createImageList(JSONArray jImages, String GcCode, boolean withLogImages) {
-        ArrayList<ImageEntry> imageEntries = new ArrayList<>();
+    private static Array<ImageEntry> createImageList(JSONArray jImages, String GcCode, boolean withLogImages) {
+        Array<ImageEntry> imageEntries = new Array<>();
 
         if (jImages != null) {
             for (int ii = 0; ii < jImages.length(); ii++) {
@@ -1374,7 +1378,7 @@ public class GroundspeakAPI {
         return imageEntries;
     }
 
-    private static ArrayList<ImageEntry> addDescriptionImageList(ArrayList<ImageEntry> imageList, AbstractCache cache) {
+    private static Array<ImageEntry> addDescriptionImageList(Array<ImageEntry> imageList, AbstractCache cache) {
 
         Array<String> DescriptionImages = getDescriptionsImages(cache);
         for (String url : DescriptionImages) {
@@ -1599,11 +1603,11 @@ public class GroundspeakAPI {
 
     public static class GeoCacheRelated {
         public AbstractCache cache;
-        public ArrayList<LogEntry> logs;
-        public ArrayList<ImageEntry> images;
+        public Array<LogEntry> logs;
+        public Array<ImageEntry> images;
         // trackables
 
-        public GeoCacheRelated(AbstractCache cache, ArrayList<LogEntry> logs, ArrayList<ImageEntry> images) {
+        public GeoCacheRelated(AbstractCache cache, Array<LogEntry> logs, Array<ImageEntry> images) {
             this.cache = cache;
             this.logs = logs;
             this.images = images;
