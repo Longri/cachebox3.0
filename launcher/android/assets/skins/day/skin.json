@@ -1060,6 +1060,10 @@
       "path": "svg/log0icon.svg",
       "scale": 0.098
     },
+    "foundMenu": {
+      "path": "svg/log0icon.svg",
+      "scale": 0.19
+    },
     "fr": {
       "path": "svg/fr.svg",
       "scale": 0.08
@@ -1715,6 +1719,10 @@
     "noteIconType": {
       "path": "svg/noteIcon.svg",
       "scale": 0.098
+    },
+    "notfoundMenu": {
+      "path": "svg/log1icon.svg",
+      "scale": 0.19
     },
     "option_0": {
       "path": "svg/option_0.svg",
@@ -3172,8 +3180,8 @@
       "ownFavorite": "cacheFavIcon"
     },
     "logViewLogStyles": {
-      "found": "found",
-      "didnt_find": "notFound",
+      "found": "foundMenu",
+      "didnt_find": "notfoundMenu",
       "note": "noteIconType",
       "published": "published",
       "enabled": "enabled",

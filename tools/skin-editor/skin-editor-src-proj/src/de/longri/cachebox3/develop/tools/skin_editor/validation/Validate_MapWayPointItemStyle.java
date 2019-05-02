@@ -88,20 +88,20 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         //Check Cache, found
         AbstractCache foundAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Cache, "GCCODE");
         foundAbstractCache.setOwner("nicht meiner");
-        foundAbstractCache.setFound(null, true);
+        foundAbstractCache.setFound(true);
         checkCache(foundAbstractCache);
 
         //Check Cache, solved
         AbstractCache solvedAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
         solvedAbstractCache.setOwner("nicht meiner");
-        solvedAbstractCache.setCorrectedCoordinates(true);
+        solvedAbstractCache.setHasCorrectedCoordinates(true);
         checkCache(solvedAbstractCache);
 
 
         //Check Cache, multi start
         AbstractCache multiStartAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Multi, "GCCODE");
         multiStartAbstractCache.setOwner("nicht meiner");
-        AbstractWaypoint wp = new ImmutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
+        AbstractWaypoint wp = new MutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
         wp.setStart(true);
         multiStartAbstractCache.getWaypoints().add(wp);
         checkCache(multiStartAbstractCache);
@@ -109,14 +109,14 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         //Check Cache, myst start
         AbstractCache mystStartAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
         mystStartAbstractCache.setOwner("nicht meiner");
-        ImmutableWaypoint wpm = new ImmutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
+        MutableWaypoint wpm = new MutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
         wpm.setStart(true);
         mystStartAbstractCache.getWaypoints().add(wpm);
         checkCache(mystStartAbstractCache);
 
 
         {// check multiStageStart
-            AbstractWaypoint wpMS = new ImmutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
+            AbstractWaypoint wpMS = new MutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
             wpMS.setStart(true);
 
             MapWayPointItemStyle style = null;
