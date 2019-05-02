@@ -85,6 +85,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable waypointListIcon;
     public Drawable trackListIcon;
     public Drawable GC_Live;
+    public Drawable gc_logo;
     public Drawable viewSettings;
     public Drawable reloadCacheIcon;
     public Drawable deleteCaches;
@@ -98,6 +99,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable downloadFriendsLogs;
     public Drawable downloadLogImages;
     public Drawable showOriginalHtmlColor;
+    public Drawable todo;
 
     @Override
     public int getPrefWidth() {

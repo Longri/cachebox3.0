@@ -73,6 +73,32 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     private AbstractCache actAbstractCache;
     private AbstractWaypoint actWaypoint;
     private ListView listView;
+    private final ClickLongClickListener clickLongClickListener = new ClickLongClickListener() {
+        @Override
+        public boolean clicked(InputEvent event, float x, float y) {
+            return false;
+        }
+
+        @Override
+        public boolean longClicked(Actor actor, float x, float y) {
+            if (!(actor instanceof ListViewItem)) return false;
+            int listIndex = ((ListViewItem) actor).getListIndex();
+
+            if (listIndex > 0) {
+                actWaypoint = actAbstractCache.getWaypoints().get(listIndex - 1);
+                if (WaypointView.this.listView != null)
+                    WaypointView.this.listView.setSelection(listIndex);
+            }
+            final Menu contextMenu = getContextMenu();
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    contextMenu.show();
+                }
+            });
+            return true;
+        }
+    };
 
     public WaypointView(BitStore reader) {
         super(reader);
@@ -271,33 +297,6 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         log.debug("Finish Thread add new listView");
         CB.requestRendering();
     }
-
-    private final ClickLongClickListener clickLongClickListener = new ClickLongClickListener() {
-        @Override
-        public boolean clicked(InputEvent event, float x, float y) {
-            return false;
-        }
-
-        @Override
-        public boolean longClicked(Actor actor, float x, float y) {
-            if (!(actor instanceof ListViewItem)) return false;
-            int listIndex = ((ListViewItem) actor).getListIndex();
-
-            if (listIndex > 0) {
-                actWaypoint = actAbstractCache.getWaypoints().get(listIndex - 1);
-                if (WaypointView.this.listView != null)
-                    WaypointView.this.listView.setSelection(listIndex);
-            }
-            final Menu contextMenu = getContextMenu();
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    contextMenu.show();
-                }
-            });
-            return true;
-        }
-    };
 
     private void disposeListView() {
         final ListView disposeListView = this.listView;
@@ -521,6 +520,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
     private boolean isCorrectedFinal() {
         // return new String(Title, (UTF_8)).equals("Final GSAK Corrected");
+        if (actWaypoint == null) return false;
         return actWaypoint.getType() == CacheTypes.Final && actWaypoint.isUserWaypoint() && actWaypoint.isValid();
     }
 }

@@ -1060,6 +1060,10 @@
       "path": "svg/log0icon.svg",
       "scale": 0.098
     },
+    "foundMenu": {
+      "path": "svg/log0icon.svg",
+      "scale": 0.19
+    },
     "fr": {
       "path": "svg/fr.svg",
       "scale": 0.08
@@ -1095,6 +1099,10 @@
     "gc_liveMenuIcon": {
       "path": "svg/gc_liveIcon.svg",
       "scale": 0.8
+    },
+    "gc_logo": {
+      "path": "svg/gc_logo.svg",
+      "scale": 1.8
     },
     "giga": {
       "path": "svg/giga.svg",
@@ -1712,6 +1720,10 @@
       "path": "svg/noteIcon.svg",
       "scale": 0.098
     },
+    "notfoundMenu": {
+      "path": "svg/log1icon.svg",
+      "scale": 0.19
+    },
     "option_0": {
       "path": "svg/option_0.svg",
       "scale": 1
@@ -1847,6 +1859,10 @@
     "toast_background": {
       "path": "svg/toast_background.svg",
       "scale": 1
+    },
+    "todo": {
+      "path": "svg/todo.svg",
+      "scale": 1.8
     },
     "toggleOff": {
       "path": "svg/toggleOff.svg",
@@ -2857,6 +2873,7 @@
       "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveMenuIcon",
+      "gc_logo": "gc_logo",
       "viewSettings": "view",
       "reloadCacheIcon": "reload_cache",
       "deleteCaches": "delete_Caches",
@@ -2868,7 +2885,8 @@
       "friendsLogs": "friendsLogs",
       "downloadLogs": "downloadLogs",
       "downloadFriendsLogs": "downloadFriendsLogs",
-      "downloadLogImages": "downloadLogImages"
+      "downloadLogImages": "downloadLogImages",
+      "todo": "todo"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
@@ -3162,8 +3180,8 @@
       "ownFavorite": "cacheFavIcon"
     },
     "logViewLogStyles": {
-      "found": "found",
-      "didnt_find": "notFound",
+      "found": "foundMenu",
+      "didnt_find": "notfoundMenu",
       "note": "noteIconType",
       "published": "published",
       "enabled": "enabled",
@@ -3275,14 +3293,13 @@
       "arrow": "arrow-compass",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
-      "typeStyle": "cacheList"
+      "typeStyle": "bubble"
     },
     "bubble": {
       "nameFont": "mapPanelUnit",
       "nameFontColor": "font_color",
       "distanceFont": "AboutInfo",
-      "distanceFontColor": "font_color",
-      "typeStyle": "bubble"
+      "distanceFontColor": "font_color"
     },
     "logListItems": {}
   },

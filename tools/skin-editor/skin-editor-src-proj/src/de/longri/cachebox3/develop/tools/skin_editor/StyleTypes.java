@@ -93,6 +93,7 @@ public class StyleTypes {
         items.add(de.longri.cachebox3.gui.skin.styles.FloatControlStyle.class);
         items.add(MapBubbleStyle.class);
         items.add(PqListItemStyle.class);
+        items.add(DescriptionViewStyle.class);
     }
 
 }

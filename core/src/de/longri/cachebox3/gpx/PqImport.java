@@ -15,12 +15,11 @@
  */
 package de.longri.cachebox3.gpx;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.activities.PqListItem;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
@@ -56,16 +55,7 @@ public class PqImport {
 
     private final static Logger log = LoggerFactory.getLogger(PqImport.class);
 
-    final Database database;
-
-
-    public void importNow(final Array<ListViewItemInterface> selectedItems, IReadyHandler ready) {
-
-        this.importNow(selectedItems, null, null, null,
-                null, null,
-                null, null,
-                null, ready);
-    }
+    private final Database database;
 
     public void importNow(final Array<ListViewItemInterface> selectedItems, final ICancel iCancel,
                           final AligmentLabel downloadLabel, final CB_ProgressBar downloadProgress,
@@ -84,7 +74,7 @@ public class PqImport {
         for (ListViewItemInterface item : selectedItems) {
             PqListItem pqListItem = (PqListItem) item;
             downloadPqCount.incrementAndGet();
-            downloadBytes.addAndGet((int) (pqListItem.getSize() * 1048576.0));
+            downloadBytes.addAndGet((int) (0 * 1048576.0)); // API 1.0 has no size: pqListItem.getSize()
             importCache.addAndGet(pqListItem.getCount());
         }
 
@@ -108,7 +98,6 @@ public class PqImport {
         database.beginTransactionExclusive(TRANSACTION_ID);
 
         //start download async
-        final FileHandle pqFolder = Gdx.files.absolute(Config.PocketQueryFolder.getValue());
         final Array<FileHandle> downloadedFiles = new Array<>();
         final Array<FileHandle> extractedfolder = new Array<>();
         final AtomicBoolean downloadReady = new AtomicBoolean(false);
@@ -119,27 +108,11 @@ public class PqImport {
             @Override
             public void run() {
                 for (ListViewItemInterface item : selectedItems) {
-                    PqListItem pqListItem = (PqListItem) item;
-                    FileHandle downloadedFile = pqListItem.getPocketQuery().download(pqFolder, iCancel, new PocketQuery.IncrementProgressBytesListener() {
-                        @Override
-                        public void increment(int bytes) {
-                            if (downloadProgress != null)
-                                downloadProgress.setValue(readyDownloadBytes.addAndGet(bytes));
-                            CB.requestRendering();
-                        }
-                    });
-                    if (downloadedFile != null) {
-                        downloadedFiles.add(downloadedFile);
-                        CB.postOnGlThread(new NamedRunnable("Update progress label") {
-                            @Override
-                            public void run() {
-                                //update progress message
-                                if (downloadLabel != null) downloadLabel.setText(Translation.get("downloaded",
-                                        Integer.toString(downloadedPqs.incrementAndGet()),
-                                        Integer.toString(downloadPqCount.get())));
-                                CB.requestRendering();
-                            }
-                        });
+                    GroundspeakAPI.PQ pqItem = ((PqListItem) item).getPocketQuery();
+                    String pqFolder = Config.PocketQueryFolder.getValue();
+                    GroundspeakAPI.fetchPocketQuery(pqItem, pqFolder);
+                    if (GroundspeakAPI.APIError == GroundspeakAPI.OK) {
+                        downloadedFiles.add(new FileHandle(pqFolder + "/" + pqItem.GUID + ".zip"));
                     }
                 }
                 log.debug("Download ready");

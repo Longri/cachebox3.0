@@ -17,7 +17,7 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
-import de.longri.cachebox3.apis.groundspeak_api.PocketQuery;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
@@ -27,18 +27,17 @@ import de.longri.cachebox3.translation.Translation;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 /**
  * Created by Longri on 26.03.2018.
  */
 public class PqListItem extends ListViewItem {
-    private final PocketQuery pq;
+    private final GroundspeakAPI.PQ pq;
     private final static DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private final static DecimalFormat decimalFormat = new DecimalFormat("###.##");
 
-    public PqListItem(int index, PocketQuery pq, PqListItemStyle style) {
+    public PqListItem(int index, GroundspeakAPI.PQ pq, PqListItemStyle style) {
         super(index);
 
         this.pq = pq;
@@ -62,10 +61,13 @@ public class PqListItem extends ListViewItem {
         this.add().expandX().fillX();
         this.row();
 
+        /*
+        // there is no size in the API 1.0 list
         this.add(new AligmentLabel(Translation.get("size"), infoLabelStyle, Align.left)).expandX().fillX();
         this.add(new AligmentLabel(decimalFormat.format(pq.sizeMB) + " MB", infoLabelStyle, Align.left)).expandX().fillX();
         this.add().expandX().fillX();
         this.row();
+         */
 
         this.add(new AligmentLabel(Translation.get("count"), infoLabelStyle, Align.left)).expandX().fillX();
         this.add(new AligmentLabel(Integer.toString(pq.cacheCount), infoLabelStyle, Align.left)).expandX().fillX();
@@ -99,27 +101,11 @@ public class PqListItem extends ListViewItem {
         this.row();
     }
 
-    public Date getCreationDate() {
-        return this.pq.lastGenerated;
-    }
-
-    public String getName() {
-        return this.pq.name;
-    }
-
-    public String getUID() {
-        return this.pq.guid;
-    }
-
-    public double getSize() {
-        return this.pq.sizeMB;
-    }
-
     public int getCount() {
         return this.pq.cacheCount;
     }
 
-    public PocketQuery getPocketQuery() {
+    public GroundspeakAPI.PQ getPocketQuery() {
         return this.pq;
     }
 }

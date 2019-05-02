@@ -28,6 +28,7 @@ import de.longri.cachebox3.gpx.ImportHandler;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.activities.ImportGcPos;
 import de.longri.cachebox3.gui.activities.ImportPQActivity;
+import de.longri.cachebox3.gui.activities.UpdateStatusAndOthers;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
@@ -63,6 +64,7 @@ public class ShowImportMenu extends Menu {
 
         //ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
 
+        addMenuItem("chkState", CB.getSkin().getMenuIcon.gc_logo,() -> new UpdateStatusAndOthers().show());
         addMenuItem("API_IMPORT", CB.getSkin().getMenuIcon.GC_Live, () -> { }).setMoreMenu(getGcImportMenu());
         addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
         addMenuItem("GCVoteRatings", null, () -> {
