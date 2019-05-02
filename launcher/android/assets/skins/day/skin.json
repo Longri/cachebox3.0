@@ -1852,6 +1852,10 @@
       "path": "svg/toast_background.svg",
       "scale": 1
     },
+    "todo": {
+      "path": "svg/todo.svg",
+      "scale": 1.8
+    },
     "toggleOff": {
       "path": "svg/toggleOff.svg",
       "scale": 1
@@ -2873,7 +2877,8 @@
       "friendsLogs": "friendsLogs",
       "downloadLogs": "downloadLogs",
       "downloadFriendsLogs": "downloadFriendsLogs",
-      "downloadLogImages": "downloadLogImages"
+      "downloadLogImages": "downloadLogImages",
+      "todo": "todo"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
@@ -3280,14 +3285,13 @@
       "arrow": "arrow-compass",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
-      "typeStyle": "cacheList"
+      "typeStyle": "bubble"
     },
     "bubble": {
       "nameFont": "mapPanelUnit",
       "nameFontColor": "font_color",
       "distanceFont": "AboutInfo",
-      "distanceFontColor": "font_color",
-      "typeStyle": "bubble"
+      "distanceFontColor": "font_color"
     },
     "logListItems": {}
   },
