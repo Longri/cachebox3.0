@@ -52,7 +52,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -66,8 +65,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     private static float lastX, lastY, lastScale;
     private PlatformDescriptionView view;
 
-    private final LinkedList<String> nonLocalImages = new LinkedList<String>();
-    private final LinkedList<String> nonLocalImagesUrl = new LinkedList<String>();
+    private final Array<String> nonLocalImages = new Array<String>();
+    private final Array<String> nonLocalImagesUrl = new Array<String>();
 
     private final AtomicBoolean FIRST = new AtomicBoolean(true);
     private final GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack = new GenericHandleCallBack<String>() {
@@ -328,13 +327,13 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         }
 
 
-        if (nonLocalImages.size() > 0) {
+        if (nonLocalImages.size > 0) {
             CB.postAsync(new NamedRunnable("DescriptionView") {
                 @Override
                 public void run() {
                     //download and store
                     log.debug("download description images");
-                    for (int i = 0, n = nonLocalImages.size(); i < n; i++) {
+                    for (int i = 0, n = nonLocalImages.size; i < n; i++) {
                         String localFilename = nonLocalImages.get(i);
                         String downloadUrl = nonLocalImagesUrl.get(i);
                         if (!NetUtils.download(downloadUrl, localFilename)) {

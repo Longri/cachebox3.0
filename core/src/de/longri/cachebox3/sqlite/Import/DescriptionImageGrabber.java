@@ -30,8 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 import static de.longri.cachebox3.Utils.sdbm;
 import static de.longri.cachebox3.apis.GroundspeakAPI.*;
@@ -139,7 +137,7 @@ public class DescriptionImageGrabber {
      * @param NonLocalImagesUrl
      * @return
      */
-    public static String ResolveImages(AbstractCache Cache, String html, boolean suppressNonLocalMedia, LinkedList<String> NonLocalImages, LinkedList<String> NonLocalImagesUrl) {
+    public static String ResolveImages(AbstractCache Cache, String html, boolean suppressNonLocalMedia, Array<String> NonLocalImages, Array<String> NonLocalImagesUrl) {
         /*
          * NonLocalImages = new List<string>(); NonLocalImagesUrl = new List<string>();
          */
@@ -224,9 +222,9 @@ public class DescriptionImageGrabber {
         return html;
     }
 
-    public static LinkedList<URI> GetImageUris(String html, String baseUrl) {
+    public static Array<URI> GetImageUris(String html, String baseUrl) {
 
-        LinkedList<URI> images = new LinkedList<>();
+        Array<URI> images = new Array<>();
 
         // chk baseUrl
         try {
@@ -269,7 +267,7 @@ public class DescriptionImageGrabber {
             log.debug("GrabImagesSelectedByCache -> grab description images");
             ip.ProgressChangeMsg("importImages", Translation.get("DescriptionImageImportForGC") + gcCode);
 
-            LinkedList<URI> imgUris = GetImageUris(description, url);
+            Array<URI> imgUris = GetImageUris(description, url);
 
             for (URI uri : imgUris) {
                 try {
@@ -313,7 +311,7 @@ public class DescriptionImageGrabber {
             // Get additional images (Spoiler)
 
             FileHandle[] files = getFilesInDirectory(Config.SpoilerFolder.getValue(), gcCode);
-            ArrayList<String> allSpoilers = new ArrayList<>();
+            Array<String> allSpoilers = new Array<>();
             for (FileHandle file : files)
                 allSpoilers.add(file.name());
             FileHandle[] filesLocal = getFilesInDirectory(Config.SpoilerFolderLocal.getValue(), gcCode);
@@ -325,7 +323,7 @@ public class DescriptionImageGrabber {
 
                 // todo always take from database. They are not downloaded yet
                 // todo else don't write them to database on fetch/update cache
-                ArrayList<ImageEntry> imageEntries = downloadImageListForGeocache(gcCode, withLogImages);
+                Array<ImageEntry> imageEntries = downloadImageListForGeocache(gcCode, withLogImages);
                 if (APIError != OK) {
                     return ERROR;
                 }
@@ -351,9 +349,9 @@ public class DescriptionImageGrabber {
                         String filename = imageEntry.LocalPath.substring(imageEntry.LocalPath.lastIndexOf('/') + 1);
 
                         // todo to test allSpoilers content
-                        if (allSpoilers.contains(filename)) {
+                        if (allSpoilers.contains(filename, false)) {
                             // wenn ja, dann aus der Liste der aktuell vorhandenen Spoiler entfernen und mit dem nächsten Spoiler weitermachen
-                            allSpoilers.remove(filename);
+                            allSpoilers.removeValue(filename, false);
                             continue; // dieser Spoiler muss jetzt nicht mehr geladen werden da er schon vorhanden ist.
                         }
 
@@ -458,7 +456,6 @@ public class DescriptionImageGrabber {
 
     /**
      * Neue Version, mit @ als Eingrenzung des Hashs, da die Klammern nicht als URL's verwendet werden dürfen
-     *
      */
     public static ImageEntry BuildAdditionalImageFilenameHashNew(String GcCode, ImageEntry imageEntry) {
         try {
@@ -476,8 +473,7 @@ public class DescriptionImageGrabber {
             // Create sdbm Hash from Path of URI, not from complete URI
             imageEntry.LocalPath = imagePath + "/" + GcCode + " - " + imageEntry.Name + " @" + sdbm(uriPath) + "@" + extension;
             return imageEntry;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
