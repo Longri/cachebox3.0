@@ -351,7 +351,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         cm.addMenuItem("ResortList", CB.getSkin().getMenuIcon.sortIcon, () -> cacheListView.resort());
         cm.addMenuItem("Filter", CB.getSkin().getMenuIcon.filterIcon, () -> new Action_EditFilterSettings().execute());
         cm.addMenuItem("MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon, () -> CB.viewmanager.setNewFilter(FilterInstances.ALL));
-        cm.addMenuItem("Search", CB.getSkin().getMenuIcon.searchIcon, () -> CB.viewmanager.toast("NOT IMPLEMENTED"));// todo ISSUE (#115 Add search Dialog for ListView)
+        cm.addMenuItem("Search", CB.getSkin().getMenuIcon.searchIcon, () -> CB.viewmanager.toast("NOT IMPLEMENTED")).setEnabled(false);// todo ISSUE (#115 Add search Dialog for ListView)
         /*
         if (SearchDialog.that == null) {
             new SearchDialog();
@@ -368,6 +368,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 })
         );
         mi = cm.addMenuItem("AutoResort", null, () -> CB.viewmanager.toast("NOT IMPLEMENTED")); // todo ISSUE (#116 addAutoResort)   icon: CB.getSkin().getMenuIcon.MI_AUTO_RESORT
+        mi.setEnabled(false);
         /*
         CB.setAutoResort(!CB.getAutoResort());
         if (CB.getAutoResort()) {
@@ -378,7 +379,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
          */
         mi.setCheckable(true);
         mi.setChecked(CB.getAutoResort());
-        cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon, () -> (new EditCache("editCache")).create()); //todo ISSUE (#118 add new Cache)
+        cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon, () -> (new EditCache("editCache")).create()).setEnabled(false); //todo ISSUE (#118 add new Cache)
         cm.addMenuItem("DeleteCaches", CB.getSkin().getMenuIcon.deleteCaches, () -> {}).setMoreMenu(new ShowDeleteMenu());
         return cm;
     }

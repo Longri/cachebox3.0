@@ -486,7 +486,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                             GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
                         else if (isCorrectedFinal())
                             GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
-                        if (GroundspeakAPI.APIError == 0) {
+                        if (GroundspeakAPI.APIError == GroundspeakAPI.OK) {
                             MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                         } else {
                             MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
