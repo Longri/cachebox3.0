@@ -193,7 +193,7 @@ public class ListView extends Catch_WidgetGroup {
                         event.setListenerActor(item);
 
                         // item Clicked
-                        log.debug("ListViewItem {} clicked", i);
+                        log.debug("ListViewItem {} clicked | item => {}", i, item.toString() );
                         Array<EventListener> listeners = item.getListeners();
                         boolean handeld = false;
                         for (EventListener listener : listeners) {

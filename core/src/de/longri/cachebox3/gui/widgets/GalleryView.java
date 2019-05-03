@@ -46,10 +46,9 @@ public class GalleryView extends Catch_Table {
         overview = new GalleryListView();
         gallery = new GalleryListView();
 
-//        this.add(gallery).expandX().fillX().height(new Value.Fixed(Gdx.graphics.getWidth()));
-//        this.row();
+        this.add(gallery).expandX().fillX().height(new Value.Fixed(Gdx.graphics.getWidth()));
+        this.row();
         this.add(overview).expandX().fillX().fillY();
-
 
         this.setDebug(true);
     }
@@ -76,7 +75,7 @@ public class GalleryView extends Catch_Table {
         GalleryItem overviewItem = new GalleryItem(index, overviewloader);
 //        overviewItem.setOnClickListener(onIconClicked);
 
-        overview.addActor(overviewItem);
+//        overview.addActor(overviewItem);
         overViewAdapter.add(overviewItem);
     }
 

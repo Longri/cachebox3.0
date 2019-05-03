@@ -61,13 +61,13 @@ public class GalleryItem extends ListViewItem {
 
     @Override
     public float getPrefHeight() {
-        return lbl != null ? (this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight(): super.getPrefHeight() )
+        return lbl != null ? (this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight())
                 : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
     }
 
     @Override
     public float getPrefWidth() {
-        return lbl != null ? (this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight(): super.getPrefHeight() )
+        return lbl != null ? (this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight())
                 : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
     }
 
@@ -75,4 +75,10 @@ public class GalleryItem extends ListViewItem {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
+
+    @Override
+    public void setX(float value) {
+        super.setX(value);
+    }
+
 }

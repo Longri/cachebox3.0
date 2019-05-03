@@ -460,13 +460,16 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     private void itemChangedSize(ListViewItemInterface newItem, float changedSize) {
         //set pos of items that are before
-        for (int i = 0; i < newItem.getListIndex(); i++) {
-            if (type == VERTICAL) {
+        if (type == VERTICAL) {
+            for (int i = 0; i < newItem.getListIndex(); i++) {
                 itemArray[i].setY(itemArray[i].getY() + changedSize);
-            } else {
+            }
+        } else {
+            for (int i = count-1; i > newItem.getListIndex(); i--) {
                 itemArray[i].setX(itemArray[i].getX() + changedSize);
             }
         }
+
         this.completeSize += changedSize;
         if (type == VERTICAL) this.setHeight(completeSize);
         else this.setWidth(completeSize);
