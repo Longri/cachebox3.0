@@ -76,10 +76,11 @@ public class GalleryView extends Catch_Table {
         GalleryItem overviewItem = new GalleryItem(index, overviewloader);
 //        overviewItem.setOnClickListener(onIconClicked);
 
+        overview.addActor(overviewItem);
         overViewAdapter.add(overviewItem);
     }
 
-//    @Override
+    //    @Override
 //    protected void sizeChanged() {
 //        super.sizeChanged();
 //        overview.setSize(this.getWidth(), this.getHeight());

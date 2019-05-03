@@ -59,12 +59,12 @@ public class GalleryItem extends ListViewItem {
 
     @Override
     public float getPrefHeight() {
-        return Gdx.graphics.getWidth();
+        return lbl != null ? super.getPrefWidth() : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
     }
 
     @Override
     public float getPrefWidth() {
-        return Gdx.graphics.getWidth();
+        return lbl != null ? super.getPrefWidth() : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
     }
 
     @Override
