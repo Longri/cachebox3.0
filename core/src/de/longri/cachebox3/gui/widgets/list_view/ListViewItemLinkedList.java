@@ -32,9 +32,10 @@ import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
  * Created by Longri on 03.02.18.
  */
 public class ListViewItemLinkedList extends ScrollViewContainer {
-    private final Logger log = LoggerFactory.getLogger(ListViewItemLinkedList.class);
+    //    private final Logger log = LoggerFactory.getLogger(ListViewItemLinkedList.class);
+    private final Logger log;
 
-    final static int OVERLOAD = 5;
+    private final static int OVERLOAD = 5;
 
     private final ListViewType type;
     private final boolean canDisposeItems;
@@ -58,6 +59,10 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     ListViewItemLinkedList(ListViewType type, ListViewStyle style, float padLeft,
                            float padRight, float padTop, float padBottom, boolean canDisposeItems) {
+
+        log = type == VERTICAL ? LoggerFactory.getLogger("Empty") : LoggerFactory.getLogger(ListViewItemLinkedList.class);
+
+
         this.canDisposeItems = canDisposeItems;
         this.type = type;
         this.style = style;
@@ -136,20 +141,24 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     void calcCompleteSize() {
         log.debug("calc complete size");
         CB.assertGlThread();
-        completeSize = (type == VERTICAL) ? padTop : padLeft;
-        for (int i = itemArray.length - 1; i >= 0; i--) {
-            if (type == VERTICAL) itemArray[i].setY(completeSize);
-            else itemArray[i].setX(completeSize);
 
-            float size = (type == VERTICAL)
-                    ? itemArray[i].getHeight() + padTop + padBottom
-                    : itemArray[i].getWidth() + padLeft + padRight;
-            completeSize += size;
+        if (type == VERTICAL) {
+            completeSize = padTop;
+            for (int i = itemArray.length - 1; i >= 0; i--) {
+                itemArray[i].setY(completeSize);
+                completeSize += itemArray[i].getHeight() + padTop + padBottom;
+            }
+            completeSize += padBottom;
+            this.setHeight(completeSize);
+        } else {
+            completeSize = padLeft;
+            for (int i = 0, n = itemArray.length; i < n; i++) {
+                itemArray[i].setX(completeSize);
+                completeSize += itemArray[i].getWidth() + padLeft + padRight;
+            }
+            completeSize += padRight;
+            this.setWidth(completeSize);
         }
-        completeSize += (type == VERTICAL) ? padBottom : padRight;
-
-        if (type == VERTICAL) this.setHeight(completeSize);
-        else this.setWidth(completeSize);
         log.debug("complete size: {}", completeSize);
     }
 
@@ -183,13 +192,13 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
 
         if (ListViewItemLinkedList.this.hasChildren() && lastVisibleScrollSearch == scroll && lastVisibleSearchSize == size) {
-            log.debug("RETURN TWICE CALL");
+//            log.debug("RETURN TWICE CALL");
             return;
         }
         lastVisibleSearchSize = size;
         lastVisibleScrollSearch = scroll;
 
-        float search = completeSize - scroll;
+        float search = (this.type == VERTICAL) ? completeSize - scroll : scroll;
 
         log.debug("setVisibleBounds scroll: {} size: {}", scroll, size);
 
@@ -221,7 +230,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
         //search last visible
         ListViewItemInterface lastVisible = firstVisible;
-        float lastPos = search - size;
+        float lastPos = (this.type == VERTICAL) ? search - size : search + size;
 
         if (this.type == VERTICAL) {
             for (int i = findIdx, n = itemArray.length; i < n; i++) {
@@ -233,7 +242,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         } else {
             for (int i = findIdx, n = itemArray.length; i < n; i++) {
                 lastVisible = itemArray[i];
-                if (lastVisible.getX() <= lastPos) {
+                if (lastVisible.getX() > lastPos) {
                     break;
                 }
             }

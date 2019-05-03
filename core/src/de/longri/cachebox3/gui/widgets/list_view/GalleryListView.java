@@ -23,8 +23,8 @@ import de.longri.cachebox3.CB;
  */
 public class GalleryListView extends ListView {
     public GalleryListView() {
-//        super(ListViewType.HORIZONTAL);
-        super(ListViewType.VERTICAL);
+        super(ListViewType.HORIZONTAL);
+//        super(ListViewType.VERTICAL);
         this.setDebug(true, true);
     }
 

@@ -50,21 +50,25 @@ public class GalleryItem extends ListViewItem {
 
     private void fillContent() {
         this.clear();
-        this.add(img);
-        if (lbl != null) {
-            this.row();
-            this.add(lbl);
-        }
+//        this.add(img);
+//        if (lbl != null) {
+//            this.row();
+//            this.add(lbl);
+//        }
+
+        this.add(new VisLabel(String.valueOf(getListIndex())));
     }
 
     @Override
     public float getPrefHeight() {
-        return lbl != null ? super.getPrefWidth() : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
+        return lbl != null ? (this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight(): super.getPrefHeight() )
+                : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
     }
 
     @Override
     public float getPrefWidth() {
-        return lbl != null ? super.getPrefWidth() : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
+        return lbl != null ? (this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight(): super.getPrefHeight() )
+                : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
     }
 
     @Override

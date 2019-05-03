@@ -46,8 +46,8 @@ public class GalleryView extends Catch_Table {
         overview = new GalleryListView();
         gallery = new GalleryListView();
 
-        this.add(gallery).expandX().fillX().height(new Value.Fixed(Gdx.graphics.getWidth()));
-        this.row();
+//        this.add(gallery).expandX().fillX().height(new Value.Fixed(Gdx.graphics.getWidth()));
+//        this.row();
         this.add(overview).expandX().fillX().fillY();
 
 
