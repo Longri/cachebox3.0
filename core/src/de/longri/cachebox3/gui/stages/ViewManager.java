@@ -34,7 +34,6 @@ import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.Action_NavigateExt;
-import de.longri.cachebox3.gui.actions.Action_NavigateInt;
 import de.longri.cachebox3.gui.actions.Action_Toggle_Day_Night;
 import de.longri.cachebox3.gui.actions.show_activities.*;
 import de.longri.cachebox3.gui.actions.show_views.*;
@@ -265,7 +264,6 @@ public class ViewManager extends NamedStage
 
         db_button.addAction(new ActionButton(action_show_cacheList, true, GestureDirection.Up));
         db_button.addAction(new ActionButton(action_show_trackableListView, false, GestureDirection.Right));
-        db_button.addAction(new ActionButton(action_show_trackListView, false, GestureDirection.Down));
 
         cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
         cache_button.addAction(new ActionButton(action_show_waypointView, false, GestureDirection.Right));
@@ -278,7 +276,9 @@ public class ViewManager extends NamedStage
         navButton.addAction(new ActionButton(action_show_mapView, true, GestureDirection.Up));
         navButton.addAction(new ActionButton(action_show_compassView, false, GestureDirection.Right));
         navButton.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
-        navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left));
+        // navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left)); not implemented, obsolete?! ACB2 removed
+        navButton.addAction(new ActionButton(action_show_trackListView, false, GestureDirection.Left));
+        // navButton.addAction(new ActionButton(); // "MapDownload",null,()->{}); //todo ISSUE (#113 Add Map download) MapDownload.INSTANCE.show();
 
 
 //
