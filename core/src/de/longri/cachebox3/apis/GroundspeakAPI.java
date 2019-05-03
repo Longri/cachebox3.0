@@ -40,7 +40,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-
 import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.Segmentize;
 import static de.longri.cachebox3.types.MutableCache.IS_FULL;
 import static de.longri.cachebox3.types.MutableCache.IS_LITE;
@@ -256,7 +255,7 @@ public class GroundspeakAPI {
         return updateGeoCaches(query, caches);
     }
 
-    public static Array<GeoCacheRelated> updateGeoCache(MutableCache cache) {
+    public static Array<GeoCacheRelated> updateGeoCache(AbstractCache cache) {
         Array<AbstractCache> caches = new Array<>();
         caches.add(cache);
         // not .onlyActiveGeoCaches() : must be updated to the latest status
@@ -1203,7 +1202,7 @@ public class GroundspeakAPI {
                     case "longDescription":
                         tmp = API1Cache.optString(switchValue, "");
                         if (tmp.length() > 0) {
-                            // containsHtml liefert immer false
+                            // containsHtml lieferte in meinen Beispielen immer false, scheint aber nun ok
                             if (!tmp.contains("<")) {
                                 tmp = tmp.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
                             }
@@ -1214,7 +1213,7 @@ public class GroundspeakAPI {
                     case "shortDescription":
                         tmp = API1Cache.optString(switchValue, "");
                         if (tmp.length() > 0) {
-                            // containsHtml liefert immer false
+                            // containsHtml lieferte in meinen Beispielen immer false, scheint aber nun ok
                             if (!tmp.contains("<")) {
                                 tmp = tmp.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
                             }

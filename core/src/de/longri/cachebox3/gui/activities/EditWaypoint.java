@@ -62,7 +62,7 @@ public class EditWaypoint extends ActivityBase {
     private final SelectBox<CacheTypes> selectBox;
     private final boolean showCoordsOnShow;
     private final GenericCallBack<AbstractWaypoint> callBack;
-    private final boolean onlyShow;//TODO implement
+    private final boolean onlyShow;//TODO implement see WaypointView context menu. See issue #252
 
     public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, boolean onlyShow, GenericCallBack<AbstractWaypoint> callBack) {
         super("EditWaypoint");

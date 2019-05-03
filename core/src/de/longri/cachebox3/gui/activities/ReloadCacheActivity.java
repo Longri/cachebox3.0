@@ -24,25 +24,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
-import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
-import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.events.*;
+import de.longri.cachebox3.apis.GroundspeakAPI;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.ImportProgressChangedEvent;
+import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.Cache3DAO;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,11 +62,19 @@ public class ReloadCacheActivity extends ActivityBase {
     private final CharSequenceButton bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;
-    private boolean importRuns = false;
-    private boolean needLayout = true;
     private final Image workAnimation;
     private final CB_ProgressBar CBProgressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
+    private boolean importRuns = false;
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (importRuns) {
+                canceled.set(true);
+            }
+            finish();
+        }
+    };
+    private boolean needLayout = true;
 
     public ReloadCacheActivity() {
         super("UpdateStatusAndOthers");
@@ -118,20 +128,10 @@ public class ReloadCacheActivity extends ActivityBase {
         needLayout = false;
     }
 
-
     private void setWorkAnimationVisible(boolean visible) {
         workAnimation.setVisible(visible);
         CBProgressBar.setVisible(visible);
     }
-
-    private final ClickListener cancelClickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            if (importRuns) {
-                canceled.set(true);
-            }
-            finish();
-        }
-    };
 
     private void createOkCancelBtn() {
         bCancel.addListener(cancelClickListener);
@@ -146,6 +146,7 @@ public class ReloadCacheActivity extends ActivityBase {
     private void importNow() {
 
         setWorkAnimationVisible(true);
+
         CBProgressBar.setAnimateDuration(0);
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
@@ -161,55 +162,26 @@ public class ReloadCacheActivity extends ActivityBase {
         EventHandler.add(progressListener);
         importRuns = true;
 
-        CB.postAsync(new NamedRunnable("ReloadCacheActivity") {
-            @Override
-            public void run() {
-                ApiCallLimitListener limitListener = new ApiCallLimitListener() {
-                    @Override
-                    public void waitForCall(ApiCallLimitEvent event) {
-                        int sec = (int) (event.getWaitTime() / 1000);
-                        CB.viewmanager.toast(Translation.get("ApiLimit"
-                                , Integer.toString(Config.apiCallLimit.getValue()), Integer.toString(sec))
-                                , ViewManager.ToastLength.LONG);
-                    }
-                };
+        AbstractCache aktCache = EventHandler.getSelectedCache();
+        if (aktCache != null) {
+            Array<GroundspeakAPI.GeoCacheRelated> updatedCaches = GroundspeakAPI.updateGeoCache(aktCache);
+            if (GroundspeakAPI.APIError != GroundspeakAPI.OK) {
+                MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("ReloadCacheAPI"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+            } else {
+                for (GroundspeakAPI.GeoCacheRelated updatedCache : updatedCaches) {
+                    Cache3DAO dao = new Cache3DAO();
+                    dao.writeToDatabase(Database.Data, updatedCache.cache, true);
 
-                EventHandler.add(limitListener);
-
-                AbstractCache actCache = EventHandler.getSelectedCache();
-                if (actCache != null) {
-                    final SearchGC searchGC = new SearchGC(Database.Data, GroundspeakLiveAPI.getAccessToken(), actCache.getGcCode().toString(),
-                            new ICancel() {
-                                @Override
-                                public boolean cancel() {
-                                    return canceled.get();
-                                }
-                            });
-                    searchGC.available = false;
-                    searchGC.excludeFounds = false;
-                    searchGC.excludeHides = false;
-                    searchGC.logCount = 10;
-
-                    final AtomicBoolean WAIT = new AtomicBoolean(true);
-                    searchGC.postRequest(new GenericCallBack<ApiResultState>() {
-                        @Override
-                        public void callBack(ApiResultState value) {
-                            WAIT.set(false);
-                        }
-                    }, actCache.getGPXFilename_ID());
-
-                    CB.wait(WAIT);
-                    //fire changed event
-                    EventHandler.fire(new SelectedCacheChangedEvent(actCache));
-
+                    LogDAO logdao = new LogDAO();
+                    logdao.writeToDB(Database.Data, updatedCache.logs);
                 }
-
-                //reload Cache complete, close activity
-                EventHandler.remove(limitListener);
-                finish();
-
             }
-        });
+        }
+
+        importRuns = false;
+
+        finish();
+
     }
 
     @Override

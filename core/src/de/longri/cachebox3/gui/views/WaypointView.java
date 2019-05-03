@@ -24,7 +24,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
-import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
@@ -35,16 +34,16 @@ import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.activities.ProjectionCoordinate;
-import de.longri.cachebox3.gui.dialogs.*;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
-import de.longri.cachebox3.gui.widgets.list_view.SelectionChangedEvent;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
@@ -56,11 +55,9 @@ import de.longri.cachebox3.types.MutableWaypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
-import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.longri.cachebox3.gui.menu.MenuID.MI_UploadCorrectedCoordinates;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 
@@ -90,19 +87,10 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                     WaypointView.this.listView.setSelection(listIndex);
             }
             final Menu contextMenu = getContextMenu();
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    contextMenu.show();
-                }
-            });
+            Gdx.app.postRunnable(contextMenu::show);
             return true;
         }
     };
-
-    public WaypointView(BitStore reader) {
-        super(reader);
-    }
 
     public WaypointView() {
         super("WaypointView");
@@ -132,12 +120,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         super.layout();
         if (listView == null) addNewListView();
         log.debug("Finish Layout");
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                Gdx.graphics.requestRendering();
-            }
-        });
+        Gdx.app.postRunnable(() -> Gdx.graphics.requestRendering());
     }
 
     /**
@@ -205,7 +188,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                 Coordinate targetCoord = idx == 0 ? actAbstractCache : actAbstractCache.getWaypoints().get(idx - 1);
 
                 //calculate distance and bearing
-                float result[] = new float[4];
+                float[] result = new float[4];
                 MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST,
                         myPosition.getLatitude(), myPosition.getLongitude(),
                         targetCoord.getLatitude(), targetCoord.getLongitude(), result);
@@ -219,12 +202,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                     changed = ((WayPointListItem) view).update(-(result[2] - heading), UnitFormatter.distanceString(result[0], true));
                 }
                 if (changed) {
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            Gdx.graphics.requestRendering();
-                        }
-                    });
+                    Gdx.app.postRunnable(() -> Gdx.graphics.requestRendering());
                 }
             }
 
@@ -249,47 +227,41 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         }
 
         // add selection changed event listener
-        listView.addSelectionChangedEventListner(new SelectionChangedEvent() {
-            @Override
-            public void selectionChanged() {
+        listView.addSelectionChangedEventListner(() -> {
 
-                if (listView.getSelectedItem() instanceof WayPointListItem) {
-                    WayPointListItem selectedItem = (WayPointListItem) listView.getSelectedItem();
-                    int index = selectedItem.getListIndex() - 1;
-                    AbstractWaypoint wp = actAbstractCache.getWaypoints().get(index);
+            if (listView.getSelectedItem() instanceof WayPointListItem) {
+                WayPointListItem selectedItem = (WayPointListItem) listView.getSelectedItem();
+                int index = selectedItem.getListIndex() - 1;
+                AbstractWaypoint wp = actAbstractCache.getWaypoints().get(index);
 
-                    log.debug("Waypoint selection changed to: " + wp.toString());
-                    //set selected Waypoint global
-                    EventHandler.fire(new SelectedWayPointChangedEvent(wp));
-                    actWaypoint = wp;
+                log.debug("Waypoint selection changed to: " + wp.toString());
+                //set selected Waypoint global
+                EventHandler.fire(new SelectedWayPointChangedEvent(wp));
+                actWaypoint = wp;
 
-                } else {
-                    CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
-                    AbstractCache cache = Database.Data.cacheList.getCacheById(selectedItem.getId());
-                    log.debug("Cache selection changed to: " + cache.toString());
-                    //set selected Cache global
-                    EventHandler.fire(new SelectedCacheChangedEvent(cache));
-                    actWaypoint = null;
-                }
+            } else {
+                CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
+                AbstractCache cache = Database.Data.cacheList.getCacheById(selectedItem.getId());
+                log.debug("Cache selection changed to: " + cache.toString());
+                //set selected Cache global
+                EventHandler.fire(new SelectedCacheChangedEvent(cache));
+                actWaypoint = null;
             }
         });
 
-        CB.postOnNextGlThread(new Runnable() {
-            @Override
-            public void run() {
-                AbstractWaypoint wp = EventHandler.getSelectedWaypoint();
-                if (wp == null) {
-                    //select Cache
-                    listView.setSelection(0);
-                    listView.setSelectedItemVisible(false);
-                } else {
-                    Array<AbstractWaypoint> waypoints = actAbstractCache.getWaypoints();
-                    for (int i = 0; i < waypoints.size; i++) {
-                        if (waypoints.get(i).getGcCode().equals(wp.getGcCode())) {
-                            listView.setSelection(i + 1);
-                            listView.setSelectedItemVisible(false);
-                            break;
-                        }
+        CB.postOnNextGlThread(() -> {
+            AbstractWaypoint wp = EventHandler.getSelectedWaypoint();
+            if (wp == null) {
+                //select Cache
+                listView.setSelection(0);
+                listView.setSelectedItemVisible(false);
+            } else {
+                Array<AbstractWaypoint> waypoints = actAbstractCache.getWaypoints();
+                for (int i = 0; i < waypoints.size; i++) {
+                    if (waypoints.get(i).getGcCode().equals(wp.getGcCode())) {
+                        listView.setSelection(i + 1);
+                        listView.setSelectedItemVisible(false);
+                        break;
                     }
                 }
             }
@@ -300,12 +272,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
     private void disposeListView() {
         final ListView disposeListView = this.listView;
-        Thread disposeThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                disposeListView.dispose();
-            }
-        });
+        Thread disposeThread = new Thread(disposeListView::dispose);
         disposeThread.start();
     }
 
@@ -340,18 +307,15 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         Window dialog = new ButtonDialog("delete Waypoint",
                 Translation.get("?DelWP") + "\n[" + actWaypoint.getTitle() + "]\n",
                 Translation.get("!DelWP"), MessageBoxButtons.YesNo, MessageBoxIcon.Question,
-                new OnMsgBoxClickListener() {
-                    @Override
-                    public boolean onClick(int which, Object data) {
-                        if (which == ButtonDialog.BUTTON_POSITIVE) {
-                            log.debug("Delete Waypoint");
-                            // Yes button clicked
-                            DaoFactory.WAYPOINT_DAO.delete(Database.Data, actWaypoint, true);
-                            actAbstractCache.getWaypoints().removeValue(actWaypoint, false);
-                            addNewListView();
-                        }
-                        return true;
+                (which, data) -> {
+                    if (which == ButtonDialog.BUTTON_POSITIVE) {
+                        log.debug("Delete Waypoint");
+                        // Yes button clicked
+                        DaoFactory.WAYPOINT_DAO.delete(Database.Data, actWaypoint, true);
+                        actAbstractCache.getWaypoints().removeValue(actWaypoint, false);
+                        addNewListView();
                     }
+                    return true;
                 });
         dialog.show();
     }
@@ -365,7 +329,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     }
 
     private void addWp(Coordinate coordinate, boolean showCoords) {
-        String newGcCode = "";
+        String newGcCode;
         try {
             newGcCode = Database.createFreeGcCode(Database.Data, EventHandler.getSelectedCache().getGcCode().toString());
         } catch (Exception e) {
@@ -386,34 +350,30 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         CB.postOnGlThread(new NamedRunnable("WaypointView") {
             @Override
             public void run() {
-                AbstractWaypoint mutable = newWP;
-                EditWaypoint editWaypoint = new EditWaypoint(mutable, showCoords, onlyShow, new GenericCallBack<AbstractWaypoint>() {
-                    @Override
-                    public void callBack(AbstractWaypoint value) {
-                        if (value != null) {
-                            boolean update = false;
-                            if (actAbstractCache.getWaypoints().contains(value, false)) {
-                                int index = actAbstractCache.getWaypoints().indexOf(value, false);
-                                actAbstractCache.getWaypoints().set(index, value);
-                                update = true;
-                            } else {
-                                actAbstractCache.getWaypoints().add(value);
-                            }
-
-                            addNewListView();
-                            EventHandler.fire(new SelectedWayPointChangedEvent(value));
-                            if (value.isStart()) {
-                                //It must be ensured here that this waypoint is the only one of these Cache,
-                                //which is defined as starting point !!!
-                                DaoFactory.WAYPOINT_DAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
-                            }
-                            if (update) {
-                                DaoFactory.WAYPOINT_DAO.updateDatabase(Database.Data, value, true);
-                            } else {
-                                DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value, true);
-                            }
-                            CB.requestRendering();
+                EditWaypoint editWaypoint = new EditWaypoint(newWP, showCoords, onlyShow, value -> {
+                    if (value != null) {
+                        boolean update = false;
+                        if (actAbstractCache.getWaypoints().contains(value, false)) {
+                            int index = actAbstractCache.getWaypoints().indexOf(value, false);
+                            actAbstractCache.getWaypoints().set(index, value);
+                            update = true;
+                        } else {
+                            actAbstractCache.getWaypoints().add(value);
                         }
+
+                        addNewListView();
+                        EventHandler.fire(new SelectedWayPointChangedEvent(value));
+                        if (value.isStart()) {
+                            //It must be ensured here that this waypoint is the only one of these Cache,
+                            //which is defined as starting point !!!
+                            DaoFactory.WAYPOINT_DAO.resetStartWaypoint(EventHandler.getSelectedCache(), value);
+                        }
+                        if (update) {
+                            DaoFactory.WAYPOINT_DAO.updateDatabase(Database.Data, value, true);
+                        } else {
+                            DaoFactory.WAYPOINT_DAO.writeToDatabase(Database.Data, value, true);
+                        }
+                        CB.requestRendering();
                     }
                 });
                 editWaypoint.show();
@@ -459,61 +419,29 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     public Menu getContextMenu() {
         Menu cm = new Menu("CacheListContextMenu");
 
-        cm.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public boolean onItemClick(MenuItem item) {
-                switch (item.getMenuItemId()) {
-                    case MenuID.MI_ADD:
-                        addWp();
-                        return true;
-                    case MenuID.MI_WP_SHOW:
-                        editWP(false);
-                        return true;
-                    case MenuID.MI_EDIT:
-                        editWP(true);
-                        return true;
-                    case MenuID.MI_DELETE:
-                        deleteWP();
-                        return true;
-                    case MenuID.MI_PROJECTION:
-                        addProjection();
-                        return true;
-                    case MenuID.MI_FROM_GPS:
-                        addMeasure();
-                        return true;
-                    case MI_UploadCorrectedCoordinates:
-                        if (actAbstractCache.hasCorrectedCoordinates())
-                            GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
-                        else if (isCorrectedFinal())
-                            GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
-                        if (GroundspeakAPI.APIError == 0) {
-                            MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
-                        } else {
-                            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
-                        }
-                        return true;
-
-                }
-                return false;
+        if (actWaypoint != null) {
+            cm.addMenuItem("show", CB.getSkin().getMenuIcon.showWp, () -> editWP(false));
+            cm.addMenuItem("edit", CB.getSkin().getMenuIcon.editWp, () -> editWP(true)).setEnabled(false); // todo implement and remove disabled. See issue #252
+        }
+        cm.addMenuItem("AddWaypoint", CB.getSkin().getMenuIcon.addWp, this::addWp);
+        if ((actWaypoint != null) && (actWaypoint.isUserWaypoint()))
+            cm.addMenuItem("delete", CB.getSkin().getMenuIcon.delWp, this::deleteWP);
+        if (actWaypoint != null || actAbstractCache != null)
+            cm.addMenuItem("Projection", CB.getSkin().getMenuIcon.projectWp, this::addProjection);
+        // todo icon for UploadCorrectedCoordinates
+        MenuItem mi = cm.addMenuItem("UploadCorrectedCoordinates", null, () -> {
+            if (actAbstractCache.hasCorrectedCoordinates())
+                GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
+            else if (isCorrectedFinal())
+                GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
+            if (GroundspeakAPI.APIError == GroundspeakAPI.OK) {
+                MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+            } else {
+                MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             }
         });
-
-        if (actWaypoint != null)
-            cm.addItem(MenuID.MI_WP_SHOW, "show", CB.getSkin().getMenuIcon.showWp);
-        if (actWaypoint != null)
-            cm.addItem(MenuID.MI_EDIT, "edit", CB.getSkin().getMenuIcon.editWp);
-        cm.addItem(MenuID.MI_ADD, "AddWaypoint", CB.getSkin().getMenuIcon.addWp);
-        if ((actWaypoint != null) && (actWaypoint.isUserWaypoint()))
-            cm.addItem(MenuID.MI_DELETE, "delete", CB.getSkin().getMenuIcon.delWp);
-
-        if (actWaypoint != null || actAbstractCache != null)
-            cm.addItem(MenuID.MI_PROJECTION, "Projection", CB.getSkin().getMenuIcon.projectWp);
-
-        MenuItem mi = cm.addItem(MI_UploadCorrectedCoordinates, "UploadCorrectedCoordinates");
         mi.setEnabled(actAbstractCache.hasCorrectedCoordinates() || isCorrectedFinal());
-
-        //ISSUE (#129 add measure WP from GPS)
-        cm.addItem(MenuID.MI_FROM_GPS, "FromGps", CB.getSkin().getMenuIcon.mesureWp);
+        cm.addMenuItem("FromGps", CB.getSkin().getMenuIcon.mesureWp, this::addMeasure);
 
         return cm;
     }
