@@ -421,7 +421,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
         if (actWaypoint != null) {
             cm.addMenuItem("show", CB.getSkin().getMenuIcon.showWp, () -> editWP(false));
-            cm.addMenuItem("edit", CB.getSkin().getMenuIcon.editWp, () -> editWP(true));
+            cm.addMenuItem("edit", CB.getSkin().getMenuIcon.editWp, () -> editWP(true)).setEnabled(false); // todo implement and remove disabled. See issue #252
         }
         cm.addMenuItem("AddWaypoint", CB.getSkin().getMenuIcon.addWp, this::addWp);
         if ((actWaypoint != null) && (actWaypoint.isUserWaypoint()))

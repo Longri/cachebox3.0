@@ -34,9 +34,6 @@ import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.settings.Config;
@@ -60,15 +57,30 @@ public class ShowImportMenu extends Menu {
 
     public ShowImportMenu() {
         super("ImportMenu");
-        // this.setOnItemClickListener(clickListener);
 
-        //ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
-
-        addMenuItem("chkState", CB.getSkin().getMenuIcon.gc_logo,() -> new UpdateStatusAndOthers().show());
-        addMenuItem("API_IMPORT", CB.getSkin().getMenuIcon.GC_Live, () -> { }).setMoreMenu(getGcImportMenu());
+        addMenuItem("chkState", CB.getSkin().getMenuIcon.gc_logo, () -> new UpdateStatusAndOthers().show());
+        // addMenuItem("API_IMPORT", CB.getSkin().getMenuIcon.GC_Live, () -> { }).setMoreMenu(getGcImportMenu());
+        // does no longer exist in ACB2
+        // in ACB2 is  a combined import with selection by checkboxes and then executed one after the other, seems to be the following issue:
+        // ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
+        addMenuItem("API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ, () -> new ImportPQActivity().show());
         addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
+        addMenuItem("API_IMPORT_OVER_POSITION", CB.getSkin().getMenuIcon.target, () -> CB.postAsync(new NamedRunnable("ShowImportMenu") {
+            @Override
+            public void run() {
+                if (!CB.checkApiKeyNeeded()) {
+                    CB.postOnGlThread(new NamedRunnable("ShowImportMenu") {
+                        @Override
+                        public void run() {
+                            new ImportGcPos().show();
+                        }
+                    });
+                }
+            }
+        }));
+        // todo ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
         addMenuItem("GCVoteRatings", null, () -> {
-            // todo create a importGCVote(): this is only a simple test for inputstream function;
+            // todo create a importGCVote(). ISSUE #122 add GC_Vote import. This is only a simple test for inputstream function;
             ArrayList<String> waypoints = new ArrayList<>();
             for (AbstractCache cache : Database.Data.cacheList) {
                 // todo only x caches at a time
@@ -90,73 +102,12 @@ public class ShowImportMenu extends Menu {
             }
         }); // todo create icon: CB.getSkin().getMenuIcon.importGCVote
 
+        addDivider(0);
 
-//        if (!StringH.isEmpty(Config.CBS_IP.getValue()))
-//            addItem(MenuID.MI_IMPORT_CBS, "CB-Server");
+        //todo ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
+        //if (!StringH.isEmpty(Config.CBS_IP.getValue()))
+        //    addItem(MenuID.MI_IMPORT_CBS, "CB-Server");
 
-        //ISSUE (#122 add GC_Vote import)   addItem(MenuID.MI_IMPORT_GCV, "GC_Vote");
-        //ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
-
-    }
-
-    /*
-    private final OnItemClickListener clickListener = new OnItemClickListener() {
-        @Override
-        public boolean onItemClick(MenuItem item) {
-            switch (item.getMenuItemId()) {
-                case MenuID.MI_IMPORT_GS:
-                    //do nothing, will show more menu
-                    break;
-                case MenuID.MI_IMPORT_GPX:
-                    break;
-            }
-            return true;
-        }
-    };
-
-     */
-
-
-    private Menu getGcImportMenu() {
-        Menu menu = new Menu("GcImportMenu");
-        menu.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public boolean onItemClick(MenuItem item) {
-
-                switch (item.getMenuItemId()) {
-                    case MenuID.MI_IMPORT_GS_PQ:
-                        ImportPQActivity imp = new ImportPQActivity();
-                        imp.show();
-                        return true;
-                    case MenuID.MI_IMPORT_GS_API_POSITION:
-                        CB.postAsync(new NamedRunnable("ShowImportMenu") {
-                            @Override
-                            public void run() {
-                                if (!CB.checkApiKeyNeeded()) {
-                                    CB.postOnGlThread(new NamedRunnable("ShowImportMenu") {
-                                        @Override
-                                        public void run() {
-                                            new ImportGcPos().show();
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                        return true;
-                    case MenuID.MI_IMPORT_GS_API_SEARCH:
-//                        SearchOverNameOwnerGcCode.ShowInstanz();
-                        return true;
-                }
-
-                return true;
-            }
-        });
-        menu.addItem(MenuID.MI_IMPORT_GS_PQ, "API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ);
-        menu.addItem(MenuID.MI_IMPORT_GS_API_POSITION, "API_IMPORT_OVER_POSITION", CB.getSkin().getMenuIcon.target);
-        //ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
-
-        return menu;
     }
 
     private void importGpxFile() {
