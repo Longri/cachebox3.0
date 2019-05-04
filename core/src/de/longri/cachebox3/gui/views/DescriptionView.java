@@ -416,7 +416,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public Menu getContextMenu() {
-        Menu cm = new Menu("DescriptionViewContextMenu");
+        Menu cm = new Menu("DescriptionViewTitle");
 
         MenuItem mi;
         boolean isSelected = (EventHandler.getSelectedCache() != null);

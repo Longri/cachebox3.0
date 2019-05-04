@@ -263,6 +263,7 @@ public class ViewManager extends NamedStage
         // assign the actions to the buttons
 
         db_button.addAction(new ActionButton(action_show_cacheList, true, GestureDirection.Up));
+        db_button.addAction(new ActionButton(new Action_ParkingDialog(),false));
         db_button.addAction(new ActionButton(action_show_trackableListView, false, GestureDirection.Right));
 
         cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
@@ -289,7 +290,6 @@ public class ViewManager extends NamedStage
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVoice, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecPicture, false, GestureDirection.Down));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVideo, false));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionParking, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
         if (CB.isTestVersion()) {

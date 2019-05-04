@@ -56,7 +56,7 @@ public class ShowImportMenu extends Menu {
     private final Logger log = LoggerFactory.getLogger(ShowImportMenu.class);
 
     public ShowImportMenu() {
-        super("ImportMenu");
+        super("ImportMenuTitle");
 
         addMenuItem("chkState", CB.getSkin().getMenuIcon.gc_logo, () -> new UpdateStatusAndOthers().show());
         // addMenuItem("API_IMPORT", CB.getSkin().getMenuIcon.GC_Live, () -> { }).setMoreMenu(getGcImportMenu());

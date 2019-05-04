@@ -22,19 +22,6 @@ package de.longri.cachebox3.gui.menu;
  * @author Longri
  */
 public class MenuID {
-    // SettingsActivity
-    public static final int MI_SHOW_EXPERT = 69;
-    public static final int MI_SHOW_ALL = 70;
-    public static final int MI_SHOW_Normal = 82;
-
-    //
-    public static final int MI_START_WITHOUT_SELECTION = 71;
-    public static final int MI_AUTO_START_DISABLED = 72;
-    public static final int MI_5 = 73;
-    public static final int MI_10 = 74;
-    public static final int MI_25 = 75;
-    public static final int MI_60 = 76;
-
     // AbstractAction ID's
     public static final int AID_TEST_VIEW = -1;
     public static final int AID_TEST_Platform_View = -2;
@@ -89,34 +76,4 @@ public class MenuID {
     public static final int AID_HELP = 209;
     public static final int AID_START_FILE_TRANSFER = 210;
     public static final int AID_GET_FRIENDS = 217;
-
-    // Compass
-    public static final int MI_COMPASS_SHOW_MAP = 142;
-    public static final int MI_COMPASS_SHOW_NAME = 143;
-    public static final int MI_COMPASS_SHOW_ICON = 144;
-    public static final int MI_COMPASS_SHOW_ATTRIBUTES = 145;
-    public static final int MI_COMPASS_SHOW_GC_CODE = 146;
-    public static final int MI_COMPASS_SHOW_COORDS = 147;
-    public static final int MI_COMPASS_SHOW_WP_DESC = 148;
-    public static final int MI_COMPASS_SHOW_SAT_INFO = 149;
-    public static final int MI_COMPASS_SHOW_SUN_MOON = 150;
-    public static final int MI_COMPASS_SHOW_TARGET_DIRECTION = 151;
-    public static final int MI_COMPASS_SHOW_S_D_T = 152;
-    public static final int MI_COMPASS_SHOW_LAST_FOUND = 153;
-
-    public static final int MI_COMPASS_SHOW = 155;
-
-    public static final int MI_SELECT_PATH = 172;
-    public static final int MI_CLEAR_PATH = 173;
-
-
-    public static final int MI_LOAD_FRIENDS_LOGS = 201;
-    public static final int MI_FILTERLOGS = 202;
-    public static final int MI_RELOADLOGS = 203;
-
-    public static final int MI_DELETE_ARCHIEVED = 214;
-    public static final int MI_DELETE_FILTER = 215;
-    public static final int MI_DELETE_FOUNDS = 216;
-
-    public static final int MI_LoadLogImages = 219;
 }

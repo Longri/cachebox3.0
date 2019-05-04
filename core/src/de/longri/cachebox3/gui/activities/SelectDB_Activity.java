@@ -30,9 +30,6 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Quit;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
@@ -64,12 +61,8 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
  */
 public class SelectDB_Activity extends ActivityBase {
     final static Logger log = LoggerFactory.getLogger(SelectDB_Activity.class);
-
-    public interface IReturnListener {
-        public void back();
-    }
-
     private final IReturnListener returnListener;
+    Timer updateTimer;
     private int autoStartTime = 10;
     private int autoStartCounter = 0;
     private String DBPath;
@@ -78,9 +71,38 @@ public class SelectDB_Activity extends ActivityBase {
     private CharSequenceButton bCancel;
     private CharSequenceButton bAutostart;
     private ListView lvFiles;
+    TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+            if (autoStartCounter == 0) {
+                stopTimer();
+                selectDB();
+            } else {
+                try {
+                    autoStartCounter--;
+                    bAutostart.setText(autoStartCounter + "    " + Translation.get("confirm"));
+                } catch (Exception e) {
+                    autoStartCounter = 0;
+                    stopTimer();
+                    selectDB();
+                }
+            }
+        }
+    };
     private CustomAdapter lvAdapter;
     private String[] fileInfos;
     private boolean mustSelect = false;
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            stopTimer();
+            if (mustSelect) {
+                new Action_Quit().execute();
+            } else {
+                finish();
+            }
+        }
+    };
+    private boolean needsLayout = true;
 
     public SelectDB_Activity(IReturnListener returnListener, boolean mustSelect) {
         super("select DB dialog");
@@ -205,40 +227,6 @@ public class SelectDB_Activity extends ActivityBase {
         }
         readCountAtThread();
     }
-
-
-    private final ClickListener cancelClickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            stopTimer();
-            if (mustSelect) {
-                new Action_Quit().execute();
-            } else {
-                finish();
-            }
-        }
-    };
-
-    TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-            if (autoStartCounter == 0) {
-                stopTimer();
-                selectDB();
-            } else {
-                try {
-                    autoStartCounter--;
-                    bAutostart.setText(autoStartCounter + "    " + Translation.get("confirm"));
-                } catch (Exception e) {
-                    autoStartCounter = 0;
-                    stopTimer();
-                    selectDB();
-                }
-            }
-        }
-    };
-
-
-    private boolean needsLayout = true;
 
     @Override
     public void layout() {
@@ -405,134 +393,39 @@ public class SelectDB_Activity extends ActivityBase {
             bAutostart.setText(Translation.get("AutoStartTime", String.valueOf(autoStartTime)));
     }
 
-    private class CustomAdapter implements ListViewAdapter {
-
-        private FileList files;
-
-
-        private CustomAdapter(FileList files) {
-            this.files = files;
-        }
-
-        public void setFiles(FileList files) {
-            this.files = files;
-        }
-
-        public FileList getFileList() {
-            return files;
-        }
-
-        @Override
-        public int getCount() {
-            return files.size;
-        }
-
-        public File getItem(int position) {
-            return files.get(position);
-        }
-
-
-        Array<SelectDBItem> itemArray = new Array();
-
-        @Override
-        public ListViewItem getView(final int listIndex) {
-
-            if (itemArray.size - 1 < listIndex) {
-                SelectDBItem item = new SelectDBItem(listIndex, files.get(listIndex), VisUI.getSkin().get("default", SelectDbStyle.class));
-
-                item.addListener(new ClickLongClickListener() {
-                    @Override
-                    public boolean clicked(InputEvent event, float x, float y) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean longClicked(Actor actor, float x, float y) {
-                        if (actor instanceof SelectDBItem) {
-                            log.debug("longClick on Item {}", files.get(listIndex).getName());
-                            deleteDatabase(files.get(listIndex));
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-                return item;
-            }
-            return itemArray.get(listIndex);
-        }
-
-        @Override
-        public void update(ListViewItem view) {
-            SelectDBItem dbItem = (SelectDBItem) view;
-            dbItem.updateFileInfo(fileInfos[view.getListIndex()]);
-        }
-
-    }
-
     private void stopTimer() {
         if (updateTimer != null)
             updateTimer.cancel();
     }
 
-
-    Timer updateTimer;
-
     private void showSelectionMenu() {
-        final CharSequence[] cs = new CharSequence[6];
-        cs[0] = Translation.get("StartWithoutSelection");
-        cs[1] = Translation.get("AutoStartDisabled");
-        cs[2] = Translation.get("AutoStartTime", "5");
-        cs[3] = Translation.get("AutoStartTime", "10");
-        cs[4] = Translation.get("AutoStartTime", "25");
-        cs[5] = Translation.get("AutoStartTime", "60");
-
-        Menu cm = new Menu("MiscContextMenu");
-
-        cm.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public boolean onItemClick(MenuItem item) {
-
-                switch (item.getMenuItemId()) {
-                    case MenuID.MI_START_WITHOUT_SELECTION:
-                        autoStartTime = -1;
-                        setAutoStartText();
-                        break;
-                    case MenuID.MI_AUTO_START_DISABLED:
-                        autoStartTime = 0;
-                        setAutoStartText();
-                        break;
-                    case MenuID.MI_5:
-                        autoStartTime = 5;
-                        setAutoStartText();
-                        break;
-                    case MenuID.MI_10:
-                        autoStartTime = 10;
-                        setAutoStartText();
-                        break;
-                    case MenuID.MI_25:
-                        autoStartTime = 25;
-                        setAutoStartText();
-                        break;
-                    case MenuID.MI_60:
-                        autoStartTime = 60;
-                        setAutoStartText();
-                        break;
-                }
-                return true;
-            }
+        Menu cm = new Menu("SelectDBContextMenuTitle");
+        cm.addMenuItem("StartWithoutSelection", null, () -> {
+            autoStartTime = -1;
+            setAutoStartText();
         });
-
-        cm.addItem(MenuID.MI_START_WITHOUT_SELECTION, cs[0], true);
-        cm.addItem(MenuID.MI_AUTO_START_DISABLED, cs[1], true);
-        cm.addItem(MenuID.MI_5, cs[2], true);
-        cm.addItem(MenuID.MI_10, cs[3], true);
-        cm.addItem(MenuID.MI_25, cs[4], true);
-        cm.addItem(MenuID.MI_60, cs[5], true);
-
+        cm.addMenuItem("AutoStartDisabled", null, () -> {
+            autoStartTime = 0;
+            setAutoStartText();
+        });
+        cm.addMenuItem("", Translation.get("AutoStartTime", "5").toString(), null, () -> {
+            autoStartTime = 5;
+            setAutoStartText();
+        });
+        cm.addMenuItem("", Translation.get("AutoStartTime", "10").toString(), null, () -> {
+            autoStartTime = 10;
+            setAutoStartText();
+        });
+        cm.addMenuItem("", Translation.get("AutoStartTime", "25").toString(), null, () -> {
+            autoStartTime = 25;
+            setAutoStartText();
+        });
+        cm.addMenuItem("", Translation.get("AutoStartTime", "60").toString(), null, () -> {
+            autoStartTime = 60;
+            setAutoStartText();
+        });
         cm.show();
     }
-
 
     @Override
     public void dispose() {
@@ -581,9 +474,74 @@ public class SelectDB_Activity extends ActivityBase {
     }
 
 
+    public interface IReturnListener {
+        public void back();
+    }
+
     public static class SelectDbStyle {
         public BitmapFont nameFont, infoFont;
         public Color nameColor, infoColor;
+    }
+
+    private class CustomAdapter implements ListViewAdapter {
+
+        Array<SelectDBItem> itemArray = new Array();
+        private FileList files;
+
+        private CustomAdapter(FileList files) {
+            this.files = files;
+        }
+
+        public void setFiles(FileList files) {
+            this.files = files;
+        }
+
+        public FileList getFileList() {
+            return files;
+        }
+
+        @Override
+        public int getCount() {
+            return files.size;
+        }
+
+        public File getItem(int position) {
+            return files.get(position);
+        }
+
+        @Override
+        public ListViewItem getView(final int listIndex) {
+
+            if (itemArray.size - 1 < listIndex) {
+                SelectDBItem item = new SelectDBItem(listIndex, files.get(listIndex), VisUI.getSkin().get("default", SelectDbStyle.class));
+
+                item.addListener(new ClickLongClickListener() {
+                    @Override
+                    public boolean clicked(InputEvent event, float x, float y) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean longClicked(Actor actor, float x, float y) {
+                        if (actor instanceof SelectDBItem) {
+                            log.debug("longClick on Item {}", files.get(listIndex).getName());
+                            deleteDatabase(files.get(listIndex));
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                return item;
+            }
+            return itemArray.get(listIndex);
+        }
+
+        @Override
+        public void update(ListViewItem view) {
+            SelectDBItem dbItem = (SelectDBItem) view;
+            dbItem.updateFileInfo(fileInfos[view.getListIndex()]);
+        }
+
     }
 
 

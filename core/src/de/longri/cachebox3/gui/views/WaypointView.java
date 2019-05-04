@@ -417,7 +417,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
     @Override
     public Menu getContextMenu() {
-        Menu cm = new Menu("CacheListContextMenu");
+        Menu cm = new Menu("WaypointViewContextMenuTitle");
 
         if (actWaypoint != null) {
             cm.addMenuItem("show", CB.getSkin().getMenuIcon.showWp, () -> editWP(false));

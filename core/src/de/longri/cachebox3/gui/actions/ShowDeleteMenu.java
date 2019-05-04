@@ -23,17 +23,16 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
-import de.longri.cachebox3.gui.dialogs.*;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
 import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
@@ -49,55 +48,24 @@ public class ShowDeleteMenu extends Menu {
     private final Logger log = LoggerFactory.getLogger(ShowDeleteMenu.class);
 
     public ShowDeleteMenu() {
-        super("DeleteMenu");
-        this.setOnItemClickListener(clickListener);
-        addItem(MenuID.MI_DELETE_FILTER, "DelActFilter", CB.getSkin().getMenuIcon.deleteFilter);
-        addItem(MenuID.MI_DELETE_ARCHIEVED, "DelArchived", CB.getSkin().getMenuIcon.deleteArchieved);
-        addItem(MenuID.MI_DELETE_FOUNDS, "DelFound", CB.getSkin().getMenuIcon.deleteFounds);
-
+        super("DeleteMenuTitle");
+        addMenuItem("DelActFilter", CB.getSkin().getMenuIcon.deleteFilter,()-> askAndExecute(CB.viewmanager.getActFilter(),"DelActFilter"));
+        addMenuItem("DelArchived", CB.getSkin().getMenuIcon.deleteArchieved,()-> askAndExecute(FilterInstances.ARCHIEVED,"DelArchived"));
+        addMenuItem("DelFound", CB.getSkin().getMenuIcon.deleteFounds,()-> askAndExecute(FilterInstances.MYFOUNDS,"DelFound"));
     }
 
-    private final OnItemClickListener clickListener = new OnItemClickListener() {
-        @Override
-        public boolean onItemClick(MenuItem item) {
-
-            FilterProperties selectedFilter = null;
-            CompoundCharSequence msg = null;
-            switch (item.getMenuItemId()) {
-                case MenuID.MI_DELETE_FILTER:
-                    log.debug("Delete Caches (Filter selection)");
-                    selectedFilter = CB.viewmanager.getActFilter();
-                    msg = Translation.get("DelActFilter");
-                    break;
-                case MenuID.MI_DELETE_ARCHIEVED:
-                    log.debug("Delete Caches (Archived)");
-                    selectedFilter = FilterInstances.ARCHIEVED;
-                    msg = Translation.get("DelArchived");
-                    break;
-                case MenuID.MI_DELETE_FOUNDS:
-                    log.debug("Delete Caches (Founds)");
-                    selectedFilter = FilterInstances.MYFOUNDS;
-                    msg = Translation.get("DelFound");
-                    break;
-            }
-
-            final FilterProperties filter = selectedFilter;
-            MessageBox.show(msg, null, MessageBoxButtons.YesNo, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
-                @Override
-                public boolean onClick(int which, Object data) {
-                    if (which == ButtonDialog.BUTTON_POSITIVE)
-                        CB.postAsync(new NamedRunnable("Delete Caches") {
-                            @Override
-                            public void run() {
-                                deleteCaches(filter);
-                            }
-                        });
-                    return true;
-                }
-            });
+    private void askAndExecute(final FilterProperties filter, String msg) {
+        MessageBox.show(Translation.get(msg), null, MessageBoxButtons.YesNo, MessageBoxIcon.Question, (which, data) -> {
+            if (which == ButtonDialog.BUTTON_POSITIVE)
+                CB.postAsync(new NamedRunnable("Delete Caches") {
+                    @Override
+                    public void run() {
+                        deleteCaches(filter);
+                    }
+                });
             return true;
-        }
-    };
+        });
+    }
 
     private BlockUiProgress_Activity blockUi;
 

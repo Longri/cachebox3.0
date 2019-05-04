@@ -29,8 +29,6 @@ import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.EditDrafts;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.popUps.QuickDraftFeedbackPopUp;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
@@ -97,21 +95,8 @@ public class DraftsView extends AbstractView {
         @Override
         public boolean longClicked(Actor actor, float x, float y) {
             if (!(actor instanceof ListViewItem)) return false;
-            Menu cm = new Menu("DraftItem-Menu");
+            Menu cm = new Menu("DraftItemMenuTitle");
             aktDraft = draftEntries.get(((ListViewItem) actor).getListIndex());
-            cm.addMenuItem("SelectCache", ":\n" + aktDraft.CacheName, aktDraft.cacheType.getDrawable(), () -> selectCacheFromDraft());
-            cm.addMenuItem("edit", CB.getSkin().getMenuIcon.edit, () -> editDraft());
-            cm.addMenuItem("delete", CB.getSkin().getMenuIcon.deleteAllDrafts, () -> deleteDraft());
-            cm.show();
-            return true;
-        }
-    };
-
-    private final OnItemClickListener itemLogClickListener = new OnItemClickListener() {
-        @Override
-        public boolean onItemClick(MenuItem item) {
-            Menu cm = new Menu("CacheListContextMenu");
-            aktDraft = draftEntries.get(item.getListIndex());
             cm.addMenuItem("SelectCache", ":\n" + aktDraft.CacheName, aktDraft.cacheType.getDrawable(), () -> selectCacheFromDraft());
             cm.addMenuItem("edit", CB.getSkin().getMenuIcon.edit, () -> editDraft());
             cm.addMenuItem("delete", CB.getSkin().getMenuIcon.deleteAllDrafts, () -> deleteDraft());
@@ -641,7 +626,7 @@ public class DraftsView extends AbstractView {
     }
 
     private Menu getSecondMenu() {
-        Menu sm = new Menu("DraftContextMenu/2");
+        Menu sm = new Menu("OwnerLogTypesTitle");
         boolean IM_owner = EventHandler.getSelectedCache().ImTheOwner();
         sm.addMenuItem("enabled", itemStyle.typeStyle.enabled, () -> addNewFieldnote(LogTypes.enabled)).setEnabled(IM_owner);
         sm.addMenuItem("temporarilyDisabled", itemStyle.typeStyle.temporarily_disabled, () -> addNewFieldnote(LogTypes.temporarily_disabled)).setEnabled(IM_owner);
@@ -827,7 +812,7 @@ public class DraftsView extends AbstractView {
     public Menu getContextMenu() {
 
 
-        final Menu cm = new Menu("DraftContextMenu");
+        final Menu cm = new Menu("DraftsContextMenuTitle");
 
         AbstractCache abstractCache = EventHandler.getSelectedCache();
         if (abstractCache != null) {

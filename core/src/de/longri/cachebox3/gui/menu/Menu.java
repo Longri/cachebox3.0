@@ -110,6 +110,7 @@ public class Menu extends Window {
 
     private MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, boolean withoutTranslation, Drawable icon, Runnable runnable) {
         MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
+        if (titleTranlationId.length() == 0) withoutTranslation = true;
         item.setTitle((withoutTranslation ? titleTranlationId : Translation.get(titleTranlationId.toString())) + titleExtension);
         if (icon != null)
             item.setIcon(icon);
@@ -340,7 +341,15 @@ public class Menu extends Window {
             titleGroup.addActor(backImage);
         }
 
-        titleLabel = new VisLabel(Translation.get(name.toString()).toString(), "menu_title_act");
+        String title = getName(); // !!! name is here(local access) and in actor(public getter/setter)
+        if (title.length() > 0) {
+            if (title.startsWith("-"))
+                title=title.substring(1);
+            else
+                title=Translation.get(title).toString();
+        }
+        else title = " ";
+        titleLabel = new VisLabel(title, "menu_title_act");
 
         if (parentMenu != null) {
             parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");

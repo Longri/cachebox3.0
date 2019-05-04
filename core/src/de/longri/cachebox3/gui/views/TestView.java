@@ -52,7 +52,6 @@ import de.longri.cachebox3.gui.widgets.list_view.DefaultListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
-import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -812,7 +811,7 @@ public class TestView extends AbstractView {
     @Override
     public Menu getContextMenu() {
 
-        Menu cm = new Menu("testView contextMenu");
+        Menu cm = new Menu("TestViewContextMenu");
 
         cm.addItem(10000, "show MSG Box 1", true);
 

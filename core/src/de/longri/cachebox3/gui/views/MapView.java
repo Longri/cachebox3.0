@@ -666,7 +666,7 @@ public class MapView extends AbstractView {
 
     @Override
     public Menu getContextMenu() {
-        Menu icm = new Menu("menu_mapviewgl");
+        Menu icm = new Menu("MapViewContextMenuTitle");
         icm.addMenuItem("Layer", CB.getSkin().getMenuIcon.mapLayer,()-> showMapLayerMenu());
         icm.addMenuItem("Renderthemes", CB.getSkin().getMenuIcon.theme,()-> showMapViewThemeMenu());
         //if actual Theme styleable, show style menu point
@@ -683,7 +683,7 @@ public class MapView extends AbstractView {
     }
 
     private void showMapLayerMenu() {
-        Menu icm = new Menu("MapViewShowLayerContextMenu");
+        Menu icm = new Menu("MapViewLayerMenuTitle");
 
         BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(CB.WorkPath));
 
@@ -779,7 +779,7 @@ public class MapView extends AbstractView {
 
     //todo ISSUE (#110 add MapView Overlays)
     private void showMapOverlayMenu() {
-        final Menu icm = new Menu("MapViewShowMapOverlayMenu");
+        final Menu icm = new Menu("MapViewOverlayMenuTitle");
 
 //        int menuID = 0;
 //        for (Layer layer : ManagerBase.Manager.getLayers()) {
@@ -810,7 +810,7 @@ public class MapView extends AbstractView {
     }
 
     private void showMapViewLayerMenu() {
-        Menu icm = new Menu("MapViewShowLayerContextMenu");
+        Menu icm = new Menu("MapViewElementsMenuTitle");
         icm.addCheckableMenuItem("HideFinds", Settings_Map.MapHideMyFinds.getValue(),()-> toggleSettingWithReload(Settings_Map.MapHideMyFinds));
         icm.addCheckableMenuItem("MapShowCompass", Settings_Map.MapShowCompass.getValue(),()-> toggleSetting(Settings_Map.MapShowCompass));
         icm.addCheckableMenuItem("ShowAllWaypoints", Settings_Map.ShowAllWaypoints.getValue(),()-> toggleSetting(Settings_Map.ShowAllWaypoints));
@@ -824,7 +824,7 @@ public class MapView extends AbstractView {
     }
 
     private void showMapViewThemeMenu() {
-        Menu icm = new Menu("MapViewThemeMenu");
+        Menu icm = new Menu("MapViewThemeMenuTitle");
 
         //add default themes
         int id = 0;
@@ -863,7 +863,7 @@ public class MapView extends AbstractView {
     }
 
     private void showMapViewThemeStyleMenu() {
-        OptionMenu icm = new OptionMenu("MapViewThemeStyleMenu");
+        OptionMenu icm = new OptionMenu("MapViewThemeStyleMenuTitle");
 
         ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
         Array<XmlRenderThemeStyleLayer> overlays = callback.getOverlays();
@@ -873,7 +873,7 @@ public class MapView extends AbstractView {
 
             if (overlay.getCategories().size() > 1) {
                 MenuItem menuItem = icm.addItem(id, overlay.getTitle(lang), true);
-                OptionMenu moreMenu = new OptionMenu(overlay.getTitle(lang));
+                OptionMenu moreMenu = new OptionMenu("-" + overlay.getTitle(lang));
                 for (String cat : overlay.getCategories()) {
                     ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
                     moreMenu.addCheckableItem(id++, cat, allCategories.get(cat), true).setData(cat);
@@ -945,7 +945,7 @@ public class MapView extends AbstractView {
 
     //todo ISSUE (#112 Record Track)
     private void showMenuTrackRecording() {
-        Menu cm2 = new Menu("TrackRecordContextMenu");
+        Menu cm2 = new Menu("TrackRecordMenuTitle");
         cm2.addMenuItem("start", null, ()->TrackRecorder.INSTANCE.startRecording()).setEnabled(!TrackRecorder.INSTANCE.recording);
         if (TrackRecorder.INSTANCE.pauseRecording)
             cm2.addMenuItem("continue", null, ()->TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
