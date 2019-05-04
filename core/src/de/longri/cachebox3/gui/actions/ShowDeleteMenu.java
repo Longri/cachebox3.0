@@ -41,6 +41,8 @@ import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Created by Longri on 16.04.2018.
  */
@@ -70,15 +72,17 @@ public class ShowDeleteMenu extends Menu {
     private BlockUiProgress_Activity blockUi;
 
     private void deleteCaches(FilterProperties filter) {
-
+        AtomicBoolean waitForBlockUIStarted = new AtomicBoolean(true);
+        blockUi = null;
         CB.postOnGlThread(new NamedRunnable("Show BlockUi for Delete Caches") {
             @Override
             public void run() {
                 blockUi = new BlockUiProgress_Activity(Translation.get("DeleteCaches"));
+                waitForBlockUIStarted.set(false);
                 blockUi.show();
             }
         });
-
+       CB.wait(waitForBlockUIStarted);
 
         //check if Filter set to delete whole Database
         int wholeCount = Database.Data.getCacheCountOnThisDB();
@@ -156,12 +160,7 @@ public class ShowDeleteMenu extends Menu {
         if (blockUi != null) blockUi.finish();
 
         final int deletedCacheCount = filteredCacheCount;
-        CB.postOnNextGlThread(new Runnable() {
-            @Override
-            public void run() {
-                CB.viewmanager.toast(Translation.get("DeletedCaches", Integer.toString(deletedCacheCount)));
-            }
-        });
+        CB.postOnNextGlThread(() -> CB.viewmanager.toast(Translation.get("DeletedCaches", Integer.toString(deletedCacheCount))));
 
         deleteCacheIdList.clear();
         deleteCacheGcCodeList.clear();
