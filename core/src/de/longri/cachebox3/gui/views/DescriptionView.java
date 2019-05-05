@@ -269,7 +269,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             }
 
             CharSequence cacheHtml = new CompoundCharSequence(longDescription, shortDescription);
-            String html = "";
+            String html;
             if (actCache.getApiState() == 1)// GC.com API lite
             { // Load Standard HTML
                 log.debug("load is Lite html");
