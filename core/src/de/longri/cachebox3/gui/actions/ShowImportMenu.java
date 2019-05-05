@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.gcvote_api.GCVote;
+import de.longri.cachebox3.apis.gcvote_api.RatingData;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gpx.GpxWptCounter;
@@ -26,20 +28,24 @@ import de.longri.cachebox3.gpx.ImportHandler;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.activities.ImportGcPos;
 import de.longri.cachebox3.gui.activities.ImportPQActivity;
+import de.longri.cachebox3.gui.activities.UpdateStatusAndOthers;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -50,79 +56,58 @@ public class ShowImportMenu extends Menu {
     private final Logger log = LoggerFactory.getLogger(ShowImportMenu.class);
 
     public ShowImportMenu() {
-        super("ImportMenu");
-        this.setOnItemClickListener(clickListener);
+        super("ImportMenuTitle");
 
-        //ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
-
-        addItem(MenuID.MI_IMPORT_GS, "API_IMPORT", CB.getSkin().getMenuIcon.GC_Live).setMoreMenu(getGcImportMenu());
-        addItem(MenuID.MI_IMPORT_GPX, "GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile);
-
-
-//        if (!StringH.isEmpty(Config.CBS_IP.getValue()))
-//            addItem(MenuID.MI_IMPORT_CBS, "CB-Server");
-
-        //ISSUE (#122 add GC_Vote import)   addItem(MenuID.MI_IMPORT_GCV, "GC_Vote");
-        //ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
-
-    }
-
-    private final OnItemClickListener clickListener = new OnItemClickListener() {
-        @Override
-        public boolean onItemClick(MenuItem item) {
-            switch (item.getMenuItemId()) {
-                case MenuID.MI_IMPORT_GS:
-                    //do nothing, will show more menu
-                    break;
-                case MenuID.MI_IMPORT_GPX:
-                    importGpxFile();
-                    break;
-            }
-            return true;
-        }
-    };
-
-
-    private Menu getGcImportMenu() {
-        Menu menu = new Menu("GcImportMenu");
-        menu.setOnItemClickListener(new OnItemClickListener() {
-
+        addMenuItem("chkState", CB.getSkin().getMenuIcon.gc_logo, () -> new UpdateStatusAndOthers().show());
+        // addMenuItem("API_IMPORT", CB.getSkin().getMenuIcon.GC_Live, () -> { }).setMoreMenu(getGcImportMenu());
+        // does no longer exist in ACB2
+        // in ACB2 is  a combined import with selection by checkboxes and then executed one after the other, seems to be the following issue:
+        // ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
+        addMenuItem("API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ, () -> new ImportPQActivity().show());
+        addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
+        addMenuItem("API_IMPORT_OVER_POSITION", CB.getSkin().getMenuIcon.target, () -> CB.postAsync(new NamedRunnable("ShowImportMenu") {
             @Override
-            public boolean onItemClick(MenuItem item) {
-
-                switch (item.getMenuItemId()) {
-                    case MenuID.MI_IMPORT_GS_PQ:
-                        ImportPQActivity imp = new ImportPQActivity();
-                        imp.show();
-                        return true;
-                    case MenuID.MI_IMPORT_GS_API_POSITION:
-                        CB.postAsync(new NamedRunnable("ShowImportMenu") {
-                            @Override
-                            public void run() {
-                                if (!CB.checkApiKeyNeeded()) {
-                                    CB.postOnGlThread(new NamedRunnable("ShowImportMenu") {
-                                        @Override
-                                        public void run() {
-                                            new ImportGcPos().show();
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                        return true;
-                    case MenuID.MI_IMPORT_GS_API_SEARCH:
-//                        SearchOverNameOwnerGcCode.ShowInstanz();
-                        return true;
+            public void run() {
+                if (!CB.checkApiKeyNeeded()) {
+                    CB.postOnGlThread(new NamedRunnable("ShowImportMenu") {
+                        @Override
+                        public void run() {
+                            new ImportGcPos().show();
+                        }
+                    });
                 }
-
-                return true;
             }
-        });
-        menu.addItem(MenuID.MI_IMPORT_GS_PQ, "API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ);
-        menu.addItem(MenuID.MI_IMPORT_GS_API_POSITION, "API_IMPORT_OVER_POSITION", CB.getSkin().getMenuIcon.target);
-        //ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
+        }));
+        // todo ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
+        addMenuItem("GCVoteRatings", null, () -> {
+            // todo create a importGCVote(). ISSUE #122 add GC_Vote import. This is only a simple test for inputstream function;
+            ArrayList<String> waypoints = new ArrayList<>();
+            for (AbstractCache cache : Database.Data.cacheList) {
+                // todo only x caches at a time
+                waypoints.add(cache.getGcCode().toString());
+            }
+            ArrayList<RatingData> ratingData;
+            try {
+                ratingData = GCVote.getVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
+            } catch (Exception e) {
+                // The NPE I got is due to a problem with classes for Json are not loaded
+                // the thread can't throw an exception !!! Must be handled there
+                ratingData = new ArrayList<>();
+            }
+            if (ratingData.size() > 0) {
+                MessageBox.show("Got " + ratingData.size() + " ratings. Write to db not implemented yet", "Not implemented", MessageBoxButtons.Cancel, MessageBoxIcon.Information, null);
+                // todo write to db
+            } else {
+                MessageBox.show("Did not fetch any vote!", "Got no votes", MessageBoxButtons.Cancel, MessageBoxIcon.Information, null);
+            }
+        }); // todo create icon: CB.getSkin().getMenuIcon.importGCVote
 
-        return menu;
+        addDivider(0);
+
+        //todo ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
+        //if (!StringH.isEmpty(Config.CBS_IP.getValue()))
+        //    addItem(MenuID.MI_IMPORT_CBS, "CB-Server");
+
     }
 
     private void importGpxFile() {
@@ -215,10 +200,10 @@ public class ShowImportMenu extends Menu {
                                 CB.postOnNextGlThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        CB.postAsync(new NamedRunnable("Reload Query after import") {
+                                        CB.postAsync(new NamedRunnable("Reload cacheList after import") {
                                             @Override
                                             public void run() {
-                                                Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                                                Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
                                                 log.debug("Call loadFilteredCacheList()");
                                                 CB.loadFilteredCacheList(null);
                                                 CB.postOnNextGlThread(new Runnable() {

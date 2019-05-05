@@ -42,9 +42,6 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -78,9 +75,19 @@ public class Settings_Activity extends ActivityBase {
 
     final static Logger log = LoggerFactory.getLogger(Settings_Activity.class);
     private static final boolean FORCE = true;
-    private CharSequenceButton btnOk, btnCancel, btnMenu;
     private final SettingsActivityStyle style;
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            Config.LoadFromLastValue();
+            finish();
+        }
+    };
+    Label.LabelStyle nameStyle, descStyle, defaultValuStyle, valueStyle;
+    private CharSequenceButton btnOk, btnCancel, btnMenu;
     private float itemWidth;
+    private Array<WidgetGroup> listViews = new Array<>();
+    private Array<CharSequence> listViewsNames = new Array<>();
+    private Array<ClickListener> listBackClickListener = new Array<>();
 
     public Settings_Activity() {
         super("Settings_Activity");
@@ -116,7 +123,6 @@ public class Settings_Activity extends ActivityBase {
         log.debug("Layout Settings");
     }
 
-
     private void createButtons() {
 
         btnOk = new CharSequenceButton(Translation.get("save"));
@@ -129,40 +135,25 @@ public class Settings_Activity extends ActivityBase {
 
         btnMenu.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Menu icm = new Menu(Translation.get("changeSettingsVisibility"));
-                icm.setOnItemClickListener(new OnItemClickListener() {
-
-                    @Override
-                    public boolean onItemClick(MenuItem item) {
-                        switch (item.getMenuItemId()) {
-                            case MenuID.MI_SHOW_EXPERT:
-                                Config.SettingsShowExpert.setValue(true);
-                                Config.SettingsShowAll.setValue(false);
-                                layoutActListView(true);
-                                return true;
-
-                            case MenuID.MI_SHOW_ALL:
-                                Config.SettingsShowAll.setValue(true);
-                                Config.SettingsShowExpert.setValue(false);
-                                layoutActListView(true);
-                                return true;
-                            case MenuID.MI_SHOW_Normal:
-                                Config.SettingsShowAll.setValue(false);
-                                Config.SettingsShowExpert.setValue(false);
-                                layoutActListView(true);
-                                return true;
-                        }
-                        return false;
-                    }
-                });
-
+                Menu icm = new Menu("SettingsLevelTitle");
                 boolean normal = !Config.SettingsShowAll.getValue() && !Config.SettingsShowExpert.getValue();
-                icm.addCheckableItem(MenuID.MI_SHOW_Normal, "Settings_Normal", normal);
-                icm.addCheckableItem(MenuID.MI_SHOW_EXPERT, "Settings_Expert", Config.SettingsShowExpert.getValue());
-                icm.addCheckableItem(MenuID.MI_SHOW_ALL, "Settings_All", Config.SettingsShowAll.getValue());
+                icm.addCheckableMenuItem("Settings_Normal", normal, () -> {
+                    Config.SettingsShowAll.setValue(false);
+                    Config.SettingsShowExpert.setValue(false);
+                    layoutActListView(true);
+                });
+                icm.addCheckableMenuItem("Settings_Expert", Config.SettingsShowExpert.getValue(), () -> {
+                    Config.SettingsShowExpert.setValue(true);
+                    Config.SettingsShowAll.setValue(false);
+                    layoutActListView(true);
+                });
+                icm.addCheckableMenuItem("Settings_All", Config.SettingsShowAll.getValue(), () -> {
+                    Config.SettingsShowAll.setValue(true);
+                    Config.SettingsShowExpert.setValue(false);
+                    layoutActListView(true);
+                });
                 icm.show();
             }
-
         });
 
 
@@ -189,19 +180,6 @@ public class Settings_Activity extends ActivityBase {
         btnCancel.addListener(cancelClickListener);
         CB.stageManager.registerForBackKey(cancelClickListener);
     }
-
-    private final ClickListener cancelClickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            Config.LoadFromLastValue();
-            finish();
-        }
-    };
-
-    private Array<WidgetGroup> listViews = new Array<>();
-    private Array<CharSequence> listViewsNames = new Array<>();
-    private Array<ClickListener> listBackClickListener = new Array<>();
-    Label.LabelStyle nameStyle, descStyle, defaultValuStyle, valueStyle;
-
 
     private void fillContent() {
 
@@ -260,7 +238,7 @@ public class Settings_Activity extends ActivityBase {
             @Override
             public void run() {
                 lv.setAdapter(listViewAdapter);
-                showListView(lv, Translation.get("setting"), true);
+                showListView(lv, Translation.get("SettingsTitle"), true);
             }
         });
     }
@@ -901,47 +879,35 @@ public class Settings_Activity extends ActivityBase {
         desclabel.setAlignment(Align.left);
         table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
-        // add clicklistener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
-                    Menu selectClearMenu = new Menu("selectClear");
-                    selectClearMenu.addItem(MenuID.MI_SELECT_PATH, "select_folder");
-                    selectClearMenu.addItem(MenuID.MI_CLEAR_PATH, "ClearPath");
-                    selectClearMenu.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public boolean onItemClick(MenuItem item) {
-                            switch (item.getMenuItemId()) {
-                                case MenuID.MI_SELECT_PATH:
-                                    FileChooser folderChooser = new FileChooser(Translation.get("selectFolder"),
-                                            FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
-                                    folderChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
-                                        @Override
-                                        public void selected(FileHandle fileHandle) {
-                                            if (fileHandle == null) return;
-                                            // check WriteProtection
-                                            String path = fileHandle.file().getAbsolutePath();
-                                            if (setting.needWritePermission() && !Utils.checkWritePermission(path)) {
-                                                CharSequence WriteProtectionMsg = Translation.get("NoWriteAcces");
-                                                CB.viewmanager.toast(WriteProtectionMsg, ViewManager.ToastLength.EXTRA_LONG);
-                                            } else {
-                                                setting.setValue(path);
-                                                valuelabel.setText("Value: " + String.valueOf(setting.getValue()));
-                                            }
-                                        }
-                                    });
-                                    folderChooser.setDirectory(Gdx.files.absolute(setting.getValue()));
-                                    folderChooser.show();
-                                    return true;
-
-                                case MenuID.MI_CLEAR_PATH:
-                                    setting.setValue(setting.getDefaultValue());
-                                    valuelabel.setText("Default");
-                                    return true;
+                    Menu selectClearMenu = new Menu("SelectPathTitle");
+                    selectClearMenu.addMenuItem("select_folder", null, () -> {
+                        FileChooser folderChooser = new FileChooser(Translation.get("selectFolder"),
+                                FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
+                        folderChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
+                            @Override
+                            public void selected(FileHandle fileHandle) {
+                                if (fileHandle == null) return;
+                                // check WriteProtection
+                                String path = fileHandle.file().getAbsolutePath();
+                                if (setting.needWritePermission() && !Utils.checkWritePermission(path)) {
+                                    CharSequence WriteProtectionMsg = Translation.get("NoWriteAcces");
+                                    CB.viewmanager.toast(WriteProtectionMsg, ViewManager.ToastLength.EXTRA_LONG);
+                                } else {
+                                    setting.setValue(path);
+                                    valuelabel.setText("Value: " + String.valueOf(setting.getValue()));
+                                }
                             }
-                            return true;
-                        }
+                        });
+                        folderChooser.setDirectory(Gdx.files.absolute(setting.getValue()));
+                        folderChooser.show();
+                    });
+                    selectClearMenu.addMenuItem("ClearPath", null, () -> {
+                        setting.setValue(setting.getDefaultValue());
+                        valuelabel.setText("Default");
                     });
                     selectClearMenu.show();
                 }
@@ -1218,16 +1184,16 @@ public class Settings_Activity extends ActivityBase {
         return table;
     }
 
-    public static class SettingsActivityStyle extends ActivityBaseStyle {
-        public Drawable nextIcon, backIcon, checkOn, checkOff, soundOn, soundMute, option_select, option_back;
-        public BitmapFont nameFont, descFont, defaultValueFont, valueFont;
-        public Color nameFontColor, descFontColor, defaultValueFontColor, valueFontColor;
-    }
-
     @Override
     public void dispose() {
         super.dispose();
         CB.stageManager.unRegisterForBackKey(cancelClickListener);
+    }
+
+    public static class SettingsActivityStyle extends ActivityBaseStyle {
+        public Drawable nextIcon, backIcon, checkOn, checkOff, soundOn, soundMute, option_select, option_back;
+        public BitmapFont nameFont, descFont, defaultValueFont, valueFont;
+        public Color nameFontColor, descFontColor, defaultValueFontColor, valueFontColor;
     }
 
 }

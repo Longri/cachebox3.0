@@ -37,16 +37,16 @@ public enum ApiResultState {
     public static ApiResultState fromState(int state) {
         switch (state) {
             case 1:
-                return ApiResultState.MEMBERSHIP_TYPE_GUEST;
+                return MEMBERSHIP_TYPE_GUEST;
             case 2:
-                return ApiResultState.MEMBERSHIP_TYPE_BASIC;
+                return MEMBERSHIP_TYPE_BASIC;
             case 3:
-                return ApiResultState.MEMBERSHIP_TYPE_PREMIUM;
+                return MEMBERSHIP_TYPE_PREMIUM;
             case -6:
-                return ApiResultState.EXPIRED_API_KEY;
+                return EXPIRED_API_KEY;
 
         }
-        return ApiResultState.MEMBERSHIP_TYPE_INVALID;
+        return MEMBERSHIP_TYPE_INVALID;
     }
 
     public int getState() {

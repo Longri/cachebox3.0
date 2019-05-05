@@ -17,73 +17,38 @@ package de.longri.cachebox3.apis.groundspeak_api;
 
 
 import com.badlogic.gdx.Net;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.CheckCacheStateParser;
-import de.longri.cachebox3.apis.groundspeak_api.search.SearchGC;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.sqlite.DatabaseSchema;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.MutableCache;
-import de.longri.cachebox3.types.Trackable;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.NetUtils;
 import de.longri.cachebox3.utils.json_parser.DraftUploadResultParser;
-import de.longri.gdx.sqlite.GdxSqlite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.GS_LIVE_URL;
 import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.STAGING_GS_LIVE_URL;
 
 public class GroundspeakLiveAPI {
-
     private static final Logger log = LoggerFactory.getLogger(GroundspeakLiveAPI.class);
-
-
     public static String LastAPIError = "";
     public static boolean CacheStatusValid = false;
-    public static int CachesLeft = -1;
-    public static int CurrentCacheCount = -1;
-    public static int MaxCacheCount = -1;
     public static boolean CacheStatusLiteValid = false;
-    public static int CachesLeftLite = -1;
-    public static int CurrentCacheCountLite = -1;
-    public static int MaxCacheCountLite = -1;
     public static String memberName = ""; // this will be filled by
-    private static boolean DownloadLimit = false;
     private static boolean API_isChecked = false;
     private static Limit apiCallLimit;
-
-    /**
-     * 0: Guest??? 1: Basic 2: Charter??? 3: Premium
-     */
     private static ApiResultState membershipType = ApiResultState.UNKNOWN;
 
-
-    /**
-     * Read the encrypted AccessToken from the config and check whether it is correct for Android CB
-     *
-     * @return
-     */
     public static String getAccessToken() {
         return getAccessToken(false);
     }
-
 
     public static String getAccessToken(boolean Url_Codiert) {
         String act = "";
@@ -130,14 +95,13 @@ public class GroundspeakLiveAPI {
         return result.replace("\n", "\\n");
     }
 
-
     public static ApiResultState createDraftAndPublish(String cacheCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog, final ICancel icancel) {
         ApiResultState chk = chkMembership(true);
         if (chk.isErrorState())
             return chk;
 
 
-        waitApiCallLimit();
+        waitApiCallLimit(null);
 
 
         String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
@@ -190,87 +154,6 @@ public class GroundspeakLiveAPI {
         LastAPIError = "";
         return ApiResultState.API_ERROR;
     }
-//
-//
-//    public static int GetCachesFound(final ICancel icancel) {
-//
-//	int chk = chkMembership(false);
-//	if (chk < 0)
-//	    return chk;
-//
-//	String URL = Config.StagingAPI.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-//
-//	try {
-//	    HttpPost httppost = new HttpPost(URL + "GetYourUserProfile?format=json");
-//	    String requestString = "";
-//	    requestString = "{";
-//	    requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
-//	    requestString += "\"ProfileOptions\":{";
-//	    requestString += "}" + ",";
-//	    requestString += getDeviceInfoRequestString();
-//	    requestString += "}";
-//
-//	    httppost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
-//
-//	    // set time outs
-//	    HttpUtils.conectionTimeout = Config.conection_timeout.getValue();
-//	    HttpUtils.socketTimeout = Config.socket_timeout.getValue();
-//
-//	    // Execute HTTP Post Request
-//	    String result = HttpUtils.Execute(httppost, icancel);
-//
-//	    if (result.contains("The service is unavailable")) {
-//		return API_IS_UNAVAILABLE;
-//	    }
-//
-//	    try
-//	    // Parse JSON Result
-//	    {
-//		JSONTokener tokener = new JSONTokener(result);
-//		JSONObject json = (JSONObject) tokener.nextValue();
-//		JSONObject status = json.getJSONObject("Status");
-//		if (status.getInt("StatusCode") == 0) {
-//		    result = "";
-//		    JSONObject profile = json.getJSONObject("Profile");
-//		    JSONObject user = profile.getJSONObject("User");
-//		    return user.getInt("FindCount");
-//
-//		} else {
-//		    result = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//		    result += status.getString("StatusMessage") + "\n";
-//		    result += status.getString("ExceptionDetails");
-//
-//		    return ERROR;
-//		}
-//
-//	    } catch (JSONException e) {
-//		e.printStackTrace();
-//	    }
-//
-//	} catch (ConnectTimeoutException e) {
-//	    log.error("GetCachesFound ConnectTimeoutException", e);
-//	    return CONNECTION_TIMEOUT;
-//	} catch (UnsupportedEncodingException e) {
-//	    log.error("GetCachesFound UnsupportedEncodingException", e);
-//	    return ERROR;
-//	} catch (ClientProtocolException e) {
-//	    log.error("GetCachesFound ClientProtocolException", e);
-//	    return ERROR;
-//	} catch (IOException e) {
-//	    log.error("GetCachesFound", e);
-//	    return ERROR;
-//	}
-//
-//	return (ERROR);
-//    }
-//
-
-    /**
-     * This method must call before every API-Call, for check any call restrictions!
-     */
-    public static int waitApiCallLimit() {
-        return waitApiCallLimit(null);
-    }
 
     public static int waitApiCallLimit(ICancel iCancel) {
 
@@ -314,10 +197,6 @@ public class GroundspeakLiveAPI {
         return 0;
     }
 
-
-    /**
-     * Loads the Membership type -1: Error 0: Guest??? 1: Basic 2: Charter??? 3: Premium
-     */
     public static void getMembershipType(final GenericCallBack<ApiResultState> callBack) {
         if (API_isChecked) {
             callBack.callBack(membershipType);
@@ -366,231 +245,6 @@ public class GroundspeakLiveAPI {
 
     }
 
-
-    public static ApiResultState getGeocacheStatus(Database database, Array<AbstractCache> caches, final ICancel icancel, CheckCacheStateParser.ProgressIncrement progressIncrement) {
-        ApiResultState chk = chkMembership(false);
-        if (chk.isErrorState())
-            return chk;
-
-        if (caches.size >= 110) throw new RuntimeException("Cache count must les then 110");
-
-        waitApiCallLimit(icancel);
-        String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-
-        Net.HttpRequest httpPost = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpPost.setUrl(URL + "getGeocacheStatus?format=json");
-        httpPost.setTimeOut(Config.socket_timeout.getValue());
-        httpPost.setHeader("format", "json");
-        httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("Content-type", "application/json");
-
-        String requestString = "";
-        requestString = "{";
-        requestString += "\"AccessToken\":\"" + getAccessToken() + "\",";
-        requestString += "\"CacheCodes\":[";
-
-        int i = 0;
-        for (AbstractCache abstractCache : caches) {
-            requestString += "\"" + abstractCache.getGcCode() + "\"";
-            if (i < caches.size - 1)
-                requestString += ",";
-            i++;
-        }
-
-        requestString += "]";
-        requestString += "}";
-
-        httpPost.setContent(requestString);
-        NetUtils.StreamHandleObject result = null;
-        result = (NetUtils.StreamHandleObject) NetUtils.postAndWait(NetUtils.ResultType.STREAM, httpPost, icancel);
-
-//        String debugStringResult = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpPost, icancel);
-
-
-        if (icancel.cancel()) {
-            if (result != null) result.handled();
-            return ApiResultState.CANCELED;
-        }
-        CheckCacheStateParser parser = new CheckCacheStateParser();
-
-        ApiResultState parseResult = parser.parse(database, result.stream, caches, icancel, progressIncrement);
-        result.handled();
-        return parseResult;
-    }
-
-    public static ApiResultState getGeocacheStatusFavoritePoints(final Database database, final Array<AbstractCache> caches, final ICancel icancel, final CheckCacheStateParser.ProgressIncrement progressIncrement) {
-        ApiResultState chk = chkMembership(false);
-        if (chk.isErrorState())
-            return chk;
-
-        if (caches.size >= 50) throw new RuntimeException("Cache count must les then 50");
-
-        waitApiCallLimit(icancel);
-
-        Array<String> gcCodes = new Array<>();
-        for (AbstractCache ca : caches) {
-            gcCodes.add(ca.getGcCode().toString());
-        }
-
-        final AtomicInteger idx = new AtomicInteger(0);
-
-        //create inMemory DB
-        GdxSqlite db = new GdxSqlite();
-        db.openOrCreateDatabase();
-        final DatabaseSchema sh = new DatabaseSchema();
-        db.execSQL(sh.getEmptyNewDB());
-
-        Database tmp = new Database(db);
-
-        final SearchGC searchGC = new SearchGC(tmp, getAccessToken(), gcCodes, (byte) 2, icancel);
-        searchGC.setIsLite(true);
-
-        final ApiResultState result[] = new ApiResultState[1];
-        final AtomicBoolean WAIT = new AtomicBoolean(true);
-        searchGC.fireProgressEvent = false;
-        searchGC.postRequest(new GenericCallBack<ApiResultState>() {
-            @Override
-            public void callBack(ApiResultState value) {
-                result[0] = value;
-                WAIT.set(false);
-            }
-        }, 0);
-
-        while (WAIT.get()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        //Store result from inMemory DB
-
-        tmp.myDB.rawQuery("SELECT Id, BooleanStore, FavPoints, NumTravelbugs FROM CacheCoreInfo", new GdxSqlite.RowCallback() {
-            @Override
-            public void newRow(String[] columnName, Object[] value, int[] types) {
-                //get cache from in list
-                AbstractCache cache = null;
-                long id = (long) value[0];
-                int idx = 0;
-                for (AbstractCache ca : caches) {
-                    if (ca.getId() == id) {
-                        cache = ca;
-                        break;
-                    }
-                    idx++;
-                }
-
-                if (cache != null) {
-                    cache.isChanged.set(false);
-                    short booleanStore = ((Long) value[1]).shortValue();
-                    boolean archieved = MutableCache.getMaskValue(MutableCache.MASK_ARCHIVED, booleanStore);
-                    boolean availeble = MutableCache.getMaskValue(MutableCache.MASK_AVAILABLE, booleanStore);
-                    short tbCount = (short) ((Long) value[3]).intValue();
-                    int favPoints = ((Long) value[2]).intValue();
-
-                    if (cache.isArchived() != archieved
-                            || cache.isAvailable() != availeble
-                            || cache.getNumTravelbugs() != tbCount
-                            || cache.getFavoritePoints() != favPoints) {
-
-                        cache.isChanged.set(false);
-                        cache.setArchived(archieved);
-                        cache.setAvailable(availeble);
-                        cache.setNumTravelbugs(tbCount);
-                        cache.setFavoritePoints(favPoints);
-                    }
-
-                    if (progressIncrement != null) progressIncrement.increment();
-                }
-            }
-        });
-
-        return result[0];
-    }
-
-    public static ApiResultState getAllImageLinks(String cacheCode, HashMap<String, URI> list, ICancel icancel) {
-        ApiResultState chk = chkMembership(false);
-        if (chk.isErrorState())
-            return chk;
-
-        String URL = Config.UseTestUrl.getValue() ? STAGING_GS_LIVE_URL : GS_LIVE_URL;
-        if (list == null)
-            list = new HashMap<String, URI>();
-
-        waitApiCallLimit();
-        try {
-            Net.HttpRequest httpGet = new Net.HttpRequest(Net.HttpMethods.GET);
-            httpGet.setUrl(URL + "GetImagesForGeocache?AccessToken=" + getAccessToken(true) + "&CacheCode=" + cacheCode + "&format=json");
-            httpGet.setTimeOut(Config.socket_timeout.getValue());
-
-
-            // Execute HTTP Post Request
-            log.debug("Send Post request");
-            String result = (String) NetUtils.postAndWait(NetUtils.ResultType.STRING, httpGet, icancel);
-
-            if (result.contains("The service is unavailable")) {
-                return ApiResultState.API_IS_UNAVAILABLE;
-            }
-
-            JsonValue root = new JsonReader().parse(result);
-            JsonValue status = root.getChild("Status");
-            if (status.getInt("StatusCode") == 0) {
-                LastAPIError = "";
-                JsonValue jImages = root.getChild("Images");
-            }
-
-//            JSONTokener tokener = new JSONTokener(result);
-//            JSONObject json = (JSONObject) tokener.nextValue();
-//            JSONObject status = json.getJSONObject("Status");
-//            if (status.getInt("StatusCode") == 0) {
-//                LastAPIError = "";
-//                JSONArray jImages = json.getJSONArray("Images");
-//
-//                for (int ii = 0; ii < jImages.length(); ii++) {
-//                    JSONObject jImage = (JSONObject) jImages.get(ii);
-//                    String name = jImage.getString("Name");
-//                    String uri = jImage.getString("Url");
-//                    // ignore log images
-//                    if (uri.contains("/cache/log"))
-//                        continue; // LOG-Image
-//                    // Check for duplicate name
-//                    if (list.containsKey(name)) {
-//                        for (int nr = 1; nr < 10; nr++) {
-//                            if (list.containsKey(name + "_" + nr)) {
-//                                continue; // Name already exists
-//                            }
-//                            name += "_" + nr;
-//                            break;
-//                        }
-//                    }
-//                    list.put(name, new URI(uri));
-//                }
-//                return IO;
-//            } else if (status.getInt("StatusCode") == 140) {
-//                return 140; // API-Limit überschritten -> nach etwas Verzögerung wiederholen!
-//            } else {
-//                LastAPIError = "";
-//                LastAPIError = "StatusCode = " + status.getInt("StatusCode") + "\n";
-//                LastAPIError += status.getString("StatusMessage") + "\n";
-//                LastAPIError += status.getString("ExceptionDetails");
-//
-//                list = null;
-//                return ERROR;
-//            }
-
-        } catch (Exception e) {
-            log.error("getAllImageLinks()", e);
-            list = null;
-            return ApiResultState.API_ERROR;
-        }
-
-        list = null;
-        return ApiResultState.API_ERROR;
-    }
-
-
     public static ApiResultState chkMembership(boolean withoutMsg) {
         final ApiResultState[] ret = {ApiResultState.UNKNOWN};
 
@@ -620,34 +274,6 @@ public class GroundspeakLiveAPI {
         return ret[0];
     }
 
-    public static ApiResultState isValidAPI_Key(boolean withoutMsg) {
-        if (API_isChecked)
-            return membershipType;
-
-        return chkMembership(withoutMsg);
-    }
-
-    /**
-     * @param trackable
-     * @param cacheCode
-     * @param logTypeId
-     * @param dateLogged
-     * @param note
-     * @return
-     */
-    public static ApiResultState createTrackableLog(Trackable trackable, String cacheCode, int logTypeId, Date dateLogged, String note, ICancel icancel) {
-        return createTrackableLog(trackable.getTBCode(), trackable.getTrackingCode(), cacheCode, logTypeId, dateLogged, note, icancel);
-    }
-
-    /**
-     * @param tbCode
-     * @param trackingNumber
-     * @param cacheCode
-     * @param logTypeId
-     * @param dateLogged
-     * @param note
-     * @return
-     */
     public static ApiResultState createTrackableLog(String tbCode, String trackingNumber, String cacheCode, int logTypeId, Date dateLogged, String note, ICancel icancel) {
         ApiResultState chk = chkMembership(false);
         if (chk.isErrorState())
@@ -695,18 +321,6 @@ public class GroundspeakLiveAPI {
         return ApiResultState.IO;
     }
 
-    public static boolean mAPI_isChecked() {
-        return API_isChecked;
-    }
-
-    public static boolean ApiLimit() {
-        return DownloadLimit;
-    }
-
-    public static void setDownloadLimit() {
-        DownloadLimit = true;
-    }
-
     public static boolean isPremiumMember() {
         final AtomicBoolean WAIT = new AtomicBoolean(true);
 
@@ -741,10 +355,6 @@ public class GroundspeakLiveAPI {
             }
         }
         return membershipType == ApiResultState.MEMBERSHIP_TYPE_PREMIUM;
-    }
-
-    public static void setTestMembershipType(ApiResultState value) {
-        membershipType = value;
     }
 
     public static void resetApiIsChecked() {

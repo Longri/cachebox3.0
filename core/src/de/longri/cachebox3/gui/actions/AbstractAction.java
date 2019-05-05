@@ -27,7 +27,7 @@ public abstract class AbstractAction {
     protected final static boolean NOT_IMPLEMENTED = true;
     protected final static boolean IMPLEMENTED = false;
 
-    final static Logger log = LoggerFactory.getLogger(AbstractAction.class);
+    protected final static Logger log = LoggerFactory.getLogger(AbstractAction.class);
 
     protected final boolean functionDisabled;
     protected final String name;

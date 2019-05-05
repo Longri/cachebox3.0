@@ -754,7 +754,7 @@
     },
     "cacheListIcon": {
       "path": "svg/cacheListIcon.svg",
-      "scale": 0.18
+      "scale": 0.22
     },
     "cache_pressed": {
       "path": "svg/cache_pressed.svg",
@@ -1096,6 +1096,10 @@
       "path": "svg/gc_liveIcon.svg",
       "scale": 0.8
     },
+    "gc_logo": {
+      "path": "svg/gc_logo.svg",
+      "scale": 1.8
+    },
     "giga": {
       "path": "svg/giga.svg",
       "scale": 0.2
@@ -1414,7 +1418,7 @@
     },
     "mapMyParking": {
       "path": "svg/mapMyParking.svg",
-      "scale": 0.15
+      "scale": 0.18
     },
     "mapMystery": {
       "path": "svg/myterie.svg",
@@ -1772,6 +1776,10 @@
       "path": "svg/reviewer_note.svg",
       "scale": 0.12
     },
+    "search": {
+      "path": "svg/search.svg",
+      "scale": 1.48
+    },
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
       "scale": 0.15
@@ -1847,6 +1855,10 @@
     "toast_background": {
       "path": "svg/toast_background.svg",
       "scale": 1
+    },
+    "todo": {
+      "path": "svg/todo.svg",
+      "scale": 1.8
     },
     "toggleOff": {
       "path": "svg/toggleOff.svg",
@@ -2827,6 +2839,7 @@
       "sortIcon": "sortIcon",
       "filterIcon": "filter",
       "resetFilterIcon": "filterReset",
+      "searchIcon": "search",
       "importIcon": "import",
       "cacheListIcon": "cacheListIcon",
       "addWp": "add-wp",
@@ -2837,6 +2850,7 @@
       "mesureWp": "mesureWp",
       "hintIconOn": "hintOn",
       "hintIconOff": "hintOff",
+      "my_parking": "mapMyParking",
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",
@@ -2857,6 +2871,7 @@
       "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveMenuIcon",
+      "gc_logo": "gc_logo",
       "viewSettings": "view",
       "reloadCacheIcon": "reload_cache",
       "deleteCaches": "delete_Caches",
@@ -2868,7 +2883,8 @@
       "friendsLogs": "friendsLogs",
       "downloadLogs": "downloadLogs",
       "downloadFriendsLogs": "downloadFriendsLogs",
-      "downloadLogImages": "downloadLogImages"
+      "downloadLogImages": "downloadLogImages",
+      "todo": "todo"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
@@ -3275,14 +3291,13 @@
       "arrow": "arrow-compass",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
-      "typeStyle": "cacheList"
+      "typeStyle": "bubble"
     },
     "bubble": {
       "nameFont": "mapPanelUnit",
       "nameFontColor": "font_color",
       "distanceFont": "AboutInfo",
-      "distanceFontColor": "font_color",
-      "typeStyle": "bubble"
+      "distanceFontColor": "font_color"
     },
     "logListItems": {}
   },
@@ -3357,6 +3372,12 @@
       "nameFontColor": "font_color",
       "infoFont": "mapPanelUnit",
       "infoFontColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.DescriptionViewStyle": {
+    "default": {
+      "backgroundColor": "background_color",
+      "foregroundColor": "font_color"
     }
   }
 }

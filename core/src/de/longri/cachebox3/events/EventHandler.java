@@ -175,7 +175,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             log.debug("Set Global selected Waypoint: {}", event.wayPoint);
             selectedWayPoint = event.wayPoint;
             if (selectedWayPoint != null) {
-                AbstractCache newCache = Database.Data.Query.GetCacheById(selectedWayPoint.getCacheId());
+                AbstractCache newCache = Database.Data.cacheList.GetCacheById(selectedWayPoint.getCacheId());
                 if (!newCache.equals(selectedCache)) {
                     load_unload_Cache_Waypoints(selectedCache, newCache);
                     selectedCache = newCache;

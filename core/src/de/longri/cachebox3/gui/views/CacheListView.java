@@ -30,14 +30,11 @@ import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.actions.ShowDeleteMenu;
 import de.longri.cachebox3.gui.actions.ShowImportMenu;
-import de.longri.cachebox3.gui.actions.show_activities.Action_ShowFilterSettings;
-import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
-import de.longri.cachebox3.gui.activities.CheckStateActivity;
+import de.longri.cachebox3.gui.actions.show_activities.Action_EditFilterSettings;
+import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
@@ -53,7 +50,6 @@ import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
-import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,16 +61,11 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
  */
 public class CacheListView extends AbstractView implements CacheListChangedListener, PositionChangedListener, OrientationChangedListener {
     private final static Logger log = LoggerFactory.getLogger(CacheListView.class);
-    private ListView listView;
     private final float result[] = new float[4];
-
+    private ListView listView;
     private ListViewItem[] createdItems;
 
     private ViewManager.ToastLength WAIT_TOAST_LENGTH = ViewManager.ToastLength.WAIT;
-
-    public CacheListView(BitStore reader) {
-        super(reader);
-    }
 
     public CacheListView() {
         super("CacheListView CacheCount: ");
@@ -93,10 +84,10 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
     }
 
     public void resort() {
-        log.debug("resort Query");
-        Database.Data.Query.resort(EventHandler.getSelectedCoord(),
+        log.debug("resort cacheList");
+        Database.Data.cacheList.resort(EventHandler.getSelectedCoord(),
                 new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
-        log.debug("Finish resort Query");
+        log.debug("Finish resort cacheList");
     }
 
 
@@ -104,7 +95,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         log.debug("Start Thread add new listView");
 
         this.clear();
-        createdItems = new ListViewItem[Database.Data.Query.size];
+        createdItems = new ListViewItem[Database.Data.cacheList.size];
         ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
             boolean outDated = false;
@@ -112,17 +103,17 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
             @Override
             public int getCount() {
                 if (outDated) return 0;
-                return Database.Data.Query.size;
+                return Database.Data.cacheList.size;
             }
 
             @Override
 
             public ListViewItem getView(int index) {
-                if (outDated || Database.Data.Query.size == 0) {
+                if (outDated || Database.Data.cacheList.size == 0) {
                     createdItems[index] = null;
                     return null;
                 }
-                ListViewItem item = CacheListItem.getListItem(index, Database.Data.Query.get(index), getWidth());
+                ListViewItem item = CacheListItem.getListItem(index, Database.Data.cacheList.get(index), getWidth());
                 createdItems[index] = item;
                 return item;
             }
@@ -134,7 +125,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 //get index from item
                 int idx = view.getListIndex();
 
-                if (idx > Database.Data.Query.getSize()) {
+                if (idx > Database.Data.cacheList.getSize()) {
                     // Cachelist is changed, reload!
                     outDated = true;
                     addNewListView();
@@ -142,7 +133,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 }
 
                 // get Cache
-                AbstractCache abstractCache = Database.Data.Query.get(idx);
+                AbstractCache abstractCache = Database.Data.cacheList.get(idx);
 
                 //get actPos and heading
                 Coordinate position = EventHandler.getMyPosition();
@@ -189,7 +180,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 CacheListItem selectedItem = (CacheListItem) CacheListView.this.listView.getSelectedItem();
                 int selectedItemListIndex = selectedItem.getListIndex();
 
-                AbstractCache cache = Database.Data.Query.get(selectedItemListIndex);
+                AbstractCache cache = Database.Data.cacheList.get(selectedItemListIndex);
                 log.debug("Cache selection changed to: " + cache.toString());
                 //set selected Cache global
                 EventHandler.fire(new SelectedCacheChangedEvent(cache));
@@ -200,16 +191,16 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
             @Override
             public void run() {
                 int selectedIndex = 0;
-                for (AbstractCache abstractCache : Database.Data.Query) {
+                for (AbstractCache abstractCache : Database.Data.cacheList) {
                     if (abstractCache.equals(EventHandler.getSelectedCache())) {
                         break;
                     }
                     selectedIndex++;
                 }
                 try {
-                    if (selectedIndex >= Database.Data.Query.size)
+                    if (selectedIndex >= Database.Data.cacheList.size)
                         selectedIndex = 0;// select first item, if Cache not found
-                    if (Database.Data.Query.size > 0) {
+                    if (Database.Data.cacheList.size > 0) {
                         CacheListView.this.listView.setSelection(selectedIndex);
                         CacheListView.this.listView.setSelectedItemVisible(false);
                     }
@@ -333,87 +324,12 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
 
     @Override
     public Menu getContextMenu() {
-        final Menu cm = new Menu("CacheListContextMenu");
-
+        final Menu cm = new Menu("CacheListViewTitle");
 
         if (!(CB.viewmanager.getActView() instanceof CacheListView))
             return null;
 
         final CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();
-
-        cm.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public boolean onItemClick(MenuItem item) {
-                EditCache editCache = null;
-                switch (item.getMenuItemId()) {
-                    case MenuID.MI_RESORT:
-                        cacheListView.resort();
-                        return true;
-                    case MenuID.MI_FilterSet:
-                        new Action_ShowFilterSettings().execute();
-                        return true;
-                    case MenuID.MI_RESET_FILTER:
-                        CB.viewmanager.setNewFilter(FilterInstances.ALL);
-                        return true;
-                    case MenuID.MI_SEARCH_LIST:
-                        CB.viewmanager.toast("Search NOT IMPLEMENTED NOW");
-//                        if (SearchDialog.that == null) {
-//                            new SearchDialog();
-//                        }
-//
-//                        SearchDialog.that.showNotCloseAutomaticly();
-
-                        return true;
-                    case MenuID.MI_IMPORT:
-                        // do nothing, will show mor menu
-                        return true;
-                    case MenuID.MI_SYNC:
-                        CB.viewmanager.toast("Sync NOT IMPLEMENTED NOW");
-//                        SyncActivity sync = new SyncActivity();
-//                        sync.show();
-                        return true;
-                    case MenuID.MI_MANAGE_DB:
-                        CB.postAsync(new NamedRunnable("CacheListView:showSelectDbDialog") {
-                            @Override
-                            public void run() {
-                                new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK).execute();
-                            }
-                        });
-                        return true;
-                    case MenuID.MI_AUTO_RESORT:
-                        CB.viewmanager.toast("Toggle Autoresort NOT IMPLEMENTED NOW");
-
-//                        CB.setAutoResort(!(CB.getAutoResort()));
-//                        if (CB.getAutoResort()) {
-//                            synchronized (Database.Data.Query) {
-//                                Database.Data.Query.resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
-//                            }
-//                        }
-                        return true;
-                    case MenuID.MI_CHK_STATE_API:
-                        new CheckStateActivity(false).show();
-                        return true;
-
-                    case MenuID.MI_CHK_STATE_API_FAV_POI:
-                        new CheckStateActivity(true).show();
-                        return true;
-
-                    case MenuID.MI_NEW_CACHE:
-                        if (editCache == null)
-                            editCache = new EditCache("editCache");
-                        editCache.create();
-                        return true;
-
-                    case MenuID.AID_SHOW_DELETE_DIALOG:
-                        CB.viewmanager.toast("deleteIcon NOT IMPLEMENTED NOW");
-                        //   TabMainView.actionDelCaches.execute();
-                        return true;
-                }
-                return false;
-            }
-
-        });
 
         String DBName = Database.Data == null || !Database.Data.isStarted() ? Translation.get("noDB").toString() : Database.Data.getPath();
         try {
@@ -427,25 +343,39 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         }
 
         MenuItem mi;
-        cm.addItem(MenuID.MI_RESORT, "ResortList", CB.getSkin().getMenuIcon.sortIcon);
-        cm.addItem(MenuID.MI_FilterSet, "filter", CB.getSkin().getMenuIcon.filterIcon);
-        cm.addItem(MenuID.MI_RESET_FILTER, "MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon);
-        //ISSUE (#115 Add search Dialog for ListView) cm.addItem(MenuID.MI_SEARCH_LIST, "search", CB.getSkin().getMenuIcon.searchIcon);
-        mi = cm.addItem(MenuID.MI_IMPORT, "importExport", CB.getSkin().getMenuIcon.importIcon);
-        mi.setMoreMenu(new ShowImportMenu());
-        cm.addItem(MenuID.MI_MANAGE_DB, "manage", "  (" + DBName + ")", CB.getSkin().getMenuIcon.manageDB);
-        //ISSUE (#116 addAutoResort)  mi = cm.addItem(MenuID.MI_AUTO_RESORT, "AutoResort");
-        // mi.setCheckable(true);
-        // mi.setChecked(CB.getAutoResort());
-
-
-        cm.addItem(MenuID.MI_CHK_STATE_API, "chkState", CB.getSkin().getMenuIcon.GC_Live);
-        cm.addItem(MenuID.MI_CHK_STATE_API_FAV_POI, "chkFavPoints", CB.getSkin().getMenuIcon.favPoint);
-
-        //ISSUE (#118 add new Cache) cm.addItem(MenuID.MI_NEW_CACHE, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon);
-        mi = cm.addItem(MenuID.AID_SHOW_DELETE_DIALOG, "DeleteCaches", CB.getSkin().getMenuIcon.deleteCaches);
-        mi.setMoreMenu(new ShowDeleteMenu());
-
+        cm.addMenuItem("ResortList", CB.getSkin().getMenuIcon.sortIcon, () -> cacheListView.resort());
+        cm.addMenuItem("Filter", CB.getSkin().getMenuIcon.filterIcon, () -> new Action_EditFilterSettings().execute());
+        cm.addMenuItem("MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon, () -> CB.viewmanager.setNewFilter(FilterInstances.ALL));
+        cm.addMenuItem("Search", CB.getSkin().getMenuIcon.searchIcon, () -> CB.viewmanager.toast("NOT IMPLEMENTED")).setEnabled(false);// todo ISSUE (#115 Add search Dialog for ListView)
+        /*
+        if (SearchDialog.that == null) {
+            new SearchDialog();
+        }
+        SearchDialog.that.showNotCloseAutomatically();
+         */
+        cm.addMenuItem("importExport", CB.getSkin().getMenuIcon.importIcon, () -> {}).setMoreMenu(new ShowImportMenu());
+        cm.addMenuItem("manage", "  (" + DBName + ")", CB.getSkin().getMenuIcon.manageDB, () -> CB.postAsync(
+                new NamedRunnable("CacheListView:showSelectDbDialog") {
+                    @Override
+                    public void run() {
+                        new Action_SelectDB_Dialog(Action_SelectDB_Dialog.ViewMode.ASK).execute();
+                    }
+                })
+        );
+        mi = cm.addMenuItem("AutoResort", null, () -> CB.viewmanager.toast("NOT IMPLEMENTED")); // todo ISSUE (#116 addAutoResort)   icon: CB.getSkin().getMenuIcon.MI_AUTO_RESORT
+        mi.setEnabled(false);
+        /*
+        CB.setAutoResort(!CB.getAutoResort());
+        if (CB.getAutoResort()) {
+            synchronized (Database.Data.cacheList) {
+                Database.Data.cacheList.resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
+            }
+        }
+         */
+        mi.setCheckable(true);
+        mi.setChecked(CB.getAutoResort());
+        cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon, () -> (new EditCache("editCache")).create()).setEnabled(false); //todo ISSUE (#118 add new Cache)
+        cm.addMenuItem("DeleteCaches", CB.getSkin().getMenuIcon.deleteCaches, () -> {}).setMoreMenu(new ShowDeleteMenu());
         return cm;
     }
 

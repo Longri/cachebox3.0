@@ -26,9 +26,9 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.actions.Action_Show_Hint;
-import de.longri.cachebox3.gui.actions.Action_Switch_Torch;
 import de.longri.cachebox3.gui.actions.QuickActions;
+import de.longri.cachebox3.gui.actions.show_activities.Action_HintDialog;
+import de.longri.cachebox3.gui.actions.show_activities.Action_Switch_Torch;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 
 /**
@@ -63,7 +63,7 @@ public class QuickButtonItem extends ListViewItem {
         mButtonIcon = new Image(spriteDrawable, Scaling.none, Align.center);
         this.addActor(mButtonIcon);
 
-        if (action instanceof Action_Show_Hint) {
+        if (action instanceof Action_HintDialog) {
             EventHandler.add(new SelectedCacheChangedListener() {
                 @Override
                 public void selectedCacheChanged(SelectedCacheChangedEvent event) {

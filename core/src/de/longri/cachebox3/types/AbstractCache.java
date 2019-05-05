@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2017 - 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -353,4 +353,8 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract void setAttributes(GdxSqliteCursor cursor);
 
     public abstract void updateBooleanStore(Database database);
+
+    public abstract void setShowOriginalHtmlColor(boolean value);
+
+    public abstract boolean getShowOriginalHtmlColor();
 }

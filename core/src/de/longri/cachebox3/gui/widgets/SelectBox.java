@@ -17,7 +17,7 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -30,7 +30,6 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
-import de.longri.cachebox3.translation.Translation;
 
 /**
  * Created by Longri on 15.05.2017.
@@ -236,7 +235,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
         if (this.selectTitle != null) {
             menu = new Menu(this.selectTitle);
         } else {
-            menu = new Menu(Translation.get("select"));
+            menu = new Menu("select");
         }
         for (int i = 0, n = entries.size; i < n; i++) {
             menu.addItem(getMenuItem(i, entries.get(i)));

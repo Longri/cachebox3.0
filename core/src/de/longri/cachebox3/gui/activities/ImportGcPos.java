@@ -465,10 +465,10 @@ public class ImportGcPos extends BlockGpsActivityBase {
                             CB.postOnNextGlThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    CB.postAsync(new NamedRunnable("Reload Query after import") {
+                                    CB.postAsync(new NamedRunnable("Reload cacheList after import") {
                                         @Override
                                         public void run() {
-                                            Database.Data.Query.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                                            Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
                                             log.debug("Call loadFilteredCacheList()");
                                             CB.loadFilteredCacheList(null);
                                             CB.postOnNextGlThread(new Runnable() {

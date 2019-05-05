@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
-import de.longri.cachebox3.gui.actions.show_activities.Action_Show_SelectDB_Dialog;
+import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
@@ -106,7 +106,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                                 CB.postAsync(new NamedRunnable("CacheList3DAO:showSelectDbDialog") {
                                     @Override
                                     public void run() {
-                                        new Action_Show_SelectDB_Dialog(Action_Show_SelectDB_Dialog.ViewMode.ASK).execute();
+                                        new Action_SelectDB_Dialog(Action_SelectDB_Dialog.ViewMode.ASK).execute();
                                     }
                                 });
                                 return true;

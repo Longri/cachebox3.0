@@ -171,7 +171,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
     }
 
     private void waypointListChanged(Database database, AbstractWaypoint wp, boolean delete, boolean fireChangedEvent) {
-        AbstractCache cache = database.Query.getCacheById(wp.getCacheId());
+        AbstractCache cache = database.cacheList.getCacheById(wp.getCacheId());
         if (cache != null && cache.getWaypoints() != null) {
             if (delete) {
                 cache.getWaypoints().removeValue(wp, false);

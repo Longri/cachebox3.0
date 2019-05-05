@@ -108,14 +108,39 @@ public class Menu extends Window {
         return item;
     }
 
-    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, ClickListener onClickListener) {
+    private MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, boolean withoutTranslation, Drawable icon, Runnable runnable) {
         MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
-        item.setTitle(String.valueOf(Translation.get(titleTranlationId.toString())));
+        if (titleTranlationId.length() == 0) withoutTranslation = true;
+        item.setTitle((withoutTranslation ? titleTranlationId : Translation.get(titleTranlationId.toString())) + titleExtension);
         if (icon != null)
             item.setIcon(icon);
-        item.addListener(onClickListener);
+        item.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (mustHandle(event)) {
+                    runnable.run();
+                }
+            }
+        });
         mItems.add(item);
         return item;
+    }
+
+    public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Runnable runnable) {
+        return addMenuItem(titleTranlationId, titleExtension, false, icon, runnable);
+    }
+
+    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, Runnable runnable) {
+        return addMenuItem(titleTranlationId, "", false, icon, runnable);
+    }
+
+    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, boolean checked, boolean withoutTranslation, Runnable runnable) {
+        MenuItem item = addMenuItem(titleTranlationId, "", withoutTranslation, null, runnable);
+        item.setCheckable(true);
+        item.setChecked(checked);
+        return item;
+    }
+    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, boolean checked, Runnable runnable) {
+        return addCheckableMenuItem(titleTranlationId, checked, false, runnable);
     }
 
     public void addItem(final MenuItem menuItem) {
@@ -316,7 +341,15 @@ public class Menu extends Window {
             titleGroup.addActor(backImage);
         }
 
-        titleLabel = new VisLabel(this.name, "menu_title_act");
+        String title = getName(); // !!! name is here(local access) and in actor(public getter/setter)
+        if (title.length() > 0) {
+            if (title.startsWith("-"))
+                title=title.substring(1);
+            else
+                title=Translation.get(title).toString();
+        }
+        else title = " ";
+        titleLabel = new VisLabel(title, "menu_title_act");
 
         if (parentMenu != null) {
             parentTitleLabel = new VisLabel(parentMenu.name, "menu_title_parent");
@@ -400,15 +433,9 @@ public class Menu extends Window {
     }
 
     public void addDivider(int listIndex) {
-
         if (this.style.divider != null) {
-            MenuItem item = new MenuItem(listIndex, this);
-            item.overrideBackground(this.style.divider);
-            addItem(item);
+            addItem(new DividerItem(listIndex, this, this.style));
         }
-
-        log.debug("add Divider");
-        //TODO add divider item
     }
 
     public void reorganizeListIndexes() {
@@ -427,9 +454,15 @@ public class Menu extends Window {
             return false;
         } else {
             event.cancel(); // to set event is handled, ...
-            if (hideWithItemClick)
-                hide(ALL);
-            return true;
+            MenuItem menuItem = (MenuItem) event.getListenerActor();
+            if (menuItem.hasMoreMenu()) {
+                menuItem.getMoreMenu(compoundMenu != null ? compoundMenu : this).show();
+                return false;
+            } else {
+                if (hideWithItemClick)
+                    hide(ALL);
+                return true;
+            }
         }
     }
 

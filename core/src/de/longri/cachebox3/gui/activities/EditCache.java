@@ -1,5 +1,6 @@
 package de.longri.cachebox3.gui.activities;
 
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 
 /**
@@ -11,6 +12,6 @@ public class EditCache extends ActivityBase {
     }
 
     public void create() {
-
+        CB.viewmanager.toast("NOT IMPLEMENTED");
     }
 }

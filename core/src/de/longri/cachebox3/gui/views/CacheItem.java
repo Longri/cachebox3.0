@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
@@ -106,9 +107,10 @@ public class CacheItem extends VisTable implements Disposable {
         VisTable arrowTable = new VisTable();
 
         if (this.style.arrow != null) {
-            arrowImage = new Image(this.style.arrow);
-            arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
-            arrowTable.add(arrowImage);
+            arrowImage = new Image(this.style.arrow, Scaling.none);
+            arrowImage.pack();
+            arrowImage.setOrigin(arrowImage.getWidth() / 2.0f, arrowImage.getHeight() / 2.0f);
+            arrowTable.add(arrowImage).expandY();
             arrowTable.row();
         }
 
@@ -117,8 +119,8 @@ public class CacheItem extends VisTable implements Disposable {
         distanceLabelStyle.fontColor = this.style.distanceFontColor;
         distanceLabel = new VisLabel(arrowImage != null ? "---- --" : "   ", distanceLabelStyle);
         arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
-        this.add(arrowTable).right();
 
+        this.add(arrowTable).right();
         this.row();
 
         VisTable line1 = new VisTable();

@@ -30,7 +30,6 @@ import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
@@ -63,7 +62,7 @@ public class EditWaypoint extends ActivityBase {
     private final SelectBox<CacheTypes> selectBox;
     private final boolean showCoordsOnShow;
     private final GenericCallBack<AbstractWaypoint> callBack;
-    private final boolean onlyShow;//TODO implement
+    private final boolean onlyShow;//TODO implement see WaypointView context menu. See issue #252
 
     public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, boolean onlyShow, GenericCallBack<AbstractWaypoint> callBack) {
         super("EditWaypoint");
@@ -75,7 +74,7 @@ public class EditWaypoint extends ActivityBase {
 
         btnOk = new CharSequenceButton(Translation.get("save"));
         btnCancel = new CharSequenceButton(Translation.get("cancel"));
-        cacheTitelLabel = new VisLabel(Database.Data.Query.GetCacheById(waypoint.getCacheId()).getName());
+        cacheTitelLabel = new VisLabel(Database.Data.cacheList.GetCacheById(waypoint.getCacheId()).getName());
         typeLabel = new VisLabel(Translation.get("type"));
         titleLabel = new VisLabel(Translation.get("Title"));
         descriptionLabel = new VisLabel(Translation.get("Description"));
@@ -99,7 +98,7 @@ public class EditWaypoint extends ActivityBase {
         itemList.add(CacheTypes.Final);
 
         selectBox = new SelectBox();
-        selectBox.setHideWithItemClick(false);
+        selectBox.setHideWithItemClick(true);
         selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -160,12 +159,7 @@ public class EditWaypoint extends ActivityBase {
     @Override
     public void onShow() {
         if (this.showCoordsOnShow) {
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    Utils.triggerButtonClicked(coordinateButton);
-                }
-            });
+            Gdx.app.postRunnable(() -> Utils.triggerButtonClicked(coordinateButton));
         }
         CB.stageManager.registerForBackKey(cancelClickListener);
     }
