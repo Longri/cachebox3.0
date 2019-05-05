@@ -22,20 +22,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextArea;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
-import de.longri.cachebox3.apis.groundspeak_api.search.SearchCoordinate;
-import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.BlockGpsActivityBase;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
@@ -47,10 +48,11 @@ import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.Cache3DAO;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.Category;
 import de.longri.cachebox3.types.GpxFilename;
-import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
 import org.slf4j.Logger;
@@ -58,6 +60,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static de.longri.cachebox3.apis.GroundspeakAPI.searchGeoCaches;
 
 
 /**
@@ -370,9 +374,8 @@ public class ImportGcPos extends BlockGpsActivityBase {
 
         int radius = 0;
         try {
-            radius = Integer.parseInt(textAreaRadius.getText().toString());
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+            radius = Integer.parseInt(textAreaRadius.getText());
+        } catch (NumberFormatException ignore) {
         }
 
         if (radius != 0)
@@ -411,92 +414,69 @@ public class ImportGcPos extends BlockGpsActivityBase {
     }
 
     private void importNow(final ImportProgressChangedListener progressListener, final Date importStart, int radius) {
+        // todo progressListener, importStart, cancel, ...
         Category category = CB.Categories.getCategory("API-Import");
         if (category != null) { // should not happen!!!
             GpxFilename gpxFilename = category.addGpxFilename("API-Import");
             if (gpxFilename != null) {
+                GroundspeakAPI.Query q = new GroundspeakAPI.Query()
+                        .resultWithFullFields()
+                        .resultWithLogs(30)
+                        //.resultWithImages(30)
+                        //.publishedDate(publishDate, btnBeforeAfterEqual.getText()) // todo ACB2 extension
+                        ;
+                q.searchInCircle(actSearchPos, radius * 1000);
 
-                log.debug("Ask for API state");
-                byte apiState;
-                if (GroundspeakLiveAPI.isPremiumMember()) {
-                    apiState = 2;
+                if (Config.SearchWithoutFounds.getValue()) q.excludeFinds();
+                if (Config.SearchWithoutOwns.getValue()) q.excludeOwn();
+                if (Config.SearchOnlyAvailable.getValue()) q.onlyActiveGeoCaches();
+
+                /*
+                // todo implement following ACB2 extensions
+                if (edtOwner.getText().trim().length() > 0) q.searchForOwner(edtOwner.getText().trim());
+                if (edtCacheName.getText().trim().length() > 0) q.searchForTitle(edtCacheName.getText().trim());
+
+                int importLimit;
+                try {
+                    importLimit = Integer.parseInt(edtImportLimit.getText());
+                } catch (Exception ex) {
+                    importLimit = Config.ImportLimit.getDefaultValue();
+                }
+                q.setMaxToFetch(importLimit);
+                 */
+                q.setMaxToFetch(Integer.MAX_VALUE);
+
+                //dis.setAnimationType(AnimationType.Download);
+                Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = searchGeoCaches(q);
+
+                //dis.setAnimationType(AnimationType.Work);
+                if (GroundspeakAPI.APIError != GroundspeakAPI.OK) {
+                    MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("importCachesOverPosition"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                 } else {
-                    apiState = 1;
+                    // WriteIntoDB.CachesAndLogsAndImagesIntoDB(geoCacheRelateds, gpxFilename);
+                    // todo set gpxfilename / category
+                    Cache3DAO dao = new Cache3DAO();
+                    for (GroundspeakAPI.GeoCacheRelated cacheEntry : fetchedCaches) {
+                        dao.writeToDatabase(Database.Data, cacheEntry.cache, true);
+
+                        LogDAO logdao = new LogDAO();
+                        logdao.writeToDB(Database.Data, cacheEntry.logs);
+                    }
                 }
 
-                log.debug("Api state = {}", apiState);
-                log.debug("Search at Coordinate:{}", actSearchPos);
-                final SearchCoordinate searchC = new SearchCoordinate(Database.Data, GroundspeakLiveAPI.getAccessToken(),
-                        50, actSearchPos, radius * 1000,
-                        apiState, new ICancel() {
+                CB.postOnNextGlThread(() -> CB.postAsync(new NamedRunnable("Reload cacheList after import") {
                     @Override
-                    public boolean cancel() {
-                        return canceled.get();
+                    public void run() {
+                        Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                        log.debug("Call loadFilteredCacheList()");
+                        CB.loadFilteredCacheList(null);
+                        CB.postOnNextGlThread(() -> EventHandler.fire(new CacheListChangedEvent()));
                     }
-                });
-                searchC.excludeFounds = Config.SearchWithoutFounds.getValue();
-                searchC.excludeHides = Config.SearchWithoutOwns.getValue();
-                searchC.available = Config.SearchOnlyAvailable.getValue();
+                }));
 
-                log.debug("Request Groundspeak API");
-                searchC.postRequest(new GenericCallBack<ApiResultState>() {
-                    @Override
-                    public void callBack(ApiResultState value) {
-                        if (!value.isErrorState()) {
+                //close Dialog
+                finish();
 
-                            String Msg;
-                            if (importStart != null) {
-                                Date Importfin = new Date();
-                                long ImportZeit = Importfin.getTime() - importStart.getTime();
-                                Msg = "Import " + String.valueOf(searchC.cacheCount) + "C " + String.valueOf(searchC.logCount) + "L in " + String.valueOf(ImportZeit);
-                            } else {
-                                Msg = "Import canceled";
-                            }
-
-                            log.debug(Msg);
-                            CB.viewmanager.toast(Msg);
-
-                            //remove Progress handler
-                            EventHandler.remove(progressListener);
-
-                            //close Dialog
-                            finish();
-
-                            CB.postOnNextGlThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    CB.postAsync(new NamedRunnable("Reload cacheList after import") {
-                                        @Override
-                                        public void run() {
-                                            Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
-                                            log.debug("Call loadFilteredCacheList()");
-                                            CB.loadFilteredCacheList(null);
-                                            CB.postOnNextGlThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    EventHandler.fire(new CacheListChangedEvent());
-                                                }
-                                            });
-                                        }
-                                    });
-
-                                }
-                            });
-                        } else {
-                            //Error
-                            log.debug("ERROR");
-                            CB.viewmanager.toast("ERROR");
-
-                            //remove Progress handler
-                            EventHandler.remove(progressListener);
-
-                            //close Dialog
-                            finish();
-
-                            EventHandler.fire(new CacheListChangedEvent());
-                        }
-                    }
-                }, gpxFilename.Id);
             }
         }
     }

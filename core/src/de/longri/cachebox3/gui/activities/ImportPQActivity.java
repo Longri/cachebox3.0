@@ -190,26 +190,15 @@ public class ImportPQActivity extends BlockGpsActivityBase {
                 }
                 log.debug(msg);
 
-                CB.postOnNextGlThread(new Runnable() {
+                CB.postOnNextGlThread(() -> CB.postAsync(new NamedRunnable("Reload cacheList after import") {
                     @Override
                     public void run() {
-                        CB.postAsync(new NamedRunnable("Reload cacheList after import") {
-                            @Override
-                            public void run() {
-                                Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
-                                log.debug("Call loadFilteredCacheList()");
-                                CB.loadFilteredCacheList(null);
-                                CB.postOnNextGlThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        EventHandler.fire(new CacheListChangedEvent());
-                                    }
-                                });
-                            }
-                        });
-
+                        Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                        log.debug("Call loadFilteredCacheList()");
+                        CB.loadFilteredCacheList(null);
+                        CB.postOnNextGlThread(() -> EventHandler.fire(new CacheListChangedEvent()));
                     }
-                });
+                }));
             }
         };
 
