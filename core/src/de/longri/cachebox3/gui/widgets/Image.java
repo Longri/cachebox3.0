@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Image extends CB_View_Base {
     final static Logger log = LoggerFactory.getLogger(Image.class);
     private ImageLoader imageLoader;
+    private float prefWidth, prefHeight;
 
     private Color mColor = new Color(1, 1, 1, 1);
     private Alignment hAlignment = Alignment.CENTER;
@@ -83,11 +84,13 @@ public class Image extends CB_View_Base {
 
                 @Override
                 public void sizechanged(float newWidth, float newHeight) {
-                    Image.this.setSize(newWidth, newHeight);
+                    Image.this.prefWidth = newWidth;
+                    Image.this.prefHeight = newHeight;
+                    Image.this.invalidateHierarchy();
+                    Image.this.layout();
                 }
-            }, this.getWidth());
+            }, rec.getWidth());
         }
-
     }
 
     @Override
@@ -164,12 +167,12 @@ public class Image extends CB_View_Base {
                     isAsRenderViewRegisted.set(true);
                 }
             } else if (imageLoader.inLoad & !imageLoader.ImageLoadError) {
-               //TODO add work animation
+                //TODO add work animation
             } else if (imageLoader.ImageLoadError) {
 
-                    //set error image
-                    //Fixme use style
-                    this.setSprite(CB.getSkin().getSprite("error"), false);
+                //set error image
+                //Fixme use style
+                this.setSprite(CB.getSkin().getSprite("error"), false);
 
             }
         } catch (Exception e) {
@@ -237,4 +240,15 @@ public class Image extends CB_View_Base {
             return null;
         return imageLoader.getDrawable(Gdx.graphics.getDeltaTime());
     }
+
+    @Override
+    public float getPrefWidth() {
+        return this.prefWidth;
+    }
+
+    @Override
+    public float getPrefHeight() {
+        return this.prefHeight;
+    }
+
 }

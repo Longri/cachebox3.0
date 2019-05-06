@@ -65,7 +65,7 @@ public class GalleryView extends Catch_Table {
         loader.setThumbWidth(MAX_THUMB_WIDTH, "");
         loader.setImage(imageEntry.LocalPath);
 
-        GalleryItem item = new GalleryItem(index, loader, label);
+        GalleryItem item = new GalleryItem(index, loader);
 //        item.setOnDoubleClickListener(onGalleryItemDoubleClicked);
         galleryAdapter.add(item);
 

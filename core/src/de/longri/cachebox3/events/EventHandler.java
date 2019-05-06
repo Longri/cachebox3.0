@@ -252,7 +252,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         FileFilter filter = new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                String filename = pathname.getAbsolutePath();
+                String filename = pathname.getName();
                 filename = filename.toLowerCase(Locale.getDefault());
                 if (filename.indexOf(cache.getGcCode().toString().toLowerCase(Locale.getDefault())) >= 0) {
                     if (filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".bmp") || filename.endsWith(".png") || filename.endsWith(".gif")) {

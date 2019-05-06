@@ -22,63 +22,66 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.gui.widgets.Image;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.ImageLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 23.04.2019.
  */
 public class GalleryItem extends ListViewItem {
 
+    private static final Logger log = LoggerFactory.getLogger(GalleryItem.class);
+
     private final ImageLoader iloader;
     private final Image img;
-    private final VisLabel lbl;
+
 
     public GalleryItem(int index, ImageLoader loader) {
-        this(index, loader, null);
-    }
-
-    public GalleryItem(int index, ImageLoader loader, String label) {
         super(index);
         iloader = loader;
         CB_RectF imgRec = new CB_RectF(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
-        img = new Image(iloader, imgRec.ScaleCenter(0.95f), "", false);
+        img = new Image(iloader, imgRec.ScaleCenter(0.695f), "", false);
         img.setHAlignment(Alignment.CENTER);
-
-        if (label == null) lbl = null;
-        else lbl = new VisLabel(label);
-        fillContent();
+        this.add(img);
     }
 
-    private void fillContent() {
-        this.clear();
-//        this.add(img);
-//        if (lbl != null) {
-//            this.row();
-//            this.add(lbl);
-//        }
 
-        this.add(new VisLabel(String.valueOf(getListIndex())));
+    @Override
+    public void layout() {
+        super.layout();
+
+        if (this.getWidth() > 0) {
+            img.setSize(this.getWidth(), this.getHeight());
+
+            iloader.setResizeListener(new ImageLoader.resize() {
+                @Override
+                public void sizechanged(float width, float height) {
+                    log.debug("GalleryItem: resized");
+                    GalleryItem.this.invalidateHierarchy();
+                    GalleryItem.this.layout();
+                }
+            }, this.getWidth());
+        }
     }
 
     @Override
     public float getPrefHeight() {
-        return lbl != null ? (this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight())
-                : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
+        return this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
     }
 
     @Override
     public float getPrefWidth() {
-        return lbl != null ? (this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight())
-                : this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
+        return this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-    }
-
-    @Override
-    public void setX(float value) {
-        super.setX(value);
-    }
+//    @Override
+//    public void draw(Batch batch, float parentAlpha) {
+//        super.draw(batch, parentAlpha);
+//    }
+//
+//    @Override
+//    public void setX(float value) {
+//        super.setX(value);
+//    }
 
 }
