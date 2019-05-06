@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.widgets.list_view;
 
 import com.kotcrab.vis.ui.building.utilities.Alignment;
 import de.longri.cachebox3.gui.widgets.Image;
+import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.ImageLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,15 +47,15 @@ public class GalleryItem extends ListViewItem {
         super.layout();
 
         if (this.getWidth() > 0) {
-            img.setSize(this.getWidth(), this.getHeight());
-
             iloader.setResizeListener((width, height) -> {
                 log.debug("GalleryItem: resized");
                 GalleryItem.this.invalidateHierarchy();
                 GalleryItem.this.layout();
             }, this.getWidth());
         }
-        img.setBounds(0, 0, this.getWidth(), this.getHeight());
+
+        CB_RectF rec = new CB_RectF(0, 0, getWidth(), getHeight()).scaleCenter(0.95f);
+        img.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
     }
 
     @Override

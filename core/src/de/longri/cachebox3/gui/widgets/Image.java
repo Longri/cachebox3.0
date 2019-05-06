@@ -48,18 +48,13 @@ public class Image extends CB_View_Base {
         this.imageLoader = img;
         this.imageLoader.reziseHeight = reziseHeight;
         if (this.imageLoader.reziseHeight && this.imageLoader.getResizeListener() == null) {
-            this.imageLoader.setResizeListener(new ImageLoader.resize() {
-
-                @Override
-                public void sizechanged(float newWidth, float newHeight) {
-                    Image.this.prefWidth = newWidth;
-                    Image.this.prefHeight = newHeight;
-                    Image.this.invalidateHierarchy();
-                    Image.this.layout();
-                }
+            this.imageLoader.setResizeListener((newWidth, newHeight) -> {
+                Image.this.prefWidth = newWidth;
+                Image.this.prefHeight = newHeight;
+                Image.this.invalidateHierarchy();
+                Image.this.layout();
             }, 0);
         }
-        this.setDebug(true);
     }
 
     @Override
@@ -72,7 +67,7 @@ public class Image extends CB_View_Base {
         }
     }
 
-    AtomicBoolean isAsRenderViewRegisted = new AtomicBoolean(false);
+    private AtomicBoolean isAsRenderViewRegisted = new AtomicBoolean(false);
 
     @Override
     public void onHide() {
