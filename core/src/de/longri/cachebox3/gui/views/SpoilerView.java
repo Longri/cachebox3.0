@@ -15,29 +15,19 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.widgets.GalleryView;
-import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Import.ImporterProgress;
 import de.longri.cachebox3.sqlite.dao.ImageDAO;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.ImageEntry;
-import de.longri.cachebox3.utils.ImageLoader;
 import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.util.Locale;
 
 import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.GrabImagesSelectedByCache;
 

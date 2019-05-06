@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -34,7 +34,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.settings.Settings;
-import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import de.longri.cachebox3.utils.texturepacker.TexturePacker_Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -454,13 +453,13 @@ public class ImageLoader {
     private String originalPath = null;
 
     private void createThumb() {
-		String tmp = PlatformConnector.createThumb(mPath, (int) resizeWidth, ThumbPräfix);
-		if (tmp != null) {
-			originalPath = mPath;
-			mPath = tmp;
-		} else {
-			log.error( "Thumb not generated for " + mPath + " ! " + ThumbPräfix);
-		}
+        String tmp = PlatformConnector.createThumb(mPath, (int) resizeWidth, ThumbPräfix);
+        if (tmp != null) {
+            originalPath = mPath;
+            mPath = tmp;
+        } else {
+            log.error("Thumb not generated for " + mPath + " ! " + ThumbPräfix);
+        }
     }
 
     /**

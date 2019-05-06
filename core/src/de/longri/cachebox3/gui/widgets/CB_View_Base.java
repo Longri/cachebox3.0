@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.Showable;
-import de.longri.cachebox3.utils.SizeF;
 
 /**
  * Created by Longri on 05.08.16.
@@ -30,23 +29,8 @@ public abstract class CB_View_Base extends Catch_WidgetGroup implements Disposab
 
     public final String NAME;
 
-    public CB_View_Base(float x, float y, float width, float height, String name) {
-        this.NAME = name;
-        this.setBounds(x, y, width, height);
-    }
-
     public CB_View_Base(String name) {
         this.NAME = name;
-    }
-
-    public CB_View_Base(CB_RectF rec, String name) {
-        this.NAME = name;
-        this.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
-    }
-
-    public CB_View_Base(SizeF size, String name) {
-        this.NAME = name;
-        this.setBounds(0, 0, size.width, size.height);
     }
 
     public abstract void dispose();

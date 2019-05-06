@@ -15,12 +15,8 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.kotcrab.vis.ui.building.utilities.Alignment;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.gui.widgets.Image;
-import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.ImageLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +35,7 @@ public class GalleryItem extends ListViewItem {
     public GalleryItem(int index, ImageLoader loader) {
         super(index);
         iloader = loader;
-        CB_RectF imgRec = new CB_RectF(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
-        img = new Image(iloader, imgRec.ScaleCenter(0.695f), "", false);
+        img = new Image(iloader, "", false);
         img.setHAlignment(Alignment.CENTER);
         this.add(img);
     }
@@ -53,15 +48,13 @@ public class GalleryItem extends ListViewItem {
         if (this.getWidth() > 0) {
             img.setSize(this.getWidth(), this.getHeight());
 
-            iloader.setResizeListener(new ImageLoader.resize() {
-                @Override
-                public void sizechanged(float width, float height) {
-                    log.debug("GalleryItem: resized");
-                    GalleryItem.this.invalidateHierarchy();
-                    GalleryItem.this.layout();
-                }
+            iloader.setResizeListener((width, height) -> {
+                log.debug("GalleryItem: resized");
+                GalleryItem.this.invalidateHierarchy();
+                GalleryItem.this.layout();
             }, this.getWidth());
         }
+        img.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
 
     @Override
@@ -73,15 +66,4 @@ public class GalleryItem extends ListViewItem {
     public float getPrefWidth() {
         return this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
     }
-
-//    @Override
-//    public void draw(Batch batch, float parentAlpha) {
-//        super.draw(batch, parentAlpha);
-//    }
-//
-//    @Override
-//    public void setX(float value) {
-//        super.setX(value);
-//    }
-
 }

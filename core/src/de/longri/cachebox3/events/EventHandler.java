@@ -37,7 +37,6 @@ import de.longri.cachebox3.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Type;
 import java.util.Locale;
@@ -47,7 +46,7 @@ import java.util.Locale;
  */
 public class EventHandler implements SelectedCacheChangedListener, SelectedWayPointChangedListener, PositionChangedListener, OrientationChangedListener {
 
-    static final Logger log = LoggerFactory.getLogger(EventHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(EventHandler.class);
 
     static final private Class[] allListener = new Class[]{de.longri.cachebox3.events.location.PositionChangedListener.class,
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
@@ -130,27 +129,24 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                     }
                 }
 
-                asyncExecutor.submit(new AsyncTask<Void>() {
-                    @Override
-                    public Void call() {
-                        for (int i = 0, n = list.size; i < n; i++) {
-                            if (myIndex >= 0 && i == myIndex) continue;
+                asyncExecutor.submit((AsyncTask<Void>) () -> {
+                    for (int i = 0, n = list.size; i < n; i++) {
+                        if (myIndex >= 0 && i == myIndex) continue;
 
+                        try {
+                            event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
+                        } catch (Exception e) {
+                            CB.stageManager.indicateException(CB.EXCEPTION_COLOR_EVENT);
+                            String name;
                             try {
-                                event.getListenerClass().getDeclaredMethods()[0].invoke(list.items[i], event);
-                            } catch (Exception e) {
-                                CB.stageManager.indicateException(CB.EXCEPTION_COLOR_EVENT);
-                                String name;
-                                try {
-                                    name = list.items[i].getClass().getSimpleName();
-                                } catch (Exception e1) {
-                                    name = "???";
-                                }
-                                log.error("Fire event to" + name, e);
+                                name = list.items[i].getClass().getSimpleName();
+                            } catch (Exception e1) {
+                                name = "???";
                             }
+                            log.error("Fire event to" + name, e);
                         }
-                        return null;
                     }
+                    return null;
                 });
             }
         }
@@ -182,7 +178,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         AbstractCache actCache = getSelectedCache();
         spoilerResources.clear();
 
-        String directory = "";
+        String directory;
         String gcCode = actCache.getGcCode().toString();
         if (gcCode.length() < 4)
             return; // don't load spoiler
@@ -249,23 +245,16 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
         if (!dir.isDirectory()) return;
 
-        FileFilter filter = new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                String filename = pathname.getName();
-                filename = filename.toLowerCase(Locale.getDefault());
-                if (filename.indexOf(cache.getGcCode().toString().toLowerCase(Locale.getDefault())) >= 0) {
-                    if (filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".bmp") || filename.endsWith(".png") || filename.endsWith(".gif")) {
-                        // don't load Thumbs
-                        if (filename.startsWith(Utils.THUMB) || filename.startsWith(Utils.THUMB_OVERVIEW + Utils.THUMB)) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
+        FileFilter filter = pathname -> {
+            String filename = pathname.getName();
+            filename = filename.toLowerCase(Locale.getDefault());
+            if (filename.contains(cache.getGcCode().toString().toLowerCase(Locale.getDefault()))) {
+                if (filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".bmp") || filename.endsWith(".png") || filename.endsWith(".gif")) {
+                    // don't load Thumbs
+                    return !filename.startsWith(Utils.THUMB) && !filename.startsWith(Utils.THUMB_OVERVIEW + Utils.THUMB);
                 }
-                return false;
             }
+            return false;
         };
         FileHandle[] files = dir.list(filter);
 
