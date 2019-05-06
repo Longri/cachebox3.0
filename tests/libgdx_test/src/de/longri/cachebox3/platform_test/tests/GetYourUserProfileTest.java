@@ -19,19 +19,19 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.apis.groundspeak_api.*;
-
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
+import de.longri.cachebox3.apis.groundspeak_api.GetYourUserProfile;
 import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.utils.BuildInfo;
+import de.longri.cachebox3.platform_test.EXCLUDE_FROM_TRAVIS;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
-import de.longri.cachebox3.platform_test.EXCLUDE_FROM_TRAVIS;
+import de.longri.cachebox3.utils.BuildInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,8 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.platform_test.Assert.assertThat;
 import static de.longri.cachebox3.platform_test.Assert.assertEquals;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by longri on 14.04.17.
@@ -161,7 +161,7 @@ public class GetYourUserProfileTest {
         };
         final ApiResultState[] state = new ApiResultState[1];
         AtomicBoolean WAIT = new AtomicBoolean(true);
-        getYourUserProfile.handleHttpResponse(response, new GenericCallBack<ApiResultState>() {
+        getYourUserProfile.doHttpResponse(response, new GenericCallBack<ApiResultState>() {
             @Override
             public void callBack(ApiResultState value) {
                 state[0] = value;

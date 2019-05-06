@@ -3,16 +3,11 @@ package de.longri.cachebox3.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.net.NetJavaImpl;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.PostRequest;
-import de.longri.cachebox3.utils.converter.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -22,17 +17,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class NetUtils {
     private final static Logger log = LoggerFactory.getLogger(NetUtils.class);
-
-
-    public enum ResultType {
-        STRING, STREAM
-    }
-
-    public abstract static class StreamHandleObject {
-        public InputStream stream;
-
-        public abstract void handled();
-    }
 
     public static Object postAndWait(final ResultType type, final Net.HttpRequest request, final ICancel icancel) {
         log.debug("Send Post request");
@@ -119,7 +103,6 @@ public class NetUtils {
         return result[0];
     }
 
-
     public static Boolean download(String uri, String local) {
         FileHandle localFile = Gdx.files.absolute(local);
         try {
@@ -128,5 +111,15 @@ public class NetUtils {
             log.error("download: " + uri + " to " + local, e);
         }
         return localFile.exists();
+    }
+
+    public enum ResultType {
+        STRING, STREAM
+    }
+
+    public abstract static class StreamHandleObject {
+        public InputStream stream;
+
+        public abstract void handled();
     }
 }

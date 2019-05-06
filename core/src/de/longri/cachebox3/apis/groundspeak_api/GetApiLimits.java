@@ -5,9 +5,7 @@ import de.longri.cachebox3.apis.groundspeak_api.json_parser.stream_parser.ApiLim
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.NetUtils;
 
-import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI.getAccessToken;
-import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.GS_LIVE_URL;
-import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.STAGING_GS_LIVE_URL;
+import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI.*;
 
 /**
  * Created by longri on 01.07.17.

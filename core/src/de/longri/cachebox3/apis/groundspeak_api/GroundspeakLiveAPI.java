@@ -33,10 +33,10 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.GS_LIVE_URL;
-import static de.longri.cachebox3.apis.groundspeak_api.PostRequest.STAGING_GS_LIVE_URL;
-
 public class GroundspeakLiveAPI {
+    final static String GS_LIVE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
+    final static String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
+
     private static final Logger log = LoggerFactory.getLogger(GroundspeakLiveAPI.class);
     public static String LastAPIError = "";
     public static boolean CacheStatusValid = false;
