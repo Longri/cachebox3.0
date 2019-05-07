@@ -49,11 +49,11 @@ public class ListView extends Catch_WidgetGroup {
 
     private final static Logger log = LoggerFactory.getLogger(ListView.class);
 
-    private final ListViewType type;
+    protected final ListViewType type;
     private final boolean canDisposeItems;
     final VisScrollPane scrollPane;
     public final ListViewStyle style;
-    private final ListViewItemLinkedList itemList;
+    protected final ListViewItemLinkedList itemList;
     private final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
     private final Array<ListViewItemInterface> selectedItemList = new Array<>();
     final CB_RectF tempClickRec = new CB_RectF();
@@ -75,7 +75,6 @@ public class ListView extends Catch_WidgetGroup {
     public ListView(ListViewType type, ListViewStyle style) {
         this(type, style, true);
     }
-
 
     public ListView(ListViewType type, boolean canDisposeItems) {
         this(type, VisUI.getSkin().get("default", ListViewStyle.class), canDisposeItems);
@@ -177,6 +176,12 @@ public class ListView extends Catch_WidgetGroup {
                     itemList.setHeight(height);
                 }
             }
+
+            /** If currently scrolling by tracking a touch down, stop scrolling. */
+            public void cancel() {
+                super.cancel();
+                log.debug("ScrollPane.cancel()");
+            }
         };
         scrollPane.addCaptureListener(new ClickLongClickListener() {
             @Override
@@ -193,7 +198,7 @@ public class ListView extends Catch_WidgetGroup {
                         event.setListenerActor(item);
 
                         // item Clicked
-                        log.debug("ListViewItem {} clicked | item => {}", i, item.toString() );
+                        log.debug("ListViewItem {} clicked | item => {}", i, item.toString());
                         Array<EventListener> listeners = item.getListeners();
                         boolean handeld = false;
                         for (EventListener listener : listeners) {
@@ -238,7 +243,11 @@ public class ListView extends Catch_WidgetGroup {
                 return false;
             }
         });
-        scrollPane.setOverscroll(false, true);
+        if (this.type == VERTICAL) {
+            scrollPane.setOverscroll(false, true);
+        } else {
+            scrollPane.setOverscroll(true, false);
+        }
         scrollPane.setFlickScroll(true);
         scrollPane.setVariableSizeKnobs(false);
         scrollPane.setCancelTouchFocus(true);

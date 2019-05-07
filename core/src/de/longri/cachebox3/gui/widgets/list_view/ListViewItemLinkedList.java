@@ -465,7 +465,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
                 itemArray[i].setY(itemArray[i].getY() + changedSize);
             }
         } else {
-            for (int i = count-1; i > newItem.getListIndex(); i--) {
+            for (int i = count - 1; i > newItem.getListIndex(); i--) {
                 itemArray[i].setX(itemArray[i].getX() + changedSize);
             }
         }
@@ -475,7 +475,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         else this.setWidth(completeSize);
     }
 
-    private static ListViewItemInterface search(ListViewType type, ListViewItemInterface[] arr, float searchValue, float range) {
+    public static ListViewItemInterface search(ListViewType type, ListViewItemInterface[] arr, float searchValue, float range) {
         int left = 0;
         int right = arr.length - 1;
         int idx = binarySearch(type, arr, searchValue, range, left, right);
@@ -484,19 +484,34 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         return arr[idx];
     }
 
-    private static int binarySearch(ListViewType type, ListViewItemInterface[] arr,
+    public static int binarySearch(ListViewType type, ListViewItemInterface[] arr,
                                     float searchValue, float range, int left, int right) {
+
+        if (left == right) return left;
         if (right < left) {
             return -1;
         }
         int mid = (left + right) >>> 1;
-        float pos = (type == VERTICAL) ? arr[mid].getY() : arr[mid].getX();
-        if (searchValue < pos && range < pos) {
-            return binarySearch(type, arr, searchValue, range, mid + 1, right);
-        } else if (searchValue > pos && range > pos) {
-            return binarySearch(type, arr, searchValue, range, left, mid - 1);
+
+
+        if (type == VERTICAL) {
+            float pos = arr[mid].getY();
+            if (searchValue < pos && range < pos) {
+                return binarySearch(type, arr, searchValue, range, mid + 1, right);
+            } else if (searchValue > pos && range > pos) {
+                return binarySearch(type, arr, searchValue, range, left, mid - 1);
+            } else {
+                return mid;
+            }
         } else {
-            return mid;
+            float pos = arr[mid].getX();
+            if (searchValue > pos) {
+                return binarySearch(type, arr, searchValue, range, mid + 1, right);
+            } else if (searchValue < pos) {
+                return binarySearch(type, arr, searchValue, range, left, mid - 1);
+            } else {
+                return mid;
+            }
         }
     }
 

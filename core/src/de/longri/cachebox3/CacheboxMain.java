@@ -40,6 +40,7 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.DescriptionView;
+import de.longri.cachebox3.gui.widgets.list_view.GalleryListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItemLinkedList;
 import de.longri.cachebox3.platform_test.gui.PlatformTestView;
@@ -75,8 +76,10 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add(CB.class.getName());
         INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
         INCLUDE_LIST.add(DescriptionView.class.getName());
-        INCLUDE_LIST.add(ListViewItemLinkedList.class.getName());
+//        INCLUDE_LIST.add(ListViewItemLinkedList.class.getName());
         INCLUDE_LIST.add(ListView.class.getName());
+        INCLUDE_LIST.add(GalleryListView.class.getName());
+
 
 
 //        INCLUDE_LIST.add(ViewManager.class.getName());

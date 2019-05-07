@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
+import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.building.utilities.Alignment;
 import de.longri.cachebox3.gui.widgets.Image;
 import de.longri.cachebox3.utils.CB_RectF;
@@ -66,5 +67,16 @@ public class GalleryItem extends ListViewItem {
     @Override
     public float getPrefWidth() {
         return this.hasParent() ? ((GalleryListView) this.getParent()).getPrefHeight() : super.getPrefHeight();
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Item: ");
+        sb.append(Integer.toString(this.index));
+        sb.append(" x: ").append(Float.toString(this.getX()));
+        sb.append(" w: ").append(Float.toString(this.getWidth()));
+        sb.append(" v: ").append(Boolean.toString(this.isVisible()));
+        return sb.toString();
     }
 }

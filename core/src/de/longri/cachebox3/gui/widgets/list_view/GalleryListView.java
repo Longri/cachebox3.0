@@ -15,17 +15,90 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.utils.NamedRunnable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewItemLinkedList.search;
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
  * Created by Longri on 23.04.2019.
  */
 public class GalleryListView extends ListView {
+
+    private static Logger log = LoggerFactory.getLogger(GalleryListView.class);
+
+    private boolean isMoving = false;
+
     public GalleryListView() {
         super(ListViewType.HORIZONTAL);
-//        super(ListViewType.VERTICAL);
         this.setDebug(true, true);
+
+        scrollPane.addCaptureListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                log.debug("TouchDown");
+                return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                log.debug("TouchUp");
+            }
+        });
+    }
+
+
+    public void act(float delta) {
+        super.act(delta);
+        if (scrollPane.isPanning() || scrollPane.isDragging() || scrollPane.isFlinging()) {
+            isMoving = true;
+        } else {
+            if (isMoving) {
+                isMoving = false;
+                CB.postAsync(new NamedRunnable("GalleryListViewSnapIn") {
+                    @Override
+                    public void run() {
+                        log.debug("SnapIn");
+                        snapIn();
+                    }
+                });
+            }
+        }
+    }
+
+
+    private void snapIn() {
+        // get first visible item and scroll to Center
+        ListViewItemInterface firstVisibleItem = getfirstVisibleItem();
+        float scrollPos = 0;
+        if (firstVisibleItem != null) {
+            int index = firstVisibleItem.getListIndex() - 1;
+            scrollPos = index < 0 ? 0 : firstVisibleItem.getX();
+        }
+        this.setScrollPos(scrollPos);
+        CB.requestRendering();
+        if (firstVisibleItem != null)
+            log.debug("Scroll to selected item {} at position {}", firstVisibleItem.getListIndex(), scrollPos);
+    }
+
+    private ListViewItemInterface getfirstVisibleItem() {
+
+        float size = getWidth();
+
+        float searchPos = getScrollPos() + (size / 2);
+
+
+        ListViewItemInterface[] itemArray = this.itemList.itemArray;
+
+        ListViewItemInterface firstItem = search(this.type, itemArray, searchPos, size);
+        ListViewItemInterface lastItem = search(this.type, itemArray, searchPos + size, size);
+
+        log.debug("RETURN Item: {}", firstItem);
+
+        return firstItem;
     }
 
 
