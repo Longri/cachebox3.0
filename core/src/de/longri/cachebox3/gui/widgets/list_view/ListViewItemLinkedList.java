@@ -485,7 +485,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     }
 
     public static int binarySearch(ListViewType type, ListViewItemInterface[] arr,
-                                    float searchValue, float range, int left, int right) {
+                                   float searchValue, float range, int left, int right) {
 
         if (left == right) return left;
         if (right < left) {
@@ -505,7 +505,8 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
             }
         } else {
             float pos = arr[mid].getX();
-            if (searchValue > pos) {
+            float end = pos + arr[mid].getWidth();
+            if (searchValue > end) {
                 return binarySearch(type, arr, searchValue, range, mid + 1, right);
             } else if (searchValue < pos) {
                 return binarySearch(type, arr, searchValue, range, left, mid - 1);
@@ -515,6 +516,23 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
         }
     }
 
+    public static float getVisualSize(ListViewType type, ListViewItemInterface item, float searchValue, float visualWidth) {
+        float size = 0;
+        if (type == VERTICAL) {
+            if (item.getY() < searchValue) {
+                size = (item.getY() + item.getHeight()) - searchValue;
+            } else {
+                size = (searchValue - item.getY()) + item.getHeight();
+            }
+        } else {
+            if (item.getX() < searchValue) {
+                size = (item.getX() + item.getWidth()) - searchValue;
+            } else {
+                size = (searchValue - item.getX()) + item.getWidth();
+            }
+        }
+        return size;
+    }
 
     ListViewItemInterface getItem(int index) {
         if (count < 0) return null;

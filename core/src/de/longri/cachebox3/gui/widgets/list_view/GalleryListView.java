@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewItemLinkedList.search;
-import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
  * Created by Longri on 23.04.2019.
@@ -72,7 +71,7 @@ public class GalleryListView extends ListView {
 
     private void snapIn() {
         // get first visible item and scroll to Center
-        ListViewItemInterface firstVisibleItem = getfirstVisibleItem();
+        ListViewItemInterface firstVisibleItem = getVisibleItem();
         float scrollPos = 0;
         if (firstVisibleItem != null) {
             int index = firstVisibleItem.getListIndex() - 1;
@@ -84,21 +83,18 @@ public class GalleryListView extends ListView {
             log.debug("Scroll to selected item {} at position {}", firstVisibleItem.getListIndex(), scrollPos);
     }
 
-    private ListViewItemInterface getfirstVisibleItem() {
-
+    private ListViewItemInterface getVisibleItem() {
         float size = getWidth();
-
-        float searchPos = getScrollPos() + (size / 2);
-
-
+        float searchPos = getScrollPos();
         ListViewItemInterface[] itemArray = this.itemList.itemArray;
-
         ListViewItemInterface firstItem = search(this.type, itemArray, searchPos, size);
-        ListViewItemInterface lastItem = search(this.type, itemArray, searchPos + size, size);
+        ListViewItemInterface lastItem = ListViewItemLinkedList.search(this.type, itemArray, searchPos + size, size);
 
-        log.debug("RETURN Item: {}", firstItem);
+        float visualFirst = ListViewItemLinkedList.getVisualSize(ListViewType.HORIZONTAL, firstItem, searchPos, size);
+        float visualLast = ListViewItemLinkedList.getVisualSize(ListViewType.HORIZONTAL, lastItem, searchPos, size);
 
-        return firstItem;
+        if (visualFirst >= visualLast) return firstItem;
+        return lastItem;
     }
 
 

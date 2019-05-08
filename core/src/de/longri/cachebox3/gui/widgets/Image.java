@@ -46,6 +46,7 @@ public class Image extends CB_View_Base {
     public Image(ImageLoader img, String name, boolean reziseHeight) {
         super(name);
         this.imageLoader = img;
+        if (imageLoader == null) return;// in case of JUnitTest
         this.imageLoader.reziseHeight = reziseHeight;
         if (this.imageLoader.reziseHeight && this.imageLoader.getResizeListener() == null) {
             this.imageLoader.setResizeListener((newWidth, newHeight) -> {
