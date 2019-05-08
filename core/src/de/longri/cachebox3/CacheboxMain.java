@@ -73,7 +73,7 @@ public class CacheboxMain extends ApplicationAdapter {
         COORD_SCALE = 1;
         EventHandler.INIT();
 
-//        INCLUDE_LIST.add(CB.class.getName());
+        INCLUDE_LIST.add(CB.class.getName());
         INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
         INCLUDE_LIST.add(DescriptionView.class.getName());
 //        INCLUDE_LIST.add(ListViewItemLinkedList.class.getName());

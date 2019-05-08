@@ -21,9 +21,7 @@ import com.kotcrab.vis.ui.util.value.PrefHeightIfVisibleValue;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
-import de.longri.cachebox3.gui.widgets.list_view.DefaultListViewAdapter;
-import de.longri.cachebox3.gui.widgets.list_view.GalleryItem;
-import de.longri.cachebox3.gui.widgets.list_view.GalleryListView;
+import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.ImageLoader;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -44,7 +42,41 @@ public class GalleryView extends Catch_Table {
 
     public GalleryView() {
         overview = new GalleryListView();
-        gallery = new GalleryListView();
+        gallery = new GalleryListView() {
+            @Override
+            protected void snapIn() {
+                super.snapIn();
+                // get index of snap item and select at Overview
+                int index = getVisibleItem().getListIndex();
+                overview.setSelection(index);
+                CB.postAsyncDelayd(300, new NamedRunnable("setSelectedItemVisible") {
+                    @Override
+                    public void run() {
+                        overview.setSelectedItemVisible(true);
+                    }
+                });
+            }
+        };
+
+        gallery.setSelectable(SelectableType.NONE);
+        overview.setSelectable(SelectableType.SINGLE);
+
+        overview.addSelectionChangedEventListner(new SelectionChangedEvent() {
+            @Override
+            public void selectionChanged() {
+                final int idx = overview.getSelectedItem().getListIndex();
+                CB.postAsync(new NamedRunnable("scroll to selected item") {
+                    @Override
+                    public void run() {
+                        ListViewItemInterface item = gallery.getListItem(idx);
+                        if (item != null) {
+                            gallery.setScrollPos(item.getX(), true);
+                        }
+
+                    }
+                });
+            }
+        });
 
         this.add(gallery).expandX().fillX().height(new Value.Fixed(Gdx.graphics.getWidth()));
         this.row();

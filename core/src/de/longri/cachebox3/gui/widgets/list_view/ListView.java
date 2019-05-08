@@ -560,4 +560,9 @@ public class ListView extends Catch_WidgetGroup {
         circPro.setProgress(-1);
         this.addActor(circPro);
     }
+
+    public ListViewItemInterface getListItem(int idx) {
+        if (this.itemList.itemArray == null || this.itemList.itemArray.length <= idx) return null;
+        return this.itemList.itemArray[idx];
+    }
 }

@@ -69,7 +69,7 @@ public class GalleryListView extends ListView {
         }
     }
 
-    private void snapIn() {
+    protected void snapIn() {
         // don't snap in with end of ListView
         log.debug("SnapIn");
 
@@ -86,7 +86,7 @@ public class GalleryListView extends ListView {
             log.debug("Scroll to selected item {} at position {}", firstVisibleItem.getListIndex(), scrollPos);
     }
 
-    private ListViewItemInterface getVisibleItem() {
+    protected ListViewItemInterface getVisibleItem() {
         float size = getWidth();
         float searchPos = getScrollPos();
         ListViewItemInterface[] itemArray = this.itemList.itemArray;
