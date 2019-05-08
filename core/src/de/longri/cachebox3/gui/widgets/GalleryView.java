@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.kotcrab.vis.ui.util.value.PrefHeightIfVisibleValue;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.gui.skin.styles.GalleryViewStyle;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.types.ImageEntry;
@@ -34,15 +35,18 @@ public class GalleryView extends Catch_Table {
     private final static int MAX_THUMB_WIDTH = 500;
     private final static int MAX_OVERVIEW_THUMB_WIDTH = 240;
 
+    private final GalleryViewStyle style;
     private final GalleryListView overview;
     private final GalleryListView gallery;
     private final DefaultListViewAdapter overViewAdapter = new DefaultListViewAdapter();
     private final DefaultListViewAdapter galleryAdapter = new DefaultListViewAdapter();
 
 
-    public GalleryView() {
-        overview = new GalleryListView();
-        gallery = new GalleryListView() {
+    public GalleryView(GalleryViewStyle style) {
+        if (style == null) throw new RuntimeException("style can't be NULL");
+        this.style = style;
+        overview = new GalleryListView(style.overviewListStyle);
+        gallery = new GalleryListView(style.galleryListStyle) {
             @Override
             protected void snapIn() {
                 super.snapIn();

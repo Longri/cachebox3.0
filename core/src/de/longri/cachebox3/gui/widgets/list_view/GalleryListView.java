@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.widgets.list_view;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,8 @@ public class GalleryListView extends ListView {
 
     private boolean isMoving = false;
 
-    public GalleryListView() {
-        super(ListViewType.HORIZONTAL);
+    public GalleryListView(ListViewStyle listViewStyle) {
+        super(ListViewType.HORIZONTAL, listViewStyle);
         this.setDebug(true, true);
     }
 

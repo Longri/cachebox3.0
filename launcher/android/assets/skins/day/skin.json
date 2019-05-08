@@ -2497,6 +2497,20 @@
       "background": "transparent_drawable",
       "vScroll": "slider_drawable",
       "vScrollKnob": "sliderKnob"
+    },
+    "spoilerGallery": {
+      "firstItem": "NULL_DRAWABLE",
+      "secondItem": "NULL_DRAWABLE",
+      "selectedItem": "NULL_DRAWABLE",
+      "pad": 1,
+      "background": "NULL_DRAWABLE"
+    },
+    "spoilerOverview": {
+      "firstItem": "listrec_first_drawable",
+      "secondItem": "listrec_first_drawable",
+      "selectedItem": "listrec_selected_drawable",
+      "pad": 1,
+      "background": "NULL_DRAWABLE"
     }
   },
   "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
@@ -3380,6 +3394,12 @@
     "default": {
       "backgroundColor": "background_color",
       "foregroundColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
+    "default": {
+      "overviewListStyle" : "spoilerOverview",
+      "galleryListStyle" : "spoilerGallery"
     }
   }
 }

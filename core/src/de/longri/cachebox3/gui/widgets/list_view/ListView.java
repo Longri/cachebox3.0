@@ -81,6 +81,9 @@ public class ListView extends Catch_WidgetGroup {
     }
 
     public ListView(ListViewType type, ListViewStyle style, boolean canDisposeItems) {
+
+        if (style == null) throw new RuntimeException("style can't be NULL");
+
         this.canDisposeItems = canDisposeItems;
         this.type = type;
         this.style = style;

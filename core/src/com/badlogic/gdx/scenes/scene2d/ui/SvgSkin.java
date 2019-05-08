@@ -158,21 +158,32 @@ public class SvgSkin extends Skin {
      */
     @Override
     public Drawable getDrawable(String name) {
-        Drawable drawable = optional(name, Drawable.class);
-        if (drawable != null) return drawable;
+        Drawable drawable = null;
 
-        // Use texture or texture region. If it has splits, use ninepatch. If it has rotation or whitespace stripping, use sprite.
-        try {
-            TextureRegion textureRegion = getRegion(name);
-            if (textureRegion instanceof TextureAtlas.AtlasRegion) {
-                TextureAtlas.AtlasRegion region = (TextureAtlas.AtlasRegion) textureRegion;
-                if (region.splits != null)
-                    drawable = new SvgNinePatchDrawable(getPatch(name));
-                else if (region.rotate || region.packedWidth != region.originalWidth || region.packedHeight != region.originalHeight)
-                    drawable = new SpriteDrawable(getSprite(name));
+        if (name.equals("NULL_DRAWABLE")) name = null;
+
+        if (name != null) {
+            drawable = optional(name, Drawable.class);
+            if (drawable != null) return drawable;
+
+            // Use texture or texture region. If it has splits, use ninepatch. If it has rotation or whitespace stripping, use sprite.
+            try {
+                TextureRegion textureRegion = getRegion(name);
+                if (textureRegion instanceof TextureAtlas.AtlasRegion) {
+                    TextureAtlas.AtlasRegion region = (TextureAtlas.AtlasRegion) textureRegion;
+                    if (region.splits != null)
+                        drawable = new SvgNinePatchDrawable(getPatch(name));
+                    else if (region.rotate || region.packedWidth != region.originalWidth || region.packedHeight != region.originalHeight)
+                        drawable = new SpriteDrawable(getSprite(name));
+                }
+                if (drawable == null) drawable = new TextureRegionDrawable(textureRegion);
+            } catch (GdxRuntimeException ignored) {
             }
-            if (drawable == null) drawable = new TextureRegionDrawable(textureRegion);
-        } catch (GdxRuntimeException ignored) {
+        } else {
+            name = "NULL_DRAWABLE";
+            drawable = optional(name, Drawable.class);
+            if (drawable != null) return drawable;
+            drawable = new ColorDrawable(Color.valueOf("#00000000"));
         }
 
         // Check for explicit registration of ninepatch, sprite, FrameAnimationDrawable or tiled drawable.
@@ -316,20 +327,40 @@ public class SvgSkin extends Skin {
             public ListViewStyle read(Json json, JsonValue jsonData, Class type) {
                 ListViewStyle style = new ListViewStyle();
 
-                String background, firstItem, secondItem, selectedItem, vScroll = null, vScrollKnob = null, hScroll = null, hScrollKnob = null;
+                String background = null, firstItem = null, secondItem = null, selectedItem = null, vScroll = null, vScrollKnob = null, hScroll = null, hScrollKnob = null;
 
-                background = json.readValue("background", String.class, jsonData);
-                firstItem = json.readValue("firstItem", String.class, jsonData);
-                secondItem = json.readValue("secondItem", String.class, jsonData);
-                selectedItem = json.readValue("selectedItem", String.class, jsonData);
+                try {
+                    background = json.readValue("background", String.class, jsonData);
+                } catch (Exception e) {
+                    log.error("Read ListViewStyle background value", e);
+                }
+                try {
+                    firstItem = json.readValue("firstItem", String.class, jsonData);
+                } catch (Exception e) {
+                    log.error("Read ListViewStyle firstItem value", e);
+                }
+                try {
+                    secondItem = json.readValue("secondItem", String.class, jsonData);
+                } catch (Exception e) {
+                    log.error("Read ListViewStyle secondItem value", e);
+                }
+                try {
+                    selectedItem = json.readValue("selectedItem", String.class, jsonData);
+                } catch (Exception e) {
+                    log.error("Read ListViewStyle selectedItem value", e);
+                }
 
                 style.background = getDrawable(background);
                 style.firstItem = getDrawable(firstItem);
                 style.secondItem = getDrawable(secondItem);
                 style.selectedItem = getDrawable(selectedItem);
 
-                style.emptyFont = getFont(json.readValue("emptyFont", String.class, jsonData));
-                style.emptyFontColor = getColor(json.readValue("emptyFontColor", String.class, jsonData));
+                try {
+                    style.emptyFont = getFont(json.readValue("emptyFont", String.class, jsonData));
+                    style.emptyFontColor = getColor(json.readValue("emptyFontColor", String.class, jsonData));
+                } catch (Exception e) {
+                    log.error("Read ListViewStyle emptyFont/Color value", e);
+                }
 
                 style.pad = json.readValue("pad", float.class, 0f, jsonData);
                 style.padLeft = json.readValue("padLeft", float.class, 0f, jsonData);

@@ -16,10 +16,12 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.skin.styles.GalleryViewStyle;
 import de.longri.cachebox3.gui.widgets.GalleryView;
 import de.longri.cachebox3.sqlite.Import.ImporterProgress;
 import de.longri.cachebox3.sqlite.dao.ImageDAO;
@@ -37,7 +39,7 @@ import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.GrabImag
 public class SpoilerView extends AbstractView {
     static final Logger log = LoggerFactory.getLogger(SpoilerView.class);
 
-    private final GalleryView galleryView = new GalleryView();
+    private final GalleryView galleryView = new GalleryView(VisUI.getSkin().get(GalleryViewStyle.class));
 
     private AbstractCache actCache;
     private boolean forceReload = false;
