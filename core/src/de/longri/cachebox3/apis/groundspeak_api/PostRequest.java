@@ -29,18 +29,15 @@ import org.slf4j.LoggerFactory;
 import java.io.StringWriter;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI.waitApiCallLimit;
+import static de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI.*;
 
 /**
  * Created by Longri on 14.04.17.
  */
 public abstract class PostRequest {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(PostRequest.class);
-    final static String GS_LIVE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
-    final static String STAGING_GS_LIVE_URL = "https://staging.api.groundspeak.com/Live/V6Beta/geocaching.svc/";
-
-    private final ICancel iCancel;
     protected final String gcApiKey;
+    private final ICancel iCancel;
     protected boolean waitLimit = true;
 
     public PostRequest(String gcApiKey, ICancel iCancel) {
@@ -49,7 +46,7 @@ public abstract class PostRequest {
         this.iCancel = iCancel;
     }
 
-    protected abstract void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack);
+    protected abstract void doHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack);
 
     public void post(final GenericCallBack<ApiResultState> readyCallBack) {
         post(readyCallBack, this.iCancel);
@@ -113,13 +110,13 @@ public abstract class PostRequest {
                     });
                 }
 
-                log.debug("Send Post request");
+                //log.debug("Send Post request");
                 Gdx.net.sendHttpRequest(httpPost, new Net.HttpResponseListener() {
                     @Override
                     public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                        log.debug("Handle Response");
+                        //      log.debug("Handle Response");
                         checkCancel.set(false);
-                        PostRequest.this.handleHttpResponse(httpResponse, readyCallBack);
+                        doHttpResponse(httpResponse, readyCallBack);
                     }
 
                     @Override
@@ -131,7 +128,7 @@ public abstract class PostRequest {
 
                     @Override
                     public void cancelled() {
-                        log.debug("Request cancelled");
+                        //  log.debug("Request cancelled");
                         checkCancel.set(false);
                         readyCallBack.callBack(ApiResultState.CANCELED);
                     }

@@ -15,20 +15,12 @@
  */
 package de.longri.cachebox3.gui.dialogs;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import de.longri.cachebox3.translation.Translation;
-
 /**
  * Created by Longri on 14.09.2016.
  */
 public class ParkingDialog extends ButtonDialog {
     public ParkingDialog() {
-        super("NewDB", createContentBox(), Translation.get("NewDB"), MessageBoxButtons.OKCancel, null);
-    }
-
-    private static Table createContentBox() {
-        Table contentBox = new Table();
-        //TODO fill content box
-        return contentBox;
+        // todo implement
+        super("ParkingDialog", getMsgContentTable("Not implemented yet", MessageBoxIcon.Information), "Not implemented", MessageBoxButtons.Cancel, null);
     }
 }

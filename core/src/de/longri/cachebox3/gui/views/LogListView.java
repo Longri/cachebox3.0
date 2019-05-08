@@ -25,7 +25,6 @@ import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
@@ -43,7 +42,6 @@ import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.APIError;
 import static de.longri.cachebox3.apis.GroundspeakAPI.LastAPIError;
-import static de.longri.cachebox3.gui.menu.MenuID.MI_LoadLogImages;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
@@ -146,27 +144,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     @Override
     public Menu getContextMenu() {
-        Menu cm = new Menu("LogListViewContextMenu");
-
-        cm.setOnItemClickListener(item -> {
-            switch (item.getMenuItemId()) {
-                case MenuID.MI_LOAD_FRIENDS_LOGS:
-                    reloadLogs(false);
-                    return true;
-                case MenuID.MI_RELOADLOGS:
-                    reloadLogs(true);
-                    return true;
-                case MenuID.MI_FILTERLOGS:
-                    logsOfFriendsAreShown = !logsOfFriendsAreShown;
-                    // todo implement filter friends logs;
-                    break;
-                case MI_LoadLogImages:
-                    // todo implement
-                    break;
-            }
-            return false;
-        });
-
+        Menu cm = new Menu("LogListViewMenuTitle");
         MenuItem mi;
         boolean isSelected = (EventHandler.getSelectedCache() != null);
         if (isSelected) {
@@ -178,14 +156,19 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             return cm;
         }
         // now a GC Cache is selected
-        cm.addItem(MenuID.MI_RELOADLOGS, "ReloadLogs", CB.getSkin().getMenuIcon.downloadLogs);
+        cm.addMenuItem("ReloadLogs", CB.getSkin().getMenuIcon.downloadLogs, () -> reloadLogs(true));
         if (Config.Friends.getValue().length() > 0) {
-            cm.addItem(MenuID.MI_LOAD_FRIENDS_LOGS, "LoadLogsOfFriends", CB.getSkin().getMenuIcon.downloadFriendsLogs);
-            mi = cm.addItem(MenuID.MI_FILTERLOGS, "FilterLogsOfFriends", CB.getSkin().getMenuIcon.friendsLogs);
+            cm.addMenuItem("LoadLogsOfFriends", CB.getSkin().getMenuIcon.downloadFriendsLogs, () -> reloadLogs(false));
+            mi = cm.addMenuItem("FilterLogsOfFriends", CB.getSkin().getMenuIcon.friendsLogs, () -> {
+                logsOfFriendsAreShown = !logsOfFriendsAreShown;
+                // todo implement filter friends logs;
+            });
             mi.setCheckable(true);
             mi.setChecked(logsOfFriendsAreShown);
         }
-        cm.addItem(MI_LoadLogImages, "LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages);
+        cm.addMenuItem("LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages, () -> {
+            // todo implement
+        });
 
         return cm;
     }

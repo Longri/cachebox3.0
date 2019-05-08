@@ -37,7 +37,7 @@ public class GetYourUserProfile extends PostRequest {
     }
 
     @Override
-    public void handleHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
+    public void doHttpResponse(Net.HttpResponse httpResponse, GenericCallBack<ApiResultState> readyCallBack) {
         String result = httpResponse.getResultAsString();
         int status = getApiStatus(result);
 

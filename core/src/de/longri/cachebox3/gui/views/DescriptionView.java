@@ -44,7 +44,6 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.NetUtils;
-import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +75,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
             }
 
-            if (url.contains("fake://fake.de/Attr")) {
+            if (url.contains("fake://fake.de/GetAttInfo")) {
 //                int pos = url.indexOf("+");
 //                if (pos < 0)
 //                    return true;
@@ -94,7 +93,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 //                final String attr = url.substring(pos + 1, url.length() - 1);
 //
 //                MessageBox.show(Translation.get(attr));
-                log.debug("Attribute icon clicked, don't load URL");
+                log.debug("Button clicked, don't load URL");
                 return true;
             } else if (url.contains("fake://fake.de/download")) {
 
@@ -164,10 +163,6 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         }
     };
 
-    public DescriptionView(BitStore reader) {
-        super(reader);
-    }
-
     public DescriptionView() {
         super("DescriptionView");
         EventHandler.add(this);
@@ -182,6 +177,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             if (attributesIterator == null || !attributesIterator.hasNext())
                 return "";
 
+            /*
             do {
                 Attributes attribute = attributesIterator.next();
                 File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
@@ -190,6 +186,20 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
             } while (attributesIterator.hasNext());
 
+            sb.append("</form>");
+             */
+
+            // alternate is perhaps something like
+            // <button name="action" value="blue"><img src="blue.png" alt="blue"></button>
+            sb.append("<form action=\"Attr\">");
+            // syntx <form action="URL"> absolute or relative
+            // In HTML5, the action attribute is no longer required.
+            do {
+                Attributes attribute = attributesIterator.next();
+                File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
+                // the url is missing the value, so we give that appended in the name and the blank
+                sb.append("<input name=\"GetAttInfo" + attribute.getImageName() + " \" type=\"image\" src=\"file://" + result.getAbsolutePath() + "\" value=\"1\">");
+            } while (attributesIterator.hasNext());
             sb.append("</form>");
 
             if (sb.length() > 0)
@@ -269,7 +279,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             }
 
             CharSequence cacheHtml = new CompoundCharSequence(longDescription, shortDescription);
-            String html = "";
+            String html;
             if (actCache.getApiState() == 1)// GC.com API lite
             { // Load Standard HTML
                 log.debug("load is Lite html");
@@ -416,7 +426,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public Menu getContextMenu() {
-        Menu cm = new Menu("DescriptionViewContextMenu");
+        Menu cm = new Menu("DescriptionViewTitle");
 
         MenuItem mi;
         boolean isSelected = (EventHandler.getSelectedCache() != null);

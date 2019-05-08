@@ -171,7 +171,7 @@ public class GestureButton extends Button {
 
                                 // Menu zusammen stellen!
                                 // zuerst das View Context Menu
-                                final Menu compoundMenu = new Menu(" ");
+                                final Menu compoundMenu = new Menu("");
 
                                 final OnItemClickListener bothListener[] = new OnItemClickListener[2];
                                 final OnItemClickListener bothItemClickListener = new OnItemClickListener() {
@@ -195,6 +195,7 @@ public class GestureButton extends Button {
 
                                 final Menu viewContextMenu = aktActionView.getContextMenu();
                                 if (viewContextMenu != null) {
+                                    compoundMenu.setName(viewContextMenu.getName()); // for title translation
                                     viewContextMenu.setCompoundMenu(compoundMenu);
                                     compoundMenu.addItems(viewContextMenu.getItems());
                                     bothListener[0] = viewContextMenu.getOnItemClickListeners();
@@ -313,7 +314,7 @@ public class GestureButton extends Button {
     };
 
     private Menu getLongClickMenu() {
-        Menu longClickMenu = new Menu("name");
+        Menu longClickMenu = new Menu("");
 
         longClickMenu.setOnItemClickListener(new OnItemClickListener() {
             @Override

@@ -296,6 +296,14 @@ public class MutableCache extends AbstractCache {
     @Override
     public Array<Attributes> getAttributes() {
         if (this.attributes == null) {
+            if (attributesPositive == null || attributesNegative == null) {
+                GdxSqliteCursor cursor = Database.Data.rawQuery("SELECT * from Attributes WHERE Id=?", new String[]{String.valueOf(this.getId())});
+                if (cursor != null) {
+                    cursor.moveToFirst();
+                    setAttributes(cursor);
+                }
+                cursor.close();
+            }
             this.attributes = Attributes.getAttributes(attributesPositive, attributesNegative);
         }
         return this.attributes;

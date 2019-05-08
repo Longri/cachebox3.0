@@ -754,7 +754,7 @@
     },
     "cacheListIcon": {
       "path": "svg/cacheListIcon.svg",
-      "scale": 0.18
+      "scale": 0.22
     },
     "cache_pressed": {
       "path": "svg/cache_pressed.svg",
@@ -1059,10 +1059,6 @@
     "found": {
       "path": "svg/log0icon.svg",
       "scale": 0.098
-    },
-    "foundMenu": {
-      "path": "svg/log0icon.svg",
-      "scale": 0.19
     },
     "fr": {
       "path": "svg/fr.svg",
@@ -1422,7 +1418,7 @@
     },
     "mapMyParking": {
       "path": "svg/mapMyParking.svg",
-      "scale": 0.15
+      "scale": 0.18
     },
     "mapMystery": {
       "path": "svg/myterie.svg",
@@ -1720,10 +1716,6 @@
       "path": "svg/noteIcon.svg",
       "scale": 0.098
     },
-    "notfoundMenu": {
-      "path": "svg/log1icon.svg",
-      "scale": 0.19
-    },
     "option_0": {
       "path": "svg/option_0.svg",
       "scale": 1
@@ -1783,6 +1775,10 @@
     "reviewer_note": {
       "path": "svg/reviewer_note.svg",
       "scale": 0.12
+    },
+    "search": {
+      "path": "svg/search.svg",
+      "scale": 1.48
     },
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
@@ -2857,6 +2853,7 @@
       "sortIcon": "sortIcon",
       "filterIcon": "filter",
       "resetFilterIcon": "filterReset",
+      "searchIcon": "search",
       "importIcon": "import",
       "cacheListIcon": "cacheListIcon",
       "addWp": "add-wp",
@@ -2867,6 +2864,7 @@
       "mesureWp": "mesureWp",
       "hintIconOn": "hintOn",
       "hintIconOff": "hintOff",
+      "my_parking": "mapMyParking",
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",
@@ -3194,8 +3192,8 @@
       "ownFavorite": "cacheFavIcon"
     },
     "logViewLogStyles": {
-      "found": "foundMenu",
-      "didnt_find": "notfoundMenu",
+      "found": "found",
+      "didnt_find": "notFound",
       "note": "noteIconType",
       "published": "published",
       "enabled": "enabled",

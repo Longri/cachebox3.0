@@ -50,7 +50,10 @@ import de.longri.cachebox3.gui.map.layer.CenterCrossLayer;
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
-import de.longri.cachebox3.gui.menu.*;
+import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.menu.MenuItem;
+import de.longri.cachebox3.gui.menu.OnItemClickListener;
+import de.longri.cachebox3.gui.menu.OptionMenu;
 import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
@@ -663,31 +666,24 @@ public class MapView extends AbstractView {
 
     @Override
     public Menu getContextMenu() {
-        Menu icm = new Menu("menu_mapviewgl");
-
-        icm.addItem(MenuID.MI_LAYER, "Layer", CB.getSkin().getMenuIcon.mapLayer);
-        icm.addItem(MenuID.MI_MAPVIEW_THEME, "Renderthemes", CB.getSkin().getMenuIcon.theme);
-
-
+        Menu icm = new Menu("MapViewContextMenuTitle");
+        icm.addMenuItem("Layer", CB.getSkin().getMenuIcon.mapLayer,()-> showMapLayerMenu());
+        icm.addMenuItem("Renderthemes", CB.getSkin().getMenuIcon.theme,()-> showMapViewThemeMenu());
         //if actual Theme styleable, show style menu point
         ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
         if (callback != null && callback.hasStyleMenu()) {
-            icm.addItem(MenuID.MI_MAPVIEW_THEME_STYLE, "Styles", CB.getSkin().getMenuIcon.themeStyle);
+            icm.addMenuItem("Styles", CB.getSkin().getMenuIcon.themeStyle,()-> showMapViewThemeStyleMenu());
         }
-
-        //ISSUE (#110 add MapView Overlays) icm.addItem(MenuID.MI_MAPVIEW_OVERLAY_VIEW, "overlays");
-        icm.addItem(MenuID.MI_CENTER_WP, "CenterWP", CB.getSkin().getMenuIcon.addWp);
-        icm.addItem(MenuID.MI_MAPVIEW_VIEW, "view", CB.getSkin().getMenuIcon.viewSettings);
-
-        //ISSUE (#112 Record Track)   icm.addItem(MenuID.MI_TREC_REC, "RecTrack");
-        //ISSUE (#113 Add Map download)   icm.addItem(MenuID.MI_MAP_DOWNOAD, "MapDownload");
-
-        icm.setOnItemClickListener(onItemClickListener);
+        icm.addMenuItem("overlays",null,()-> showMapOverlayMenu()); // todo icon
+        icm.addMenuItem("view", CB.getSkin().getMenuIcon.viewSettings,()-> showMapViewLayerMenu());
+        // todo needed? nach Kompass ausrichten | setAlignToCompass
+        icm.addMenuItem("CenterWP", CB.getSkin().getMenuIcon.addWp,()-> createWaypointAtCenter());
+        icm.addMenuItem("RecTrack", null,()-> showMenuTrackRecording()); // todo icon
         return icm;
     }
 
     private void showMapLayerMenu() {
-        Menu icm = new Menu("MapViewShowLayerContextMenu");
+        Menu icm = new Menu("MapViewLayerMenuTitle");
 
         BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(CB.WorkPath));
 
@@ -781,8 +777,9 @@ public class MapView extends AbstractView {
         icm.show();
     }
 
+    //todo ISSUE (#110 add MapView Overlays)
     private void showMapOverlayMenu() {
-        final Menu icm = new Menu("MapViewShowMapOverlayMenu");
+        final Menu icm = new Menu("MapViewOverlayMenuTitle");
 
 //        int menuID = 0;
 //        for (Layer layer : ManagerBase.Manager.getLayers()) {
@@ -813,22 +810,21 @@ public class MapView extends AbstractView {
     }
 
     private void showMapViewLayerMenu() {
-        Menu icm = new Menu("MapViewShowLayerContextMenu");
-        icm.addCheckableItem(MenuID.MI_HIDE_FINDS, "HideFinds", Settings_Map.MapHideMyFinds.getValue());
-        icm.addCheckableItem(MenuID.MI_MAP_SHOW_COMPASS, "MapShowCompass", Settings_Map.MapShowCompass.getValue());
-        icm.addCheckableItem(MenuID.MI_SHOW_ALL_WAYPOINTS, "ShowAllWaypoints", Settings_Map.ShowAllWaypoints.getValue());
-        icm.addCheckableItem(MenuID.MI_SHOW_RATINGS, "ShowRatings", Settings_Map.MapShowRating.getValue());
-        icm.addCheckableItem(MenuID.MI_SHOW_DT, "ShowDT", Settings_Map.MapShowDT.getValue());
-        icm.addCheckableItem(MenuID.MI_SHOW_TITLE, "ShowTitle", Settings_Map.MapShowTitles.getValue());
-        icm.addCheckableItem(MenuID.MI_SHOW_DIRECT_LINE, "ShowDirectLine", Settings_Map.ShowDirektLine.getValue());
-        icm.addCheckableItem(MenuID.MI_SHOW_ACCURACY_CIRCLE, "MenuTextShowAccuracyCircle", Settings_Map.ShowAccuracyCircle.getValue());
-        icm.addCheckableItem(MenuID.MI_SHOW_CENTERCROSS, "ShowCenterCross", Settings_Map.ShowMapCenterCross.getValue());
-        icm.setOnItemClickListener(onItemClickListener);
+        Menu icm = new Menu("MapViewElementsMenuTitle");
+        icm.addCheckableMenuItem("HideFinds", Settings_Map.MapHideMyFinds.getValue(),()-> toggleSettingWithReload(Settings_Map.MapHideMyFinds));
+        icm.addCheckableMenuItem("MapShowCompass", Settings_Map.MapShowCompass.getValue(),()-> toggleSetting(Settings_Map.MapShowCompass));
+        icm.addCheckableMenuItem("ShowAllWaypoints", Settings_Map.ShowAllWaypoints.getValue(),()-> toggleSetting(Settings_Map.ShowAllWaypoints));
+        icm.addCheckableMenuItem("ShowRatings", Settings_Map.MapShowRating.getValue(),()-> toggleSetting(Settings_Map.MapShowRating));
+        icm.addCheckableMenuItem("ShowDT", Settings_Map.MapShowDT.getValue(),()-> toggleSetting(Settings_Map.MapShowDT));
+        icm.addCheckableMenuItem("ShowTitle", Settings_Map.MapShowTitles.getValue(),()-> toggleSetting(Settings_Map.MapShowTitles));
+        icm.addCheckableMenuItem("ShowDirectLine", Settings_Map.ShowDirektLine.getValue(),()-> toggleSetting(Settings_Map.ShowDirektLine));
+        icm.addCheckableMenuItem("MenuTextShowAccuracyCircle", Settings_Map.ShowAccuracyCircle.getValue(),()-> toggleSetting(Settings_Map.ShowAccuracyCircle));
+        icm.addCheckableMenuItem("ShowCenterCross", Settings_Map.ShowMapCenterCross.getValue(),()-> toggleSetting(Settings_Map.ShowMapCenterCross));
         icm.show();
     }
 
     private void showMapViewThemeMenu() {
-        Menu icm = new Menu("MapViewThemeMenu");
+        Menu icm = new Menu("MapViewThemeMenuTitle");
 
         //add default themes
         int id = 0;
@@ -867,7 +863,7 @@ public class MapView extends AbstractView {
     }
 
     private void showMapViewThemeStyleMenu() {
-        OptionMenu icm = new OptionMenu("MapViewThemeStyleMenu");
+        OptionMenu icm = new OptionMenu("MapViewThemeStyleMenuTitle");
 
         ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
         Array<XmlRenderThemeStyleLayer> overlays = callback.getOverlays();
@@ -877,7 +873,7 @@ public class MapView extends AbstractView {
 
             if (overlay.getCategories().size() > 1) {
                 MenuItem menuItem = icm.addItem(id, overlay.getTitle(lang), true);
-                OptionMenu moreMenu = new OptionMenu(overlay.getTitle(lang));
+                OptionMenu moreMenu = new OptionMenu("-" + overlay.getTitle(lang));
                 for (String cat : overlay.getCategories()) {
                     ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
                     moreMenu.addCheckableItem(id++, cat, allCategories.get(cat), true).setData(cat);
@@ -912,18 +908,15 @@ public class MapView extends AbstractView {
     };
 
 
-    private final OnItemClickListener styleItemClickListener = new OnItemClickListener() {
-        @Override
-        public boolean onItemClick(MenuItem item) {
-            String cat = (String) item.getData();
-            if (cat.isEmpty()) return true;
-            ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
-            ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
-            boolean newValue = !allCategories.get(cat);
-            item.setChecked(newValue);
-            allCategories.put(cat, newValue);
-            return true;
-        }
+    private final OnItemClickListener styleItemClickListener = item -> {
+        String cat = (String) item.getData();
+        if (cat.isEmpty()) return true;
+        ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
+        ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
+        boolean newValue = !allCategories.get(cat);
+        item.setChecked(newValue);
+        allCategories.put(cat, newValue);
+        return true;
     };
 
 
@@ -945,113 +938,20 @@ public class MapView extends AbstractView {
         }
     }
 
-    private final OnItemClickListener onItemClickListener = new OnItemClickListener() {
-
-
-        @Override
-        public boolean onItemClick(MenuItem item) {
-            switch (item.getMenuItemId()) {
-                case MenuID.MI_LAYER:
-                    showMapLayerMenu();
-                    return true;
-                case MenuID.MI_MAPVIEW_OVERLAY_VIEW:
-                    showMapOverlayMenu();
-                    return true;
-                case MenuID.MI_MAPVIEW_VIEW:
-                    showMapViewLayerMenu();
-                    return true;
-                case MenuID.MI_MAPVIEW_THEME:
-                    showMapViewThemeMenu();
-                    return true;
-                case MenuID.MI_MAPVIEW_THEME_STYLE:
-                    showMapViewThemeStyleMenu();
-                    return true;
-                case MenuID.MI_SHOW_ALL_WAYPOINTS:
-                    toggleSetting(Settings_Map.ShowAllWaypoints);
-                    return true;
-                case MenuID.MI_HIDE_FINDS:
-                    toggleSettingWithReload(Settings_Map.MapHideMyFinds);
-                    return true;
-                case MenuID.MI_SHOW_RATINGS:
-                    toggleSetting(Settings_Map.MapShowRating);
-                    return true;
-                case MenuID.MI_SHOW_DT:
-                    toggleSetting(Settings_Map.MapShowDT);
-                    return true;
-                case MenuID.MI_SHOW_TITLE:
-                    toggleSetting(Settings_Map.MapShowTitles);
-                    return true;
-                case MenuID.MI_SHOW_DIRECT_LINE:
-                    toggleSetting(Settings_Map.ShowDirektLine);
-                    return true;
-                case MenuID.MI_SHOW_ACCURACY_CIRCLE:
-                    toggleSetting(Settings_Map.ShowAccuracyCircle);
-                    return true;
-                case MenuID.MI_SHOW_CENTERCROSS:
-                    toggleSetting(Settings_Map.ShowMapCenterCross);
-                    return true;
-                case MenuID.MI_MAP_SHOW_COMPASS:
-                    toggleSetting(Settings_Map.MapShowCompass);
-                    return true;
-                case MenuID.MI_CENTER_WP:
-                    createWaypointAtCenter();
-                    return true;
-                case MenuID.MI_TREC_REC:
-                    showMenuTrackRecording();
-                    return true;
-                case MenuID.MI_MAP_DOWNOAD:
-                    //TODO MapDownload.INSTANCE.show();
-                    return true;
-                default:
-                    return false;
-            }
-        }
-    };
-
-
     private void createWaypointAtCenter() {
         //show EditWaypoint dialog;
         new Action_Add_WP().execute();
     }
 
-    private static final int START = 1;
-    private static final int PAUSE = 2;
-    private static final int STOP = 3;
-
+    //todo ISSUE (#112 Record Track)
     private void showMenuTrackRecording() {
-        MenuItem mi;
-        Menu cm2 = new Menu("TrackRecordContextMenu");
-        cm2.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public boolean onItemClick(MenuItem item) {
-                switch (item.getMenuItemId()) {
-                    case START:
-                        TrackRecorder.INSTANCE.startRecording();
-                        return true;
-                    case PAUSE:
-                        TrackRecorder.INSTANCE.pauseRecording();
-                        return true;
-                    case STOP:
-                        TrackRecorder.INSTANCE.stopRecording();
-                        return true;
-                }
-                return false;
-            }
-        });
-        mi = cm2.addItem(START, "start");
-        mi.setEnabled(!TrackRecorder.INSTANCE.recording);
-
+        Menu cm2 = new Menu("TrackRecordMenuTitle");
+        cm2.addMenuItem("start", null, ()->TrackRecorder.INSTANCE.startRecording()).setEnabled(!TrackRecorder.INSTANCE.recording);
         if (TrackRecorder.INSTANCE.pauseRecording)
-            mi = cm2.addItem(PAUSE, "continue");
+            cm2.addMenuItem("continue", null, ()->TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
         else
-            mi = cm2.addItem(PAUSE, "pause");
-
-        mi.setEnabled(TrackRecorder.INSTANCE.recording);
-
-        mi = cm2.addItem(STOP, "stop");
-        mi.setEnabled(TrackRecorder.INSTANCE.recording | TrackRecorder.INSTANCE.pauseRecording);
-
+            cm2.addMenuItem("pause", null, ()->TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
+        cm2.addMenuItem("stop", null, ()->TrackRecorder.INSTANCE.stopRecording()).setEnabled(TrackRecorder.INSTANCE.recording | TrackRecorder.INSTANCE.pauseRecording);
         cm2.show();
     }
 

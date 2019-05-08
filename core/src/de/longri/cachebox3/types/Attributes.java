@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public enum Attributes {
@@ -321,7 +320,7 @@ public enum Attributes {
     }
 
     public static Array<Attributes> getAttributes(DLong attributesPositive, DLong attributesNegative) {
-        if (attributesPositive == null) attributesNegative = new DLong(0, 0);
+        if (attributesPositive == null) attributesPositive = new DLong(0, 0);
         if (attributesNegative == null) attributesNegative = new DLong(0, 0);
         Array<Attributes> ret = new Array<>();
         if (attributeLookup == null)

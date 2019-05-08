@@ -144,7 +144,7 @@ public class SpoilerView extends AbstractView {
 
     @Override
     public Menu getContextMenu() {
-        Menu contextMenu = new Menu("SpoilerViewContextMenu");
+        Menu contextMenu = new Menu("SpoilerViewContextMenuTitle");
 
         contextMenu.addMenuItem("reloadSpoiler", CB.getSkin().getMenuIcon.importIcon, () -> {
             // todo inform the user about progress and give him the possibility to abort the image downloads
