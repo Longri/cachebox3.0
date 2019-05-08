@@ -36,40 +36,43 @@ public class GalleryListView extends ListView {
     public GalleryListView() {
         super(ListViewType.HORIZONTAL);
         this.setDebug(true, true);
-
-        scrollPane.addCaptureListener(new InputListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                log.debug("TouchDown");
-                return true;
-            }
-
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                log.debug("TouchUp");
-            }
-        });
     }
-
 
     public void act(float delta) {
         super.act(delta);
+
+        boolean dontSnapIn = false;
+        if (isMoving && !scrollPane.isPanning()) {
+            float maxY = getScrollPos() + scrollPane.getWidth();
+            ListViewItemInterface lastItem = this.itemList.itemArray[this.itemList.itemArray.length - 1];
+            float maxWidth = lastItem.getX() + lastItem.getWidth();
+            if (maxY > maxWidth) {
+                // it's over scroll, don't snapIn
+                dontSnapIn = true;
+            }
+        }
+
+
         if (scrollPane.isPanning() || scrollPane.isDragging() || scrollPane.isFlinging()) {
             isMoving = true;
         } else {
             if (isMoving) {
                 isMoving = false;
-                CB.postAsync(new NamedRunnable("GalleryListViewSnapIn") {
-                    @Override
-                    public void run() {
-                        log.debug("SnapIn");
-                        snapIn();
-                    }
-                });
+                if (!dontSnapIn)
+                    CB.postAsync(new NamedRunnable("GalleryListViewSnapIn") {
+                        @Override
+                        public void run() {
+                            snapIn();
+                        }
+                    });
             }
         }
     }
 
-
     private void snapIn() {
+        // don't snap in with end of ListView
+        log.debug("SnapIn");
+
         // get first visible item and scroll to Center
         ListViewItemInterface firstVisibleItem = getVisibleItem();
         float scrollPos = 0;
@@ -97,54 +100,6 @@ public class GalleryListView extends ListView {
         return lastItem;
     }
 
-
-    //    @Override
-//    public void setWidth(float newWidth) {
-//        super.setWidth(newWidth);
-//    }
-//
-//    @Override
-//    public void setHeight(float newHeight) {
-//        super.setHeight(newHeight);
-//    }
-//
-//    public void setSize(float width, float height) {
-//        super.setSize(width, height);
-//    }
-//
-//    /**
-//     * Adds the specified size to the current size.
-//     */
-//    public void sizeBy(float size) {
-//        super.sizeBy(size);
-//    }
-//
-//    /**
-//     * Adds the specified size to the current size.
-//     */
-//    public void sizeBy(float width, float height) {
-//        super.sizeBy(width, height);
-//    }
-//
-//    /**
-//     * Set bounds the x, y, width, and height.
-//     */
-//    public void setBounds(float x, float y, float width, float height) {
-//        super.setBounds(x, y, width, height);
-//    }
-//
-//
-//    @Override
-//    public void draw(Batch batch, float parentAlpha) {
-//        super.draw(batch, parentAlpha);
-//    }
-//
-//    @Override
-//    public float getPrefWidth(){
-//        return 100;
-//    }
-//
-//
     @Override
     public float getPrefHeight() {
         return CB.getScaledFloat(75);
