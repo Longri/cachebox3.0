@@ -16,16 +16,28 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
-import com.kotcrab.vis.ui.util.value.PrefHeightIfVisibleValue;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DoubleClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.skin.styles.GalleryViewStyle;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.ImageLoader;
 import de.longri.cachebox3.utils.NamedRunnable;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 23.04.2019.
@@ -34,6 +46,18 @@ public class GalleryView extends Catch_Table {
 
     private final static int MAX_THUMB_WIDTH = 500;
     private final static int MAX_OVERVIEW_THUMB_WIDTH = 240;
+    private final static String HTML_1 = "<!DOCTYPE html>" +
+            "<html>" +
+            "<head>" +
+            "  <meta charset=\"utf-8\">" +
+            "</head>" +
+            "<body>" +
+            "<p>" +
+            "  <img src=\"file:///";
+    private final static String HTML_2 = "\">" +
+            "</p>" +
+            "</body>" +
+            "</html>";
 
     private final GalleryViewStyle style;
     private final GalleryListView overview;
@@ -41,6 +65,9 @@ public class GalleryView extends Catch_Table {
     private final DefaultListViewAdapter overViewAdapter = new DefaultListViewAdapter();
     private final DefaultListViewAdapter galleryAdapter = new DefaultListViewAdapter();
 
+    private PlatformDescriptionView webView;
+    VisTextButton btnCloseZoomView;
+    private boolean webViewVisible = false;
 
     public GalleryView(GalleryViewStyle style) {
         if (style == null) throw new RuntimeException("style can't be NULL");
@@ -51,7 +78,9 @@ public class GalleryView extends Catch_Table {
             protected void snapIn() {
                 super.snapIn();
                 // get index of snap item and select at Overview
-                int index = getVisibleItem().getListIndex();
+                ListViewItemInterface visibleItem = getVisibleItem();
+                if (visibleItem == null) return;
+                int index = visibleItem.getListIndex();
                 overview.setSelection(index);
                 CB.postAsyncDelayd(300, new NamedRunnable("setSelectedItemVisible") {
                     @Override
@@ -62,6 +91,33 @@ public class GalleryView extends Catch_Table {
             }
         };
 
+        ActorGestureListener gestureListener = new ActorGestureListener() {
+
+            public boolean handle(Event e) {
+                if (!(e instanceof InputEvent)) return super.handle(e);
+                InputEvent event = (InputEvent) e;
+                if (event.getType() == InputEvent.Type.scrolled) {// show a web webView with html to showing this Image
+                    showZoomingWebView();
+                    return true;
+                }
+                return super.handle(e);
+            }
+
+            public void zoom(InputEvent event, float initialDistance, float distance) {
+                // show a web webView with html to showing this Image
+                showZoomingWebView();
+            }
+        };
+
+        DoubleClickListener doubleClickListener=new DoubleClickListener(){
+            public void doubleClicked(InputEvent event, float x, float y) {
+                // show a web webView with html to showing this Image
+                showZoomingWebView();
+            }
+        };
+
+        gallery.addCaptureListener(gestureListener);
+        gallery.addCaptureListener(doubleClickListener);
         gallery.setSelectable(SelectableType.NONE);
         overview.setSelectable(SelectableType.SINGLE);
 
@@ -81,12 +137,76 @@ public class GalleryView extends Catch_Table {
                 });
             }
         });
-
-        this.add(gallery).expandX().fillX().height(new Value.Fixed(Gdx.graphics.getWidth()));
-        this.row();
-        this.add(overview).expandX().fillX().fillY();
+        setLayout(false);
 
         this.setDebug(true);
+    }
+
+    private void setLayout(boolean webViewVisible) {
+        this.clear();
+
+        if (webViewVisible) {
+            btnCloseZoomView = new VisTextButton("c");
+            this.add().fill().expand();
+            this.add(btnCloseZoomView).align(Align.topRight);
+            this.invalidate();
+            this.layout();
+        } else {
+            this.add(gallery).expandX().fillX().height(new Value.Fixed(Gdx.graphics.getWidth()));
+            this.row();
+            this.add(overview).expandX().fillX().fillY();
+        }
+    }
+
+    private void showZoomingWebView() {
+
+        ListViewItemInterface actView = gallery.getVisibleItem();
+
+        if (actView == null) return;
+
+        final AtomicBoolean WAIT = new AtomicBoolean(false);
+        setLayout(true);
+        if (webView == null) {
+            WAIT.set(true);
+            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformDescriptionView>() {
+                @Override
+                public void callBack(PlatformDescriptionView descriptionView) {
+                    webView = descriptionView;
+                    WAIT.set(false);
+                }
+            });
+        }
+
+        CB.wait(WAIT);
+
+        webView.display();
+        String imagePath = ((GalleryItem) actView).getImagePath();
+
+        String html = HTML_1 + imagePath + HTML_2;
+        html = html.replace("\\", "/");
+        webView.setHtml(html);
+        webViewVisible = true;
+        setWebViewBounds();
+    }
+
+    public void onShow() {
+        if (webViewVisible) {
+            setWebViewBounds();
+            webView.display();
+        }
+    }
+
+    private void setWebViewBounds() {
+        Actor parent = this.getParent();
+        //calculate height to show webViewClose button
+        float height = this.getHeight() - btnCloseZoomView.getHeight();
+        webView.setBounding(parent.getX() + this.getX(), parent.getY() + this.getX(), this.getWidth(), height, Gdx.graphics.getHeight());
+    }
+
+    public void onHide() {
+        if (webViewVisible) {
+            webView.close();
+        }
     }
 
     public void clearGallery() {
@@ -115,22 +235,16 @@ public class GalleryView extends Catch_Table {
         overViewAdapter.add(overviewItem);
     }
 
-    //    @Override
-//    protected void sizeChanged() {
-//        super.sizeChanged();
-//        overview.setSize(this.getWidth(), this.getHeight());
-//        gallery.setSize(this.getWidth(), this.getHeight());
-//    }
-//
+    @Override
+    protected void sizeChanged() {
+        super.sizeChanged();
+        if (webView != null) {
+            setWebViewBounds();
+        }
+    }
+
     public void galleryChanged() {
         overview.setAdapter(overViewAdapter);
         gallery.setAdapter(galleryAdapter);
-
-//        CB.postOnMainThreadDelayed(10000, new NamedRunnable("tets") {
-//            @Override
-//            public void run() {
-//                GalleryView.this.layout();
-//            }
-//        });
     }
 }

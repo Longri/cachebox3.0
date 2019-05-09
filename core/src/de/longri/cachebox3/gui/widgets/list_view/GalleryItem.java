@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.widgets.list_view;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.building.utilities.Alignment;
 import de.longri.cachebox3.gui.widgets.Image;
+import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.ImageLoader;
 import org.slf4j.Logger;
@@ -78,5 +79,9 @@ public class GalleryItem extends ListViewItem {
         sb.append(" w: ").append(Float.toString(this.getWidth()));
         sb.append(" v: ").append(Boolean.toString(this.isVisible()));
         return sb.toString();
+    }
+
+    public String getImagePath() {
+        return this.iloader.getOriginalImagePath();
     }
 }

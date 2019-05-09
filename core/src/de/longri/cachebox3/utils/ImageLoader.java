@@ -42,6 +42,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -110,6 +111,8 @@ public class ImageLoader {
      * Pack the images from Folder into a Atlas and Load the Image from Atlas
      */
     private void packImagesToTextureAtlas(String ImagePath, boolean reziseHeight) {
+        CB.assertGlThread();
+
         if (isPacking)
             return;
         isPacking = true;
@@ -167,36 +170,53 @@ public class ImageLoader {
         return Name;
     }
 
-    private Sprite tryToLoadFromCreatedAtlas(String ImagePath) {
+    private Sprite tryToLoadFromCreatedAtlas(final String ImagePath) {
+        AtomicBoolean WAIT = new AtomicBoolean(true);
+        final Sprite[] tmp = {null};
 
-        if (Atlanten == null)
-            Atlanten = new HashMap<String, TextureAtlas>();
+        CB.postOnGlThread(new NamedRunnable("ImageLoader") {
+            @Override
+            public void run() {
+                if (Atlanten == null)
+                    Atlanten = new HashMap<String, TextureAtlas>();
 
-        String inputFolder = Utils.getDirectoryName(ImagePath);
-        String ImageName = Utils.getFileNameWithoutExtension(ImagePath);
-        String Name = getCachedAtlasName(inputFolder);
+                String inputFolder = Utils.getDirectoryName(ImagePath);
+                String ImageName = Utils.getFileNameWithoutExtension(ImagePath);
+                String Name = getCachedAtlasName(inputFolder);
 
-        final String AtlasPath = Settings.ImageCacheFolder.getValue() + "/" + Name;
-        if (!Utils.fileExistsNotEmpty(AtlasPath))
-            return null;
-        TextureAtlas atlas = null;
-        if (Atlanten.containsKey(AtlasPath)) {
-            atlas = Atlanten.get(AtlasPath);
-        } else {
-            this.AtlasPath = AtlasPath;
-            this.ImgName = ImageName;
-            State = 6;
+                final String AtlasPath = Settings.ImageCacheFolder.getValue() + "/" + Name;
+                if (!Utils.fileExistsNotEmpty(AtlasPath)) {
+                    tmp[0] = null;
+                    WAIT.set(false);
+                }
+                TextureAtlas atlas = null;
+                if (Atlanten.containsKey(AtlasPath)) {
+                    atlas = Atlanten.get(AtlasPath);
+                } else {
+                    ImageLoader.this.AtlasPath = AtlasPath;
+                    ImageLoader.this.ImgName = ImageName;
+                    State = 6;
+                }
+
+
+                if (atlas != null) {
+                    tmp[0] = atlas.createSprite(ImageName);
+                }
+            }
+        });
+
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
-        Sprite tmp = null;
-        if (atlas != null) {
-            tmp = atlas.createSprite(ImageName);
-        }
-        return tmp;
-
+        return tmp[0];
     }
 
     void setAtlas(String atlasPath, String imgName, boolean reziseHeight) {
+        CB.assertGlThread();
         State = 7;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.absolute(atlasPath));
         Atlanten.put(atlasPath, atlas);
@@ -227,7 +247,6 @@ public class ImageLoader {
             @Override
             public void run() {
                 Sprite spt = tryToLoadFromCreatedAtlas(mPath);
-
                 if (spt != null) {
                     setSprite(spt, reziseHeight);
                 } else {

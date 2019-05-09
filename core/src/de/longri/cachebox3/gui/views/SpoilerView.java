@@ -120,8 +120,14 @@ public class SpoilerView extends AbstractView {
         } else {
             galleryView.clearGallery();
         }
-
+        galleryView.onShow();
     }
+
+    @Override
+    public void onHide() {
+        galleryView.onHide();
+    }
+
 
     @Override
     public void dispose() {

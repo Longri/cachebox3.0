@@ -518,6 +518,7 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
 
     public static float getVisualSize(ListViewType type, ListViewItemInterface item, float searchValue, float visualWidth) {
         float size = 0;
+        if (item == null) return size;
         if (type == VERTICAL) {
             if (item.getY() < searchValue) {
                 size = (item.getY() + item.getHeight()) - searchValue;

@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.widgets.list_view;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -87,7 +88,7 @@ public class GalleryListView extends ListView {
             log.debug("Scroll to selected item {} at position {}", firstVisibleItem.getListIndex(), scrollPos);
     }
 
-    protected ListViewItemInterface getVisibleItem() {
+    public ListViewItemInterface getVisibleItem() {
         float size = getWidth();
         float searchPos = getScrollPos();
         ListViewItemInterface[] itemArray = this.itemList.itemArray;
