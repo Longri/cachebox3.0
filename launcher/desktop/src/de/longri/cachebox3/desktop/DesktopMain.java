@@ -21,7 +21,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
-import de.longri.cachebox3.gui.stages.StageManager;
 
 /**
  * Created by Longri on 09.03.18.

@@ -34,7 +34,6 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.EditTextBox;
@@ -69,58 +68,6 @@ public class EditDrafts extends ActivityBase {
 
     private boolean isNewDraft;
     private ReturnListener returnListener;
-    private DraftEntry actDraft;
-    private DraftEntry altDraft;
-    private boolean needsLayout = true;
-    private AdjustableStarWidget gcVoteWidget;
-    private Button onlineOption, fieldNoteOption;
-
-    public interface ReturnListener {
-        void returnedDraft(DraftEntry fn, boolean isNewDraft, boolean directlog);
-    }
-
-
-    public EditDrafts(DraftEntry note, ReturnListener returnListener, boolean isNewDraft) {
-        super("EditDraft");
-        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
-
-        btnOk = new CharSequenceButton(Translation.get("save"));
-        btnOk.addListener(saveClickListener);
-        btnCancel = new CharSequenceButton(Translation.get("cancel"));
-        btnCancel.addListener(cancelClickListener);
-        contentTable = new VisTable();
-        setDraft(note, returnListener, isNewDraft);
-        if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
-            gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"),
-                    new IntProperty(), itemStyle.starStyle, itemStyle.cacheSizeStyle);
-            gcVoteWidget.setBackground(CB.getSkin().get(ListViewStyle.class).firstItem);
-        }
-
-        scrollPane = new VisScrollPane(contentTable);
-
-        if (note.isTbDraft)
-            foundLabel = new VisLabel("");
-        else
-            foundLabel = new VisLabel("Founds: #" + note.foundNumber);
-
-        dateLabel = new VisLabel(Translation.get("wptDate") + ":");
-        timeLabel = new VisLabel(Translation.get("time") + ":");
-
-        dateTextArea = new EditTextBox(false);
-        timeTextArea = new EditTextBox(false) {
-            //return same width like dateTextArea
-            public float getPrefWidth() {
-                return dateTextArea.getPrefWidth();
-            }
-        };
-        commentTextArea = new EditTextBox(true);
-
-        dateTextArea.setText(iso8601FormatDate.format(note.timestamp));
-        timeTextArea.setText(iso8601FormatTime.format(note.timestamp));
-        commentTextArea.setText(note.comment);
-
-    }
-
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             if (returnListener != null)
@@ -128,7 +75,11 @@ public class EditDrafts extends ActivityBase {
             finish();
         }
     };
-
+    private DraftEntry actDraft;
+    private DraftEntry altDraft;
+    private boolean needsLayout = true;
+    private AdjustableStarWidget gcVoteWidget;
+    private Button onlineOption, fieldNoteOption;
     private final ClickListener saveClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             if (returnListener != null) {
@@ -170,6 +121,47 @@ public class EditDrafts extends ActivityBase {
             finish();
         }
     };
+
+    public EditDrafts(DraftEntry note, ReturnListener returnListener, boolean isNewDraft) {
+        super("EditDraft");
+        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
+
+        btnOk = new CharSequenceButton(Translation.get("save"));
+        btnOk.addListener(saveClickListener);
+        btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        btnCancel.addListener(cancelClickListener);
+        contentTable = new VisTable();
+        setDraft(note, returnListener, isNewDraft);
+        if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
+            gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"),
+                    new IntProperty(), itemStyle.starStyle, itemStyle.cacheSizeStyle);
+            gcVoteWidget.setBackground(CB.getSkin().get(ListViewStyle.class).firstItem);
+        }
+
+        scrollPane = new VisScrollPane(contentTable);
+
+        if (note.isTbDraft)
+            foundLabel = new VisLabel("");
+        else
+            foundLabel = new VisLabel("Founds: #" + note.foundNumber);
+
+        dateLabel = new VisLabel(Translation.get("wptDate") + ":");
+        timeLabel = new VisLabel(Translation.get("time") + ":");
+
+        dateTextArea = new EditTextBox(false);
+        timeTextArea = new EditTextBox(false) {
+            //return same width like dateTextArea
+            public float getPrefWidth() {
+                return dateTextArea.getPrefWidth();
+            }
+        };
+        commentTextArea = new EditTextBox(true);
+
+        dateTextArea.setText(iso8601FormatDate.format(note.timestamp));
+        timeTextArea.setText(iso8601FormatTime.format(note.timestamp));
+        commentTextArea.setText(note.comment);
+
+    }
 
     @Override
     public void onShow() {
@@ -323,6 +315,10 @@ public class EditDrafts extends ActivityBase {
         scrollPane.layout();
 
         super.layout();
+    }
+
+    public interface ReturnListener {
+        void returnedDraft(DraftEntry fn, boolean isNewDraft, boolean directlog);
     }
 
 

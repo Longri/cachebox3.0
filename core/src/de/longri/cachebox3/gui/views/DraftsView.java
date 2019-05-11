@@ -21,9 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.apis.gcvote_api.GCVote;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.EditDrafts;
@@ -360,102 +359,43 @@ public class DraftsView extends AbstractView {
         THAT.notifyDataSetChanged();
     }
 
-    private static void logOnline(final DraftEntry fieldNote, final boolean isNewDraft) {
-        // todo
-        throw new RuntimeException("TODO");
+    private static void logOnline(final DraftEntry fieldNote, final boolean isNewFieldNote) {
 
-//        wd = CancelWaitDialog.ShowWait("Upload Log", DownloadAnimation.GetINSTANCE(), new IcancelListener() {
-//
-//            @Override
-//            public void isCanceld() {
-//
-//            }
-//        }, new cancelRunnable() {
-//
-//            @Override
-//            public void run() {
-//                GroundspeakLiveAPI.LastAPIError = "";
-//
-//                boolean dl = fieldNote.isDirectLog;
-//                int result = GroundspeakLiveAPI.createDraftAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, this);
-//
-//                if (result == GroundspeakLiveAPI.IO) {
-//                    fieldNote.uploaded = true;
-//
-//                    // after direct Log create a fieldNote with uploded state
-//                    addOrChangeDraft(fieldNote, isNewDraft, false);
-//                }
-//
-//                if (result == GroundspeakLiveAPI.CONNECTION_TIMEOUT) {
-//                    GL.that.Toast(ConnectionError.INSTANCE);
-//                    if (wd != null)
-//                        wd.close();
-//                    MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
-//
-//                        @Override
-//                        public boolean onClick(int which, Object data) {
-//                            switch (which) {
-//                                case ButtonDialog.BUTTON_NEGATIVE:
-//                                    addOrChangeDraft(fieldNote, isNewDraft, true);// try again
-//                                    return true;
-//
-//                                case ButtonDialog.BUTTON_NEUTRAL:
-//                                    return true;
-//
-//                                case ButtonDialog.BUTTON_POSITIVE:
-//                                    addOrChangeDraft(fieldNote, isNewDraft, false);// create Fieldnote
-//                                    return true;
-//                            }
-//                            return true;
-//                        }
-//                    });
-//                    return;
-//                }
-//                if (result == GroundspeakLiveAPI.API_IS_UNAVAILABLE) {
-//                    GL.that.Toast(ApiUnavailable.INSTANCE);
-//                    if (wd != null)
-//                        wd.close();
-//                    MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
-//
-//                        @Override
-//                        public boolean onClick(int which, Object data) {
-//                            switch (which) {
-//                                case ButtonDialog.BUTTON_NEGATIVE:
-//                                    addOrChangeDraft(fieldNote, isNewDraft, true);// try again
-//                                    return true;
-//
-//                                case ButtonDialog.BUTTON_NEUTRAL:
-//                                    return true;
-//
-//                                case ButtonDialog.BUTTON_POSITIVE:
-//                                    addOrChangeDraft(fieldNote, isNewDraft, false);// create Fieldnote
-//                                    return true;
-//                            }
-//                            return true;
-//                        }
-//                    });
-//                    return;
-//                }
-//
-//                if (GroundspeakLiveAPI.LastAPIError.length() > 0) {
-//                    Gdx.app.postRunnable(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            MessageBox.show(GroundspeakLiveAPI.LastAPIError, Translation.get("Error"), MessageBoxIcon.Error);
-//                        }
-//                    });
-//                }
-//
-//                if (wd != null)
-//                    wd.close();
-//            }
-//
-//            @Override
-//            public boolean cancel() {
-//                // TODO handle cancel
-//                return false;
-//            }
-//        });
+        if (Config.GcVotePassword.getEncryptedValue().length() > 0 && !fieldNote.isTbDraft) {
+            if (fieldNote.gc_Vote > 0) {
+                // Stimme abgeben
+                try {
+                    if (!GCVote.sendVote(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), fieldNote.gc_Vote, fieldNote.CacheUrl, fieldNote.gcCode)) {
+                        log.error(fieldNote.gcCode + " GC-Vote");
+                    }
+                } catch (Exception e) {
+                    log.error(fieldNote.gcCode + " GC-Vote");
+                }
+            }
+        }
+
+        if (GroundspeakAPI.OK == GroundspeakAPI.UploadDraftOrLog(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, fieldNote.isDirectLog)) {
+            // after direct Log change state to uploaded
+            fieldNote.uploaded = true;
+            addOrChangeDraft(fieldNote, isNewFieldNote, false);
+        } else {
+            // Error handling
+            MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, (which, data) -> {
+                switch (which) {
+                    case ButtonDialog.BUTTON_NEGATIVE:
+                        addOrChangeDraft(fieldNote, isNewFieldNote, true);// try again
+                        break;
+                    case ButtonDialog.BUTTON_NEUTRAL:
+                        break;
+                    case ButtonDialog.BUTTON_POSITIVE:
+                        addOrChangeDraft(fieldNote, isNewFieldNote, false);// create Fieldnote
+                }
+                return true;
+            });
+        }
+        if (GroundspeakAPI.LastAPIError.length() > 0) {
+            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+        }
 
     }
 
@@ -576,22 +516,17 @@ public class DraftsView extends AbstractView {
                                     }
                                 }
 
-                                ApiResultState result;
+                                int result;
 
                                 if (fieldNote.isTbDraft) {
-                                    result = GroundspeakLiveAPI.createTrackableLog(fieldNote.TravelBugCode, fieldNote.TrackingNumber, fieldNote.gcCode, LogTypes.CB_LogType2GC(fieldNote.type), fieldNote.timestamp, fieldNote.comment, iCancel);
+                                    result = GroundspeakAPI.uploadTrackableLog(fieldNote.TravelBugCode, fieldNote.TrackingNumber, fieldNote.gcCode, LogTypes.CB_LogType2GC(fieldNote.type), fieldNote.timestamp, fieldNote.comment);
                                 } else {
                                     boolean dl = fieldNote.isDirectLog;
-                                    result = GroundspeakLiveAPI.createDraftAndPublish(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl, iCancel);
+                                    result = GroundspeakAPI.UploadDraftOrLog(fieldNote.gcCode, fieldNote.type.getGcLogTypeId(), fieldNote.timestamp, fieldNote.comment, dl);
                                 }
 
-                                if (CB.checkApiResultState(result)) {
-                                    cancel();
-                                    return;
-                                }
-
-                                if (result.isErrorState()) {
-                                    UploadMeldung.append(fieldNote.gcCode).append("\n").append(GroundspeakLiveAPI.LastAPIError).append("\n");
+                                if (result == GroundspeakAPI.ERROR) {
+                                    UploadMeldung.append(fieldNote.gcCode).append("\n").append(GroundspeakAPI.LastAPIError).append("\n");
                                 } else {
                                     // set Draft as uploaded
                                     fieldNote.uploaded = true;
