@@ -71,7 +71,7 @@ public class GalleryListView extends ListView {
         }
     }
 
-    protected void snapIn() {
+    public void snapIn() {
         // don't snap in with end of ListView
         log.debug("SnapIn");
 

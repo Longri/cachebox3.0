@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DoubleClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -33,6 +34,7 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.skin.styles.GalleryViewStyle;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.gui.widgets.list_view.*;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.ImageLoader;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -75,7 +77,7 @@ public class GalleryView extends Catch_Table {
         overview = new GalleryListView(style.overviewListStyle);
         gallery = new GalleryListView(style.galleryListStyle) {
             @Override
-            protected void snapIn() {
+            public void snapIn() {
                 super.snapIn();
                 // get index of snap item and select at Overview
                 ListViewItemInterface visibleItem = getVisibleItem();
@@ -109,7 +111,7 @@ public class GalleryView extends Catch_Table {
             }
         };
 
-        DoubleClickListener doubleClickListener=new DoubleClickListener(){
+        DoubleClickListener doubleClickListener = new DoubleClickListener() {
             public void doubleClicked(InputEvent event, float x, float y) {
                 // show a web webView with html to showing this Image
                 showZoomingWebView();
@@ -146,7 +148,15 @@ public class GalleryView extends Catch_Table {
         this.clear();
 
         if (webViewVisible) {
-            btnCloseZoomView = new VisTextButton("c");
+            btnCloseZoomView = new VisTextButton(Translation.get("close").toString());
+            btnCloseZoomView.addCaptureListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    setLayout(false);
+                    btnCloseZoomView = null;
+                    webView.close();
+                    gallery.snapIn();
+                }
+            });
             this.add().fill().expand();
             this.add(btnCloseZoomView).align(Align.topRight);
             this.invalidate();
