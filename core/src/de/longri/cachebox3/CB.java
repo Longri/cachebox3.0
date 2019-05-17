@@ -79,11 +79,11 @@ public class CB {
     public static final Color EXCEPTION_COLOR_LOCATION = Color.BLUE;
     public static final String VersionPrefix = "Test";
     //LogLevels
-    public static final String LOG_LEVEL_INFO = "info";
-    public static final String LOG_LEVEL_DEBUG = "debug";
-    public static final String LOG_LEVEL_WARN = "warn";
-    public static final String LOG_LEVEL_ERROR = "error";
-    public static final String LOG_LEVEL_TRACE = "trace";
+    public static final String LOG_LEVEL_INFO = "INFO";
+    public static final String LOG_LEVEL_DEBUG = "DEBUG";
+    public static final String LOG_LEVEL_WARN = "WARN";
+    public static final String LOG_LEVEL_ERROR = "ERROR";
+    public static final String LOG_LEVEL_TRACE = "TRACE";
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.5f;
     public static final MapState actMapState = new MapState();

@@ -64,7 +64,7 @@ public class Settings extends Settings_Skin {
     public static final SettingDouble ParkingLongitude = (SettingDouble) settingsList.addSetting(new SettingDouble("ParkingLongitude", Positions, NEVER, 0, Global, ACB));
     public static final SettingString Friends = (SettingString) settingsList.addSetting(new SettingString("Friends", Login, SettingMode.Normal, "", Global, ACB));
 
-    public static final SettingBool DirectOnlineLog = (SettingBool) settingsList.addSetting(new SettingBool("DirectOnlineLog", Fieldnotes, NEVER, false, Global, ACB));
+    public static final SettingBool DirectOnlineLog = (SettingBool) settingsList.addSetting(new SettingBool("DirectOnlineLog", Drafts, NEVER, false, Global, ACB));
 
     public static final SettingInt memberChipType = (SettingInt) settingsList.addSetting(new SettingInt("memberChipType", API, NEVER, -1, Global, ACB, true));
     public static final SettingInt apiCallLimit = (SettingInt) settingsList.addSetting(new SettingInt("apiCallLimit", API, NEVER, 30, Global, ACB, true));
@@ -115,8 +115,8 @@ public class Settings extends Settings_Skin {
     public static final SettingFloat CompassViewSplit = (SettingFloat) settingsList.addSetting(new SettingFloat("CompassViewSplit", Compass, NEVER, 0.5f, Global, ACB));
 
 
-    public static final SettingBool DraftsLoadAll = (SettingBool) settingsList.addSetting(new SettingBool("FieldNotesLoadAll", Fieldnotes, EXPERT, false, Global, ACB));
-    public static final SettingInt DraftsLoadLength = (SettingInt) settingsList.addSetting(new SettingInt("FieldNotesLoadLength", Fieldnotes, EXPERT, 10, Global, ACB));
+    public static final SettingBool DraftsLoadAll = (SettingBool) settingsList.addSetting(new SettingBool("DraftsLoadAll", Drafts, EXPERT, false, Global, ACB));
+    public static final SettingInt DraftsLoadLength = (SettingInt) settingsList.addSetting(new SettingInt("DraftsLoadLength", Drafts, EXPERT, 10, Global, ACB));
     public static final SettingInt FoundOffset = (SettingInt) settingsList.addSetting(new SettingInt("FoundOffset", Misc, NEVER, 0, Global, ACB));
     public static final SettingString FoundTemplate = (SettingString) settingsList.addSetting(new SettingLongString("FoundTemplate", Templates, NORMAL, FOUND, Global, ACB));
     public static final SettingString AttendedTemplate = (SettingString) settingsList.addSetting(new SettingLongString("AttendedTemplate", Templates, NORMAL, ATTENDED, Global, ACB));
@@ -171,8 +171,8 @@ public class Settings extends Settings_Skin {
 //    public static final SettingString SpoilersDescriptionTags = (SettingString) settingsList.addSetting(new SettingString("SpoilersDescriptionTags", Internal, DEVELOPER, "", SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingString GcJoker = (SettingString) settingsList.addSetting(new SettingString("GcJoker", Login, NORMAL, "", SettingStoreType.Global, SettingUsage.ALL));
 //    public static final SettingStringArray Navis = (SettingStringArray) settingsList.addSetting(new SettingStringArray("Navis", Misc, NORMAL, "Google", SettingStoreType.Global, SettingUsage.ACB, navis));
-//    public static final SettingBool ShowFieldnotesCMwithFirstShow = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesCMwithFirstShow", Fieldnotes, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool ShowFieldnotesAsDefaultView = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesAsDefaultView", Fieldnotes, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
+//    public static final SettingBool ShowFieldnotesCMwithFirstShow = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesCMwithFirstShow", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
+//    public static final SettingBool ShowFieldnotesAsDefaultView = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesAsDefaultView", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool LiveMapEnabeld = (SettingBool) settingsList.addSetting(new SettingBool("LiveMapEnabeld", LiveMap, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool AppRaterDontShowAgain = (SettingBool) settingsList.addSetting(new SettingBool("AppRaterDontShowAgain", RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingString AppRaterFirstLunch = (SettingString) settingsList.addSetting(new SettingString("AppRaterFirstLunch", Internal, NEVER, "0", SettingStoreType.Global, SettingUsage.ACB));

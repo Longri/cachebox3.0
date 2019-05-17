@@ -84,7 +84,7 @@ public class ViewManager extends NamedStage
     private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
     private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
     private final Action_Quit action_quit = new Action_Quit();
-    private final Action_Show_DraftsView action_show_fieldNotesView = new Action_Show_DraftsView();
+    private final Action_Show_DraftsView action_show_DraftsView = new Action_Show_DraftsView();
 
     private FilterProperties actFilter = FilterInstances.ALL;
     private final AtomicBoolean isFilters = new AtomicBoolean(false);
@@ -284,7 +284,7 @@ public class ViewManager extends NamedStage
 
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
-        tool_button.addAction(new ActionButton(action_show_fieldNotesView, true));
+        tool_button.addAction(new ActionButton(action_show_DraftsView, true));
         tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecTrack, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVoice, false));
