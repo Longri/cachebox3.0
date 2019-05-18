@@ -54,7 +54,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
                 return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
             } else {
                 // what todo
-                return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, "fake://fake.de/GetAttInfo Kann Attribut nicht bestimmen.");
+                return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, "fake://fake.de?GetAttInfo Kann Attribut nicht bestimmen.");
             }
         }
 

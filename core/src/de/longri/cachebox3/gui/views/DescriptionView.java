@@ -75,12 +75,15 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
             }
 
-            if (url.contains("fake://fake.de/GetAttInfo")) {
+            // contains fake://fake.de?GetAttInfo
+            if (url.contains("GetAttInfo")) {
                 // the url is missing the name=value on different devices (perhaps dependant from chromium), so we give that appended to the name and the blank
                 int pos = url.indexOf("+"); // the Blank is converted to + in url
                 // 25 is the length of "fake://fake.de?GetAttInfo"
                 if (pos > 0)
+                    // todo a nicer box
                     MessageBox.show(Translation.get(url.substring(25, pos)));
+                // todo scale of Descriptionview changes sometime (bigger)after showing msgbox
                 return true;
             } else if (url.contains("fake://fake.de/download")) {
                 // not yet tested
