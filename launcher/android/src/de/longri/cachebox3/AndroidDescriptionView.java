@@ -40,26 +40,25 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
     final String mimeType = "text/html";
     final String encoding = "utf-8";
-    private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
     private final AtomicBoolean pageVisible = new AtomicBoolean(false);
+    private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
     private GenericHandleCallBack<String> finishLoadingCallBack;
-
-    public AndroidDescriptionView(Context context) {
-        super(AndroidLauncher.androidLauncher, null, android.R.attr.webViewStyle);
-        this.setDrawingCacheEnabled(false);
-        this.getSettings().setLoadWithOverviewMode(true);
-        this.getSettings().setSupportZoom(true);
-        this.getSettings().setBuiltInZoomControls(true);
-        this.getSettings().setJavaScriptEnabled(true);
-        this.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-
-        this.setWebViewClient(clint);
-    }
-
+    private Point scrollPos = new Point(0, 0);
+    private float scale = 4;
     WebViewClient clint = new WebViewClient() {
 
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            String url = request.getUrl().getPath();
+            // this method is not called on my device (sdk_int = 22)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                String url = request.getUrl().getPath();
+                return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
+            } else {
+                // what todo
+                return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, "fake://fake.de/GetAttInfo Kann Attribut nicht bestimmen.");
+            }
+        }
+
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
             return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
         }
 
@@ -83,11 +82,6 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
             pageVisible.set(true);
         }
 
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
-        }
-
         public void onScaleChanged(WebView view, float oldScale, float newScale) {
             super.onScaleChanged(view, oldScale, newScale);
             scale = newScale;
@@ -95,23 +89,32 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
         }
     };
 
+    public AndroidDescriptionView(Context context) {
+        super(AndroidLauncher.androidLauncher, null, android.R.attr.webViewStyle);
+        this.setDrawingCacheEnabled(false);
+        this.getSettings().setLoadWithOverviewMode(true);
+        this.getSettings().setSupportZoom(true);
+        this.getSettings().setBuiltInZoomControls(true);
+        this.getSettings().setJavaScriptEnabled(true);
+        this.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+        this.setWebViewClient(clint);
+    }
+
     private boolean shouldOverrideUrlLoading(WebView view, String url) {
         return shouldOverrideUrlLoadingCallBack.callBack(url);
     }
 
     @Override
     public void setBounding(final float x, final float y, final float width, final float height, final int screenHeight) {
-        androidLauncher.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                FrameLayout.LayoutParams paramsLeft = (FrameLayout.LayoutParams) AndroidDescriptionView.this.getLayoutParams();
-                if (paramsLeft != null) {
-                    paramsLeft.width = (int) width;
-                    paramsLeft.height = (int) height;
-                    AndroidDescriptionView.this.setLayoutParams(paramsLeft);
-                    AndroidDescriptionView.this.setX(x);
-                    AndroidDescriptionView.this.setY(screenHeight - height - y);
-                }
+        androidLauncher.runOnUiThread(() -> {
+            FrameLayout.LayoutParams paramsLeft = (FrameLayout.LayoutParams) AndroidDescriptionView.this.getLayoutParams();
+            if (paramsLeft != null) {
+                paramsLeft.width = (int) width;
+                paramsLeft.height = (int) height;
+                AndroidDescriptionView.this.setLayoutParams(paramsLeft);
+                AndroidDescriptionView.this.setX(x);
+                AndroidDescriptionView.this.setY(screenHeight - height - y);
             }
         });
     }
@@ -146,14 +149,11 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     @Override
     public void setHtml(final String html) {
         pageVisible.set(false);
-        androidLauncher.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    AndroidDescriptionView.this.loadDataWithBaseURL("fake://fake.de", html, mimeType, encoding, null);
-                } catch (Exception e) {
-                    return; // if an exception here, then this is not initializes
-                }
+        androidLauncher.runOnUiThread(() -> {
+            try {
+                loadDataWithBaseURL("fake://fake.de", html, mimeType, encoding, null);
+            } catch (Exception ignored) {
+                // if an exception here, then this is not initializes
             }
         });
     }
@@ -161,23 +161,13 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     @Override
     public void display() {
         log.debug("display webView");
-        androidLauncher.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                androidLauncher.show(AndroidDescriptionView.this);
-            }
-        });
+        androidLauncher.runOnUiThread(() -> androidLauncher.show(AndroidDescriptionView.this));
     }
 
     @Override
     public void close() {
         log.debug("close webView");
-        androidLauncher.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                androidLauncher.removeView(AndroidDescriptionView.this);
-            }
-        });
+        androidLauncher.runOnUiThread(() -> androidLauncher.removeView(AndroidDescriptionView.this));
     }
 
     @Override
@@ -194,9 +184,6 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     public boolean isPageVisible() {
         return pageVisible.get();
     }
-
-    private Point scrollPos = new Point(0, 0);
-    private float scale = 4;
 
     @Override
     protected void onScrollChanged(int x, int y, int oldl, int oldt) {
