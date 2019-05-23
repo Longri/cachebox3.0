@@ -55,21 +55,11 @@ public class GenerateApiKeyWebViewController extends UIViewController implements
         NSHTTPCookieStorage.getSharedHTTPCookieStorage().setCookieAcceptPolicy(NSHTTPCookieAcceptPolicy.Always);
 
         if (Config.OverrideUrl.getValue().equals("")) {
-            CB_Api.getGcAuthUrl(new GenericCallBack<String>() {
-                @Override
-                public void callBack(final String value) {
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-                    });
-                    log.debug("Show web site at {}", value);
-                    NSURL url = new NSURL(value);
-                    NSURLRequest request = new NSURLRequest(url);
-                    webView.loadRequest(request);
-                }
-            });
+            final String value = CB_Api.getGcAuthUrl();
+            log.debug("Show web site at {}", value);
+            NSURL url = new NSURL(value);
+            NSURLRequest request = new NSURLRequest(url);
+            webView.loadRequest(request);
         } else {
             String GC_AuthUrl = Config.OverrideUrl.getValue();
             log.debug("Show override web site at {}", GC_AuthUrl);

@@ -812,7 +812,8 @@ public class MapView extends AbstractView {
     private void showMapViewLayerMenu() {
         Menu icm = new Menu("MapViewElementsMenuTitle");
         icm.addCheckableMenuItem("HideFinds", Settings_Map.MapHideMyFinds.getValue(),()-> toggleSettingWithReload(Settings_Map.MapHideMyFinds));
-        icm.addCheckableMenuItem("MapShowCompass", Settings_Map.MapShowCompass.getValue(),()-> toggleSetting(Settings_Map.MapShowCompass));
+        // icm.addCheckableMenuItem("MapShowCompass", Settings_Map.MapShowCompass.getValue(),()-> toggleSetting(Settings_Map.MapShowCompass));
+        // todo icm.addCheckableMenuItem("MapShowInfoBar",Settings_Map.ShowInfo .....)
         icm.addCheckableMenuItem("ShowAllWaypoints", Settings_Map.ShowAllWaypoints.getValue(),()-> toggleSetting(Settings_Map.ShowAllWaypoints));
         icm.addCheckableMenuItem("ShowRatings", Settings_Map.MapShowRating.getValue(),()-> toggleSetting(Settings_Map.MapShowRating));
         icm.addCheckableMenuItem("ShowDT", Settings_Map.MapShowDT.getValue(),()-> toggleSetting(Settings_Map.MapShowDT));

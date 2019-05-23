@@ -16,13 +16,10 @@
 
 package de.longri.cachebox3.apis.cachebox_api;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
-import com.badlogic.gdx.net.HttpRequestBuilder;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
-import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.http.Response;
+import de.longri.cachebox3.utils.http.Webb;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,50 +31,28 @@ import org.slf4j.LoggerFactory;
 public class CB_Api {
     private static final Logger log = LoggerFactory.getLogger(CB_Api.class);
 
-    private static final String CB_API_URL_GET_URLS = "http://team-cachebox.de/CB_API/index.php?get=url_ACB";
-    private static final String CB_API_URL_GET_URLS_Staging = "http://team-cachebox.de/CB_API/index.php?get=url_ACB_Staging";
-
-    /**
-     * Gibt die bei Team-Cachebox.de hinterlegte GC Auth url zurück
-     *
-     * @return String
-     */
-    public static void getGcAuthUrl(final GenericCallBack<String> callBack) {
-
-        // ues Gdx http request described: https://github.com/libgdx/libgdx/wiki/Networking
-
-        HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
-        Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET)
-                .url(Config.UseTestUrl.getValue() ? CB_API_URL_GET_URLS_Staging : CB_API_URL_GET_URLS).build();
-        Net.HttpResponseListener httpResponseListener = new Net.HttpResponseListener() {
-            @Override
-            public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                String jsonResult = httpResponse.getResultAsString();
-                JsonValue json = new JsonReader().parse(jsonResult);
-
-                String url;
-                if (Config.UseTestUrl.getValue())
-                    url = json.getString("GcAuth_ACB_Staging");
-                else
-                    url = json.getString("GcAuth_ACB");
-
-                url=url.replace("\\/","/").trim();
-
-                callBack.callBack(url);
+    public static String getGcAuthUrl() {
+        try {
+            String url, resultKey;
+            if (Config.UseTestUrl.getValue()) {
+                url = "http://team-cachebox.de/CB_API/index.php?get=url_ACB_Staging";
+                resultKey = "GcAuth_ACB_Staging";
+                // {"GcAuth_ACB_Staging":"http:\/\/staging.oauth.Team-Cachebox.de\/index.php?Version=ACB "}
+            } else {
+                url = "http://team-cachebox.de/CB_API/index.php?get=url_ACB";
+                resultKey = "GcAuth_ACB";
+                // {"GcAuth_ACB":"http:\/\/oauth.Team-Cachebox.de\/index.php?Version=ACB "}
             }
-
-            @Override
-            public void failed(Throwable t) {
-                log.error("CB_Api request failed", t);
-                callBack.callBack("");
-            }
-
-            @Override
-            public void cancelled() {
-                log.debug("CB_Api request canceled");
-                callBack.callBack("");
-            }
-        };
-        Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
+            Webb httpClient = Webb.create();
+            Response<JSONObject> response = httpClient
+                    .post(url)
+                    .ensureSuccess()
+                    .asJsonObject();
+            return response.getBody().getString(resultKey).trim();
+        } catch (Exception ex) {
+            log.error("getGcAuthUrl", ex);
+            return "";
+        }
     }
+
 }

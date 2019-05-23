@@ -20,16 +20,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
-import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.skin.styles.ApiButtonStyle;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Calendar;
+import static de.longri.cachebox3.apis.GroundspeakAPI.isAccessTokenInvalid;
+import static de.longri.cachebox3.apis.GroundspeakAPI.isPremiumMember;
 
 /**
  * Created by Longri on 11.04.2017.
@@ -38,6 +36,11 @@ public class ApiButton extends IconButton {
 
     private final Logger log = LoggerFactory.getLogger(ApiButton.class);
     private final ApiButtonStyle style;
+    private final ClickListener clickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            generateKey();
+        }
+    };
 
     public ApiButton() {
         super("");
@@ -73,86 +76,27 @@ public class ApiButton extends IconButton {
         }
 
         if (Entry) {
-            ApiResultState state = GroundspeakLiveAPI.chkMembership(true);
-
-            switch (state) {
-                case API_ERROR:
-                case MEMBERSHIP_TYPE_INVALID:
-                    image.setDrawable(style.invalid);
-                    break;
-                case EXPIRED_API_KEY:
-                    image.setDrawable(style.expired);
-                    break;
-                case MEMBERSHIP_TYPE_GUEST:
-                case MEMBERSHIP_TYPE_BASIC:
-                case MEMBERSHIP_TYPE_PREMIUM:
-                    image.setDrawable(style.check);
-                    break;
-
-                default:
+            if (isAccessTokenInvalid()) {
+                image.setDrawable(style.invalid);
+                // image.setDrawable(style.expired);
+                // image.setDrawable(style.check);
+            } else {
+                if (isPremiumMember()) {
                     image.setDrawable(style.unchecked);
-                    break;
+                } else {
+                    image.setDrawable(style.unchecked);
+                }
             }
-
-
         } else {
             image.setDrawable(style.unchecked);
         }
 
-        //TODO set icon for invalid and expired
-
     }
-
-    private final ClickListener clickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            generateKey();
-        }
-    };
 
     public void generateKey() {
         log.debug("Create Api Key clicked");
-        PlatformConnector.getApiKey(new GenericCallBack<String>() {
-            @Override
-            public void callBack(String accessToken) {
-                log.debug("return create ApiKey :{}", accessToken);
-
-                GroundspeakLiveAPI.CacheStatusValid = false;
-                GroundspeakLiveAPI.CacheStatusLiteValid = false;
-
-                // store the encrypted AccessToken in the Config file
-                if (Config.UseTestUrl.getValue()) {
-                    Config.AccessTokenForTest.setEncryptedValue(accessToken);
-                } else {
-                    Config.AccessToken.setEncryptedValue(accessToken);
-                }
-
-                //reset ApiKey validation
-                GroundspeakLiveAPI.resetApiIsChecked();
-
-                //set config stored MemberChipType as expired
-                Calendar cal = Calendar.getInstance();
-                Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
-
-
-                Config.AcceptChanges();
-                String act = GroundspeakLiveAPI.getAccessToken();
-                if (act.length() > 0) {
-                    GroundspeakLiveAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
-                        @Override
-                        public void callBack(ApiResultState status) {
-                            if (!status.isErrorState()) {
-                                log.debug("Read User name/State {}/{}", GroundspeakLiveAPI.memberName, status);
-                                Config.GcLogin.setValue(GroundspeakLiveAPI.memberName);
-                                Config.AcceptChanges();
-                                CB.viewmanager.toast("Welcome : " + GroundspeakLiveAPI.memberName);
-                            } else {
-                                CB.viewmanager.toast("Welcome : " + GroundspeakLiveAPI.memberName);
-                                log.debug("Can't read UserName State: {}", GroundspeakLiveAPI.memberName, status);
-                            }
-                        }
-                    });
-                }
-            }
+        PlatformConnector.getApiKey(accessToken -> {
+            // todo write token to config db and set Webb
         });
     }
 }

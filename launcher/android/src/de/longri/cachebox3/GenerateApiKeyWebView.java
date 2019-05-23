@@ -26,7 +26,6 @@ import android.view.View;
 import android.webkit.*;
 import android.widget.LinearLayout;
 import de.longri.cachebox3.apis.cachebox_api.CB_Api;
-import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 
 /**
@@ -35,9 +34,9 @@ import de.longri.cachebox3.settings.Config;
 public class GenerateApiKeyWebView extends Activity {
     private static ProgressDialog pd;
     private static boolean pdIsShow = false;
+    final String javaScript = "javascript:window.HTMLOUT.showHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');";
     private LinearLayout webViewLayout;
     private WebView WebControl;
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,20 +45,7 @@ public class GenerateApiKeyWebView extends Activity {
 
         webViewLayout = (LinearLayout) findViewById(R.id.gal_Layout);
         if (Config.OverrideUrl.getValue().equals("")) {
-            CB_Api.getGcAuthUrl(new GenericCallBack<String>() {
-                @Override
-                public void callBack(final String GC_AuthUrl) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (GC_AuthUrl.equals("")) {
-                                finish();
-                            }
-                            ShowWebsite(GC_AuthUrl);
-                        }
-                    });
-                }
-            });
+            ShowWebsite(CB_Api.getGcAuthUrl());
         } else {
             runOnUiThread(new Runnable() {
                 @Override
@@ -74,7 +60,6 @@ public class GenerateApiKeyWebView extends Activity {
 
         }
     }
-
 
     @Override
     public void onDestroy() {
@@ -202,8 +187,6 @@ public class GenerateApiKeyWebView extends Activity {
 
         WebControl.loadUrl(GC_AuthUrl);
     }
-
-    final String javaScript = "javascript:window.HTMLOUT.showHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');";
 
     class MyJavaScriptInterface {
 

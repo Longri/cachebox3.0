@@ -42,6 +42,8 @@ import static javafx.concurrent.Worker.State.FAILED;
 
 public class GenerateApiKeyWebView extends Window {
 
+    private static final Logger log = LoggerFactory.getLogger(GenerateApiKeyWebView.class);
+
     static {
         //apply -Dprism.order=j2d (set VM options)
         Properties props = System.getProperties();
@@ -49,14 +51,13 @@ public class GenerateApiKeyWebView extends Window {
 //TODO that dosn't work
     }
 
-    private static final Logger log = LoggerFactory.getLogger(GenerateApiKeyWebView.class);
-
-
     //    private final UIWebView webView;
     private final GenericCallBack<String> callBack;
     private final JFXPanel jfxPanel;
     private WebEngine engine;
-//    private final UIViewController mainViewController;
+    //    private final UIViewController mainViewController;
+    private boolean cancelBounds = false;
+    private boolean secondLoad = false;
 
     public GenerateApiKeyWebView(GenericCallBack<String> callBack) {
 
@@ -75,13 +76,7 @@ public class GenerateApiKeyWebView extends Window {
 
 
         if (Config.OverrideUrl.getValue().equals("")) {
-            CB_Api.getGcAuthUrl(new GenericCallBack<String>() {
-                @Override
-                public void callBack(final String value) {
-                    log.debug("show web site at {}", value);
-
-                }
-            });
+            log.debug("show web site at {}", CB_Api.getGcAuthUrl());
         } else {
             String GC_AuthUrl = Config.OverrideUrl.getValue();
             log.debug("show override web site at {}", GC_AuthUrl);
@@ -96,7 +91,13 @@ public class GenerateApiKeyWebView extends Window {
 
     }
 
-    private boolean cancelBounds = false;
+    private static String toURL(String str) {
+        try {
+            return new URL(str).toExternalForm();
+        } catch (MalformedURLException exception) {
+            return null;
+        }
+    }
 
     private void loopBounds() {
         if (cancelBounds) return;
@@ -117,8 +118,6 @@ public class GenerateApiKeyWebView extends Window {
         this.callBack.callBack(key);
         this.setVisible(false);
     }
-
-    private boolean secondLoad = false;
 
     private void iniitialWebView() {
         Platform.runLater(new Runnable() {
@@ -195,13 +194,7 @@ public class GenerateApiKeyWebView extends Window {
                         });
                 // show web site
                 if (Config.OverrideUrl.getValue().equals("")) {
-                    CB_Api.getGcAuthUrl(new GenericCallBack<String>() {
-                        @Override
-                        public void callBack(final String value) {
-                            log.debug("show web site at {}", value);
-                            loadURL(value);
-                        }
-                    });
+                    loadURL(CB_Api.getGcAuthUrl());
                 } else {
                     String GC_AuthUrl = Config.OverrideUrl.getValue();
                     log.debug("show override web site at {}", GC_AuthUrl);
@@ -234,14 +227,6 @@ public class GenerateApiKeyWebView extends Window {
             }
         });
 
-    }
-
-    private static String toURL(String str) {
-        try {
-            return new URL(str).toExternalForm();
-        } catch (MalformedURLException exception) {
-            return null;
-        }
     }
 
 }

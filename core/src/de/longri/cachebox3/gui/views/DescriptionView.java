@@ -29,6 +29,7 @@ import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -48,8 +49,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static de.longri.cachebox3.apis.GroundspeakAPI.*;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -60,12 +62,10 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     private static long lastCacheId;
     private static float lastX, lastY, lastScale;
-    private PlatformDescriptionView view;
-
     private final Array<String> nonLocalImages = new Array<String>();
     private final Array<String> nonLocalImagesUrl = new Array<String>();
-
     private final AtomicBoolean FIRST = new AtomicBoolean(true);
+    private PlatformDescriptionView view;
     private final GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack = new GenericHandleCallBack<String>() {
         @Override
         public boolean callBack(String url) {
@@ -75,80 +75,64 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
             }
 
-            if (url.contains("fake://fake.de/GetAttInfo")) {
-//                int pos = url.indexOf("+");
-//                if (pos < 0)
-//                    return true;
-//
-//                final String attr = url.substring(pos + 1, url.length() - 1);
-//
-//                MessageBox.show(Translation.get(attr));
-                log.debug("Attribute icon clicked, don't load URL");
-                return true;
-            } else if (url.contains("fake://fake.de?Button")) {
-//                int pos = url.indexOf("+");
-//                if (pos < 0)
-//                    return true;
-//
-//                final String attr = url.substring(pos + 1, url.length() - 1);
-//
-//                MessageBox.show(Translation.get(attr));
-                log.debug("Button clicked, don't load URL");
+            // contains fake://fake.de?GetAttInfo
+            if (url.contains("GetAttInfo")) {
+                // the url is missing the name=value on different devices (perhaps dependant from chromium), so we give that appended to the name and the blank
+                int pos = url.indexOf("+"); // the Blank is converted to + in url
+                // 25 is the length of "fake://fake.de?GetAttInfo"
+                if (pos > 0)
+                    // todo a nicer box
+                    MessageBox.show(Translation.get(url.substring(25, pos)));
+                // todo scale of Descriptionview changes sometime (bigger)after showing msgbox
                 return true;
             } else if (url.contains("fake://fake.de/download")) {
+                // not yet tested
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
 
-//                Thread thread = new Thread() {
-//                    @Override
-//                    public void run() {
-//
-//                        if (!CB_Core.Api.GroundspeakLiveAPI.CacheStatusValid) {
-//                            int result = CB_Core.Api.GroundspeakLiveAPI.GetCacheLimits(null);
-//                            if (result != 0) {
-//                                onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(1));
-//                                return;
-//                            }
-//
-//                            if (result == GroundspeakLiveAPI.CONNECTION_TIMEOUT) {
-//                                GL.that.Toast(ConnectionError.INSTANCE);
-//                                return;
-//                            }
-//                            if (result == GroundspeakLiveAPI.API_IS_UNAVAILABLE) {
-//                                GL.that.Toast(ApiUnavailable.INSTANCE);
-//                                return;
-//                            }
-//                        }
-//                        if (CB_Core.Api.GroundspeakLiveAPI.CachesLeft <= 0) {
-//                            String s = "download limit is reached!\n";
-//                            s += "You have downloaded the full cache details of " + CB_Core.Api.GroundspeakLiveAPI.MaxCacheCount + " caches in the last 24 hours.\n";
-//                            if (CB_Core.Api.GroundspeakLiveAPI.MaxCacheCount < 10)
-//                                s += "If you want to download the full cache details of 6000 caches per day you can upgrade to Premium Member at \nwww.geocaching.com!";
-//
-//                            message = s;
-//
-//                            onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(2));
-//
-//                            return;
-//                        }
-//
-//                        if (!CB_Core.Api.GroundspeakLiveAPI.IsPremiumMember()) {
-//                            String s = "download Details of this cache?\n";
-//                            s += "Full Downloads left: " + CB_Core.Api.GroundspeakLiveAPI.CachesLeft + "\n";
-//                            s += "Actual Downloads: " + CB_Core.Api.GroundspeakLiveAPI.CurrentCacheCount + "\n";
-//                            s += "Max. Downloads in 24h: " + CB_Core.Api.GroundspeakLiveAPI.MaxCacheCount;
-//                            message = s;
-//                            onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(3));
-//                            return;
-//                        } else {
-//                            // call the download directly
-//                            onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(4));
-//                            return;
-//                        }
-//                    }
-//                };
-//                pd = ProgressDialog.show(getContext(), "", "download Description", true);
-//
-//                thread.start();
-                log.debug("get Basic Member description clicked, don't load URL");
+                        fetchMyCacheLimits();
+                        if (APIError != OK) {
+                            MessageBox.show(LastAPIError, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                            // onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(1));
+                            return;
+                        }
+                        if (isDownloadLimitExceeded()) {
+                            String msg;
+                            if (isPremiumMember()) {
+                                msg = "You have left " + fetchMyUserInfos().remaining + " full and " + fetchMyUserInfos().remainingLite + " lite caches.";
+                                msg += "The time to wait is " + fetchMyUserInfos().remainingTime + "/" + fetchMyUserInfos().remainingLiteTime;
+                            } else {
+                                msg = "Upgrade to Geocaching.com Premium Membership today\n"
+                                        + "for as little at $2.50 per month\n"
+                                        + "to download the full details for up to 6000 caches per day,\n"
+                                        + "view all cache types in your area,\n"
+                                        + "and access many more benefits. \n"
+                                        + "Visit Geocaching.com to upgrade.";
+                            }
+
+                            //message = msg;
+                            //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(2));
+                            MessageBox.show(msg, Translation.get("download"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+
+                            return;
+                        }
+
+                        if (!isPremiumMember()) {
+                            String msg = "Download Details of this cache?\n";
+                            msg += "Full Downloads left: " + fetchMyUserInfos().remaining + "\n";
+                            //message = msg;
+                            //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(3));
+                            return;
+                        } else {
+                            // call the download directly
+                            //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(4));
+                            return;
+                        }
+                    }
+                };
+                // pd = ProgressDialog.show(getContext(), "", "Download Description", true);
+                thread.start();
                 return true;
             } else if (url.startsWith("http://") || url.startsWith("https://")) {
                 // Load Url in ext Browser
@@ -168,45 +152,24 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         EventHandler.add(this);
     }
 
+    private static String getStringFromDB(Database database, String statement, long cacheID) {
+        String[] args = new String[]{Long.toString(cacheID)};
+        return database.getString(statement, args);
+    }
+
     private String getAttributesHtml(AbstractCache abstractCache) {
         StringBuilder sb = new StringBuilder();
         try {
-            Array<Attributes> attributes = abstractCache.getAttributes();
-            if (attributes == null) return "";
-            Iterator<Attributes> attributesIterator = attributes.iterator();
-            if (attributesIterator == null || !attributesIterator.hasNext())
-                return "";
-
-            /*
-            do {
-                Attributes attribute = attributesIterator.next();
-                File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
-                sb.append("<form action=\"Attr\">");
-                sb.append("<input name=\"Button\" type=\"image\" src=\"" + result.toURI() + "\" height=\"40\" width=\"40\" value=\" " + attribute.getImageName() + " \">");
-
-            } while (attributesIterator.hasNext());
-
-            sb.append("</form>");
-             */
-
-            // alternate is perhaps something like
-            // <button name="action" value="blue"><img src="blue.png" alt="blue"></button>
-            sb.append("<form action=\"Attr\">");
-            // syntx <form action="URL"> absolute or relative
-            // In HTML5, the action attribute is no longer required.
-            do {
-                Attributes attribute = attributesIterator.next();
+            for (Attributes attribute : abstractCache.getAttributes()) {
                 File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
                 // the url is missing the value, so we give that appended in the name and the blank
-                sb.append("<input name=\"GetAttInfo" + attribute.getImageName() + " \" type=\"image\" src=\"file://" + result.getAbsolutePath() + "\" value=\"1\">");
-            } while (attributesIterator.hasNext());
-            sb.append("</form>");
-
-            if (sb.length() > 0)
-                sb.append("<br>");
-            return sb.toString();
+                sb.append("<input name=\"GetAttInfo" + attribute.getImageName() + " \" height=\"40\" width=\"40\" type=\"image\" src=\"file://" + result.getAbsolutePath() + "\" value=\"1\">");
+            }
+            if (sb.length > 0) {
+                return "<form action=\"Attr\">" + sb.toString() + "</form><br>";
+            } else return "";
         } catch (Exception ex) {
-            // TODO Handle Exception
+            log.error("getAttributesHtml:", ex);
             return "";
         }
     }
@@ -227,7 +190,6 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     protected void boundsChanged(float x, float y, float width, float height) {
         if (view != null) view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
     }
-
 
     @Override
     public void onShow() {
@@ -417,7 +379,6 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         });
     }
 
-
     //################### Context menu implementation ####################################
     @Override
     public boolean hasContextMenu() {
@@ -511,10 +472,5 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         mi.setChecked(EventHandler.getSelectedCache().getShowOriginalHtmlColor());
 
         return cm;
-    }
-
-    private static String getStringFromDB(Database database, String statement, long cacheID) {
-        String[] args = new String[]{Long.toString(cacheID)};
-        return database.getString(statement, args);
     }
 }

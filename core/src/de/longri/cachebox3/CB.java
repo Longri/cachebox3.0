@@ -24,17 +24,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
-import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
-import de.longri.cachebox3.gui.dialogs.GetApiKeyQuestionDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
@@ -72,63 +65,49 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static de.longri.cachebox3.apis.GroundspeakAPI.isAccessTokenInvalid;
+
 /**
  * Static class
  * Created by Longri on 20.07.2016.
  */
 public class CB {
-    static final Logger log = LoggerFactory.getLogger(CB.class);
-
     public static final boolean DRAW_EXCEPTION_INDICATOR = true;
     public static final Color EXCEPTION_COLOR_DRAWING = Color.RED;
     public static final Color EXCEPTION_COLOR_POST = Color.YELLOW;
     public static final Color EXCEPTION_COLOR_EVENT = Color.GREEN;
     public static final Color EXCEPTION_COLOR_LOCATION = Color.BLUE;
-
-
     public static final String VersionPrefix = "Test";
-
-    public static LocationHandler locationHandler;
-
     //LogLevels
-    public static final String LOG_LEVEL_INFO = "info";
-    public static final String LOG_LEVEL_DEBUG = "debug";
-    public static final String LOG_LEVEL_WARN = "warn";
-    public static final String LOG_LEVEL_ERROR = "error";
-    public static final String LOG_LEVEL_TRACE = "trace";
-
+    public static final String LOG_LEVEL_INFO = "INFO";
+    public static final String LOG_LEVEL_DEBUG = "DEBUG";
+    public static final String LOG_LEVEL_WARN = "WARN";
+    public static final String LOG_LEVEL_ERROR = "ERROR";
+    public static final String LOG_LEVEL_TRACE = "TRACE";
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.5f;
-    public static Categories Categories;
-    public static float stateTime;
-    private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
-
     public static final MapState actMapState = new MapState();
     public static final MapState lastMapState = new MapState();
     public static final MapState lastMapStateBeforeCar = new MapState();
-
-    public static int androidStatusbarHeight;
-
-    final static float PPI_DEFAULT = 163;
-    private static float globalScale = 1;
-    public static ViewManager viewmanager;
     public static final String br = System.getProperty("line.separator");
     public static final String fs = System.getProperty("file.separator");
-
     public static final String AboutMsg = "Team Cachebox (2011-2016)" + br + "www.team-cachebox.de" + br + "Cache Icons Copyright 2009," + br + "Groundspeak Inc. Used with permission";
     public static final String splashMsg = AboutMsg + br + br + "POWERED BY:";
-
-
-    private static AbstractCache nearestAbstractCache = null;
-    private static boolean autoResort;
+    public final static SensorIO sensoerIO = new SensorIO();
+    static final Logger log = LoggerFactory.getLogger(CB.class);
+    final static float PPI_DEFAULT = 163;
+    final static AtomicInteger executeCount = new AtomicInteger(0);
+    final static Array<String> runningRunnables = new Array<>();
+    private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
+    public static LocationHandler locationHandler;
+    public static Categories Categories;
+    public static float stateTime;
+    public static int androidStatusbarHeight;
+    public static ViewManager viewmanager;
     public static boolean switchToCompassCompleted = false;
     public static String cacheHistory = "";
-
-    public final static SensorIO sensoerIO = new SensorIO();
-
     public static CacheboxMain cbMain;
     public static StageManager stageManager;
-
     /**
      * WorkPath is a String to the used work path.<br>
      * This Path is a absolute path.<br>
@@ -138,7 +117,6 @@ public class CB {
      * or to the "SandBox" on the external SD
      */
     public static String WorkPath;
-    private static SvgSkin actSkin;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
     public static ScaledSizes scaledSizes;
     public static Track actRoute;
@@ -149,14 +127,43 @@ public class CB {
     public static Image CB_Logo;
     public static Image backgroundImage;
     public static boolean isBackground = false;
+    static boolean mapScaleInitial = false;
+    private static float globalScale = 1;
+    private static AbstractCache nearestAbstractCache = null;
+    private static boolean autoResort;
+    private static SvgSkin actSkin;
+    private static boolean isTestVersionCheked = false;
+    private static boolean isTestVersion = false;
+    private static float scalefactor = 0;
+    private static AtomicBoolean quitCalled = new AtomicBoolean(false);
+    // GL-Thread check
+    private static Thread GL_THREAD;
+    private static boolean mockChecked = false;
+    private static boolean isMocked = false;
+    private static IChanged mapScaleSettingChanged = new IChanged() {
 
+        private float lastDpi = 0;
+        private float lastText = 0;
+
+        @Override
+        public void isChanged() {
+            float dpi = Settings.MapViewDPIFaktor.getValue();
+            float text = Settings.MapViewTextFaktor.getValue();
+            if (dpi != lastDpi || text != lastText) {
+                lastDpi = dpi;
+                lastText = text;
+                //calculate CanvasAdapter.dpi
+                float scaleFactor = CB.getScaledFloat(dpi);
+                CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
+                CanvasAdapter.textScale = text;
+                Tile.SIZE = Tile.calculateTileSize();
+                loadThemeFile(CB.actThemeFile);
+            }
+        }
+    };
 
     private CB() {
     }
-
-
-    private static boolean isTestVersionCheked = false;
-    private static boolean isTestVersion = false;
 
     public static boolean isTestVersion() {
         if (isTestVersionCheked)
@@ -192,9 +199,6 @@ public class CB {
     public static SvgSkin getSkin() {
         return actSkin;
     }
-
-
-    private static float scalefactor = 0;
 
     public static float getScaledFloat(float value) {
         if (scalefactor == 0)
@@ -237,10 +241,6 @@ public class CB {
         globalScale = scale;
     }
 
-    public float getGlobalScaleFactor() {
-        return globalScale;
-    }
-
     public static float getScalefactor() {
         if (scalefactor == 0)
             calcScaleFactor();
@@ -264,8 +264,6 @@ public class CB {
     public static Sprite getSprite(String name) {
         return actSkin != null ? actSkin.getSprite(name) : null;
     }
-
-    private static AtomicBoolean quitCalled = new AtomicBoolean(false);
 
     public static boolean isQuitCalled() {
         return quitCalled.get();
@@ -291,7 +289,6 @@ public class CB {
         });
     }
 
-
     public static boolean getAutoResort() {
         return autoResort;
     }
@@ -300,22 +297,13 @@ public class CB {
         autoResort = value;
     }
 
-
     public static void setNearestCache(AbstractCache AbstractCache) {
         nearestAbstractCache = AbstractCache;
     }
 
-
     public static AbstractCache NearestCache() {
         return nearestAbstractCache;
     }
-
-
-    // GL-Thread check
-    private static Thread GL_THREAD;
-
-    private static boolean mockChecked = false;
-    private static boolean isMocked = false;
 
     public static boolean isMocked() {
         if (!mockChecked) {
@@ -336,6 +324,10 @@ public class CB {
         return GL_THREAD == Thread.currentThread();
     }
 
+    public static void setGlThread(Thread glThread) {
+        GL_THREAD = glThread;
+    }
+
     public static void initThreadCheck() {
         Gdx.app.postRunnable(new Runnable() {
             @Override
@@ -344,11 +336,6 @@ public class CB {
             }
         });
     }
-
-    public static void setGlThread(Thread glThread) {
-        GL_THREAD = glThread;
-    }
-
 
     public static void scheduleOnGlThread(final NamedRunnable runnable, long delay) {
         TimerTask timerTask = new TimerTask() {
@@ -361,7 +348,6 @@ public class CB {
         new Timer().schedule(timerTask, delay);
         requestRendering();
     }
-
 
     public static void postOnGlThread(final NamedRunnable runnable) {
         postOnGlThread(runnable, false);
@@ -422,9 +408,6 @@ public class CB {
         });
     }
 
-    final static AtomicInteger executeCount = new AtomicInteger(0);
-    final static Array<String> runningRunnables = new Array<>();
-
     public static void postAsync(final NamedRunnable runnable) {
         runningRunnables.add(runnable.name);
         log.debug("Submit Async execute count {} runs: {}", executeCount.incrementAndGet(), runningRunnables.toString());
@@ -448,114 +431,9 @@ public class CB {
         });
     }
 
-
-    /**
-     * Returns TRUE with any error!
-     *
-     * @param result
-     * @return
-     */
-    public static boolean checkApiResultState(ApiResultState result) {
-        if (result == ApiResultState.CONNECTION_TIMEOUT) {
-            CB.viewmanager.toast(Translation.get("ConnectionError"));
-            return true;
-        }
-        if (result == ApiResultState.API_IS_UNAVAILABLE) {
-            CB.viewmanager.toast(Translation.get("API-offline"));
-            return true;
-        }
-
-        if (result == ApiResultState.EXPIRED_API_KEY) {
-            CB.scheduleOnGlThread(new NamedRunnable("CB: ExpiredApiKey") {
-                @Override
-                public void run() {
-                    String msg = Translation.get("apiKeyExpired") + "\n\n"
-                            + Translation.get("wantApi");
-                    new GetApiKeyQuestionDialog(msg, Translation.get("errorAPI"),
-                            MessageBoxIcon.ExpiredApiKey).show();
-                }
-            }, 300);// wait for closing ProgressDialog before show msg
-            return true;
-        }
-
-        if (result == ApiResultState.MEMBERSHIP_TYPE_INVALID) {
-            CB.scheduleOnGlThread(new NamedRunnable("CB:Invalid membership") {
-                @Override
-                public void run() {
-                    String msg = Translation.get("apiKeyInvalid") + "\n\n"
-                            + Translation.get("wantApi");
-                    new GetApiKeyQuestionDialog(msg, Translation.get("errorAPI"),
-                            MessageBoxIcon.ExpiredApiKey).show();
-                }
-            }, 300);// wait for closing ProgressDialog before show msg
-            return true;
-        }
-
-        if (result == ApiResultState.NO_API_KEY) {
-            CB.scheduleOnGlThread(new NamedRunnable("CB:No ApiKey") {
-                @Override
-                public void run() {
-                    String msg = Translation.get("apiKeyNeeded") + "\n\n"
-                            + Translation.get("wantApi");
-                    new GetApiKeyQuestionDialog(msg, Translation.get("errorAPI"),
-                            MessageBoxIcon.ExpiredApiKey).show();
-                }
-            }, 300);// wait for closing ProgressDialog before show msg
-            return true;
-        }
-
-        if (result == ApiResultState.API_DOWNLOAD_LIMIT) {
-            CB.scheduleOnGlThread(new NamedRunnable("DownloadLimit") {
-                @Override
-                public void run() {
-                    MessageBox.show(Translation.get("Limit_msg")//Message
-                            , Translation.get("Limit_title")//Title
-                            , MessageBoxButtons.OK
-                            , MessageBoxIcon.Error, null);
-                }
-            }, 300);// wait for closing ProgressDialog before show msg
-            return true;
-        }
-        return false;
-    }
-
     public static boolean checkApiKeyNeeded() {
-        if (Config.AccessToken.getValue() == null || Config.AccessToken.getValue().isEmpty()) {
-            postOnGlThread(new NamedRunnable("CB:checkApiKeyNeeded") {
-                @Override
-                public void run() {
-                    new GetApiKeyQuestionDialog().show();
-                }
-            });
-            return true;
-        }
-
-        //check if expired or invalid
-        final AtomicBoolean wait = new AtomicBoolean(true);
-        final AtomicBoolean errror = new AtomicBoolean(false);
-        GroundspeakLiveAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
-            @Override
-            public void callBack(ApiResultState value) {
-                errror.set(checkApiResultState(value));
-                wait.set(false);
-            }
-        });
-
-
-        while (wait.get()) {
-            if (CB.isGlThread()) {
-                throw new RuntimeException("Don't block main thread with check API key!");
-            }
-
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return errror.get();
+        return isAccessTokenInvalid();
     }
-
 
     public static void wait(AtomicBoolean wait) {
         wait(wait, false, null);
@@ -704,31 +582,6 @@ public class CB {
         });
     }
 
-
-    static boolean mapScaleInitial = false;
-
-    private static IChanged mapScaleSettingChanged = new IChanged() {
-
-        private float lastDpi = 0;
-        private float lastText = 0;
-
-        @Override
-        public void isChanged() {
-            float dpi = Settings.MapViewDPIFaktor.getValue();
-            float text = Settings.MapViewTextFaktor.getValue();
-            if (dpi != lastDpi || text != lastText) {
-                lastDpi = dpi;
-                lastText = text;
-                //calculate CanvasAdapter.dpi
-                float scaleFactor = CB.getScaledFloat(dpi);
-                CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
-                CanvasAdapter.textScale = text;
-                Tile.SIZE = Tile.calculateTileSize();
-                loadThemeFile(CB.actThemeFile);
-            }
-        }
-    };
-
     public static boolean loadThemeFile(ThemeFile themeFile) {
 
         if (!mapScaleInitial) {
@@ -766,6 +619,10 @@ public class CB {
 
     public static boolean isCarMode() {
         return actMapState.getMapMode() == MapMode.CAR;
+    }
+
+    public float getGlobalScaleFactor() {
+        return globalScale;
     }
 }
 
