@@ -16,15 +16,18 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DoubleClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -93,32 +96,57 @@ public class GalleryView extends Catch_Table {
             }
         };
 
-        ActorGestureListener gestureListener = new ActorGestureListener() {
-
-            public boolean handle(Event e) {
-                if (!(e instanceof InputEvent)) return super.handle(e);
-                InputEvent event = (InputEvent) e;
-                if (event.getType() == InputEvent.Type.scrolled) {// show a web webView with html to showing this Image
-                    showZoomingWebView();
-                    return true;
-                }
-                return super.handle(e);
-            }
-
-            public void zoom(InputEvent event, float initialDistance, float distance) {
-                // show a web webView with html to showing this Image
-                showZoomingWebView();
-            }
-        };
 
         DoubleClickListener doubleClickListener = new DoubleClickListener() {
+
+            private float touchDownX;
+            private float touchDownY;
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                touchDownX = x;
+                touchDownY = y;
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
             public void doubleClicked(InputEvent event, float x, float y) {
                 // show a web webView with html to showing this Image
                 showZoomingWebView();
             }
+
+
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                super.touchDragged(event, x, y, pointer);
+                //drag image if Zoomed
+                gallery.zoomedDrag(x - touchDownX, y - touchDownY);
+                touchDownX = x;
+                touchDownY = y;
+            }
         };
 
-        gallery.addCaptureListener(gestureListener);
+        gallery.addInputListener(new InputListener() {
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                getStage().setScrollFocus(gallery);
+            }
+
+            public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                getStage().setScrollFocus(null);
+            }
+
+            public boolean scrolled(InputEvent event, float x, float y, int amount) {
+                //block scrolling of gallery items and set zoom to act visible item
+                gallery.scroll(x, y, amount);
+                return true;
+            }
+
+            /** Called when a mouse button or a finger touch is moved anywhere, but only if touchDown previously returned true for the
+             * mouse button or touch. The touchDragged event is always {@link Event#handle() handled}.
+             * @see InputEvent */
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+//                gallery.zoomedDrag(x, y);
+            }
+        });
+
+
         gallery.addCaptureListener(doubleClickListener);
         gallery.setSelectable(SelectableType.NONE);
         overview.setSelectable(SelectableType.SINGLE);

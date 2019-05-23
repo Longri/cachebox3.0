@@ -15,9 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -34,6 +32,9 @@ public class GalleryListView extends ListView {
     private static Logger log = LoggerFactory.getLogger(GalleryListView.class);
 
     private boolean isMoving = false;
+    private GalleryItem firstVisibleItem;
+    private float lastSearchPos;
+    private InputListener inputListener;
 
     public GalleryListView(ListViewStyle listViewStyle) {
         super(ListViewType.HORIZONTAL, listViewStyle);
@@ -76,7 +77,7 @@ public class GalleryListView extends ListView {
         log.debug("SnapIn");
 
         // get first visible item and scroll to Center
-        ListViewItemInterface firstVisibleItem = getVisibleItem();
+        firstVisibleItem = (GalleryItem) getVisibleItem();
         float scrollPos = 0;
         if (firstVisibleItem != null) {
             int index = firstVisibleItem.getListIndex() - 1;
@@ -91,6 +92,8 @@ public class GalleryListView extends ListView {
     public ListViewItemInterface getVisibleItem() {
         float size = getWidth();
         float searchPos = getScrollPos();
+        if (lastSearchPos == searchPos && firstVisibleItem != null) return firstVisibleItem;
+        lastSearchPos = searchPos;
         ListViewItemInterface[] itemArray = this.itemList.itemArray;
         ListViewItemInterface firstItem = search(this.type, itemArray, searchPos, size);
         ListViewItemInterface lastItem = ListViewItemLinkedList.search(this.type, itemArray, searchPos + size, size);
@@ -105,5 +108,39 @@ public class GalleryListView extends ListView {
     @Override
     public float getPrefHeight() {
         return CB.getScaledFloat(75);
+    }
+
+    public void scroll(float x, float y, int amount) {
+        // check if item snapped in
+        float scrollPos = getScrollPos();
+        if (firstVisibleItem == null) {
+            snapIn();
+        }
+
+        //set zoom to Item
+        float amountScaleFactor = 0.25f;
+        float scale = amount * amountScaleFactor;
+        firstVisibleItem.zoom(x, y, scale);
+
+        //disable scrolling
+        if (firstVisibleItem.getZoom() > 1.0f) {
+            log.debug("DISABLE scrolling");
+            setScrollingDisabled(true, this.inputListener);
+        } else {
+            log.debug("ENABLE scrolling");
+            setScrollingDisabled(false, this.inputListener);
+        }
+
+
+    }
+
+    public void zoomedDrag(float x, float y) {
+        log.debug("draged x:{} / y:{}", x, y);
+        if (firstVisibleItem != null) firstVisibleItem.drag(x, y);
+    }
+
+    public void addInputListener(InputListener inputListener) {
+        this.inputListener = inputListener;
+        this.addListener(inputListener);
     }
 }

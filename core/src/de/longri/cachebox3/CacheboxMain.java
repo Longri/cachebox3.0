@@ -30,8 +30,6 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import de.longri.cachebox3.events.CacheListChangedEvent;
-import de.longri.cachebox3.events.CacheListChangedListener;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
@@ -40,10 +38,9 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.DescriptionView;
+import de.longri.cachebox3.gui.widgets.list_view.GalleryItem;
 import de.longri.cachebox3.gui.widgets.list_view.GalleryListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewItemLinkedList;
-import de.longri.cachebox3.platform_test.gui.PlatformTestView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -79,8 +76,7 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add(ListViewItemLinkedList.class.getName());
         INCLUDE_LIST.add(ListView.class.getName());
         INCLUDE_LIST.add(GalleryListView.class.getName());
-
-
+        INCLUDE_LIST.add(GalleryItem.class.getName());
 
 //        INCLUDE_LIST.add(ViewManager.class.getName());
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");

@@ -15,10 +15,14 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.building.utilities.Alignment;
 import de.longri.cachebox3.gui.widgets.Image;
-import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.ImageLoader;
 import org.slf4j.Logger;
@@ -31,8 +35,13 @@ public class GalleryItem extends ListViewItem {
 
     private static final Logger log = LoggerFactory.getLogger(GalleryItem.class);
 
+    private static final float zoomMax = 4;
+    private static final float zoomMin = 1;
+
     private final ImageLoader iloader;
     private final Image img;
+    private float zoom = 1.0f;
+    private float proportion = -1;
 
 
     public GalleryItem(int index, ImageLoader loader) {
@@ -83,5 +92,65 @@ public class GalleryItem extends ListViewItem {
 
     public String getImagePath() {
         return this.iloader.getOriginalImagePath();
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if (zoom > 1.0f) {
+            Drawable imgDrawable = this.iloader.getDrawable(Gdx.graphics.getDeltaTime());
+
+            if (!this.iloader.inLoad) {
+                //calculate proportional width/height and pos
+                if (proportion < 0) {// calc once
+                    float proportionWidth = getWidth() / this.iloader.getSpriteWidth();
+                    float proportionHeight = getHeight() / this.iloader.getSpriteHeight();
+                    proportion = Math.min(proportionWidth, proportionHeight);
+                }
+
+                float drwX = this.getX() + zoomOffsetX;
+                float drwY = this.getY() + zoomOffsetY;
+                float drwWidth = this.iloader.getSpriteWidth() * proportion * zoom;
+                float drwHeight = this.iloader.getSpriteHeight() * proportion * zoom;
+
+
+                //draw with scissor
+                Rectangle scissors = new Rectangle();
+                Rectangle clipBounds = new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+                getStage().calculateScissors(clipBounds, scissors);
+                if (ScissorStack.pushScissors(scissors)) {
+                    imgDrawable.draw(batch, drwX, drwY, drwWidth, drwHeight);
+                    batch.flush();
+                    ScissorStack.popScissors();
+                } else {
+                    imgDrawable.draw(batch, drwX, drwY, drwWidth, drwHeight);
+                }
+            }
+        } else {
+            super.draw(batch, parentAlpha);
+        }
+
+
+    }
+
+    public void zoom(float x, float y, float scale) {
+        this.zoom += scale;
+        log.debug("zoom {} to actScale {}", scale, this.zoom);
+
+        if (this.zoom > zoomMax) this.zoom = zoomMax;
+        if (this.zoom < zoomMin) this.zoom = zoomMin;
+
+    }
+
+    public float getZoom() {
+        return this.zoom;
+    }
+
+
+    private float zoomOffsetX = 0;
+    private float zoomOffsetY = 0;
+
+    public void drag(float x, float y) {
+        zoomOffsetX += x;
+        zoomOffsetY += y;
     }
 }
