@@ -139,6 +139,12 @@ public class GalleryItem extends ListViewItem {
         if (this.zoom > zoomMax) this.zoom = zoomMax;
         if (this.zoom < zoomMin) this.zoom = zoomMin;
 
+        //calculate over dragging bounds
+        float drwWidth = this.iloader.getSpriteWidth() * proportion * zoom;
+        float drwHeight = this.iloader.getSpriteHeight() * proportion * zoom;
+
+        maxOverDraggedX = -1 * (drwWidth - this.getWidth());
+        maxOverDraggedY = -1 * (drwHeight - this.getHeight());
     }
 
     public float getZoom() {
@@ -148,9 +154,19 @@ public class GalleryItem extends ListViewItem {
 
     private float zoomOffsetX = 0;
     private float zoomOffsetY = 0;
+    private float maxOverDraggedX, maxOverDraggedY;
 
     public void drag(float x, float y) {
         zoomOffsetX += x;
         zoomOffsetY += y;
+
+        //check if over dragged
+        if (zoomOffsetX < maxOverDraggedX) zoomOffsetX = maxOverDraggedX;
+        if (zoomOffsetY < maxOverDraggedY) zoomOffsetY = maxOverDraggedY;
+
+        if (zoomOffsetX >0) zoomOffsetX = 0;
+        if (zoomOffsetY >0) zoomOffsetY = 0;
+
+        log.debug("ZoomOffset x:{}  y:{}", zoomOffsetX, zoomOffsetY);
     }
 }
