@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.DoubleClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -164,7 +165,8 @@ public class GalleryItem extends ListViewItem {
     float amountX, amountY;
     float maxX, maxY;
     float flingTime = 1f;
-    private float overscrollDistance = 50;
+    private boolean panning = false;
+    private float overscrollDistance = 50, overscrollSpeedMin = 30, overscrollSpeedMax = 200;
 
     public void cancelTouchFocus() {
         if (eventListener == null) return;
@@ -198,6 +200,8 @@ public class GalleryItem extends ListViewItem {
     public void act(float delta) {
         super.act(delta);
 
+        panning = this.eventListener != null && (((DoubleClickListener) (this.eventListener)).getGestureDetector().isPanning());
+        animating = false;
         if (flingTimer > 0) {
 
             float alpha = flingTimer / flingTime;
@@ -205,7 +209,7 @@ public class GalleryItem extends ListViewItem {
             amountY -= velocityY * alpha * delta;
             clamp();
 
-            // Stop fling if hit overscroll distance.
+            // Stop zoomedFling if hit overscroll distance.
             if (amountX == -overscrollDistance) velocityX = 0;
             if (amountX >= maxX + overscrollDistance) velocityX = 0;
             if (amountY == -overscrollDistance) velocityY = 0;
@@ -218,6 +222,43 @@ public class GalleryItem extends ListViewItem {
             }
 
             animating = true;
+        }
+
+        if (!panning) {
+            if (true) {
+                if (amountX < 0) {   //todo <== center x Pos
+
+                    amountX += (overscrollSpeedMin + (overscrollSpeedMax - overscrollSpeedMin) * -amountX / overscrollDistance)
+                            * delta;
+                    if (amountX > 0) scrollX(0);
+                    animating = true;
+                } else if (amountX > maxX) {
+
+                    amountX -= (overscrollSpeedMin
+                            + (overscrollSpeedMax - overscrollSpeedMin) * -(maxX - amountX) / overscrollDistance) * delta;
+                    if (amountX < maxX) scrollX(maxX);
+                    animating = true;
+                }
+            }
+            if (true) {
+                if (amountY < 0) { //todo  <== center Y Pos
+                    amountY += (overscrollSpeedMin + (overscrollSpeedMax - overscrollSpeedMin) * -amountY / overscrollDistance)
+                            * delta;
+                    if (amountY > 0) scrollY(0);
+                    animating = true;
+                } else if (amountY > maxY) {
+
+                    amountY -= (overscrollSpeedMin
+                            + (overscrollSpeedMax - overscrollSpeedMin) * -(maxY - amountY) / overscrollDistance) * delta;
+                    if (amountY < maxY) scrollY(maxY);
+                    animating = true;
+                }
+            }
+
+            if (animating) {
+                Stage stage = getStage();
+                if (stage != null && stage.getActionsRequestRendering()) Gdx.graphics.requestRendering();
+            }
         }
     }
 
@@ -240,7 +281,7 @@ public class GalleryItem extends ListViewItem {
     }
 
     /**
-     * Called whenever the x scroll amount is changed.
+     * Called whenever the x zoomedScroll amount is changed.
      */
     protected void scrollX(float pixelsX) {
         this.amountX = pixelsX;
@@ -248,7 +289,7 @@ public class GalleryItem extends ListViewItem {
     }
 
     /**
-     * Called whenever the y scroll amount is changed.
+     * Called whenever the y zoomedScroll amount is changed.
      */
     protected void scrollY(float pixelsY) {
         this.amountY = pixelsY;

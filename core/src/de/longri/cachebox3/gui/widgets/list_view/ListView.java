@@ -362,13 +362,13 @@ public class ListView extends Catch_WidgetGroup {
         }
         float paneYPos = this.backgroundDrawable != null ? this.backgroundDrawable.getTopHeight() : 0;
         float completeSize = itemList.getCompleteSize();
-        if (this.type == VERTICAL){
+        if (this.type == VERTICAL) {
             if (this.getHeight() > completeSize) {
                 //set on Top
                 paneHeight = completeSize;
                 paneYPos = this.getHeight() - completeSize;
             }
-        }else{
+        } else {
             if (this.getWidth() > completeSize) {
                 //set on Top
                 paneWidth = completeSize;
@@ -533,6 +533,7 @@ public class ListView extends Catch_WidgetGroup {
         try {
             super.act(delta);
         } catch (Exception e) {
+            log.error("act()", e);
         }
 
         if (this.scrollChangedEventListener != null) {

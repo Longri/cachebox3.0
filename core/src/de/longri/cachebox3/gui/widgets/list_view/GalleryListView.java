@@ -51,7 +51,7 @@ public class GalleryListView extends ListView {
             ListViewItemInterface lastItem = this.itemList.itemArray[this.itemList.itemArray.length - 1];
             float maxWidth = lastItem.getX() + lastItem.getWidth();
             if (maxY > maxWidth) {
-                // it's over scroll, don't snapIn
+                // it's over zoomedScroll, don't snapIn
                 dontSnapIn = true;
             }
         }
@@ -77,7 +77,7 @@ public class GalleryListView extends ListView {
         // don't snap in with end of ListView
         log.debug("SnapIn");
 
-        // get first visible item and scroll to Center
+        // get first visible item and zoomedScroll to Center
         firstVisibleItem = (GalleryItem) getVisibleItem();
         float scrollPos = 0;
         if (firstVisibleItem != null) {
@@ -111,7 +111,7 @@ public class GalleryListView extends ListView {
         return CB.getScaledFloat(75);
     }
 
-    public void scroll(float x, float y, int amount) {
+    public void zoomedScroll(float x, float y, int amount) {
         // check if item snapped in
         float scrollPos = getScrollPos();
         if (firstVisibleItem == null) {
@@ -135,7 +135,7 @@ public class GalleryListView extends ListView {
 
     }
 
-    public void fling(float velocityX, float velocityY) {
+    public void zoomedFling(float velocityX, float velocityY) {
         if (firstVisibleItem != null) {
             firstVisibleItem.setInputListener(this.inputListener);
             firstVisibleItem.fling(velocityX, velocityY);
@@ -155,4 +155,7 @@ public class GalleryListView extends ListView {
     }
 
 
+    public void zoomedSnapIn() {
+
+    }
 }

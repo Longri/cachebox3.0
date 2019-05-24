@@ -16,19 +16,13 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DoubleClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -108,7 +102,7 @@ public class GalleryView extends Catch_Table {
             @Override
             public void selectionChanged() {
                 final int idx = overview.getSelectedItem().getListIndex();
-                CB.postAsync(new NamedRunnable("scroll to selected item") {
+                CB.postAsync(new NamedRunnable("zoomedScroll to selected item") {
                     @Override
                     public void run() {
                         ListViewItemInterface item = gallery.getListItem(idx);
@@ -239,41 +233,38 @@ public class GalleryView extends Catch_Table {
         gallery.setAdapter(galleryAdapter);
     }
 
-//    private final InputListener scrollWheelListener = new InputListener() {
-//        public boolean scrolled(InputEvent event, float x, float y, int amount) {
-//            //block scrolling of gallery items and set zoom to act visible item
-//            gallery.scroll(x, y, amount);
-//            return true;
-//        }
-//    };
-//
-//    private final ActorGestureListener gestureListener = new ActorGestureListener() {
-//
-//    };
-
     DoubleClickListener doubleClickListener = new DoubleClickListener() {
+        @Override
+        public void touchUp(final InputEvent event, final float x, final float y, int pointer, int button) {
+            super.touchUp(event, x, y, pointer, button);
+            //snap in
+            gallery.zoomedSnapIn();
+        }
 
         @Override
         public boolean scrolled(InputEvent event, float x, float y, int amount) {
             //block scrolling of gallery items and set zoom to act visible item
-            gallery.scroll(x, y, amount);
+            gallery.zoomedScroll(x, y, amount);
             return true;
         }
 
+        @Override
         public void fling(InputEvent event, float velocityX, float velocityY, int button) {
-            gallery.fling(velocityX, velocityY);
+            gallery.zoomedFling(velocityX, velocityY);
         }
 
-        /** The delta is the difference in stage coordinates since the last pan. */
+        @Override
         public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
             //drag image if Zoomed
             gallery.zoomedDrag(deltaX, deltaY);
         }
 
+        @Override
         public void zoom(InputEvent event, float initialDistance, float distance) {
             log.debug("Gesture =>zoom");
         }
 
+        @Override
         public void pinch(InputEvent event, Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
             log.debug("Gesture =>pinch");
         }
