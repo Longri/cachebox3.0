@@ -17,7 +17,11 @@ package de.longri.cachebox3.gui.widgets.list_view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -35,13 +39,14 @@ public class GalleryItem extends ListViewItem {
 
     private static final Logger log = LoggerFactory.getLogger(GalleryItem.class);
 
-    private static final float zoomMax = 4;
+    private static final float zoomMax = 8;
     private static final float zoomMin = 1;
 
     private final ImageLoader iloader;
     private final Image img;
     private float zoom = 1.0f;
     private float proportion = -1;
+    private EventListener eventListener;
 
 
     public GalleryItem(int index, ImageLoader loader) {
@@ -105,12 +110,12 @@ public class GalleryItem extends ListViewItem {
                     float proportionWidth = getWidth() / this.iloader.getSpriteWidth();
                     float proportionHeight = getHeight() / this.iloader.getSpriteHeight();
                     proportion = Math.min(proportionWidth, proportionHeight);
+                    drwWidth = this.iloader.getSpriteWidth() * proportion * zoom;
+                    drwHeight = this.iloader.getSpriteHeight() * proportion * zoom;
                 }
 
-                float drwX = this.getX() + zoomOffsetX;
-                float drwY = this.getY() + zoomOffsetY;
-                float drwWidth = this.iloader.getSpriteWidth() * proportion * zoom;
-                float drwHeight = this.iloader.getSpriteHeight() * proportion * zoom;
+                float drwX = this.getX() - amountX;
+                float drwY = this.getY() - amountY;
 
 
                 //draw with scissor
@@ -128,8 +133,6 @@ public class GalleryItem extends ListViewItem {
         } else {
             super.draw(batch, parentAlpha);
         }
-
-
     }
 
     public void zoom(float x, float y, float scale) {
@@ -140,33 +143,119 @@ public class GalleryItem extends ListViewItem {
         if (this.zoom < zoomMin) this.zoom = zoomMin;
 
         //calculate over dragging bounds
-        float drwWidth = this.iloader.getSpriteWidth() * proportion * zoom;
-        float drwHeight = this.iloader.getSpriteHeight() * proportion * zoom;
+        drwWidth = this.iloader.getSpriteWidth() * proportion * zoom;
+        drwHeight = this.iloader.getSpriteHeight() * proportion * zoom;
 
-        maxOverDraggedX = -1 * (drwWidth - this.getWidth());
-        maxOverDraggedY = -1 * (drwHeight - this.getHeight());
+        maxX = (drwWidth - this.getWidth());
+        maxY = (drwHeight - this.getHeight());
+        if (this.zoom > 1.0f) clamp();
     }
 
     public float getZoom() {
         return this.zoom;
     }
 
+    float drwWidth;
+    float drwHeight;
 
-    private float zoomOffsetX = 0;
-    private float zoomOffsetY = 0;
-    private float maxOverDraggedX, maxOverDraggedY;
+    float velocityX, velocityY;
+    float flingTimer;
+    boolean animating = false;
+    float amountX, amountY;
+    float maxX, maxY;
+    float flingTime = 1f;
+    private float overscrollDistance = 50;
 
-    public void drag(float x, float y) {
-        zoomOffsetX += x;
-        zoomOffsetY += y;
+    public void cancelTouchFocus() {
+        if (eventListener == null) return;
+        Stage stage = getStage();
+        if (stage != null) stage.cancelTouchFocusExcept(eventListener, this);
+    }
 
-        //check if over dragged
-        if (zoomOffsetX < maxOverDraggedX) zoomOffsetX = maxOverDraggedX;
-        if (zoomOffsetY < maxOverDraggedY) zoomOffsetY = maxOverDraggedY;
+    public void drag(float deltaX, float deltaY) {
+        amountX -= deltaX;
+        amountY -= deltaY;
+        clamp();
+//        if ((deltaX != 0) || (deltaY != 0)) cancelTouchFocus();
+    }
 
-        if (zoomOffsetX >0) zoomOffsetX = 0;
-        if (zoomOffsetY >0) zoomOffsetY = 0;
+    public void fling(float x, float y) {
+        if (this.zoom > 1.0f) {
+            if (Math.abs(x) > 150) {
+                flingTimer = flingTime;
+                velocityX = x;
+//                if (cancelTouchFocus) cancelTouchFocus();
+            }
+            if (Math.abs(y) > 150) {
+                flingTimer = flingTime;
+                velocityY = y;
+//                if (cancelTouchFocus) cancelTouchFocus();
+            }
+        }
+    }
 
-        log.debug("ZoomOffset x:{}  y:{}", zoomOffsetX, zoomOffsetY);
+
+    public void act(float delta) {
+        super.act(delta);
+
+        if (flingTimer > 0) {
+
+            float alpha = flingTimer / flingTime;
+            amountX -= velocityX * alpha * delta;
+            amountY -= velocityY * alpha * delta;
+            clamp();
+
+            // Stop fling if hit overscroll distance.
+            if (amountX == -overscrollDistance) velocityX = 0;
+            if (amountX >= maxX + overscrollDistance) velocityX = 0;
+            if (amountY == -overscrollDistance) velocityY = 0;
+            if (amountY >= maxY + overscrollDistance) velocityY = 0;
+
+            flingTimer -= delta;
+            if (flingTimer <= 0) {
+                velocityX = 0;
+                velocityY = 0;
+            }
+
+            animating = true;
+        }
+    }
+
+    void clamp() {
+        //maybe center
+        float drwWidth = this.iloader.getSpriteWidth() * proportion * zoom;
+        float drwHeight = this.iloader.getSpriteHeight() * proportion * zoom;
+        if (drwWidth < this.getWidth()) {
+            // center x
+            amountX = (getWidth() - drwWidth) / 2;
+        }
+        if (drwHeight < this.getHeight()) {
+            // center y
+            amountY = (getHeight() - drwHeight) / 2;
+        }
+
+        //set
+        scrollX(MathUtils.clamp(amountX, -overscrollDistance, maxX + overscrollDistance));
+        scrollY(MathUtils.clamp(amountY, -overscrollDistance, maxY + overscrollDistance));
+    }
+
+    /**
+     * Called whenever the x scroll amount is changed.
+     */
+    protected void scrollX(float pixelsX) {
+        this.amountX = pixelsX;
+        log.debug("setAmountX:{}", amountX);
+    }
+
+    /**
+     * Called whenever the y scroll amount is changed.
+     */
+    protected void scrollY(float pixelsY) {
+        this.amountY = pixelsY;
+        log.debug("setAmountY:{}", amountY);
+    }
+
+    public void setInputListener(EventListener inputListener) {
+        this.eventListener = inputListener;
     }
 }

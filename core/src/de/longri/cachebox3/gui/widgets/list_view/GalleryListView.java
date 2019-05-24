@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.widgets.list_view;
 
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
@@ -34,7 +35,7 @@ public class GalleryListView extends ListView {
     private boolean isMoving = false;
     private GalleryItem firstVisibleItem;
     private float lastSearchPos;
-    private InputListener inputListener;
+    private EventListener inputListener;
 
     public GalleryListView(ListViewStyle listViewStyle) {
         super(ListViewType.HORIZONTAL, listViewStyle);
@@ -134,13 +135,24 @@ public class GalleryListView extends ListView {
 
     }
 
-    public void zoomedDrag(float x, float y) {
-        log.debug("draged x:{} / y:{}", x, y);
-        if (firstVisibleItem != null) firstVisibleItem.drag(x, y);
+    public void fling(float velocityX, float velocityY) {
+        if (firstVisibleItem != null) {
+            firstVisibleItem.setInputListener(this.inputListener);
+            firstVisibleItem.fling(velocityX, velocityY);
+        }
     }
 
-    public void addInputListener(InputListener inputListener) {
+    public void zoomedDrag(float x, float y) {
+        if (firstVisibleItem != null) {
+            firstVisibleItem.setInputListener(this.inputListener);
+            firstVisibleItem.drag(x, y);
+        }
+    }
+
+    public void addInputListener(EventListener inputListener) {
         this.inputListener = inputListener;
         this.addListener(inputListener);
     }
+
+
 }

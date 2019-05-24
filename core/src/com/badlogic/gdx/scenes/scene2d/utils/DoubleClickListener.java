@@ -18,7 +18,9 @@ package com.badlogic.gdx.scenes.scene2d.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -36,7 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Nathan Sweet
  */
-public class DoubleClickListener extends InputListener {
+public class DoubleClickListener extends ActorGestureListener {
     /**
      * Time in seconds {@link #isVisualPressed()} reports true after a press resulting in a click is released.
      */
@@ -51,6 +53,7 @@ public class DoubleClickListener extends InputListener {
     private long tapCountInterval = (long) (0.4f * 1000000000l);
     private int tapCount;
     private long lastTapTime;
+    private final GestureDetector gestureDetector;
 
     /**
      * Create a listener where {@link #clicked(InputEvent, float, float)} is only called for left clicks.
@@ -58,25 +61,64 @@ public class DoubleClickListener extends InputListener {
      * @see #DoubleClickListener(int)
      */
     public DoubleClickListener() {
+        this(0);
     }
 
     /**
      * @see #setButton(int)
      */
     public DoubleClickListener(int button) {
+        super();
         this.button = button;
+        gestureDetector = getGestureDetector();
     }
 
-    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        if (pressed) return false;
-        if (pointer == 0 && this.button != -1 && button != this.button) return false;
+
+    public boolean handle(Event e) {
+        if (!(e instanceof InputEvent)) return false;
+        InputEvent event = (InputEvent) e;
+
+        switch (event.getType()) {
+            case touchDown:
+                actor = event.getListenerActor();
+                touchDownTarget = event.getTarget();
+                gestureDetector.touchDown(event.getStageX(), event.getStageY(), event.getPointer(), event.getButton());
+                actor.stageToLocalCoordinates(tmpCoords.set(event.getStageX(), event.getStageY()));
+                touchDown(event, tmpCoords.x, tmpCoords.y, event.getPointer(), event.getButton());
+                return true;
+            case touchUp:
+                if (event.isTouchFocusCancel()) {
+                    gestureDetector.reset();
+                    return false;
+                }
+                this.event = event;
+                actor = event.getListenerActor();
+                gestureDetector.touchUp(event.getStageX(), event.getStageY(), event.getPointer(), event.getButton());
+                actor.stageToLocalCoordinates(tmpCoords.set(event.getStageX(), event.getStageY()));
+                touchUp(event, tmpCoords.x, tmpCoords.y, event.getPointer(), event.getButton());
+                return true;
+            case touchDragged:
+                this.event = event;
+                actor = event.getListenerActor();
+                gestureDetector.touchDragged(event.getStageX(), event.getStageY(), event.getPointer());
+                return true;
+            case scrolled:
+                return scrolled(event, tmpCoords.x, tmpCoords.y, event.getScrollAmount());
+        }
+        return false;
+    }
+
+
+    public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        if (pressed) return;
+        if (pointer == 0 && this.button != -1 && button != this.button) return;
         pressed = true;
         pressedPointer = pointer;
         pressedButton = button;
         touchDownX = x;
         touchDownY = y;
         visualPressedTime = TimeUtils.millis() + (long) (visualPressedDuration * 1000);
-        return true;
+        return;
     }
 
     public void touchDragged(InputEvent event, float x, float y, int pointer) {
@@ -265,5 +307,10 @@ public class DoubleClickListener extends InputListener {
      */
     public void setButton(int button) {
         this.button = button;
+    }
+
+    /** Called when the mouse wheel has been scrolled. When true is returned, the event is {@link Event#handle() handled}. */
+    public boolean scrolled (InputEvent event, float x, float y, int amount) {
+        return false;
     }
 }

@@ -256,35 +256,37 @@ public class ListView extends Catch_WidgetGroup {
     Array<EventListener> originalCapturelistener = new Array<>();
     boolean isDisabled = false;
 
-    protected void setScrollingDisabled(boolean value, InputListener inputListener) {
+    protected void setScrollingDisabled(boolean value, EventListener inputListener) {
         if (value) {
             if (isDisabled) return;
             isDisabled = true;
             scrollPane.setScrollingDisabled(true, true);
 
-            for (EventListener listener : scrollPane.getCaptureListeners()) {
-                originalCapturelistener.add(listener);
-            }
+//            for (EventListener listener : scrollPane.getCaptureListeners()) {
+//                originalCapturelistener.add(listener);
+//            }
+//
+//            for (EventListener listener : originalCapturelistener) {
+//                scrollPane.removeCaptureListener(listener);
+//            }
+//            scrollPane.addCaptureListener(inputListener);
 
-            for (EventListener listener : originalCapturelistener) {
-                scrollPane.removeCaptureListener(listener);
-            }
-            scrollPane.addCaptureListener(inputListener);
-
-            scrollPane.setFlickScroll(false);
+//            scrollPane.setFlickScroll(false);
         } else {
             if (!isDisabled) return;
             isDisabled = false;
             scrollPane.setScrollingDisabled(this.type == VERTICAL, this.type == HORIZONTAL);
-            scrollPane.removeCaptureListener(inputListener);
-            for (EventListener listener : originalCapturelistener) {
-                scrollPane.addCaptureListener(listener);
-            }
-            for (EventListener listener : scrollPane.getCaptureListeners()) {
-                originalCapturelistener.removeValue(listener, true);
-            }
-            originalCapturelistener.clear();
-            scrollPane.setFlickScroll(true);
+            scrollPane.setScrollingDisabled(false, false);
+            setScrollPaneBounds();
+//            scrollPane.removeCaptureListener(inputListener);
+//            for (EventListener listener : originalCapturelistener) {
+//                scrollPane.addCaptureListener(listener);
+//            }
+//            for (EventListener listener : scrollPane.getCaptureListeners()) {
+//                originalCapturelistener.removeValue(listener, true);
+//            }
+//            originalCapturelistener.clear();
+//            scrollPane.setFlickScroll(true);
         }
         log.debug("isScrollingDisabledX: {} / isScrollingDisabledY:{}", scrollPane.isScrollingDisabledX(), scrollPane.isScrollingDisabledY());
     }
@@ -360,10 +362,17 @@ public class ListView extends Catch_WidgetGroup {
         }
         float paneYPos = this.backgroundDrawable != null ? this.backgroundDrawable.getTopHeight() : 0;
         float completeSize = itemList.getCompleteSize();
-        if (this.getHeight() > completeSize) {
-            //set on Top
-            paneHeight = completeSize;
-            paneYPos = this.getHeight() - completeSize;
+        if (this.type == VERTICAL){
+            if (this.getHeight() > completeSize) {
+                //set on Top
+                paneHeight = completeSize;
+                paneYPos = this.getHeight() - completeSize;
+            }
+        }else{
+            if (this.getWidth() > completeSize) {
+                //set on Top
+                paneWidth = completeSize;
+            }
         }
 
         scrollPane.setBounds(this.backgroundDrawable != null ? this.backgroundDrawable.getLeftWidth() : 0, paneYPos,

@@ -322,6 +322,11 @@ public class ListViewItemLinkedList extends ScrollViewContainer {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         replaceDummy();
+        if (type == VERTICAL) {
+            this.setHeight(completeSize);
+        } else {
+            this.setWidth(completeSize);
+        }
     }
 
     void replaceDummy() {

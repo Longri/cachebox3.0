@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -41,6 +42,8 @@ import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.ImageLoader;
 import de.longri.cachebox3.utils.NamedRunnable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -48,6 +51,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Longri on 23.04.2019.
  */
 public class GalleryView extends Catch_Table {
+
+    Logger log = LoggerFactory.getLogger(GalleryView.class);
 
     private final static int MAX_THUMB_WIDTH = 500;
     private final static int MAX_OVERVIEW_THUMB_WIDTH = 240;
@@ -95,59 +100,7 @@ public class GalleryView extends Catch_Table {
                 });
             }
         };
-
-
-        DoubleClickListener doubleClickListener = new DoubleClickListener() {
-
-            private float touchDownX;
-            private float touchDownY;
-
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                touchDownX = x;
-                touchDownY = y;
-                return super.touchDown(event, x, y, pointer, button);
-            }
-
-            public void doubleClicked(InputEvent event, float x, float y) {
-                // show a web webView with html to showing this Image
-                showZoomingWebView();
-            }
-
-
-            public void touchDragged(InputEvent event, float x, float y, int pointer) {
-                super.touchDragged(event, x, y, pointer);
-                //drag image if Zoomed
-                gallery.zoomedDrag(x - touchDownX, y - touchDownY);
-                touchDownX = x;
-                touchDownY = y;
-            }
-        };
-
-        gallery.addInputListener(new InputListener() {
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//                getStage().setScrollFocus(gallery);
-            }
-
-            public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//                getStage().setScrollFocus(null);
-            }
-
-            public boolean scrolled(InputEvent event, float x, float y, int amount) {
-                //block scrolling of gallery items and set zoom to act visible item
-                gallery.scroll(x, y, amount);
-                return true;
-            }
-
-            /** Called when a mouse button or a finger touch is moved anywhere, but only if touchDown previously returned true for the
-             * mouse button or touch. The touchDragged event is always {@link Event#handle() handled}.
-             * @see InputEvent */
-            public void touchDragged(InputEvent event, float x, float y, int pointer) {
-//                gallery.zoomedDrag(x, y);
-            }
-        });
-
-
-        gallery.addCaptureListener(doubleClickListener);
+        gallery.addInputListener(doubleClickListener);
         gallery.setSelectable(SelectableType.NONE);
         overview.setSelectable(SelectableType.SINGLE);
 
@@ -285,4 +238,45 @@ public class GalleryView extends Catch_Table {
         overview.setAdapter(overViewAdapter);
         gallery.setAdapter(galleryAdapter);
     }
+
+//    private final InputListener scrollWheelListener = new InputListener() {
+//        public boolean scrolled(InputEvent event, float x, float y, int amount) {
+//            //block scrolling of gallery items and set zoom to act visible item
+//            gallery.scroll(x, y, amount);
+//            return true;
+//        }
+//    };
+//
+//    private final ActorGestureListener gestureListener = new ActorGestureListener() {
+//
+//    };
+
+    DoubleClickListener doubleClickListener = new DoubleClickListener() {
+
+        @Override
+        public boolean scrolled(InputEvent event, float x, float y, int amount) {
+            //block scrolling of gallery items and set zoom to act visible item
+            gallery.scroll(x, y, amount);
+            return true;
+        }
+
+        public void fling(InputEvent event, float velocityX, float velocityY, int button) {
+            gallery.fling(velocityX, velocityY);
+        }
+
+        /** The delta is the difference in stage coordinates since the last pan. */
+        public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
+            //drag image if Zoomed
+            gallery.zoomedDrag(deltaX, deltaY);
+        }
+
+        public void zoom(InputEvent event, float initialDistance, float distance) {
+            log.debug("Gesture =>zoom");
+        }
+
+        public void pinch(InputEvent event, Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+            log.debug("Gesture =>pinch");
+        }
+
+    };
 }
