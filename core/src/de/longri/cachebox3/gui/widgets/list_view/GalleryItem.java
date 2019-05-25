@@ -314,4 +314,8 @@ public class GalleryItem extends ListViewItem {
     public void setInputListener(EventListener inputListener) {
         this.eventListener = inputListener;
     }
+
+    public void resetZoom() {
+        this.zoom = 1.0f;
+    }
 }

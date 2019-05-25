@@ -154,8 +154,13 @@ public class GalleryListView extends ListView {
         this.addListener(inputListener);
     }
 
-
-    public void zoomedSnapIn() {
-
+    @Override
+    public void setScrollPos(float scrollPos, boolean withAnimation) {
+        if (firstVisibleItem != null) {
+            //reset zoomed item
+            firstVisibleItem.resetZoom();
+            setScrollingDisabled(false, this.inputListener);
+        }
+        super.setScrollPos(scrollPos, withAnimation);
     }
 }

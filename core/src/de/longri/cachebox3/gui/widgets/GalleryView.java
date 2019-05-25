@@ -80,10 +80,13 @@ public class GalleryView extends Catch_Table {
         gallery = new GalleryListView(style.galleryListStyle) {
             @Override
             public void snapIn() {
-                super.snapIn();
+
                 // get index of snap item and select at Overview
                 ListViewItemInterface visibleItem = getVisibleItem();
                 if (visibleItem == null) return;
+                //don't snapIn with zoomed image
+                if (((GalleryItem) visibleItem).getZoom() > 1.0) return;
+                super.snapIn();
                 int index = visibleItem.getListIndex();
                 overview.setSelection(index);
                 CB.postAsyncDelayd(300, new NamedRunnable("setSelectedItemVisible") {
@@ -237,8 +240,7 @@ public class GalleryView extends Catch_Table {
         @Override
         public void touchUp(final InputEvent event, final float x, final float y, int pointer, int button) {
             super.touchUp(event, x, y, pointer, button);
-            //snap in
-            gallery.zoomedSnapIn();
+            log.debug("Gesture =>touchUp");
         }
 
         @Override
