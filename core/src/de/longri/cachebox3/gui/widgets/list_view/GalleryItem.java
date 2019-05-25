@@ -225,8 +225,11 @@ public class GalleryItem extends ListViewItem {
         }
 
         if (!panning) {
-            if (true) {
-                if (amountX < 0) {   //todo <== center x Pos
+            if (this.zoom > 1.0f) {
+                if (drwWidth < this.getWidth()) {
+                    amountX = -(getWidth() - drwWidth) / 2.0f;
+                    animating = true;
+                } else if (amountX < 0) {   //todo <== center x Pos
 
                     amountX += (overscrollSpeedMin + (overscrollSpeedMax - overscrollSpeedMin) * -amountX / overscrollDistance)
                             * delta;
@@ -239,9 +242,11 @@ public class GalleryItem extends ListViewItem {
                     if (amountX < maxX) scrollX(maxX);
                     animating = true;
                 }
-            }
-            if (true) {
-                if (amountY < 0) { //todo  <== center Y Pos
+
+                if (drwHeight < this.getHeight()) {// center image
+                    amountY = -(getHeight() - drwHeight) / 2.0f;
+                    animating = true;
+                } else if (amountY < 0) { //todo  <== center Y Pos
                     amountY += (overscrollSpeedMin + (overscrollSpeedMax - overscrollSpeedMin) * -amountY / overscrollDistance)
                             * delta;
                     if (amountY > 0) scrollY(0);
@@ -258,6 +263,16 @@ public class GalleryItem extends ListViewItem {
             if (animating) {
                 Stage stage = getStage();
                 if (stage != null && stage.getActionsRequestRendering()) Gdx.graphics.requestRendering();
+            }
+        } else {
+            //center
+            if (this.zoom > 1.0f) {
+                if (drwWidth < this.getWidth()) {
+                    amountX = -(getWidth() - drwWidth) / 2.0f;
+                }
+                if (drwHeight < this.getHeight()) {
+                    amountY = -(getHeight() - drwHeight) / 2.0f;
+                }
             }
         }
     }
