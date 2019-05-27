@@ -261,14 +261,26 @@ public class GalleryView extends Catch_Table {
             gallery.zoomedDrag(deltaX, deltaY);
         }
 
+        float lastDistance;
+
         @Override
         public void zoom(InputEvent event, float initialDistance, float distance) {
-            log.debug("Gesture =>zoom");
+//            log.debug("Gesture =>zoom initdistance:{}  distance:{}", initialDistance, distance);
+//            distance = (distance - initialDistance);
+//            distance = distance - lastDistance;
+//            gallery.zoom(0, 0, distance);
+//            lastDistance = distance;
+//            log.debug("zoom distance {}", distance / 100);
         }
 
         @Override
         public void pinch(InputEvent event, Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-            log.debug("Gesture =>pinch");
+
+            float distance1X = initialPointer1.x - pointer1.x;
+            float distance2X = initialPointer2.x - pointer2.x;
+
+            log.debug("pinch distance1{}  distance2{}", distance1X, distance2X);
+
         }
 
     };
