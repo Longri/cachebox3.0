@@ -26,8 +26,8 @@ import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.isAccessTokenInvalid;
-import static de.longri.cachebox3.apis.GroundspeakAPI.isPremiumMember;
+import static de.longri.cachebox3.apis.GroundspeakAPI.*;
+import static de.longri.cachebox3.settings.Settings.GcLogin;
 
 /**
  * Created by Longri on 11.04.2017.
@@ -38,7 +38,9 @@ public class ApiButton extends IconButton {
     private final ApiButtonStyle style;
     private final ClickListener clickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
-            generateKey();
+            // generateKey is called twice, here and in Settings_Activity
+            // todo remove one of these ( I remove this one)
+            // generateKey();
         }
     };
 
@@ -96,7 +98,17 @@ public class ApiButton extends IconButton {
     public void generateKey() {
         log.debug("Create Api Key clicked");
         PlatformConnector.getApiKey(accessToken -> {
-            // todo write token to config db and set Webb
+            // store the encrypted AccessToken in the Config file
+            if (Config.UseTestUrl.getValue()) {
+                Config.AccessTokenForTest.setEncryptedValue(accessToken);
+            } else {
+                Config.AccessToken.setEncryptedValue(accessToken);
+            }
+            setAuthorization();
+            String userNameOfAuthorization = fetchMyUserInfos().username;
+            GcLogin.setValue(userNameOfAuthorization);
+            // Config.AcceptChanges();
+            // refresh settings view
         });
     }
 }

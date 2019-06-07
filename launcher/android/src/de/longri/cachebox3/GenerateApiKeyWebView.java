@@ -36,7 +36,7 @@ public class GenerateApiKeyWebView extends Activity {
     private static boolean pdIsShow = false;
     final String javaScript = "javascript:window.HTMLOUT.showHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');";
     private LinearLayout webViewLayout;
-    private WebView WebControl;
+    private WebView webView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,15 +47,12 @@ public class GenerateApiKeyWebView extends Activity {
         if (Config.OverrideUrl.getValue().equals("")) {
             ShowWebsite(CB_Api.getGcAuthUrl());
         } else {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    String GC_AuthUrl = Config.OverrideUrl.getValue();
-                    if (GC_AuthUrl.equals("")) {
-                        finish();
-                    }
-                    ShowWebsite(GC_AuthUrl);
+            runOnUiThread(() -> {
+                String GC_AuthUrl = Config.OverrideUrl.getValue();
+                if (GC_AuthUrl.equals("")) {
+                    finish();
                 }
+                ShowWebsite(GC_AuthUrl);
             });
 
         }
@@ -73,32 +70,29 @@ public class GenerateApiKeyWebView extends Activity {
     private void ShowWebsite(String GC_AuthUrl) {
         // Initial new VebView Instanz
 
-        WebControl = (WebView) this.findViewById(R.id.gal_WebView);
+        webView = findViewById(R.id.gal_WebView);
 
         webViewLayout.removeAllViews();
-        if (WebControl != null) {
-            WebControl.destroy();
-            WebControl = null;
+        if (webView != null) {
+            webView.destroy();
+            webView = null;
         }
 
         // Instanz new WebView
-        WebControl = new WebView(AndroidLauncher.androidLauncher, null, android.R.attr.webViewStyle);
-        WebControl.requestFocus(View.FOCUS_DOWN);
-        WebControl.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                    case MotionEvent.ACTION_UP:
-                        if (!v.hasFocus()) {
-                            v.requestFocus();
-                        }
-                        break;
-                }
-                return false;
+        webView = new WebView(AndroidLauncher.androidLauncher, null, android.R.attr.webViewStyle);
+        webView.requestFocus(View.FOCUS_DOWN);
+        webView.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_UP:
+                    if (!v.hasFocus()) {
+                        v.requestFocus();
+                    }
+                    break;
             }
+            return false;
         });
-        webViewLayout.addView(WebControl);
+        webViewLayout.addView(webView);
 
         if (!pdIsShow) {
             this.runOnUiThread(new Runnable() {
@@ -112,20 +106,16 @@ public class GenerateApiKeyWebView extends Activity {
 
         }
 
-        WebControl.setWebViewClient(new WebViewClient() {
+        webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                GenerateApiKeyWebView.this.setTitle("Loading...");
+                setTitle("Loading...");
 
                 if (!pdIsShow) {
-                    GenerateApiKeyWebView.this.runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            pd = ProgressDialog.show(GenerateApiKeyWebView.this, "", "Loading....", true);
-                            pdIsShow = true;
-                        }
+                    runOnUiThread(() -> {
+                        pd = ProgressDialog.show(GenerateApiKeyWebView.this, "", "Loading....", true);
+                        pdIsShow = true;
                     });
 
                 }
@@ -141,21 +131,20 @@ public class GenerateApiKeyWebView extends Activity {
             @Override
             public void onPageFinished(WebView view, String url) {
 
-                GenerateApiKeyWebView.this.setTitle(R.string.app_name);
+                setTitle(R.string.app_name);
                 if (pd != null)
                     pd.dismiss();
                 pdIsShow = false;
 
                 if (url.toLowerCase().contains("oauth_verifier=") && (url.toLowerCase().contains("oauth_token="))) {
-                    WebControl.loadUrl(javaScript);
+                    webView.loadUrl(javaScript);
                 } else
                     super.onPageFinished(view, url);
             }
 
         });
 
-        WebSettings settings = WebControl.getSettings();
-
+        WebSettings settings = webView.getSettings();
         // settings.setPluginsEnabled(true);
         settings.setJavaScriptEnabled(true);
         // settings.setJavaScriptCanOpenWindowsAutomatically(true);
@@ -163,29 +152,27 @@ public class GenerateApiKeyWebView extends Activity {
         // webView.setWebChromeClient(new WebChromeClient());
 
 
-        {//delete cookies and cache
-            WebControl.clearCache(true);
-            WebControl.clearHistory();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                Log.d("GcApiLogin", "Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
-                CookieManager.getInstance().removeAllCookies(null);
-                CookieManager.getInstance().flush();
-            } else {
-                Log.d("GcApiLogin", "Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
-                CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(this);
-                cookieSyncMngr.startSync();
-                CookieManager cookieManager = CookieManager.getInstance();
-                cookieManager.removeAllCookie();
-                cookieManager.removeSessionCookie();
-                cookieSyncMngr.stopSync();
-                cookieSyncMngr.sync();
-            }
+        //delete cookies and cache
+        webView.clearCache(true);
+        webView.clearHistory();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Log.d("GcApiLogin", "Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        } else {
+            Log.d("GcApiLogin", "Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+            CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(this);
+            cookieSyncMngr.startSync();
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeAllCookie();
+            cookieManager.removeSessionCookie();
+            cookieSyncMngr.stopSync();
+            cookieSyncMngr.sync();
         }
 
-        WebControl.getSettings().setJavaScriptEnabled(true);
-        WebControl.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
 
-        WebControl.loadUrl(GC_AuthUrl);
+        webView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
+        webView.loadUrl(GC_AuthUrl);
     }
 
     class MyJavaScriptInterface {
@@ -203,7 +190,7 @@ public class GenerateApiKeyWebView extends Activity {
             // zwischen pos und pos2 sollte ein gültiges AccessToken sein!!!
             final String accessToken = html.substring(pos + search.length(), pos2);
             AndroidPlatformConnector.platformConnector.callBack.callBack(accessToken);
-            GenerateApiKeyWebView.this.finish();
+            finish();
         }
     }
 }

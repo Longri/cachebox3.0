@@ -130,14 +130,11 @@ public class AndroidPlatformConnector extends PlatformConnector {
     @Override
     protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
 
-        this.application.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (descriptionView == null)
-                    descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
-                callBack.callBack(descriptionView);
+        this.application.runOnUiThread(() -> {
+            if (descriptionView == null)
+                descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
+            callBack.callBack(descriptionView);
 
-            }
         });
     }
 
