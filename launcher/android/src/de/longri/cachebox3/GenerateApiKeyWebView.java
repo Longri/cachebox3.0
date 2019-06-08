@@ -95,13 +95,9 @@ public class GenerateApiKeyWebView extends Activity {
         webViewLayout.addView(webView);
 
         if (!pdIsShow) {
-            this.runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    pd = ProgressDialog.show(GenerateApiKeyWebView.this, "", "Loading....", true);
-                    pdIsShow = true;
-                }
+            this.runOnUiThread(() -> {
+                pd = ProgressDialog.show(GenerateApiKeyWebView.this, "", "Loading....", true);
+                pdIsShow = true;
             });
 
         }
@@ -124,7 +120,20 @@ public class GenerateApiKeyWebView extends Activity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("http:"))
+                    url = url.replace("http:", "https:");
                 view.loadUrl(url);
+                return true;
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    String url = request.getUrl().toString();
+                    if (url.startsWith("http:"))
+                        url = url.replace("http:", "https:");
+                    view.loadUrl(url);
+                }
                 return true;
             }
 
