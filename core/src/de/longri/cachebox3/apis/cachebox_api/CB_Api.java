@@ -17,7 +17,6 @@
 package de.longri.cachebox3.apis.cachebox_api;
 
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.utils.http.Response;
 import de.longri.cachebox3.utils.http.Webb;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -35,20 +34,21 @@ public class CB_Api {
         try {
             String url, resultKey;
             if (Config.UseTestUrl.getValue()) {
-                url = "http://team-cachebox.de/CB_API/index.php?get=url_ACB_Staging";
+                url = "https://longri.de/CB_API/index.php?get=url_ACB_Staging";
                 resultKey = "GcAuth_ACB_Staging";
                 // {"GcAuth_ACB_Staging":"http:\/\/staging.oauth.Team-Cachebox.de\/index.php?Version=ACB "}
             } else {
-                url = "http://team-cachebox.de/CB_API/index.php?get=url_ACB";
+                url = "https://longri.de/CB_API/index.php?get=url_ACB";
                 resultKey = "GcAuth_ACB";
                 // {"GcAuth_ACB":"http:\/\/oauth.Team-Cachebox.de\/index.php?Version=ACB "}
             }
             Webb httpClient = Webb.create();
-            Response<JSONObject> response = httpClient
-                    .post(url)
+            JSONObject response = httpClient
+                    .get(url)
                     .ensureSuccess()
-                    .asJsonObject();
-            return response.getBody().getString(resultKey).trim();
+                    .asJsonObject()
+                    .getBody();
+            return response.getString(resultKey).trim();
         } catch (Exception ex) {
             log.error("getGcAuthUrl", ex);
             return "";
