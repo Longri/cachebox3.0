@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
+import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -164,13 +165,41 @@ public class GalleryListView extends ListView {
         super.setScrollPos(scrollPos, withAnimation);
     }
 
-    public void zoom(float x, float y, float distance) {
+    public void zoom(float x, float y, float pixelChange) {
+
         if (firstVisibleItem == null) {
             snapIn();
         }
 
+
+        float actZoom = firstVisibleItem.getZoom();
+
+        if (actZoom == 1) firstVisibleItem.clamp();
+
+        float itemWidth = firstVisibleItem.drwWidth;
+        float itemHeight = firstVisibleItem.drwHeight;
+
+        if (itemWidth <= 0 || itemHeight <= 0) {
+            itemWidth = firstVisibleItem.getImgWidth();
+            itemHeight = firstVisibleItem.getImgHeight();
+        }
+
+        if (itemWidth <= 0 || itemHeight <= 0) {
+            log.debug("don't zoom a item with unvisible size of width:{}, height:{}", itemWidth, itemHeight);
+            return;
+        }
+
+        // calculate zoom from Pixel change
+        log.debug("itemWidth:{} , itemHeight:{}", itemWidth, itemHeight);
+        float hypotenuseAlt = MathUtils.hypo(itemWidth, itemHeight);
+        float hypotenuseNew = hypotenuseAlt + pixelChange;
+
+
+        float zoom = (1 - (hypotenuseAlt / hypotenuseNew)) * CB.getScalefactor() * actZoom * 3f;
+        log.debug("a:{} , c:{} ,n:{}, z:{}", hypotenuseAlt, pixelChange, hypotenuseNew, zoom);
+
         //set zoom to Item
-        firstVisibleItem.zoom(x, y, distance);
+        firstVisibleItem.zoom(x, y, zoom);
 
         //disable scrolling
         if (firstVisibleItem.getZoom() > 1.0f) {

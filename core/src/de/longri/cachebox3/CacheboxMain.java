@@ -76,8 +76,8 @@ public class CacheboxMain extends ApplicationAdapter {
         INCLUDE_LIST.add(GalleryView.class.getName());
 //        INCLUDE_LIST.add(ListViewItemLinkedList.class.getName());
 //        INCLUDE_LIST.add(ListView.class.getName());
-//        INCLUDE_LIST.add(GalleryListView.class.getName());
-//        INCLUDE_LIST.add(GalleryItem.class.getName());
+        INCLUDE_LIST.add(GalleryListView.class.getName());
+        INCLUDE_LIST.add(GalleryItem.class.getName());
 
 //        INCLUDE_LIST.add(ViewManager.class.getName());
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");

@@ -237,10 +237,16 @@ public class GalleryView extends Catch_Table {
     }
 
     DoubleClickListener doubleClickListener = new DoubleClickListener() {
+
+        float lastDistance = 0;
+
         @Override
         public void touchUp(final InputEvent event, final float x, final float y, int pointer, int button) {
             super.touchUp(event, x, y, pointer, button);
             log.debug("Gesture =>touchUp");
+
+            //reset pinch distance
+            lastDistance = 0;
         }
 
         @Override
@@ -261,16 +267,18 @@ public class GalleryView extends Catch_Table {
             gallery.zoomedDrag(deltaX, deltaY);
         }
 
-        float lastDistance;
-
         @Override
         public void zoom(InputEvent event, float initialDistance, float distance) {
-//            log.debug("Gesture =>zoom initdistance:{}  distance:{}", initialDistance, distance);
-//            distance = (distance - initialDistance);
-//            distance = distance - lastDistance;
-//            gallery.zoom(0, 0, distance);
-//            lastDistance = distance;
-//            log.debug("zoom distance {}", distance / 100);
+            //ignore pointer1
+            if (event.getPointer() > 0) return;
+
+            float newDistance = (distance - initialDistance);
+            float distanceChange = newDistance - lastDistance;
+
+            gallery.zoom(0, 0, distanceChange);
+
+            log.debug("n: {}, c: {}, e: {}", newDistance, distanceChange, event.getType());
+            lastDistance = newDistance;
         }
 
         @Override
@@ -279,7 +287,7 @@ public class GalleryView extends Catch_Table {
             float distance1X = initialPointer1.x - pointer1.x;
             float distance2X = initialPointer2.x - pointer2.x;
 
-            log.debug("pinch distance1{}  distance2{}", distance1X, distance2X);
+//            log.debug("pinch distance1{}  distance2{}", distance1X, distance2X);
 
         }
 

@@ -109,6 +109,7 @@ public class ApiButton extends IconButton {
             GcLogin.setValue(userNameOfAuthorization);
             // Config.AcceptChanges();
             // refresh settings view
+            setIcon();
         });
     }
 }

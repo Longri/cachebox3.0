@@ -150,6 +150,8 @@ public class GalleryItem extends ListViewItem {
         maxX = (drwWidth - this.getWidth());
         maxY = (drwHeight - this.getHeight());
         if (this.zoom > 1.0f) clamp();
+
+        log.debug("zoomed size w:{} , h:{}", drwWidth, drwHeight);
     }
 
     public float getZoom() {
@@ -277,7 +279,7 @@ public class GalleryItem extends ListViewItem {
         }
     }
 
-    void clamp() {
+    public void clamp() {
         //maybe center
         float drwWidth = this.iloader.getSpriteWidth() * proportion * zoom;
         float drwHeight = this.iloader.getSpriteHeight() * proportion * zoom;
@@ -317,5 +319,13 @@ public class GalleryItem extends ListViewItem {
 
     public void resetZoom() {
         this.zoom = 1.0f;
+    }
+
+    public float getImgWidth() {
+        return iloader.getSpriteWidth();
+    }
+
+    public float getImgHeight() {
+        return iloader.getSpriteHeight();
     }
 }
