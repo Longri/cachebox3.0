@@ -54,14 +54,18 @@ public class Utils {
      */
     public static Pixmap getPixmapFromBitmap(Bitmap bitmap) {
         byte[] encodedData = bitmap.getPngEncodedData();
-        return new Pixmap(encodedData, 0, encodedData.length);
+        Pixmap ret = new Pixmap(encodedData, 0, encodedData.length);
+        encodedData = new byte[0];
+        System.gc();
+        return ret;
     }
 
     public static TextureRegion getTextureRegion(InputStream inputStream) {
         try {
             Bitmap svgBitmap = PlatformConnector.getSvg("", inputStream, PlatformConnector.SvgScaleType.DPI_SCALED, 1f);
-            return new TextureRegion(new Texture(getPixmapFromBitmap(svgBitmap)));
-
+            TextureRegion ret = new TextureRegion(new Texture(getPixmapFromBitmap(svgBitmap)));
+            svgBitmap.recycle();
+            return ret;
         } catch (IOException e) {
             log.error("getTextureRegion", e);
         }

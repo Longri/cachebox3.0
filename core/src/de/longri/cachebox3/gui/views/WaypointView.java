@@ -55,6 +55,7 @@ import de.longri.cachebox3.types.MutableWaypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
+import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,6 +92,10 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             return true;
         }
     };
+
+    public WaypointView(BitStore reader) {
+        super(reader);
+    }
 
     public WaypointView() {
         super("WaypointView");

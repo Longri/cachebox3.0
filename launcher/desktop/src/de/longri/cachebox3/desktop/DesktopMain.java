@@ -71,8 +71,6 @@ public class DesktopMain extends CacheboxMain {
     @Override
     public void render() {
         super.render();
-
-
         if (pause) {
             //Draw Black Overlay
             Batch batch = CB.stageManager.getBatch();
@@ -85,6 +83,5 @@ public class DesktopMain extends CacheboxMain {
             batch.end();
 
         }
-
     }
 }
