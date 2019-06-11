@@ -82,6 +82,7 @@ public class Window extends Catch_Table implements Disposable {
     protected NamedStage showingStage;
 
     public void show() {
+        if (CB.stageManager == null) return;
         clearActions();
         pack();
 
