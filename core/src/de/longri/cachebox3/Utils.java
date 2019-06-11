@@ -18,14 +18,11 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.utils.converter.Base64;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -54,15 +51,19 @@ public class Utils {
      */
     public static Pixmap getPixmapFromBitmap(Bitmap bitmap) {
         byte[] encodedData = bitmap.getPngEncodedData();
-        return new Pixmap(encodedData, 0, encodedData.length);
+        Pixmap ret = new Pixmap(encodedData, 0, encodedData.length);
+        encodedData = new byte[0];
+        System.gc();
+        return ret;
     }
 
 
     public static TextureRegion getTextureRegion(InputStream inputStream) {
         try {
             Bitmap svgBitmap = PlatformConnector.getSvg("", inputStream, PlatformConnector.SvgScaleType.DPI_SCALED, 1f);
-            return new TextureRegion(new Texture(getPixmapFromBitmap(svgBitmap)));
-
+            TextureRegion ret = new TextureRegion(new Texture(getPixmapFromBitmap(svgBitmap)));
+            svgBitmap.recycle();
+            return ret;
         } catch (IOException e) {
             log.error("getTextureRegion", e);
         }

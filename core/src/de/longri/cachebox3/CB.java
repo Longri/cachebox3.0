@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import com.kotcrab.vis.ui.VisUI;
@@ -59,6 +60,7 @@ import org.oscim.theme.VtmThemes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.NumberFormat;
 import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -623,6 +625,22 @@ public class CB {
 
     public float getGlobalScaleFactor() {
         return globalScale;
+    }
+
+    static private Runtime runtime;
+    static private StringBuilder memoryStringBuilder = new StringBuilder();
+    static private NumberFormat format = NumberFormat.getInstance();
+
+    public static String getMemoryUsage() {
+        if (runtime == null) runtime = Runtime.getRuntime();
+        long allocatedMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+
+        memoryStringBuilder.clear();
+        memoryStringBuilder.append("used: ");
+        memoryStringBuilder.append(format.format((allocatedMemory - freeMemory) / 1048576));
+        memoryStringBuilder.append(" kb");
+        return memoryStringBuilder.toString();
     }
 }
 
