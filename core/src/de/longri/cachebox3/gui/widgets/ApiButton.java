@@ -15,19 +15,16 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.skin.styles.ApiButtonStyle;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.*;
-import static de.longri.cachebox3.settings.Settings.GcLogin;
+import static de.longri.cachebox3.apis.GroundspeakAPI.isAccessTokenInvalid;
+import static de.longri.cachebox3.apis.GroundspeakAPI.isPremiumMember;
 
 /**
  * Created by Longri on 11.04.2017.
@@ -36,18 +33,10 @@ public class ApiButton extends IconButton {
 
     private final Logger log = LoggerFactory.getLogger(ApiButton.class);
     private final ApiButtonStyle style;
-    private final ClickListener clickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            // generateKey is called twice, here and in Settings_Activity
-            // todo remove one of these ( I remove this one)
-            // generateKey();
-        }
-    };
 
     public ApiButton() {
         super("");
         this.getLabel().setText(Translation.get("getApiKey"));
-        this.addListener(clickListener);
         this.style = VisUI.getSkin().get("ApiButton", ApiButtonStyle.class);
         TextButtonStyle btnStyle = new VisTextButtonStyle();
         btnStyle.up = style.up;
@@ -93,22 +82,5 @@ public class ApiButton extends IconButton {
             image.setDrawable(style.unchecked);
         }
 
-    }
-
-    public void generateKey() {
-        log.debug("Create Api Key clicked");
-        PlatformConnector.getApiKey(accessToken -> {
-            // store the encrypted AccessToken in the Config file
-            if (Config.UseTestUrl.getValue()) {
-                Config.AccessTokenForTest.setEncryptedValue(accessToken);
-            } else {
-                Config.AccessToken.setEncryptedValue(accessToken);
-            }
-            setAuthorization();
-            String userNameOfAuthorization = fetchMyUserInfos().username;
-            GcLogin.setValue(userNameOfAuthorization);
-            // Config.AcceptChanges();
-            // refresh settings view
-        });
     }
 }
