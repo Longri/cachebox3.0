@@ -45,6 +45,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.NetUtils;
+import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,6 +147,10 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             return false;
         }
     };
+
+    public DescriptionView(BitStore reader) {
+        super(reader);
+    }
 
     public DescriptionView() {
         super("DescriptionView");

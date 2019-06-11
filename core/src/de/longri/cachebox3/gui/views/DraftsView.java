@@ -104,6 +104,11 @@ public class DraftsView extends AbstractView {
         }
     };
 
+
+    public DraftsView(BitStore reader) {
+        super(reader);
+    }
+
     public DraftsView() {
         super("DraftsView");
         create();
