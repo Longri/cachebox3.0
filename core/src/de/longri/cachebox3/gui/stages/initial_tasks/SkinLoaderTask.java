@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.stages.initial_tasks;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
@@ -57,6 +58,22 @@ public final class SkinLoaderTask extends AbstractInitTask {
 
     @Override
     public void runnable() {
+
+        if (Gdx.app.getType() == Application.ApplicationType.iOS) {
+            // if exist a "reset.tmp" file on iTunes shared folder
+            // delete tmp skin files
+            String sharedFilerPath = Settings.MapPackFolder.getDefaultValue();
+            FileHandle sharedFolderResetTmp = new FileHandle(sharedFilerPath).child("reset.tmp");
+            if (sharedFolderResetTmp.exists() && !sharedFolderResetTmp.isDirectory()) {
+                log.debug("found \"reset.tmp\" file, delete temp skinFolder");
+                sharedFolderResetTmp.delete();
+                FileHandle tempFolder = new FileHandle(CB.WorkPath).child("user/temp");
+                if (!tempFolder.deleteDirectory()) {
+                    log.warn("can't delete temp folder");
+                }
+            }
+        }
+
 
         //initial sizes
         DevicesSizes ui = new DevicesSizes();

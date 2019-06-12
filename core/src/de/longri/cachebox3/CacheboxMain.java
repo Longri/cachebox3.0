@@ -37,6 +37,7 @@ import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.stages.initial_tasks.SkinLoaderTask;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.DescriptionView;
 import de.longri.cachebox3.settings.Config;
@@ -71,7 +72,7 @@ public class CacheboxMain extends ApplicationAdapter {
         INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
         INCLUDE_LIST.add(DescriptionView.class.getName());
         INCLUDE_LIST.add(SvgSkinUtil.class.getName());
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
+        INCLUDE_LIST.add(SkinLoaderTask.class.getName());
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");

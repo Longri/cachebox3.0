@@ -28,6 +28,7 @@ import org.oscim.ios.backend.IOS_RealSvgBitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
 import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
+import org.robovm.apple.coregraphics.CGBitmapContext;
 import org.robovm.apple.coregraphics.CGRect;
 import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.dispatch.DispatchQueue;
@@ -61,7 +62,43 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected String _createThumb(String path, int scaledWidth, String thumbPrefix) {
-        throw new NotImplementedException("Create Thump is not implemented");
+        try {
+            String storePath = Utils.getDirectoryName(path) + "/";
+            String storeName = Utils.getFileNameWithoutExtension(path);
+            String storeExt = Utils.getFileExtension(path).toLowerCase();
+            String thumbPath = storePath + thumbPrefix + Utils.THUMB + storeName + "." + storeExt;
+
+            FileHandle thumbFile = new FileHandle(thumbPath);
+
+            if (thumbFile.exists())
+                return thumbPath;
+
+            java.io.File orgFile = new java.io.File(path);
+            if (orgFile.exists()) {
+                IOS_RealSvgBitmap ori = new IOS_RealSvgBitmap(path);
+                if (ori == null) {
+                    orgFile.delete();
+                    return null;
+                }
+                float scalefactor = (float) scaledWidth / (float) ori.getWidth();
+
+                if (scalefactor >= 1)
+                    return path; // don't need a thumb, return original path
+
+                int newHeight = (int) (ori.getHeight() * scalefactor);
+                int newWidth = (int) (ori.getWidth() * scalefactor);
+
+                ori.scaleTo(newWidth, newHeight);
+                ori.store(thumbFile);
+                ori.recycle();
+
+                return thumbPath;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
     }
 
     @Override

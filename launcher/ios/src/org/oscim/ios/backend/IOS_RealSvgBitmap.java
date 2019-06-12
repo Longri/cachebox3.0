@@ -34,7 +34,7 @@ import java.io.InputStreamReader;
 /**
  * Created by Longri on 19.07.16.
  */
-public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implements GetName,StoreSvg {
+public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implements GetName, StoreSvg {
 
     public String name;
 
@@ -105,10 +105,22 @@ public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implement
     }
 
 
+    public IOS_RealSvgBitmap(String fileName) throws IOException {
+        super(fileName);
+    }
+
+
     @Override
     public void store(FileHandle child) {
         UIImage uiImage = new UIImage(cgBitmapContext.toImage());
         NSData data = uiImage.toPNGData();
-        data.write(child.file(),true);
+        data.write(child.file(), true);
+        data.release();
+        uiImage.dispose();
+    }
+
+    @Override
+    public void scaleTo(int width, int height) {
+        // TODO
     }
 }
