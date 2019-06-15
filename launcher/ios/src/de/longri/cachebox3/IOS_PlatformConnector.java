@@ -22,16 +22,14 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.NamedRunnable;
-import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.ios.backend.IOS_RealSvgBitmap;
 import org.robovm.apple.avfoundation.AVCaptureDevice;
 import org.robovm.apple.avfoundation.AVCaptureTorchMode;
 import org.robovm.apple.avfoundation.AVMediaType;
-import org.robovm.apple.coregraphics.CGBitmapContext;
-import org.robovm.apple.coregraphics.CGRect;
-import org.robovm.apple.coregraphics.CGSize;
+import org.robovm.apple.coregraphics.*;
 import org.robovm.apple.dispatch.DispatchQueue;
+import org.robovm.apple.foundation.NSData;
 import org.robovm.apple.foundation.NSErrorException;
 import org.robovm.apple.foundation.NSURL;
 import org.robovm.apple.uikit.*;
@@ -39,13 +37,14 @@ import org.robovm.objc.block.VoidBlock1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.robovm.apple.dispatch.DispatchQueue.PRIORITY_BACKGROUND;
-import static org.robovm.apple.dispatch.DispatchQueue.PRIORITY_DEFAULT;
 
 /**
  * Created by Longri on 17.07.16.
@@ -62,43 +61,91 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     protected String _createThumb(String path, int scaledWidth, String thumbPrefix) {
-        try {
-            String storePath = Utils.getDirectoryName(path) + "/";
-            String storeName = Utils.getFileNameWithoutExtension(path);
-            String storeExt = Utils.getFileExtension(path).toLowerCase();
-            String thumbPath = storePath + thumbPrefix + Utils.THUMB + storeName + "." + storeExt;
 
-            FileHandle thumbFile = new FileHandle(thumbPath);
+        String ret[] = new String[1];
+        AtomicBoolean WAIT = new AtomicBoolean(true);
+        CB.postOnMainThread(new NamedRunnable("create thump") {
+            @Override
+            public void run() {
+                try {
+                    String storePath = Utils.getDirectoryName(path) + "/";
+                    String storeName = Utils.getFileNameWithoutExtension(path);
+                    String storeExt = Utils.getFileExtension(path).toLowerCase();
+                    String thumbPath = storePath + thumbPrefix + Utils.THUMB + storeName + "." + storeExt;
 
-            if (thumbFile.exists())
-                return thumbPath;
+                    FileHandle thumbFile = new FileHandle(thumbPath);
 
-            java.io.File orgFile = new java.io.File(path);
-            if (orgFile.exists()) {
-                IOS_RealSvgBitmap ori = new IOS_RealSvgBitmap(path);
-                if (ori == null) {
-                    orgFile.delete();
-                    return null;
+                    if (thumbFile.exists()) {
+                        ret[0] = path;
+                        WAIT.set(false);
+                        return;
+                    }
+                    FileHandle orgFile = new FileHandle(path);
+
+                    if (!orgFile.exists() || orgFile.isDirectory()) {
+                        ret[0] = path;
+                        WAIT.set(false);
+                        return;
+                    }
+                    NSData data = new NSData(toByteArray(orgFile.read()));
+                    CGImage image = new UIImage(data).getCGImage();
+
+
+                    float scalefactor = (float) scaledWidth / (float) image.getWidth();
+
+                    if (scalefactor >= 1) {
+                        // don't need a thumb, return original path
+                        ret[0] = path;
+                        WAIT.set(false);
+                        return;
+                    }
+                    int newHeight = (int) (image.getHeight() * scalefactor);
+                    int newWidth = (int) (image.getWidth() * scalefactor);
+
+                    CGBitmapContext cgBitmapContext = CGBitmapContext.create(newWidth, newHeight, 8, 4 * newWidth,
+                            CGColorSpace.createDeviceRGB(), CGImageAlphaInfo.PremultipliedLast);
+
+                    cgBitmapContext.drawImage(new CGRect(0, 0, newWidth, newHeight), image);
+                    image.dispose();
+
+                    // store
+                    UIImage uiImage = new UIImage(cgBitmapContext.toImage());
+                    NSData storeData = uiImage.toPNGData();
+                    storeData.write(thumbFile.file(), true);
+                    storeData.release();
+                    uiImage.dispose();
+                    cgBitmapContext.close();
+
+                    ret[0] = thumbFile.file().getAbsolutePath();
+                    WAIT.set(false);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ret[0] = null;
+                    WAIT.set(false);
                 }
-                float scalefactor = (float) scaledWidth / (float) ori.getWidth();
-
-                if (scalefactor >= 1)
-                    return path; // don't need a thumb, return original path
-
-                int newHeight = (int) (ori.getHeight() * scalefactor);
-                int newWidth = (int) (ori.getWidth() * scalefactor);
-
-                ori.scaleTo(newWidth, newHeight);
-                ori.store(thumbFile);
-                ori.recycle();
-
-                return thumbPath;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        });
+        CB.wait(WAIT);
+        log.debug("ready create thumb");
+        return ret[0];
+    }
+
+    /**
+     * Returns a ByteArray from InputStream
+     *
+     * @param in InputStream
+     * @return
+     * @throws IOException
+     */
+    static byte[] toByteArray(InputStream in) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buff = new byte[8192];
+        while (in.read(buff) > 0) {
+            out.write(buff);
         }
-        return null;
+        out.close();
+        return out.toByteArray();
     }
 
     @Override
