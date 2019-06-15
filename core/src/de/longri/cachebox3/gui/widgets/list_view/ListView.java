@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
@@ -38,6 +39,7 @@ import de.longri.cachebox3.utils.CB_RectF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.HORIZONTAL;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
 import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
@@ -49,11 +51,11 @@ public class ListView extends Catch_WidgetGroup {
 
     private final static Logger log = LoggerFactory.getLogger(ListView.class);
 
-    private final ListViewType type;
+    protected final ListViewType type;
     private final boolean canDisposeItems;
     final VisScrollPane scrollPane;
     public final ListViewStyle style;
-    private final ListViewItemLinkedList itemList;
+    protected final ListViewItemLinkedList itemList;
     private final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
     private final Array<ListViewItemInterface> selectedItemList = new Array<>();
     final CB_RectF tempClickRec = new CB_RectF();
@@ -66,6 +68,7 @@ public class ListView extends Catch_WidgetGroup {
     private long frameID = Long.MIN_VALUE;
     private VisLabel emptyLabel;
     CircularProgressWidget circPro;
+    private boolean block = false;
 
 
     public ListView(ListViewType type) {
@@ -76,12 +79,14 @@ public class ListView extends Catch_WidgetGroup {
         this(type, style, true);
     }
 
-
     public ListView(ListViewType type, boolean canDisposeItems) {
         this(type, VisUI.getSkin().get("default", ListViewStyle.class), canDisposeItems);
     }
 
     public ListView(ListViewType type, ListViewStyle style, boolean canDisposeItems) {
+
+        if (style == null) throw new RuntimeException("style can't be NULL");
+
         this.canDisposeItems = canDisposeItems;
         this.type = type;
         this.style = style;
@@ -148,17 +153,6 @@ public class ListView extends Catch_WidgetGroup {
                 return actor;
             }
 
-            @Override
-            public void setScrollX(float scroll) {
-                super.setScrollX(scroll);
-
-            }
-
-            @Override
-            public void setScrollY(float scroll) {
-                super.setScrollY(scroll);
-
-            }
 
             @Override
             public void sizeChanged() {
@@ -177,73 +171,124 @@ public class ListView extends Catch_WidgetGroup {
                     itemList.setHeight(height);
                 }
             }
+
+            /** If currently scrolling by tracking a touch down, stop scrolling. */
+            public void cancel() {
+                super.cancel();
+                log.debug("ScrollPane.cancel()");
+            }
         };
-        scrollPane.addCaptureListener(new ClickLongClickListener() {
-            @Override
-            public boolean clicked(InputEvent event, float x, float y) {
-                log.debug("ListViewItem clicked on x:{}  y:{}", x, y);
-                SnapshotArray<Actor> childs = ((ListViewItemLinkedList) scrollPane.getChildren().get(0)).getChildren();
-
-                for (int i = 0, n = childs.size; i < n; i++) {
-                    ListViewItem item = (ListViewItem) childs.get(i);
-                    Vector2 vec = item.localToStageCoordinates(new Vector2());
-                    tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
-                    if (tempClickRec.contains(event.getStageX(), event.getStageY())) {
-
-                        event.setListenerActor(item);
-
-                        // item Clicked
-                        log.debug("ListViewItem {} clicked", i);
-                        Array<EventListener> listeners = item.getListeners();
-                        boolean handeld = false;
-                        for (EventListener listener : listeners) {
-                            if (listener instanceof ClickListener) {
-                                ((ClickListener) listener).clicked(event, x, y);
-                            } else if (listener instanceof ClickLongClickListener) {
-                                if (((ClickLongClickListener) listener).clicked(event, x, y)) {
-                                    event.cancel();
-                                    handeld = true;
-                                }
-                            }
-                        }
-                        return handeld;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public boolean longClicked(Actor actor, float x, float y) {
-                log.debug("ListViewItem longClicked on x:{}  y:{}", x, y);
-                SnapshotArray<Actor> childs = ((ListViewItemLinkedList) scrollPane.getChildren().get(0)).getChildren();
-                for (int i = 0, n = childs.size; i < n; i++) {
-                    ListViewItem item = (ListViewItem) childs.get(i);
-                    Vector2 vec = item.localToStageCoordinates(new Vector2());
-                    tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
-                    if (tempClickRec.contains(x, y)) {
-                        // item Clicked
-                        log.debug("ListViewItem {} LongClicked", i);
-                        Array<EventListener> listeners = item.getListeners();
-                        boolean handeld = false;
-                        for (EventListener listener : listeners) {
-                            if (listener instanceof ClickLongClickListener) {
-                                if (((ClickLongClickListener) listener).longClicked(actor, x, y)) {
-                                    handeld = true;
-                                }
-                            }
-                        }
-                        return handeld;
-                    }
-                }
-                return false;
-            }
-        });
-        scrollPane.setOverscroll(false, true);
+        scrollPane.addCaptureListener(scrollpaneCaptureListener);
+        if (this.type == VERTICAL) {
+            scrollPane.setOverscroll(false, true);
+        } else {
+            scrollPane.setOverscroll(true, false);
+        }
         scrollPane.setFlickScroll(true);
         scrollPane.setVariableSizeKnobs(false);
         scrollPane.setCancelTouchFocus(true);
         scrollPane.setupFadeScrollBars(1f, 0.5f);
 
+    }
+
+    private final ClickLongClickListener scrollpaneCaptureListener = new ClickLongClickListener() {
+        @Override
+        public boolean clicked(InputEvent event, float x, float y) {
+            log.debug("ListViewItem clicked on x:{}  y:{}", x, y);
+            SnapshotArray<Actor> childs = ((ListViewItemLinkedList) scrollPane.getChildren().get(0)).getChildren();
+
+            for (int i = 0, n = childs.size; i < n; i++) {
+                ListViewItem item = (ListViewItem) childs.get(i);
+                Vector2 vec = item.localToStageCoordinates(new Vector2());
+                tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
+                if (tempClickRec.contains(event.getStageX(), event.getStageY())) {
+
+                    event.setListenerActor(item);
+
+                    // item Clicked
+                    log.debug("ListViewItem {} clicked | item => {}", i, item.toString());
+                    Array<EventListener> listeners = item.getListeners();
+                    boolean handeld = false;
+                    for (EventListener listener : listeners) {
+                        if (listener instanceof ClickListener) {
+                            ((ClickListener) listener).clicked(event, x, y);
+                        } else if (listener instanceof ClickLongClickListener) {
+                            if (((ClickLongClickListener) listener).clicked(event, x, y)) {
+                                event.cancel();
+                                handeld = true;
+                            }
+                        }
+                    }
+                    return handeld;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean longClicked(Actor actor, float x, float y) {
+            log.debug("ListViewItem longClicked on x:{}  y:{}", x, y);
+            SnapshotArray<Actor> childs = ((ListViewItemLinkedList) scrollPane.getChildren().get(0)).getChildren();
+            for (int i = 0, n = childs.size; i < n; i++) {
+                ListViewItem item = (ListViewItem) childs.get(i);
+                Vector2 vec = item.localToStageCoordinates(new Vector2());
+                tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
+                if (tempClickRec.contains(x, y)) {
+                    // item Clicked
+                    log.debug("ListViewItem {} LongClicked", i);
+                    Array<EventListener> listeners = item.getListeners();
+                    boolean handeld = false;
+                    for (EventListener listener : listeners) {
+                        if (listener instanceof ClickLongClickListener) {
+                            if (((ClickLongClickListener) listener).longClicked(actor, x, y)) {
+                                handeld = true;
+                            }
+                        }
+                    }
+                    return handeld;
+                }
+            }
+            return false;
+        }
+    };
+
+
+    Array<EventListener> originalCapturelistener = new Array<>();
+    boolean isDisabled = false;
+
+    protected void setScrollingDisabled(boolean value, EventListener inputListener) {
+        if (value) {
+            if (isDisabled) return;
+            isDisabled = true;
+            scrollPane.setScrollingDisabled(true, true);
+
+//            for (EventListener listener : scrollPane.getCaptureListeners()) {
+//                originalCapturelistener.add(listener);
+//            }
+//
+//            for (EventListener listener : originalCapturelistener) {
+//                scrollPane.removeCaptureListener(listener);
+//            }
+//            scrollPane.addCaptureListener(inputListener);
+
+//            scrollPane.setFlickScroll(false);
+        } else {
+            if (!isDisabled) return;
+            isDisabled = false;
+            scrollPane.setScrollingDisabled(this.type == VERTICAL, this.type == HORIZONTAL);
+            scrollPane.setScrollingDisabled(false, false);
+            setScrollPaneBounds();
+//            scrollPane.removeCaptureListener(inputListener);
+//            for (EventListener listener : originalCapturelistener) {
+//                scrollPane.addCaptureListener(listener);
+//            }
+//            for (EventListener listener : scrollPane.getCaptureListeners()) {
+//                originalCapturelistener.removeValue(listener, true);
+//            }
+//            originalCapturelistener.clear();
+//            scrollPane.setFlickScroll(true);
+        }
+        log.debug("isScrollingDisabledX: {} / isScrollingDisabledY:{}", scrollPane.isScrollingDisabledX(), scrollPane.isScrollingDisabledY());
     }
 
     public void setAdapter(ListViewAdapter adapter) {
@@ -317,10 +362,17 @@ public class ListView extends Catch_WidgetGroup {
         }
         float paneYPos = this.backgroundDrawable != null ? this.backgroundDrawable.getTopHeight() : 0;
         float completeSize = itemList.getCompleteSize();
-        if (this.getHeight() > completeSize) {
-            //set on Top
-            paneHeight = completeSize;
-            paneYPos = this.getHeight() - completeSize;
+        if (this.type == VERTICAL) {
+            if (this.getHeight() > completeSize) {
+                //set on Top
+                paneHeight = completeSize;
+                paneYPos = this.getHeight() - completeSize;
+            }
+        } else {
+            if (this.getWidth() > completeSize) {
+                //set on Top
+                paneWidth = completeSize;
+            }
         }
 
         scrollPane.setBounds(this.backgroundDrawable != null ? this.backgroundDrawable.getLeftWidth() : 0, paneYPos,
@@ -481,6 +533,7 @@ public class ListView extends Catch_WidgetGroup {
         try {
             super.act(delta);
         } catch (Exception e) {
+            log.error("act()", e);
         }
 
         if (this.scrollChangedEventListener != null) {
@@ -550,5 +603,10 @@ public class ListView extends Catch_WidgetGroup {
         circPro = new CircularProgressWidget();
         circPro.setProgress(-1);
         this.addActor(circPro);
+    }
+
+    public ListViewItemInterface getListItem(int idx) {
+        if (this.itemList.itemArray == null || this.itemList.itemArray.length <= idx) return null;
+        return this.itemList.itemArray[idx];
     }
 }

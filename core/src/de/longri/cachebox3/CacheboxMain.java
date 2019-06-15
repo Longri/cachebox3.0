@@ -37,6 +37,7 @@ import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.stages.initial_tasks.SkinLoaderTask;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.DescriptionView;
 import de.longri.cachebox3.settings.Config;
@@ -71,7 +72,7 @@ public class CacheboxMain extends ApplicationAdapter {
         INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
         INCLUDE_LIST.add(DescriptionView.class.getName());
         INCLUDE_LIST.add(SvgSkinUtil.class.getName());
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
+        INCLUDE_LIST.add(SkinLoaderTask.class.getName());
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
@@ -97,7 +98,16 @@ public class CacheboxMain extends ApplicationAdapter {
         EXCLUDE_LIST.add(AbstractGpxStreamImporter.class.getName());
 
 
+        // iOS Platform debug includes
+        INCLUDE_LIST.add("org.oscim.ios.backend.IOS_RealSvgBitmap");
+        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
+        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
+        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher");
+        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
+        INCLUDE_LIST.add("de.longri.cachebox3.GenerateApiKeyWebViewController");
+
     }
+
 
     static private final Logger log = LoggerFactory.getLogger(CacheboxMain.class);
     static private final String SAVE_INSTANCE_KEY = "SaveInstanceState";

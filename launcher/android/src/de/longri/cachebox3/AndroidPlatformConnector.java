@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -40,9 +41,9 @@ import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+
+import static de.longri.cachebox3.Utils.THUMB;
 
 /**
  * Created by Longri on 17.07.16.
@@ -64,6 +65,84 @@ public class AndroidPlatformConnector extends PlatformConnector {
         this.flashLight = new AndroidFlashLight(this.context);
     }
 
+    @Override
+    protected String _createThumb(String path, int scaledWidth, String thumbPrefix) {
+        String storePath = Utils.getDirectoryName(path) + "/";
+        String storeName = Utils.getFileNameWithoutExtension(path);
+        String storeExt = Utils.getFileExtension(path).toLowerCase();
+        String ThumbPath = storePath + thumbPrefix + Utils.THUMB + storeName + "." + storeExt;
+
+        java.io.File ThumbFile = new java.io.File(ThumbPath);
+
+        if (ThumbFile.exists())
+            return ThumbPath;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        if (BitmapFactory.decodeFile(path, options) == null) {
+            // seems as if decodeFile always returns null (independant from success)
+            // todo delete a bad original file (Path)
+            // return null;
+            // will now perhaps produce bad thumbs
+        }
+
+        int oriWidth = options.outWidth;
+        int oriHeight = options.outHeight;
+        float scalefactor = (float) scaledWidth / (float) oriWidth;
+
+        if (scalefactor >= 1)
+            return path; // don't need a thumb, return original path
+
+        int newHeight = (int) (oriHeight * scalefactor);
+        int newWidth = (int) (oriWidth * scalefactor);
+
+        final int REQUIRED_WIDTH = newWidth;
+        final int REQUIRED_HIGHT = newHeight;
+        //Find the correct scale value. It should be the power of 2.
+        int scale = 1;
+        while (oriWidth / scale / 2 >= REQUIRED_WIDTH && oriHeight / scale / 2 >= REQUIRED_HIGHT)
+            scale *= 2;
+
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        android.graphics.Bitmap resized = null;
+        try {
+            resized = BitmapFactory.decodeStream(new FileInputStream(path), null, o2);
+        } catch (FileNotFoundException e1) {
+
+            e1.printStackTrace();
+        }
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(ThumbPath);
+            android.graphics.Bitmap.CompressFormat format = android.graphics.Bitmap.CompressFormat.PNG;
+
+            if (storeExt.equals("jpg"))
+                format = android.graphics.Bitmap.CompressFormat.JPEG;
+
+            if (out == null || format == null || resized == null) {
+                return null;
+            }
+            resized.compress(format, 80, out);
+
+            resized.recycle();
+
+            return ThumbPath;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     @Override
     protected boolean _isTorchAvailable() {

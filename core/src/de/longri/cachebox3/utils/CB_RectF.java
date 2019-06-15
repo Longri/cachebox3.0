@@ -43,7 +43,7 @@ public class CB_RectF {
      * [8] = centerPos.x <br>
      * [9] = centerPos.y <br>
      */
-    protected float member[] = new float[]{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    private float[] member = new float[]{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 
     public float getHalfWidth() {
         return member[4];
@@ -97,7 +97,7 @@ public class CB_RectF {
             return;
         member[2] = Width;
         calcCrossCorner();
-        CallRecChanged();
+        callRecChanged();
     }
 
     public void setHeight(float Height) {
@@ -105,7 +105,7 @@ public class CB_RectF {
             return;
         member[3] = Height;
         calcCrossCorner();
-        CallRecChanged();
+        callRecChanged();
     }
 
     public boolean setSize(SizeF Size) {
@@ -127,7 +127,7 @@ public class CB_RectF {
         member[2] = Width;
         member[3] = Height;
         calcCrossCorner();
-        CallRecChanged();
+        callRecChanged();
         return true;
     }
 
@@ -260,7 +260,7 @@ public class CB_RectF {
         }
     }
 
-    public void CallRecChanged() {
+    public void callRecChanged() {
         synchronized (list) {
             if (list == null)
                 return; // is disposed
@@ -306,7 +306,7 @@ public class CB_RectF {
             return;
         this.member[1] = i;
         calcCrossCorner();
-        CallRecChanged();
+        callRecChanged();
     }
 
     public void setX(float i) {
@@ -316,7 +316,7 @@ public class CB_RectF {
             return;
         this.member[0] = i;
         calcCrossCorner();
-        CallRecChanged();
+        callRecChanged();
     }
 
     // /**
@@ -349,13 +349,13 @@ public class CB_RectF {
     // return n + 1;
     // }
 
-    public CB_RectF ScaleCenter(float ScaleFactor) {
-        return ScaleCenter(this, ScaleFactor);
+    public CB_RectF scaleCenter(float scaleFactor) {
+        return scaleCenter(this, scaleFactor);
     }
 
-    public static CB_RectF ScaleCenter(CB_RectF rectangle, float ScaleFactor) {
-        float newWidth = rectangle.getWidth() * ScaleFactor;
-        float newHeight = rectangle.getHeight() * ScaleFactor;
+    public static CB_RectF scaleCenter(CB_RectF rectangle, float scaleFactor) {
+        float newWidth = rectangle.getWidth() * scaleFactor;
+        float newHeight = rectangle.getHeight() * scaleFactor;
         float newX = rectangle.member[0] + ((rectangle.getWidth() - newWidth) / 2);
         float newY = rectangle.member[1] + ((rectangle.getHeight() - newHeight) / 2);
         return new CB_RectF(newX, newY, newWidth, newHeight);
@@ -494,7 +494,7 @@ public class CB_RectF {
         if (this.equals(rec))
             return;
         System.arraycopy(rec.member, 0, this.member, 0, 10);
-        CallRecChanged();
+        callRecChanged();
     }
 
     @Override
@@ -514,7 +514,7 @@ public class CB_RectF {
         this.member[0] = x;
         this.member[1] = y;
         calcCrossCorner();
-        CallRecChanged();
+        callRecChanged();
     }
 
     public float getCenterPosX() {
@@ -540,7 +540,7 @@ public class CB_RectF {
         this.member[2] = width;
         this.member[3] = height;
         calcCrossCorner();
-        CallRecChanged();
+        callRecChanged();
     }
 
     public void dispose() {

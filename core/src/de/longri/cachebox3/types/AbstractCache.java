@@ -126,13 +126,6 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
      */
     public abstract AbstractWaypoint GetStartWaypoint();
 
-    /**
-     * Returns true has the Cache Spoilers else returns false
-     *
-     * @return Boolean
-     */
-    public abstract boolean hasSpoiler();
-
     protected abstract AbstractWaypoint findWaypointByGc(String gc);
 
     public abstract CharSequence getGcCode();

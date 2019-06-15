@@ -15,7 +15,13 @@
  */
 package de.longri.cachebox3.settings;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.settings.types.*;
+import org.oscim.backend.CanvasAdapter;
+import org.oscim.backend.Platform;
+import org.oscim.backend.canvas.Canvas;
 
 import static de.longri.cachebox3.settings.types.SettingCategory.*;
 import static de.longri.cachebox3.settings.types.SettingStoreType.Global;
@@ -31,7 +37,11 @@ import static de.longri.cachebox3.settings.types.SettingUsage.ALL;
 public class Settings_Map extends Settings_Const {
 
     // NORMAL visible
-    public static final SettingFolder MapPackFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("MapPackFolder", Map, NORMAL, "?/repository/maps", Global, ALL, false));
+    public static final SettingFolder MapPackFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("MapPackFolder", Map, NORMAL,
+            Gdx.app.getType() == Application.ApplicationType.iOS ? Gdx.files.getExternalStoragePath() : "?/repository/maps",
+            Global, ALL, false));
+
+
     public static final SettingInt dynamicZoomLevelMax = (SettingInt) settingsList.addSetting(new SettingInt("dynamicZoomLevelMax", CarMode, NORMAL, 15, Global, ACB));
     public static final SettingInt dynamicZoomLevelMin = (SettingInt) settingsList.addSetting(new SettingInt("dynamicZoomLevelMin", CarMode, NORMAL, 14, Global, ACB));
     public static final SettingBool dynamicZoom = (SettingBool) settingsList.addSetting(new SettingBool("dynamicZoom", CarMode, NORMAL, true, Global, ACB));

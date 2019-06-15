@@ -24,13 +24,16 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -39,6 +42,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,6 +69,55 @@ public class DesktopPlatformConnector extends PlatformConnector {
         // is not implemented, do nothing
     }
 
+    @Override
+    protected String _createThumb(String path, int scaledWidth, String thumbPrefix) {
+        try {
+            String storePath = Utils.getDirectoryName(path) + "/";
+            String storeName = Utils.getFileNameWithoutExtension(path);
+            String storeExt = Utils.getFileExtension(path).toLowerCase();
+            String ThumbPath = storePath + thumbPrefix + Utils.THUMB + storeName + "." + storeExt;
+
+            java.io.File ThumbFile = new java.io.File(ThumbPath);
+
+            if (ThumbFile.exists())
+                return ThumbPath;
+
+            java.io.File orgFile = new java.io.File(path);
+            if (orgFile.exists()) {
+                BufferedImage ori = ImageIO.read(orgFile);
+                if (ori == null) {
+                    orgFile.delete();
+                    return null;
+                }
+                float scalefactor = (float) scaledWidth / (float) ori.getWidth();
+
+                if (scalefactor >= 1)
+                    return path; // don't need a thumb, return original path
+
+                int newHeight = (int) (ori.getHeight() * scalefactor);
+                int newWidth = (int) (ori.getWidth() * scalefactor);
+
+                Image scaled = ori.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                BufferedImage img = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+                img.createGraphics().drawImage(scaled, 0, 0, null);
+                ImageIO.write(img, storeExt, ThumbFile);
+
+                img.flush();
+                ori.flush();
+                scaled.flush();
+
+                img = null;
+                ori = null;
+                scaled = null;
+
+                return ThumbPath;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
 
     @Override
     public Bitmap getRealScaledSVG(String name, InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {

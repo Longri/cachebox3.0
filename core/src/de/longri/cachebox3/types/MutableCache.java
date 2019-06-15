@@ -335,11 +335,6 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public boolean hasSpoiler() {
-        return false;
-    }
-
-    @Override
     public int compareTo(AbstractCache c2) {
         return 0;
     }

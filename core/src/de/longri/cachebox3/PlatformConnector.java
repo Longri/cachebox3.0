@@ -40,6 +40,12 @@ public abstract class PlatformConnector {
         return platformConnector._isTorchAvailable();
     }
 
+    public static String createThumb(String path, int scaledWidth, String thumbPrefix) {
+        return platformConnector._createThumb(path, scaledWidth, thumbPrefix);
+    }
+
+    protected abstract String _createThumb(String path, int scaledWidth, String thumbPrefix);
+
     protected abstract boolean _isTorchAvailable();
 
     public static boolean isTorchOn() {
@@ -119,7 +125,6 @@ public abstract class PlatformConnector {
 
     public abstract Bitmap getRealScaledSVG(String name, InputStream stream,
                                             SvgScaleType scaleType, float scaleValue) throws IOException;
-
 
 
     public static FileHandle getSandboxFileHandle(String fileName) {

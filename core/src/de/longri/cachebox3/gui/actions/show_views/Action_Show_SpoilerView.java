@@ -50,8 +50,8 @@ public class Action_Show_SpoilerView extends Abstract_Action_ShowView {
     public Drawable getIcon() {
         boolean hasSpoiler = CB.selectedCachehasSpoiler();
         if (hasSpoiler)
-            return CB.getSkin().getMenuIcon.todo; // CB.getSkin().getMenuIcon.imagesIcon;
+            return CB.getSkin().getMenuIcon.imagesIcon;
         else
-            return CB.getSkin().getMenuIcon.todo; // CB.getSkin().getMenuIcon.imagesIconOff; // todo create off icon
+            return CB.getSkin().getMenuIcon.imagesIconOff;
     }
 }

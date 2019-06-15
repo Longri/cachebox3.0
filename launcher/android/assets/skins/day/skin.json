@@ -1124,6 +1124,10 @@
       "path": "svg/hu.svg",
       "scale": 0.08
     },
+    "image_off": {
+      "path": "svg/image_off.svg",
+      "scale": 0.195
+    },
     "images-icon": {
       "path": "svg/images-icon.svg",
       "scale": 0.195
@@ -1778,7 +1782,7 @@
     },
     "search": {
       "path": "svg/search.svg",
-      "scale": 1.48
+      "scale": 0.22
     },
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
@@ -2493,6 +2497,24 @@
       "background": "transparent_drawable",
       "vScroll": "slider_drawable",
       "vScrollKnob": "sliderKnob"
+    },
+    "spoilerGallery": {
+      "firstItem": "NULL_DRAWABLE",
+      "secondItem": "NULL_DRAWABLE",
+      "selectedItem": "NULL_DRAWABLE",
+      "pad": 1,
+      "emptyFont": "coordinateValueFont",
+      "emptyFontColor": "settings_default_value_font_color",
+      "background": "NULL_DRAWABLE"
+    },
+    "spoilerOverview": {
+      "firstItem": "listrec_first_drawable",
+      "secondItem": "listrec_first_drawable",
+      "selectedItem": "listrec_selected_drawable",
+      "pad": 1,
+      "emptyFont": "coordinateValueFont",
+      "emptyFontColor": "settings_default_value_font_color",
+      "background": "NULL_DRAWABLE"
     }
   },
   "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
@@ -2866,6 +2888,7 @@
       "solverIcon": "solver-icon",
       "solver2Icon": "solver-icon-2",
       "imagesIcon": "images-icon",
+      "imagesIconOff": "image_off",
       "cb": "cb",
       "tbListIcon": "tbListIcon",
       "waypointListIcon": "waypointListIcon",
@@ -3378,6 +3401,14 @@
     "default": {
       "backgroundColor": "background_color",
       "foregroundColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
+    "default": {
+     "overviewListStyle" : "spoilerOverview",
+      "galleryListStyle" : "spoilerGallery",
+      "spoilerNameFont": "AboutInfo",
+      "spoilerNameFontColor": "font_color"
     }
   }
 }

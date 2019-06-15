@@ -134,7 +134,7 @@ public class StringTranslationHandler extends AbstractTranslationHandler {
         readDefFile(FilePath);
 
         {// read refFile (EN)
-            String FileName = Utils.GetFileName(FilePath);
+            String FileName = Utils.getFileName(FilePath);
             int pos = FilePath.lastIndexOf("lang") + 4;
             String LangFileName = FilePath.substring(0, pos) + "/en-GB/" + FileName;
             readRefFile(LangFileName);

@@ -23,7 +23,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.building.utilities.Alignment;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.utils.CB_RectF;
 import de.longri.cachebox3.utils.ImageLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,55 +38,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Image extends CB_View_Base {
     final static Logger log = LoggerFactory.getLogger(Image.class);
     private ImageLoader imageLoader;
+    private float prefWidth, prefHeight;
 
     private Color mColor = new Color(1, 1, 1, 1);
     private Alignment hAlignment = Alignment.CENTER;
 
-    public Image(float x, float y, float width, float height, String name, boolean reziseHeight) {
-        super(x, y, width, height, name);
-        this.imageLoader = new ImageLoader();
-        this.imageLoader.reziseHeight = reziseHeight;
-        if (this.imageLoader.reziseHeight && this.imageLoader.getResizeListener() == null) {
-            this.imageLoader.setResizeListener(new ImageLoader.resize() {
-
-                @Override
-                public void sizechanged(float newWidth, float newHeight) {
-                    Image.this.setSize(newWidth, newHeight);
-                }
-            }, this.getWidth());
-        }
-
-    }
-
-    public Image(CB_RectF rec, String name, boolean reziseHeight) {
-        super(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight(), name);
-        this.imageLoader = new ImageLoader();
-        this.imageLoader.reziseHeight = reziseHeight;
-        if (this.imageLoader.reziseHeight && this.imageLoader.getResizeListener() == null) {
-            this.imageLoader.setResizeListener(new ImageLoader.resize() {
-
-                @Override
-                public void sizechanged(float newWidth, float newHeight) {
-                    Image.this.setSize(newWidth, newHeight);
-                }
-            }, this.getWidth());
-        }
-    }
-
-    public Image(ImageLoader img, CB_RectF rec, String name, boolean reziseHeight) {
-        super(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight(), name);
+    public Image(ImageLoader img, String name, boolean reziseHeight) {
+        super(name);
         this.imageLoader = img;
+        if (imageLoader == null) return;// in case of JUnitTest
         this.imageLoader.reziseHeight = reziseHeight;
         if (this.imageLoader.reziseHeight && this.imageLoader.getResizeListener() == null) {
-            this.imageLoader.setResizeListener(new ImageLoader.resize() {
-
-                @Override
-                public void sizechanged(float newWidth, float newHeight) {
-                    Image.this.setSize(newWidth, newHeight);
-                }
-            }, this.getWidth());
+            this.imageLoader.setResizeListener((newWidth, newHeight) -> {
+                Image.this.prefWidth = newWidth;
+                Image.this.prefHeight = newHeight;
+                Image.this.invalidateHierarchy();
+                Image.this.layout();
+            }, 0);
         }
-
     }
 
     @Override
@@ -95,13 +63,12 @@ public class Image extends CB_View_Base {
         super.onShow();
         if (imageLoader != null) {
             if (imageLoader.getAnimDelay() > 0) {
-                //GL.that.addRenderView(this, imageLoader.getAnimDelay());
                 isAsRenderViewRegisted.set(true);
             }
         }
     }
 
-    AtomicBoolean isAsRenderViewRegisted = new AtomicBoolean(false);
+    private AtomicBoolean isAsRenderViewRegisted = new AtomicBoolean(false);
 
     @Override
     public void onHide() {
@@ -157,19 +124,22 @@ public class Image extends CB_View_Base {
                     drawY = (getHeight() - drawHeight) / 2;
                 }
 
+
+                drawX += this.getX();
+                drawY += this.getY();
+
                 imageLoader.getDrawable(Gdx.graphics.getDeltaTime()).draw(batch, drawX, drawY, drawwidth, drawHeight);
 
                 if (!isAsRenderViewRegisted.get() && imageLoader.getAnimDelay() > 0) {
-                    //GL.that.addRenderView(this, imageLoader.getAnimDelay());
                     isAsRenderViewRegisted.set(true);
                 }
             } else if (imageLoader.inLoad & !imageLoader.ImageLoadError) {
-               //TODO add work animation
+                //TODO add work animation
             } else if (imageLoader.ImageLoadError) {
 
-                    //set error image
-                    //Fixme use style
-                    this.setSprite(CB.getSkin().getSprite("error"), false);
+                //set error image
+                //Fixme use style
+                this.setSprite(CB.getSkin().getSprite("error"), false);
 
             }
         } catch (Exception e) {
@@ -215,14 +185,6 @@ public class Image extends CB_View_Base {
             imageLoader.setImageURL(iconUrl);
     }
 
-//    public void clearImage() {
-//        if (imageLoader != null)
-//            imageLoader.clearImage();
-//        mColor = new Color(1, 1, 1, 1);
-//        mScale = 1;
-//        setOriginCenter();
-//    }
-
     public void setHAlignment(Alignment alignment) {
         this.hAlignment = alignment;
     }
@@ -237,4 +199,15 @@ public class Image extends CB_View_Base {
             return null;
         return imageLoader.getDrawable(Gdx.graphics.getDeltaTime());
     }
+
+    @Override
+    public float getPrefWidth() {
+        return this.prefWidth;
+    }
+
+    @Override
+    public float getPrefHeight() {
+        return this.prefHeight;
+    }
+
 }

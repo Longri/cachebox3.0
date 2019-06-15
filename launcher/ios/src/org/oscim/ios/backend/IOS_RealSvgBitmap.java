@@ -20,8 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.GetName;
 import com.badlogic.gdx.scenes.scene2d.ui.StoreSvg;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import org.robovm.apple.coregraphics.CGRect;
-import org.robovm.apple.coregraphics.CGSize;
+import de.longri.cachebox3.utils.NamedRunnable;
+import org.robovm.apple.coregraphics.*;
 import org.robovm.apple.foundation.NSData;
 import org.robovm.apple.uikit.UIImage;
 import svg.SVGRenderer;
@@ -30,11 +30,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 19.07.16.
  */
-public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implements GetName,StoreSvg {
+public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implements GetName, StoreSvg {
 
     public String name;
 
@@ -105,10 +106,50 @@ public class IOS_RealSvgBitmap extends org.oscim.ios.backend.IosBitmap implement
     }
 
 
+    public IOS_RealSvgBitmap(String fileName) throws IOException {
+        super(fileName);
+    }
+
+
+    private final AtomicBoolean storeAtWork = new AtomicBoolean(false);
+
     @Override
     public void store(FileHandle child) {
-        UIImage uiImage = new UIImage(cgBitmapContext.toImage());
-        NSData data = uiImage.toPNGData();
-        data.write(child.file(),true);
+        storeAtWork.set(true);
+        log.debug("Store Bitmap");
+        CB.postOnMainThread(new NamedRunnable("store Image") {
+            @Override
+            public void run() {
+                try {
+                    UIImage uiImage = new UIImage(cgBitmapContext.toImage());
+                    NSData data = uiImage.toPNGData();
+                    data.write(child.file(), true);
+                    data.release();
+                    uiImage.dispose();
+                } catch (Exception e) {
+                    log.error("Store bitmap", e);
+                } finally {
+                    storeAtWork.set(false);
+                }
+            }
+        });
     }
+
+    @Override
+    public void recycle() {
+        // wait for store?
+        if(storeAtWork.get())
+            log.debug("wait for Bmp recycle because storing is running");
+        while (storeAtWork.get()) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+               log.error("error with wait");
+            }
+        }
+        log.debug("recycle Bmp");
+        super.recycle();
+    }
+
+
 }
