@@ -277,7 +277,7 @@ public class CB {
     }
 
     public static boolean selectedCachehasSpoiler() {
-        return false; //TODO
+        return EventHandler.actCacheHasSpoiler();
     }
 
     public static void requestRendering() {
