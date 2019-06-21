@@ -45,7 +45,7 @@ public abstract class ProgressCancelRunnable implements Runnable {
         return isCanceled.get();
     }
 
-    protected void setProgress(float progressValue, CharSequence msg) {
+    public void setProgress(float progressValue, CharSequence msg) {
         this.progressValue = progressValue;
         this.progressMsg = msg;
     }

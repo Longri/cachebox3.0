@@ -20,16 +20,23 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.ImportProgressChangedEvent;
+import de.longri.cachebox3.events.ImportProgressChangedListener;
+import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.GalleryViewStyle;
 import de.longri.cachebox3.gui.widgets.GalleryView;
+import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.sqlite.Import.ImporterProgress;
 import de.longri.cachebox3.sqlite.dao.ImageDAO;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.ImageEntry;
+import de.longri.cachebox3.utils.ICancel;
 import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.GrabImagesSelectedByCache;
 
@@ -76,7 +83,7 @@ public class SpoilerView extends AbstractView {
         if (cacheLoaded()) return;
 
         Array<ImageEntry> spoilerResources = EventHandler.getSelectedCacheSpoiler();
-
+        galleryView.clearGallery();
         if (EventHandler.actCacheHasSpoiler()) {
             ImageDAO imageDAO = new ImageDAO();
             Array<ImageEntry> dbImages = imageDAO.getImagesForCache(actCache.getGcCode());
@@ -153,12 +160,10 @@ public class SpoilerView extends AbstractView {
         Menu contextMenu = new Menu("SpoilerViewContextMenuTitle");
 
         contextMenu.addMenuItem("reloadSpoiler", CB.getSkin().getMenuIcon.importIcon, () -> {
-            // todo inform the user about progress and give him the possibility to abort the image downloads
-            GrabImagesSelectedByCache(new ImporterProgress(), true, false, EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(), "", "", false);
+            downloadSpoiler(false);
         });
         contextMenu.addMenuItem("LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages, () -> {
-            // todo inform the user about progress and give him the possibility to abort the image downloads
-            GrabImagesSelectedByCache(new ImporterProgress(), true, false, EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(), "", "", true);
+            downloadSpoiler(true);
         });
 
 
@@ -187,6 +192,52 @@ public class SpoilerView extends AbstractView {
          */
 
         return contextMenu;
+    }
+
+    private void downloadSpoiler(final boolean withLogs) {
+
+
+        final ProgressCancelRunnable progressRunnable = new ProgressCancelRunnable() {
+
+            final ProgressCancelRunnable pr = this;
+
+            final ImportProgressChangedListener progressChangedListener = new ImportProgressChangedListener() {
+                @Override
+                public void progressChanged(ImportProgressChangedEvent event) {
+                    pr.setProgress(event.progress.progress, event.progress.msg);
+                }
+            };
+            AtomicBoolean atomicCanceld = new AtomicBoolean(false);
+            ICancel iCancel = new ICancel() {
+                @Override
+                public boolean cancel() {
+                    return atomicCanceld.get();
+                }
+            };
+
+            @Override
+            public void canceled() {
+                atomicCanceld.set(true);
+            }
+
+            @Override
+            public void run() {
+
+                EventHandler.add(progressChangedListener);
+                GrabImagesSelectedByCache(new ImporterProgress(), iCancel, true, false,
+                        EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(),
+                        "", "", withLogs);
+
+                EventHandler.remove(progressChangedListener);
+                forceReload = true;
+                EventHandler.forceReloadSpoiler();
+            }
+        };
+
+
+        CancelProgressDialog cancelProgressDialog = new CancelProgressDialog("name", "Title", progressRunnable);
+        cancelProgressDialog.show();
+
     }
 
     private static String removeHashFromLabel(String label) {

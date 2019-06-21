@@ -24,6 +24,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.ImageEntry;
+import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NetUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -260,7 +261,7 @@ public class DescriptionImageGrabber {
         return images;
     }
 
-    public static int GrabImagesSelectedByCache(ImporterProgress ip, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String description, String url, boolean withLogImages) {
+    public static void GrabImagesSelectedByCache(ImporterProgress ip, ICancel iCancel, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String description, String url, boolean withLogImages) {
         boolean imageLoadError = false;
 
         if (!descriptionImagesUpdated) {
@@ -269,23 +270,23 @@ public class DescriptionImageGrabber {
 
             Array<URI> imgUris = GetImageUris(description, url);
 
-            for (URI uri : imgUris) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    return 0;
-                }
+            for (URI uri  : imgUris) {
+                ImporterProgress.Step step = new ImporterProgress.Step("importImages", 1.0f);
+                ip.addStep(step);
+            }
 
-                if (BreakawayImportThread.isCanceled())
-                    return 0;
+
+            if (iCancel != null && iCancel.cancel()) return;
+
+            for (URI uri : imgUris) {
+                if (iCancel != null && iCancel.cancel()) return;
 
                 String local = BuildDescriptionImageFilename(gcCode, uri);
 
-                ip.ProgressChangeMsg("importImages", Translation.get("DescriptionImageImportForGC") + gcCode + Translation.get("ImageDownloadFrom") + uri);
+                ip.ProgressInkrement("importImages", Translation.get("DescriptionImageImportForGC") + gcCode + Translation.get("ImageDownloadFrom") + uri, false);
 
                 // direkt download
                 for (int j = 0; j < 1 /* && !parent.Cancel */; j++) {
-                    // todo replace NetUtils.download
                     if (NetUtils.download(uri.toString(), local)) {
                         // Next image
                         DeleteMissingImageInformation(local);
@@ -315,33 +316,39 @@ public class DescriptionImageGrabber {
             for (FileHandle file : files)
                 allSpoilers.add(file.name());
             FileHandle[] filesLocal = getFilesInDirectory(Config.SpoilerFolderLocal.getValue(), gcCode);
+
+
             for (FileHandle file : filesLocal)
                 allSpoilers.add(file.name());
 
             {
+
+
+                if (iCancel != null && iCancel.cancel()) return;
                 ip.ProgressChangeMsg("importImages", Translation.get("SpoilerImageImportForGC") + gcCode);
 
                 // todo always take from database. They are not downloaded yet
                 // todo else don't write them to database on fetch/update cache
                 Array<ImageEntry> imageEntries = downloadImageListForGeocache(gcCode, withLogImages);
                 if (APIError != OK) {
-                    return ERROR;
+                    return;
                 }
 
                 for (ImageEntry imageEntry : imageEntries) {
+                    ImporterProgress.Step step = new ImporterProgress.Step("importImages", 1.0f);
+                    ip.addStep(step);
+                }
 
-                    try {// for cancel/interupt Thread
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        return 0;
-                    }
 
-                    if (BreakawayImportThread.isCanceled())
-                        return 0;
+                if (iCancel != null && iCancel.cancel()) return;
+
+                for (ImageEntry imageEntry : imageEntries) {
+
+                    if (iCancel != null && iCancel.cancel()) return;
 
                     String uri = imageEntry.ImageUrl;
 
-                    ip.ProgressChangeMsg("importImages", Translation.get("SpoilerImageImportForGC") + gcCode + Translation.get("ImageDownloadFrom") + uri);
+                    ip.ProgressInkrement("importImages", Translation.get("SpoilerImageImportForGC") + gcCode + Translation.get("ImageDownloadFrom") + uri, false);
 
                     imageEntry = BuildAdditionalImageFilenameHashNew(gcCode, imageEntry);
                     if (imageEntry != null) {
@@ -356,7 +363,6 @@ public class DescriptionImageGrabber {
                         }
 
                         for (int j = 0; j < 1; j++) {
-                            // todo replace NetUtils.download
                             if (NetUtils.download(imageEntry.ImageUrl, imageEntry.LocalPath)) {
                                 // Next image
                                 DeleteMissingImageInformation(imageEntry.LocalPath);
@@ -400,7 +406,7 @@ public class DescriptionImageGrabber {
             }
             log.debug("GrabImagesSelectedByCache done");
         }
-        return 0;
+        return;
     }
 
     private static FileHandle[] getFilesInDirectory(String path, final String GcCode) {
