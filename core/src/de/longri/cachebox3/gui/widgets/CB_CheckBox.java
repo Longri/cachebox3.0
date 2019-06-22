@@ -20,16 +20,16 @@ import com.kotcrab.vis.ui.widget.VisCheckBox;
 /**
  * Created by Longri on 30.10.2017.
  */
-public class CharSequenceCheckBox extends VisCheckBox {
+public class CB_CheckBox extends VisCheckBox {
 
     private final static String EMPTY = "";
 
-    public CharSequenceCheckBox(CharSequence text) {
+    public CB_CheckBox(CharSequence text) {
         super(EMPTY);
         getLabel().setText(text);
     }
 
-    public CharSequenceCheckBox(CharSequence text, String styleName) {
+    public CB_CheckBox(CharSequence text, String styleName) {
         super(EMPTY, styleName);
         getLabel().setText(text);
     }

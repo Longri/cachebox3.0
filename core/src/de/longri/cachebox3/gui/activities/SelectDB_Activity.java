@@ -32,7 +32,7 @@ import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
@@ -66,10 +66,10 @@ public class SelectDB_Activity extends ActivityBase {
     private int autoStartTime = 10;
     private int autoStartCounter = 0;
     private String DBPath;
-    private CharSequenceButton bNew;
-    private CharSequenceButton bSelect;
-    private CharSequenceButton bCancel;
-    private CharSequenceButton bAutostart;
+    private CB_Button bNew;
+    private CB_Button bSelect;
+    private CB_Button bCancel;
+    private CB_Button bAutostart;
     private ListView lvFiles;
     TimerTask timerTask = new TimerTask() {
         @Override
@@ -114,10 +114,10 @@ public class SelectDB_Activity extends ActivityBase {
         this.addActor(lvFiles);
 
 
-        bNew = new CharSequenceButton(Translation.get("NewDB"));
-        bSelect = new CharSequenceButton(Translation.get("confirm"));
-        bCancel = new CharSequenceButton(Translation.get("cancel"));
-        bAutostart = new CharSequenceButton("");
+        bNew = new CB_Button(Translation.get("NewDB"));
+        bSelect = new CB_Button(Translation.get("confirm"));
+        bCancel = new CB_Button(Translation.get("cancel"));
+        bAutostart = new CB_Button("");
 
         this.addActor(bSelect);
         this.addActor(bNew);

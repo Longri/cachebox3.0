@@ -65,10 +65,11 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
         contentTable.add(versionLabel).center();
         contentTable.row();
 
-        Label.LabelStyle style = null;
+        Label.LabelStyle style;
         try {
             style = VisUI.getSkin().get("AboutViewVersionInfoStyle", Label.LabelStyle.class);
         } catch (Exception e) {
+            style = null;
         }
         VisLabel versionInfoLabel = new VisLabel("(" + BuildInfo.getBranch() + " " + BuildInfo.getBuildDate() +
                 " " + BuildInfo.getSHA() + ")", style == null ? VisUI.getSkin().get(Label.LabelStyle.class) : style);
@@ -76,10 +77,11 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
         contentTable.add(versionInfoLabel).center();
         contentTable.row();
 
-        Label.LabelStyle aboutStyle = null;
+        Label.LabelStyle aboutStyle;
         try {
             aboutStyle = VisUI.getSkin().get("AboutSmall", Label.LabelStyle.class);
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            aboutStyle = null;
         }
 
         VisLabel aboutLabel1 = new VisLabel(aboutMsg1, aboutStyle == null ? VisUI.getSkin().get(Label.LabelStyle.class) : aboutStyle);

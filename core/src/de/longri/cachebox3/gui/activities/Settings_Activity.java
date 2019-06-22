@@ -46,7 +46,7 @@ import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.ApiButton;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.FloatControl;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
@@ -84,7 +84,7 @@ public class Settings_Activity extends ActivityBase {
         }
     };
     private Label.LabelStyle nameStyle, descStyle, defaultValueStyle, valueStyle;
-    private CharSequenceButton btnOk, btnCancel, btnMenu;
+    private CB_Button btnOk, btnCancel, btnMenu;
     private float itemWidth;
     private Array<WidgetGroup> listViews = new Array<>();
     private Array<CharSequence> listViewsNames = new Array<>();
@@ -126,9 +126,9 @@ public class Settings_Activity extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new CharSequenceButton(Translation.get("save"));
-        btnMenu = new CharSequenceButton("...");
-        btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        btnOk = new CB_Button(Translation.get("save"));
+        btnMenu = new CB_Button("...");
+        btnCancel = new CB_Button(Translation.get("cancel"));
 
         this.addActor(btnOk);
         this.addActor(btnMenu);

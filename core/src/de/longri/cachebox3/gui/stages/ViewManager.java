@@ -279,7 +279,7 @@ public class ViewManager extends NamedStage
         navButton.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
         // navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left)); not implemented, obsolete?! ACB2 removed
         navButton.addAction(new ActionButton(action_show_trackListView, false, GestureDirection.Left));
-        // navButton.addAction(new ActionButton(); // "MapDownload",null,()->{}); //todo ISSUE (#113 Add Map download) MapDownload.INSTANCE.show();
+        navButton.addAction(new ActionButton(new Action_MapDownload(), false)); // "MapDownload",null,()->{}); //todo ISSUE (#113 Add Map download) MapDownload.INSTANCE.show();
 
 
 //

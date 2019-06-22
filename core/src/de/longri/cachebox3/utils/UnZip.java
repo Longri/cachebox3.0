@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 /**
@@ -47,6 +46,9 @@ public class UnZip {
         return Gdx.files.absolute(resultPath);
     }
 
+    public String extractFolder(String zipFile) throws IOException {
+        return extractFolder(zipFile, false);
+    }
 
     /**
      * Extract the given ZIP-File
@@ -55,7 +57,7 @@ public class UnZip {
      * @return Extracted Folder Path as String
      * @throws IOException with IO error
      */
-    public String extractFolder(String zipFile) throws IOException {
+    public String extractFolder(String zipFile, boolean here) throws IOException {
         log.debug("extract => " + zipFile);
         int BUFFER = 2048;
         File file = new File(zipFile);
@@ -63,7 +65,12 @@ public class UnZip {
         ZipFile zip = new ZipFile(file.getAbsolutePath());
         String newPath = zipFile.substring(0, zipFile.length() - 4);
 
-        new File(newPath).mkdir();
+        if (here) {
+            newPath = file.getParent();
+        }
+        else {
+            new File(newPath).mkdir();
+        }
         Enumeration<?> zipFileEntries = zip.entries();
 
         // Process each entry

@@ -21,11 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.UnitFormatter;
 
@@ -35,7 +33,7 @@ import de.longri.cachebox3.utils.UnitFormatter;
 public class HintDialog extends ButtonDialog {
     private final CharSequence hintFromDB;
     private final VisLabel hintLabel;
-    private final CharSequenceButton encodeButton;
+    private final CB_Button encodeButton;
     private boolean encoded = false;
 
     public HintDialog() {
@@ -49,9 +47,9 @@ public class HintDialog extends ButtonDialog {
         hintLabel.setWrap(true);
 
         SnapshotArray<Actor> childs = this.buttonTable.getChildren();
-        encodeButton = ((CharSequenceButton) childs.get(0));
+        encodeButton = ((CB_Button) childs.get(0));
         encodeButton.setText(Translation.get("decode"));
-        ((CharSequenceButton) childs.get(1)).setText(Translation.get("close"));
+        ((CB_Button) childs.get(1)).setText(Translation.get("close"));
         result(BUTTON_POSITIVE);
     }
 

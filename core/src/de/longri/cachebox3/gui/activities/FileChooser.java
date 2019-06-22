@@ -31,8 +31,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
-import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
@@ -62,7 +61,7 @@ public class FileChooser extends ActivityBase {
         void selected(FileHandle fileHandle);
     }
 
-    private CharSequenceButton btnOk, btnCancel;
+    private CB_Button btnOk, btnCancel;
     private FileHandle actDir;
     private FileChooserStyle fileChooserStyle;
     private FileFilter actFilter;
@@ -170,8 +169,8 @@ public class FileChooser extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new CharSequenceButton(Translation.get("select"));
-        btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        btnOk = new CB_Button(Translation.get("select"));
+        btnCancel = new CB_Button(Translation.get("cancel"));
 
         this.addActor(btnOk);
         this.addActor(btnCancel);

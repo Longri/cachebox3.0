@@ -5,6 +5,7 @@ dependencies {
     implementation "org.slf4j:slf4j-api:$slf4jVersion"
     implementation fileTree(dir: 'libs', include: ['json-20180813.jar'])
     implementation fileTree(dir: 'libs', include: ['libPP-jar-0.9.0-SNAPSHOT.jar'])
+    implementation fileTree(dir: 'libs', include: ['sjxp-2.2.jar'])
 
     // libgdx
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"

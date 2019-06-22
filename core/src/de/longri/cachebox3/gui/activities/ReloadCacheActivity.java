@@ -38,8 +38,8 @@ import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.Cache3DAO;
 import de.longri.cachebox3.sqlite.dao.LogDAO;
@@ -59,7 +59,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(ReloadCacheActivity.class);
 
-    private final CharSequenceButton bCancel;
+    private final CB_Button bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;
     private final Image workAnimation;
@@ -78,7 +78,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
     public ReloadCacheActivity() {
         super("UpdateStatusAndOthers");
-        bCancel = new CharSequenceButton(Translation.get("cancel"));
+        bCancel = new CB_Button(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("ReloadCacheAPI"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());

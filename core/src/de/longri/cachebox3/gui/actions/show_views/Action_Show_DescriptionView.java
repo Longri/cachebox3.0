@@ -29,8 +29,6 @@ public class Action_Show_DescriptionView extends Abstract_Action_ShowView {
         super(DescriptionView.class, IMPLEMENTED, "Description", MenuID.AID_SHOW_DESCRIPTION);
     }
 
-
-
     @Override
     public boolean isActVisible() {
         return CB.viewmanager.getActView() instanceof DescriptionView;

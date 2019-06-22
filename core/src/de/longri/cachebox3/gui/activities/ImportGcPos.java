@@ -39,9 +39,9 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
+import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.CB_CheckBox;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.CoordinateGPS;
@@ -71,11 +71,11 @@ public class ImportGcPos extends BlockGpsActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(ImportGcPos.class);
 
-    private final CharSequenceButton bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
+    private final CB_Button bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
     private final VisLabel lblTitle, lblRadius, lblRadiusUnit, lblCaches, lblWaypoints, lblLogs, lblImages;
     private final Image gsLogo;
     private final CoordinateButton coordBtn;
-    private final CharSequenceCheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
+    private final CB_CheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
     private final VisTextArea textAreaRadius;
     private Coordinate actSearchPos;
     private boolean importRuns = false;
@@ -92,8 +92,8 @@ public class ImportGcPos extends BlockGpsActivityBase {
 
     public ImportGcPos() {
         super("searchOverPosActivity");
-        bOK = new CharSequenceButton(Translation.get("import"));
-        bCancel = new CharSequenceButton(Translation.get("cancel"));
+        bOK = new CB_Button(Translation.get("import"));
+        bCancel = new CB_Button(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("importCachesOverPosition"));
         lblRadius = new VisLabel(Translation.get("Radius"));
@@ -103,14 +103,14 @@ public class ImportGcPos extends BlockGpsActivityBase {
         lblImages = new VisLabel("Imported Images: 0");
         textAreaRadius = new VisTextArea("default");
         lblRadiusUnit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
-        btnMinus = new CharSequenceButton("-");
-        btnPlus = new CharSequenceButton("+");
-        checkBoxOnlyAvailable = new CharSequenceCheckBox(Translation.get("SearchOnlyAvailable"));
-        checkBoxExcludeHides = new CharSequenceCheckBox(Translation.get("SearchWithoutOwns"));
-        checkBoxExcludeFounds = new CharSequenceCheckBox(Translation.get("SearchWithoutFounds"));
+        btnMinus = new CB_Button("-");
+        btnPlus = new CB_Button("+");
+        checkBoxOnlyAvailable = new CB_CheckBox(Translation.get("SearchOnlyAvailable"));
+        checkBoxExcludeHides = new CB_CheckBox(Translation.get("SearchWithoutOwns"));
+        checkBoxExcludeFounds = new CB_CheckBox(Translation.get("SearchWithoutFounds"));
         coordBtn = new CoordinateButton(EventHandler.getMyPosition());
-        tglBtnGPS = new CharSequenceButton(Translation.get("FromGps"), "toggle");
-        tglBtnMap = new CharSequenceButton(Translation.get("FromMap"), "toggle");
+        tglBtnGPS = new CB_Button(Translation.get("FromGps"), "toggle");
+        tglBtnMap = new CB_Button(Translation.get("FromMap"), "toggle");
 
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);

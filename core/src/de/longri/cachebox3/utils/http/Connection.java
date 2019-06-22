@@ -148,6 +148,7 @@ public class Connection {
             @Override
             public void failed(Throwable t) {
                 log.error("Request failed", t);
+                responseMessage = t.toString(); // + t.getMessage();
                 WAIT.set(false);
             }
 
@@ -175,7 +176,12 @@ public class Connection {
     }
 
     public String getResponseMessage() {
-        return httpResponse.getHeader(null);
+        if (statusCode == -1) {
+            return responseMessage;
+        }
+        else {
+            return httpResponse.getHeader(null);
+        }
     }
 
     public  <T> void parseErrorResponse(Class<T> clazz, Response<T> response, InputStream responseBodyStream)

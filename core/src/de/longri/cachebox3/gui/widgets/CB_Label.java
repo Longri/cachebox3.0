@@ -40,6 +40,10 @@ public class CB_Label extends VisLabel {
         super(text, alignment);
     }
 
+    public CB_Label(CharSequence name) {
+        super(name);
+    }
+
     public void draw (Batch batch, float parentAlpha) {
         try {
             super.draw(batch,parentAlpha);

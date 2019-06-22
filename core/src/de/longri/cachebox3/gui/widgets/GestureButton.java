@@ -69,7 +69,6 @@ public class GestureButton extends Button {
         this.hasContextMenu = hasContextMenu;
     }
 
-
     public GestureButton(String styleName, ViewManager viewManager) {
         style = VisUI.getSkin().get(styleName, GestureButtonStyle.class);
         style.checked = style.select;

@@ -30,9 +30,12 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
 import de.longri.cachebox3.gui.skin.styles.IconsStyle;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_Label;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.list_view.*;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.translation.Translation;
 
 /**
@@ -320,7 +323,7 @@ public class ButtonDialog extends Window {
     }
 
     private void button(CharSequence text, float buttonWidth, Object object) {
-        CharSequenceButton button = new CharSequenceButton(text);
+        CB_Button button = new CB_Button(text);
         buttonTable.add(button).width(buttonWidth);
         values.put(button, object);
     }

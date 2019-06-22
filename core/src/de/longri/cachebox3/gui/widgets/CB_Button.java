@@ -20,23 +20,23 @@ import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButt
 /**
  * Created by Longri on 27.10.2017.
  */
-public class CharSequenceButton extends Catch_VisTextButton {
+public class CB_Button extends Catch_VisTextButton {
 
     private final static String EMPTY = "";
 
-    public CharSequenceButton(CharSequence text) {
+    public CB_Button(CharSequence text) {
         super(EMPTY);
         getLabel().setText(text);
         setSize(getPrefWidth(), getPrefHeight());
     }
 
-    public CharSequenceButton(CharSequence text, String styleName) {
+    public CB_Button(CharSequence text, String styleName) {
         super(EMPTY, styleName);
         getLabel().setText(text);
         setSize(getPrefWidth(), getPrefHeight());
     }
 
-    public CharSequenceButton(CharSequence text, VisTextButtonStyle buttonStyle) {
+    public CB_Button(CharSequence text, VisTextButtonStyle buttonStyle) {
         super(EMPTY, buttonStyle);
         getLabel().setText(text);
         setSize(getPrefWidth(), getPrefHeight());

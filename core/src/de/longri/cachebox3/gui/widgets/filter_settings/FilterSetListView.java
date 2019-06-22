@@ -37,7 +37,7 @@ import de.longri.cachebox3.gui.skin.styles.CacheSizeStyle;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.skin.styles.StarsStyle;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
@@ -317,7 +317,7 @@ public class FilterSetListView extends Catch_Table implements EditFilterSettings
         public ButtonListViewItem(int listIndex, CharSequence text, ClickListener clickListener) {
             super(listIndex);
             this.clickListener = clickListener;
-            CharSequenceButton btn = new CharSequenceButton(text);
+            CB_Button btn = new CB_Button(text);
             btn.getLabel().setWrap(true);
 
             // add own clicklistener for detect Click and scroll this Item to top of ListView

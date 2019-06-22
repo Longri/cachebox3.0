@@ -27,10 +27,6 @@ public class BlockGpsActivityBase extends ActivityBase {
         super(name);
     }
 
-    public BlockGpsActivityBase(String name, ActivityBaseStyle style) {
-        super(name, style);
-    }
-
     public void show() {
         super.show();
         CB.viewmanager.locationReceiver.stopForgroundUpdates();

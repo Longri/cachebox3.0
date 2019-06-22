@@ -400,9 +400,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         boolean selectedCacheIsNoGC = false;
         if (isSelected)
             selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
-        mi = cm.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> {
-            new ReloadCacheActivity().show();
-        });
+        mi = cm.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> new ReloadCacheActivity().show());
         if (!isSelected)
             mi.setEnabled(false);
         if (selectedCacheIsNoGC)

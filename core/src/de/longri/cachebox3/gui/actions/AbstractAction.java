@@ -40,6 +40,12 @@ public abstract class AbstractAction {
      * @param name = Translation ID
      * @param id   = AbstractAction ID ( AID_xxxx )
      */
+    public AbstractAction(String name, int id) {
+        this.name = name;
+        this.id = id;
+        this.functionDisabled = IMPLEMENTED;
+    }
+
     public AbstractAction(boolean disabled, String name, int id) {
         //super();
         this.name = name;
