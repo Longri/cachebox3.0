@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2013-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -339,12 +339,12 @@ public class Downloader implements Runnable {
                 throw e;
             }
 
-			/* get length of the remote resource */
+            /* get length of the remote resource */
             checkState();
             progressString = "Getting length of remote resource";
             progressUpdated = true;
 
-			/* get size of webpage in bytes; -1 if unknown */
+            /* get size of webpage in bytes; -1 if unknown */
             final int length = link.getContentLength();
 
             synchronized (lengthLock) {
@@ -353,7 +353,7 @@ public class Downloader implements Runnable {
 
             progressUpdated = true;
 
-			/* open input stream to remote resource */
+            /* open input stream to remote resource */
             checkState();
             progressString = "Opening input stream to remote resource";
             progressUpdated = true;
@@ -383,7 +383,7 @@ public class Downloader implements Runnable {
                 } else if (target instanceof StringBuilder) {
                     final String contentType = link.getContentType().toLowerCase(Locale.ENGLISH);
 
-					/* look for charset, if specified */
+                    /* look for charset, if specified */
                     String charset = null;
                     final Matcher m = Pattern.compile(".*charset[\\s]*=([^;]++).*").matcher(contentType);
 
@@ -409,7 +409,7 @@ public class Downloader implements Runnable {
                 throw e;
             }
 
-			/* open output stream, if necessary */
+            /* open output stream, if necessary */
             if (target instanceof File) {
                 checkState();
                 progressString = "Opening output stream to local file";
@@ -432,7 +432,7 @@ public class Downloader implements Runnable {
                 }
             }
 
-			/* download remote resource iteratively */
+            /* download remote resource iteratively */
             progressString = "Downloading";
             progressUpdated = true;
 
@@ -444,7 +444,7 @@ public class Downloader implements Runnable {
                         checkState();
                         final int byteCount = bis.read(byteBuffer, 0, BUFFER_SIZE);
 
-						/* check for end-of-stream */
+                        /* check for end-of-stream */
                         if (byteCount == -1) {
                             break;
                         }
@@ -465,7 +465,7 @@ public class Downloader implements Runnable {
                         checkState();
                         final int charCount = br.read(charBuffer, 0, BUFFER_SIZE);
 
-						/* check for end-of-stream */
+                        /* check for end-of-stream */
                         if (charCount == -1) {
                             break;
                         }
@@ -485,7 +485,7 @@ public class Downloader implements Runnable {
                 throw e;
             }
 
-			/* download completed successfully */
+            /* download completed successfully */
             progressString = "download completed";
             progressUpdated = true;
         } catch (Exception e) {
@@ -521,6 +521,10 @@ public class Downloader implements Runnable {
      */
 
     private void checkState() throws Exception {
+        // debug sleeping for se progress changes on UI
+        Thread.sleep(500);
+
+
         while (true) {
             synchronized (stateLock) {
                 if (cancelled) {
@@ -533,7 +537,6 @@ public class Downloader implements Runnable {
                     return;
                 }
             }
-
         }
     }
 }

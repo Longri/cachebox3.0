@@ -169,6 +169,10 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         return INSTANCE.spoilerResources.size > 0;
     }
 
+    public static void forceReloadSpoiler() {
+        INSTANCE.spoilerLoaded = false;
+    }
+
     public static Array<ImageEntry> getSelectedCacheSpoiler() {
         return actCacheHasSpoiler() ? INSTANCE.spoilerResources : null;
     }

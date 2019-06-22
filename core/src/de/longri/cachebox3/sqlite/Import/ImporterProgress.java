@@ -32,7 +32,7 @@ public class ImporterProgress {
      *
      * @author Longri
      */
-    public class Step {
+    public static class Step {
         public Step(String name, float weight) {
             this.weight = weight;
             this.name = name;
@@ -87,7 +87,6 @@ public class ImporterProgress {
                     job.progress += job.stepweight;
                 }
                 progressValue = getProgress();
-
                 break;
             }
         }
