@@ -50,11 +50,11 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 public class FileChooser extends ActivityBase {
 
     public enum Mode {
-        OPEN, SAVE
+        OPEN, SAVE, BROWSE
     }
 
     public enum SelectionMode {
-        FILES, DIRECTORIES
+        FILES, DIRECTORIES, ALL
     }
 
     public interface SelectionReturnListner {

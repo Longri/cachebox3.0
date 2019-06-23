@@ -51,7 +51,6 @@ public class Action_SelectDB_Dialog extends AbstractAction {
 
     @Override
     public void execute() {
-
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
@@ -65,7 +64,6 @@ public class Action_SelectDB_Dialog extends AbstractAction {
             }
         });
     }
-
 
     private void returnFromSelectDB() {
         log.debug("\r\nSwitch DB");
