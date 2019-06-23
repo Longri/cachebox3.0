@@ -32,6 +32,7 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.IconButton;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
@@ -39,6 +40,7 @@ import de.longri.cachebox3.translation.Translation;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
@@ -50,52 +52,15 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 public class FileChooser extends ActivityBase {
 
     public enum Mode {
-        OPEN, SAVE
+        OPEN, SAVE, BROWSE
     }
 
     public enum SelectionMode {
-        FILES, DIRECTORIES
+        FILES, DIRECTORIES, ALL
     }
 
     public interface SelectionReturnListner {
         void selected(FileHandle fileHandle);
-    }
-
-    private CB_Button btnOk, btnCancel;
-    private FileHandle actDir;
-    private FileChooserStyle fileChooserStyle;
-    private FileFilter actFilter;
-    private FileHandle[] actFileList;
-    private String[] fileExtentions;
-    private FileHandle selectedFile;
-    private final SelectionMode selectionMode;
-    private SelectionReturnListner selectionReturnListner;
-
-    public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode) {
-        this(title, mode, selectMode, (String) null);
-    }
-
-    public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode, String... extentions) {
-        super("FileChooser", VisUI.getSkin().get("default", FileChooserStyle.class));
-        fileChooserStyle = (FileChooserStyle) this.style;
-        this.setStageBackground(style.background);
-        createButtons();
-
-        switch (selectMode) {
-            case FILES:
-                if (extentions == null || extentions.length == 0 || (extentions.length == 1 && extentions[0] == null)) {
-                    this.actFilter = fileFilter;
-                } else {
-                    this.fileExtentions = extentions;
-                    this.actFilter = extentionFileFilter;
-                }
-                break;
-            case DIRECTORIES:
-                this.actFilter = directoryFileFilter;
-                break;
-        }
-        this.selectionMode = selectMode;
-
     }
 
     FileFilter directoryFileFilter = new FileFilter() {
@@ -129,8 +94,65 @@ public class FileChooser extends ActivityBase {
         }
     };
 
+    FileFilter browseFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            return true;
+        }
+    };
+
+
+    private CB_Button btnCancel;
+    private IconButton btnAction;
+    private FileHandle rootDir;
+    private FileHandle actDir;
+    private FileChooserStyle fileChooserStyle;
+    private FileFilter actFilter = browseFilter;
+    private final Array<FileHandle> actFileList = new Array<>();
+    private String[] fileExtentions;
+    private FileHandle selectedFile;
+    private final SelectionMode selectionMode;
+    private final Mode mode;
+    private SelectionReturnListner selectionReturnListner;
+
+    public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode) {
+        this(title, mode, selectMode, (String) null);
+    }
+
+    public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode, String... extentions) {
+        super("FileChooser", VisUI.getSkin().get("default", FileChooserStyle.class));
+        this.mode = mode;
+        fileChooserStyle = (FileChooserStyle) this.style;
+        this.setStageBackground(style.background);
+        createButtons();
+
+        switch (selectMode) {
+            case FILES:
+                if (extentions == null || extentions.length == 0 || (extentions.length == 1 && extentions[0] == null)) {
+                    this.actFilter = fileFilter;
+                } else {
+                    this.fileExtentions = extentions;
+                    this.actFilter = extentionFileFilter;
+                }
+                break;
+            case DIRECTORIES:
+                this.actFilter = directoryFileFilter;
+                break;
+        }
+        this.selectionMode = selectMode;
+
+    }
+
 
     public void setDirectory(FileHandle directory) {
+        this.setDirectory(directory, false);
+    }
+
+    public void setDirectory(FileHandle directory, boolean isRoot) {
+
+        if (isRoot)
+            rootDir = directory;
+
         // list all parents
         String absolutPath = directory.file().getAbsolutePath();
         String split = CB.fs;
@@ -143,51 +165,57 @@ public class FileChooser extends ActivityBase {
 
         String path = "";
         for (int i = 0, n = folder.length; i < n; i++) {
-            if (folder[i].equals(".")) continue;
+            if (folder[i] == null || folder[i].equals(".")) continue;
             path += folder[i] + "/";
-            setInternDirectory(Gdx.files.absolute(path));
+            setInternDirectory(Gdx.files.absolute(path), isRoot);
         }
     }
 
-    private void setInternDirectory(FileHandle directory) {
+    private void setInternDirectory(FileHandle directory, boolean isRoot) {
         this.selectedFile = null;
         this.actDir = directory;
-        actFileList = this.actDir.list(this.actFilter);
-        fillContent();
+        actFileList.clear();
+        for (FileHandle fileHandle : this.actDir.list(this.actFilter))
+            actFileList.add(fileHandle);
+        fillContent(isRoot);
         checkButton();
     }
 
     private void checkButton() {
         if (selectionMode == SelectionMode.FILES) {
             if (this.selectedFile == null) {
-                btnOk.setDisabled(true);
+                btnAction.setDisabled(true);
             } else {
-                btnOk.setDisabled(false);
+                btnAction.setDisabled(false);
             }
         }
     }
 
     private void createButtons() {
 
-        btnOk = new CB_Button(Translation.get("select"));
-        btnCancel = new CB_Button(Translation.get("cancel"));
-
-        this.addActor(btnOk);
-        this.addActor(btnCancel);
-
-        btnOk.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (btnOk.isDisabled()) return;
-                if (selectionReturnListner != null) {
-                    if (selectionMode == SelectionMode.FILES) {
-                        selectionReturnListner.selected(selectedFile);
-                    } else {
-                        selectionReturnListner.selected(actDir);
+        if (this.mode == Mode.BROWSE) {
+            btnAction = new IconButton(Translation.get("delete"), fileChooserStyle.deleteBtnIcon);
+        } else {
+            btnAction = new IconButton(Translation.get("select"));
+            btnAction.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    if (btnAction.isDisabled()) return;
+                    if (selectionReturnListner != null) {
+                        if (selectionMode == SelectionMode.FILES) {
+                            selectionReturnListner.selected(selectedFile);
+                        } else {
+                            selectionReturnListner.selected(actDir);
+                        }
                     }
+                    finish();
                 }
-                finish();
-            }
-        });
+            });
+        }
+
+        btnCancel = new CB_Button(Translation.get(this.mode == Mode.BROWSE ? "close" : "cancel"));
+
+        this.addActor(btnAction);
+        this.addActor(btnCancel);
 
         btnCancel.addListener(cancelClickListener);
         CB.stageManager.registerForBackKey(cancelClickListener);
@@ -213,9 +241,9 @@ public class FileChooser extends ActivityBase {
 
         btnCancel.setPosition(x, y);
 
-        x -= CB.scaledSizes.MARGIN + btnOk.getWidth();
+        x -= CB.scaledSizes.MARGIN + btnAction.getWidth();
 
-        btnOk.setPosition(x, y);
+        btnAction.setPosition(x, y);
     }
 
     private Array<WidgetGroup> listViews = new Array<WidgetGroup>();
@@ -223,17 +251,30 @@ public class FileChooser extends ActivityBase {
     Label.LabelStyle nameStyle;
 
 
-    private void fillContent() {
+    private void fillContent(boolean isRoot) {
         //set LabelStyles
         nameStyle = new Label.LabelStyle();
         nameStyle.font = fileChooserStyle.itemNameFont;
         nameStyle.fontColor = fileChooserStyle.itemNameFontColor;
 
+        actFileList.sort(new Comparator<FileHandle>() {
+            @Override
+            public int compare(FileHandle o1, FileHandle o2) {
+                // directories first
+                if (o1.isDirectory() && !o2.isDirectory()) return -1;
+                if (!o1.isDirectory() && o2.isDirectory()) return 1;
+
+                // in alphabetical order
+                return o1.name().compareToIgnoreCase(o2.name());
+            }
+        });
+
+
         final FileListAdapter listViewAdapter = new FileListAdapter(actFileList) {
 
             @Override
             public int getCount() {
-                return fileList.length;
+                return fileList.size;
             }
 
             @Override
@@ -248,7 +289,7 @@ public class FileChooser extends ActivityBase {
 
             private ListViewItem getEntryItem(final int index) {
 
-                final FileHandle file = fileList[index];
+                final FileHandle file = fileList.get(index);
                 if (file.isDirectory()) {
                     ListViewItem table = new ListViewItem(index) {
                         @Override
@@ -270,7 +311,7 @@ public class FileChooser extends ActivityBase {
                     table.addListener(new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
                             if (event.getType() == InputEvent.Type.touchUp) {
-                                setInternDirectory(file);
+                                setInternDirectory(file, false);
                             }
                         }
                     });
@@ -341,7 +382,7 @@ public class FileChooser extends ActivityBase {
             @Override
             public void run() {
                 listView.setAdapter(listViewAdapter);
-                showListView(listView, FileChooser.this.actDir.name(), true);
+                showListView(listView, FileChooser.this.actDir.name(), true, isRoot);
             }
         });
 
@@ -354,9 +395,9 @@ public class FileChooser extends ActivityBase {
         this.checkButton();
     }
 
-    private void showListView(ListView listView, String name, boolean animate) {
+    private void showListView(ListView listView, String name, boolean animate, boolean isRoot) {
 
-        float y = btnOk.getY() + btnOk.getHeight() + CB.scaledSizes.MARGIN;
+        float y = btnAction.getY() + btnAction.getHeight() + CB.scaledSizes.MARGIN;
 
         WidgetGroup widgetGroup = new WidgetGroup();
         widgetGroup.setBounds(CB.scaledSizes.MARGIN, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGIN));
@@ -414,7 +455,7 @@ public class FileChooser extends ActivityBase {
 
         float titleHeight = titleLabel.getHeight() + CB.scaledSizes.MARGIN;
         titleGroup.setBounds(0, Gdx.graphics.getHeight() - (y + titleHeight), Gdx.graphics.getWidth(), titleHeight);
-        titleGroup.addListener(backClickListener);
+        if (!isRoot) titleGroup.addListener(backClickListener);
         widgetGroup.addActor(titleGroup);
 
         listView.setBounds(0, 0, widgetGroup.getWidth(), titleGroup.getY() - CB.scaledSizes.MARGIN);
@@ -453,9 +494,9 @@ public class FileChooser extends ActivityBase {
     }
 
     private abstract class FileListAdapter implements ListViewAdapter {
-        protected final FileHandle[] fileList;
+        protected final Array<FileHandle> fileList;
 
-        protected FileListAdapter(FileHandle[] fileList) {
+        protected FileListAdapter(Array<FileHandle> fileList) {
             this.fileList = fileList;
         }
 

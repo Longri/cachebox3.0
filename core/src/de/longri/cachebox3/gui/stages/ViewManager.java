@@ -263,7 +263,7 @@ public class ViewManager extends NamedStage
         // assign the actions to the buttons
 
         db_button.addAction(new ActionButton(action_show_cacheList, true, GestureDirection.Up));
-        db_button.addAction(new ActionButton(new Action_ParkingDialog(),false));
+        db_button.addAction(new ActionButton(new Action_ParkingDialog(), false));
         db_button.addAction(new ActionButton(action_show_trackableListView, false, GestureDirection.Right));
 
         cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
@@ -285,6 +285,7 @@ public class ViewManager extends NamedStage
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
         tool_button.addAction(new ActionButton(action_show_DraftsView, true));
+        tool_button.addAction(new ActionButton(new Action_Explore(), false));
         tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecTrack, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVoice, false));
@@ -295,7 +296,6 @@ public class ViewManager extends NamedStage
         if (CB.isTestVersion()) {
             tool_button.addAction(new ActionButton(new Action_Show_TestView(), false));
             tool_button.addAction(new ActionButton(new Action_Show_PlatformTestView(), false));
-
         }
 
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
@@ -303,7 +303,7 @@ public class ViewManager extends NamedStage
         misc_button.addAction(new ActionButton(new Action_Settings_Activity(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Help(), false));
-        misc_button.addAction(new ActionButton(new Action_GetFriends(),false));
+        misc_button.addAction(new ActionButton(new Action_GetFriends(), false));
         misc_button.addAction(new ActionButton(action_quit, false, GestureDirection.Down));
 
 //        actionShowAboutView.execute();

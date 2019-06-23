@@ -68,11 +68,11 @@ public class CacheboxMain extends ApplicationAdapter {
         COORD_SCALE = 1;
         EventHandler.INIT();
 
-        INCLUDE_LIST.add(CB.class.getName());
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
-        INCLUDE_LIST.add(DescriptionView.class.getName());
-        INCLUDE_LIST.add(SvgSkinUtil.class.getName());
-        INCLUDE_LIST.add(SkinLoaderTask.class.getName());
+//        INCLUDE_LIST.add(CB.class.getName());
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
+//        INCLUDE_LIST.add(DescriptionView.class.getName());
+//        INCLUDE_LIST.add(SvgSkinUtil.class.getName());
+//        INCLUDE_LIST.add(SkinLoaderTask.class.getName());
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
@@ -84,11 +84,11 @@ public class CacheboxMain extends ApplicationAdapter {
         EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
 //        EXCLUDE_LIST.add(StageManager.class.getName());
 //
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
-        EXCLUDE_LIST.add("EMPTY");
-        EXCLUDE_LIST.add("DB:cachebox");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+//        EXCLUDE_LIST.add("EMPTY");
+//        EXCLUDE_LIST.add("DB:cachebox");
 //        EXCLUDE_LIST.add(LocationAccuracyLayer.class.getName());
 //        EXCLUDE_LIST.add(LocationTextureRenderer.class.getName());
 //        EXCLUDE_LIST.add(DoubleAnimator.class.getName());
@@ -99,12 +99,12 @@ public class CacheboxMain extends ApplicationAdapter {
 
 
         // iOS Platform debug includes
-        INCLUDE_LIST.add("org.oscim.ios.backend.IOS_RealSvgBitmap");
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher");
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
-        INCLUDE_LIST.add("de.longri.cachebox3.GenerateApiKeyWebViewController");
+//        INCLUDE_LIST.add("org.oscim.ios.backend.IOS_RealSvgBitmap");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
+//        INCLUDE_LIST.add("de.longri.cachebox3.GenerateApiKeyWebViewController");
 
     }
 

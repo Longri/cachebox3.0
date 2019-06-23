@@ -155,8 +155,10 @@ public class MenuItem extends ListViewItem {
     public void draw(Batch batch, float parentAlpha) {
         if (mLabel != null && mLabel.getHeight() > this.getHeight()) {
             this.setHeight(mLabel.getHeight() + CB.scaledSizes.MARGINx4);
-            parentMenu.listView.invalidate();
-            parentMenu.listView.layout();
+            if (parentMenu != null && parentMenu.listView != null) {
+                parentMenu.listView.invalidate();
+                parentMenu.listView.layout();
+            }
         }
 
         // set alpha if item disabled

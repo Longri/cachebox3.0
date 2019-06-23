@@ -888,6 +888,10 @@
       "path": "svg/default_button_pressed.svg",
       "scale": 0.5
     },
+    "delFile": {
+      "path": "svg/delFile.svg",
+      "scale": 0.13
+    },
     "delWp": {
       "path": "svg/delWp.svg",
       "scale": 0.23
@@ -2928,6 +2932,7 @@
       "folderIcon": "folder",
       "fileIcon": "file",
       "mapFileIcon": "mapFile",
+      "deleteBtnIcon": "delFile",
       "background": "activityBack_drawable"
     }
   },
@@ -3405,8 +3410,6 @@
   },
   "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
     "default": {
-     "overviewListStyle" : "spoilerOverview",
-      "galleryListStyle" : "spoilerGallery",
       "spoilerNameFont": "AboutInfo",
       "spoilerNameFontColor": "font_color"
     }

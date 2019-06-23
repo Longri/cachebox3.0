@@ -16,6 +16,7 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -119,6 +120,7 @@ public class CB {
      * or to the "SandBox" on the external SD
      */
     public static String WorkPath;
+    public static FileHandle WorkPathFileHandle;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
     public static ScaledSizes scaledSizes;
     public static Track actRoute;
