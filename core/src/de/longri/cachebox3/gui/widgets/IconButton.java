@@ -28,7 +28,8 @@ import de.longri.cachebox3.utils.HSV_Color;
  */
 public class IconButton extends Catch_VisTextButton {
     protected final com.badlogic.gdx.scenes.scene2d.ui.Image image;
-    protected float preferredHeight, preferredWidth;
+    protected float preferredHeight;
+    protected float preferredWidth;
 
     public IconButton(String text) {
         super(text);
@@ -36,6 +37,27 @@ public class IconButton extends Catch_VisTextButton {
         image = new com.badlogic.gdx.scenes.scene2d.ui.Image(new ColorDrawable(new HSV_Color(0)));
         this.getLabel().setAlignment(Align.center | Align.left);
         this.addActor(image);
+        setSize(super.getPrefWidth(), super.getPrefHeight());
+    }
+
+    public IconButton(Drawable icon) {
+        super("");
+        setStyle(getVisTextButtonStyle());
+        image = new com.badlogic.gdx.scenes.scene2d.ui.Image(icon);
+        this.getLabel().setAlignment(Align.center | Align.left);
+        this.addActor(image);
+        this.setIcon(icon);
+        setSize(getPrefWidth(), getPrefHeight());
+    }
+
+    public IconButton(CharSequence text) {
+        super(EMPTY);
+        getLabel().setText(text);
+        setStyle(getVisTextButtonStyle());
+        image = new com.badlogic.gdx.scenes.scene2d.ui.Image(new ColorDrawable(new HSV_Color(0)));
+        this.getLabel().setAlignment(Align.center | Align.left);
+        this.addActor(image);
+        setSize(super.getPrefWidth(), super.getPrefHeight());
     }
 
     private VisTextButtonStyle getVisTextButtonStyle() {

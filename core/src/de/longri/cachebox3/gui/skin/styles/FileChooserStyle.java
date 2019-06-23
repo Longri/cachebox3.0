@@ -31,4 +31,5 @@ public class FileChooserStyle extends ActivityBase.ActivityBaseStyle {
     public Drawable folderIcon;
     public Drawable fileIcon;
     public Drawable mapFileIcon;
+    public Drawable deleteBtnIcon;
 }

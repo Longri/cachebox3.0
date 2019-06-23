@@ -32,6 +32,7 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.IconButton;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
@@ -100,7 +101,8 @@ public class FileChooser extends ActivityBase {
     };
 
 
-    private CB_Button btnOk, btnCancel;
+    private CB_Button btnCancel;
+    private IconButton btnAction;
     private FileHandle rootDir;
     private FileHandle actDir;
     private FileChooserStyle fileChooserStyle;
@@ -109,6 +111,7 @@ public class FileChooser extends ActivityBase {
     private String[] fileExtentions;
     private FileHandle selectedFile;
     private final SelectionMode selectionMode;
+    private final Mode mode;
     private SelectionReturnListner selectionReturnListner;
 
     public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode) {
@@ -117,6 +120,7 @@ public class FileChooser extends ActivityBase {
 
     public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode, String... extentions) {
         super("FileChooser", VisUI.getSkin().get("default", FileChooserStyle.class));
+        this.mode = mode;
         fileChooserStyle = (FileChooserStyle) this.style;
         this.setStageBackground(style.background);
         createButtons();
@@ -177,34 +181,38 @@ public class FileChooser extends ActivityBase {
     private void checkButton() {
         if (selectionMode == SelectionMode.FILES) {
             if (this.selectedFile == null) {
-                btnOk.setDisabled(true);
+                btnAction.setDisabled(true);
             } else {
-                btnOk.setDisabled(false);
+                btnAction.setDisabled(false);
             }
         }
     }
 
     private void createButtons() {
 
-        btnOk = new CB_Button(Translation.get("select"));
+        if (this.mode == Mode.BROWSE) {
+            btnAction = new IconButton(fileChooserStyle.deleteBtnIcon);
+        } else {
+            btnAction = new IconButton(Translation.get("select"));
+            btnAction.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    if (btnAction.isDisabled()) return;
+                    if (selectionReturnListner != null) {
+                        if (selectionMode == SelectionMode.FILES) {
+                            selectionReturnListner.selected(selectedFile);
+                        } else {
+                            selectionReturnListner.selected(actDir);
+                        }
+                    }
+                    finish();
+                }
+            });
+        }
+
         btnCancel = new CB_Button(Translation.get("cancel"));
 
-        this.addActor(btnOk);
+        this.addActor(btnAction);
         this.addActor(btnCancel);
-
-        btnOk.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (btnOk.isDisabled()) return;
-                if (selectionReturnListner != null) {
-                    if (selectionMode == SelectionMode.FILES) {
-                        selectionReturnListner.selected(selectedFile);
-                    } else {
-                        selectionReturnListner.selected(actDir);
-                    }
-                }
-                finish();
-            }
-        });
 
         btnCancel.addListener(cancelClickListener);
         CB.stageManager.registerForBackKey(cancelClickListener);
@@ -230,9 +238,9 @@ public class FileChooser extends ActivityBase {
 
         btnCancel.setPosition(x, y);
 
-        x -= CB.scaledSizes.MARGIN + btnOk.getWidth();
+        x -= CB.scaledSizes.MARGIN + btnAction.getWidth();
 
-        btnOk.setPosition(x, y);
+        btnAction.setPosition(x, y);
     }
 
     private Array<WidgetGroup> listViews = new Array<WidgetGroup>();
@@ -373,7 +381,7 @@ public class FileChooser extends ActivityBase {
 
     private void showListView(ListView listView, String name, boolean animate, boolean isRoot) {
 
-        float y = btnOk.getY() + btnOk.getHeight() + CB.scaledSizes.MARGIN;
+        float y = btnAction.getY() + btnAction.getHeight() + CB.scaledSizes.MARGIN;
 
         WidgetGroup widgetGroup = new WidgetGroup();
         widgetGroup.setBounds(CB.scaledSizes.MARGIN, y, Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2, Gdx.graphics.getHeight() - (y + CB.scaledSizes.MARGIN));

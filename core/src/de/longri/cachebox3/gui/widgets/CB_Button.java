@@ -22,8 +22,6 @@ import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButt
  */
 public class CB_Button extends Catch_VisTextButton {
 
-    private final static String EMPTY = "";
-
     public CB_Button(CharSequence text) {
         super(EMPTY);
         getLabel().setText(text);
