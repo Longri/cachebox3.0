@@ -60,6 +60,17 @@ public class IconButton extends Catch_VisTextButton {
         setSize(super.getPrefWidth(), super.getPrefHeight());
     }
 
+    public IconButton(CharSequence text, Drawable icon) {
+        super(EMPTY);
+        getLabel().setText(text);
+        setStyle(getVisTextButtonStyle());
+        image = new com.badlogic.gdx.scenes.scene2d.ui.Image(icon);
+        this.getLabel().setAlignment(Align.center | Align.left);
+        this.addActor(image);
+        this.setIcon(icon);
+        setSize(getPrefWidth(), getPrefHeight());
+    }
+
     private VisTextButtonStyle getVisTextButtonStyle() {
         return VisUI.getSkin().get(VisTextButtonStyle.class);
     }
@@ -90,11 +101,11 @@ public class IconButton extends Catch_VisTextButton {
     protected void setIcon(Drawable drawableIcon) {
         image.setDrawable(drawableIcon);
         if (drawableIcon != null) {
-            this.preferredHeight = drawableIcon.getMinHeight() + CB.scaledSizes.MARGINx2;
-            this.preferredWidth = super.getPrefWidth() + this.preferredHeight;
+            this.preferredHeight = Math.max(super.getPrefHeight(), drawableIcon.getMinHeight() + CB.scaledSizes.MARGINx2);
+            this.preferredWidth = super.getPrefWidth() + drawableIcon.getMinWidth() + CB.scaledSizes.MARGINx2;
         } else {
-            this.preferredHeight = 0;
-            this.preferredWidth = 0;
+            this.preferredHeight = super.getPrefHeight();
+            this.preferredWidth = super.getPrefWidth();
         }
     }
 

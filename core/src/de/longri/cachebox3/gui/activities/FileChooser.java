@@ -40,6 +40,7 @@ import de.longri.cachebox3.translation.Translation;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
@@ -107,7 +108,7 @@ public class FileChooser extends ActivityBase {
     private FileHandle actDir;
     private FileChooserStyle fileChooserStyle;
     private FileFilter actFilter = browseFilter;
-    private FileHandle[] actFileList;
+    private final Array<FileHandle> actFileList = new Array<>();
     private String[] fileExtentions;
     private FileHandle selectedFile;
     private final SelectionMode selectionMode;
@@ -173,7 +174,9 @@ public class FileChooser extends ActivityBase {
     private void setInternDirectory(FileHandle directory, boolean isRoot) {
         this.selectedFile = null;
         this.actDir = directory;
-        actFileList = this.actDir.list(this.actFilter);
+        actFileList.clear();
+        for (FileHandle fileHandle : this.actDir.list(this.actFilter))
+            actFileList.add(fileHandle);
         fillContent(isRoot);
         checkButton();
     }
@@ -191,7 +194,7 @@ public class FileChooser extends ActivityBase {
     private void createButtons() {
 
         if (this.mode == Mode.BROWSE) {
-            btnAction = new IconButton(fileChooserStyle.deleteBtnIcon);
+            btnAction = new IconButton(Translation.get("delete"), fileChooserStyle.deleteBtnIcon);
         } else {
             btnAction = new IconButton(Translation.get("select"));
             btnAction.addListener(new ClickListener() {
@@ -209,7 +212,7 @@ public class FileChooser extends ActivityBase {
             });
         }
 
-        btnCancel = new CB_Button(Translation.get("cancel"));
+        btnCancel = new CB_Button(Translation.get(this.mode == Mode.BROWSE ? "close" : "cancel"));
 
         this.addActor(btnAction);
         this.addActor(btnCancel);
@@ -254,11 +257,24 @@ public class FileChooser extends ActivityBase {
         nameStyle.font = fileChooserStyle.itemNameFont;
         nameStyle.fontColor = fileChooserStyle.itemNameFontColor;
 
+        actFileList.sort(new Comparator<FileHandle>() {
+            @Override
+            public int compare(FileHandle o1, FileHandle o2) {
+                // directories first
+                if (o1.isDirectory() && !o2.isDirectory()) return -1;
+                if (!o1.isDirectory() && o2.isDirectory()) return 1;
+
+                // in alphabetical order
+                return o1.name().compareToIgnoreCase(o2.name());
+            }
+        });
+
+
         final FileListAdapter listViewAdapter = new FileListAdapter(actFileList) {
 
             @Override
             public int getCount() {
-                return fileList.length;
+                return fileList.size;
             }
 
             @Override
@@ -273,7 +289,7 @@ public class FileChooser extends ActivityBase {
 
             private ListViewItem getEntryItem(final int index) {
 
-                final FileHandle file = fileList[index];
+                final FileHandle file = fileList.get(index);
                 if (file.isDirectory()) {
                     ListViewItem table = new ListViewItem(index) {
                         @Override
@@ -478,9 +494,9 @@ public class FileChooser extends ActivityBase {
     }
 
     private abstract class FileListAdapter implements ListViewAdapter {
-        protected final FileHandle[] fileList;
+        protected final Array<FileHandle> fileList;
 
-        protected FileListAdapter(FileHandle[] fileList) {
+        protected FileListAdapter(Array<FileHandle> fileList) {
             this.fileList = fileList;
         }
 
