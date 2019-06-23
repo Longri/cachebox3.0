@@ -30,6 +30,9 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.thebuzzmedia.sjxp.XMLParser;
+import com.thebuzzmedia.sjxp.rule.DefaultRule;
+import com.thebuzzmedia.sjxp.rule.IRule;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.EventHandler;
@@ -38,6 +41,9 @@ import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Add_WP;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.MapViewPositionChangedHandler;
@@ -72,6 +78,9 @@ import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.utils.EQUALS;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
+import de.longri.cachebox3.utils.UnZip;
+import de.longri.cachebox3.utils.http.Download;
+import de.longri.cachebox3.utils.http.Webb;
 import de.longri.serializable.BitStore;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
@@ -106,7 +115,9 @@ import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 
@@ -119,14 +130,33 @@ public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
 
     private static double lastCenterPosLat, lastCenterPosLon;
+    private final Event selfEvent = new Event();
+    private final OnItemClickListener styleItemClickListener = item -> {
+        String cat = (String) item.getData();
+        if (cat.isEmpty()) return true;
+        ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
+        ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
+        boolean newValue = !allCategories.get(cat);
+        item.setChecked(newValue);
+        allCategories.put(cat, newValue);
+        return true;
+    };
+    float mapHalfWith;
+    float mapHalfHeight;
     private boolean menuInShow;
-
-    public static Coordinate getLastCenterPos() {
-        return new Coordinate(lastCenterPosLat, lastCenterPosLon);
-    }
-
     private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter map;
+    private final Window.WindowCloseListener closeStyleMenuListener = new Window.WindowCloseListener() {
+        @Override
+        public void windowClosed() {
+            ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
+            if (callback != null)
+                callback.storeChanges();
+            CB.actThemeFile.setMenuCallback(callback);
+            CB.loadThemeFile(CB.actThemeFile);
+            map.setTheme(CB.actThemeFile);
+        }
+    };
     private MapScaleBarLayer mapScaleBarLayer;
     private MapStateButton mapStateButton;
     private ZoomButton zoomButton;
@@ -134,10 +164,61 @@ public class MapView extends AbstractView {
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
     private CenterCrossLayer ccl;
+    private final IChanged showMapCenterCrossChangedListener = new IChanged() {
+        @Override
+        public void isChanged() {
+            if (map == null) return;
+            log.debug("change center cross visibility to {}", Settings_Map.ShowMapCenterCross.getValue() ? "visible" : "invisible");
+            setCenterCrossLayerEnabled(Settings_Map.ShowMapCenterCross.getValue());
+            map.updateMap(true);
+        }
+    };
     private LocationTextureLayer myLocationLayer;
     private MapViewPositionChangedHandler positionChangedHandler;
     private Point screenPoint = new Point();
-    private final Event selfEvent = new Event();
+    private Menu mapViewThemeMenu;
+    private String themesPath;
+    private FZKThemesInfo fzkThemesInfo;
+    private Array<FZKThemesInfo> fzkThemesInfoList = new Array<>();
+    private MapWayPointItem infoItem = null;
+    private MapBubble infoBubble;
+    private ClickListener bubbleClickListener = new ClickListener() {
+
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchDown(event, x, y, pointer, button);
+            if (infoBubble != null) {
+                //click detection
+                if (infoBubble.getX() <= x && infoBubble.getX() + infoBubble.getWidth() >= x &&
+                        infoBubble.getY() <= y && infoBubble.getY() + infoBubble.getHeight() >= y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void clicked(InputEvent event, float x, float y) {
+            if (infoBubble != null) {
+
+                //click detection
+                if (infoBubble.getX() <= x && infoBubble.getX() + infoBubble.getWidth() >= x &&
+                        infoBubble.getY() <= y && infoBubble.getY() + infoBubble.getHeight() >= y) {
+                    // select this cache/waypoint and close bubble
+                    Object obj = infoItem.dataObject;
+                    if (obj instanceof AbstractCache) {
+                        AbstractCache cache = (AbstractCache) obj;
+                        EventHandler.fire(new SelectedCacheChangedEvent(cache));
+                    } else if (obj instanceof AbstractWaypoint) {
+                        AbstractWaypoint waypoint = (AbstractWaypoint) obj;
+                        EventHandler.fire(new SelectedWayPointChangedEvent(waypoint));
+                    }
+
+                    closeInfoBubble();
+                }
+            }
+
+        }
+    };
+
 
     public MapView(BitStore reader) {
         super(reader);
@@ -147,6 +228,49 @@ public class MapView extends AbstractView {
     public MapView() {
         super("MapView");
         create();
+    }
+
+    public static Coordinate getLastCenterPos() {
+        return new Coordinate(lastCenterPosLat, lastCenterPosLon);
+    }
+
+    public static LinkedHashMap<Object, TextureRegion> createTextureAtlasRegions() {
+        // create TextureRegions from all Bitmap symbols
+        LinkedHashMap<Object, TextureRegion> textureRegionMap = new LinkedHashMap<>();
+        ObjectMap<String, MapWayPointItemStyle> list = VisUI.getSkin().getAll(MapWayPointItemStyle.class);
+        if (list == null) return null;
+        Array<Bitmap> bitmapList = new Array<>();
+        for (MapWayPointItemStyle style : list.values()) {
+            if (style.small != null) if (!bitmapList.contains(style.small, true)) bitmapList.add(style.small);
+            if (style.middle != null) if (!bitmapList.contains(style.middle, true)) bitmapList.add(style.middle);
+            if (style.large != null) if (!bitmapList.contains(style.large, true)) bitmapList.add(style.large);
+        }
+
+        //add Bitmaps from MapArrowStyle
+        MapArrowStyle mapArrowStyle = null;
+        try {
+            mapArrowStyle = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
+        } catch (Exception e) {
+            log.error("get MapArrowStyle 'myLocation'", e);
+        }
+
+        if (mapArrowStyle != null) {
+            if (mapArrowStyle.myLocation != null) bitmapList.add(mapArrowStyle.myLocation);
+            if (mapArrowStyle.myLocationTransparent != null) bitmapList.add(mapArrowStyle.myLocationTransparent);
+            if (mapArrowStyle.myLocationCar != null) bitmapList.add(mapArrowStyle.myLocationCar);
+        }
+
+
+        LinkedHashMap<Object, Bitmap> input = new LinkedHashMap<>();
+        for (Bitmap bmp : bitmapList) {
+            input.put(((GetName) bmp).getName(), bmp);
+        }
+        ArrayList<TextureAtlas> atlasList = new ArrayList<>();
+        boolean flipped = CanvasAdapter.platform == Platform.IOS;
+        System.out.print("create MapTextureAtlas with flipped Y? " + flipped);
+        TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, false,
+                flipped);
+        return textureRegionMap;
     }
 
     @Override
@@ -305,7 +429,6 @@ public class MapView extends AbstractView {
         }
     }
 
-
     private CacheboxMapAdapter createMap() {
 
         if (CB.isMocked()) return null;
@@ -360,45 +483,6 @@ public class MapView extends AbstractView {
         return map;
     }
 
-    public static LinkedHashMap<Object, TextureRegion> createTextureAtlasRegions() {
-        // create TextureRegions from all Bitmap symbols
-        LinkedHashMap<Object, TextureRegion> textureRegionMap = new LinkedHashMap<>();
-        ObjectMap<String, MapWayPointItemStyle> list = VisUI.getSkin().getAll(MapWayPointItemStyle.class);
-        if (list == null) return null;
-        Array<Bitmap> bitmapList = new Array<>();
-        for (MapWayPointItemStyle style : list.values()) {
-            if (style.small != null) if (!bitmapList.contains(style.small, true)) bitmapList.add(style.small);
-            if (style.middle != null) if (!bitmapList.contains(style.middle, true)) bitmapList.add(style.middle);
-            if (style.large != null) if (!bitmapList.contains(style.large, true)) bitmapList.add(style.large);
-        }
-
-        //add Bitmaps from MapArrowStyle
-        MapArrowStyle mapArrowStyle = null;
-        try {
-            mapArrowStyle = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
-        } catch (Exception e) {
-            log.error("get MapArrowStyle 'myLocation'", e);
-        }
-
-        if (mapArrowStyle != null) {
-            if (mapArrowStyle.myLocation != null) bitmapList.add(mapArrowStyle.myLocation);
-            if (mapArrowStyle.myLocationTransparent != null) bitmapList.add(mapArrowStyle.myLocationTransparent);
-            if (mapArrowStyle.myLocationCar != null) bitmapList.add(mapArrowStyle.myLocationCar);
-        }
-
-
-        LinkedHashMap<Object, Bitmap> input = new LinkedHashMap<>();
-        for (Bitmap bmp : bitmapList) {
-            input.put(((GetName) bmp).getName(), bmp);
-        }
-        ArrayList<TextureAtlas> atlasList = new ArrayList<>();
-        boolean flipped = CanvasAdapter.platform == Platform.IOS;
-        System.out.print("create MapTextureAtlas with flipped Y? " + flipped);
-        TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, false,
-                flipped);
-        return textureRegionMap;
-    }
-
     @Override
     public void onShow() {
         addInputListener();
@@ -435,7 +519,6 @@ public class MapView extends AbstractView {
         if (!menuInShow)
             storeMapstate(mapStateButton.getSelected(), null);
     }
-
 
     @Override
     public void dispose() {
@@ -508,12 +591,10 @@ public class MapView extends AbstractView {
                 calculatedWidth, infoPanel.getPrefHeight());
     }
 
-
     @Override
     public void positionChanged() {
         ((CacheboxMain) Gdx.app.getApplicationListener()).setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
     }
-
 
     private void initLayers(boolean tileGrid) {
 
@@ -590,23 +671,12 @@ public class MapView extends AbstractView {
         map.layers().add(layerGroup);
     }
 
-    private final IChanged showMapCenterCrossChangedListener = new IChanged() {
-        @Override
-        public void isChanged() {
-            if (map == null) return;
-            log.debug("change center cross visibility to {}", Settings_Map.ShowMapCenterCross.getValue() ? "visible" : "invisible");
-            setCenterCrossLayerEnabled(Settings_Map.ShowMapCenterCross.getValue());
-            map.updateMap(true);
-        }
-    };
-
     private void setMapScaleBarOffset(float xOffset, float yOffset) {
         if (mapScaleBarLayer == null) return;
         BitmapRenderer renderer = mapScaleBarLayer.getRenderer();
         renderer.setPosition(GLViewport.Position.BOTTOM_LEFT);
         renderer.setOffset(xOffset, yOffset);
     }
-
 
     public void setInputListener(boolean on) {
         if (on) {
@@ -615,7 +685,6 @@ public class MapView extends AbstractView {
             removeInputListener();
         }
     }
-
 
     private void createMapInputHandler() {
         GestureDetector gestureDetector = new GestureDetector(new GestureHandlerImpl(map));
@@ -657,7 +726,6 @@ public class MapView extends AbstractView {
         return new Coordinate(mp.getLatitude(), mp.getLongitude());
     }
 
-
     //################### Context menu implementation ####################################
     @Override
     public boolean hasContextMenu() {
@@ -667,18 +735,18 @@ public class MapView extends AbstractView {
     @Override
     public Menu getContextMenu() {
         Menu icm = new Menu("MapViewContextMenuTitle");
-        icm.addMenuItem("Layer", CB.getSkin().getMenuIcon.mapLayer,()-> showMapLayerMenu());
-        icm.addMenuItem("Renderthemes", CB.getSkin().getMenuIcon.theme,()-> showMapViewThemeMenu());
+        icm.addMenuItem("Layer", CB.getSkin().getMenuIcon.mapLayer, () -> showMapLayerMenu());
+        icm.addMenuItem("Renderthemes", CB.getSkin().getMenuIcon.theme, () -> showMapViewThemeMenu());
         //if actual Theme styleable, show style menu point
         ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
         if (callback != null && callback.hasStyleMenu()) {
-            icm.addMenuItem("Styles", CB.getSkin().getMenuIcon.themeStyle,()-> showMapViewThemeStyleMenu());
+            icm.addMenuItem("Styles", CB.getSkin().getMenuIcon.themeStyle, () -> showMapViewThemeStyleMenu());
         }
-        icm.addMenuItem("overlays",null,()-> showMapOverlayMenu()); // todo icon
-        icm.addMenuItem("view", CB.getSkin().getMenuIcon.viewSettings,()-> showMapViewLayerMenu());
+        icm.addMenuItem("overlays", null, () -> showMapOverlayMenu()); // todo icon
+        icm.addMenuItem("view", CB.getSkin().getMenuIcon.viewSettings, () -> showMapViewLayerMenu());
         // todo needed? nach Kompass ausrichten | setAlignToCompass
-        icm.addMenuItem("CenterWP", CB.getSkin().getMenuIcon.addWp,()-> createWaypointAtCenter());
-        icm.addMenuItem("RecTrack", null,()-> showMenuTrackRecording()); // todo icon
+        icm.addMenuItem("CenterWP", CB.getSkin().getMenuIcon.addWp, () -> createWaypointAtCenter());
+        icm.addMenuItem("RecTrack", null, () -> showMenuTrackRecording()); // todo icon
         return icm;
     }
 
@@ -811,56 +879,154 @@ public class MapView extends AbstractView {
 
     private void showMapViewLayerMenu() {
         Menu icm = new Menu("MapViewElementsMenuTitle");
-        icm.addCheckableMenuItem("HideFinds", Settings_Map.MapHideMyFinds.getValue(),()-> toggleSettingWithReload(Settings_Map.MapHideMyFinds));
+        icm.addCheckableMenuItem("HideFinds", Settings_Map.MapHideMyFinds.getValue(), () -> toggleSettingWithReload(Settings_Map.MapHideMyFinds));
         // icm.addCheckableMenuItem("MapShowCompass", Settings_Map.MapShowCompass.getValue(),()-> toggleSetting(Settings_Map.MapShowCompass));
         // todo icm.addCheckableMenuItem("MapShowInfoBar",Settings_Map.ShowInfo .....)
-        icm.addCheckableMenuItem("ShowAllWaypoints", Settings_Map.ShowAllWaypoints.getValue(),()-> toggleSetting(Settings_Map.ShowAllWaypoints));
-        icm.addCheckableMenuItem("ShowRatings", Settings_Map.MapShowRating.getValue(),()-> toggleSetting(Settings_Map.MapShowRating));
-        icm.addCheckableMenuItem("ShowDT", Settings_Map.MapShowDT.getValue(),()-> toggleSetting(Settings_Map.MapShowDT));
-        icm.addCheckableMenuItem("ShowTitle", Settings_Map.MapShowTitles.getValue(),()-> toggleSetting(Settings_Map.MapShowTitles));
-        icm.addCheckableMenuItem("ShowDirectLine", Settings_Map.ShowDirektLine.getValue(),()-> toggleSetting(Settings_Map.ShowDirektLine));
-        icm.addCheckableMenuItem("MenuTextShowAccuracyCircle", Settings_Map.ShowAccuracyCircle.getValue(),()-> toggleSetting(Settings_Map.ShowAccuracyCircle));
-        icm.addCheckableMenuItem("ShowCenterCross", Settings_Map.ShowMapCenterCross.getValue(),()-> toggleSetting(Settings_Map.ShowMapCenterCross));
+        icm.addCheckableMenuItem("ShowAllWaypoints", Settings_Map.ShowAllWaypoints.getValue(), () -> toggleSetting(Settings_Map.ShowAllWaypoints));
+        icm.addCheckableMenuItem("ShowRatings", Settings_Map.MapShowRating.getValue(), () -> toggleSetting(Settings_Map.MapShowRating));
+        icm.addCheckableMenuItem("ShowDT", Settings_Map.MapShowDT.getValue(), () -> toggleSetting(Settings_Map.MapShowDT));
+        icm.addCheckableMenuItem("ShowTitle", Settings_Map.MapShowTitles.getValue(), () -> toggleSetting(Settings_Map.MapShowTitles));
+        icm.addCheckableMenuItem("ShowDirectLine", Settings_Map.ShowDirektLine.getValue(), () -> toggleSetting(Settings_Map.ShowDirektLine));
+        icm.addCheckableMenuItem("MenuTextShowAccuracyCircle", Settings_Map.ShowAccuracyCircle.getValue(), () -> toggleSetting(Settings_Map.ShowAccuracyCircle));
+        icm.addCheckableMenuItem("ShowCenterCross", Settings_Map.ShowMapCenterCross.getValue(), () -> toggleSetting(Settings_Map.ShowMapCenterCross));
         icm.show();
     }
 
     private void showMapViewThemeMenu() {
-        Menu icm = new Menu("MapViewThemeMenuTitle");
-
+        mapViewThemeMenu = new Menu("MapViewThemeMenuTitle");
         //add default themes
-        int id = 0;
         for (VtmThemes vtmTheme : VtmThemes.values()) {
-            icm.addCheckableItem(id++, vtmTheme.name(), EQUALS.is(CB.actThemeFile, vtmTheme), true);
+            mapViewThemeMenu.addCheckableMenuItem(vtmTheme.name(), EQUALS.is(CB.actThemeFile, vtmTheme), true, () -> {
+                map.setTheme(vtmTheme);
+            });
         }
 
         final Array<NamedExternalRenderTheme> themes = new Array<>();
+        themesPath = "";
 
         // search themes on repository/maps/themes (recursive)
         FileHandle folder = Gdx.files.absolute(CB.WorkPath + "/repository/maps/themes");
         searchThemes(folder, themes);
+        if (folder.file().canWrite())
+            themesPath = folder.path();
 
         // search themes on User map folder
         folder = Gdx.files.absolute(Config.MapPackFolder.getValue());
         searchThemes(folder, themes);
+        if (folder.file().canWrite())
+            themesPath = folder.path();
 
         for (NamedExternalRenderTheme themFile : themes) {
-            icm.addCheckableItem(id++, themFile.name, EQUALS.is(CB.actThemeFile, themFile), true);
+            mapViewThemeMenu.addCheckableMenuItem(themFile.name, EQUALS.is(CB.actThemeFile, themFile), true, () -> map.setTheme(themFile));
         }
 
-        icm.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public boolean onItemClick(MenuItem item) {
-                if (item.getMenuItemId() < VtmThemes.values().length) {
-                    VtmThemes theme = VtmThemes.values()[item.getMenuItemId()];
-                    map.setTheme(theme);
-                } else {
-                    NamedExternalRenderTheme theme = themes.get(item.getListIndex() - VtmThemes.values().length);
-                    map.setTheme(theme);
+        final String target = themesPath + "/Elevate4.zip";
+        if (themesPath.length() > 0) {
+            mapViewThemeMenu.addDivider(-1);
+            mapViewThemeMenu.addMenuItem("Download", "\n OpenAndroMaps", CB.getSkin().getMenuIcon.baseMapMapsforge, () -> {
+                Download.Download("http://download.openandromaps.org/themes/Elevate4.zip", target);
+                try {
+                    new UnZip().extractFolder(target);
+                } catch (Exception ex) {
+                    MessageBox.show(ex.toString(), "Unzip", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
                 }
-                return true;
+                Gdx.files.absolute(target).delete();
+            });
+        }
+
+        addDownloadFZKRenderThemes();
+
+        mapViewThemeMenu.show();
+    }
+
+    private void addDownloadFZKRenderThemes() {
+
+        if (fzkThemesInfoList.size == 0) {
+            String repository_freizeitkarte_android = Webb.create()
+                    .get("http://repository.freizeitkarte-osm.de/repository_freizeitkarte_android.xml")
+                    .setTimeout(Config.socket_timeout.getValue())
+                    .ensureSuccess()
+                    .asString()
+                    .getBody();
+            java.util.Map<String, String> values = new HashMap<>();
+            System.setProperty("sjxp.namespaces", "false");
+            Array<IRule<java.util.Map<String, String>>> ruleList = createRepositoryRules(new Array<>());
+            XMLParser<java.util.Map<String, String>> parserCache = new XMLParser<>(ruleList.toArray(IRule.class));
+            parserCache.parse(new ByteArrayInputStream(repository_freizeitkarte_android.getBytes()), values);
+        }
+
+        for (FZKThemesInfo fzkThemesInfo : fzkThemesInfoList) {
+            mapViewThemeMenu.addMenuItem("Download", "\n" + fzkThemesInfo.Description, CB.getSkin().getMenuIcon.baseMapFreizeitkarte, () -> {
+                String zipFile = fzkThemesInfo.Url.substring(fzkThemesInfo.Url.lastIndexOf("/") + 1);
+                String target = themesPath + "/" + zipFile;
+
+                Download.Download(fzkThemesInfo.Url, target);
+                try {
+                    new UnZip().extractFolder(target, true);
+                } catch (Exception ex) {
+                    MessageBox.show(ex.toString(), "Unzip", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
+                }
+                Gdx.files.absolute(target).delete();
+            });
+        }
+    }
+
+    private Array<IRule<java.util.Map<String, String>>> createRepositoryRules(Array<IRule<java.util.Map<String, String>>> ruleList) {
+        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Name") {
+            @Override
+            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+                fzkThemesInfo.Name = text;
             }
         });
-        icm.show();
+
+        if (Config.localisation.getValue().equals("de")) {
+            ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/DescriptionGerman") {
+                @Override
+                public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+                    fzkThemesInfo.Description = text;
+                }
+            });
+        } else {
+            ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/DescriptionEnglish") {
+                @Override
+                public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+                    fzkThemesInfo.Description = text;
+                }
+            });
+        }
+
+        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Url") {
+            @Override
+            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+                fzkThemesInfo.Url = text;
+            }
+        });
+
+        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Size") {
+            @Override
+            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+                fzkThemesInfo.Size = Integer.parseInt(text);
+            }
+        });
+
+        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Checksum") {
+            @Override
+            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+                fzkThemesInfo.MD5 = text;
+            }
+        });
+
+        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.TAG, "/Freizeitkarte/Theme") {
+            @Override
+            public void handleTag(XMLParser<java.util.Map<String, String>> parser, boolean isStartTag, java.util.Map<String, String> values) {
+                if (isStartTag) {
+                    fzkThemesInfo = new FZKThemesInfo();
+                } else {
+                    fzkThemesInfoList.add(fzkThemesInfo);
+                }
+            }
+        });
+        return ruleList;
     }
 
     private void showMapViewThemeStyleMenu() {
@@ -896,31 +1062,6 @@ public class MapView extends AbstractView {
         icm.show();
     }
 
-    private final Window.WindowCloseListener closeStyleMenuListener = new Window.WindowCloseListener() {
-        @Override
-        public void windowClosed() {
-            ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
-            if (callback != null)
-                callback.storeChanges();
-            CB.actThemeFile.setMenuCallback(callback);
-            CB.loadThemeFile(CB.actThemeFile);
-            map.setTheme(CB.actThemeFile);
-        }
-    };
-
-
-    private final OnItemClickListener styleItemClickListener = item -> {
-        String cat = (String) item.getData();
-        if (cat.isEmpty()) return true;
-        ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
-        ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
-        boolean newValue = !allCategories.get(cat);
-        item.setChecked(newValue);
-        allCategories.put(cat, newValue);
-        return true;
-    };
-
-
     private void searchThemes(FileHandle folder, Array<NamedExternalRenderTheme> themes) {
         if (!folder.isDirectory()) return;
         for (FileHandle handle : folder.list()) {
@@ -947,12 +1088,12 @@ public class MapView extends AbstractView {
     //todo ISSUE (#112 Record Track)
     private void showMenuTrackRecording() {
         Menu cm2 = new Menu("TrackRecordMenuTitle");
-        cm2.addMenuItem("start", null, ()->TrackRecorder.INSTANCE.startRecording()).setEnabled(!TrackRecorder.INSTANCE.recording);
+        cm2.addMenuItem("start", null, () -> TrackRecorder.INSTANCE.startRecording()).setEnabled(!TrackRecorder.INSTANCE.recording);
         if (TrackRecorder.INSTANCE.pauseRecording)
-            cm2.addMenuItem("continue", null, ()->TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
+            cm2.addMenuItem("continue", null, () -> TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
         else
-            cm2.addMenuItem("pause", null, ()->TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
-        cm2.addMenuItem("stop", null, ()->TrackRecorder.INSTANCE.stopRecording()).setEnabled(TrackRecorder.INSTANCE.recording | TrackRecorder.INSTANCE.pauseRecording);
+            cm2.addMenuItem("pause", null, () -> TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
+        cm2.addMenuItem("stop", null, () -> TrackRecorder.INSTANCE.stopRecording()).setEnabled(TrackRecorder.INSTANCE.recording | TrackRecorder.INSTANCE.pauseRecording);
         cm2.show();
     }
 
@@ -967,11 +1108,6 @@ public class MapView extends AbstractView {
         Config.AcceptChanges();
         setNewSettings();
     }
-
-    private MapWayPointItem infoItem = null;
-    private MapBubble infoBubble;
-    float mapHalfWith;
-    float mapHalfHeight;
 
     public void clickOnItem(final MapWayPointItem item) {
 
@@ -996,43 +1132,6 @@ public class MapView extends AbstractView {
 
 
     }
-
-    private ClickListener bubbleClickListener = new ClickListener() {
-
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            super.touchDown(event, x, y, pointer, button);
-            if (infoBubble != null) {
-                //click detection
-                if (infoBubble.getX() <= x && infoBubble.getX() + infoBubble.getWidth() >= x &&
-                        infoBubble.getY() <= y && infoBubble.getY() + infoBubble.getHeight() >= y) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void clicked(InputEvent event, float x, float y) {
-            if (infoBubble != null) {
-
-                //click detection
-                if (infoBubble.getX() <= x && infoBubble.getX() + infoBubble.getWidth() >= x &&
-                        infoBubble.getY() <= y && infoBubble.getY() + infoBubble.getHeight() >= y) {
-                    // select this cache/waypoint and close bubble
-                    Object obj = infoItem.dataObject;
-                    if (obj instanceof AbstractCache) {
-                        AbstractCache cache = (AbstractCache) obj;
-                        EventHandler.fire(new SelectedCacheChangedEvent(cache));
-                    } else if (obj instanceof AbstractWaypoint) {
-                        AbstractWaypoint waypoint = (AbstractWaypoint) obj;
-                        EventHandler.fire(new SelectedWayPointChangedEvent(waypoint));
-                    }
-
-                    closeInfoBubble();
-                }
-            }
-
-        }
-    };
 
     public void closeInfoBubble() {
         CB.postOnGlThread(new NamedRunnable("remove info bubble") {
@@ -1062,5 +1161,13 @@ public class MapView extends AbstractView {
         MapPosition actPosition = map.getMapPosition();
         actPosition.tilt = (float) tilt;
         map.setMapPosition(actPosition);
+    }
+
+    public static class FZKThemesInfo {
+        public String Name;
+        public String Description;
+        public String Url;
+        public int Size;
+        public String MD5;
     }
 }

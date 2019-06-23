@@ -54,8 +54,6 @@ public class Action_MapDownload extends AbstractAction {
                 XMLParser<Map<String, String>> parserCache = new XMLParser<>(ruleList.toArray(IRule.class));
                 parserCache.parse(new ByteArrayInputStream(repository_freizeitkarte_android.getBytes()), values);
 
-                float yPos = 0;
-
                 // get and check the target directory (global value)
                 String workPath = Config.MapPackFolder.getValue();
                 boolean isWritable;
@@ -172,7 +170,7 @@ public class Action_MapDownload extends AbstractAction {
         public String Description;
         public String Url;
         public int Size;
-        String MD5;
+        public String MD5;
     }
 
 }
