@@ -45,9 +45,7 @@ public class Action_Explore extends AbstractAction {
             public void run() {
                 final FileChooser fileChooser = new FileChooser(Translation.get("Xplore"),
                         FileChooser.Mode.BROWSE, FileChooser.SelectionMode.ALL);
-
-
-                //todo set root path
+                fileChooser.setDirectory(CB.WorkPathFileHandle, true);
                 fileChooser.show();
             }
         });

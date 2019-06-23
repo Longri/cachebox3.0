@@ -61,10 +61,50 @@ public class FileChooser extends ActivityBase {
         void selected(FileHandle fileHandle);
     }
 
+    FileFilter directoryFileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            return pathname.isDirectory();
+        }
+    };
+
+    FileFilter fileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            return true;
+        }
+    };
+
+    FileFilter extentionFileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            if (pathname.isDirectory()) return true;
+
+            String name = pathname.getName();
+            int dotIndex = name.lastIndexOf('.');
+            if (dotIndex == -1) return false;
+            String ext = name.substring(dotIndex + 1);
+
+            for (String ex : fileExtentions) {
+                if (ext.equals(ex)) return true;
+            }
+            return false;
+        }
+    };
+
+    FileFilter browseFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            return true;
+        }
+    };
+
+
     private CB_Button btnOk, btnCancel;
+    private FileHandle rootDir;
     private FileHandle actDir;
     private FileChooserStyle fileChooserStyle;
-    private FileFilter actFilter;
+    private FileFilter actFilter = browseFilter;
     private FileHandle[] actFileList;
     private String[] fileExtentions;
     private FileHandle selectedFile;
@@ -98,39 +138,16 @@ public class FileChooser extends ActivityBase {
 
     }
 
-    FileFilter directoryFileFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return pathname.isDirectory();
-        }
-    };
-
-    FileFilter fileFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return true;
-        }
-    };
-
-    FileFilter extentionFileFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            if (pathname.isDirectory()) return true;
-
-            String name = pathname.getName();
-            int dotIndex = name.lastIndexOf('.');
-            if (dotIndex == -1) return false;
-            String ext = name.substring(dotIndex + 1);
-
-            for (String ex : fileExtentions) {
-                if (ext.equals(ex)) return true;
-            }
-            return false;
-        }
-    };
-
 
     public void setDirectory(FileHandle directory) {
+        this.setDirectory(directory, false);
+    }
+
+    public void setDirectory(FileHandle directory, boolean isRoot) {
+
+        if (isRoot)
+            rootDir = directory;
+
         // list all parents
         String absolutPath = directory.file().getAbsolutePath();
         String split = CB.fs;
@@ -143,17 +160,17 @@ public class FileChooser extends ActivityBase {
 
         String path = "";
         for (int i = 0, n = folder.length; i < n; i++) {
-            if (folder[i].equals(".")) continue;
+            if (folder[i] == null || folder[i].equals(".")) continue;
             path += folder[i] + "/";
-            setInternDirectory(Gdx.files.absolute(path));
+            setInternDirectory(Gdx.files.absolute(path), isRoot);
         }
     }
 
-    private void setInternDirectory(FileHandle directory) {
+    private void setInternDirectory(FileHandle directory, boolean isRoot) {
         this.selectedFile = null;
         this.actDir = directory;
         actFileList = this.actDir.list(this.actFilter);
-        fillContent();
+        fillContent(isRoot);
         checkButton();
     }
 
@@ -223,7 +240,7 @@ public class FileChooser extends ActivityBase {
     Label.LabelStyle nameStyle;
 
 
-    private void fillContent() {
+    private void fillContent(boolean isRoot) {
         //set LabelStyles
         nameStyle = new Label.LabelStyle();
         nameStyle.font = fileChooserStyle.itemNameFont;
@@ -270,7 +287,7 @@ public class FileChooser extends ActivityBase {
                     table.addListener(new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
                             if (event.getType() == InputEvent.Type.touchUp) {
-                                setInternDirectory(file);
+                                setInternDirectory(file, false);
                             }
                         }
                     });
@@ -341,7 +358,7 @@ public class FileChooser extends ActivityBase {
             @Override
             public void run() {
                 listView.setAdapter(listViewAdapter);
-                showListView(listView, FileChooser.this.actDir.name(), true);
+                showListView(listView, FileChooser.this.actDir.name(), true, isRoot);
             }
         });
 
@@ -354,7 +371,7 @@ public class FileChooser extends ActivityBase {
         this.checkButton();
     }
 
-    private void showListView(ListView listView, String name, boolean animate) {
+    private void showListView(ListView listView, String name, boolean animate, boolean isRoot) {
 
         float y = btnOk.getY() + btnOk.getHeight() + CB.scaledSizes.MARGIN;
 
@@ -414,7 +431,7 @@ public class FileChooser extends ActivityBase {
 
         float titleHeight = titleLabel.getHeight() + CB.scaledSizes.MARGIN;
         titleGroup.setBounds(0, Gdx.graphics.getHeight() - (y + titleHeight), Gdx.graphics.getWidth(), titleHeight);
-        titleGroup.addListener(backClickListener);
+        if (!isRoot) titleGroup.addListener(backClickListener);
         widgetGroup.addActor(titleGroup);
 
         listView.setBounds(0, 0, widgetGroup.getWidth(), titleGroup.getY() - CB.scaledSizes.MARGIN);
