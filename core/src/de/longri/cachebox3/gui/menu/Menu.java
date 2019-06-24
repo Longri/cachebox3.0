@@ -101,10 +101,14 @@ public class Menu extends Window {
         this.hideWithItemClick = heideWithItemClick;
     }
 
-    public MenuItem addItem(int ID, CharSequence StringId, Drawable icon) {
-        MenuItem item = addItem(ID, StringId);
+    public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, boolean withoutTranslation, Drawable icon, ClickListener clickListener) {
+        MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
+        if (titleTranlationId.length() == 0) withoutTranslation = true;
+        item.setTitle((withoutTranslation ? titleTranlationId : Translation.get(titleTranlationId.toString())) + titleExtension);
         if (icon != null)
             item.setIcon(icon);
+        item.addListener(clickListener);
+        mItems.add(item);
         return item;
     }
 

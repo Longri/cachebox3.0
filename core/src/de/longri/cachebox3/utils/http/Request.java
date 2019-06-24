@@ -31,7 +31,7 @@ public class Request {
         this.followRedirects = webb.followRedirects;
     }
 
-    public Request setTimeout(int timeout) {
+    public Request readTimeout(int timeout) {
         this.timeout = timeout;
         return this;
     }

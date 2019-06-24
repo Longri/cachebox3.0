@@ -45,7 +45,7 @@ public class GCVote {
         try {
             InputStream is = Webb.create()
                     .get("http://gcvote.com/getVotes.php?" + data)
-                    .setTimeout(Config.socket_timeout.getValue())
+                    .readTimeout(Config.socket_timeout.getValue())
                     .ensureSuccess()
                     .asStream()
                     .getBody();
@@ -107,7 +107,7 @@ public class GCVote {
         try {
             String responseString = Webb.create()
                     .get("http://gcvote.com/setVote.php?" + data)
-                    .setTimeout(Config.socket_timeout.getValue())
+                    .readTimeout(Config.socket_timeout.getValue())
                     .ensureSuccess()
                     .asString()
                     .getBody();

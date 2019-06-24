@@ -1,6 +1,8 @@
 package de.longri.cachebox3.gui.actions.show_activities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.thebuzzmedia.sjxp.XMLParser;
@@ -13,6 +15,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.UnZip;
@@ -44,7 +47,7 @@ public class Action_MapDownload extends AbstractAction {
                 icm = new Menu("MapDownload");
                 String repository_freizeitkarte_android = Webb.create()
                         .get("http://repository.freizeitkarte-osm.de/repository_freizeitkarte_android.xml")
-                        .setTimeout(Config.socket_timeout.getValue())
+                        .readTimeout(Config.socket_timeout.getValue())
                         .ensureSuccess()
                         .asString()
                         .getBody();
@@ -76,20 +79,28 @@ public class Action_MapDownload extends AbstractAction {
                 // todo perhaps sorting mapInfoList
                 // icm.setHideWithItemClick(true);
                 for (MapRepositoryInfo mapInfo : mapInfoList) {
-                    icm.addMenuItem("", mapInfo.Description.substring(14) + " (" + mapInfo.Size / 1024 / 1024 + " MB)", null, () -> {
-                        // todo Download Animation
-                        int slashPos = mapInfo.Url.lastIndexOf("/");
-                        String zipFile = mapInfo.Url.substring(slashPos + 1);
-                        String target = targetPath + "/" + zipFile;
-                        Download.Download(mapInfo.Url, target);
-                        try {
-                            UnZip unzip = new UnZip();
-                            unzip.extractFolder(target, true);
-                        } catch (Exception e) {
-                            log.error(e.getLocalizedMessage());
-                        }
-                        Gdx.files.absolute(target).delete();
-                    });
+                    icm.addMenuItem("", mapInfo.Description.substring(14) + " (" + mapInfo.Size / 1024 / 1024 + " MB)", false,
+                            null,
+                            new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    if (icm.mustHandle(event)) {
+                                        MenuItem mi = (MenuItem) event.getListenerActor();
+                                        mi.setEnabled(false);
+                                        // todo doesn't show disabled (enough animation?)
+                                        int slashPos = mapInfo.Url.lastIndexOf("/");
+                                        String zipFile = mapInfo.Url.substring(slashPos + 1);
+                                        String target = targetPath + "/" + zipFile;
+                                        Download.Download(mapInfo.Url, target);
+                                        try {
+                                            UnZip unzip = new UnZip();
+                                            unzip.extractFolder(target, true);
+                                        } catch (Exception e) {
+                                            log.error(e.getLocalizedMessage());
+                                        }
+                                        Gdx.files.absolute(target).delete();
+                                    }
+                                }
+                            });
                 }
             }
 

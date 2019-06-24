@@ -923,15 +923,24 @@ public class MapView extends AbstractView {
         final String target = themesPath + "/Elevate4.zip";
         if (themesPath.length() > 0) {
             mapViewThemeMenu.addDivider(-1);
-            mapViewThemeMenu.addMenuItem("Download", "\n OpenAndroMaps", CB.getSkin().getMenuIcon.baseMapMapsforge, () -> {
-                Download.Download("http://download.openandromaps.org/themes/Elevate4.zip", target);
-                try {
-                    new UnZip().extractFolder(target);
-                } catch (Exception ex) {
-                    MessageBox.show(ex.toString(), "Unzip", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
-                }
-                Gdx.files.absolute(target).delete();
-            });
+            mapViewThemeMenu.addMenuItem("Download", "\n OpenAndroMaps", false,
+                    CB.getSkin().getMenuIcon.baseMapMapsforge,
+                    new ClickListener() {
+                        public void clicked(InputEvent event, float x, float y) {
+                            if (mapViewThemeMenu.mustHandle(event)) {
+                                MenuItem mi = (MenuItem) event.getListenerActor();
+                                mi.setEnabled(false);
+                                // todo doesn't show disabled (enough animation?)
+                                Download.Download("http://download.openandromaps.org/themes/Elevate4.zip", target);
+                                try {
+                                    new UnZip().extractFolder(target);
+                                } catch (Exception ex) {
+                                    MessageBox.show(ex.toString(), "Unzip", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
+                                }
+                                Gdx.files.absolute(target).delete();
+                            }
+                        }
+                    });
         }
 
         addDownloadFZKRenderThemes();
@@ -944,7 +953,7 @@ public class MapView extends AbstractView {
         if (fzkThemesInfoList.size == 0) {
             String repository_freizeitkarte_android = Webb.create()
                     .get("http://repository.freizeitkarte-osm.de/repository_freizeitkarte_android.xml")
-                    .setTimeout(Config.socket_timeout.getValue())
+                    .readTimeout(Config.socket_timeout.getValue())
                     .ensureSuccess()
                     .asString()
                     .getBody();
@@ -956,6 +965,7 @@ public class MapView extends AbstractView {
         }
 
         for (FZKThemesInfo fzkThemesInfo : fzkThemesInfoList) {
+            // todo change to explicit clicklistener, if animation works
             mapViewThemeMenu.addMenuItem("Download", "\n" + fzkThemesInfo.Description, CB.getSkin().getMenuIcon.baseMapFreizeitkarte, () -> {
                 String zipFile = fzkThemesInfo.Url.substring(fzkThemesInfo.Url.lastIndexOf("/") + 1);
                 String target = themesPath + "/" + zipFile;

@@ -46,6 +46,13 @@ public class UnZip {
         return Gdx.files.absolute(resultPath);
     }
 
+    /**
+     *
+     * @param zipFile file to extract
+     *             attention in ACB2 the default is here == true
+     * @return Extracted Folder Path as String
+     * @throws IOException with IO error
+     */
     public String extractFolder(String zipFile) throws IOException {
         return extractFolder(zipFile, false);
     }
@@ -54,6 +61,8 @@ public class UnZip {
      * Extract the given ZIP-File
      *
      * @param zipFile file to extract
+     * @param here true: extract into the path where the zipfile is <br>
+     *             false: extract into new path with the name of the zipfile (without extension)
      * @return Extracted Folder Path as String
      * @throws IOException with IO error
      */
