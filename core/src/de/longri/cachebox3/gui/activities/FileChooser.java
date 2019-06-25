@@ -17,6 +17,8 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -25,18 +27,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
+import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.IconButton;
-import de.longri.cachebox3.gui.widgets.list_view.ListView;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
+import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.utils.NamedRunnable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -50,6 +59,8 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
  * Created by Longri on 20.02.2017.
  */
 public class FileChooser extends ActivityBase {
+
+    private final static Logger log = LoggerFactory.getLogger(FileChooser.class);
 
     public enum Mode {
         OPEN, SAVE, BROWSE
@@ -167,8 +178,8 @@ public class FileChooser extends ActivityBase {
         for (int i = 0, n = folder.length; i < n; i++) {
             if (folder[i] == null || folder[i].equals(".")) continue;
             path += folder[i] + "/";
-            setInternDirectory(Gdx.files.absolute(path), isRoot);
         }
+        setInternDirectory(Gdx.files.absolute(path), isRoot);
     }
 
     private void setInternDirectory(FileHandle directory, boolean isRoot) {
@@ -178,14 +189,16 @@ public class FileChooser extends ActivityBase {
         for (FileHandle fileHandle : this.actDir.list(this.actFilter))
             actFileList.add(fileHandle);
         fillContent(isRoot);
-        checkButton();
+        checkButton(null);
     }
 
-    private void checkButton() {
-        if (selectionMode == SelectionMode.FILES) {
-            if (this.selectedFile == null) {
+    private void checkButton(ListView listView) {
+        if (selectionMode != SelectionMode.DIRECTORIES) {
+            if (listView == null || listView.getSelectedItem() == null) {
+                log.debug("chekButton switch off");
                 btnAction.setDisabled(true);
             } else {
+                log.debug("chekButton switch on");
                 btnAction.setDisabled(false);
             }
         }
@@ -195,21 +208,10 @@ public class FileChooser extends ActivityBase {
 
         if (this.mode == Mode.BROWSE) {
             btnAction = new IconButton(Translation.get("delete"), fileChooserStyle.deleteBtnIcon);
+            btnAction.addListener(deleteClickListener);
         } else {
             btnAction = new IconButton(Translation.get("select"));
-            btnAction.addListener(new ClickListener() {
-                public void clicked(InputEvent event, float x, float y) {
-                    if (btnAction.isDisabled()) return;
-                    if (selectionReturnListner != null) {
-                        if (selectionMode == SelectionMode.FILES) {
-                            selectionReturnListner.selected(selectedFile);
-                        } else {
-                            selectionReturnListner.selected(actDir);
-                        }
-                    }
-                    finish();
-                }
-            });
+            btnAction.addListener(selectClickListener);
         }
 
         btnCancel = new CB_Button(Translation.get(this.mode == Mode.BROWSE ? "close" : "cancel"));
@@ -224,6 +226,52 @@ public class FileChooser extends ActivityBase {
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             if (selectionReturnListner != null) selectionReturnListner.selected(null);
+            finish();
+        }
+    };
+
+    private final ClickListener deleteClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            // ask for deletion selected files
+
+            ListView actListView = (ListView) listViews.peek().getChildren().peek();
+
+            Array<ListViewItemInterface> selectedItems = actListView.getSelectedItems();
+            Array<FileHandle> delFiles = new Array<>();
+            int delDirCount = 0;
+            int delFileCount = 0;
+            for (ListViewItemInterface itemInterface : selectedItems) {
+                FileChooserItem item = (FileChooserItem) itemInterface;
+                if (item.fileHandle.isDirectory()) delDirCount++;
+                else delFileCount++;
+                delFiles.add(item.fileHandle);
+            }
+            CharSequence msg = Translation.get("delete_Files", Integer.toString(delDirCount), Integer.toString(delFileCount));
+
+            MessageBox.show(msg, null, MessageBoxButtons.YesNo, MessageBoxIcon.Question, (which, data) -> {
+                if (which == ButtonDialog.BUTTON_POSITIVE)
+                    CB.postAsync(new NamedRunnable("delete files") {
+                        @Override
+                        public void run() {
+                            //delete Files
+                            //TODO delete Files
+                        }
+                    });
+                return true;
+            });
+        }
+    };
+
+    private final ClickListener selectClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (btnAction.isDisabled()) return;
+            if (selectionReturnListner != null) {
+                if (selectionMode == SelectionMode.FILES) {
+                    selectionReturnListner.selected(selectedFile);
+                } else {
+                    selectionReturnListner.selected(actDir);
+                }
+            }
             finish();
         }
     };
@@ -272,6 +320,8 @@ public class FileChooser extends ActivityBase {
 
         final FileListAdapter listViewAdapter = new FileListAdapter(actFileList) {
 
+            IntMap<FileChooserItem> items = new IntMap<>();
+
             @Override
             public int getCount() {
                 return fileList.size;
@@ -279,7 +329,11 @@ public class FileChooser extends ActivityBase {
 
             @Override
             public ListViewItem getView(int index) {
-                return getEntryItem(index);
+                if (items.containsKey(index))
+                    return items.get(index);
+                FileChooserItem item = getEntryItem(index);
+                items.put(index, item);
+                return item;
             }
 
             @Override
@@ -287,54 +341,109 @@ public class FileChooser extends ActivityBase {
 
             }
 
-            private ListViewItem getEntryItem(final int index) {
+            private FileChooserItem getEntryItem(final int index) {
 
                 final FileHandle file = fileList.get(index);
                 if (file.isDirectory()) {
-                    ListViewItem table = new ListViewItem(index) {
+                    FileChooserItem item = new FileChooserItem(index, file) {
                         @Override
                         public void dispose() {
                         }
                     };
 
                     // add label with category name, align left
-                    table.left();
+                    item.left();
                     VisLabel label = new VisLabel(file.name());
                     label.setAlignment(Align.left);
-                    table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+                    item.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
                     // add folder icon
                     Image next = new Image(fileChooserStyle.folderIcon);
-                    table.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+                    item.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
                     // add clicklistener
-                    table.addListener(new ClickListener() {
-                        public void clicked(InputEvent event, float x, float y) {
+                    item.addListener(new ClickLongClickListener() {
+                        public boolean clicked(InputEvent event, float x, float y) {
                             if (event.getType() == InputEvent.Type.touchUp) {
+                                if (mode == Mode.BROWSE) {
+                                    log.debug("click");
+                                    //remove selection before switch to dir
+                                    item.setSelected(false);
+                                    Array<ListViewItemInterface> selectedItems = listView.getSelectedItems();
+                                    if (selectedItems != null) {
+                                        for (ListViewItemInterface item : selectedItems) {
+                                            item.setSelected(false);
+                                        }
+                                        selectedItems.clear();
+                                    }
+                                }
                                 setInternDirectory(file, false);
                             }
+                            return true;
                         }
+
+                        @Override
+                        public boolean longClicked(Actor actor, float x, float y) {
+                            log.debug("longClick on Actor: {}", actor.toString());
+                            //select and not browse
+                            if (mode == Mode.BROWSE) {
+                                if (item.isSelected()) {
+                                    item.setSelected(false);
+                                    Array<ListViewItemInterface> selectedItems = listView.getSelectedItems();
+                                    if (selectedItems != null) {
+                                        selectedItems.removeValue(item, true);
+                                    }
+                                } else {
+                                    item.setSelected(true);
+                                    Array<ListViewItemInterface> selectedItems = listView.getSelectedItems();
+                                    if (selectedItems != null) {
+                                        selectedItems.add(item);
+                                    } else {
+                                        listView.setSelection(item.getListIndex());
+                                    }
+                                }
+                            }
+                            return true;
+                        }
+
+                        public boolean handle(Event e) {
+                            boolean ret = super.handle(e);
+                            if (!(e instanceof InputEvent)) return ret;
+                            InputEvent event = (InputEvent) e;
+                            if (event.getType() == InputEvent.Type.touchUp) {
+                                log.debug("touchUp");
+                                CB.postAsyncDelayd(200, new NamedRunnable("") {
+                                    @Override
+                                    public void run() {
+                                        checkButton(listView);
+                                    }
+                                });
+                            }
+                            return ret;
+                        }
+
+
                     });
-                    return table;
+                    return item;
                 } else if (file.extension().equals("map")) {
-                    ListViewItem table = new ListViewItem(index) {
+                    FileChooserItem item = new FileChooserItem(index, file) {
                         @Override
                         public void dispose() {
                         }
                     };
 
                     // add label with category name, align left
-                    table.left();
+                    item.left();
                     VisLabel label = new VisLabel(file.name());
                     label.setAlignment(Align.left);
-                    table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+                    item.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
                     // add map file icon
                     Image next = new Image(fileChooserStyle.mapFileIcon);
-                    table.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+                    item.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
                     // add clicklistener
-                    table.addListener(new ClickListener() {
+                    item.addListener(new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
                             if (event.getType() == InputEvent.Type.touchUp) {
                                 selectedFile = file;
@@ -342,34 +451,35 @@ public class FileChooser extends ActivityBase {
                             }
                         }
                     });
-                    return table;
+                    return item;
                 } else {
-                    ListViewItem table = new ListViewItem(index) {
+                    FileChooserItem item = new FileChooserItem(index, file) {
                         @Override
                         public void dispose() {
                         }
                     };
 
                     // add label with category name, align left
-                    table.left();
+                    item.left();
                     VisLabel label = new VisLabel(file.name());
                     label.setAlignment(Align.left);
-                    table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+                    item.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
                     // add file icon
                     Image next = new Image(fileChooserStyle.fileIcon);
-                    table.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+                    item.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
                     // add clicklistener
-                    table.addListener(new ClickListener() {
+                    item.addListener(new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
-                            if (event.getType() == InputEvent.Type.touchUp) {
+                            if (event.getType() == InputEvent.Type.touchUp & !event.isCancelled()) {
                                 selectedFile = file;
                                 select(listView, index);
+                                event.cancel();
                             }
                         }
                     });
-                    return table;
+                    return item;
                 }
             }
 
@@ -390,9 +500,26 @@ public class FileChooser extends ActivityBase {
     }
 
     private void select(ListView listView, int index) {
-        listView.setSelectable(SINGLE);
-        listView.setSelection(index);
-        this.checkButton();
+        if (selectionMode == SelectionMode.ALL) {
+            ListViewItemInterface item = listView.getListItem(index);
+            if (item.isSelected()) {
+                listView.getSelectedItems().removeValue(item, true);
+                item.setSelected(false);
+                CB.requestRendering();
+            } else {
+                item.setSelected(true);
+                Array<ListViewItemInterface> selectedItems = listView.getSelectedItems();
+                if (selectedItems == null || selectedItems.size == 0) {
+                    listView.setSelection(index);
+                } else {
+                    selectedItems.add(item);
+                }
+            }
+        } else {
+            listView.setSelectable(SINGLE);
+            listView.setSelection(index);
+        }
+        this.checkButton(listView);
     }
 
     private void showListView(ListView listView, String name, boolean animate, boolean isRoot) {
@@ -461,6 +588,12 @@ public class FileChooser extends ActivityBase {
         listView.setBounds(0, 0, widgetGroup.getWidth(), titleGroup.getY() - CB.scaledSizes.MARGIN);
         listView.layout();
         listView.setBackground(null); // remove default background
+
+        //set selection mode
+        if (this.selectionMode == SelectionMode.ALL)
+            listView.setSelectable(SelectableType.MULTI);
+
+
         widgetGroup.addActor(listView);
 
         if (listViews.size > 0) {
@@ -509,4 +642,16 @@ public class FileChooser extends ActivityBase {
         super.dispose();
         CB.stageManager.unRegisterForBackKey(cancelClickListener);
     }
+
+    static class FileChooserItem extends ListViewItem {
+
+        final FileHandle fileHandle;
+
+        public FileChooserItem(int index, FileHandle fileHandle) {
+            super(index);
+            this.fileHandle = fileHandle;
+        }
+    }
 }
+
+
