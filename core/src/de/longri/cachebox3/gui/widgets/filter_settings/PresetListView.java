@@ -210,7 +210,7 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
                     }
 
                     @Override
-                    public boolean longClicked(Actor actor, float x, float y) {
+                    public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
 
                         String name = "";
 

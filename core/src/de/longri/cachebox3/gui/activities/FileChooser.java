@@ -383,7 +383,7 @@ public class FileChooser extends ActivityBase {
                         }
 
                         @Override
-                        public boolean longClicked(Actor actor, float x, float y) {
+                        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
                             log.debug("longClick on Actor: {}", actor.toString());
                             //select and not browse
                             if (mode == Mode.BROWSE) {

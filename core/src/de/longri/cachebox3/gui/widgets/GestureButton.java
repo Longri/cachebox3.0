@@ -261,7 +261,7 @@ public class GestureButton extends Button {
         }
 
         @Override
-        public boolean longClicked(Actor actor, float x, float y) {
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
             log.debug("onLongClick");
             // GL_MsgBox.show("Button " + Me.getName() + " recivet a LongClick Event");
             // Wenn diesem Button mehrere Actions zugeordnet sind dann wird nach einem Lang-Click ein Menü angezeigt aus dem eine dieser

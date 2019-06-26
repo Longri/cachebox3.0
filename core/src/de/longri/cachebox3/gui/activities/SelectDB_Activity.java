@@ -522,7 +522,7 @@ public class SelectDB_Activity extends ActivityBase {
                     }
 
                     @Override
-                    public boolean longClicked(Actor actor, float x, float y) {
+                    public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
                         if (actor instanceof SelectDBItem) {
                             log.debug("longClick on Item {}", files.get(listIndex).getName());
                             deleteDatabase(files.get(listIndex));

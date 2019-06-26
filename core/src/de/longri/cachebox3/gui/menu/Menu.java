@@ -143,6 +143,7 @@ public class Menu extends Window {
         item.setChecked(checked);
         return item;
     }
+
     public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, boolean checked, Runnable runnable) {
         return addCheckableMenuItem(titleTranlationId, checked, false, runnable);
     }
@@ -175,7 +176,7 @@ public class Menu extends Window {
             }
 
             @Override
-            public boolean longClicked(Actor actor, float x, float y) {
+            public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
                 return false;
             }
         });
@@ -348,11 +349,10 @@ public class Menu extends Window {
         String title = getName(); // !!! name is here(local access) and in actor(public getter/setter)
         if (title.length() > 0) {
             if (title.startsWith("-"))
-                title=title.substring(1);
+                title = title.substring(1);
             else
-                title=Translation.get(title).toString();
-        }
-        else title = " ";
+                title = Translation.get(title).toString();
+        } else title = " ";
         titleLabel = new VisLabel(title, "menu_title_act");
 
         if (parentMenu != null) {

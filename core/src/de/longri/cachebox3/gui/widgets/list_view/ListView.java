@@ -226,18 +226,14 @@ public class ListView extends Catch_WidgetGroup {
         }
 
         @Override
-        public boolean longClicked(Actor actor, float x, float y) {
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
             log.debug("ListViewItem longClicked on x:{}  y:{}", x, y);
-
-            Vector2 vec = ListView.this.localToStageCoordinates(new Vector2());
-            x += vec.x;
-            y += vec.y;
-
             SnapshotArray<Actor> childs = ((ListViewItemLinkedList) scrollPane.getChildren().get(0)).getChildren();
             for (int i = 0, n = childs.size; i < n; i++) {
                 ListViewItem item = (ListViewItem) childs.get(i);
-                tempClickRec.set(item.getX(), item.getY() + scrollPane.getScrollY(), item.getWidth(), item.getHeight());
-                if (tempClickRec.contains(x, y)) {
+                Vector2 vec = item.localToStageCoordinates(new Vector2());
+                tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
+                if (tempClickRec.contains(touchDownStageX, touchDownStageY)) {
                     item.setBackground(ListView.this.style.selectedItem);
                     // item Clicked
                     log.debug("ListViewItem {} LongClicked", i);
@@ -245,7 +241,7 @@ public class ListView extends Catch_WidgetGroup {
                     boolean handeld = false;
                     for (EventListener listener : listeners) {
                         if (listener instanceof ClickLongClickListener) {
-                            if (((ClickLongClickListener) listener).longClicked(actor, x, y)) {
+                            if (((ClickLongClickListener) listener).longClicked(actor, x, y, touchDownStageX, touchDownStageY)) {
                                 handeld = true;
                             }
                         }
@@ -460,7 +456,7 @@ public class ListView extends Catch_WidgetGroup {
         }
 
         @Override
-        public boolean longClicked(Actor actor, float x, float y) {
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
             return false;
         }
     };

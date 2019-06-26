@@ -78,7 +78,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         }
 
         @Override
-        public boolean longClicked(Actor actor, float x, float y) {
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
             if (!(actor instanceof ListViewItem)) return false;
             int listIndex = ((ListViewItem) actor).getListIndex();
 
