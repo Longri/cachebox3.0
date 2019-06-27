@@ -17,11 +17,7 @@ package de.longri.cachebox3.settings;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.settings.types.*;
-import org.oscim.backend.CanvasAdapter;
-import org.oscim.backend.Platform;
-import org.oscim.backend.canvas.Canvas;
 
 import static de.longri.cachebox3.settings.types.SettingCategory.*;
 import static de.longri.cachebox3.settings.types.SettingStoreType.Global;
@@ -68,6 +64,8 @@ public class Settings_Map extends Settings_Const {
 
     public static final SettingFile MapsforgeDayTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeDayTheme", Map, NEVER, "", Global, ACB, "xml"));
     public static final SettingFile MapsforgeNightTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeNightTheme", Map, NEVER, "", Global, ACB, "xml"));
+    public static final SettingString MapsforgeDayStyle = (SettingString) settingsList.addSetting(new SettingString("MapsforgeDayStyle", Map, NEVER, "", Global, ACB));
+    public static final SettingString MapsforgeNightStyle = (SettingString) settingsList.addSetting(new SettingString("MapsforgeNightStyle", Map, NEVER, "", Global, ACB));
 
     public static final SettingsBlob lastMapState = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapState", Map, NEVER, Local, ACB, false, new byte[]{}));
     public static final SettingsBlob lastMapStateBeforeCar = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapStateBeforeCar", Map, NEVER, Local, ACB, false, new byte[]{}));

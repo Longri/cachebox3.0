@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.apis;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.locator.Coordinate;
@@ -31,8 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -465,7 +466,8 @@ public class GroundspeakAPI {
                     .getBody();
             // String dateString = new SimpleDateFormat("yyyyMMddHHmmss").format(pocketQuery.lastGenerated);
             String local = pqFolder + "/" + pocketQuery.GUID + ".zip";
-            FileOutputStream localFile = new FileOutputStream(local);
+            // FileOutputStream localFile = new FileOutputStream(local);
+            OutputStream localFile = Gdx.files.absolute(local).write(false);
             outStream = new BufferedOutputStream(localFile);
             WebbUtils.copyStream(inStream, outStream);
             APIError = OK;

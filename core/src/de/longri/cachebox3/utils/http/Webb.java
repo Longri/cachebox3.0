@@ -38,6 +38,8 @@ public class Webb {
     Map<String, Object> defaultHeaders;
 
     protected Webb() {
+        setDefaultHeader("User-Agent", DEFAULT_USER_AGENT);
+        setDefaultHeader(HDR_ACCEPT_ENCODING, "gzip");
     }
 
     /**

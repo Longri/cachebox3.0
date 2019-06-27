@@ -32,8 +32,7 @@ import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
-import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
-import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
+import de.longri.cachebox3.gui.map.layer.ThemeMenu;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -55,7 +54,6 @@ import org.oscim.backend.Platform;
 import org.oscim.core.Tile;
 import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.theme.IRenderTheme;
-import org.oscim.theme.ThemeFile;
 import org.oscim.theme.ThemeLoader;
 import org.oscim.theme.VtmThemes;
 import org.slf4j.Logger;
@@ -125,13 +123,12 @@ public class CB {
     public static ScaledSizes scaledSizes;
     public static Track actRoute;
     public static int actRouteCount;
-    public static ThemeFile actThemeFile;
-    public static IRenderTheme actTheme;
     public static LinkedHashMap<Object, TextureRegion> textureRegionMap;
     public static Image CB_Logo;
     public static Image backgroundImage;
     public static boolean isBackground = false;
     static boolean mapScaleInitial = false;
+    private static IRenderTheme actTheme;
     private static float globalScale = 1;
     private static AbstractCache nearestAbstractCache = null;
     private static boolean autoResort;
@@ -161,10 +158,13 @@ public class CB {
                 CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
                 CanvasAdapter.textScale = text;
                 Tile.SIZE = Tile.calculateTileSize();
-                loadThemeFile(CB.actThemeFile);
+                setCurrentTheme();
             }
         }
     };
+    static private Runtime runtime;
+    static private StringBuilder memoryStringBuilder = new StringBuilder();
+    static private NumberFormat format = NumberFormat.getInstance();
 
     private CB() {
     }
@@ -572,66 +572,75 @@ public class CB {
     }
 
     public static void postOnNextGlThread(final Runnable runnable) {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        runnable.run();
-                        requestRendering();
-                    }
-                });
-            }
-        });
-    }
-
-    public static boolean loadThemeFile(ThemeFile themeFile) {
-
-        if (!mapScaleInitial) {
-            Settings.MapViewDPIFaktor.addChangedEventListener(mapScaleSettingChanged);
-            Settings.MapViewTextFaktor.addChangedEventListener(mapScaleSettingChanged);
-            mapScaleInitial = true;
-        }
-
-        log.debug("load new Theme: {}", CB.actTheme);
-
-        //store theme on config
-        String path;
-        if (themeFile instanceof NamedExternalRenderTheme) {
-            path = ((NamedExternalRenderTheme) themeFile).path;
-        } else if (themeFile instanceof VtmThemes) {
-            path = "VTM:" + ((VtmThemes) themeFile).name();
-        } else {
-            log.warn("Cant store Theme instanceOf: {}", themeFile.getClass().getName());
-            return false;
-        }
-        if (!Config.nightMode.getValue()) {
-            Config.MapsforgeDayTheme.setValue(path);
-        } else {
-            Config.MapsforgeNightTheme.setValue(path);
-        }
-
-        // before we load the theme, we must set the MenuCallback
-        themeFile.setMenuCallback(new ThemeMenuCallback(path));
-
-        CB.actTheme = ThemeLoader.load(themeFile);
-        CB.actThemeFile = themeFile;
-        Config.AcceptChanges();
-        return true;
+        Gdx.app.postRunnable(() -> Gdx.app.postRunnable(() -> {
+            runnable.run();
+            requestRendering();
+        }));
     }
 
     public static boolean isCarMode() {
         return actMapState.getMapMode() == MapMode.CAR;
     }
 
-    public float getGlobalScaleFactor() {
-        return globalScale;
+    public static IRenderTheme getCurrentTheme() {
+        return actTheme;
     }
 
-    static private Runtime runtime;
-    static private StringBuilder memoryStringBuilder = new StringBuilder();
-    static private NumberFormat format = NumberFormat.getInstance();
+    public static void setCurrentTheme() {
+        if (!mapScaleInitial) {
+            Settings.MapViewDPIFaktor.addChangedEventListener(mapScaleSettingChanged);
+            Settings.MapViewTextFaktor.addChangedEventListener(mapScaleSettingChanged);
+            mapScaleInitial = true;
+        }
+
+        String path = getConfigsThemePath();
+        if (path.startsWith("VTM:") || path.length() == 0) {
+            VtmThemes themeFile;
+            if (path.length() == 0) {
+                themeFile = VtmThemes.DEFAULT; // or VtmThemes.OSMARENDER
+            } else {
+                String name = path.replace("VTM:", "");
+                themeFile = VtmThemes.valueOf(name);
+            }
+            actTheme = ThemeLoader.load(themeFile);
+        } else {
+            ThemeMenu themeMenu = new ThemeMenu(getConfigsThemePath());
+            themeMenu.applyConfig(getConfigsMapStyle());
+            actTheme = themeMenu.getRenderTheme();
+        }
+    }
+
+    public static String getConfigsThemePath() {
+        if (Config.nightMode.getValue()) {
+            return Config.MapsforgeNightTheme.getValue();
+        } else {
+            return Config.MapsforgeDayTheme.getValue();
+        }
+    }
+
+    public static void setConfigsThemePath(String path) {
+        if (Config.nightMode.getValue()) {
+            Config.MapsforgeNightTheme.setValue(path);
+        } else {
+            Config.MapsforgeDayTheme.setValue(path);
+        }
+    }
+
+    public static String getConfigsMapStyle() {
+        if (Config.nightMode.getValue()) {
+            return Config.MapsforgeNightStyle.getValue();
+        } else {
+            return Config.MapsforgeDayStyle.getValue();
+        }
+    }
+
+    public static void setConfigsMapStyle(String mapStyle) {
+        if (Config.nightMode.getValue()) {
+            Config.MapsforgeNightStyle.setValue(mapStyle);
+        } else {
+            Config.MapsforgeDayStyle.setValue(mapStyle);
+        }
+    }
 
     public static String getMemoryUsage() {
         if (runtime == null) runtime = Runtime.getRuntime();
@@ -643,6 +652,10 @@ public class CB {
         memoryStringBuilder.append(format.format((allocatedMemory - freeMemory) / 1048576));
         memoryStringBuilder.append(" kb");
         return memoryStringBuilder.toString();
+    }
+
+    public float getGlobalScaleFactor() {
+        return globalScale;
     }
 }
 
