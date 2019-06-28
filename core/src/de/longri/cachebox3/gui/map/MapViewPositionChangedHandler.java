@@ -28,6 +28,7 @@ import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
@@ -51,8 +52,8 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
     private final MyPositionAnimator myPositionAnimator;
 
     private float arrowHeading, mapBearing, userBearing, tilt;
-    private Coordinate mapCenter;
-    private Coordinate myPosition;
+    private CoordinateGPS mapCenter = new CoordinateGPS();
+    private CoordinateGPS myPosition = new CoordinateGPS();
     private final CacheboxMapAdapter map;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
     private double lastDynZoom;
@@ -140,7 +141,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                     //use saved pos
                     if (myPos == null) {
 
-                        if(CB.lastMapState.isEmpty()){
+                        if (CB.lastMapState.isEmpty()) {
                             //restore MapState
                             CB.lastMapState.deserialize(Config.lastMapState.getValue());
                             CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
@@ -148,7 +149,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
 
                         LatLong latLon = CB.lastMapState.getFreePosition();
                         if (latLon != null) {
-                            this.myPosition = new Coordinate(latLon);
+                            this.myPosition.set(latLon);
                         }
                     }
                 }
@@ -236,9 +237,9 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
-        this.myPosition = event.pos;
+        this.myPosition.set(event);
         if (getCenterGps())
-            this.mapCenter = this.myPosition;
+            this.mapCenter.set(this.myPosition);
         assumeValues(false, event.ID);
     }
 

@@ -206,10 +206,10 @@ public class MapView extends AbstractView {
                     Object obj = infoItem.dataObject;
                     if (obj instanceof AbstractCache) {
                         AbstractCache cache = (AbstractCache) obj;
-                        EventHandler.fire(new SelectedCacheChangedEvent(cache));
+                        EventHandler.fireAsync(new SelectedCacheChangedEvent(cache));
                     } else if (obj instanceof AbstractWaypoint) {
                         AbstractWaypoint waypoint = (AbstractWaypoint) obj;
-                        EventHandler.fire(new SelectedWayPointChangedEvent(waypoint));
+                        EventHandler.fireAsync(new SelectedWayPointChangedEvent(waypoint));
                     }
 
                     closeInfoBubble();

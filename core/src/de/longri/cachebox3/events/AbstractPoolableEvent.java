@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 team-cachebox.de
+ * Copyright (C) 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.locator;
+package de.longri.cachebox3.events;
 
-import de.longri.cachebox3.events.location.PositionChangedEvent;
-
-import java.util.concurrent.atomic.AtomicReference;
+import com.badlogic.gdx.utils.Pool;
 
 /**
- * Created by Longri on 30.01.2018.
+ * Created by Longri on 28.06.2019.
  */
-public class AtomicMutableLatLong extends AtomicReference<LatLong> {
+public abstract class AbstractPoolableEvent extends AbstractEvent implements Pool.Poolable {
 
-    public AtomicMutableLatLong() {
-        set(new LatLong(0, 0));
-    }
-
-    public void set(PositionChangedEvent event) {
-        this.get().setLatLon(event.getLatitude(), event.getLongitude());
+    public AbstractPoolableEvent(Class clazz) {
+        super(clazz);
     }
 }

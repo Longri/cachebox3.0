@@ -68,7 +68,9 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         final int count = getFilteredCacheCount(database, statement);
         if (count == 0) {
             cacheList.clear();
-            EventHandler.fire(new IncrementProgressEvent(100, msg, 100));
+            IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+            event.set(100, msg, 100);
+            EventHandler.fireAsync(event);
             return;
         }
 
@@ -87,7 +89,9 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                     actCacheCount++;
                     progressFireCount++;
                     if (progressFireCount >= progressEventcount) {
-                        EventHandler.fire(new IncrementProgressEvent(actCacheCount, msg, count));
+                        IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+                        event.set(actCacheCount, msg, count);
+                        EventHandler.fireAsync(event);
                         progressFireCount = 0;
                     }
                 }
@@ -172,8 +176,9 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             cursor.close();
         }
 
-
-        EventHandler.fire(new IncrementProgressEvent(count, msg, count));
+        IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(count, msg, count);
+        EventHandler.fireAsync(event);
         log.debug("CacheLoadReady after {} ms", System.currentTimeMillis() - startTime);
 
         if (!loadAllWaypoints) {

@@ -50,7 +50,9 @@ public class InitialWorkPathTask extends AbstractInitTask {
         log.debug("ini_Dirs");
         new CreateCbDirectoryStructure(CB.WorkPath, CanvasAdapter.platform == Platform.ANDROID);
 
-        EventHandler.fire(new IncrementProgressEvent(1, "open/create settings DB"));
+        IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(1, "open/create settings DB");
+        EventHandler.fireAsync(event);
         try {
             FileHandle configFileHandle = Gdx.files.absolute(CB.WorkPath + "/user/config.db3");
             Database.Settings = new Database(Database.DatabaseType.Settings);
@@ -70,13 +72,14 @@ public class InitialWorkPathTask extends AbstractInitTask {
 
 
         //load settings
-        EventHandler.fire(new IncrementProgressEvent(1, "load settings"));
+        event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(1, "load settings");
+        EventHandler.fireAsync(event);
         Config.readFromDB(false);
 
-
-//DEBUG SKIN set for debug
-//        Config.daySkinName.setValue("testDay");
-        EventHandler.fire(new IncrementProgressEvent(1, "load skin"));
+        event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(1, "load skin");
+        EventHandler.fireAsync(event);
         Config.daySkinName.loadDefault();
 
     }

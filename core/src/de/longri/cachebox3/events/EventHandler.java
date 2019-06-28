@@ -19,12 +19,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.location.*;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
@@ -34,6 +37,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,10 +107,21 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         }
     }
 
+    public static void fireAsync(final AbstractEvent event) {
+        CB.postAsync(new NamedRunnable("Fire Event Async") {
+            @Override
+            public void run() {
+                fire(event);
+            }
+        });
+    }
+
     public static void fire(final AbstractEvent event) {
 
-        //ignore events if we are on background
-        if (CB.isBackground) return;
+        //don't fire events on GL Thread
+        if (CB.isGlThread()) {
+            throw new RuntimeException("Access from GL thread! Fire event async with method Eventhandler.fireAsync(Event); ");
+        }
 
         synchronized (listenerMap) {
             final Array<Object> list = listenerMap.get(event.getListenerClass());
@@ -146,6 +161,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
                             log.error("Fire event to" + name, e);
                         }
                     }
+                    // if a Event pooled mark for reuse here
+                    if (event instanceof AbstractPoolableEvent)
+                        Pools.free(event);
                     return null;
                 });
             }
@@ -160,7 +178,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     private AbstractCache selectedCache;
     private AbstractWaypoint selectedWayPoint;
     private Coordinate selectedCoordinate;
-    private Coordinate myPosition;
+    private CoordinateGPS myPosition;
     private float heading;
     private boolean spoilerLoaded = false;
 
@@ -349,7 +367,6 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         }
     }
 
-
     private void fireCoordChanged(SelectedCoordChangedEvent event) {
         if (this.selectedCoordinate == null || !this.selectedCoordinate.equals(event.coordinate)) {
             this.selectedCoordinate = event.coordinate;
@@ -372,11 +389,12 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
-        if (event.pos != null) {
-            if (event.gpsProvided) {
-                this.myPosition = event.pos;
-                fireDistanceChanged(event.ID);
+        if (event.isGpsProvided()) {
+            if (this.myPosition == null) {
+                this.myPosition = new CoordinateGPS();
             }
+            this.myPosition.set(event);
+            fireDistanceChanged(event.ID);
         }
     }
 
@@ -401,13 +419,13 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
 
-    public static Coordinate getMyPosition() {
+    public static CoordinateGPS getMyPosition() {
 
         if (INSTANCE.myPosition == null) {
             //return last stored Pos
             LatLong lastStoredPos = CB.lastMapState.getFreePosition();
             if (lastStoredPos == null) return null;
-            return new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
+            return new CoordinateGPS(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
         }
         return INSTANCE.myPosition;
     }
@@ -431,5 +449,17 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             log.warn("update Selected Cache with new Cache! Fire Change Event?");
         }
         INSTANCE.selectedCache = selectedCache;
+    }
+
+    private final static Pool<PositionChangedEvent> POOL_PositionChangedEvent = Pools.get(PositionChangedEvent.class, 100);
+    private final static Pool<IncrementProgressEvent> POOL_IncrementProgressEvent = Pools.get(IncrementProgressEvent.class, 5);
+
+    static {
+        Pools.set(PositionChangedEvent.class, POOL_PositionChangedEvent);
+        Pools.set(IncrementProgressEvent.class, POOL_IncrementProgressEvent);
+    }
+
+    public static <T extends AbstractPoolableEvent> T getPooledEvent(Class<T> type) {
+        return Pools.get(type).obtain();
     }
 }

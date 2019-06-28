@@ -15,30 +15,85 @@
  */
 package de.longri.cachebox3.events.location;
 
+import com.badlogic.gdx.utils.Pool;
 import de.longri.cachebox3.events.AbstractEvent;
+import de.longri.cachebox3.events.AbstractPoolableEvent;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.LatLong;
 
 /**
  * Created by Longri on 23.03.2017.
  */
-public class PositionChangedEvent extends AbstractEvent<Coordinate> {
-    public final Coordinate pos;
-    public final boolean gpsProvided;
+public class PositionChangedEvent extends AbstractPoolableEvent implements Pool.Poolable {
+    private final CoordinateGPS pos = new CoordinateGPS();
 
-    public PositionChangedEvent(Coordinate pos, boolean gpsProvided) {
+    public PositionChangedEvent() {
         super(Coordinate.class);
-        this.pos = pos;
-        this.gpsProvided = gpsProvided;
     }
 
-    public PositionChangedEvent(Coordinate pos, boolean gpsProvided, short id) {
-        super(Coordinate.class, id);
-        this.pos = pos;
-        this.gpsProvided = gpsProvided;
-    }
 
     @Override
     public Class getListenerClass() {
         return PositionChangedListener.class;
+    }
+
+    public void reset() {
+        // reset id
+        this.ID = EventHandler.getId();
+        pos.reset();
+    }
+
+    public void setPos(double latitude, double longitude) {
+        pos.setLatLon(latitude, longitude);
+    }
+
+    public void setElevation(double elevation) {
+        pos.setElevation(elevation);
+    }
+
+    public void setAccuracy(float accuracy) {
+        pos.setAccuracy(accuracy);
+    }
+
+    public void setSpeed(double speed) {
+        pos.setSpeed(speed);
+    }
+
+    public void setHeading(double heading) {
+        pos.setHeading(heading);
+    }
+
+    public void setIsGpsProvided(boolean isGpsProvided) {
+        pos.setIsGpsProvided(isGpsProvided);
+    }
+
+    public boolean isGpsProvided() {
+        return pos.isGPSprovided();
+    }
+
+    public double getElevation() {
+        return pos.getElevation();
+    }
+
+    public double getLatitude() {
+        return pos.getLatitude();
+    }
+
+    public double getLongitude() {
+        return pos.getLongitude();
+    }
+
+    public int getCoordHash() {
+        return pos.hashCode();
+    }
+
+    public double getHeading() {
+        return pos.getHeading();
+    }
+
+    public int getAccuracy() {
+        return pos.getAccuracy();
     }
 }

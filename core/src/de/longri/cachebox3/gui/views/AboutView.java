@@ -128,24 +128,14 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
         de.longri.cachebox3.events.EventHandler.remove(this);
     }
 
-//    protected void boundsChanged(float x, float y, float width, float height) {
-//        super.boundsChanged(x, y, width, height);
-//
-//    }
-
-
-    Coordinate pos;
-    float distance = -1;
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
-        pos = event.pos;
 
     }
 
     @Override
     public void distanceChanged(de.longri.cachebox3.events.DistanceChangedEvent event) {
-        distance = event.distance;
 
     }
 

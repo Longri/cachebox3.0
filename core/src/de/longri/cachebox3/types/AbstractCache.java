@@ -350,4 +350,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract void setShowOriginalHtmlColor(boolean value);
 
     public abstract boolean getShowOriginalHtmlColor();
+
+    @Override
+    public abstract void reset();
 }

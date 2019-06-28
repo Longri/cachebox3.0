@@ -81,7 +81,9 @@ public class SkinFont extends BitmapFont {
         if (cachePath != null) {
             FileHandle cacheFontPath = cachePath.child(tempName + ".fnt");
             if (cacheFontPath.exists()) {
-                EventHandler.fire(new IncrementProgressEvent(1, "Init Fonts | load:" + tempName));
+                IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+                event.set(1,"Init Fonts | load:" + tempName);
+                EventHandler.fireAsync(event);
                 log.debug("Init Fonts | load:{}", tempName);
                 try {
                     BitmapFont cachedFont = new BitmapFont(cacheFontPath);
@@ -92,8 +94,9 @@ public class SkinFont extends BitmapFont {
                 }
             }
         }
-
-        EventHandler.fire(new IncrementProgressEvent(1, "Init Fonts | generate:" + tempName));
+        IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(1, "Init Fonts | generate:" + tempName);
+        EventHandler.fireAsync(event);
         log.debug("Init Fonts | generate:{}", tempName);
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fileHandle);

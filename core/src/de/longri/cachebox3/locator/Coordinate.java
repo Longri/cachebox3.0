@@ -16,6 +16,7 @@
 package de.longri.cachebox3.locator;
 
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.utils.GeoUtils;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
@@ -283,5 +284,6 @@ public class Coordinate extends LatLong {
     public String toString() {
         return FormatCoordinate();
     }
+
 
 }

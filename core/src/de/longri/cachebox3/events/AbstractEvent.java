@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.events;
 
+import com.badlogic.gdx.utils.Pool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractEvent<T> {
 
     private final Class clazz;
-    public final short ID;
+    public short ID;
 
     public AbstractEvent(Class<T> clazz) {
         this(clazz, EventHandler.getId());
@@ -36,5 +37,5 @@ public abstract class AbstractEvent<T> {
     }
 
     public abstract Class getListenerClass();
-
 }
+

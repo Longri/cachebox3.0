@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.events.location;
 
+import com.badlogic.gdx.utils.Pools;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -87,7 +88,10 @@ public class GpsEventHelper implements LocationEvents {
             lastAccuracy = accuracy;
             lastGpsPositionTime = System.currentTimeMillis();
             //fire pos changed event
-            EventHandler.fire(new PositionChangedEvent(new Coordinate(latitude, longitude), true, EventHandler.getId()));
+            PositionChangedEvent event = EventHandler.getPooledEvent(PositionChangedEvent.class);
+            event.setPos(latitude, longitude);
+            event.setAccuracy(accuracy);
+            EventHandler.fire(event);
             EventHandler.fire(new AccuracyChangedEvent(accuracy));
         }
     }
@@ -113,7 +117,11 @@ public class GpsEventHelper implements LocationEvents {
             if ((System.currentTimeMillis() - lastGpsPositionTime) > 60000) fire = true;
 
             if (fire) {
-                EventHandler.fire(new PositionChangedEvent(new Coordinate(latitude, longitude), false, EventHandler.getId()));
+                PositionChangedEvent event = EventHandler.getPooledEvent(PositionChangedEvent.class);
+                event.setPos(latitude, longitude);
+                event.setAccuracy(accuracy);
+                EventHandler.fire(event);
+                Pools.free(event);
                 EventHandler.fire(new AccuracyChangedEvent(accuracy));
             }
         }
@@ -215,11 +223,6 @@ public class GpsEventHelper implements LocationEvents {
         // todo write to SensorIO
     }
 
-//    public void newAccuracy(float accuracy) {
-//        CB.sensoerIO.write_newAccuracy(accuracy);
-//        this.accuracy = accuracy;
-//    }
-
     @Override
     public void newSpeed(double speed) {
         if (CB.isBackground) return;
@@ -229,22 +232,6 @@ public class GpsEventHelper implements LocationEvents {
             EventHandler.fire(new SpeedChangedEvent((float) speed));
         }
     }
-
-//    public void gpsStateChanged(GpsState state) {
-//
-//        this.gpsState = state;
-////        log.debug("Gps state changed to {}", state);
-//    }
-//
-//    public CoordinateGPS getLastGpsCoordinate() {
-//        CoordinateGPS coord = new CoordinateGPS(this.lastGpsLat, this.lastGpsLon);
-//        coord.setAccuracy(this.lastGpsAccuracy);
-//        coord.setElevation(this.lastGpsElevation);
-//        coord.setHeading(this.lastCompassHeading);
-//        coord.setSpeed(this.lastSpeed);
-//        return coord;
-//    }
-
 
     public float getAccuracy() {
         return this.accuracy;

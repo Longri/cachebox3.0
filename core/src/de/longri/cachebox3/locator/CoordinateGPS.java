@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2011-2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.locator;
 
+import de.longri.cachebox3.events.location.PositionChangedEvent;
 import org.oscim.core.MapPosition;
 
 import java.io.Serializable;
@@ -69,6 +70,10 @@ public class CoordinateGPS extends Coordinate implements Serializable {
         super(mapPosition.getLatitude(), mapPosition.getLongitude());
     }
 
+    public CoordinateGPS() {
+        super(0.0, 0.0);
+    }
+
     public boolean hasAccuracy() {
         if (Accuracy == -1)
             return false;
@@ -89,18 +94,8 @@ public class CoordinateGPS extends Coordinate implements Serializable {
         super(text);
     }
 
-
     public double getElevation() {
         return Elevation;
-    }
-
-
-    public void setElevation(double elevation) {
-        Elevation = elevation;
-    }
-
-    public void setAccuracy(float accuracy) {
-        Accuracy = (int) accuracy;
     }
 
     public boolean isGPSprovided() {
@@ -115,6 +110,14 @@ public class CoordinateGPS extends Coordinate implements Serializable {
         return this.speed;
     }
 
+    public void setElevation(double elevation) {
+        Elevation = elevation;
+    }
+
+    public void setAccuracy(float accuracy) {
+        Accuracy = (int) accuracy;
+    }
+
     public void setSpeed(double speed) {
         this.speed = speed;
     }
@@ -125,5 +128,21 @@ public class CoordinateGPS extends Coordinate implements Serializable {
 
     public void setIsGpsProvided(boolean isGpsProvided) {
         this.isGPSprovided = isGpsProvided;
+    }
+
+    public void reset() {
+        super.reset();
+        Elevation = 0;
+        Accuracy = -1;
+        speed = 0;
+        heading = 0;
+        isGPSprovided = false;
+    }
+
+    public void set(PositionChangedEvent event) {
+        super.set(event);
+        this.heading = event.getHeading();
+        this.Accuracy = event.getAccuracy();
+        this.Elevation = event.getElevation();
     }
 }

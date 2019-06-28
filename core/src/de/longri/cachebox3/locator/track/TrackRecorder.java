@@ -18,6 +18,7 @@ package de.longri.cachebox3.locator.track;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Pools;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.events.EventHandler;
@@ -169,7 +170,12 @@ public class TrackRecorder implements PositionChangedListener {
         if (mustRecPos) {
             mustRecPos = false;
         }
-        positionChanged(new PositionChangedEvent(location, true));
+        // write a additional track point for this media
+        PositionChangedEvent event = EventHandler.getPooledEvent(PositionChangedEvent.class);
+        event.setPos(location.getLatitude(), location.getLongitude());
+        event.setIsGpsProvided(true);
+        positionChanged(event);
+        Pools.free(event);
     }
 
     private boolean mustRecPos = false;
@@ -197,19 +203,18 @@ public class TrackRecorder implements PositionChangedListener {
         return "Track_" + sDate + ".gpx";
     }
 
+    CoordinateGPS newCoord = new CoordinateGPS();
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
-        if (gpxfile == null || pauseRecording || !event.gpsProvided)
+        if (gpxfile == null || pauseRecording || !event.isGpsProvided())
             return;
 
         if (writeAnnotateMedia) {
             mustRecPos = true;
         }
 
-//        CoordinateGPS newCoord = CB.eventHelper.getLastGpsCoordinate();
-        //  TODO implement
-        CoordinateGPS newCoord = null;
+        newCoord.set(event);
 
         if (LastRecordedPosition == null) { // Warte bis 2 gültige Koordinaten vorliegen
             LastRecordedPosition = newCoord;
@@ -219,18 +224,22 @@ public class TrackRecorder implements PositionChangedListener {
             TrackPoint NewPoint;
             double AltDiff = 0;
 
+            double latitude = event.getLatitude();
+            double longitude = event.getLongitude();
+
+
             // wurden seit dem letzten aufgenommenen Wegpunkt mehr als x Meter
             // zurückgelegt? Wenn nicht, dann nicht aufzeichnen.
             float[] dist = new float[1];
 
             MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, LastRecordedPosition.getLatitude(),
-                    LastRecordedPosition.getLongitude(), event.pos.getLatitude(), event.pos.getLongitude(), dist);
+                    LastRecordedPosition.getLongitude(), latitude, longitude, dist);
             float cachedDistance = dist[0];
 
             if (cachedDistance > Config.TrackDistance.getValue()) {
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("<trkpt lat=\"" + String.valueOf(event.pos.getLatitude()) + "\" lon=\"" + String.valueOf(event.pos.getLongitude()) + "\">\n");
+                sb.append("<trkpt lat=\"" + String.valueOf(latitude) + "\" lon=\"" + String.valueOf(longitude) + "\">\n");
                 sb.append("   <ele>" + String.valueOf(newCoord.getElevation()) + "</ele>\n");
                 sb.append("   <time>" + getDateTimeString() + "</time>\n");
                 sb.append("   <course>" + String.valueOf(newCoord.getHeading()) + "</course>\n");
@@ -264,7 +273,7 @@ public class TrackRecorder implements PositionChangedListener {
                     log.error("Trackrecorder", "IOException", e);
                 }
 
-                NewPoint = new TrackPoint(event.pos.getLongitude(), event.pos.getLongitude(), newCoord.getElevation(),
+                NewPoint = new TrackPoint(latitude, longitude, newCoord.getElevation(),
                         newCoord.getHeading(), new Date());
 
                 CB.actRoute.Points.add(NewPoint);

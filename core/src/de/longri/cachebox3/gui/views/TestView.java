@@ -423,8 +423,9 @@ public class TestView extends AbstractView {
                             while (value < 200) {
                                 value += 1f;
                                 final float progressValue = value < 50 ? 0 : value > 150 ? 100 : value - 50;
-                                EventHandler.fire(new IncrementProgressEvent((int) progressValue,
-                                        "Progress Test AligmentLabel", progressValue == 0 ? -1 : 100));
+                                IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+                                event.set((int) progressValue, "Progress Test AligmentLabel", progressValue == 0 ? -1 : 100);
+                                EventHandler.fireAsync(event);
                                 try {
                                     Thread.sleep(50);
                                 } catch (InterruptedException e) {

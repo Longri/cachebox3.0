@@ -241,7 +241,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
                 log.debug("Waypoint selection changed to: " + wp.toString());
                 //set selected Waypoint global
-                EventHandler.fire(new SelectedWayPointChangedEvent(wp));
+                EventHandler.fireAsync(new SelectedWayPointChangedEvent(wp));
                 actWaypoint = wp;
 
             } else {
@@ -249,7 +249,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                 AbstractCache cache = Database.Data.cacheList.getCacheById(selectedItem.getId());
                 log.debug("Cache selection changed to: " + cache.toString());
                 //set selected Cache global
-                EventHandler.fire(new SelectedCacheChangedEvent(cache));
+                EventHandler.fireAsync(new SelectedCacheChangedEvent(cache));
                 actWaypoint = null;
             }
         });
@@ -367,7 +367,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                         }
 
                         addNewListView();
-                        EventHandler.fire(new SelectedWayPointChangedEvent(value));
+                        EventHandler.fireAsync(new SelectedWayPointChangedEvent(value));
                         if (value.isStart()) {
                             //It must be ensured here that this waypoint is the only one of these Cache,
                             //which is defined as starting point !!!

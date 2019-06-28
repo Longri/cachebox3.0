@@ -188,7 +188,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 AbstractCache cache = Database.Data.cacheList.get(selectedItemListIndex);
                 log.debug("Cache selection changed to: " + cache.toString());
                 //set selected Cache global
-                EventHandler.fire(new SelectedCacheChangedEvent(cache));
+                EventHandler.fireAsync(new SelectedCacheChangedEvent(cache));
             }
         });
 

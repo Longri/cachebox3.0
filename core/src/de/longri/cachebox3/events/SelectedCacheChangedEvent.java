@@ -37,4 +37,9 @@ public class SelectedCacheChangedEvent extends AbstractEvent<AbstractCache> {
     public Class getListenerClass() {
         return SelectedCacheChangedListener.class;
     }
+
+//    @Override
+    public void reset() {
+        cache.reset();
+    }
 }

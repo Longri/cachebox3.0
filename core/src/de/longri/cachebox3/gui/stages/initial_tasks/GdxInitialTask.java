@@ -48,7 +48,9 @@ public final class GdxInitialTask extends AbstractInitTask {
 
     @Override
     public void runnable() {
-        EventHandler.fire(new IncrementProgressEvent(2, "Initial openGL"));
+        IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(2, "Initial openGL");
+        EventHandler.fireAsync(event);
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         CB.stageManager.setInputMultiplexer(inputMultiplexer);
 

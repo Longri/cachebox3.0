@@ -330,7 +330,7 @@ public class CompassView extends AbstractView implements
     @Override
     public void positionChanged(de.longri.cachebox3.events.location.PositionChangedEvent event) {
         synchronized (this) {
-            actCoord = event.pos;
+            actCoord.set(event);
             refreshOrientationInfo();
         }
     }

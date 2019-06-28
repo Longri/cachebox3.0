@@ -14,6 +14,8 @@
  */
 package de.longri.cachebox3.locator;
 
+import de.longri.cachebox3.events.location.PositionChangedEvent;
+
 /**
  * A LatLong represents an immutable pair of latitude and longitude coordinates.
  */
@@ -119,4 +121,21 @@ public class LatLong {
         this.hash = 0;
     }
 
+    protected void reset() {
+        this.latitude = 0;
+        this.longitude = 0;
+        this.hash = 0;
+    }
+
+    public void set(PositionChangedEvent event) {
+        this.latitude = event.getLatitude();
+        this.longitude = event.getLongitude();
+        this.hash = event.getCoordHash();
+    }
+
+    public void set(LatLong latLon) {
+        this.latitude = latLon.latitude;
+        this.longitude = latLon.longitude;
+        this.hash = latLon.hash;
+    }
 }

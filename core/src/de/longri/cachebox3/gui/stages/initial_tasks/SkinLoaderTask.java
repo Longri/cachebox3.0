@@ -223,7 +223,9 @@ public final class SkinLoaderTask extends AbstractInitTask {
         String imageName = value.getImageName() + ".png";
         FileHandle storeFile = attFileHandle.child(imageName);
         if (storeFile.exists()) return;
-        EventHandler.fire(new IncrementProgressEvent(1, "generate attribute image: " + imageName));
+        IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(1, "generate attribute image: " + imageName);
+        EventHandler.fireAsync(event);
 
 
         TextureRegionDrawable drawable = (TextureRegionDrawable) value.getDrawable(style);

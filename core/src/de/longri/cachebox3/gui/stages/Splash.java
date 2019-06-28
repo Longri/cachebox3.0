@@ -171,20 +171,21 @@ public class Splash extends NamedStage {
             final IncrementProgressListener incrementProgressListener =
                     new IncrementProgressListener() {
                         @Override
-                        public void incrementProgress(final IncrementProgressEvent event) {
+                        public void incrementProgress(IncrementProgressEvent event) {
+                            int value = event.getIncrementValue();
+                            int max = event.getIncrementMaxValue();
+                            String msg = event.getMsg();
                             Gdx.app.postRunnable(new Runnable() {
                                 @Override
                                 public void run() {
 
-                                    if (event.progressIncrement.incrementMaxValue > 0) {
+                                    if (max > 0) {
                                         //increment progress max
-                                        progress.setRange(0, progress.getMaxValue() + event.progressIncrement.incrementMaxValue);
+                                        progress.setRange(0, progress.getMaxValue() + max);
                                     }
 
-                                    workLabel.setText(event.progressIncrement.msg);
-                                    progress.setValue(progress.getValue() + event.progressIncrement.incrementValue);
-
-                                    log.debug("ProgressEvent MSG:{} increment:{}", event.progressIncrement.msg, event.progressIncrement.incrementValue);
+                                    workLabel.setText(msg);
+                                    progress.setValue(progress.getValue() + value);
                                 }
                             });
                         }

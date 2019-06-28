@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.locator;
 
+import com.badlogic.gdx.utils.Pools;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
@@ -68,7 +69,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
     @Override
     public void positionChanged(de.longri.cachebox3.events.location.PositionChangedEvent event) {
-        pendingLatLong.set(event.pos);
+        pendingLatLong.set(event);
         runAsync();
     }
 
@@ -234,7 +235,10 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         CB.postOnNextGlThread(new Runnable() {
             @Override
             public void run() {
-                EventHandler.fire(new PositionChangedEvent(lastBackgroundCoord, true));
+                PositionChangedEvent event = EventHandler.getPooledEvent(PositionChangedEvent.class);
+                event.setPos(lastBackgroundCoord.latitude, lastBackgroundCoord.longitude);
+                EventHandler.fire(event);
+                Pools.free(event);
             }
         });
     }

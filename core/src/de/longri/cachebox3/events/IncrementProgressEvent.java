@@ -18,36 +18,52 @@ package de.longri.cachebox3.events;
 /**
  * Created by Longri on 11.07.2017.
  */
-public class IncrementProgressEvent extends AbstractEvent<IncrementProgressEvent.ProgressIncrement> {
+public class IncrementProgressEvent extends AbstractPoolableEvent {
 
-    public static class ProgressIncrement{
-        public final int incrementValue;
-        public final String msg;
-        public final int incrementMaxValue;
+    @Override
+    public void reset() {
+        progressIncrement.incrementMaxValue = -1;
+        progressIncrement.msg = null;
+        progressIncrement.incrementValue = 0;
+    }
 
-        private ProgressIncrement(int incrementValue, String msg, int incrementMaxValue) {
-            this.incrementValue = incrementValue;
-            this.msg = msg;
-            this.incrementMaxValue = incrementMaxValue;
+    public void set(int incrementValue, String msg) {
+        progressIncrement.incrementMaxValue = incrementValue;
+        progressIncrement.msg = msg;
+    }
+
+    public void set(int incrementValue, String msg, int incrementMaxValue) {
+        progressIncrement.incrementValue = incrementValue;
+        progressIncrement.msg = msg;
+        progressIncrement.incrementMaxValue = incrementMaxValue;
+    }
+
+    public int getIncrementValue() {
+        return progressIncrement.incrementValue;
+    }
+
+    public int getIncrementMaxValue() {
+        return progressIncrement.incrementMaxValue;
+    }
+
+    public String getMsg() {
+        return progressIncrement.msg;
+    }
+
+    public static class ProgressIncrement {
+        public int incrementValue;
+        public String msg;
+        public int incrementMaxValue;
+
+        private ProgressIncrement() {
         }
     }
 
+    private final ProgressIncrement progressIncrement;
 
-   public final ProgressIncrement progressIncrement;
-
-    public IncrementProgressEvent(int incrementValue, String msg) {
+    protected IncrementProgressEvent() {
         super(IncrementProgressEvent.ProgressIncrement.class);
-        this.progressIncrement = new ProgressIncrement(incrementValue,msg,-1);
-    }
-
-    public IncrementProgressEvent(int incrementValue, String msg, short id) {
-        super(IncrementProgressEvent.ProgressIncrement.class, id);
-        this.progressIncrement = new ProgressIncrement(incrementValue,msg, -1);
-    }
-
-    public IncrementProgressEvent(int incrementValue, String msg, int incrementMaxValue) {
-        super(IncrementProgressEvent.ProgressIncrement.class);
-        this.progressIncrement = new ProgressIncrement(incrementValue, msg, incrementMaxValue);
+        this.progressIncrement = new ProgressIncrement();
     }
 
     @Override

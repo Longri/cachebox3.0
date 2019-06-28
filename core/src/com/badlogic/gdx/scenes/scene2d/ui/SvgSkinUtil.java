@@ -72,7 +72,9 @@ public class SvgSkinUtil {
             if (cachedTexturatlasFileHandle.exists()) {
                 if (HashAtlasWriter.hashEquals(cachedTexturatlasFileHandle, scaledSvgList, skinFile)) {
                     log.debug("load Skin | Load cached TextureAtlas");
-                    EventHandler.fire(new IncrementProgressEvent(1, "load Skin | Load cached TextureAtlas"));
+                    IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+                    event.set(1, "load Skin | Load cached TextureAtlas");
+                    EventHandler.fireAsync(event);
 
                     final TextureAtlas[] atlas = new TextureAtlas[1];
                     try {
@@ -107,7 +109,9 @@ public class SvgSkinUtil {
             }
         }, true);
 
-        EventHandler.fire(new IncrementProgressEvent(0, "load Skin | Create new TextureAtlas", scaledSvgList.size()));
+        IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(0, "load Skin | Create new TextureAtlas", scaledSvgList.size());
+        EventHandler.fireAsync(event);
 
         FileHandle fileHandle;
         for (ScaledSvg scaledSvg : scaledSvgList) {
@@ -117,7 +121,9 @@ public class SvgSkinUtil {
             fileHandle = skinFile.parent().child(scaledSvg.path);
 
             if (!fileHandle.exists()) continue;
-            EventHandler.fire(new IncrementProgressEvent(1, "load Skin | Create new TextureAtlas \npack:" + scaledSvg.path));
+            event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+            event.set(1, "load Skin | Create new TextureAtlas \npack:" + scaledSvg.path);
+            EventHandler.fireAsync(event);
             InputStream stream = null;
             try {
                 name = scaledSvg.getRegisterName();
@@ -152,7 +158,9 @@ public class SvgSkinUtil {
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
         packer[0].pack("color", pixmap);
-        EventHandler.fire(new IncrementProgressEvent(20, "load Skin | Create new TextureAtlas \nGenerate Texture Atlas"));
+        event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(20, "load Skin | Create new TextureAtlas \nGenerate Texture Atlas");
+        EventHandler.fireAsync(event);
 
         final TextureAtlas[] atlas = new TextureAtlas[1];
         System.gc();

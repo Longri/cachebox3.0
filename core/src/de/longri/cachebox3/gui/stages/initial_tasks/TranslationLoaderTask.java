@@ -45,10 +45,11 @@ public final class TranslationLoaderTask extends AbstractInitTask {
 
     @Override
     public void runnable() {
-//        Translation.translation = new StringTranslationHandler(Gdx.files.internal("lang"), "en-GB");
         Translation.translation = new SequenceTranslationHandler(Gdx.files.internal("lang"), "en-GB");
 
-        EventHandler.fire(new IncrementProgressEvent(10, "Load Translation"));
+        IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+        event.set(10, "Load Translation");
+        EventHandler.fireAsync(event);
         loadTranslation();
 
         // add settings change handler

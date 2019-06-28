@@ -80,12 +80,14 @@ public class BlockUiProgress_Activity extends ActivityBase implements IncrementP
 
     @Override
     public void incrementProgress(final IncrementProgressEvent event) {
+        int value = event.getIncrementValue();
+        int max = event.getIncrementMaxValue();
+        String msg = event.getMsg();
+
         CB.postOnGlThread(new NamedRunnable("Test Add") {
             @Override
             public void run() {
-                int value = event.progressIncrement.incrementValue;
-                int max = event.progressIncrement.incrementMaxValue;
-                String msg = event.progressIncrement.msg;
+
                 progress.setProgressMax(max);
                 progress.setProgress(value);
                 msgLabel.setText(msg);
