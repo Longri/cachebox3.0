@@ -598,7 +598,7 @@ public class MapView extends AbstractView {
 
         // load last saved BaseMap
         String baseMapName = Settings_Map.CurrentMapLayer.getValue()[0];
-        BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
+        BaseMapManager.INSTANCE.refreshMaps();
         AbstractManagedMapLayer baseMap = null;
         for (int i = 0, n = BaseMapManager.INSTANCE.size; i < n; i++) {
             AbstractManagedMapLayer map = BaseMapManager.INSTANCE.get(i);
@@ -731,21 +731,23 @@ public class MapView extends AbstractView {
     @Override
     public Menu getContextMenu() {
         Menu icm = new Menu("MapViewContextMenuTitle");
-        icm.addMenuItem("Layer", CB.getSkin().getMenuIcon.mapLayer, () -> showMapLayerMenu());
-        icm.addMenuItem("Renderthemes", CB.getSkin().getMenuIcon.theme, () -> showMapViewThemeMenu());
-        icm.addMenuItem("Styles", CB.getSkin().getMenuIcon.themeStyle, () -> showMapViewThemeStyleMenu());
-        icm.addMenuItem("overlays", null, () -> showMapOverlayMenu()); // todo icon
-        icm.addMenuItem("view", CB.getSkin().getMenuIcon.viewSettings, () -> showMapViewLayerMenu());
+        icm.addMenuItem("Layer", CB.getSkin().getMenuIcon.mapLayer, () -> showMapViewLayerMenu());
+        if (cacheboxMapAdapter.getBaseMap() instanceof MapsforgeSingleMap) {
+            icm.addMenuItem("Renderthemes", CB.getSkin().getMenuIcon.theme, () -> showMapViewThemeMenu());
+            icm.addMenuItem("Styles", CB.getSkin().getMenuIcon.themeStyle, () -> showMapViewThemeStyleMenu());
+        }
+        icm.addMenuItem("overlays", CB.getSkin().getMenuIcon.todo, () -> showMapViewOverlaysMenu()); // todo icon
+        icm.addMenuItem("view", CB.getSkin().getMenuIcon.viewSettings, () -> showMapViewElementsMenu());
         // todo needed? nach Kompass ausrichten | setAlignToCompass
         icm.addMenuItem("CenterWP", CB.getSkin().getMenuIcon.addWp, () -> createWaypointAtCenter());
-        icm.addMenuItem("RecTrack", null, () -> showMenuTrackRecording()); // todo icon
+        icm.addMenuItem("RecTrack", CB.getSkin().getMenuIcon.todo, () -> showTrackRecordMenu()); // todo icon
         return icm;
     }
 
-    private void showMapLayerMenu() {
+    private void showMapViewLayerMenu() {
         Menu icm = new Menu("MapViewLayerMenuTitle");
 
-        BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(CB.WorkPath));
+        BaseMapManager.INSTANCE.refreshMaps();
 
 
         int menuID = 0;
@@ -838,7 +840,7 @@ public class MapView extends AbstractView {
     }
 
     //todo ISSUE (#110 add MapView Overlays)
-    private void showMapOverlayMenu() {
+    private void showMapViewOverlaysMenu() {
         final Menu icm = new Menu("MapViewOverlayMenuTitle");
 
 //        int menuID = 0;
@@ -861,7 +863,7 @@ public class MapView extends AbstractView {
 //                }
 //                // Refresh menu
 //                icm.close();
-//                showMapOverlayMenu();
+//                showMapViewOverlaysMenu();
 //                return true;
 //            }
 //        });
@@ -869,7 +871,7 @@ public class MapView extends AbstractView {
         icm.show();
     }
 
-    private void showMapViewLayerMenu() {
+    private void showMapViewElementsMenu() {
         Menu icm = new Menu("MapViewElementsMenuTitle");
         icm.addCheckableMenuItem("HideFinds", Settings_Map.MapHideMyFinds.getValue(), () -> toggleSettingWithReload(Settings_Map.MapHideMyFinds));
         // icm.addCheckableMenuItem("MapShowCompass", Settings_Map.MapShowCompass.getValue(),()-> toggleSetting(Settings_Map.MapShowCompass));
@@ -1106,7 +1108,7 @@ public class MapView extends AbstractView {
     }
 
     //todo ISSUE (#112 Record Track)
-    private void showMenuTrackRecording() {
+    private void showTrackRecordMenu() {
         Menu cm2 = new Menu("TrackRecordMenuTitle");
         cm2.addMenuItem("start", null, () -> TrackRecorder.INSTANCE.startRecording()).setEnabled(!TrackRecorder.INSTANCE.recording);
         if (TrackRecorder.INSTANCE.pauseRecording)

@@ -172,7 +172,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
             storeAttributePng(skin, style, attFileHandle, value);
         }
 
-
+        // todo do not preload theme, if no mapsforge map is selected
         //preload Map Theme on async task
         CB.postAsync(new NamedRunnable("preload Map Theme") {
             @Override

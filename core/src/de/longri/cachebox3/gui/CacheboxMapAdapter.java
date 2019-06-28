@@ -57,7 +57,7 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
     private boolean mRenderRequest;
     private int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight(), xOffset, yOffset;
     private VectorTileLayer vectorTileLayer;
-
+    private AbstractManagedMapLayer baseMap;
 
     public CacheboxMapAdapter() {
         super();
@@ -117,7 +117,6 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             }
         }
     }
-
 
     @Override
     public void render() {
@@ -187,7 +186,12 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         return super.handleGesture(g, e);
     }
 
+    public AbstractManagedMapLayer getBaseMap() {
+        return baseMap;
+    }
+
     public void setNewBaseMap(final AbstractManagedMapLayer baseMap) {
+        this.baseMap = baseMap;
         if (this.layers().size() > 1)
             this.layers().remove(1);
 
