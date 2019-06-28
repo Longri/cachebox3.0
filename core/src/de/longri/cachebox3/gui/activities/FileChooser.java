@@ -246,9 +246,16 @@ public class FileChooser extends ActivityBase {
                 else delFileCount++;
                 delFiles.add(item.fileHandle);
             }
-            CharSequence msg = Translation.get("delete_Files", Integer.toString(delDirCount), Integer.toString(delFileCount));
+            CharSequence msg;
 
-            MessageBox.show(msg, null, MessageBoxButtons.YesNo, MessageBoxIcon.Question, (which, data) -> {
+            if ((delDirCount > 0 && delFileCount > 0) || delDirCount > 1 || delFileCount > 1) {
+                msg = Translation.get("delObj", Integer.toString(delDirCount + delFileCount));
+            } else if (delDirCount > 0) {
+                msg = Translation.get("delDir");
+            } else {
+                msg = Translation.get("delFile");
+            }
+            MessageBox.show(msg, null, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, (which, data) -> {
                 if (which == ButtonDialog.BUTTON_POSITIVE)
                     CB.postAsync(new NamedRunnable("delete files") {
                         @Override
