@@ -1,5 +1,6 @@
 package de.longri.cachebox3.utils.http;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,7 @@ public class Download {
 
     public static boolean Download(String remote, String local) {
         boolean err = false;
-        FileHandle localFile = new FileHandle(local);
+        FileHandle localFile = Gdx.files.absolute(local);
         /* create parent directories, if necessary */
         FileHandle parent = localFile.parent();
         if ((parent != null) && !parent.exists()) {

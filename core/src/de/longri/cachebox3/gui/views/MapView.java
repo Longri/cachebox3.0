@@ -54,7 +54,7 @@ import de.longri.cachebox3.gui.map.baseMap.MapsforgeSingleMap;
 import de.longri.cachebox3.gui.map.baseMap.OSciMap;
 import de.longri.cachebox3.gui.map.layer.CenterCrossLayer;
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
-import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
+import de.longri.cachebox3.gui.map.layer.ThemeMenu;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -75,7 +75,6 @@ import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.settings.types.SettingBool;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.utils.EQUALS;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnZip;
@@ -109,7 +108,6 @@ import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.IRenderTheme;
 import org.oscim.theme.VtmThemes;
-import org.oscim.theme.XmlRenderThemeStyleLayer;
 import org.oscim.utils.FastMath;
 import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.Logger;
@@ -131,30 +129,28 @@ public class MapView extends AbstractView {
 
     private static double lastCenterPosLat, lastCenterPosLon;
     private final Event selfEvent = new Event();
+    /*
     private final OnItemClickListener styleItemClickListener = item -> {
         String cat = (String) item.getData();
         if (cat.isEmpty()) return true;
-        ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
+        ThemeMenu callback = (ThemeMenu) CB.actThemeFile.getMenuCallback();
         ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
         boolean newValue = !allCategories.get(cat);
         item.setChecked(newValue);
         allCategories.put(cat, newValue);
         return true;
     };
+     */
     float mapHalfWith;
     float mapHalfHeight;
     private boolean menuInShow;
     private InputMultiplexer mapInputHandler;
-    private CacheboxMapAdapter map;
+    private CacheboxMapAdapter cacheboxMapAdapter;
     private final Window.WindowCloseListener closeStyleMenuListener = new Window.WindowCloseListener() {
         @Override
         public void windowClosed() {
-            ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
-            if (callback != null)
-                callback.storeChanges();
-            CB.actThemeFile.setMenuCallback(callback);
-            CB.loadThemeFile(CB.actThemeFile);
-            map.setTheme(CB.actThemeFile);
+            // todo save selection to db and prepare CB.actThemeFile
+            cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
         }
     };
     private MapScaleBarLayer mapScaleBarLayer;
@@ -167,10 +163,10 @@ public class MapView extends AbstractView {
     private final IChanged showMapCenterCrossChangedListener = new IChanged() {
         @Override
         public void isChanged() {
-            if (map == null) return;
+            if (cacheboxMapAdapter == null) return;
             log.debug("change center cross visibility to {}", Settings_Map.ShowMapCenterCross.getValue() ? "visible" : "invisible");
             setCenterCrossLayerEnabled(Settings_Map.ShowMapCenterCross.getValue());
-            map.updateMap(true);
+            cacheboxMapAdapter.updateMap(true);
         }
     };
     private LocationTextureLayer myLocationLayer;
@@ -218,15 +214,18 @@ public class MapView extends AbstractView {
 
         }
     };
+    private CB.ThemeIsFor whichCase;
 
 
     public MapView(BitStore reader) {
         super(reader);
+        whichCase = CB.ThemeIsFor.day;
         create();
     }
 
     public MapView() {
         super("MapView");
+        whichCase = CB.ThemeIsFor.day;
         create();
     }
 
@@ -285,7 +284,7 @@ public class MapView extends AbstractView {
             @Override
             public void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event) {
 
-                MapPosition mapPosition = map.getMapPosition();
+                MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
                 CB.actMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
                 CB.actMapState.setMapMode(mapMode);
                 CB.actMapState.setOrientation(mapPosition.bearing);
@@ -353,7 +352,7 @@ public class MapView extends AbstractView {
         infoPanel.setBounds(10, 100, 200, 100);
         this.addActor(infoPanel);
 
-        map = createMap();
+        cacheboxMapAdapter = createMap();
 
         this.addActor(mapStateButton);
         this.setTouchable(Touchable.enabled);
@@ -361,7 +360,7 @@ public class MapView extends AbstractView {
         this.zoomButton = new ZoomButton(new ZoomButton.ValueChangeListener() {
             @Override
             public void valueChanged(int changeValue) {
-                MapPosition mapPosition = map.getMapPosition();
+                MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
                 double value = mapPosition.getScale();
                 if (changeValue > 0)
                     value = value * 2;
@@ -377,7 +376,7 @@ public class MapView extends AbstractView {
     }
 
     private void storeMapstate(MapMode mapMode, MapMode beforeCar) {
-        MapPosition mapPosition = map.getMapPosition();
+        MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
         CB.lastMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
         CB.lastMapState.setMapMode(mapMode);
         CB.lastMapState.setOrientation(mapPosition.bearing);
@@ -402,7 +401,7 @@ public class MapView extends AbstractView {
 
         log.debug("restore MapState: " + mapState);
 
-        MapPosition mapPosition = map.getMapPosition();
+        MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
         mapPosition.scale = 1 << mapState.getZoom();
         mapPosition.bearing = mapState.getOrientation();
         mapPosition.tilt = mapState.getTilt();
@@ -410,8 +409,8 @@ public class MapView extends AbstractView {
             mapPosition.setPosition(mapState.getFreePosition().getLatitude(), mapState.getFreePosition().getLongitude());
         mapStateButton.setMapMode(mapState.getMapMode(), true, selfEvent);
         infoPanel.setMapOrientationMode(mapState.getMapOrientationMode());
-        map.setMapPosition(mapPosition);
-        map.updateMap(true);
+        cacheboxMapAdapter.setMapPosition(mapPosition);
+        cacheboxMapAdapter.updateMap(true);
     }
 
     private void setCenterCrossLayerEnabled(boolean enabled) {
@@ -420,7 +419,7 @@ public class MapView extends AbstractView {
     }
 
     private void setBuildingLayerEnabled(boolean enabled) {
-        Layers layers = map.layers();
+        Layers layers = cacheboxMapAdapter.layers();
         for (Layer layer : layers) {
             if (layer instanceof CacheboxMapAdapter.BuildingLabelLayer) {
                 log.debug("{} BuildingLayer", enabled ? "Enable" : "Disable");
@@ -438,7 +437,7 @@ public class MapView extends AbstractView {
 
 
         CacheboxMain.drawMap.set(true);
-        map = new CacheboxMapAdapter() {
+        cacheboxMapAdapter = new CacheboxMapAdapter() {
 
             @Override
             public void beginFrame() {
@@ -472,15 +471,15 @@ public class MapView extends AbstractView {
                 lastCenterPosLon = mapPosition.getLongitude();
             }
         };
-        ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer = new MapRenderer(map);
+        ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer = new MapRenderer(cacheboxMapAdapter);
         ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer.onSurfaceCreated();
 
         initLayers(false);
 
         //add position changed handler
-        positionChangedHandler = new MapViewPositionChangedHandler(map, directLineLayer, myLocationLayer, infoPanel);
+        positionChangedHandler = new MapViewPositionChangedHandler(cacheboxMapAdapter, directLineLayer, myLocationLayer, infoPanel);
 
-        return map;
+        return cacheboxMapAdapter;
     }
 
     @Override
@@ -528,7 +527,7 @@ public class MapView extends AbstractView {
         positionChangedHandler.dispose();
         positionChangedHandler = null;
 
-        Layers layers = map.layers();
+        Layers layers = cacheboxMapAdapter.layers();
         for (Layer layer : layers) {
             if (layer instanceof Disposable) {
                 ((Disposable) layer).dispose();
@@ -546,9 +545,9 @@ public class MapView extends AbstractView {
         wayPointLayer = null;
         mapInputHandler.clear();
         mapInputHandler = null;
-        map.clearMap();
-        map.destroy();
-        map = null;
+        cacheboxMapAdapter.clearMap();
+        cacheboxMapAdapter.destroy();
+        cacheboxMapAdapter = null;
         CB.postOnGlThread(new NamedRunnable("MapView:dispose texture items") {
             @Override
             public void run() {
@@ -568,13 +567,13 @@ public class MapView extends AbstractView {
 
     @Override
     public void sizeChanged() {
-        if (map == null) return;
-        map.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
-        map.viewport().setViewSize((int) this.getWidth(), (int) this.getHeight());
+        if (cacheboxMapAdapter == null) return;
+        cacheboxMapAdapter.setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
+        cacheboxMapAdapter.viewport().setViewSize((int) this.getWidth(), (int) this.getHeight());
         ((CacheboxMain) Gdx.app.getApplicationListener()).setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
 
-        mapHalfWith = map.getWidth() / 2;
-        mapHalfHeight = map.getHeight() / 2;
+        mapHalfWith = cacheboxMapAdapter.getWidth() / 2;
+        mapHalfHeight = cacheboxMapAdapter.getHeight() / 2;
 
         // set position of MapScaleBar
         setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
@@ -602,7 +601,7 @@ public class MapView extends AbstractView {
 
         // load last saved BaseMap
         String baseMapName = Settings_Map.CurrentMapLayer.getValue()[0];
-        BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(Settings_Map.MapPackFolder.getValue()));
+        BaseMapManager.INSTANCE.refreshMaps();
         AbstractManagedMapLayer baseMap = null;
         for (int i = 0, n = BaseMapManager.INSTANCE.size; i < n; i++) {
             AbstractManagedMapLayer map = BaseMapManager.INSTANCE.get(i);
@@ -618,19 +617,19 @@ public class MapView extends AbstractView {
 
         setBaseMap(baseMap);
 
-        DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(map);
+        DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(cacheboxMapAdapter);
         mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
         mapScaleBar.setDistanceUnitAdapter(MetricUnitAdapter.INSTANCE);
         mapScaleBar.setSecondaryDistanceUnitAdapter(ImperialUnitAdapter.INSTANCE);
         mapScaleBar.setScaleBarPosition(MapScaleBar.ScaleBarPosition.BOTTOM_LEFT);
 
-        directLineLayer = new DirectLineLayer(map);
-        mapScaleBarLayer = new MapScaleBarLayer(map, mapScaleBar);
-        wayPointLayer = new WaypointLayer(this, map, CB.textureRegionMap);
+        directLineLayer = new DirectLineLayer(cacheboxMapAdapter);
+        mapScaleBarLayer = new MapScaleBarLayer(cacheboxMapAdapter, mapScaleBar);
+        wayPointLayer = new WaypointLayer(this, cacheboxMapAdapter, CB.textureRegionMap);
         MapArrowStyle style = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
         String bmpName = ((GetName) style.myLocation).getName();
         TextureRegion textureRegion = CB.textureRegionMap.get(bmpName);
-        myLocationLayer = new LocationTextureLayer(map, textureRegion);
+        myLocationLayer = new LocationTextureLayer(cacheboxMapAdapter, textureRegion);
         myLocationLayer.locationRenderer.setAccuracyColor(Color.BLUE);
         myLocationLayer.locationRenderer.setIndicatorColor(Color.RED);
         myLocationLayer.locationRenderer.setBillboard(false);
@@ -638,13 +637,13 @@ public class MapView extends AbstractView {
         boolean showDirectLine = Settings_Map.ShowDirektLine.getValue();
         log.debug("Initial direct line layer and {}", showDirectLine ? "enable" : "disable");
         directLineLayer.setEnabled(showDirectLine);
-        GroupLayer layerGroup = new GroupLayer(map);
+        GroupLayer layerGroup = new GroupLayer(cacheboxMapAdapter);
 
-        ccl = new CenterCrossLayer(map);
+        ccl = new CenterCrossLayer(cacheboxMapAdapter);
 
 
         if (tileGrid)
-            layerGroup.layers.add(new TileGridLayer(map));
+            layerGroup.layers.add(new TileGridLayer(cacheboxMapAdapter));
 
         layerGroup.layers.add(wayPointLayer);
         layerGroup.layers.add(directLineLayer);
@@ -655,10 +654,10 @@ public class MapView extends AbstractView {
         Settings_Map.ShowDirektLine.addChangedEventListener(new IChanged() {
             @Override
             public void isChanged() {
-                if (map == null) return;
+                if (cacheboxMapAdapter == null) return;
                 log.debug("change direct line visibility to {}", Settings_Map.ShowDirektLine.getValue() ? "visible" : "invisible");
                 directLineLayer.setEnabled(Settings_Map.ShowDirektLine.getValue());
-                map.updateMap(true);
+                cacheboxMapAdapter.updateMap(true);
             }
         });
 
@@ -668,7 +667,7 @@ public class MapView extends AbstractView {
 
         ccl.setEnabled(showCenterCross);
         Settings_Map.ShowMapCenterCross.addChangedEventListener(showMapCenterCrossChangedListener);
-        map.layers().add(layerGroup);
+        cacheboxMapAdapter.layers().add(layerGroup);
     }
 
     private void setMapScaleBarOffset(float xOffset, float yOffset) {
@@ -687,9 +686,9 @@ public class MapView extends AbstractView {
     }
 
     private void createMapInputHandler() {
-        GestureDetector gestureDetector = new GestureDetector(new GestureHandlerImpl(map));
-        MapMotionHandler motionHandler = new MapMotionHandler(map, mapStateButton);
-        MapInputHandler inputHandler = new MapInputHandler(map, mapStateButton);
+        GestureDetector gestureDetector = new GestureDetector(new GestureHandlerImpl(cacheboxMapAdapter));
+        MapMotionHandler motionHandler = new MapMotionHandler(cacheboxMapAdapter, mapStateButton);
+        MapInputHandler inputHandler = new MapInputHandler(cacheboxMapAdapter, mapStateButton);
         mapInputHandler = new InputMultiplexer();
         mapInputHandler.addProcessor(gestureDetector);
         mapInputHandler.addProcessor(motionHandler);
@@ -718,11 +717,11 @@ public class MapView extends AbstractView {
     }
 
     public void setBaseMap(AbstractManagedMapLayer baseMap) {
-        this.map.setNewBaseMap(baseMap);
+        this.cacheboxMapAdapter.setNewBaseMap(baseMap);
     }
 
     public Coordinate getMapCenter() {
-        MapPosition mp = this.map.getMapPosition();
+        MapPosition mp = this.cacheboxMapAdapter.getMapPosition();
         return new Coordinate(mp.getLatitude(), mp.getLongitude());
     }
 
@@ -735,25 +734,23 @@ public class MapView extends AbstractView {
     @Override
     public Menu getContextMenu() {
         Menu icm = new Menu("MapViewContextMenuTitle");
-        icm.addMenuItem("Layer", CB.getSkin().getMenuIcon.mapLayer, () -> showMapLayerMenu());
-        icm.addMenuItem("Renderthemes", CB.getSkin().getMenuIcon.theme, () -> showMapViewThemeMenu());
-        //if actual Theme styleable, show style menu point
-        ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
-        if (callback != null && callback.hasStyleMenu()) {
+        icm.addMenuItem("Layer", CB.getSkin().getMenuIcon.mapLayer, () -> showMapViewLayerMenu());
+        if (cacheboxMapAdapter.getBaseMap() instanceof MapsforgeSingleMap) {
+            icm.addMenuItem("Renderthemes", CB.getSkin().getMenuIcon.theme, () -> showMapViewThemeMenu());
             icm.addMenuItem("Styles", CB.getSkin().getMenuIcon.themeStyle, () -> showMapViewThemeStyleMenu());
         }
-        icm.addMenuItem("overlays", null, () -> showMapOverlayMenu()); // todo icon
-        icm.addMenuItem("view", CB.getSkin().getMenuIcon.viewSettings, () -> showMapViewLayerMenu());
+        icm.addMenuItem("overlays", CB.getSkin().getMenuIcon.todo, () -> showMapViewOverlaysMenu()); // todo icon
+        icm.addMenuItem("view", CB.getSkin().getMenuIcon.viewSettings, () -> showMapViewElementsMenu());
         // todo needed? nach Kompass ausrichten | setAlignToCompass
         icm.addMenuItem("CenterWP", CB.getSkin().getMenuIcon.addWp, () -> createWaypointAtCenter());
-        icm.addMenuItem("RecTrack", null, () -> showMenuTrackRecording()); // todo icon
+        icm.addMenuItem("RecTrack", CB.getSkin().getMenuIcon.todo, () -> showTrackRecordMenu()); // todo icon
         return icm;
     }
 
-    private void showMapLayerMenu() {
+    private void showMapViewLayerMenu() {
         Menu icm = new Menu("MapViewLayerMenuTitle");
 
-        BaseMapManager.INSTANCE.refreshMaps(Gdx.files.absolute(CB.WorkPath));
+        BaseMapManager.INSTANCE.refreshMaps();
 
 
         int menuID = 0;
@@ -846,7 +843,7 @@ public class MapView extends AbstractView {
     }
 
     //todo ISSUE (#110 add MapView Overlays)
-    private void showMapOverlayMenu() {
+    private void showMapViewOverlaysMenu() {
         final Menu icm = new Menu("MapViewOverlayMenuTitle");
 
 //        int menuID = 0;
@@ -869,7 +866,7 @@ public class MapView extends AbstractView {
 //                }
 //                // Refresh menu
 //                icm.close();
-//                showMapOverlayMenu();
+//                showMapViewOverlaysMenu();
 //                return true;
 //            }
 //        });
@@ -877,7 +874,7 @@ public class MapView extends AbstractView {
         icm.show();
     }
 
-    private void showMapViewLayerMenu() {
+    private void showMapViewElementsMenu() {
         Menu icm = new Menu("MapViewElementsMenuTitle");
         icm.addCheckableMenuItem("HideFinds", Settings_Map.MapHideMyFinds.getValue(), () -> toggleSettingWithReload(Settings_Map.MapHideMyFinds));
         // icm.addCheckableMenuItem("MapShowCompass", Settings_Map.MapShowCompass.getValue(),()-> toggleSetting(Settings_Map.MapShowCompass));
@@ -896,9 +893,12 @@ public class MapView extends AbstractView {
         mapViewThemeMenu = new Menu("MapViewThemeMenuTitle");
         //add default themes
         for (VtmThemes vtmTheme : VtmThemes.values()) {
-            mapViewThemeMenu.addCheckableMenuItem(vtmTheme.name(), EQUALS.is(CB.actThemeFile, vtmTheme), true, () -> {
-                map.setTheme(vtmTheme);
-            });
+            mapViewThemeMenu.addCheckableMenuItem(vtmTheme.name(), vtmTheme.equals(CB.getCurrentTheme()), true,
+                    () -> {
+                        CB.setCurrentTheme(whichCase);
+                        cacheboxMapAdapter.setTheme(vtmTheme);
+                        // todo just save to config or load with defaults?
+                    });
         }
 
         final Array<NamedExternalRenderTheme> themes = new Array<>();
@@ -916,8 +916,14 @@ public class MapView extends AbstractView {
         if (folder.file().canWrite())
             themesPath = folder.path();
 
-        for (NamedExternalRenderTheme themFile : themes) {
-            mapViewThemeMenu.addCheckableMenuItem(themFile.name, EQUALS.is(CB.actThemeFile, themFile), true, () -> map.setTheme(themFile));
+        for (NamedExternalRenderTheme themeFile : themes) {
+            mapViewThemeMenu.addCheckableMenuItem(themeFile.name, CB.getConfigsThemePath(whichCase).equals(themeFile.path), true,
+                    () -> {
+                        CB.setConfigsThemePath(whichCase,themeFile.path);
+                        CB.setCurrentTheme(whichCase);
+                        cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
+                        // todo just save to config or load with defaults?
+                    });
         }
 
         final String target = themesPath + "/Elevate4.zip";
@@ -1040,9 +1046,19 @@ public class MapView extends AbstractView {
     }
 
     private void showMapViewThemeStyleMenu() {
-        OptionMenu icm = new OptionMenu("MapViewThemeStyleMenuTitle");
+        OptionMenu menuMapStyle = new OptionMenu("MapViewThemeStyleMenuTitle");
+        ObjectMap<String, String> mapStyles;
+        ThemeMenu themeMenu = new ThemeMenu(CB.getConfigsThemePath(whichCase));
+        themeMenu.readTheme();
+        mapStyles = themeMenu.getStyles();
 
-        ThemeMenuCallback callback = (ThemeMenuCallback) CB.actThemeFile.getMenuCallback();
+        for (String mapStyle : mapStyles.keys()) {
+            menuMapStyle.addCheckableMenuItem(mapStyle, false, true, () -> {
+            });
+        }
+
+        /*
+        ThemeMenu callback = (ThemeMenu) CB.actThemeFile.getMenuCallback();
         Array<XmlRenderThemeStyleLayer> overlays = callback.getOverlays();
         int id = 0;
         String lang = "de";
@@ -1069,7 +1085,9 @@ public class MapView extends AbstractView {
         }
         icm.setOnItemClickListener(styleItemClickListener);
         icm.setWindowCloseListener(closeStyleMenuListener);
-        icm.show();
+
+         */
+        menuMapStyle.show();
     }
 
     private void searchThemes(FileHandle folder, Array<NamedExternalRenderTheme> themes) {
@@ -1096,7 +1114,7 @@ public class MapView extends AbstractView {
     }
 
     //todo ISSUE (#112 Record Track)
-    private void showMenuTrackRecording() {
+    private void showTrackRecordMenu() {
         Menu cm2 = new Menu("TrackRecordMenuTitle");
         cm2.addMenuItem("start", null, () -> TrackRecorder.INSTANCE.startRecording()).setEnabled(!TrackRecorder.INSTANCE.recording);
         if (TrackRecorder.INSTANCE.pauseRecording)
@@ -1156,8 +1174,8 @@ public class MapView extends AbstractView {
 
 
     private void setInfoBubblePos() {
-        if (this.map != null && infoBubble != null && screenPoint != null) {
-            this.map.viewport().toScreenPoint(infoBubble.getCoordX(), infoBubble.getCoordY(), screenPoint);
+        if (this.cacheboxMapAdapter != null && infoBubble != null && screenPoint != null) {
+            this.cacheboxMapAdapter.viewport().toScreenPoint(infoBubble.getCoordX(), infoBubble.getCoordY(), screenPoint);
             infoBubble.setPosition((float) (screenPoint.x + this.getWidth() / 2) + infoBubble.getOffsetX(),
                     (float) (this.getHeight() - (screenPoint.y + this.getHeight() / 2)) + infoBubble.getOffsetY());
         }
@@ -1168,16 +1186,17 @@ public class MapView extends AbstractView {
     }
 
     public void setTilt(double tilt) {
-        MapPosition actPosition = map.getMapPosition();
+        MapPosition actPosition = cacheboxMapAdapter.getMapPosition();
         actPosition.tilt = (float) tilt;
-        map.setMapPosition(actPosition);
+        cacheboxMapAdapter.setMapPosition(actPosition);
     }
 
-    public static class FZKThemesInfo {
+    private class FZKThemesInfo {
         public String Name;
         public String Description;
         public String Url;
         public int Size;
         public String MD5;
     }
+
 }
