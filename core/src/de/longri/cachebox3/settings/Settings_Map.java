@@ -64,8 +64,12 @@ public class Settings_Map extends Settings_Const {
 
     public static final SettingFile MapsforgeDayTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeDayTheme", Map, NEVER, "", Global, ACB, "xml"));
     public static final SettingFile MapsforgeNightTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeNightTheme", Map, NEVER, "", Global, ACB, "xml"));
+    public static final SettingFile MapsforgeCarDayTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeCarDayTheme", Map, NEVER, "", Global, ACB, "xml"));
+    public static final SettingFile MapsforgeCarNightTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeCarNightTheme", Map, NEVER, "", Global, ACB, "xml"));
     public static final SettingString MapsforgeDayStyle = (SettingString) settingsList.addSetting(new SettingString("MapsforgeDayStyle", Map, NEVER, "", Global, ACB));
     public static final SettingString MapsforgeNightStyle = (SettingString) settingsList.addSetting(new SettingString("MapsforgeNightStyle", Map, NEVER, "", Global, ACB));
+    public static final SettingString MapsforgeCarDayStyle = (SettingString) settingsList.addSetting(new SettingString("MapsforgeCarDayStyle", Map, NEVER, "", Global, ACB));
+    public static final SettingString MapsforgeCarNightStyle = (SettingString) settingsList.addSetting(new SettingString("MapsforgeCarNightStyle", Map, NEVER, "", Global, ACB));
 
     public static final SettingsBlob lastMapState = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapState", Map, NEVER, Local, ACB, false, new byte[]{}));
     public static final SettingsBlob lastMapStateBeforeCar = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapStateBeforeCar", Map, NEVER, Local, ACB, false, new byte[]{}));
@@ -80,8 +84,6 @@ public class Settings_Map extends Settings_Const {
 //    public static final SettingIntArray CompassMapMaxZommLevel = (SettingIntArray) settingsList.addSetting(new SettingIntArray("CompassMapMaxZommLevel", Map, EXPERT, 20, Global, ACB, Level));
 //
 //    public static final SettingFolder RenderThemesFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("RenderThemesFolder", Map, NORMAL, "", Global, ALL, false));
-//     public static final SettingFile MapsforgeCarDayTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeCarDayTheme", Map, NEVER, "", Global, ACB, "xml"));
-//    public static final SettingFile MapsforgeCarNightTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeCarNightTheme", Map, NEVER, "", Global, ACB, "xml"));
 //    public static final SettingBool MoveMapCenterWithSpeed = (SettingBool) settingsList.addSetting(new SettingBool("MoveMapCenterWithSpeed", CarMode, NORMAL, false, Global, ACB));
 //    public static final SettingBool DEBUG_MapGrid = (SettingBool) settingsList.addSetting(new SettingBool("DEBUG_MapGrid", Debug, NORMAL, false, Global, ACB));
 

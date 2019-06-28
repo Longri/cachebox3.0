@@ -158,7 +158,7 @@ public class CB {
                 CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
                 CanvasAdapter.textScale = text;
                 Tile.SIZE = Tile.calculateTileSize();
-                setCurrentTheme();
+                setCurrentTheme(ThemeIsFor.day); // todo set the correct parameter
             }
         }
     };
@@ -586,14 +586,14 @@ public class CB {
         return actTheme;
     }
 
-    public static void setCurrentTheme() {
+    public static void setCurrentTheme(ThemeIsFor themeIsFor) {
         if (!mapScaleInitial) {
             Settings.MapViewDPIFaktor.addChangedEventListener(mapScaleSettingChanged);
             Settings.MapViewTextFaktor.addChangedEventListener(mapScaleSettingChanged);
             mapScaleInitial = true;
         }
 
-        String path = getConfigsThemePath();
+        String path = getConfigsThemePath(themeIsFor);
         if (path.startsWith("VTM:") || path.length() == 0) {
             VtmThemes themeFile;
             if (path.length() == 0) {
@@ -604,41 +604,68 @@ public class CB {
             }
             actTheme = ThemeLoader.load(themeFile);
         } else {
-            ThemeMenu themeMenu = new ThemeMenu(getConfigsThemePath());
-            themeMenu.applyConfig(getConfigsMapStyle());
+            ThemeMenu themeMenu = new ThemeMenu(getConfigsThemePath(themeIsFor));
+            themeMenu.applyConfig(getConfigsMapStyle(themeIsFor));
             actTheme = themeMenu.getRenderTheme();
         }
     }
 
-    public static String getConfigsThemePath() {
-        if (Config.nightMode.getValue()) {
-            return Config.MapsforgeNightTheme.getValue();
-        } else {
-            return Config.MapsforgeDayTheme.getValue();
+    public static String getConfigsThemePath(ThemeIsFor themeIsFor) {
+        switch (themeIsFor) {
+            case day:
+                return Config.MapsforgeDayTheme.getValue();
+            case night:
+                return Config.MapsforgeNightTheme.getValue();
+            case carday:
+                return Config.MapsforgeCarDayTheme.getValue();
+            default: //case carnight:
+                return Config.MapsforgeCarNightTheme.getValue();
         }
     }
 
-    public static void setConfigsThemePath(String path) {
-        if (Config.nightMode.getValue()) {
-            Config.MapsforgeNightTheme.setValue(path);
-        } else {
-            Config.MapsforgeDayTheme.setValue(path);
+    public static void setConfigsThemePath(ThemeIsFor themeIsFor, String path) {
+        switch (themeIsFor) {
+            case day:
+                Config.MapsforgeDayTheme.setValue(path);
+                break;
+            case night:
+                Config.MapsforgeNightTheme.setValue(path);
+                break;
+            case carday:
+                Config.MapsforgeCarDayTheme.setValue(path);
+                break;
+            default: //case carnight:
+                Config.MapsforgeCarNightTheme.setValue(path);
         }
     }
 
-    public static String getConfigsMapStyle() {
-        if (Config.nightMode.getValue()) {
-            return Config.MapsforgeNightStyle.getValue();
-        } else {
-            return Config.MapsforgeDayStyle.getValue();
+    public static String getConfigsMapStyle(ThemeIsFor themeIsFor) {
+        switch (themeIsFor) {
+            case day:
+                return Config.MapsforgeDayStyle.getValue();
+            case night:
+                return Config.MapsforgeNightStyle.getValue();
+            case carday:
+                return Config.MapsforgeCarDayStyle.getValue();
+            default: //case carnight:
+                return Config.MapsforgeCarNightStyle.getValue();
         }
     }
 
-    public static void setConfigsMapStyle(String mapStyle) {
-        if (Config.nightMode.getValue()) {
-            Config.MapsforgeNightStyle.setValue(mapStyle);
-        } else {
-            Config.MapsforgeDayStyle.setValue(mapStyle);
+    public static void setConfigsMapStyle(ThemeIsFor themeIsFor, String mapStyle) {
+        switch (themeIsFor) {
+            case day:
+                Config.MapsforgeDayStyle.setValue(mapStyle);
+                break;
+            case night:
+                Config.MapsforgeNightStyle.setValue(mapStyle);
+                break;
+            case carday:
+                Config.MapsforgeCarDayStyle.setValue(mapStyle);
+                break;
+            case carnight:
+                Config.MapsforgeCarNightStyle.setValue(mapStyle);
+                break;
         }
     }
 
@@ -657,5 +684,10 @@ public class CB {
     public float getGlobalScaleFactor() {
         return globalScale;
     }
+
+    public enum ThemeIsFor {
+        day, night, carday, carnight
+    }
+
 }
 

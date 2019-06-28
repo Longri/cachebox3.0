@@ -214,15 +214,18 @@ public class MapView extends AbstractView {
 
         }
     };
+    private CB.ThemeIsFor whichCase;
 
 
     public MapView(BitStore reader) {
         super(reader);
+        whichCase = CB.ThemeIsFor.day;
         create();
     }
 
     public MapView() {
         super("MapView");
+        whichCase = CB.ThemeIsFor.day;
         create();
     }
 
@@ -892,7 +895,8 @@ public class MapView extends AbstractView {
         for (VtmThemes vtmTheme : VtmThemes.values()) {
             mapViewThemeMenu.addCheckableMenuItem(vtmTheme.name(), vtmTheme.equals(CB.getCurrentTheme()), true,
                     () -> {
-                        // cacheboxMapAdapter.setTheme(vtmTheme);
+                        CB.setCurrentTheme(whichCase);
+                        cacheboxMapAdapter.setTheme(vtmTheme);
                         // todo just save to config or load with defaults?
                     });
         }
@@ -913,9 +917,11 @@ public class MapView extends AbstractView {
             themesPath = folder.path();
 
         for (NamedExternalRenderTheme themeFile : themes) {
-            mapViewThemeMenu.addCheckableMenuItem(themeFile.name, CB.getConfigsThemePath().equals(themeFile.path), true,
+            mapViewThemeMenu.addCheckableMenuItem(themeFile.name, CB.getConfigsThemePath(whichCase).equals(themeFile.path), true,
                     () -> {
-                        // cacheboxMapAdapter.setTheme(themeFile);
+                        CB.setConfigsThemePath(whichCase,themeFile.path);
+                        CB.setCurrentTheme(whichCase);
+                        cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
                         // todo just save to config or load with defaults?
                     });
         }
@@ -1042,7 +1048,7 @@ public class MapView extends AbstractView {
     private void showMapViewThemeStyleMenu() {
         OptionMenu menuMapStyle = new OptionMenu("MapViewThemeStyleMenuTitle");
         ObjectMap<String, String> mapStyles;
-        ThemeMenu themeMenu = new ThemeMenu(CB.getConfigsThemePath());
+        ThemeMenu themeMenu = new ThemeMenu(CB.getConfigsThemePath(whichCase));
         themeMenu.readTheme();
         mapStyles = themeMenu.getStyles();
 

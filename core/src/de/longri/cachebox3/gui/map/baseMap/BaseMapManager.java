@@ -45,7 +45,7 @@ public final class BaseMapManager extends CB_List<AbstractManagedMapLayer> {
         String actRepositoryName = Config.DatabaseName.getValue().replace(".db3", "");
         addMapFiles(workPath.child("repositories").child(actRepositoryName).child("maps"));
 
-        // add map files from setet user map folder
+        // add map files from user map folder
         FileHandle userMapFolder = Gdx.files.absolute(Config.MapPackFolder.getValue());
         if (!userMapFolder.path().equals(repositoryMaps))
             addMapFiles(userMapFolder);

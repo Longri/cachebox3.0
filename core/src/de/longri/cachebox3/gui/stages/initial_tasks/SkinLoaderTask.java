@@ -182,7 +182,7 @@ public final class SkinLoaderTask extends AbstractInitTask {
                 CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
                 CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
                 Tile.SIZE = Tile.calculateTileSize();
-                CB.setCurrentTheme();
+                CB.setCurrentTheme(CB.ThemeIsFor.day); // todo set the correct parameter
             }
         });
     }
