@@ -261,7 +261,12 @@ public class FileChooser extends ActivityBase {
                         @Override
                         public void run() {
                             //delete Files
-                            //TODO delete Files
+                            for (FileHandle delFile : delFiles) {
+                                if (delFile.isDirectory())
+                                    delFile.deleteDirectory();
+                                else
+                                    delFile.delete();
+                            }
                         }
                     });
                 return true;
