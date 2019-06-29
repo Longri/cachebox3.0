@@ -356,19 +356,19 @@ public class FileChooser extends ActivityBase {
             private FileChooserItem getEntryItem(final int index) {
 
                 final FileHandle file = fileList.get(index);
+                FileChooserItem item = new FileChooserItem(index, file) {
+                    @Override
+                    public void dispose() {
+                    }
+                };
+
+                // add label with category name, align left
+                item.left();
+                VisLabel label = new VisLabel(file.name());
+                label.setAlignment(Align.left);
+                item.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
                 if (file.isDirectory()) {
-                    FileChooserItem item = new FileChooserItem(index, file) {
-                        @Override
-                        public void dispose() {
-                        }
-                    };
-
-                    // add label with category name, align left
-                    item.left();
-                    VisLabel label = new VisLabel(file.name());
-                    label.setAlignment(Align.left);
-                    item.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
                     // add folder icon
                     Image next = new Image(fileChooserStyle.folderIcon);
                     item.add(next).width(next.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
@@ -438,17 +438,7 @@ public class FileChooser extends ActivityBase {
                     });
                     return item;
                 } else if (file.extension().equals("map")) {
-                    FileChooserItem item = new FileChooserItem(index, file) {
-                        @Override
-                        public void dispose() {
-                        }
-                    };
 
-                    // add label with category name, align left
-                    item.left();
-                    VisLabel label = new VisLabel(file.name());
-                    label.setAlignment(Align.left);
-                    item.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
                     // add map file icon
                     Image next = new Image(fileChooserStyle.mapFileIcon);
@@ -465,17 +455,7 @@ public class FileChooser extends ActivityBase {
                     });
                     return item;
                 } else {
-                    FileChooserItem item = new FileChooserItem(index, file) {
-                        @Override
-                        public void dispose() {
-                        }
-                    };
 
-                    // add label with category name, align left
-                    item.left();
-                    VisLabel label = new VisLabel(file.name());
-                    label.setAlignment(Align.left);
-                    item.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
                     // add file icon
                     Image next = new Image(fileChooserStyle.fileIcon);
