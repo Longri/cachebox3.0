@@ -18,10 +18,7 @@ package com.badlogic.gdx.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -47,7 +44,12 @@ public abstract class AbstractStreamParser {
     }
 
     public void parse(final InputStream input, long length) {
-        this.reader = new InputStreamReader(input);
+        try {
+            this.reader = new InputStreamReader(input, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return;
+        }
 
         if (DEBUG) log.debug("Start parsing");
 
@@ -124,5 +126,5 @@ public abstract class AbstractStreamParser {
      * @param data
      * @return
      */
-     abstract int parse(char[] data);
+    abstract int parse(char[] data);
 }
