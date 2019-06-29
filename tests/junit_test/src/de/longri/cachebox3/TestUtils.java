@@ -218,6 +218,13 @@ public class TestUtils {
         IconsStyle iconsStyle = new IconsStyle();
         VisUI.getSkin().add("default", iconsStyle, IconsStyle.class);
 
+        //de.longri.cachebox3.gui.skin.styles.GalleryViewStyle registered with name: default
+        GalleryViewStyle galleryViewStyle = new GalleryViewStyle();
+        galleryViewStyle.galleryListStyle = listViewStyle;
+        galleryViewStyle.overviewListStyle = listViewStyle;
+
+        VisUI.getSkin().add("default", galleryViewStyle, GalleryViewStyle.class);
+
     }
 
     public static double roundDoubleCoordinate(double value) {
