@@ -31,14 +31,14 @@ public final class BaseMapManager extends CB_List<AbstractManagedMapLayer> {
 
     public final static BaseMapManager INSTANCE = new BaseMapManager();
 
-    private BaseMapManager() {
+    public BaseMapManager() {
     }
 
     public void refreshMaps() {
         refreshMaps(Gdx.files.absolute(CB.WorkPath));
     }
 
-    private void refreshMaps(FileHandle workPath) {
+    public void refreshMaps(FileHandle workPath) {
         this.clear();
         // add map files from repository
         String repositoryMaps = addMapFiles(workPath.child("repository").child("maps"));
