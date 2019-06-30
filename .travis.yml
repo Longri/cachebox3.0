@@ -2,6 +2,7 @@ sudo: "required"
 
 before_install:
   - chmod +x gradlew
+  - sudo apt-get install openjfx
 
 install: true
 language: java
