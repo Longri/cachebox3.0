@@ -1,0 +1,16 @@
+include ':core', ':desktop', ':gps-simulator', ':cb3-file-transfer', ':skin-editor-src-proj', ':ios'
+//include ':android'
+//project(':android').projectDir = new File('./launcher/android')
+
+project(':desktop').projectDir = new File('./launcher/desktop')
+project(':ios').projectDir = new File('./launcher/ios')
+
+project(':gps-simulator').projectDir = new File('./tools/gps-simulator')
+project(':cb3-file-transfer').projectDir = new File('./tools/cb3-file-transfer')
+project(':skin-editor-src-proj').projectDir = new File('./tools/skin-editor/skin-editor-src-proj')
+
+
+include ':junit_test', ':libgdx_test',':extract_libgdx_test'
+project(':junit_test').projectDir = new File('./tests/junit_test')
+project(':libgdx_test').projectDir = new File('./tests/libgdx_test')
+project(':extract_libgdx_test').projectDir = new File('./tools/extract_libgdx_test')
