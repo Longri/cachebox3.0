@@ -3410,6 +3410,8 @@
   },
   "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
     "default": {
+      "overviewListStyle" : "spoilerOverview",
+      "galleryListStyle" : "spoilerGallery",
       "spoilerNameFont": "AboutInfo",
       "spoilerNameFontColor": "font_color"
     }
