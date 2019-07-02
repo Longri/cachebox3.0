@@ -101,10 +101,10 @@ public class Menu extends Window {
         this.hideWithItemClick = heideWithItemClick;
     }
 
-    public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, boolean withoutTranslation, Drawable icon, ClickListener clickListener) {
+    public MenuItem addMenuItem(CharSequence titleTranlationId, String addUnTranslatedPart, Drawable icon, ClickListener clickListener) {
         MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
-        if (titleTranlationId.length() == 0) withoutTranslation = true;
-        item.setTitle((withoutTranslation ? titleTranlationId : Translation.get(titleTranlationId.toString())) + titleExtension);
+        // String titleTranslation = (titleTranlationId.length() == 0 ? "" : Translation.get(titleTranlationId.toString()).toString());
+        item.setTitle((titleTranlationId.length() == 0 ? "" : Translation.get(titleTranlationId.toString()).toString()) + addUnTranslatedPart);
         if (icon != null)
             item.setIcon(icon);
         item.addListener(clickListener);
@@ -112,41 +112,30 @@ public class Menu extends Window {
         return item;
     }
 
-    private MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, boolean withoutTranslation, Drawable icon, Runnable runnable) {
-        MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
-        if (titleTranlationId.length() == 0) withoutTranslation = true;
-        item.setTitle((withoutTranslation ? titleTranlationId : Translation.get(titleTranlationId.toString())) + titleExtension);
-        if (icon != null)
-            item.setIcon(icon);
-        item.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (mustHandle(event)) {
-                    runnable.run();
-                }
-            }
-        });
-        mItems.add(item);
-        return item;
-    }
-
     public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Runnable runnable) {
-        return addMenuItem(titleTranlationId, titleExtension, false, icon, runnable);
+        return addMenuItem(titleTranlationId, titleExtension, icon, new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        if (mustHandle(event)) {
+                            runnable.run();
+                        }
+                    }
+                });
     }
 
     public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, Runnable runnable) {
-        return addMenuItem(titleTranlationId, "", false, icon, runnable);
+        return addMenuItem(titleTranlationId, "", icon, runnable);
     }
 
-    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, boolean checked, boolean withoutTranslation, Runnable runnable) {
-        MenuItem item = addMenuItem(titleTranlationId, "", withoutTranslation, null, runnable);
+    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, boolean checked, Runnable runnable) {
+        MenuItem item = addMenuItem(titleTranlationId, titleExtension, null, runnable);
         item.setCheckable(true);
         item.setChecked(checked);
         return item;
     }
-
     public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, boolean checked, Runnable runnable) {
-        return addCheckableMenuItem(titleTranlationId, checked, false, runnable);
+        return addCheckableMenuItem(titleTranlationId, "", null, checked, runnable);
     }
+
 
     public void addItem(final MenuItem menuItem) {
 

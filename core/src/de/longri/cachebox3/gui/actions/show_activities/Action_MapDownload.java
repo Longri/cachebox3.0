@@ -79,7 +79,7 @@ public class Action_MapDownload extends AbstractAction {
                 // todo perhaps sorting mapInfoList
                 // icm.setHideWithItemClick(true);
                 for (MapRepositoryInfo mapInfo : mapInfoList) {
-                    icm.addMenuItem("", mapInfo.Description.substring(14) + " (" + mapInfo.Size / 1024 / 1024 + " MB)", false,
+                    icm.addMenuItem("", mapInfo.Description.substring(14) + " (" + mapInfo.Size / 1024 / 1024 + " MB)",
                             null,
                             new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {

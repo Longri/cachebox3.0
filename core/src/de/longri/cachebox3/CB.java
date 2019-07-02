@@ -640,6 +640,8 @@ public class CB {
     }
 
     public static String getConfigsMapStyle(ThemeIsFor themeIsFor) {
+        // todo: the configs mapstyle is possibly not suitable for this layer
+        // his must be detected somehow
         switch (themeIsFor) {
             case day:
                 return Config.MapsforgeDayStyle.getValue();

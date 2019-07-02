@@ -58,7 +58,6 @@ import de.longri.cachebox3.gui.map.layer.ThemeMenu;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.menu.OptionMenu;
 import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
@@ -615,7 +614,7 @@ public class MapView extends AbstractView {
             baseMap = new OSciMap();
         }
 
-        setBaseMap(baseMap);
+        cacheboxMapAdapter.setNewBaseMap(baseMap);
 
         DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(cacheboxMapAdapter);
         mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
@@ -716,10 +715,6 @@ public class MapView extends AbstractView {
         //TODO
     }
 
-    public void setBaseMap(AbstractManagedMapLayer baseMap) {
-        this.cacheboxMapAdapter.setNewBaseMap(baseMap);
-    }
-
     public Coordinate getMapCenter() {
         MapPosition mp = this.cacheboxMapAdapter.getMapPosition();
         return new Coordinate(mp.getLatitude(), mp.getLongitude());
@@ -759,9 +754,6 @@ public class MapView extends AbstractView {
             AbstractManagedMapLayer baseMap = BaseMapManager.INSTANCE.get(i);
 
             if (!baseMap.isOverlay) {
-                MenuItem mi = icm.addItem(menuID++, "", baseMap.name); // == friendlyName == FileName !!! without translation
-                mi.setData(baseMap);
-                mi.setCheckable(true);
 
                 //set icon (Online_BMP, Online_Vector, Mapsforge or Freizeitkarte)
                 Drawable icon = null;
@@ -785,21 +777,23 @@ public class MapView extends AbstractView {
 
                 }
 
-                if (icon != null)
-                    mi.setIcon(icon);
-
+                boolean isChecked = false;
                 String[] currentLayer = Settings_Map.CurrentMapLayer.getValue();
-
                 for (int j = 0, m = currentLayer.length; j < m; j++) {
                     String str = currentLayer[j];
                     if (str.equals(baseMap.name)) {
-                        mi.setChecked(true);
+                        isChecked = true;
                         break;
                     }
                 }
+
+                MenuItem mi = icm.addCheckableMenuItem("", baseMap.name, icon, isChecked, () -> {
+                    cacheboxMapAdapter.setNewBaseMap(baseMap);
+                });
             }
         }
 
+        /*
         icm.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public boolean onItemClick(MenuItem item) {
@@ -834,10 +828,12 @@ public class MapView extends AbstractView {
 //                    return true;
 //                }
 
-                setBaseMap(baseMap);
+                cacheboxMapAdapter.setNewBaseMap(baseMap);
                 return true;
             }
         });
+
+         */
 
         icm.show();
     }
@@ -893,10 +889,10 @@ public class MapView extends AbstractView {
         mapViewThemeMenu = new Menu("MapViewThemeMenuTitle");
         //add default themes
         for (VtmThemes vtmTheme : VtmThemes.values()) {
-            mapViewThemeMenu.addCheckableMenuItem(vtmTheme.name(), vtmTheme.equals(CB.getCurrentTheme()), true,
+            mapViewThemeMenu.addCheckableMenuItem("", vtmTheme.name(), null, vtmTheme.equals(CB.getCurrentTheme()),
                     () -> {
                         CB.setCurrentTheme(whichCase);
-                        cacheboxMapAdapter.setTheme(vtmTheme);
+                        cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
                         // todo just save to config or load with defaults?
                     });
         }
@@ -917,9 +913,9 @@ public class MapView extends AbstractView {
             themesPath = folder.path();
 
         for (NamedExternalRenderTheme themeFile : themes) {
-            mapViewThemeMenu.addCheckableMenuItem(themeFile.name, CB.getConfigsThemePath(whichCase).equals(themeFile.path), true,
+            mapViewThemeMenu.addCheckableMenuItem("", themeFile.name, null, CB.getConfigsThemePath(whichCase).equals(themeFile.path),
                     () -> {
-                        CB.setConfigsThemePath(whichCase,themeFile.path);
+                        CB.setConfigsThemePath(whichCase, themeFile.path);
                         CB.setCurrentTheme(whichCase);
                         cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
                         // todo just save to config or load with defaults?
@@ -929,7 +925,7 @@ public class MapView extends AbstractView {
         final String target = themesPath + "/Elevate4.zip";
         if (themesPath.length() > 0) {
             mapViewThemeMenu.addDivider(-1);
-            mapViewThemeMenu.addMenuItem("Download", "\n OpenAndroMaps", false,
+            mapViewThemeMenu.addMenuItem("Download", "\n OpenAndroMaps",
                     CB.getSkin().getMenuIcon.baseMapMapsforge,
                     new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
@@ -1053,7 +1049,9 @@ public class MapView extends AbstractView {
         mapStyles = themeMenu.getStyles();
 
         for (String mapStyle : mapStyles.keys()) {
-            menuMapStyle.addCheckableMenuItem(mapStyle, false, true, () -> {
+            // check, if saved for selected layer
+            boolean isSelected = false;
+            menuMapStyle.addCheckableMenuItem("", mapStyle, null, isSelected, () -> {
             });
         }
 

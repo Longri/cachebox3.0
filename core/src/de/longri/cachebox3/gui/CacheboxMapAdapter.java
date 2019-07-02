@@ -212,8 +212,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             } else {
                 vectorTileLayer.setTileSource(((AbstractVectorLayer) baseMap).getVectorTileSource());
             }
-            tileLayer = this.setBaseMap(vectorTileLayer);
 
+            tileLayer = this.setBaseMap(vectorTileLayer);
+            // todo this is possibly not corresponding
             setTheme(CB.getCurrentTheme());
 
             ((AbstractList) this.layers()).add(2, new BuildingLabelLayer(this, vectorTileLayer));
