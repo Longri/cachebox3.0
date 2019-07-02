@@ -896,7 +896,7 @@ public class Settings_Activity extends ActivityBase {
                                 valuelabel.setText("Value: " + String.valueOf(setting.getValue()));
                             }
                         });
-                        folderChooser.setDirectory(Gdx.files.absolute(setting.getValue()));
+                        folderChooser.setDirectory(CB.WorkPathFileHandle, true);
                         folderChooser.show();
                     });
                     selectClearMenu.addMenuItem("ClearPath", null, () -> {
