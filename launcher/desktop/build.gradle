@@ -21,7 +21,7 @@ dependencies {
     implementation project(':gps-simulator')
     implementation project(':cb3-file-transfer')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     implementation 'com.kitfox.svg:svg-salamander:1.0'
@@ -43,7 +43,7 @@ dependencies {
         exclude group: 'com.metsci.ext.com.kitfox.svg'
     }
 
-    implementation("org.mapsforge:vtm-desktop-lwjgl:$vtmVersion")
+    implementation("org.mapsforge:vtm-desktop-lwjgl3:$vtmVersion")
 
     
     
