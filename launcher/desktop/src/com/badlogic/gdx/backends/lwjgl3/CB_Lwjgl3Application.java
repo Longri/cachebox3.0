@@ -85,6 +85,7 @@ public class CB_Lwjgl3Application implements Application {
     }
 
     public CB_Lwjgl3Application(ApplicationListener listener, Lwjgl3ApplicationConfiguration config) {
+        config.setTitle("Cachebox 3.0 as Lwjgl3Application");
         initializeGlfw();
         setApplicationLogger(new Lwjgl3ApplicationLogger());
         this.config = Lwjgl3ApplicationConfiguration.copy(config);

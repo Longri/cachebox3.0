@@ -42,7 +42,7 @@ import org.slf4j.impl.LibgdxLogger;
 
 import javax.swing.*;
 
-public class TouchLauncher {
+public class TouchLwjgl3Launcher {
     public static void main(String[] args) {
         System.setProperty("org.lwjgl.util.NoChecks", "true");
         LibgdxLogger.PROPERTIES_FILE_HANDLE = new Lwjgl3FileHandle(LibgdxLogger.CONFIGURATION_FILE_XML, Files.FileType.Local);
@@ -64,7 +64,7 @@ public class TouchLauncher {
 //        config.samples = 1;
         config.windowWidth = 202;
         config.windowHeight = 337;
-        config.setTitle("Cachebox 3.0");
+
 
         config.stencil = 8;
 //        config.idleFPS = 60;
