@@ -76,9 +76,9 @@ public class ScrollLabel extends Label {
         cache.tint(color);
         cache.setPosition(getX() + scrollPosition, getY());
 
+        getStage().getViewport().calculateScissors(batch.getTransformMatrix(), localRec, scissorRec);
 
-        getStage().calculateScissors(localRec, scissorRec);
-
+        batch.flush();
         if (ScissorStack.pushScissors(scissorRec)) {
             cache.draw(batch);
             batch.flush();
@@ -86,7 +86,6 @@ public class ScrollLabel extends Label {
         } else {
             cache.draw(batch);
         }
-
     }
 
 

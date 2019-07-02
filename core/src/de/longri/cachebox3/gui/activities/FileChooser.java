@@ -17,12 +17,14 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -41,6 +43,7 @@ import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.IconButton;
+import de.longri.cachebox3.gui.widgets.ScrollLabel;
 import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -371,11 +374,12 @@ public class FileChooser extends ActivityBase {
                     }
                 };
 
-                // add label with category name, align left
-                item.left();
-                VisLabel label = new VisLabel(file.name());
+                ScrollLabel label = new ScrollLabel(file.name(), nameStyle);
                 label.setAlignment(Align.left);
-                item.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+                float width = FileChooser.this.getWidth() - (fileChooserStyle.folderIcon.getMinWidth()
+                        + CB.scaledSizes.MARGINx4 + CB.scaledSizes.MARGINx4);
+                item.add(label).pad(CB.scaledSizes.MARGIN).width(new Value.Fixed(width));
 
                 if (file.isDirectory()) {
                     // add folder icon
@@ -608,25 +612,28 @@ public class FileChooser extends ActivityBase {
                 widgetGroup.setPosition(CB.scaledSizes.MARGIN, y);
             }
         }
+        widgetGroup.addActor(listView);
 
-        if (reload) {
-            WidgetGroup altWidgedGroup = listViews.pop();
-            this.removeActor(altWidgedGroup);
-            listViewsNames.pop();
-            listViews.add(widgetGroup);
-            listViewsNames.add(name);
-            this.addActor(widgetGroup);
-        } else {
-            listViews.add(widgetGroup);
-            listViewsNames.add(name);
-            this.addActor(widgetGroup);
+        if (listViews.size > 0) {
+            // animate
+            float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
+            if (animate) {
+                listViews.get(listViews.size - 1).addAction(Actions.moveTo(0 - nextXPos, y, Menu.MORE_MENU_ANIMATION_TIME));
+                widgetGroup.setPosition(nextXPos, y);
+                widgetGroup.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
+            } else {
+                widgetGroup.setPosition(CB.scaledSizes.MARGIN, y);
+            }
         }
+        listViews.add(widgetGroup);
+        listViewsNames.add(name);
+        this.addActor(widgetGroup);
     }
 
     private void backClick() {
         float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
 
-        if (listViews.size == 1) return;
+        if (listViews.size == 0) return;
 
         listViewsNames.pop();
         WidgetGroup actWidgetGroup = listViews.pop();
@@ -661,6 +668,11 @@ public class FileChooser extends ActivityBase {
         public FileChooserItem(int index, FileHandle fileHandle) {
             super(index);
             this.fileHandle = fileHandle;
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            super.draw(batch, parentAlpha);
         }
     }
 }
