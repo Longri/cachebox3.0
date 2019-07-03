@@ -22,5 +22,6 @@ public class TouchLauncher {
     public static void main(String[] args) {
         //redirect to new Lwjgl3 version on namespace com.badlogic.gdx.backends.lwjgl3
         com.badlogic.gdx.backends.lwjgl3.TouchLwjgl3Launcher.main(args);
+        System.exit(0);
     }
 }

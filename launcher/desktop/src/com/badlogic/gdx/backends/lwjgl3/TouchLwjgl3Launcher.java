@@ -109,41 +109,9 @@ public class TouchLwjgl3Launcher {
         // Don't change this LogLevel
         // Cachebox use the slf4j implematation for LibGdx as Log engine.
         // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
-        CB_Lwjgl3Application application = new CB_Lwjgl3Application(new DesktopMain(), config) {
-            public boolean executeRunnables() {
-                long start = System.currentTimeMillis();
-                synchronized (runnables) {
-                    for (int i = runnables.size - 1; i >= 0; i--)
-                        executedRunnables.add(runnables.get(i));
-                    runnables.clear();
-                }
-                if (executedRunnables.size == 0) return false;
-                final String arryString = executedRunnables.toString();
-                do
-                    executedRunnables.pop().run();
-                while (executedRunnables.size > 0);
-
-                long executionTime = System.currentTimeMillis() - start;
-
-                if (executionTime > 200) {
-                    log.warn("Blocked MAIN-LOOp for {}ms => {}", executionTime, arryString);
-                }
-
-                return true;
-            }
-        };
-
-        application.setLogLevel(Lwjgl3Application.LOG_DEBUG);
+        new CB_Lwjgl3Application(new DesktopMain(), config);
 
 
-        if (cmd.hasOption("transfer")) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Application.launch(MainWindow.class);
-                }
-            }).start();
-        }
     }
 
     public static void initVtm() {

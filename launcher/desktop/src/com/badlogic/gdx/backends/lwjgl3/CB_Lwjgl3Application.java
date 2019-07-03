@@ -20,7 +20,6 @@ import java.io.PrintStream;
 import java.nio.IntBuffer;
 
 import com.badlogic.gdx.ApplicationLogger;
-import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.glutils.GLVersion;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -52,8 +51,13 @@ import com.badlogic.gdx.utils.Clipboard;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CB_Lwjgl3Application implements Application {
+
+    private static final Logger log = LoggerFactory.getLogger(CB_Lwjgl3Application.class);
+
     private final Lwjgl3ApplicationConfiguration config;
     private final Array<Lwjgl3Window> windows = new Array<Lwjgl3Window>();
     public volatile Lwjgl3Window currentWindow;
@@ -85,6 +89,7 @@ public class CB_Lwjgl3Application implements Application {
     }
 
     public CB_Lwjgl3Application(ApplicationListener listener, Lwjgl3ApplicationConfiguration config) {
+        this.setLogLevel(Lwjgl3Application.LOG_DEBUG);
         config.setTitle("Cachebox 3.0 as Lwjgl3Application");
         initializeGlfw();
         setApplicationLogger(new Lwjgl3ApplicationLogger());
@@ -111,7 +116,7 @@ public class CB_Lwjgl3Application implements Application {
         try {
             loop();
             cleanupWindows();
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             if (t instanceof RuntimeException)
                 throw (RuntimeException) t;
             else
@@ -143,17 +148,7 @@ public class CB_Lwjgl3Application implements Application {
             }
             GLFW.glfwPollEvents();
 
-            boolean shouldRequestRendering;
-            synchronized (runnables) {
-                shouldRequestRendering = runnables.size > 0;
-                executedRunnables.clear();
-                executedRunnables.addAll(runnables);
-                runnables.clear();
-            }
-            for (Runnable runnable : executedRunnables) {
-                runnable.run();
-            }
-            if (shouldRequestRendering){
+            if (executeRunnables()) {
                 // Must follow Runnables execution so changes done by Runnables are reflected
                 // in the following render.
                 for (Lwjgl3Window window : windows) {
@@ -191,9 +186,33 @@ public class CB_Lwjgl3Application implements Application {
         }
     }
 
+    public boolean executeRunnables() {
+        boolean shouldRequestRendering;
+        long start = System.currentTimeMillis();
+        synchronized (runnables) {
+            shouldRequestRendering = runnables.size > 0;
+            for (int i = runnables.size - 1; i >= 0; i--)
+                executedRunnables.add(runnables.get(i));
+            runnables.clear();
+        }
+        if (executedRunnables.size == 0) return false;
+        final String arryString = executedRunnables.toString();
+        do
+            executedRunnables.pop().run();
+        while (executedRunnables.size > 0);
+
+        long executionTime = System.currentTimeMillis() - start;
+
+        if (executionTime > 200) {
+            log.warn("Blocked MAIN-LOOp for {}ms => {}", executionTime, arryString);
+        }
+
+        return shouldRequestRendering;
+    }
+
     private void cleanupWindows() {
         synchronized (lifecycleListeners) {
-            for(LifecycleListener lifecycleListener : lifecycleListeners){
+            for (LifecycleListener lifecycleListener : lifecycleListeners) {
                 lifecycleListener.pause();
                 lifecycleListener.dispose();
             }
@@ -249,32 +268,32 @@ public class CB_Lwjgl3Application implements Application {
     }
 
     @Override
-    public void debug (String tag, String message) {
+    public void debug(String tag, String message) {
         if (logLevel >= LOG_DEBUG) getApplicationLogger().debug(tag, message);
     }
 
     @Override
-    public void debug (String tag, String message, Throwable exception) {
+    public void debug(String tag, String message, Throwable exception) {
         if (logLevel >= LOG_DEBUG) getApplicationLogger().debug(tag, message, exception);
     }
 
     @Override
-    public void log (String tag, String message) {
+    public void log(String tag, String message) {
         if (logLevel >= LOG_INFO) getApplicationLogger().log(tag, message);
     }
 
     @Override
-    public void log (String tag, String message, Throwable exception) {
+    public void log(String tag, String message, Throwable exception) {
         if (logLevel >= LOG_INFO) getApplicationLogger().log(tag, message, exception);
     }
 
     @Override
-    public void error (String tag, String message) {
+    public void error(String tag, String message) {
         if (logLevel >= LOG_ERROR) getApplicationLogger().error(tag, message);
     }
 
     @Override
-    public void error (String tag, String message, Throwable exception) {
+    public void error(String tag, String message, Throwable exception) {
         if (logLevel >= LOG_ERROR) getApplicationLogger().error(tag, message, exception);
     }
 
@@ -289,12 +308,12 @@ public class CB_Lwjgl3Application implements Application {
     }
 
     @Override
-    public void setApplicationLogger (ApplicationLogger applicationLogger) {
+    public void setApplicationLogger(ApplicationLogger applicationLogger) {
         this.applicationLogger = applicationLogger;
     }
 
     @Override
-    public ApplicationLogger getApplicationLogger () {
+    public ApplicationLogger getApplicationLogger() {
         return applicationLogger;
     }
 
@@ -363,7 +382,7 @@ public class CB_Lwjgl3Application implements Application {
 
     /**
      * Creates a new {@link Lwjgl3Window} using the provided listener and {@link Lwjgl3WindowConfiguration}.
-     *
+     * <p>
      * This function only just instantiates a {@link Lwjgl3Window} and returns immediately. The actual window creation
      * is postponed with {@link Application#postRunnable(Runnable)} until after all existing windows are updated.
      */
@@ -373,8 +392,8 @@ public class CB_Lwjgl3Application implements Application {
         return createWindow(appConfig, listener, windows.get(0).getWindowHandle());
     }
 
-    private Lwjgl3Window createWindow (final Lwjgl3ApplicationConfiguration config, ApplicationListener listener,
-                                       final long sharedContext) {
+    private Lwjgl3Window createWindow(final Lwjgl3ApplicationConfiguration config, ApplicationListener listener,
+                                      final long sharedContext) {
         final Lwjgl3Window window = new Lwjgl3Window(listener, config);
         if (sharedContext == 0) {
             // the main window is created immediately
@@ -382,7 +401,7 @@ public class CB_Lwjgl3Application implements Application {
         } else {
             // creation of additional windows is deferred to avoid GL context trouble
             postRunnable(new Runnable() {
-                public void run () {
+                public void run() {
                     createWindow(window, config, sharedContext);
                     windows.add(window);
                 }
@@ -411,7 +430,7 @@ public class CB_Lwjgl3Application implements Application {
         GLFW.glfwWindowHint(GLFW.GLFW_MAXIMIZED, config.windowMaximized ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, config.autoIconify ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
 
-        if(sharedContextWindow == 0) {
+        if (sharedContextWindow == 0) {
             GLFW.glfwWindowHint(GLFW.GLFW_RED_BITS, config.r);
             GLFW.glfwWindowHint(GLFW.GLFW_GREEN_BITS, config.g);
             GLFW.glfwWindowHint(GLFW.GLFW_BLUE_BITS, config.b);
@@ -443,11 +462,11 @@ public class CB_Lwjgl3Application implements Application {
 
         long windowHandle = 0;
 
-        if(config.fullscreenMode != null) {
+        if (config.fullscreenMode != null) {
             // glfwWindowHint(GLFW.GLFW_REFRESH_RATE, config.fullscreenMode.refreshRate);
             windowHandle = GLFW.glfwCreateWindow(config.fullscreenMode.width, config.fullscreenMode.height, config.title, config.fullscreenMode.getMonitor(), sharedContextWindow);
         } else {
-            GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, config.windowDecorated? GLFW.GLFW_TRUE: GLFW.GLFW_FALSE);
+            GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, config.windowDecorated ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
             windowHandle = GLFW.glfwCreateWindow(config.windowWidth, config.windowHeight, config.title, 0, sharedContextWindow);
         }
         if (windowHandle == 0) {
@@ -491,14 +510,14 @@ public class CB_Lwjgl3Application implements Application {
         return windowHandle;
     }
 
-    private static void initiateGL () {
+    private static void initiateGL() {
         String versionString = GL11.glGetString(GL11.GL_VERSION);
         String vendorString = GL11.glGetString(GL11.GL_VENDOR);
         String rendererString = GL11.glGetString(GL11.GL_RENDERER);
         glVersion = new GLVersion(Application.ApplicationType.Desktop, versionString, vendorString, rendererString);
     }
 
-    private static boolean supportsFBO () {
+    private static boolean supportsFBO() {
         // FBO is in core since OpenGL 3.0, see https://www.opengl.org/wiki/Framebuffer_Object
         return glVersion.isVersionEqualToOrHigher(3, 0) || GLFW.glfwExtensionSupported("GL_EXT_framebuffer_object")
                 || GLFW.glfwExtensionSupported("GL_ARB_framebuffer_object");
@@ -539,10 +558,10 @@ public class CB_Lwjgl3Application implements Application {
     /**
      * Enables or disables GL debug messages for the specified severity level. Returns false if the severity
      * level could not be set (e.g. the NOTIFICATION level is not supported by the ARB and AMD extensions).
-     *
+     * <p>
      * See {@link Lwjgl3ApplicationConfiguration#enableGLDebugOutput(boolean, PrintStream)}
      */
-    public static boolean setGLDebugMessageControl (com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.GLDebugMessageSeverity severity, boolean enabled) {
+    public static boolean setGLDebugMessageControl(com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application.GLDebugMessageSeverity severity, boolean enabled) {
         GLCapabilities caps = GL.getCapabilities();
         final int GL_DONT_CARE = 0x1100; // not defined anywhere yet
 
