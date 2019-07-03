@@ -60,7 +60,7 @@ public class StageManager {
     private  boolean debug = true;
     private  boolean writeDrawSequence = debug;
 
-    private  NamedStage mainStage;
+    NamedStage mainStage;
     private  InputMultiplexer inputMultiplexer;
 
     public static final InputEvent BACK_KEY_INPUT_EVENT = new InputEvent();

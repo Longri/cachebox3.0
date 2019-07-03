@@ -20,23 +20,17 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.ImportProgressChangedEvent;
-import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.GalleryViewStyle;
 import de.longri.cachebox3.gui.widgets.GalleryView;
-import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
-import de.longri.cachebox3.sqlite.Import.ImporterProgress;
 import de.longri.cachebox3.sqlite.dao.ImageDAO;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.ImageEntry;
-import de.longri.cachebox3.utils.ICancel;
+import de.longri.cachebox3.utils.http.ProgressCancelDownloader;
 import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.GrabImagesSelectedByCache;
 
@@ -196,47 +190,24 @@ public class SpoilerView extends AbstractView {
 
     private void downloadSpoiler(final boolean withLogs) {
 
+        final ProgressCancelDownloader downloader = new ProgressCancelDownloader();
 
-        final ProgressCancelRunnable progressRunnable = new ProgressCancelRunnable() {
-
-            final ProgressCancelRunnable pr = this;
-
-            final ImportProgressChangedListener progressChangedListener = new ImportProgressChangedListener() {
-                @Override
-                public void progressChanged(ImportProgressChangedEvent event) {
-                    pr.setProgress(event.progress.progress, event.progress.msg);
-                }
-            };
-            AtomicBoolean atomicCanceld = new AtomicBoolean(false);
-            ICancel iCancel = new ICancel() {
-                @Override
-                public boolean cancel() {
-                    return atomicCanceld.get();
-                }
-            };
-
-            @Override
-            public void canceled() {
-                atomicCanceld.set(true);
-            }
-
-            @Override
-            public void run() {
-
-                EventHandler.add(progressChangedListener);
-                GrabImagesSelectedByCache(new ImporterProgress(), iCancel, true, false,
-                        EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(),
-                        "", "", withLogs);
-
-                EventHandler.remove(progressChangedListener);
-                forceReload = true;
-                EventHandler.forceReloadSpoiler();
-            }
-        };
+        //add downloader objects
+        GrabImagesSelectedByCache(downloader, true, false,
+                EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(),
+                "", "", withLogs);
 
 
-        CancelProgressDialog cancelProgressDialog = new CancelProgressDialog("name", "Title", progressRunnable);
+        // show dialog and start downloaderRunable
+        // if cancel clicked or all downloads are ready, the CancelProgressDialog is closed automatically
+        CancelProgressDialog cancelProgressDialog = new CancelProgressDialog("name", "Title", downloader);
         cancelProgressDialog.show();
+
+
+        // after downloading, we must reload the spoiler images
+        EventHandler.forceReloadSpoiler();
+        this.forceReload();
+        // spoiler will force reload with show() after closing ProgressDialog automatically
 
     }
 

@@ -521,8 +521,8 @@ public class Downloader implements Runnable {
      */
 
     private void checkState() throws Exception {
-        // debug sleeping for se progress changes on UI
-        Thread.sleep(500);
+//        // debug sleeping for se progress changes on UI
+//        Thread.sleep(500);
 
 
         while (true) {
