@@ -30,7 +30,6 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
-import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.layer.ThemeMenu;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
@@ -49,6 +48,8 @@ import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.*;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.core.Tile;
@@ -67,6 +68,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.isAccessTokenInvalid;
+import static de.longri.cachebox3.settings.Settings_Map.CurrentMapLayer;
 
 /**
  * Static class
@@ -87,7 +89,6 @@ public class CB {
     public static final String LOG_LEVEL_TRACE = "TRACE";
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.5f;
-    public static final MapState actMapState = new MapState();
     public static final MapState lastMapState = new MapState();
     public static final MapState lastMapStateBeforeCar = new MapState();
     public static final String br = System.getProperty("line.separator");
@@ -158,7 +159,6 @@ public class CB {
                 CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
                 CanvasAdapter.textScale = text;
                 Tile.SIZE = Tile.calculateTileSize();
-                setCurrentTheme(ThemeIsFor.day); // todo set the correct parameter
             }
         }
     };
@@ -578,21 +578,11 @@ public class CB {
         }));
     }
 
-    public static boolean isCarMode() {
-        return actMapState.getMapMode() == MapMode.CAR;
-    }
-
     public static IRenderTheme getCurrentTheme() {
         return actTheme;
     }
 
     public static void setCurrentTheme(ThemeIsFor themeIsFor) {
-        if (!mapScaleInitial) {
-            Settings.MapViewDPIFaktor.addChangedEventListener(mapScaleSettingChanged);
-            Settings.MapViewTextFaktor.addChangedEventListener(mapScaleSettingChanged);
-            mapScaleInitial = true;
-        }
-
         String path = getConfigsThemePath(themeIsFor);
         if (path.startsWith("VTM:") || path.length() == 0) {
             VtmThemes themeFile;
@@ -608,6 +598,43 @@ public class CB {
             themeMenu.applyConfig(getConfigsMapStyle(themeIsFor));
             actTheme = themeMenu.getRenderTheme();
         }
+    }
+
+    public static void setScaleChangedListener() {
+        if (!mapScaleInitial) {
+            Settings.MapViewDPIFaktor.addChangedEventListener(mapScaleSettingChanged);
+            Settings.MapViewTextFaktor.addChangedEventListener(mapScaleSettingChanged);
+            mapScaleInitial = true;
+        }
+    }
+
+    public static String readThemeOfMap(String layerName, ThemeIsFor themeIsFor) {
+        GdxSqliteCursor cursor = Database.Settings.rawQuery("SELECT LongString FROM Config WHERE Key=\"" + layerName + "|" + themeIsFor + "\"");
+        if (cursor != null) {
+            try {
+                cursor.moveToFirst();
+                return cursor.getString(0);
+            } catch (Exception e) {
+                return "";
+            }
+        }
+        return "";
+    }
+
+    public static void writeThemeOfMap(ThemeIsFor themeIsFor) {
+        // store map, themeIsFor -> last used theme to config : to read, when map is selected
+        try {
+            String[] currentLayer = CurrentMapLayer.getValue();
+            for (int j = 0, m = currentLayer.length; j < m; j++) {
+                GdxSqlitePreparedStatement statement = Database.Settings.myDB.prepare("INSERT OR REPLACE into Config VALUES(?,?,?,?,?)");
+                statement.bind(currentLayer[j] + "|" + themeIsFor, null, getConfigsThemePath(themeIsFor), null, null);
+                statement.commit();
+                statement.close();
+            }
+        } catch (Exception e) {
+            log.error("Can't writeThemeOfMap", e);
+        }
+
     }
 
     public static String getConfigsThemePath(ThemeIsFor themeIsFor) {

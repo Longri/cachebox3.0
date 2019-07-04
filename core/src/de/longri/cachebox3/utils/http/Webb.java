@@ -105,7 +105,7 @@ public class Webb {
                     !request.params.isEmpty()) {
                 uri += "?" + WebbUtils.queryString(request.params);
             }
-            log.debug("url " + URLDecoder.decode(uri,"UTF-8"));
+            log.debug("url " + URLDecoder.decode(uri, "UTF-8"));
             connection.setUrl(uri);
             if (request.followRedirects != null) {
                 connection.setFollowRedirects(request.followRedirects.booleanValue());
@@ -116,7 +116,6 @@ public class Webb {
             if (clazz == JSONObject.class || clazz == JSONArray.class) {
                 connection.ensureRequestProperty(HDR_ACCEPT, APP_JSON);
             }
-
 
             if (request.method == Request.Method.POST || request.method == Request.Method.PUT) {
                 String requestBody = WebbUtils.getPayloadAsBytesAndSetContentType(connection, request, jsonIndentFactor);

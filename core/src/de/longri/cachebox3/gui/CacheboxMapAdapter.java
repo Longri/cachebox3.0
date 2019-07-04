@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.AbstractVectorLayer;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.MathUtils;
@@ -63,6 +64,18 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         super();
         events.bind(this); //register Update listener
         this.viewport().setMaxTilt(65f);
+    }
+
+    public static void setCurrentTheme() {
+        if (MapView.isCarMode())
+            if (Config.nightMode.getValue())
+                CB.setCurrentTheme(CB.ThemeIsFor.carnight);
+            else
+                CB.setCurrentTheme(CB.ThemeIsFor.carday);
+        else if (Config.nightMode.getValue())
+            CB.setCurrentTheme(CB.ThemeIsFor.night);
+        else
+            CB.setCurrentTheme(CB.ThemeIsFor.day);
     }
 
     @Override
@@ -214,7 +227,12 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             }
 
             tileLayer = this.setBaseMap(vectorTileLayer);
-            // todo this is possibly not corresponding
+
+            // set current theme to the last used theme of the map, if its saved in the config
+            // means reading the config here
+            CB.setConfigsThemePath(CB.ThemeIsFor.day, CB.readThemeOfMap(baseMap.name, CB.ThemeIsFor.day));
+            setCurrentTheme();
+            // this possibly does not belong / is not suitable for the this layer (its perhaps changed later on)
             setTheme(CB.getCurrentTheme());
 
             ((AbstractList) this.layers()).add(2, new BuildingLabelLayer(this, vectorTileLayer));

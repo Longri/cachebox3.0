@@ -169,7 +169,7 @@ public class GpsEventHelper implements LocationEvents {
             }
         }
 
-        if (!useCompassOnly && (lastSpeed > compassLevel || CB.isCarMode())) {
+        if (!useCompassOnly && (lastSpeed > compassLevel || MapView.isCarMode())) {
             EventHandler.fire(new OrientationChangedEvent((float) lastGpsHeading));
             log.debug("fire GPS heading event {} (rad:{}) ", lastGpsHeading, Math.toRadians(lastGpsHeading));
         } else {

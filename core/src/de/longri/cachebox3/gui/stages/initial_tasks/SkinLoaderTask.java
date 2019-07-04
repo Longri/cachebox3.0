@@ -31,7 +31,6 @@ import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.DevicesSizes;
-import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SizeF;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
@@ -172,19 +171,21 @@ public final class SkinLoaderTask extends AbstractInitTask {
             storeAttributePng(skin, style, attFileHandle, value);
         }
 
-        // todo do not preload theme, if no mapsforge map is selected
-        //preload Map Theme on async task
-        CB.postAsync(new NamedRunnable("preload Map Theme") {
+        // "init CanvasAdapter.dpi .textScale + Tile.SIZE"
+        float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
+        CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
+        CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
+        Tile.SIZE = Tile.calculateTileSize();
+        CB.setScaleChangedListener();
+
+        // preload Map Theme on async task is a good idea, but has no advantage for starting the map. It is done there once more
+        /*
+        CB.postAsync(new NamedRunnable("") {
             @Override
             public void run() {
-                //calculate CanvasAdapter.dpi
-                float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
-                CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
-                CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
-                Tile.SIZE = Tile.calculateTileSize();
-                CB.setCurrentTheme(CB.ThemeIsFor.day); // todo set the correct parameter
             }
         });
+         */
     }
 
     @Override

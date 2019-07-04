@@ -51,6 +51,9 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
     final private AtomicBoolean playSounds = new AtomicBoolean(false);
     final private AtomicBoolean approachSoundCompleted = new AtomicBoolean();
     final private AtomicMutableLatLong pendingLatLong = new AtomicMutableLatLong();
+    private LocationManager locationManagerForeGround;
+    private GpsEventHelper foreGroundHelper = new GpsEventHelper();
+    private BackgroundTask backgroundTask;
 
     public GlobalLocationReceiver() {
         EventHandler.add(this);
@@ -139,6 +142,9 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         resetApproach();
     }
 
+    //#######################################################################################################
+    // Location manager
+
     private void resetApproach() {
 
         // set approach sound if the distance low
@@ -168,13 +174,6 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         approachSoundCompleted.set(true);
     }
 
-    //#######################################################################################################
-    // Location manager
-
-    private LocationManager locationManagerForeGround;
-
-    private GpsEventHelper foreGroundHelper = new GpsEventHelper();
-
     private void initialForegroundLocationListener() {
 
         CB.postOnMainThread(new NamedRunnable("initial LocationListener") {
@@ -193,7 +192,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                             AbstractView actView = CB.viewmanager.getActView();
                             if (actView == null) return false;
                             if (actView instanceof MapView) {
-                                return !CB.isCarMode();
+                                return !MapView.isCarMode();
                             } else if (actView instanceof CompassView) {
                                 return true;
                             }
@@ -214,8 +213,6 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         locationManagerForeGround.stopUpdateHeading();
         locationManagerForeGround.setDelegate(null);
     }
-
-    private BackgroundTask backgroundTask;
 
     private void initialBackGroundLocationListener() {
         backgroundTask = new BackgroundTask();
