@@ -213,19 +213,30 @@ public class MapView extends AbstractView {
 
         }
     };
-    private CB.ThemeIsFor whichCase;
 
+    private CB.ThemeIsFor whichCase;
+    static private MapState actMapState;
 
     public MapView(BitStore reader) {
         super(reader);
         whichCase = CB.ThemeIsFor.day;
+        actMapState = new MapState();
         create();
     }
 
     public MapView() {
         super("MapView");
         whichCase = CB.ThemeIsFor.day;
+        actMapState = new MapState();
         create();
+    }
+
+    public MapState getActMapState() {
+        return actMapState;
+    }
+
+    public static boolean isCarMode() {
+        return actMapState.getMapMode() == MapMode.CAR;
     }
 
     public static Coordinate getLastCenterPos() {
@@ -284,13 +295,13 @@ public class MapView extends AbstractView {
             public void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event) {
 
                 MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
-                CB.actMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
-                CB.actMapState.setMapMode(mapMode);
-                CB.actMapState.setOrientation(mapPosition.bearing);
-                CB.actMapState.setTilt(mapPosition.tilt);
-                CB.actMapState.setMapOrientationMode(infoPanel.getOrientationState());
+                actMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
+                actMapState.setMapMode(mapMode);
+                actMapState.setOrientation(mapPosition.bearing);
+                actMapState.setTilt(mapPosition.tilt);
+                actMapState.setMapOrientationMode(infoPanel.getOrientationState());
 
-                log.debug("Map state changed to:" + CB.actMapState);
+                log.debug("Map state changed to:" + actMapState);
 
                 if (mapMode == MapMode.CAR) {
                     storeMapstate(mapMode, lastMapMode);
@@ -351,7 +362,7 @@ public class MapView extends AbstractView {
         infoPanel.setBounds(10, 100, 200, 100);
         this.addActor(infoPanel);
 
-        cacheboxMapAdapter = createMap();
+        createCacheboxMapAdapter();
 
         this.addActor(mapStateButton);
         this.setTouchable(Touchable.enabled);
@@ -427,15 +438,16 @@ public class MapView extends AbstractView {
         }
     }
 
-    private CacheboxMapAdapter createMap() {
+    private void createCacheboxMapAdapter() {
 
-        if (CB.isMocked()) return null;
+        if (CB.isMocked()) return;
 
         log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
         log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
 
 
         CacheboxMain.drawMap.set(true);
+
         cacheboxMapAdapter = new CacheboxMapAdapter() {
 
             @Override
@@ -478,7 +490,7 @@ public class MapView extends AbstractView {
         //add position changed handler
         positionChangedHandler = new MapViewPositionChangedHandler(cacheboxMapAdapter, directLineLayer, myLocationLayer, infoPanel);
 
-        return cacheboxMapAdapter;
+        return;
     }
 
     @Override
@@ -893,7 +905,6 @@ public class MapView extends AbstractView {
                     () -> {
                         CB.setCurrentTheme(whichCase);
                         cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
-                        // todo just save to config or load with defaults?
                     });
         }
 
@@ -1052,6 +1063,7 @@ public class MapView extends AbstractView {
             // check, if saved for selected layer
             boolean isSelected = false;
             menuMapStyle.addCheckableMenuItem("", mapStyle, null, isSelected, () -> {
+
             });
         }
 

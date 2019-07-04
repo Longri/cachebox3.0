@@ -49,13 +49,10 @@ public class ThemeMenu implements XmlRenderThemeMenuCallback {
     public void readTheme() {
         mode = Mode.get;
         try {
-            // parse RenderTheme to get XmlRenderThemeMenuCallback getCategories called
+            // parse RenderTheme "ThemeLoader.load" to get XmlRenderThemeMenuCallback getCategories called
             thisRenderTheme = ThemeLoader.load(themePath, this);
-            /*
-            // todo if internal theme should be handled here
-            themeFile.setMenuCallback(this);
-            ThemeLoader.load(themeFile);
-             */
+            // for internal theme we must use "ThemeLoader.load(themeFile);" there is no themepath (and no config),
+            // so handling internal themes is done at CB.setCurrentTheme
         } catch (Exception e) {
             log.error(e.toString());
         }
@@ -67,13 +64,10 @@ public class ThemeMenu implements XmlRenderThemeMenuCallback {
         configOverlays = new HashSet<>();
         readConfig(mapStyleId); // into configOverlays
         try {
-            // parse RenderTheme to get XmlRenderThemeMenuCallback getCategories called
+            // parse RenderTheme "ThemeLoader.load" to get XmlRenderThemeMenuCallback getCategories called
             thisRenderTheme = ThemeLoader.load(themePath, this);
-            /*
-            // todo for internal theme
-            themeFile.setMenuCallback(this);
-            ThemeLoader.load(themeFile);
-             */
+            // for internal theme we must use "ThemeLoader.load(themeFile);" there is no themepath (and no config),
+            // so handling internal themes is done at CB.setCurrentTheme
         } catch (Exception e) {
             log.error(e.toString());
         }
@@ -145,8 +139,7 @@ public class ThemeMenu implements XmlRenderThemeMenuCallback {
         if (cursor != null) {
             try {
                 cursor.moveToFirst();
-                byte[] serialize = cursor.getBlob(0);
-                BitStore store = new BitStore(serialize);
+                BitStore store = new BitStore(cursor.getBlob(0));
                 int count = store.readInt();
                 for (int i = 0; i < count; i++)
                     configOverlays.add(store.readString());
@@ -157,6 +150,7 @@ public class ThemeMenu implements XmlRenderThemeMenuCallback {
     }
 
     private void writeConfig(String mapStyleId) {
+        // getCategories must have been called in advance (read allOverlays)
         try {
             BitStore store = new BitStore();
             int count = allOverlays.get(mapStyleId).size;
@@ -167,9 +161,8 @@ public class ThemeMenu implements XmlRenderThemeMenuCallback {
                 }
             }
 
-            byte[] bytes = store.getArray();
             GdxSqlitePreparedStatement statement = Database.Settings.myDB.prepare("INSERT OR REPLACE into Config VALUES(?,?,?,?,?)");
-            statement.bind(themePath + "!" + mapStyleId, null, null, null, bytes);
+            statement.bind(themePath + "!" + mapStyleId, null, null, null, store.getArray());
 
             statement.commit();
             statement.close();
