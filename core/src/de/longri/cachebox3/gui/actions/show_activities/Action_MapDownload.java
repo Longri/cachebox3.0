@@ -5,10 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.thebuzzmedia.sjxp.XMLParser;
-import com.thebuzzmedia.sjxp.rule.DefaultRule;
-import com.thebuzzmedia.sjxp.rule.IRule;
-import com.thebuzzmedia.sjxp.rule.IRule.Type;
+import com.badlogic.gdx.utils.XmlStreamParser;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
@@ -24,9 +21,7 @@ import de.longri.cachebox3.utils.http.Webb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.InputStream;
 
 import static de.longri.cachebox3.gui.menu.MenuID.AID_Download_FZK_Map;
 
@@ -44,18 +39,70 @@ public class Action_MapDownload extends AbstractAction {
     public void execute() {
         try {
             if (mapInfoList.size == 0) {
+                mapInfo = new MapRepositoryInfo();
                 icm = new Menu("MapDownload");
-                String repository_freizeitkarte_android = Webb.create()
-                        .get("http://repository.freizeitkarte-osm.de/repository_freizeitkarte_android.xml")
-                        .readTimeout(Config.socket_timeout.getValue())
-                        .ensureSuccess()
-                        .asString()
-                        .getBody();
-                Map<String, String> values = new HashMap<>();
-                System.setProperty("sjxp.namespaces", "false");
-                Array<IRule<Map<String, String>>> ruleList = createRepositoryRules(new Array<>());
-                XMLParser<Map<String, String>> parserCache = new XMLParser<>(ruleList.toArray(IRule.class));
-                parserCache.parse(new ByteArrayInputStream(repository_freizeitkarte_android.getBytes()), values);
+                InputStream repository_freizeitkarte_android = null;
+                try {
+                    repository_freizeitkarte_android = Webb.create()
+                            .get("http://repository.freizeitkarte-osm.de/repository_freizeitkarte_android.xml")
+                            .readTimeout(Config.socket_timeout.getValue())
+                            .ensureSuccess()
+                            .asStream()
+                            .getBody();
+                    XmlStreamParser readFZKXml = new XmlStreamParser();
+                    readFZKXml.registerDataHandler("/Freizeitkarte/Map/Name", new XmlStreamParser.DataHandler() {
+                        @Override
+                        public void handleData(char[] data, int offset, int length) {
+                            mapInfo.Name = new String(data, offset, length);
+                        }
+                    });
+                    if (Config.localisation.getValue().equals("de")) {
+                        readFZKXml.registerDataHandler("/Freizeitkarte/Map/DescriptionGerman", new XmlStreamParser.DataHandler() {
+                            @Override
+                            public void handleData(char[] data, int offset, int length) {
+                                mapInfo.Description = new String(data, offset, length);
+                            }
+                        });
+                    } else {
+                        readFZKXml.registerDataHandler("/Freizeitkarte/Map/DescriptionEnglish", new XmlStreamParser.DataHandler() {
+                            @Override
+                            public void handleData(char[] data, int offset, int length) {
+                                mapInfo.Description = new String(data, offset, length);
+                            }
+                        });
+                    }
+                    readFZKXml.registerDataHandler("/Freizeitkarte/Map/Url", new XmlStreamParser.DataHandler() {
+                        @Override
+                        public void handleData(char[] data, int offset, int length) {
+                            mapInfo.Url = new String(data, offset, length);
+                        }
+                    });
+
+                    readFZKXml.registerDataHandler("/Freizeitkarte/Map/Size", new XmlStreamParser.DataHandler() {
+                        @Override
+                        public void handleData(char[] data, int offset, int length) {
+                            mapInfo.Size = Integer.parseInt(new String(data, offset, length));
+                        }
+                    });
+                    // MD5 ignored
+
+                    readFZKXml.registerEndTagHandler("/Freizeitkarte/Map", new XmlStreamParser.EndTagHandler() {
+                        @Override
+                        protected void handleEndTag() {
+                            mapInfoList.add(mapInfo);
+                            mapInfo = new MapRepositoryInfo();
+                        }
+                    });
+                    readFZKXml.parse(repository_freizeitkarte_android);
+
+                } catch (Exception ignored) {
+
+                } finally {
+                    try {
+                        repository_freizeitkarte_android.close();
+                    } catch (Exception ignored) {
+                    }
+                }
 
                 // get and check the target directory (global value)
                 String workPath = Config.MapPackFolder.getValue();
@@ -115,66 +162,6 @@ public class Action_MapDownload extends AbstractAction {
     @Override
     public Drawable getIcon() {
         return CB.getSkin().getMenuIcon.baseMapFreizeitkarte;
-    }
-
-    private Array<IRule<Map<String, String>>> createRepositoryRules(Array<IRule<Map<String, String>>> ruleList) {
-        ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/Name") {
-            @Override
-            public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-                mapInfo.Name = text;
-            }
-        });
-
-        if (Config.localisation.getValue().equals("de")) {
-            ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/DescriptionGerman") {
-                @Override
-                public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-                    mapInfo.Description = text;
-                }
-            });
-        } else {
-            ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/DescriptionEnglish") {
-                @Override
-                public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-                    mapInfo.Description = text;
-                }
-            });
-        }
-
-        ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/Url") {
-            @Override
-            public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-                mapInfo.Url = text;
-            }
-        });
-
-        ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/Size") {
-            @Override
-            public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-                mapInfo.Size = Integer.parseInt(text);
-            }
-        });
-
-        ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/Checksum") {
-            @Override
-            public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-                mapInfo.MD5 = text;
-            }
-        });
-
-        ruleList.add(new DefaultRule<Map<String, String>>(Type.TAG, "/Freizeitkarte/Map") {
-            @Override
-            public void handleTag(XMLParser<Map<String, String>> parser, boolean isStartTag, Map<String, String> values) {
-
-                if (isStartTag) {
-                    mapInfo = new MapRepositoryInfo();
-                } else {
-                    mapInfoList.add(mapInfo);
-                }
-
-            }
-        });
-        return ruleList;
     }
 
     public static class MapRepositoryInfo {
