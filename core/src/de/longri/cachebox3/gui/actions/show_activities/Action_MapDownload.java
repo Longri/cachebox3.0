@@ -23,11 +23,8 @@ import de.longri.cachebox3.utils.http.Webb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import static de.longri.cachebox3.gui.menu.MenuID.AID_Download_FZK_Map;
 
@@ -111,65 +108,6 @@ public class Action_MapDownload extends AbstractAction {
         return CB.getSkin().getMenuIcon.baseMapFreizeitkarte;
     }
 
-//    private Array<IRule<Map<String, String>>> createRepositoryRules(Array<IRule<Map<String, String>>> ruleList) {
-//        ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/Name") {
-//            @Override
-//            public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-//                mapInfo.Name = text;
-//            }
-//        });
-//
-//        if (Config.localisation.getValue().equals("de")) {
-//            ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/DescriptionGerman") {
-//                @Override
-//                public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-//                    mapInfo.Description = text;
-//                }
-//            });
-//        } else {
-//            ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/DescriptionEnglish") {
-//                @Override
-//                public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-//                    mapInfo.Description = text;
-//                }
-//            });
-//        }
-//
-//        ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/Url") {
-//            @Override
-//            public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-//                mapInfo.Url = text;
-//            }
-//        });
-//
-//        ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/Size") {
-//            @Override
-//            public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-//                mapInfo.Size = Integer.parseInt(text);
-//            }
-//        });
-//
-//        ruleList.add(new DefaultRule<Map<String, String>>(Type.CHARACTER, "/Freizeitkarte/Map/Checksum") {
-//            @Override
-//            public void handleParsedCharacters(XMLParser<Map<String, String>> parser, String text, Map<String, String> values) {
-//                mapInfo.MD5 = text;
-//            }
-//        });
-//
-//        ruleList.add(new DefaultRule<Map<String, String>>(Type.TAG, "/Freizeitkarte/Map") {
-//            @Override
-//            public void handleTag(XMLParser<Map<String, String>> parser, boolean isStartTag, Map<String, String> values) {
-//
-//                if (isStartTag) {
-//                    mapInfo = new MapRepositoryInfo();
-//                } else {
-//                    mapInfoList.add(mapInfo);
-//                }
-//
-//            }
-//        });
-//        return ruleList;
-//    }
 
     public static Array<MapRepositoryInfo> getMapInfoList(InputStream stream) {
         final Action_MapDownload.MapRepositoryInfo[] info = {new Action_MapDownload.MapRepositoryInfo()};
