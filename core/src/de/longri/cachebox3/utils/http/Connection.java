@@ -22,11 +22,12 @@ import static de.longri.cachebox3.utils.http.Webb.HDR_CONTENT_TYPE;
 
 public class Connection {
     private static final Logger log = LoggerFactory.getLogger(Connection.class);
-    public Net.HttpRequest httpRequest;
+    public final Net.HttpRequest httpRequest;
+    public final AtomicBoolean waitForStreamHandled = new AtomicBoolean(false);
+
     public Net.HttpResponse httpResponse;
     public int statusCode;
     public String responseMessage;
-    public AtomicBoolean waitForStreamHandled;
 
     public Connection(Request.Method method) {
         switch (method) {
@@ -101,6 +102,7 @@ public class Connection {
      * <br>
      * If you have to deal with dates in this format with JavaScript, it's easy, because the JavaScript
      * Date object has a constructor for strings formatted this way.
+     *
      * @return a new instance
      */
     private DateFormat getRfc1123DateFormat() {
@@ -114,7 +116,7 @@ public class Connection {
     void connect(ICancel icancel) {
         log.debug("Send httpRequest");
         final AtomicBoolean WAIT = new AtomicBoolean(true);
-        waitForStreamHandled = new AtomicBoolean(true);
+        waitForStreamHandled.set(true);
 
         if (icancel != null) {
             CB.postAsync(new NamedRunnable("connect1") {
@@ -178,13 +180,12 @@ public class Connection {
     public String getResponseMessage() {
         if (statusCode == -1) {
             return responseMessage;
-        }
-        else {
+        } else {
             return httpResponse.getHeader(null);
         }
     }
 
-    public  <T> void parseErrorResponse(Class<T> clazz, Response<T> response, InputStream responseBodyStream)
+    public <T> void parseErrorResponse(Class<T> clazz, Response<T> response, InputStream responseBodyStream)
             throws IOException {
 
         if (responseBodyStream == null) {

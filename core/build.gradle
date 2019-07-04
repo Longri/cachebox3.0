@@ -3,7 +3,8 @@ apply plugin: 'java'
 
 dependencies {
     implementation "org.slf4j:slf4j-api:$slf4jVersion"
-    implementation fileTree(dir: 'libs', include: ['json-20180813.jar'])
+//    implementation fileTree(dir: 'libs', include: ['json-20180813.jar'])
+    implementation group: 'org.json', name: 'json', version: '20180813'
     implementation fileTree(dir: 'libs', include: ['libPP-jar-0.9.0-SNAPSHOT.jar'])
     implementation fileTree(dir: 'libs', include: ['sjxp-2.2.jar'])
 

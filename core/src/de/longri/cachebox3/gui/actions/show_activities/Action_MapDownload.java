@@ -107,6 +107,7 @@ public class Action_MapDownload extends AbstractAction {
             icm.show();
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             MessageBox.show(ex.toString(), Translation.get("MapDownload"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
         }
     }
