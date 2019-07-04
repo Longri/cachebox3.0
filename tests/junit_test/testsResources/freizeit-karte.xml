@@ -20,7 +20,7 @@ We wish you lots of fun with the Freizeitkarte maps ... and many interesting tri
 </General>
 <Map>
 <Name>Freizeitkarte_BADEN-WUERTTEMBERG</Name>
-<DescriptionGerman>Freizeitkarte Baden-Württemberg</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Baden-WÃ¼rttemberg</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Baden-Wuerttemberg</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_baden-wuerttemberg.map.zip
@@ -335,7 +335,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_THUERINGEN</Name>
-<DescriptionGerman>Freizeitkarte Thüringen</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Thï¿½ringen</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Thuringia</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_thueringen.map.zip
@@ -461,7 +461,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_TUR</Name>
-<DescriptionGerman>Freizeitkarte Türkei</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Tï¿½rkei</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Turkey</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_tur.map.zip
@@ -482,7 +482,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_FRO</Name>
-<DescriptionGerman>Freizeitkarte Färöer-Inseln</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Fï¿½rï¿½er-Inseln</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Faroe Islands</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_fro.map.zip
@@ -566,7 +566,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_AUT</Name>
-<DescriptionGerman>Freizeitkarte Österreich</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte ï¿½sterreich</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Austria</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_aut.map.zip
@@ -629,7 +629,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_AUT+</Name>
-<DescriptionGerman>Freizeitkarte Österreich+</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte ï¿½sterreich+</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Austria+</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_aut+.map.zip
@@ -734,7 +734,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_DEU+SUED</Name>
-<DescriptionGerman>Freizeitkarte Deutschland+ Süd</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Deutschland+ Sï¿½d</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Germany+ South</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_deu+sued.map.zip
@@ -986,7 +986,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_FRA+SOUTH</Name>
-<DescriptionGerman>Freizeitkarte Frankreich+ Süd</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Frankreich+ Sï¿½d</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte France+ South</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_fra+south.map.zip
@@ -1028,7 +1028,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_PYRENEES</Name>
-<DescriptionGerman>Freizeitkarte Pyrenäen</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Pyrenï¿½en</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Pyrenees</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_pyrenees.map.zip
@@ -1049,7 +1049,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_DNK+</Name>
-<DescriptionGerman>Freizeitkarte Dänemark+</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Dï¿½nemark+</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Denmark+</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_dnk+.map.zip
@@ -1091,7 +1091,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_NOR+SOUTH</Name>
-<DescriptionGerman>Freizeitkarte Norwegen+ Süd</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Norwegen+ Sï¿½d</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Norway+ South</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_nor+south.map.zip
@@ -1238,7 +1238,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_ITA+SOUTH</Name>
-<DescriptionGerman>Freizeitkarte Italien+ Süd</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Italien+ Sï¿½d</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Italy+ South</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_ita+south.map.zip
@@ -1406,7 +1406,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_ROU+</Name>
-<DescriptionGerman>Freizeitkarte Rumänien+</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Rumï¿½nien+</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Romania+</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rou+.map.zip
@@ -1490,7 +1490,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_BLR+</Name>
-<DescriptionGerman>Freizeitkarte Weißrussland+</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Weiï¿½russland+</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Belarus+</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_blr+.map.zip
@@ -1763,7 +1763,7 @@ locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_ma
 </Map>
 <Map>
 <Name>Freizeitkarte_RUS_SOUTH</Name>
-<DescriptionGerman>Freizeitkarte Russland FK Südrussland</DescriptionGerman>
+<DescriptionGerman>Freizeitkarte Russland FK Sï¿½drussland</DescriptionGerman>
 <DescriptionEnglish>Freizeitkarte Russia Southern FD</DescriptionEnglish>
 <Url>
 http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rus_south.map.zip

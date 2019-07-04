@@ -30,9 +30,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.thebuzzmedia.sjxp.XMLParser;
-import com.thebuzzmedia.sjxp.rule.DefaultRule;
-import com.thebuzzmedia.sjxp.rule.IRule;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.EventHandler;
@@ -960,10 +957,10 @@ public class MapView extends AbstractView {
                     .asString()
                     .getBody();
             java.util.Map<String, String> values = new HashMap<>();
-            System.setProperty("sjxp.namespaces", "false");
-            Array<IRule<java.util.Map<String, String>>> ruleList = createRepositoryRules(new Array<>());
-            XMLParser<java.util.Map<String, String>> parserCache = new XMLParser<>(ruleList.toArray(IRule.class));
-            parserCache.parse(new ByteArrayInputStream(repository_freizeitkarte_android.getBytes()), values);
+//            System.setProperty("sjxp.namespaces", "false");
+//            Array<IRule<java.util.Map<String, String>>> ruleList = createRepositoryRules(new Array<>());
+//            XMLParser<java.util.Map<String, String>> parserCache = new XMLParser<>(ruleList.toArray(IRule.class));
+//            parserCache.parse(new ByteArrayInputStream(repository_freizeitkarte_android.getBytes()), values);
         }
 
         for (FZKThemesInfo fzkThemesInfo : fzkThemesInfoList) {
@@ -983,63 +980,63 @@ public class MapView extends AbstractView {
         }
     }
 
-    private Array<IRule<java.util.Map<String, String>>> createRepositoryRules(Array<IRule<java.util.Map<String, String>>> ruleList) {
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Name") {
-            @Override
-            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                fzkThemesInfo.Name = text;
-            }
-        });
-
-        if (Config.localisation.getValue().equals("de")) {
-            ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/DescriptionGerman") {
-                @Override
-                public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                    fzkThemesInfo.Description = text;
-                }
-            });
-        } else {
-            ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/DescriptionEnglish") {
-                @Override
-                public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                    fzkThemesInfo.Description = text;
-                }
-            });
-        }
-
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Url") {
-            @Override
-            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                fzkThemesInfo.Url = text;
-            }
-        });
-
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Size") {
-            @Override
-            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                fzkThemesInfo.Size = Integer.parseInt(text);
-            }
-        });
-
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Checksum") {
-            @Override
-            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                fzkThemesInfo.MD5 = text;
-            }
-        });
-
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.TAG, "/Freizeitkarte/Theme") {
-            @Override
-            public void handleTag(XMLParser<java.util.Map<String, String>> parser, boolean isStartTag, java.util.Map<String, String> values) {
-                if (isStartTag) {
-                    fzkThemesInfo = new FZKThemesInfo();
-                } else {
-                    fzkThemesInfoList.add(fzkThemesInfo);
-                }
-            }
-        });
-        return ruleList;
-    }
+//    private Array<IRule<java.util.Map<String, String>>> createRepositoryRules(Array<IRule<java.util.Map<String, String>>> ruleList) {
+//        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Name") {
+//            @Override
+//            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+//                fzkThemesInfo.Name = text;
+//            }
+//        });
+//
+//        if (Config.localisation.getValue().equals("de")) {
+//            ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/DescriptionGerman") {
+//                @Override
+//                public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+//                    fzkThemesInfo.Description = text;
+//                }
+//            });
+//        } else {
+//            ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/DescriptionEnglish") {
+//                @Override
+//                public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+//                    fzkThemesInfo.Description = text;
+//                }
+//            });
+//        }
+//
+//        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Url") {
+//            @Override
+//            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+//                fzkThemesInfo.Url = text;
+//            }
+//        });
+//
+//        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Size") {
+//            @Override
+//            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+//                fzkThemesInfo.Size = Integer.parseInt(text);
+//            }
+//        });
+//
+//        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Checksum") {
+//            @Override
+//            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
+//                fzkThemesInfo.MD5 = text;
+//            }
+//        });
+//
+//        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.TAG, "/Freizeitkarte/Theme") {
+//            @Override
+//            public void handleTag(XMLParser<java.util.Map<String, String>> parser, boolean isStartTag, java.util.Map<String, String> values) {
+//                if (isStartTag) {
+//                    fzkThemesInfo = new FZKThemesInfo();
+//                } else {
+//                    fzkThemesInfoList.add(fzkThemesInfo);
+//                }
+//            }
+//        });
+//        return ruleList;
+//    }
 
     private void showMapViewThemeStyleMenu() {
         OptionMenu menuMapStyle = new OptionMenu("MapViewThemeStyleMenuTitle");
