@@ -17,17 +17,12 @@ package gdx.utils;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.XmlStreamParser;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.gui.actions.show_activities.Action_MapDownload;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
-import de.longri.cachebox3.utils.CharSequenceUtil;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -91,5 +86,55 @@ public class FreizeitkarteXmlStreamParserTest {
 
     }
 
+
+    @Test
+    void parse_theme_de() {
+
+        Language altLang = Config.localisation.getEnumValue();
+        Config.localisation.setEnumValue(Language.de);
+
+        final FileHandle testFile = TestUtils.getResourceFileHandle("testsResources/freizeit-karte.xml", true);
+
+        Array<MapView.FZKThemesInfo> list = MapView.getMapInfoList(testFile.read());
+
+        assertThat("list must not NULL", list != null);
+        assertThat("list count must be 3", list.size == 3);
+
+        MapView.FZKThemesInfo info = list.get(0);
+
+        assertEquals("freizeitkarte-v5", info.Name, "Name must be 'freizeitkarte-v5'");
+        assertEquals("Standard-Design V5", info.Description, "Description must be 'Standard-Design V5'");
+        assertEquals("http://download.freizeitkarte-osm.de/android/1906/freizeitkarte-v5.zip", info.Url, "Url must be 'http://download.freizeitkarte-osm.de/android/1906/freizeitkarte-v5.zip'");
+        assertEquals(299570, info.Size, "Size must be '299570'");
+        assertEquals(null, info.MD5, "Md5 must be 'null'");
+
+        Config.localisation.setEnumValue(altLang);
+
+    }
+
+    @Test
+    void parse_theme_en() {
+
+        Language altLang = Config.localisation.getEnumValue();
+        Config.localisation.setEnumValue(Language.en_GB);
+
+        final FileHandle testFile = TestUtils.getResourceFileHandle("testsResources/freizeit-karte.xml", true);
+
+        Array<MapView.FZKThemesInfo> list = MapView.getMapInfoList(testFile.read());
+
+        assertThat("list must not NULL", list != null);
+        assertThat("list count must be 3", list.size == 3);
+
+        MapView.FZKThemesInfo info = list.get(0);
+
+        assertEquals("freizeitkarte-v5", info.Name, "Name must be 'freizeitkarte-v5'");
+        assertEquals("Default design v5", info.Description, "Description must be 'Default design v5'");
+        assertEquals("http://download.freizeitkarte-osm.de/android/1906/freizeitkarte-v5.zip", info.Url, "Url must be 'http://download.freizeitkarte-osm.de/android/1906/freizeitkarte-v5.zip'");
+        assertEquals(299570, info.Size, "Size must be '299570'");
+        assertEquals(null, info.MD5, "Md5 must be 'null'");
+
+        Config.localisation.setEnumValue(altLang);
+
+    }
 
 }
