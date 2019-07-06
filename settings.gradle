@@ -1,8 +1,9 @@
-include ':core', ':desktop', ':gps-simulator', ':cb3-file-transfer', ':skin-editor-src-proj', ':ios'
+include ':core', ':desktop', ':desktop_lwjgl', ':gps-simulator', ':cb3-file-transfer', ':skin-editor-src-proj', ':ios'
 include ':android'
 project(':android').projectDir = new File('./launcher/android')
 
 project(':desktop').projectDir = new File('./launcher/desktop')
+project(':desktop_lwjgl').projectDir = new File('./launcher/desktop_lwjgl')
 project(':ios').projectDir = new File('./launcher/ios')
 
 project(':gps-simulator').projectDir = new File('./tools/gps-simulator')
