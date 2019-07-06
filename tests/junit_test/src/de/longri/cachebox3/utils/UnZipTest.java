@@ -2,6 +2,7 @@ package de.longri.cachebox3.utils;
 
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.TestUtils;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -34,9 +35,17 @@ class UnZipTest {
         }
 
         UnZip unZip = new UnZip();
-        FileHandle resultFileHandle = unZip.extractFolder(zipFile);
+        final double[] progress = {0};
+        FileHandle resultFileHandle = unZip.extractFolder(zipFile, new GenericCallBack<Double>() {
+            @Override
+            public void callBack(Double value) {
+                progress[0] = value;
+            }
+        });
         assertThat("extracted folder must exist", resultFileHandle != null && resultFileHandle.exists());
         assertThat("extracted folder path must correct", extractedFolder.path().equals(resultFileHandle.path()));
+
+        assertThat("last progress value must be 100.0", progress[0] == 100.0);
 
         Thread.sleep(500); //wait for close streams;
 

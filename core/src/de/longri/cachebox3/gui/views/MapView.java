@@ -1021,7 +1021,7 @@ public class MapView extends AbstractView {
 
                 Download.Download(fzkThemesInfo.Url, target);
                 try {
-                    new UnZip().extractFolder(target, true);
+                    new UnZip().extractFolder(target);
                 } catch (Exception ex) {
                     MessageBox.show(ex.toString(), "Unzip", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
                 }

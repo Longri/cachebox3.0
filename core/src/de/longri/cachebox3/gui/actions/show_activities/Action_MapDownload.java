@@ -7,7 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlStreamParser;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
@@ -17,16 +19,21 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CharSequenceUtil;
+import de.longri.cachebox3.utils.Downloader;
 import de.longri.cachebox3.utils.UnZip;
 import de.longri.cachebox3.utils.http.Download;
+import de.longri.cachebox3.utils.http.ProgressCancelDownloader;
 import de.longri.cachebox3.utils.http.Webb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static de.longri.cachebox3.gui.menu.MenuID.AID_Download_FZK_Map;
+import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.GrabImagesSelectedByCache;
 
 public class Action_MapDownload extends AbstractAction {
     private static Logger log = LoggerFactory.getLogger(Action_MapDownload.class);
@@ -82,14 +89,36 @@ public class Action_MapDownload extends AbstractAction {
                                     int slashPos = mapInfo.Url.lastIndexOf("/");
                                     String zipFile = mapInfo.Url.substring(slashPos + 1);
                                     String target = targetPath + "/" + zipFile;
-                                    Download.Download(mapInfo.Url, target);
+
+
+
+                                    final ProgressCancelDownloader downloader = new ProgressCancelDownloader();
+
+                                    //add downloader object
+                                    try {
+                                        downloader.add(new Downloader(new URL(mapInfo.Url), Gdx.files.absolute(target)));
+                                    } catch (MalformedURLException e) {
+                                        log.error("download", e);
+                                    }
+
+
+                                    // show dialog and start downloaderRunable
+                                    // if cancel clicked or all downloads are ready, the CancelProgressDialog is closed automatically
+                                    CancelProgressDialog cancelProgressDialog = new CancelProgressDialog("name", "Title", downloader);
+                                    cancelProgressDialog.show();
+
+
+
+
+
                                     try {
                                         UnZip unzip = new UnZip();
-                                        unzip.extractFolder(target, true);
+                                        unzip.extractFolder(target);
                                     } catch (Exception e) {
                                         log.error(e.getLocalizedMessage());
                                     }
                                     Gdx.files.absolute(target).delete();
+
                                 }
                             }
                         });
