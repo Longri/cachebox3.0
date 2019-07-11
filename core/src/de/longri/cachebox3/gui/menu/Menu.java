@@ -19,7 +19,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -29,7 +28,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
@@ -112,6 +110,13 @@ public class Menu extends Window {
         return item;
     }
 
+    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, boolean checked, ClickListener clickListener) {
+        MenuItem item = addMenuItem(titleTranlationId, titleExtension, icon, clickListener);
+        item.setCheckable(true);
+        item.setChecked(checked);
+        return item;
+    }
+
     public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Runnable runnable) {
         return addMenuItem(titleTranlationId, titleExtension, icon, new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
@@ -173,37 +178,12 @@ public class Menu extends Window {
         mItems.add(menuItem);
     }
 
-    public MenuItem addItem(int ID, CharSequence StringId) {
-        return addItem(ID, StringId, "", false);
-    }
-
     public MenuItem addItem(int ID, CharSequence StringId, boolean withoutTranslation) {
         return addItem(ID, StringId, "", withoutTranslation);
     }
 
-    public MenuItem addItem(int ID, CharSequence StringId, String appendix, Sprite icon) {
-        MenuItem item = addItem(ID, StringId, appendix);
-        if (icon != null)
-            item.setIcon(new SpriteDrawable(icon));
-        return item;
-    }
-
-    public MenuItem addItem(int ID, CharSequence StringId, String appendix, Drawable icon) {
-        MenuItem item = addItem(ID, StringId, appendix);
-        if (icon != null)
-            item.setIcon(icon);
-        return item;
-    }
-
     public MenuItem addItem(int ID, CharSequence StringId, String appendix) {
         return addItem(ID, StringId, appendix, false);
-    }
-
-    public MenuItem addItem(int index, String text, Drawable drawable, boolean withoutTranslation) {
-        MenuItem item = addItem(index, text, "", withoutTranslation);
-        if (drawable != null)
-            item.setIcon(drawable);
-        return item;
     }
 
     public MenuItem addItem(int ID, CharSequence StringId, String appendix, boolean withoutTranslation) {
@@ -221,17 +201,6 @@ public class Menu extends Window {
         item.setTitle(trans);
         addItem(item);
 
-        return item;
-    }
-
-    public MenuItem addCheckableItem(int ID, CharSequence StringId, boolean checked) {
-        return addCheckableItem(ID, StringId, checked, false);
-    }
-
-    public MenuItem addCheckableItem(int ID, CharSequence StringId, boolean checked, boolean withoutTranslation) {
-        MenuItem item = addItem(ID, StringId, "", withoutTranslation);
-        item.setCheckable(true);
-        item.setChecked(checked);
         return item;
     }
 

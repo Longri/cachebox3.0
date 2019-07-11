@@ -39,7 +39,6 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.Segmentize;
 import static de.longri.cachebox3.types.MutableCache.IS_FULL;
@@ -503,7 +502,7 @@ public class GroundspeakAPI {
                         .body(new JSONObject()
                                 .put("geocacheCode", cacheCode)
                                 .put("type", wptLogTypeId)
-                                .put("loggedDate", getUTCDate(dateLogged))
+                                .put("loggedDate", getDate(dateLogged))
                                 .put("text", prepareNote(note))
                         )
                         .ensureSuccess()
@@ -515,7 +514,7 @@ public class GroundspeakAPI {
                         .body(new JSONObject()
                                 .put("geocacheCode", cacheCode)
                                 .put("logType", wptLogTypeId)
-                                .put("loggedDateUtc", getUTCDate(dateLogged))
+                                .put("loggedDate", getDate(dateLogged))
                                 .put("note", prepareNote(note))
                         )
                         .ensureSuccess()
@@ -729,7 +728,7 @@ public class GroundspeakAPI {
                             .put("trackingNumber", TrackingNummer) // code only found on the trackable itself (only needed for creating a log)
                             .put("trackableCode", TBCode) // identifier of the related trackable, required for creation
                             .put("geocacheCode", cacheCode)
-                            .put("loggedDate", getUTCDate(dateLogged))
+                            .put("loggedDate", getDate(dateLogged))
                             .put("text", prepareNote(note))
                             .put("typeId", LogTypeId) // see Trackable Log Types https://api.groundspeak.com/documentation#trackable-log-types
                     )
@@ -744,7 +743,7 @@ public class GroundspeakAPI {
             LastAPIError += "\n trackingNumber: " + TrackingNummer;
             LastAPIError += "\n trackableCode: " + TBCode;
             LastAPIError += "\n geocacheCode: " + cacheCode;
-            LastAPIError += "\n loggedDate: " + getUTCDate(dateLogged);
+            LastAPIError += "\n loggedDate: " + getDate(dateLogged);
             LastAPIError += "\n text: " + prepareNote(note);
             LastAPIError += "\n typeId: " + LogTypeId;
             log.error("uploadTrackableLog \n" + LastAPIError, ex);
@@ -1543,16 +1542,8 @@ public class GroundspeakAPI {
         }
     }
 
-    private static String getUTCDate(Date date) {
-        // check "2001-09-28T00:00:00"
-        log.debug("getUTCDate In:" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(date));
-        long utc = date.getTime();
-        TimeZone tzp = TimeZone.getTimeZone("GMT");
-        utc = utc - tzp.getOffset(utc);
-        date.setTime(utc);
-        String ret = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(date);
-        log.debug("getUTCDate Out:" + ret);
-        return ret;
+    private static String getDate(Date date) {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(date);
     }
 
     private static String getStringValue(JSONObject jObject, String from, String KeyName) {

@@ -31,6 +31,7 @@ import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.DevicesSizes;
+import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SizeF;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
@@ -178,14 +179,14 @@ public final class SkinLoaderTask extends AbstractInitTask {
         Tile.SIZE = Tile.calculateTileSize();
         CB.setScaleChangedListener();
 
-        // preload Map Theme on async task is a good idea, but has no advantage for starting the map. It is done there once more
-        /*
+        // preload Map Theme
         CB.postAsync(new NamedRunnable("") {
             @Override
             public void run() {
+                CB.setCurrentTheme(CB.ThemeUsage.day, CB.createTheme(CB.getConfigsThemePath(CB.ThemeUsage.day), CB.getConfigsMapStyle(CB.ThemeUsage.day)));
             }
         });
-         */
+
     }
 
     @Override
