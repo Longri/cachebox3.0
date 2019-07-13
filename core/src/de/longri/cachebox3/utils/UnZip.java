@@ -18,18 +18,16 @@ package de.longri.cachebox3.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.sun.applet2.preloader.CancelException;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
+import de.longri.cachebox3.utils.exceptions.CancelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
-import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -156,7 +154,7 @@ public class UnZip {
         });
     }
 
-    public String extractFolder(FileHandle fileHandle, GenericCallBack<Double> progressCallBack, AtomicBoolean atomicCancel) throws IOException {
+    public String extractFolder(FileHandle fileHandle, GenericCallBack<Double> progressCallBack, AtomicBoolean atomicCancel) throws IOException, CancelException {
         return extractFolder(fileHandle.file().getAbsolutePath(), progressCallBack, atomicCancel);
     }
 
