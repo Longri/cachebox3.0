@@ -19,8 +19,6 @@ package de.longri.cachebox3.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
-import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
-import de.longri.cachebox3.utils.exceptions.CancelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +57,7 @@ public class UnZip {
      */
     public FileHandle extractFolder(FileHandle zipFile, GenericCallBack<Double> progressCallBack) throws IOException {
         String path = zipFile.file().getAbsolutePath();
-        String resultPath = extractFolder(path, progressCallBack, null);
+        String resultPath = extractFolder(path, progressCallBack, new AtomicBoolean(false));
         return Gdx.files.absolute(resultPath);
     }
 
@@ -70,99 +68,19 @@ public class UnZip {
      * @throws IOException with IO error
      */
     public String extractFolder(String zipFile) throws IOException {
-        return extractFolder(zipFile, null, null);
+        return extractFolder(zipFile, null, new AtomicBoolean(false));
     }
 
-//    /**
-//     * Extract the given ZIP-File
-//     *
-//     * @param zipFile file to extract
-//     * @param here    true: extract into the path where the zipfile is <br>
-//     *                false: extract into new path with the name of the zipfile (without extension)
-//     * @return Extracted Folder Path as String
-//     * @throws IOException with IO error
-//     */
-//    public String extractFolder(String zipFile, boolean here) throws IOException {
-//        log.debug("extract => " + zipFile);
-//        int BUFFER = 2048;
-//        File file = new File(zipFile);
-//
-//        ZipFile zip = new ZipFile(file.getAbsolutePath());
-//        String newPath = zipFile.substring(0, zipFile.length() - 4);
-//
-//        if (here) {
-//            newPath = file.getParent();
-//        } else {
-//            new File(newPath).mkdir();
-//        }
-//        Enumeration<?> zipFileEntries = zip.entries();
-//
-//        // Process each entry
-//        while (zipFileEntries.hasMoreElements()) {
-//            // grab a zip file entry
-//            ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
-//            String currentEntry = entry.getName();
-//
-//            File destFile = new File(newPath, currentEntry);
-//            // destFile = FileFactory.createFile(newPath, destFile.getName());
-//            File destinationParent = destFile.getParentFile();
-//
-//            // create the parent directory structure if needed
-//            destinationParent.mkdirs();
-//
-//            destinationParent.setLastModified(entry.getTime()); // set original Datetime to be able to import ordered oldest first
-//
-//            if (!entry.isDirectory()) {
-//                BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
-//                int currentByte;
-//                // establish buffer for writing file
-//                byte data[] = new byte[BUFFER];
-//
-//                // write the current file to disk
-//                FileOutputStream fos = new FileOutputStream(destFile);
-//                BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER);
-//
-//                // read and write until last byte is encountered
-//                while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
-//                    dest.write(data, 0, currentByte);
-//                }
-//                dest.flush();
-//                dest.close();
-//                is.close();
-//            }
-//
-//            destFile.setLastModified(entry.getTime()); // set original Datetime to be able to import ordered oldest first
-//
-//            if (currentEntry.endsWith(".zip")) {
-//                // found a zip file, try to open
-//                extractFolder(destFile.getAbsolutePath());
-//            }
-//        }
-//        zip.close();
-//
-//        return newPath;
-//    }
-
-    public FileHandle extractFolder(FileHandle zipFile, final ProgressCancelRunnable progressCancelRunnable) throws IOException {
-        progressCancelRunnable.getIsCanceledAtomic();
-        final CharSequence msg = progressCancelRunnable.getProgressMsg();
-        return extractFolder(zipFile, new GenericCallBack<Double>() {
-            @Override
-            public void callBack(Double value) {
-                progressCancelRunnable.setProgress(value.floatValue(), msg);
-            }
-        });
-    }
-
-    public String extractFolder(FileHandle fileHandle, GenericCallBack<Double> progressCallBack, AtomicBoolean atomicCancel) throws IOException, CancelException {
-        return extractFolder(fileHandle.file().getAbsolutePath(), progressCallBack, atomicCancel);
+    public String extractFolder(FileHandle fileHandle, GenericCallBack<Double> progressCallBack, AtomicBoolean cancel) throws IOException {
+        if (cancel == null) cancel = new AtomicBoolean(false);
+        return extractFolder(fileHandle.file().getAbsolutePath(), progressCallBack, cancel);
     }
 
 
     /*
     https://stackoverflow.com/questions/40050270/java-unzip-and-progress-bar
      */
-    public String extractFolder(String file, GenericCallBack<Double> progressCallBack, AtomicBoolean atomicCancel) throws IOException, CancelException {
+    private String extractFolder(String file, GenericCallBack<Double> progressCallBack, AtomicBoolean cancel) throws IOException {
 
         String newPath = file.substring(0, file.length() - 4);
         File folder = new File(newPath);
@@ -173,7 +91,7 @@ public class UnZip {
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
         ZipEntry ze = null;
         try {
-            while ((ze = zis.getNextEntry()) != null && ((atomicCancel != null && !atomicCancel.get())) || atomicCancel == null) {
+            while ((ze = zis.getNextEntry()) != null && !cancel.get()) {
                 File f = new File(folder.getCanonicalPath(), ze.getName());
                 if (ze.isDirectory()) {
                     f.mkdirs();
@@ -188,12 +106,13 @@ public class UnZip {
                         long nread = 0L;
                         long length = zipfile.length();
 
-                        while (-1 != (bytesRead = zis.read(buf)) && ((atomicCancel != null && !atomicCancel.get())) || atomicCancel == null) {
+                        while (-1 != (bytesRead = zis.read(buf)) && !cancel.get()) {
                             fos.write(buf, 0, bytesRead);
                             nread += bytesRead;
                             if (progressCallBack != null) {
                                 progressCallBack.callBack(((double) length / (double) channel.position()) * 100.0);
                             }
+                            //updateProgress(channel.position(), length);
                         }
                     } finally {
                         fos.close();
