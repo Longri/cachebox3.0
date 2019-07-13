@@ -18,13 +18,16 @@ package de.longri.cachebox3.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.sun.applet2.preloader.CancelException;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.Enumeration;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -58,7 +61,7 @@ public class UnZip {
      */
     public FileHandle extractFolder(FileHandle zipFile, GenericCallBack<Double> progressCallBack) throws IOException {
         String path = zipFile.file().getAbsolutePath();
-        String resultPath = extractFolder(path, progressCallBack);
+        String resultPath = extractFolder(path, progressCallBack, null);
         return Gdx.files.absolute(resultPath);
     }
 
@@ -69,7 +72,7 @@ public class UnZip {
      * @throws IOException with IO error
      */
     public String extractFolder(String zipFile) throws IOException {
-        return extractFolder(zipFile, null);
+        return extractFolder(zipFile, null, null);
     }
 
 //    /**
@@ -142,11 +145,26 @@ public class UnZip {
 //        return newPath;
 //    }
 
+    public FileHandle extractFolder(FileHandle zipFile, final ProgressCancelRunnable progressCancelRunnable) throws IOException {
+        progressCancelRunnable.getIsCanceledAtomic();
+        final CharSequence msg = progressCancelRunnable.getProgressMsg();
+        return extractFolder(zipFile, new GenericCallBack<Double>() {
+            @Override
+            public void callBack(Double value) {
+                progressCancelRunnable.setProgress(value.floatValue(), msg);
+            }
+        });
+    }
+
+    public String extractFolder(FileHandle fileHandle, GenericCallBack<Double> progressCallBack, AtomicBoolean atomicCancel) throws IOException {
+        return extractFolder(fileHandle.file().getAbsolutePath(), progressCallBack, atomicCancel);
+    }
+
 
     /*
     https://stackoverflow.com/questions/40050270/java-unzip-and-progress-bar
      */
-    public String extractFolder(String file, GenericCallBack<Double> progressCallBack) throws IOException {
+    public String extractFolder(String file, GenericCallBack<Double> progressCallBack, AtomicBoolean atomicCancel) throws IOException, CancelException {
 
         String newPath = file.substring(0, file.length() - 4);
         File folder = new File(newPath);
@@ -157,7 +175,7 @@ public class UnZip {
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
         ZipEntry ze = null;
         try {
-            while ((ze = zis.getNextEntry()) != null) {
+            while ((ze = zis.getNextEntry()) != null && ((atomicCancel != null && !atomicCancel.get())) || atomicCancel == null) {
                 File f = new File(folder.getCanonicalPath(), ze.getName());
                 if (ze.isDirectory()) {
                     f.mkdirs();
@@ -172,13 +190,12 @@ public class UnZip {
                         long nread = 0L;
                         long length = zipfile.length();
 
-                        while (-1 != (bytesRead = zis.read(buf))) {
+                        while (-1 != (bytesRead = zis.read(buf)) && ((atomicCancel != null && !atomicCancel.get())) || atomicCancel == null) {
                             fos.write(buf, 0, bytesRead);
                             nread += bytesRead;
                             if (progressCallBack != null) {
                                 progressCallBack.callBack(((double) length / (double) channel.position()) * 100.0);
                             }
-                            //updateProgress(channel.position(), length);
                         }
                     } finally {
                         fos.close();

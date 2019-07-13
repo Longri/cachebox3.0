@@ -49,6 +49,7 @@ import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.utils.exceptions.CancelException;
 
 
 /**
@@ -72,29 +73,35 @@ public class Downloader implements Runnable {
     private final Object target;
 
     /**
+     * target FileHandle to be populated
+     */
+    protected final FileHandle targetFileHandle;
+
+
+    /**
      * length of the remote resource, in number of bytes; -1 if unknown
      */
-    private int totalLength = -1;
+    protected int totalLength = -1;
 
     /**
      * number of bytes downloaded
      */
-    private int downloadedLength = 0;
+    protected int downloadedLength = 0;
 
     /**
      * mutex lock for fields totalLength and downloadedLength
      */
-    private final Object lengthLock = new Object();
+    protected final Object lengthLock = new Object();
 
     /**
      * string describing the current progress
      */
-    volatile private String progressString = "Waiting to start";
+    protected volatile String progressString = "Waiting to start";
 
     /**
      * has there been an update in the progress?
      */
-    volatile private boolean progressUpdated = false;
+    protected volatile boolean progressUpdated = false;
 
     /**
      * Exception object representing the error, if any
@@ -109,12 +116,12 @@ public class Downloader implements Runnable {
     /**
      * is the downloader running?
      */
-    private boolean running = false;
+    protected boolean running = false;
 
     /**
      * is the download cancelled?
      */
-    private boolean cancelled = false;
+    protected boolean cancelled = false;
 
     /**
      * is the download completed?
@@ -124,7 +131,7 @@ public class Downloader implements Runnable {
     /**
      * mutex lock for fields started, running, cancelled, and completed
      */
-    private final Object stateLock = new Object();
+    protected final Object stateLock = new Object();
 
     /**
      * Constructor. The target object should not be accessed until after calling waitUntilCompleted().
@@ -135,10 +142,12 @@ public class Downloader implements Runnable {
     public Downloader(final URL url, final Object target) {
         if ((target instanceof File) || (target instanceof StringBuilder)) {
             this.target = target;
+            this.targetFileHandle = null;
         } else if (target instanceof FileHandle) {
-            this.target = ((FileHandle) target).file();
+            this.targetFileHandle = ((FileHandle) target);
+            this.target = this.targetFileHandle.file();
         } else {
-            throw new IllegalArgumentException("Target must be a File or StringBuilder object.");
+            throw new IllegalArgumentException("Target must be a FileHandle or StringBuilder object.");
         }
 
         this.url = url;
@@ -347,9 +356,7 @@ public class Downloader implements Runnable {
             /* get size of webpage in bytes; -1 if unknown */
             final int length = link.getContentLength();
 
-            synchronized (lengthLock) {
-                totalLength = length;
-            }
+            setTotalLength(length);
 
             progressUpdated = true;
 
@@ -513,24 +520,25 @@ public class Downloader implements Runnable {
         }
     }
 
+    protected void setTotalLength(int length) {
+        synchronized (lengthLock) {
+            totalLength = length;
+        }
+    }
+
     /**
      * Check if the downloader state has been modified. This method blocks if the download has been paused, unless it is resumed or
      * cancelled. An exception is thrown if the download is cancelled.
      *
      * @throws Exception if the download is cancelled
      */
-
-    private void checkState() throws Exception {
-//        // debug sleeping for se progress changes on UI
-//        Thread.sleep(500);
-
-
+    protected void checkState() throws Exception {
         while (true) {
             synchronized (stateLock) {
                 if (cancelled) {
                     progressString = "download cancelled";
                     progressUpdated = true;
-                    throw new Exception("download cancelled");
+                    throw new CancelException("download cancelled");
                 }
 
                 if (running) {

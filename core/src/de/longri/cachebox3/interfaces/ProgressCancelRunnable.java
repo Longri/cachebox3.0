@@ -50,4 +50,8 @@ public abstract class ProgressCancelRunnable implements Runnable {
         this.progressMsg = msg;
     }
 
+    public AtomicBoolean getIsCanceledAtomic() {
+        return isCanceled;
+    }
+
 }
