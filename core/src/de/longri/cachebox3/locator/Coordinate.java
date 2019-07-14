@@ -51,10 +51,18 @@ public class Coordinate extends LatLong {
     private double heading;
     private boolean isGPSprovided;
     private int accuracy = -1;
+    private long time = -1;
 
 
     public Coordinate(LatLong latLon) {
         super(latLon);
+    }
+
+    public Coordinate(double latitude, double longitude, double elevation, double heading, long time) {
+        super(latitude, longitude);
+        this.elevation = elevation;
+        this.heading = heading;
+        this.time = time;
     }
 
     public static Coordinate Project(Coordinate coord, double Direction, double Distance) {
@@ -327,8 +335,6 @@ public class Coordinate extends LatLong {
     public int getAccuracy() {
         return this.accuracy;
     }
-
-
 
 
 }

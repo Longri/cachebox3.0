@@ -216,7 +216,7 @@ public class TrackRecorder implements PositionChangedListener {
             SaveAltitude = newCoord.getElevation();
         } else {
             writePos = true;
-            TrackPoint NewPoint;
+            Coordinate NewPoint;
             double AltDiff = 0;
 
             // wurden seit dem letzten aufgenommenen Wegpunkt mehr als x Meter
@@ -264,8 +264,8 @@ public class TrackRecorder implements PositionChangedListener {
                     log.error("Trackrecorder", "IOException", e);
                 }
 
-                NewPoint = new TrackPoint(event.pos.getLongitude(), event.pos.getLongitude(), newCoord.getElevation(),
-                        newCoord.getHeading(), new Date());
+                NewPoint = new Coordinate(event.pos.getLatitude(), event.pos.getLongitude(), newCoord.getElevation(),
+                        newCoord.getHeading(), System.currentTimeMillis());
 
                 CB.actRoute.Points.add(NewPoint);
 
