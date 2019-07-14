@@ -115,4 +115,9 @@ public class LatLong {
         this.hash = 0;
     }
 
+    public void set(LatLong latLong) {
+        this.latitude = latLong.latitude;
+        this.longitude = latLong.longitude;
+    }
+
 }

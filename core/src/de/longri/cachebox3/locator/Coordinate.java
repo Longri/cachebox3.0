@@ -46,6 +46,13 @@ public class Coordinate extends LatLong {
 
     private static final float[] mResults = new float[2];
 
+    private double elevation = 0;
+    private double speed;
+    private double heading;
+    private boolean isGPSprovided;
+    private int accuracy = -1;
+
+
     public Coordinate(LatLong latLon) {
         super(latLon);
     }
@@ -280,5 +287,48 @@ public class Coordinate extends LatLong {
     public String toString() {
         return FormatCoordinate();
     }
+
+    public double getElevation() {
+        return elevation;
+    }
+
+    public void setElevation(double elevation) {
+        this.elevation = elevation;
+    }
+
+    public double getHeading() {
+        return this.heading;
+    }
+
+    public double getSpeed() {
+        return this.speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public void setHeading(double heading) {
+        this.heading = heading;
+    }
+
+    public void setIsGpsProvided(boolean isGpsProvided) {
+        this.isGPSprovided = isGpsProvided;
+    }
+
+    public boolean isGPSprovided() {
+        return this.isGPSprovided;
+    }
+
+    public void setAccuracy(float accuracy) {
+        this.accuracy = (int) accuracy;
+    }
+
+    public int getAccuracy() {
+        return this.accuracy;
+    }
+
+
+
 
 }

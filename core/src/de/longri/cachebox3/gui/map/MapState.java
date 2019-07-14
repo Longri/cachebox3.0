@@ -17,7 +17,7 @@ package de.longri.cachebox3.gui.map;
 
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
-import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class MapState {
     private final int MAP_ZOOM_MASK = 992;
 
     private int value = 0;
-    private final CoordinateGPS freePosition = new CoordinateGPS(0, 0);
+    private final Coordinate freePosition = new Coordinate(0, 0);
     private float orientation;
     private float tilt;
     private boolean changed = false;

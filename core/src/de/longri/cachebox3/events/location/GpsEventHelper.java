@@ -236,8 +236,8 @@ public class GpsEventHelper implements LocationEvents {
 ////        log.debug("Gps state changed to {}", state);
 //    }
 //
-//    public CoordinateGPS getLastGpsCoordinate() {
-//        CoordinateGPS coord = new CoordinateGPS(this.lastGpsLat, this.lastGpsLon);
+//    public Coordinate getLastGpsCoordinate() {
+//        Coordinate coord = new Coordinate(this.lastGpsLat, this.lastGpsLon);
 //        coord.setAccuracy(this.lastGpsAccuracy);
 //        coord.setElevation(this.lastGpsElevation);
 //        coord.setHeading(this.lastCompassHeading);
