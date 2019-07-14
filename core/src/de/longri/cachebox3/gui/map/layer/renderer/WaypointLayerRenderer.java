@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
 import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.backend.canvas.Bitmap;
@@ -331,7 +331,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         }
     };
 
-    public static Point project(LatLong p, Point reuse) {
+    public static Point project(Coordinate p, Point reuse) {
         if (reuse == null) {
             reuse = new Point();
         }

@@ -18,7 +18,7 @@ package de.longri.cachebox3.gui.map;
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +82,7 @@ public class MapState {
 
     //setter
 
-    public void setPosition(LatLong latLong) {
+    public void setPosition(Coordinate latLong) {
         this.freePosition.set(latLong);
         changed = true;
     }
@@ -133,7 +133,7 @@ public class MapState {
 
     //getter
 
-    public LatLong getFreePosition() {
+    public Coordinate getFreePosition() {
         return freePosition;
     }
 

@@ -20,5 +20,5 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Created by Longri on 30.01.2018.
  */
-public class AtomicMutableLatLong extends AtomicReference<LatLong> {
+public class AtomicMutableCoordinate extends AtomicReference<Coordinate> {
 }

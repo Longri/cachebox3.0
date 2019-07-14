@@ -20,7 +20,7 @@ import de.longri.cachebox3.utils.GeoUtils;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
 
-public class Coordinate extends LatLong {
+public class Coordinate {
 
     static final String br = System.getProperty("line.separator");
 
@@ -46,6 +46,17 @@ public class Coordinate extends LatLong {
 
     private static final float[] mResults = new float[2];
 
+    /**
+     * The latitude coordinate of this Coordinate in degrees.
+     */
+    protected double latitude;
+
+    /**
+     * The longitude coordinate of this Coordinate in degrees.
+     */
+    protected double longitude;
+
+    private int hash = 0;
     private double elevation = 0;
     private double speed;
     private double heading;
@@ -54,12 +65,8 @@ public class Coordinate extends LatLong {
     private long time = -1;
 
 
-    public Coordinate(LatLong latLon) {
-        super(latLon);
-    }
-
     public Coordinate(double latitude, double longitude, double elevation, double heading, long time) {
-        super(latitude, longitude);
+        this(latitude, longitude);
         this.elevation = elevation;
         this.heading = heading;
         this.time = time;
@@ -183,7 +190,7 @@ public class Coordinate extends LatLong {
      * @param dest the destination location
      * @return the initial bearing in degrees
      */
-    public float bearingTo(LatLong dest, CalculationType type) {
+    public float bearingTo(Coordinate dest, CalculationType type) {
         synchronized (mResults) {
             // See if we already have the result
             // if (getLatitude() != mLat1 || getLongitude() != mLon1 || dest.getLatitude() != mLat2 || dest.getLongitude() != mLon2)
@@ -210,7 +217,7 @@ public class Coordinate extends LatLong {
      * @param coord
      * @return
      */
-    public float distance(LatLong coord, CalculationType type) {
+    public float distance(Coordinate coord, CalculationType type) {
         if (coord == null) return -1;
         MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), coord.getLatitude(), coord.getLongitude(), mResults);
         return mResults[0];
@@ -223,12 +230,12 @@ public class Coordinate extends LatLong {
      */
     public float distance(CalculationType type) {
         float[] dist = new float[1];
-        LatLong myPos = EventHandler.getMyPosition();
+        Coordinate myPos = EventHandler.getMyPosition();
         MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), myPos.latitude, myPos.longitude, dist);
         return dist[0];
     }
 
-    private final static double TOL = 0.000008;
+    private final static double TOLLERANZ = 0.000008;
 
     @Override
     public boolean equals(Object obj) {
@@ -250,9 +257,9 @@ public class Coordinate extends LatLong {
         if (lo < 0)
             lo *= -1;
 
-        if (la > TOL)
+        if (la > TOLLERANZ)
             return false;
-        if (lo > TOL)
+        if (lo > TOLLERANZ)
             return false;
 
         return true;
@@ -269,17 +276,12 @@ public class Coordinate extends LatLong {
     }
 
     public Coordinate(Coordinate parent) {
-        super(parent.latitude, parent.longitude);
+        this(parent.latitude, parent.longitude);
     }
 
     public Coordinate(double latitude, double longitude) {
-        super(latitude, longitude);
-    }
-
-    public Coordinate(int latitude, int longitude) {
-        super(latitude, longitude);
-        if (latitude == 0 && longitude == 0)
-            return;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public Coordinate(String text) {
@@ -287,7 +289,7 @@ public class Coordinate extends LatLong {
     }
 
     public Coordinate(double[] coordinate) {
-        super(coordinate[0], coordinate[1]);
+        this(coordinate[0], coordinate[1]);
     }
 
 
@@ -336,5 +338,65 @@ public class Coordinate extends LatLong {
         return this.accuracy;
     }
 
+
+    /**
+     * Returns the approximate distance in degrees between this location and the
+     * given location, calculated in Euclidean space.
+     */
+    public double distance(Coordinate other) {
+        return Math.hypot(this.longitude - other.longitude, this.latitude - other.latitude);
+    }
+
+    @Override
+    public int hashCode() {
+        if (hash != 0) return hash;
+        int prime = 31;
+        int result = 1;
+        long temp;
+        temp = Double.doubleToLongBits(this.latitude);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(this.longitude);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        hash = result;
+        if (hash == 0) { //realy?
+            hash = 1;
+        }
+        return hash;
+    }
+
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return this.latitude;
+    }
+
+    public double getLongitude() {
+        return this.longitude;
+    }
+
+    public void setLatLon(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.hash = 0;
+    }
+
+    public void set(Coordinate other) {
+        this.latitude = other.latitude;
+        this.longitude = other.longitude;
+        this.elevation = other.elevation;
+        this.speed = other.speed;
+        this.heading = other.heading;
+        this.isGPSprovided = other.isGPSprovided;
+        this.accuracy = other.accuracy;
+        this.time = other.time;
+        this.hash = other.hash;
+    }
 
 }

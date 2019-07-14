@@ -29,7 +29,7 @@ import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.IChanged;
@@ -147,7 +147,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                             CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
                         }
 
-                        LatLong latLon = CB.lastMapState.getFreePosition();
+                        Coordinate latLon = CB.lastMapState.getFreePosition();
                         if (latLon != null) {
                             this.myPosition = new Coordinate(latLon);
                         }

@@ -141,9 +141,9 @@ class ThreadStackTest {
 
 
             runnables.pushAndStart(runnable1);
-            sleep(5);
+            sleep(10);
             runnables.pushAndStart(runnable2);
-            sleep(5);
+            sleep(10);
             runnables.pushAndStart(runnable3);
 
 

@@ -20,7 +20,7 @@ import ch.fhnw.imvs.gpssimulator.data.GPSDataListener;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.location.LocationEvents;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Region;
 import de.longri.cachebox3.locator.manager.LocationManager;
 import de.longri.cachebox3.utils.MathUtils;
@@ -107,7 +107,7 @@ public class Desktop_LocationManager extends LocationManager {
         @Override
         public void valueChanged() {
             {//check region handler
-                LatLong latLong = new LatLong(GPSData.getLatitude(), GPSData.getLongitude());
+                Coordinate latLong = new Coordinate(GPSData.getLatitude(), GPSData.getLongitude());
                 clearList.clear();
                 for (int i = 0; i < regions.size; i++) {
                     Region region = regions.get(i);

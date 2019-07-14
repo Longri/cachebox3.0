@@ -65,7 +65,7 @@ import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
@@ -272,7 +272,7 @@ public class MapView extends AbstractView {
             public void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event) {
 
                 MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
-                actMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
+                actMapState.setPosition(new Coordinate(mapPosition.getLatitude(), mapPosition.getLongitude()));
                 actMapState.setMapMode(mapMode);
                 actMapState.setOrientation(mapPosition.bearing);
                 actMapState.setTilt(mapPosition.tilt);
@@ -364,7 +364,7 @@ public class MapView extends AbstractView {
 
     private void storeMapstate(MapMode mapMode, MapMode beforeCar) {
         MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
-        CB.lastMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
+        CB.lastMapState.setPosition(new Coordinate(mapPosition.getLatitude(), mapPosition.getLongitude()));
         CB.lastMapState.setMapMode(mapMode);
         CB.lastMapState.setOrientation(mapPosition.bearing);
         CB.lastMapState.setTilt(mapPosition.tilt);
@@ -481,7 +481,7 @@ public class MapView extends AbstractView {
 
         //use saved pos
         if (myPos == null) {
-            LatLong latLon = CB.lastMapState.getFreePosition();
+            Coordinate latLon = CB.lastMapState.getFreePosition();
             if (latLon != null) {
                 myPos = new Coordinate(latLon);
             }
