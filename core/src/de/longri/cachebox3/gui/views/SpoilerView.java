@@ -25,6 +25,7 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.GalleryViewStyle;
 import de.longri.cachebox3.gui.widgets.GalleryView;
 import de.longri.cachebox3.sqlite.dao.ImageDAO;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.http.ProgressCancelDownloader;
@@ -200,7 +201,7 @@ public class SpoilerView extends AbstractView {
 
         // show dialog and start downloaderRunable
         // if cancel clicked or all downloads are ready, the CancelProgressDialog is closed automatically
-        CancelProgressDialog cancelProgressDialog = new CancelProgressDialog("name", "Title", downloader);
+        CancelProgressDialog cancelProgressDialog = new CancelProgressDialog("download Spoiler", Translation.get("downloadSpoiler"), downloader);
         cancelProgressDialog.show();
 
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlStreamParser;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.callbacks.FinishCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
@@ -24,6 +25,7 @@ import de.longri.cachebox3.utils.UnZip;
 import de.longri.cachebox3.utils.http.Download;
 import de.longri.cachebox3.utils.http.ProgressCancelDownloader;
 import de.longri.cachebox3.utils.http.Webb;
+import de.longri.cachebox3.utils.http.ZipDownloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,12 +93,11 @@ public class Action_MapDownload extends AbstractAction {
                                     String target = targetPath + "/" + zipFile;
 
 
-
                                     final ProgressCancelDownloader downloader = new ProgressCancelDownloader();
 
                                     //add downloader object
                                     try {
-                                        downloader.add(new Downloader(new URL(mapInfo.Url), Gdx.files.absolute(target)));
+                                        downloader.add(new ZipDownloader(new URL(mapInfo.Url), Gdx.files.absolute(target)));
                                     } catch (MalformedURLException e) {
                                         log.error("download", e);
                                     }
@@ -104,21 +105,17 @@ public class Action_MapDownload extends AbstractAction {
 
                                     // show dialog and start downloaderRunable
                                     // if cancel clicked or all downloads are ready, the CancelProgressDialog is closed automatically
-                                    CancelProgressDialog cancelProgressDialog = new CancelProgressDialog("name", "Title", downloader);
-                                    cancelProgressDialog.show();
-
-
-
-
-
-                                    try {
-                                        UnZip unzip = new UnZip();
-                                        unzip.extractFolder(target);
-                                    } catch (Exception e) {
-                                        log.error(e.getLocalizedMessage());
-                                    }
-                                    Gdx.files.absolute(target).delete();
-
+                                    CancelProgressDialog cancelProgressDialog = new CancelProgressDialog("name", Translation.get("MapDownload"), downloader);
+                                    cancelProgressDialog.show(new FinishCallBack() {
+                                        @Override
+                                        public void callBack() {
+                                            //delete zip file after extraction
+                                            if (!Gdx.files.absolute(target).delete())
+                                                log.warn("can't delete zip file from downloaded Map: {}", mapInfo.Description);
+                                            else
+                                                log.debug("delete zip file from downloaded Map: {}", mapInfo.Description);
+                                        }
+                                    });
                                 }
                             }
                         });

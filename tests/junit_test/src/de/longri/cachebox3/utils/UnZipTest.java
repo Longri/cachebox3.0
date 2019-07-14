@@ -34,7 +34,7 @@ class UnZipTest {
             }
         }
 
-        UnZip unZip = new UnZip();
+        UnZip unZip = new UnZip(extractedFolder);
         final double[] progress = {0};
         FileHandle resultFileHandle = unZip.extractFolder(zipFile, new GenericCallBack<Double>() {
             @Override

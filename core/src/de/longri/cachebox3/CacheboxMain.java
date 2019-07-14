@@ -34,6 +34,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
+import de.longri.cachebox3.gui.stages.NamedStage;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -82,7 +83,9 @@ public class CacheboxMain extends ApplicationAdapter {
 
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
         EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-//        EXCLUDE_LIST.add(StageManager.class.getName());
+        EXCLUDE_LIST.add(StageManager.class.getName());
+        EXCLUDE_LIST.add(NamedStage.class.getName());
+        EXCLUDE_LIST.add(CB.class.getName());
 //
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");

@@ -18,6 +18,9 @@ package de.longri.cachebox3.utils.http;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.Downloader;
 import de.longri.cachebox3.utils.UnZip;
+import de.longri.cachebox3.utils.exceptions.CancelException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,6 +30,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Longri on 2019-07-08.
  */
 public class ZipDownloader extends Downloader {
+
+    protected static Logger log = LoggerFactory.getLogger(ZipDownloader.class);
+
+    private final double DOWNLOAD_EXTRACT_RATIO = 25.0;
+
     /**
      * Constructor. The target object should not be accessed until after calling waitUntilCompleted().
      *
@@ -40,13 +48,60 @@ public class ZipDownloader extends Downloader {
     /**
      * number of bytes extractedded
      */
-    protected int extractedLength = 0;
+    private int extractedLength = 0;
+
+    /**
+     * is the extraction completed?
+     */
+    private boolean completed = false;
+
+    private boolean extractRunning = false;
+
+
+    /**
+     * Is the download completed?
+     *
+     * @return true if download is completed; false otherwise
+     */
+    public boolean isCompleted() {
+        return super.isCompleted() && completed;
+    }
+
+    /**
+     * get the number of bytes downloaded * 2.
+     */
+    @Override
+    public int getDownloadedLength() {
+        synchronized (lengthLock) {
+            return downloadedLength + (int) (extractedLength / DOWNLOAD_EXTRACT_RATIO);
+        }
+    }
+
+    /**
+     * get the length of the remote resource.
+     *
+     * @return length of the remote resource, in number of bytes; -1 if unknown
+     */
+    @Override
+    public int getLength() {
+        synchronized (lengthLock) {
+            return totalLength + (int) (totalLength / DOWNLOAD_EXTRACT_RATIO);
+        }
+    }
+
+    public boolean isDownloadCompleted() {
+        return super.isCompleted();
+    }
 
     @Override
     public void run() {
         super.run(); // download
 
+        extractRunning = true;
+
         final AtomicBoolean canceld = new AtomicBoolean(false);
+
+        log.debug("Unzip downloaded file");
 
         // now extract
         UnZip unZip = new UnZip();
@@ -64,8 +119,13 @@ public class ZipDownloader extends Downloader {
                 }
             }, canceld);
         } catch (IOException e) {
+            log.error("Unzip file", e);
             e.printStackTrace();
         }
+        completed = true;
+        extractRunning = false;
+
+        log.debug("Ready unzip file");
     }
 
     /**
@@ -80,6 +140,45 @@ public class ZipDownloader extends Downloader {
                 return -1;
             } else {
                 return (int) (100.0 * (downloadedLength + extractedLength) / (totalLength * 2));
+            }
+        }
+    }
+
+    /**
+     * Pause the download.
+     */
+    public void pause() {
+        super.pause();
+        extractRunning = false;
+
+    }
+
+    /**
+     * Resume the download.
+     */
+    public void resume() {
+        super.resume();
+        if (!completed) extractRunning = true;
+    }
+
+    /**
+     * Check if the downloader state has been modified. This method blocks if the download has been paused, unless it is resumed or
+     * cancelled. An exception is thrown if the download is cancelled.
+     *
+     * @throws Exception if the download is cancelled
+     */
+    protected void checkState() throws CancelException {
+        while (true) {
+            synchronized (stateLock) {
+                if (cancelled) {
+                    log.debug("extract download cancelled");
+                    progressUpdated = true;
+                    throw new CancelException("extract download cancelled");
+                }
+
+                if (running || extractRunning) {
+                    return;
+                }
             }
         }
     }

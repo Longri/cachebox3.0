@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.callbacks.FinishCallBack;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
@@ -34,8 +35,9 @@ public class CancelProgressDialog extends ButtonDialog {
 
     private final ProgressCancelRunnable progressCancelRunnable;
     private final ProgressTable progressTable;
+    private FinishCallBack finishCallBack;
 
-    public CancelProgressDialog(String name, String title, final ProgressCancelRunnable progressCancelRunnable) {
+    public CancelProgressDialog(String name, CharSequence title, final ProgressCancelRunnable progressCancelRunnable) {
         super(name, getProgressContentTable(), title, MessageBoxButtons.Cancel, null);
         this.msgBoxClickListener = new OnMsgBoxClickListener() {
             @Override
@@ -65,22 +67,30 @@ public class CancelProgressDialog extends ButtonDialog {
         return contentTable;
     }
 
+    public void show(FinishCallBack finishCallBack) {
+        this.finishCallBack = finishCallBack;
+        this.show();
+    }
+
     @Override
     public void show() {
 
         super.show();
 
         //start runnable async
-        CB.postAsync(new NamedRunnable("CancelProgressDialog") {
+        CB.postAsync(new NamedRunnable("CancelProgressDialog name:" + getName()) {
             @Override
             public void run() {
                 progressCancelRunnable.run();
 
-                //after finish, close Dialog
-                CB.postOnGlThread(new NamedRunnable("CancelProgressDialog") {
+                //after finish, close Dialog and call FinishCallBack
+                CB.postOnGlThread(new NamedRunnable("CancelProgressDialog name:" + getName()) {
                     @Override
                     public void run() {
                         CancelProgressDialog.this.hide();
+                        if (CancelProgressDialog.this.finishCallBack != null) {
+                            CancelProgressDialog.this.finishCallBack.callBack();
+                        }
                     }
                 });
 

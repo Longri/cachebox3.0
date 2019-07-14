@@ -17,6 +17,7 @@ package de.longri.cachebox3.utils.http;
 
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.Downloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +59,15 @@ public class ProgressCancelDownloader extends ProgressCancelRunnable {
 
         // start all downloader on own Thread to get progress infos
         int count = 0;
+        boolean allZipDownloader = true;
+        boolean allDownloader = true;
         for (Downloader downloader : list) {
             final int num = count++;
+            if (downloader instanceof ZipDownloader) {
+                allDownloader = false;
+            } else {
+                allZipDownloader = false;
+            }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -76,10 +84,28 @@ public class ProgressCancelDownloader extends ProgressCancelRunnable {
         }
 
         boolean allReady = false;
-        double allBytes = -1;
-        double readyBytes = -1;
+        double allBytes = 0;
+        double readyBytes = 0;
+
 
         while (!allReady && !isCanceled.get()) {
+            boolean anyUpdate = false;
+            allBytes = 0;
+            readyBytes = 0;
+            for (Downloader downloader : list) {
+                if (downloader.isProgressUpdated() || downloader.isCompleted()) {
+                    anyUpdate = true;
+                    break;
+                }
+            }
+            if (!anyUpdate) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                }
+                continue;
+            }
+
             allReady = true;
             boolean allHasLength = true;
             //check all download states
@@ -96,10 +122,23 @@ public class ProgressCancelDownloader extends ProgressCancelRunnable {
             if (allHasLength) {
                 // now we can calculate progress
                 double progress = (readyBytes / allBytes) * 100;
+
+                if (allZipDownloader && list.size == 1) {
+                    ZipDownloader zipDownloader = (ZipDownloader) list.get(0);
+                    if (!zipDownloader.isDownloadCompleted()) {
+                        progressMsg = "Download " + String.valueOf((int) progress) + "%";
+                    } else {
+                        progressMsg = "Extract " + String.valueOf((int) progress) + "%";
+                    }
+                } else if (allZipDownloader) {
+                    progressMsg = "Download/Extract " + String.valueOf((int) progress) + "%";
+                } else {
+                    progressMsg = "Download " + String.valueOf((int) progress) + "%";
+                }
                 setProgress((float) progress, progressMsg);
             }
             try {
-                Thread.sleep(70);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

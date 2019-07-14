@@ -110,7 +110,7 @@ public class PqImport {
                 for (ListViewItemInterface item : selectedItems) {
                     GroundspeakAPI.PQ pqItem = ((PqListItem) item).getPocketQuery();
                     String pqFolder = Config.PocketQueryFolder.getValue();
-                    GroundspeakAPI.fetchPocketQuery(pqItem, pqFolder);
+                    GroundspeakAPI.fetchPocketQuery(pqItem, pqFolder); //TODO handle progress with parallel download
                     if (GroundspeakAPI.APIError == GroundspeakAPI.OK) {
                         downloadedFiles.add(new FileHandle(pqFolder + "/" + pqItem.GUID + ".zip"));
                     }

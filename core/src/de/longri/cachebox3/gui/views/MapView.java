@@ -1166,9 +1166,9 @@ public class MapView extends AbstractView {
             } else if (handle.extension().equals("xml")) {
                 try {
                     NamedExternalRenderTheme extTheme = new NamedExternalRenderTheme(handle.nameWithoutExtension(),
-                            handle.file().getAbsolutePath());
+                            handle.file().getCanonicalPath());
                     themes.add(extTheme);
-                } catch (IRenderTheme.ThemeException e) {
+                } catch (IRenderTheme.ThemeException | IOException e) {
                     // is invalid Theme File
                     log.warn("Found invalid Theme file: {}", handle.file().getAbsolutePath());
                 }

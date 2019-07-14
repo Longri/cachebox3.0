@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -35,60 +36,78 @@ public class UnZip {
 
     private final Logger log = LoggerFactory.getLogger(UnZip.class);
 
+    private final FileHandle targetFolder;
+
+    public UnZip() {
+        targetFolder = null;
+    }
+
+    public UnZip(FileHandle targetFolder) {
+        this.targetFolder = targetFolder;
+    }
+
     /**
      * Extract the given ZIP-File
      *
      * @param zipFile file to extract
-     * @return Extracted Folder Path as String
+     * @return Extracted Folder Path as String (Absolute)
+     * @throws IOException with IO error
+     */
+    public FileHandle extractFolder(String zipFile) throws IOException {
+        return extractFolder(Gdx.files.absolute(zipFile));
+    }
+
+    /**
+     * Extract the given ZIP-File
+     *
+     * @param zipFile file to extract
+     * @return Extracted Folder Path as FileHandle
      * @throws IOException with IO error
      */
     public FileHandle extractFolder(FileHandle zipFile) throws IOException {
-        String path = zipFile.file().getAbsolutePath();
-        String resultPath = extractFolder(path);
-        return Gdx.files.absolute(resultPath);
+        return extractFolder(zipFile);
     }
 
     /**
      * Extract the given ZIP-File
      *
      * @param zipFile file to extract
-     * @return Extracted Folder Path as String
+     * @return Extracted Folder Path as FileHandle
      * @throws IOException with IO error
      */
     public FileHandle extractFolder(FileHandle zipFile, GenericCallBack<Double> progressCallBack) throws IOException {
-        String path = zipFile.file().getAbsolutePath();
-        String resultPath = extractFolder(path, progressCallBack, new AtomicBoolean(false));
+        String resultPath = extractFolder(zipFile, progressCallBack, new AtomicBoolean(false));
         return Gdx.files.absolute(resultPath);
-    }
-
-    /**
-     * @param zipFile file to extract
-     *                attention in ACB2 the default is here == true
-     * @return Extracted Folder Path as String
-     * @throws IOException with IO error
-     */
-    public String extractFolder(String zipFile) throws IOException {
-        return extractFolder(zipFile, null, new AtomicBoolean(false));
-    }
-
-    public String extractFolder(FileHandle fileHandle, GenericCallBack<Double> progressCallBack, AtomicBoolean cancel) throws IOException {
-        if (cancel == null) cancel = new AtomicBoolean(false);
-        return extractFolder(fileHandle.file().getAbsolutePath(), progressCallBack, cancel);
     }
 
 
     /*
     https://stackoverflow.com/questions/40050270/java-unzip-and-progress-bar
      */
-    private String extractFolder(String file, GenericCallBack<Double> progressCallBack, AtomicBoolean cancel) throws IOException {
+    public String extractFolder(FileHandle fileHandle, GenericCallBack<Double> progressCallBack, AtomicBoolean cancel) throws IOException {
 
-        String newPath = file.substring(0, file.length() - 4);
-        File folder = new File(newPath);
-        File zipfile = new File(file);
+
+        File folder;
+        if (this.targetFolder != null) {
+            String file = fileHandle.file().getCanonicalPath();
+            String newPath = file.substring(0, file.length() - 4);
+            folder = new File(newPath);
+        } else {
+            folder = fileHandle.parent().file();
+        }
+        File zipfile = fileHandle.file();
 
         FileInputStream is = new FileInputStream(zipfile.getCanonicalFile());
-        FileChannel channel = is.getChannel();
-        ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
+        final AtomicInteger compleadReadedBytes = new AtomicInteger(0);
+        double zipFileLength = zipfile.length();
+        BufferedInputStream bis = new BufferedInputStream(is) {
+            public int read(byte b[], int off, int len) throws IOException {
+                int ret = super.read(b, off, len);
+                compleadReadedBytes.addAndGet(ret);
+                return ret;
+            }
+        };
+        ZipInputStream zis = new ZipInputStream(bis);
         ZipEntry ze = null;
         try {
             while ((ze = zis.getNextEntry()) != null && !cancel.get()) {
@@ -101,18 +120,17 @@ public class UnZip {
                 OutputStream fos = new BufferedOutputStream(new FileOutputStream(f));
                 try {
                     try {
-                        final byte[] buf = new byte[1024 * 1024];
+                        final byte[] buf = new byte[1024];
                         int bytesRead;
                         long nread = 0L;
-                        long length = zipfile.length();
+
 
                         while (-1 != (bytesRead = zis.read(buf)) && !cancel.get()) {
                             fos.write(buf, 0, bytesRead);
                             nread += bytesRead;
                             if (progressCallBack != null) {
-                                progressCallBack.callBack(((double) length / (double) channel.position()) * 100.0);
+                                progressCallBack.callBack(((double) compleadReadedBytes.get() / zipFileLength) * 100.0);
                             }
-                            //updateProgress(channel.position(), length);
                         }
                     } finally {
                         fos.close();
@@ -125,6 +143,9 @@ public class UnZip {
         } finally {
             zis.close();
         }
-        return newPath;
+        if (progressCallBack != null) {
+            progressCallBack.callBack(100.0);
+        }
+        return folder.getCanonicalPath();
     }
 }
