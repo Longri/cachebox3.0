@@ -275,9 +275,6 @@ public class Coordinate extends LatLong {
         super(coordinate[0], coordinate[1]);
     }
 
-    public Coordinate copy() {
-        return new Coordinate(this);
-    }
 
     @Override
     public String toString() {

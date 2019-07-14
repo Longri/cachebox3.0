@@ -109,10 +109,6 @@ public class LatLong {
         return this.longitude;
     }
 
-    public LatLong copy() {
-        return new LatLong(this.latitude, this.longitude);
-    }
-
     public void setLatLon(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;

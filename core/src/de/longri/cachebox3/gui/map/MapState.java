@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.map;
 
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
+import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.locator.LatLong;
 import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class MapState {
     private final int MAP_ZOOM_MASK = 992;
 
     private int value = 0;
-    private LatLong freePosition;
+    private final CoordinateGPS freePosition = new CoordinateGPS(0, 0);
     private float orientation;
     private float tilt;
     private boolean changed = false;
@@ -58,7 +59,7 @@ public class MapState {
         if (store.readBool()) {
             double lat = (float) store.readInt() / CONVERSION;
             double lon = (float) store.readInt() / CONVERSION;
-            freePosition = new LatLong(lat, lon);
+            freePosition.setLatLon(lat, lon);
         }
         orientation = (float) store.readInt() / CONVERSION;
         tilt = (float) store.readInt() / CONVERSION;
@@ -82,7 +83,7 @@ public class MapState {
     //setter
 
     public void setPosition(LatLong latLong) {
-        this.freePosition = latLong;
+        this.freePosition.set(latLong);
         changed = true;
     }
 
@@ -126,7 +127,7 @@ public class MapState {
         this.value = mapState.value;
         this.tilt = mapState.tilt;
         this.orientation = mapState.orientation;
-        this.freePosition = mapState.freePosition.copy();
+        this.freePosition.set(mapState.freePosition);
         changed = true;
     }
 

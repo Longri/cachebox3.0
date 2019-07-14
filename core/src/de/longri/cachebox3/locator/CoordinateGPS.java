@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2011-2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -116,5 +116,10 @@ public class CoordinateGPS extends Coordinate implements Serializable {
 
     public void setIsGpsProvided(boolean isGpsProvided) {
         this.isGPSprovided = isGpsProvided;
+    }
+
+    public void set(LatLong latLong) {
+        this.latitude = latLong.latitude;
+        this.longitude = latLong.longitude;
     }
 }
