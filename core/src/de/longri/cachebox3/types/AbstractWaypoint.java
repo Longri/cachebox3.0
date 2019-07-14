@@ -16,6 +16,7 @@
 package de.longri.cachebox3.types;
 
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
@@ -23,7 +24,7 @@ import de.longri.gdx.sqlite.GdxSqliteCursor;
 /**
  * Created by Longri on 19.10.2017.
  */
-public abstract class AbstractWaypoint extends Coordinate {
+public abstract class AbstractWaypoint extends CoordinateGPS {
     public AbstractWaypoint(double latitude, double longitude) {
         super(latitude, longitude);
     }

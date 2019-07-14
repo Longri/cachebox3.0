@@ -24,14 +24,8 @@ import java.io.Serializable;
  */
 public class CoordinateGPS extends Coordinate implements Serializable {
 
-    private static final long serialVersionUID = 1235642315487L;
-
     private double Elevation = 0;
-
-    /**
-     * Die Genauigkeit dieser Coordinate! Wird beim Messen benutzt
-     */
-    protected int Accuracy = -1;
+    private int Accuracy = -1;
     private double speed;
     private double heading;
     private boolean isGPSprovided;
@@ -75,7 +69,6 @@ public class CoordinateGPS extends Coordinate implements Serializable {
         return true;
     }
 
-
     public int getAccuracy() {
         return Accuracy;
     }
@@ -89,11 +82,9 @@ public class CoordinateGPS extends Coordinate implements Serializable {
         super(text);
     }
 
-
     public double getElevation() {
         return Elevation;
     }
-
 
     public void setElevation(double elevation) {
         Elevation = elevation;

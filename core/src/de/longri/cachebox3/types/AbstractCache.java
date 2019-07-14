@@ -17,6 +17,7 @@ package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.CoordinateGPS;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by Longri on 16.10.2017.
  */
-public abstract class AbstractCache extends Coordinate implements Comparable<AbstractCache> {
+public abstract class AbstractCache extends CoordinateGPS implements Comparable<AbstractCache> {
     public AbstractCache(double latitude, double longitude) {
         super(latitude, longitude);
     }
