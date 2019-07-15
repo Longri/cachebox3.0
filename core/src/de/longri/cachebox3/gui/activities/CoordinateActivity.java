@@ -39,7 +39,7 @@ import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.converter.UTMConvert;
 import org.slf4j.Logger;
@@ -113,7 +113,7 @@ public class CoordinateActivity extends ActivityBase {
 
             log.debug("Toggle to: " + checkedButton.getText());
             if (actValueTable != null) {
-                LatLong latLong = actValueTable.getValue();
+                Coordinate latLong = actValueTable.getValue();
                 if (latLong != null) {
                     lat = latLong.getLatitude();
                     lon = latLong.getLongitude();

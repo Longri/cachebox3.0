@@ -172,19 +172,21 @@ public final class SkinLoaderTask extends AbstractInitTask {
             storeAttributePng(skin, style, attFileHandle, value);
         }
 
-        // todo do not preload theme, if no mapsforge map is selected
-        //preload Map Theme on async task
-        CB.postAsync(new NamedRunnable("preload Map Theme") {
+        // "init CanvasAdapter.dpi .textScale + Tile.SIZE"
+        float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
+        CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
+        CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
+        Tile.SIZE = Tile.calculateTileSize();
+        CB.setScaleChangedListener();
+
+        // preload Map Theme
+        CB.postAsync(new NamedRunnable("") {
             @Override
             public void run() {
-                //calculate CanvasAdapter.dpi
-                float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
-                CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
-                CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
-                Tile.SIZE = Tile.calculateTileSize();
-                CB.setCurrentTheme(CB.ThemeIsFor.day); // todo set the correct parameter
+                CB.setCurrentTheme(CB.ThemeUsage.day, CB.createTheme(CB.getConfigsThemePath(CB.ThemeUsage.day), CB.getConfigsMapStyle(CB.ThemeUsage.day)));
             }
         });
+
     }
 
     @Override

@@ -27,7 +27,6 @@ import de.longri.cachebox3.gui.skin.styles.MapBubbleStyle;
 import de.longri.cachebox3.gui.views.CacheItem;
 import de.longri.cachebox3.gui.views.WayPointItem;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
-import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.LogTypes;
@@ -84,7 +83,7 @@ public class MapBubble extends Catch_Table {
 
             content = new WayPointItem(null,
                     waypoint.getGcCode(), waypoint.getTitle(),
-                    waypoint.getDescription(), waypoint.FormatCoordinate(), style.wayPointListItemStyle);
+                    waypoint.getDescription(), waypoint.formatCoordinate(), style.wayPointListItemStyle);
             isSelected = waypoint == EventHandler.getSelectedWaypoint();
 
         } else {

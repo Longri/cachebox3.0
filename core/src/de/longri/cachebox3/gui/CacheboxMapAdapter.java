@@ -206,7 +206,6 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         }
 
         if (baseMap.isVector()) {
-
             if (vectorTileLayer == null) {
                 vectorTileLayer = (VectorTileLayer) baseMap.getTileLayer(this);
             } else {
@@ -214,10 +213,8 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             }
             tileLayer = this.setBaseMap(vectorTileLayer);
 
-            setTheme(CB.getCurrentTheme());
-
+            setTheme(CB.getCurrentTheme()); // apply theme to the layer
             ((AbstractList) this.layers()).add(2, new BuildingLabelLayer(this, vectorTileLayer));
-
         } else {
             tileLayer = this.setBaseMap(baseMap.getTileLayer(this));
         }

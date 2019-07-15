@@ -30,7 +30,6 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
-import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
 import de.longri.cachebox3.gui.map.layer.ThemeMenu;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
@@ -49,6 +48,8 @@ import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.*;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.core.Tile;
@@ -67,6 +68,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.isAccessTokenInvalid;
+import static de.longri.cachebox3.settings.Settings_Map.CurrentMapLayer;
 
 /**
  * Static class
@@ -87,7 +89,6 @@ public class CB {
     public static final String LOG_LEVEL_TRACE = "TRACE";
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.5f;
-    public static final MapState actMapState = new MapState();
     public static final MapState lastMapState = new MapState();
     public static final MapState lastMapStateBeforeCar = new MapState();
     public static final String br = System.getProperty("line.separator");
@@ -127,6 +128,7 @@ public class CB {
     public static Image CB_Logo;
     public static Image backgroundImage;
     public static boolean isBackground = false;
+    public static ThemeUsage currentThemeUsage = ThemeUsage.day;
     static boolean mapScaleInitial = false;
     private static IRenderTheme actTheme;
     private static float globalScale = 1;
@@ -158,7 +160,6 @@ public class CB {
                 CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
                 CanvasAdapter.textScale = text;
                 Tile.SIZE = Tile.calculateTileSize();
-                setCurrentTheme(ThemeIsFor.day); // todo set the correct parameter
             }
         }
     };
@@ -578,40 +579,90 @@ public class CB {
         }));
     }
 
-    public static boolean isCarMode() {
-        return actMapState.getMapMode() == MapMode.CAR;
+    /**
+     * @param isCarMode   depends on car mode
+     * @param isNightMode depends on night mode
+     * @return true if there is a change
+     */
+    public static boolean setCurrentThemeUsage(boolean isCarMode, boolean isNightMode) {
+        // CB.setCurrentThemeUsage(MapView.isCarMode(), Config.nightMode.getValue());
+        ThemeUsage oldValue = currentThemeUsage;
+        if (isCarMode)
+            if (isNightMode)
+                currentThemeUsage = ThemeUsage.carnight;
+            else
+                currentThemeUsage = ThemeUsage.carday;
+        else if (isNightMode)
+            currentThemeUsage = ThemeUsage.night;
+        else
+            currentThemeUsage = ThemeUsage.day;
+        return oldValue != currentThemeUsage;
     }
 
     public static IRenderTheme getCurrentTheme() {
         return actTheme;
     }
 
-    public static void setCurrentTheme(ThemeIsFor themeIsFor) {
+    public static void setCurrentTheme(ThemeUsage themeUsage, IRenderTheme theme) {
+        currentThemeUsage = themeUsage;
+        actTheme = theme;
+    }
+
+    public static IRenderTheme createTheme(String cThemePath, String cMapStyle) {
+        if (cThemePath.startsWith("VTM:") || cThemePath.length() == 0) {
+            VtmThemes themeFile;
+            if (cThemePath.length() == 0) {
+                themeFile = VtmThemes.DEFAULT; // or VtmThemes.OSMARENDER
+            } else {
+                themeFile = VtmThemes.valueOf(cThemePath.replace("VTM:", ""));
+            }
+            return ThemeLoader.load(themeFile);
+        } else {
+            ThemeMenu themeMenu = new ThemeMenu(cThemePath);
+            themeMenu.applyConfig(cMapStyle);
+            return themeMenu.getRenderTheme();
+        }
+    }
+
+    public static void setScaleChangedListener() {
         if (!mapScaleInitial) {
             Settings.MapViewDPIFaktor.addChangedEventListener(mapScaleSettingChanged);
             Settings.MapViewTextFaktor.addChangedEventListener(mapScaleSettingChanged);
             mapScaleInitial = true;
         }
-
-        String path = getConfigsThemePath(themeIsFor);
-        if (path.startsWith("VTM:") || path.length() == 0) {
-            VtmThemes themeFile;
-            if (path.length() == 0) {
-                themeFile = VtmThemes.DEFAULT; // or VtmThemes.OSMARENDER
-            } else {
-                String name = path.replace("VTM:", "");
-                themeFile = VtmThemes.valueOf(name);
-            }
-            actTheme = ThemeLoader.load(themeFile);
-        } else {
-            ThemeMenu themeMenu = new ThemeMenu(getConfigsThemePath(themeIsFor));
-            themeMenu.applyConfig(getConfigsMapStyle(themeIsFor));
-            actTheme = themeMenu.getRenderTheme();
-        }
     }
 
-    public static String getConfigsThemePath(ThemeIsFor themeIsFor) {
-        switch (themeIsFor) {
+    public static String readThemeOfMap(String layerName, ThemeUsage themeUsage) {
+        GdxSqliteCursor cursor = Database.Settings.rawQuery("SELECT LongString FROM Config WHERE Key=\"" + layerName + "|" + themeUsage + "\"");
+        if (cursor != null) {
+            try {
+                cursor.moveToFirst();
+                return cursor.getString(0);
+            } catch (Exception e) {
+                return "";
+            }
+        }
+        return "";
+    }
+
+    public static void writeThemeOfMap(ThemeUsage themeUsage) {
+        // store map, themeUsage -> last used theme to config : to read, when map is selected
+        try {
+            String[] currentLayer = CurrentMapLayer.getValue();
+            for (int j = 0, m = currentLayer.length; j < m; j++) {
+                GdxSqlitePreparedStatement statement = Database.Settings.myDB.prepare("INSERT OR REPLACE into Config VALUES(?,?,?,?,?)");
+                statement.bind(currentLayer[j] + "|" + themeUsage, null, getConfigsThemePath(themeUsage), null, null);
+                statement.commit();
+                statement.close();
+            }
+        } catch (Exception e) {
+            log.error("Can't writeThemeOfMap", e);
+        }
+
+    }
+
+    public static String getConfigsThemePath(ThemeUsage themeUsage) {
+        switch (themeUsage) {
             case day:
                 return Config.MapsforgeDayTheme.getValue();
             case night:
@@ -623,24 +674,33 @@ public class CB {
         }
     }
 
-    public static void setConfigsThemePath(ThemeIsFor themeIsFor, String path) {
-        switch (themeIsFor) {
+    public static boolean setConfigsThemePath(ThemeUsage themeUsage, String path) {
+        String oldValue;
+        if (path.length() == 0) return false;
+        switch (themeUsage) {
             case day:
+                oldValue = Config.MapsforgeDayTheme.getValue();
                 Config.MapsforgeDayTheme.setValue(path);
                 break;
             case night:
+                oldValue = Config.MapsforgeNightTheme.getValue();
                 Config.MapsforgeNightTheme.setValue(path);
                 break;
             case carday:
+                oldValue = Config.MapsforgeCarDayTheme.getValue();
                 Config.MapsforgeCarDayTheme.setValue(path);
                 break;
             default: //case carnight:
+                oldValue = Config.MapsforgeCarNightTheme.getValue();
                 Config.MapsforgeCarNightTheme.setValue(path);
         }
+        return oldValue != path;
     }
 
-    public static String getConfigsMapStyle(ThemeIsFor themeIsFor) {
-        switch (themeIsFor) {
+    public static String getConfigsMapStyle(ThemeUsage themeUsage) {
+        // todo: the configs mapstyle is possibly not suitable for this layer
+        // this must be detected somehow
+        switch (themeUsage) {
             case day:
                 return Config.MapsforgeDayStyle.getValue();
             case night:
@@ -652,8 +712,8 @@ public class CB {
         }
     }
 
-    public static void setConfigsMapStyle(ThemeIsFor themeIsFor, String mapStyle) {
-        switch (themeIsFor) {
+    public static void setConfigsMapStyle(ThemeUsage themeUsage, String mapStyle) {
+        switch (themeUsage) {
             case day:
                 Config.MapsforgeDayStyle.setValue(mapStyle);
                 break;
@@ -685,7 +745,7 @@ public class CB {
         return globalScale;
     }
 
-    public enum ThemeIsFor {
+    public enum ThemeUsage {
         day, night, carday, carnight
     }
 

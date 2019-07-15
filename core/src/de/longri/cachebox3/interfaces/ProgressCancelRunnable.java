@@ -22,9 +22,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class ProgressCancelRunnable implements Runnable {
 
-    private final AtomicBoolean isCanceled = new AtomicBoolean(false);
-    private float progressValue;
-    private CharSequence progressMsg;
+    protected final AtomicBoolean isCanceled = new AtomicBoolean(false);
+    protected float progressValue;
+    protected CharSequence progressMsg;
 
     public float getProgress() {
         return this.progressValue;
@@ -48,6 +48,10 @@ public abstract class ProgressCancelRunnable implements Runnable {
     public void setProgress(float progressValue, CharSequence msg) {
         this.progressValue = progressValue;
         this.progressMsg = msg;
+    }
+
+    public AtomicBoolean getIsCanceledAtomic() {
+        return isCanceled;
     }
 
 }

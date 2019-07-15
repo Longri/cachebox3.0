@@ -37,6 +37,7 @@ import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.utils.GeoUtils;
 
 /**
  * Created by Longri on 14.11.2017.
@@ -160,7 +161,7 @@ public class ProjectionCoordinate extends ActivityBase {
                         callBack(null);
                     }
                     if (invertCheckBox.isChecked()) direction -= 180;
-                    Coordinate project = Coordinate.Project(cordButton.getCoordinate(), direction, distance);
+                    Coordinate project = GeoUtils.project(cordButton.getCoordinate(), direction, distance);
                     callBack(project);
                 }
             });
@@ -168,7 +169,7 @@ public class ProjectionCoordinate extends ActivityBase {
     };
 
     private void createInputFields() {
-        addEditLine(Translation.get("Bearing"), textFieldBearing, "°");
+        addEditLine(Translation.get("bearing"), textFieldBearing, "°");
         addEditLine(Translation.get("Distance"), textFieldDistance,
                 Config.ImperialUnits.getValue() ? "yd" : "m");
 

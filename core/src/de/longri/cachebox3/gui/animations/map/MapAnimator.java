@@ -73,7 +73,7 @@ public class MapAnimator {
             mapPosition.setTilt((float) tilt.getAct());
         }
         if (changed) {
-            log.debug("setMapPosition Bearing {}", mapPosition.bearing);
+            log.debug("setMapPosition bearing {}", mapPosition.bearing);
             map.setMapPosition(mapPosition);
             Gdx.app.postRunnable(new Runnable() {
                 @Override

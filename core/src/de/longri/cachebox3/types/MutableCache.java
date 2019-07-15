@@ -105,9 +105,7 @@ public class MutableCache extends AbstractCache {
     }
 
     public MutableCache(AbstractCache cache) {
-        super(cache.getLatitude(), cache.getLongitude());
-        this.latitude = cache.getLatitude();
-        this.longitude = cache.getLongitude();
+        super(cache);
         this.attributes = null;
         this.attributesPositive = cache.getAttributesPositive();
         this.attributesNegative = cache.getAttributesNegative();
@@ -271,26 +269,6 @@ public class MutableCache extends AbstractCache {
     @Override
     public void updateBooleanStore(Database database) {
         DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
-    }
-
-    @Override
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    @Override
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    @Override
-    public double getLatitude() {
-        return this.latitude;
-    }
-
-    @Override
-    public double getLongitude() {
-        return this.longitude;
     }
 
     @Override
@@ -828,11 +806,6 @@ public class MutableCache extends AbstractCache {
         }
     }
 
-    @Override
-    public void setLatLon(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
 
     @Override
     public short getBooleanStore() {

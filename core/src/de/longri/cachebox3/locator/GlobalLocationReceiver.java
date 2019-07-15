@@ -51,7 +51,10 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
     final private AtomicBoolean pendingWork = new AtomicBoolean(false);
     final private AtomicBoolean playSounds = new AtomicBoolean(false);
     final private AtomicBoolean approachSoundCompleted = new AtomicBoolean();
-    final private AtomicMutableLatLong pendingLatLong = new AtomicMutableLatLong();
+    final private AtomicMutableCoordinate pendingCoordinate = new AtomicMutableCoordinate();
+    private LocationManager locationManagerForeGround;
+    private GpsEventHelper foreGroundHelper = new GpsEventHelper();
+    private BackgroundTask backgroundTask;
 
     public GlobalLocationReceiver() {
         EventHandler.add(this);
@@ -69,7 +72,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
     @Override
     public void positionChanged(de.longri.cachebox3.events.location.PositionChangedEvent event) {
-        pendingLatLong.set(event);
+        pendingCoordinate.set(event.pos);
         runAsync();
     }
 
@@ -104,7 +107,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                 AbstractWaypoint selectedWaypoint = EventHandler.getSelectedWaypoint();
 
                 if (selectedCache != null) {
-                    LatLong pos = pendingLatLong.get();
+                    Coordinate pos = pendingCoordinate.get();
                     float distance = selectedCache.distance(pos, MathUtils.CalculationType.FAST);
                     if (selectedWaypoint != null) {
                         distance = selectedWaypoint.distance(pos, MathUtils.CalculationType.FAST);
@@ -140,12 +143,15 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         resetApproach();
     }
 
+    //#######################################################################################################
+    // Location manager
+
     private void resetApproach() {
 
         // set approach sound if the distance low
         AbstractCache selectedCache = EventHandler.getSelectedCache();
         AbstractWaypoint selectedWaypoint = EventHandler.getSelectedWaypoint();
-        LatLong pos = EventHandler.getMyPosition();
+        Coordinate pos = EventHandler.getMyPosition();
         if (selectedCache != null && pos != null) {
             float distance = selectedCache.distance(pos, MathUtils.CalculationType.FAST);
             if (selectedWaypoint != null) {
@@ -169,13 +175,6 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         approachSoundCompleted.set(true);
     }
 
-    //#######################################################################################################
-    // Location manager
-
-    private LocationManager locationManagerForeGround;
-
-    private GpsEventHelper foreGroundHelper = new GpsEventHelper();
-
     private void initialForegroundLocationListener() {
 
         CB.postOnMainThread(new NamedRunnable("initial LocationListener") {
@@ -194,7 +193,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                             AbstractView actView = CB.viewmanager.getActView();
                             if (actView == null) return false;
                             if (actView instanceof MapView) {
-                                return !CB.isCarMode();
+                                return !MapView.isCarMode();
                             } else if (actView instanceof CompassView) {
                                 return true;
                             }
@@ -215,8 +214,6 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         locationManagerForeGround.stopUpdateHeading();
         locationManagerForeGround.setDelegate(null);
     }
-
-    private BackgroundTask backgroundTask;
 
     private void initialBackGroundLocationListener() {
         backgroundTask = new BackgroundTask();

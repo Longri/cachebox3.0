@@ -19,18 +19,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.ImageEntry;
+import de.longri.cachebox3.utils.Downloader;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NetUtils;
+import de.longri.cachebox3.utils.http.ProgressCancelDownloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 
 import static de.longri.cachebox3.Utils.sdbm;
 import static de.longri.cachebox3.apis.GroundspeakAPI.*;
@@ -261,39 +266,22 @@ public class DescriptionImageGrabber {
         return images;
     }
 
-    public static void GrabImagesSelectedByCache(ImporterProgress ip, ICancel iCancel, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String description, String url, boolean withLogImages) {
+    public static void GrabImagesSelectedByCache(ProgressCancelDownloader ip, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String description, String url, boolean withLogImages) {
         boolean imageLoadError = false;
 
         if (!descriptionImagesUpdated) {
-            log.debug("GrabImagesSelectedByCache -> grab description images");
-            ip.ProgressChangeMsg("importImages", Translation.get("DescriptionImageImportForGC") + gcCode);
+            log.debug("GrabImagesSelectedByCache -> grab description images for GC:{}", gcCode);
+            ip.setProgress(-1, Translation.get("DescriptionImageImportForGC") + gcCode);
 
             Array<URI> imgUris = GetImageUris(description, url);
 
-            for (URI uri  : imgUris) {
-                ImporterProgress.Step step = new ImporterProgress.Step("importImages", 1.0f);
-                ip.addStep(step);
-            }
-
-
-            if (iCancel != null && iCancel.cancel()) return;
-
             for (URI uri : imgUris) {
-                if (iCancel != null && iCancel.cancel()) return;
-
                 String local = BuildDescriptionImageFilename(gcCode, uri);
-
-                ip.ProgressInkrement("importImages", Translation.get("DescriptionImageImportForGC") + gcCode + Translation.get("ImageDownloadFrom") + uri, false);
-
-                // direkt download
-                for (int j = 0; j < 1 /* && !parent.Cancel */; j++) {
-                    if (NetUtils.download(uri.toString(), local)) {
-                        // Next image
-                        DeleteMissingImageInformation(local);
-                        break;
-                    } else {
-                        imageLoadError = HandleMissingImages(imageLoadError, uri.toString(), local);
-                    }
+                FileHandle localFile = Gdx.files.absolute(local);
+                try {
+                    ip.add(new Downloader(uri.toURL(), localFile));
+                } catch (MalformedURLException e) {
+                    log.error("download", e);
                 }
             }
 
@@ -321,89 +309,69 @@ public class DescriptionImageGrabber {
             for (FileHandle file : filesLocal)
                 allSpoilers.add(file.name());
 
-            {
 
+            ip.setProgress(-1, Translation.get("SpoilerImageImportForGC") + gcCode);
 
-                if (iCancel != null && iCancel.cancel()) return;
-                ip.ProgressChangeMsg("importImages", Translation.get("SpoilerImageImportForGC") + gcCode);
-
-                // todo always take from database. They are not downloaded yet
-                // todo else don't write them to database on fetch/update cache
-                Array<ImageEntry> imageEntries = downloadImageListForGeocache(gcCode, withLogImages);
-                if (APIError != OK) {
-                    return;
-                }
-
-                for (ImageEntry imageEntry : imageEntries) {
-                    ImporterProgress.Step step = new ImporterProgress.Step("importImages", 1.0f);
-                    ip.addStep(step);
-                }
-
-
-                if (iCancel != null && iCancel.cancel()) return;
-
-                for (ImageEntry imageEntry : imageEntries) {
-
-                    if (iCancel != null && iCancel.cancel()) return;
-
-                    String uri = imageEntry.ImageUrl;
-
-                    ip.ProgressInkrement("importImages", Translation.get("SpoilerImageImportForGC") + gcCode + Translation.get("ImageDownloadFrom") + uri, false);
-
-                    imageEntry = BuildAdditionalImageFilenameHashNew(gcCode, imageEntry);
-                    if (imageEntry != null) {
-                        // todo ? should write or update database
-                        String filename = imageEntry.LocalPath.substring(imageEntry.LocalPath.lastIndexOf('/') + 1);
-
-                        // todo to test allSpoilers content
-                        if (allSpoilers.contains(filename, false)) {
-                            // wenn ja, dann aus der Liste der aktuell vorhandenen Spoiler entfernen und mit dem nächsten Spoiler weitermachen
-                            allSpoilers.removeValue(filename, false);
-                            continue; // dieser Spoiler muss jetzt nicht mehr geladen werden da er schon vorhanden ist.
-                        }
-
-                        for (int j = 0; j < 1; j++) {
-                            if (NetUtils.download(imageEntry.ImageUrl, imageEntry.LocalPath)) {
-                                // Next image
-                                DeleteMissingImageInformation(imageEntry.LocalPath);
-                                break;
-                            } else {
-                                imageLoadError = HandleMissingImages(imageLoadError, uri, imageEntry.LocalPath);
-                            }
-
-                        }
-                    }
-                }
-                log.debug("images download done");
-
-                additionalImagesUpdated = true;
-
-                if (!imageLoadError) {
-                    Database.Parameters args = new Database.Parameters();
-                    args.put("ImagesUpdated", additionalImagesUpdated);
-                    Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(id)});
-                    // jetzt können noch alle "alten" Spoiler gelöscht werden.
-                    // "alte" Spoiler sind die, die auf der SD vorhanden sind, aber nicht als Link über die API gemeldet wurden.
-                    // Alle Spoiler in der Liste allSpoilers sind "alte"
-                    log.debug("Delete old spoilers.");
-                    for (String file : allSpoilers) {
-                        String fileNameWithOutExt = file.replaceFirst("[.][^.]+$", "");
-                        // Testen, ob dieser Dateiname einen gültigen ACB Hash hat (eingeschlossen zwischen @....@>
-                        if (fileNameWithOutExt.endsWith("@") && fileNameWithOutExt.contains("@")) {
-                            // file enthält nur den Dateinamen, nicht den Pfad. Diesen Dateinamen um den Pfad erweitern, in dem hier die
-                            // Spoiler gespeichert wurden
-                            String path = getSpoilerPath(gcCode);
-                            FileHandle f = Gdx.files.absolute(path + '/' + file);
-                            try {
-                                f.delete();
-                            } catch (Exception ex) {
-                                log.error("DescriptionImageGrabber - GrabImagesSelectedByCache - DeleteSpoiler", ex);
-                            }
-                        }
-                    }
-                }
-
+            // todo always take from database. They are not downloaded yet
+            // todo else don't write them to database on fetch/update cache
+            Array<ImageEntry> imageEntries = downloadImageListForGeocache(gcCode, withLogImages);
+            if (APIError != OK) {
+                return;
             }
+
+            for (ImageEntry imageEntry : imageEntries) {
+
+                String uri = imageEntry.ImageUrl;
+                imageEntry = BuildAdditionalImageFilenameHashNew(gcCode, imageEntry);
+                if (imageEntry != null) {
+                    // todo ? should write or update database
+                    String filename = imageEntry.LocalPath.substring(imageEntry.LocalPath.lastIndexOf('/') + 1);
+
+                    // todo to test allSpoilers content
+                    if (allSpoilers.contains(filename, false)) {
+                        // wenn ja, dann aus der Liste der aktuell vorhandenen Spoiler entfernen und mit dem nächsten Spoiler weitermachen
+                        allSpoilers.removeValue(filename, false);
+                        continue; // dieser Spoiler muss jetzt nicht mehr geladen werden da er schon vorhanden ist.
+                    }
+
+                    for (int j = 0; j < 1; j++) {
+
+                        try {
+                            ip.add(new Downloader(new URL(imageEntry.ImageUrl), Gdx.files.absolute(imageEntry.LocalPath)));
+                        } catch (MalformedURLException e) {
+                            log.error("download", e);
+                        }
+                    }
+                }
+            }
+            log.debug("images download done");
+
+            additionalImagesUpdated = true;
+
+//            if (!imageLoadError) {
+//                Database.Parameters args = new Database.Parameters();
+//                args.put("ImagesUpdated", additionalImagesUpdated);
+//                Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(id)});
+//                // jetzt können noch alle "alten" Spoiler gelöscht werden.
+//                // "alte" Spoiler sind die, die auf der SD vorhanden sind, aber nicht als Link über die API gemeldet wurden.
+//                // Alle Spoiler in der Liste allSpoilers sind "alte"
+//                log.debug("Delete old spoilers.");
+//                for (String file : allSpoilers) {
+//                    String fileNameWithOutExt = file.replaceFirst("[.][^.]+$", "");
+//                    // Testen, ob dieser Dateiname einen gültigen ACB Hash hat (eingeschlossen zwischen @....@>
+//                    if (fileNameWithOutExt.endsWith("@") && fileNameWithOutExt.contains("@")) {
+//                        // file enthält nur den Dateinamen, nicht den Pfad. Diesen Dateinamen um den Pfad erweitern, in dem hier die
+//                        // Spoiler gespeichert wurden
+//                        String path = getSpoilerPath(gcCode);
+//                        FileHandle f = Gdx.files.absolute(path + '/' + file);
+//                        try {
+//                            f.delete();
+//                        } catch (Exception ex) {
+//                            log.error("DescriptionImageGrabber - GrabImagesSelectedByCache - DeleteSpoiler", ex);
+//                        }
+//                    }
+//                }
+//            }
             log.debug("GrabImagesSelectedByCache done");
         }
         return;

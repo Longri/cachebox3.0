@@ -22,7 +22,6 @@ import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.lists.CB_List;
 
-import java.io.File;
 import java.io.FileFilter;
 
 /**
@@ -36,8 +35,11 @@ public final class BaseMapManager extends CB_List<AbstractManagedMapLayer> {
     }
 
     public void refreshMaps() {
+        refreshMaps(Gdx.files.absolute(CB.WorkPath));
+    }
+
+    public void refreshMaps(FileHandle workPath) {
         this.clear();
-        FileHandle workPath = Gdx.files.absolute(CB.WorkPath);
         // add map files from repository
         String repositoryMaps = addMapFiles(workPath.child("repository").child("maps"));
 
@@ -55,12 +57,7 @@ public final class BaseMapManager extends CB_List<AbstractManagedMapLayer> {
     }
 
     private String addMapFiles(FileHandle workPath) {
-        FileFilter mapFileFilter = new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return Utils.getFileExtension(pathname.getAbsolutePath()).toLowerCase().equals("map");
-            }
-        };
+        FileFilter mapFileFilter = pathname -> Utils.getFileExtension(pathname.getAbsolutePath()).toLowerCase().equals("map");
         FileHandle[] mapFiles = workPath.list(mapFileFilter);
 
         for (FileHandle mapFile : mapFiles) {

@@ -30,8 +30,8 @@ public class CoordinateButton extends Catch_VisTextButton {
     private Coordinate coordinate;
 
     public CoordinateButton(Coordinate coordinate) {
-        super(coordinate == null ? new Coordinate(0, 0).FormatCoordinate() :
-                coordinate.FormatCoordinate(), VisUI.getSkin().get("coordinate", VisTextButtonStyle.class));
+        super(coordinate == null ? new Coordinate(0, 0).formatCoordinate() :
+                coordinate.formatCoordinate(), VisUI.getSkin().get("coordinate", VisTextButtonStyle.class));
         this.coordinate = coordinate;
         this.addListener(clickListener);
     }
@@ -44,7 +44,7 @@ public class CoordinateButton extends Catch_VisTextButton {
                 public void callBack(Coordinate coordinate) {
                     if (coordinate != null) {
                         CoordinateButton.this.coordinate = coordinate;
-                        CoordinateButton.this.setText(coordinate.FormatCoordinate());
+                        CoordinateButton.this.setText(coordinate.formatCoordinate());
                     }
                 }
             };

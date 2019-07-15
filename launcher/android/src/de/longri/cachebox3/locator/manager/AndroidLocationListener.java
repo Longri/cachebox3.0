@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.location.LocationEvents;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public class AndroidLocationListener implements LocationListener {
         if (this.handler == null) return;
 
         try {//check region handler
-            LatLong latLong = new LatLong(location.getLatitude(), location.getLongitude());
+            Coordinate latLong = new Coordinate(location.getLatitude(), location.getLongitude());
             clearList.clear();
             for (int i = 0; i < regions.size; i++) {
                 Region region = regions.get(i);

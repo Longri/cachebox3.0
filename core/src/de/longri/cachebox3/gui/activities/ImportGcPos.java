@@ -44,8 +44,7 @@ import de.longri.cachebox3.gui.widgets.CB_CheckBox;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.CoordinateGPS;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.Cache3DAO;
@@ -251,15 +250,15 @@ public class ImportGcPos extends BlockGpsActivityBase {
 
         tglBtnMap.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                LatLong lastStoredPos = CB.lastMapState.getFreePosition();
+                Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
                 if (tglBtnMap.isDisabled()) {
-                    actSearchPos = new CoordinateGPS(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
+                    actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
                     setToggleBtnState(0);
                     return;
                 }
                 Coordinate mapCenterPos = MapView.getLastCenterPos();
                 if (mapCenterPos == null) {
-                    actSearchPos = new CoordinateGPS(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
+                    actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
                 } else {
                     actSearchPos = mapCenterPos;
                 }
@@ -285,8 +284,8 @@ public class ImportGcPos extends BlockGpsActivityBase {
             case 1:
                 Coordinate mapCenterPos = MapView.getLastCenterPos();
                 if (mapCenterPos == null) {
-                    LatLong lastStoredPos = CB.lastMapState.getFreePosition();
-                    actSearchPos = new CoordinateGPS(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
+                    Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
+                    actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
                 } else {
                     actSearchPos = mapCenterPos;
                 }

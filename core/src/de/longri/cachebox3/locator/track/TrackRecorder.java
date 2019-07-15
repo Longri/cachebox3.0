@@ -20,7 +20,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Pools;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
@@ -52,7 +52,7 @@ public class TrackRecorder implements PositionChangedListener {
     public double SaveAltitude = 0;
 
 
-    public CoordinateGPS LastRecordedPosition = null;
+    public Coordinate LastRecordedPosition = null;
 
     public void startRecording() {
 
@@ -115,10 +115,10 @@ public class TrackRecorder implements PositionChangedListener {
     private boolean mustWriteMedia = false;
     String mFriendlyName = "";
     String mMediaPath = "";
-    CoordinateGPS mMediaCoord = null;
+    Coordinate mMediaCoord = null;
     String mTimestamp = "";
 
-    public void annotateMedia(final String friendlyName, final String mediaPath, final CoordinateGPS location, final String timestamp) {
+    public void annotateMedia(final String friendlyName, final String mediaPath, final Coordinate location, final String timestamp) {
         writeAnnotateMedia = true;
 
         if (writePos) {
@@ -221,7 +221,7 @@ public class TrackRecorder implements PositionChangedListener {
             SaveAltitude = newCoord.getElevation();
         } else {
             writePos = true;
-            TrackPoint NewPoint;
+            Coordinate newPoint;
             double AltDiff = 0;
 
             double latitude = event.getLatitude();
@@ -273,10 +273,10 @@ public class TrackRecorder implements PositionChangedListener {
                     log.error("Trackrecorder", "IOException", e);
                 }
 
-                NewPoint = new TrackPoint(latitude, longitude, newCoord.getElevation(),
+                newPoint = new Coordinate(event.pos.getLatitude(), event.pos.getLongitude(), newCoord.getElevation(),
                         newCoord.getHeading(), new Date());
 
-                CB.actRoute.Points.add(NewPoint);
+                CB.actRoute.Points.add(newPoint);
 
                 // notify TrackListView
                 //TODO notify TrackListView

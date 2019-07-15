@@ -70,6 +70,7 @@ public class Settings_Map extends Settings_Const {
     public static final SettingString MapsforgeNightStyle = (SettingString) settingsList.addSetting(new SettingString("MapsforgeNightStyle", Map, NEVER, "", Global, ACB));
     public static final SettingString MapsforgeCarDayStyle = (SettingString) settingsList.addSetting(new SettingString("MapsforgeCarDayStyle", Map, NEVER, "", Global, ACB));
     public static final SettingString MapsforgeCarNightStyle = (SettingString) settingsList.addSetting(new SettingString("MapsforgeCarNightStyle", Map, NEVER, "", Global, ACB));
+    public static final SettingString PreferredMapLanguage = (SettingString) settingsList.addSetting(new SettingString("PreferredMapLanguage", Map, NEVER, "", Global, ACB));
 
     public static final SettingsBlob lastMapState = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapState", Map, NEVER, Local, ACB, false, new byte[]{}));
     public static final SettingsBlob lastMapStateBeforeCar = (SettingsBlob) settingsList.addSetting(new SettingsBlob("lastMapStateBeforeCar", Map, NEVER, Local, ACB, false, new byte[]{}));

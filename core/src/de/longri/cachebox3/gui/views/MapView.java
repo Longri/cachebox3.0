@@ -28,18 +28,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.XmlStreamParser;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.thebuzzmedia.sjxp.XMLParser;
-import com.thebuzzmedia.sjxp.rule.DefaultRule;
-import com.thebuzzmedia.sjxp.rule.IRule;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
-import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Add_WP;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
@@ -58,7 +55,6 @@ import de.longri.cachebox3.gui.map.layer.ThemeMenu;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.menu.OptionMenu;
 import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
@@ -67,14 +63,17 @@ import de.longri.cachebox3.gui.widgets.MapBubble;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.settings.types.SettingBool;
+import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnZip;
@@ -108,15 +107,18 @@ import org.oscim.renderer.bucket.TextureItem;
 import org.oscim.scalebar.*;
 import org.oscim.theme.IRenderTheme;
 import org.oscim.theme.VtmThemes;
+import org.oscim.tiling.source.mapfile.MapFileTileSource;
+import org.oscim.tiling.source.mapfile.MapInfo;
 import org.oscim.utils.FastMath;
 import org.oscim.utils.TextureAtlasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 
 /**
@@ -128,31 +130,11 @@ public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
 
     private static double lastCenterPosLat, lastCenterPosLon;
+    private static MapState actMapState = new MapState();
     private final Event selfEvent = new Event();
-    /*
-    private final OnItemClickListener styleItemClickListener = item -> {
-        String cat = (String) item.getData();
-        if (cat.isEmpty()) return true;
-        ThemeMenu callback = (ThemeMenu) CB.actThemeFile.getMenuCallback();
-        ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
-        boolean newValue = !allCategories.get(cat);
-        item.setChecked(newValue);
-        allCategories.put(cat, newValue);
-        return true;
-    };
-     */
-    float mapHalfWith;
-    float mapHalfHeight;
     private boolean menuInShow;
     private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter cacheboxMapAdapter;
-    private final Window.WindowCloseListener closeStyleMenuListener = new Window.WindowCloseListener() {
-        @Override
-        public void windowClosed() {
-            // todo save selection to db and prepare CB.actThemeFile
-            cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
-        }
-    };
     private MapScaleBarLayer mapScaleBarLayer;
     private MapStateButton mapStateButton;
     private ZoomButton zoomButton;
@@ -172,11 +154,10 @@ public class MapView extends AbstractView {
     private LocationTextureLayer myLocationLayer;
     private MapViewPositionChangedHandler positionChangedHandler;
     private Point screenPoint = new Point();
-    private Menu mapViewThemeMenu;
     private String themesPath;
-    private FZKThemesInfo fzkThemesInfo;
     private Array<FZKThemesInfo> fzkThemesInfoList = new Array<>();
     private MapWayPointItem infoItem = null;
+    private CB.ThemeUsage whichUsage;
     private MapBubble infoBubble;
     private ClickListener bubbleClickListener = new ClickListener() {
 
@@ -214,19 +195,21 @@ public class MapView extends AbstractView {
 
         }
     };
-    private CB.ThemeIsFor whichCase;
-
 
     public MapView(BitStore reader) {
         super(reader);
-        whichCase = CB.ThemeIsFor.day;
+        whichUsage = CB.ThemeUsage.day;
         create();
     }
 
     public MapView() {
         super("MapView");
-        whichCase = CB.ThemeIsFor.day;
+        whichUsage = CB.ThemeUsage.day;
         create();
+    }
+
+    public static boolean isCarMode() {
+        return actMapState.getMapMode() == MapMode.CAR;
     }
 
     public static Coordinate getLastCenterPos() {
@@ -272,6 +255,10 @@ public class MapView extends AbstractView {
         return textureRegionMap;
     }
 
+    public MapState getActMapState() {
+        return actMapState;
+    }
+
     @Override
     protected void create() {
         this.setTouchable(Touchable.disabled);
@@ -285,13 +272,13 @@ public class MapView extends AbstractView {
             public void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event) {
 
                 MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
-                CB.actMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
-                CB.actMapState.setMapMode(mapMode);
-                CB.actMapState.setOrientation(mapPosition.bearing);
-                CB.actMapState.setTilt(mapPosition.tilt);
-                CB.actMapState.setMapOrientationMode(infoPanel.getOrientationState());
+                actMapState.setPosition(new Coordinate(mapPosition.getLatitude(), mapPosition.getLongitude()));
+                actMapState.setMapMode(mapMode);
+                actMapState.setOrientation(mapPosition.bearing);
+                actMapState.setTilt(mapPosition.tilt);
+                actMapState.setMapOrientationMode(infoPanel.getOrientationState());
 
-                log.debug("Map state changed to:" + CB.actMapState);
+                log.debug("Map state changed to:" + actMapState);
 
                 if (mapMode == MapMode.CAR) {
                     storeMapstate(mapMode, lastMapMode);
@@ -352,7 +339,7 @@ public class MapView extends AbstractView {
         infoPanel.setBounds(10, 100, 200, 100);
         this.addActor(infoPanel);
 
-        cacheboxMapAdapter = createMap();
+        createCacheboxMapAdapter();
 
         this.addActor(mapStateButton);
         this.setTouchable(Touchable.enabled);
@@ -377,7 +364,7 @@ public class MapView extends AbstractView {
 
     private void storeMapstate(MapMode mapMode, MapMode beforeCar) {
         MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
-        CB.lastMapState.setPosition(new LatLong(mapPosition.getLatitude(), mapPosition.getLongitude()));
+        CB.lastMapState.setPosition(new Coordinate(mapPosition.getLatitude(), mapPosition.getLongitude()));
         CB.lastMapState.setMapMode(mapMode);
         CB.lastMapState.setOrientation(mapPosition.bearing);
         CB.lastMapState.setTilt(mapPosition.tilt);
@@ -428,15 +415,16 @@ public class MapView extends AbstractView {
         }
     }
 
-    private CacheboxMapAdapter createMap() {
+    private void createCacheboxMapAdapter() {
 
-        if (CB.isMocked()) return null;
+        if (CB.isMocked()) return;
 
         log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
         log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
 
 
         CacheboxMain.drawMap.set(true);
+
         cacheboxMapAdapter = new CacheboxMapAdapter() {
 
             @Override
@@ -471,6 +459,7 @@ public class MapView extends AbstractView {
                 lastCenterPosLon = mapPosition.getLongitude();
             }
         };
+
         ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer = new MapRenderer(cacheboxMapAdapter);
         ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer.onSurfaceCreated();
 
@@ -479,7 +468,7 @@ public class MapView extends AbstractView {
         //add position changed handler
         positionChangedHandler = new MapViewPositionChangedHandler(cacheboxMapAdapter, directLineLayer, myLocationLayer, infoPanel);
 
-        return cacheboxMapAdapter;
+        return;
     }
 
     @Override
@@ -492,7 +481,7 @@ public class MapView extends AbstractView {
 
         //use saved pos
         if (myPos == null) {
-            LatLong latLon = CB.lastMapState.getFreePosition();
+            Coordinate latLon = CB.lastMapState.getFreePosition();
             if (latLon != null) {
                 myPos = new Coordinate(latLon);
             }
@@ -572,8 +561,8 @@ public class MapView extends AbstractView {
         cacheboxMapAdapter.viewport().setViewSize((int) this.getWidth(), (int) this.getHeight());
         ((CacheboxMain) Gdx.app.getApplicationListener()).setMapPosAndSize((int) this.getX(), (int) this.getY(), (int) this.getWidth(), (int) this.getHeight());
 
-        mapHalfWith = cacheboxMapAdapter.getWidth() / 2;
-        mapHalfHeight = cacheboxMapAdapter.getHeight() / 2;
+        // float mapHalfWith = cacheboxMapAdapter.getWidth() / 2;
+        // float mapHalfHeight = cacheboxMapAdapter.getHeight() / 2;
 
         // set position of MapScaleBar
         setMapScaleBarOffset(CB.scaledSizes.MARGIN, CB.scaledSizes.MARGIN_HALF);
@@ -600,7 +589,7 @@ public class MapView extends AbstractView {
         log.debug("Init layer");
 
         // load last saved BaseMap
-        String baseMapName = Settings_Map.CurrentMapLayer.getValue()[0];
+        String baseMapName = Config.CurrentMapLayer.getValue()[0];
         BaseMapManager.INSTANCE.refreshMaps();
         AbstractManagedMapLayer baseMap = null;
         for (int i = 0, n = BaseMapManager.INSTANCE.size; i < n; i++) {
@@ -615,7 +604,8 @@ public class MapView extends AbstractView {
             baseMap = new OSciMap();
         }
 
-        setBaseMap(baseMap);
+        // init basemap is with preloaded theme for day, no carmode,
+        cacheboxMapAdapter.setNewBaseMap(baseMap);
 
         DefaultMapScaleBar mapScaleBar = new DefaultMapScaleBar(cacheboxMapAdapter);
         mapScaleBar.setScaleBarMode(DefaultMapScaleBar.ScaleBarMode.BOTH);
@@ -634,7 +624,7 @@ public class MapView extends AbstractView {
         myLocationLayer.locationRenderer.setIndicatorColor(Color.RED);
         myLocationLayer.locationRenderer.setBillboard(false);
 
-        boolean showDirectLine = Settings_Map.ShowDirektLine.getValue();
+        boolean showDirectLine = Config.ShowDirektLine.getValue();
         log.debug("Initial direct line layer and {}", showDirectLine ? "enable" : "disable");
         directLineLayer.setEnabled(showDirectLine);
         GroupLayer layerGroup = new GroupLayer(cacheboxMapAdapter);
@@ -651,22 +641,22 @@ public class MapView extends AbstractView {
         layerGroup.layers.add(mapScaleBarLayer);
         layerGroup.layers.add(ccl);
 
-        Settings_Map.ShowDirektLine.addChangedEventListener(new IChanged() {
+        Config.ShowDirektLine.addChangedEventListener(new IChanged() {
             @Override
             public void isChanged() {
                 if (cacheboxMapAdapter == null) return;
-                log.debug("change direct line visibility to {}", Settings_Map.ShowDirektLine.getValue() ? "visible" : "invisible");
-                directLineLayer.setEnabled(Settings_Map.ShowDirektLine.getValue());
+                log.debug("change direct line visibility to {}", Config.ShowDirektLine.getValue() ? "visible" : "invisible");
+                directLineLayer.setEnabled(Config.ShowDirektLine.getValue());
                 cacheboxMapAdapter.updateMap(true);
             }
         });
 
 
-        boolean showCenterCross = Settings_Map.ShowMapCenterCross.getValue();
+        boolean showCenterCross = Config.ShowMapCenterCross.getValue();
         log.debug("Initial center cross layer and {}", showCenterCross ? "enable" : "disable");
 
         ccl.setEnabled(showCenterCross);
-        Settings_Map.ShowMapCenterCross.addChangedEventListener(showMapCenterCrossChangedListener);
+        Config.ShowMapCenterCross.addChangedEventListener(showMapCenterCrossChangedListener);
         cacheboxMapAdapter.layers().add(layerGroup);
     }
 
@@ -716,10 +706,6 @@ public class MapView extends AbstractView {
         //TODO
     }
 
-    public void setBaseMap(AbstractManagedMapLayer baseMap) {
-        this.cacheboxMapAdapter.setNewBaseMap(baseMap);
-    }
-
     public Coordinate getMapCenter() {
         MapPosition mp = this.cacheboxMapAdapter.getMapPosition();
         return new Coordinate(mp.getLatitude(), mp.getLongitude());
@@ -753,15 +739,11 @@ public class MapView extends AbstractView {
         BaseMapManager.INSTANCE.refreshMaps();
 
 
-        int menuID = 0;
         for (int i = 0, n = BaseMapManager.INSTANCE.size; i < n; i++) {
 
             AbstractManagedMapLayer baseMap = BaseMapManager.INSTANCE.get(i);
 
             if (!baseMap.isOverlay) {
-                MenuItem mi = icm.addItem(menuID++, "", baseMap.name); // == friendlyName == FileName !!! without translation
-                mi.setData(baseMap);
-                mi.setCheckable(true);
 
                 //set icon (Online_BMP, Online_Vector, Mapsforge or Freizeitkarte)
                 Drawable icon = null;
@@ -785,28 +767,21 @@ public class MapView extends AbstractView {
 
                 }
 
-                if (icon != null)
-                    mi.setIcon(icon);
-
-                String[] currentLayer = Settings_Map.CurrentMapLayer.getValue();
-
+                boolean isChecked = false;
+                String[] currentLayer = Config.CurrentMapLayer.getValue();
                 for (int j = 0, m = currentLayer.length; j < m; j++) {
                     String str = currentLayer[j];
                     if (str.equals(baseMap.name)) {
-                        mi.setChecked(true);
+                        isChecked = true;
                         break;
                     }
                 }
-            }
-        }
 
-        icm.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public boolean onItemClick(MenuItem item) {
-                final AbstractManagedMapLayer baseMap = (AbstractManagedMapLayer) item.getData();
+                icm.addCheckableMenuItem("", baseMap.name, icon, isChecked, () -> {
+                    if (baseMap.isVector()) {
 
-                // if curent layer a Mapsforge map, it is posible to add the selected Mapsforge map
-                // to the current layer. We ask the User!
+// if current layer is a Mapsforge map, it is posible to add the selected Mapsforge map
+// to the current layer. We ask the User!
 //                if (MapView.mapTileLoader.getCurrentLayer().isMapsForge() && layer.isMapsForge()) {
 //                    GL_MsgBox msgBox = GL_MsgBox.show("add or change", "Map selection", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
 //
@@ -815,7 +790,7 @@ public class MapView extends AbstractView {
 //
 //                            switch (which) {
 //                                case GL_MsgBox.BUTTON_POSITIVE:
-//                                    // add the selected map to the curent layer
+//                                    // add the selected map to the current layer
 //                                    TabMainView.mapView.addToCurrentLayer(layer);
 //                                    break;
 //                                case GL_MsgBox.BUTTON_NEUTRAL:
@@ -833,13 +808,54 @@ public class MapView extends AbstractView {
 //                    msgBox.button2.setText("select");
 //                    return true;
 //                }
-
-                setBaseMap(baseMap);
-                return true;
+                        showLanguageSelectionMenu(baseMap);
+                        // set a theme for the map
+                        String lastThemePath = CB.readThemeOfMap(baseMap.name, CB.currentThemeUsage);
+                        if (lastThemePath.length() > 0) {
+                            if (CB.setConfigsThemePath(CB.currentThemeUsage, lastThemePath)) {
+                                // theme is changed, so mapStyle will also be bad (but not saved)
+                                CB.createTheme(CB.getConfigsThemePath(CB.currentThemeUsage), "");
+                            }
+                        }
+                    }
+                    // possibly a not suitable theme will be set. Changed by Theme Selection
+                    cacheboxMapAdapter.setNewBaseMap(baseMap);
+                });
             }
-        });
+        }
 
         icm.show();
+    }
+
+    private boolean showLanguageSelectionMenu(AbstractManagedMapLayer layer) {
+        boolean hasLanguage = false;
+        if (layer instanceof MapsforgeSingleMap) {
+            MapFileTileSource mapFileTileSource = (MapFileTileSource) ((MapsforgeSingleMap) layer).getVectorTileSource();
+            try {
+                mapFileTileSource.open();
+                MapInfo mapInfo = mapFileTileSource.getMapInfo();
+                if (mapInfo != null) {
+                    if (mapInfo.languagesPreference != null) {
+                        String[] languages = mapInfo.languagesPreference.split(",");
+                        if (languages.length > 1) {
+                            final Menu lsm = new Menu("MapViewLayerSelectLanguageTitle");
+                            for (String lang : languages) {
+                                lsm.addMenuItem("", lang, null, () -> {
+                                    mapFileTileSource.setPreferredLanguage(lang);
+                                    Config.PreferredMapLanguage.setValue(lang);
+                                    Config.AcceptChanges();
+                                });
+                            }
+                            lsm.show();
+                            hasLanguage = true;
+                        }
+                    }
+                }
+                mapFileTileSource.close();
+            } catch (Exception ignored) {
+            }
+        }
+        return hasLanguage;
     }
 
     //todo ISSUE (#110 add MapView Overlays)
@@ -875,29 +891,55 @@ public class MapView extends AbstractView {
     }
 
     private void showMapViewElementsMenu() {
-        Menu icm = new Menu("MapViewElementsMenuTitle");
-        icm.addCheckableMenuItem("HideFinds", Settings_Map.MapHideMyFinds.getValue(), () -> toggleSettingWithReload(Settings_Map.MapHideMyFinds));
-        // icm.addCheckableMenuItem("MapShowCompass", Settings_Map.MapShowCompass.getValue(),()-> toggleSetting(Settings_Map.MapShowCompass));
-        // todo icm.addCheckableMenuItem("MapShowInfoBar",Settings_Map.ShowInfo .....)
-        icm.addCheckableMenuItem("ShowAllWaypoints", Settings_Map.ShowAllWaypoints.getValue(), () -> toggleSetting(Settings_Map.ShowAllWaypoints));
-        icm.addCheckableMenuItem("ShowRatings", Settings_Map.MapShowRating.getValue(), () -> toggleSetting(Settings_Map.MapShowRating));
-        icm.addCheckableMenuItem("ShowDT", Settings_Map.MapShowDT.getValue(), () -> toggleSetting(Settings_Map.MapShowDT));
-        icm.addCheckableMenuItem("ShowTitle", Settings_Map.MapShowTitles.getValue(), () -> toggleSetting(Settings_Map.MapShowTitles));
-        icm.addCheckableMenuItem("ShowDirectLine", Settings_Map.ShowDirektLine.getValue(), () -> toggleSetting(Settings_Map.ShowDirektLine));
-        icm.addCheckableMenuItem("MenuTextShowAccuracyCircle", Settings_Map.ShowAccuracyCircle.getValue(), () -> toggleSetting(Settings_Map.ShowAccuracyCircle));
-        icm.addCheckableMenuItem("ShowCenterCross", Settings_Map.ShowMapCenterCross.getValue(), () -> toggleSetting(Settings_Map.ShowMapCenterCross));
+        Menu icm = new OptionMenu("MapViewElementsMenuTitle");
+        // icm.addCheckableMenuItem("MapShowCompass", Config.MapShowCompass.getValue(),()-> toggleSetting(Config.MapShowCompass));
+        // todo icm.addCheckableMenuItem("MapShowInfoBar",Config.ShowInfo .....)
+        addViewElement(icm, "ShowAllWaypoints", Config.ShowAllWaypoints, true);
+        addViewElement(icm, "ShowAllWaypoints", Config.ShowAllWaypoints, true);
+        addViewElement(icm, "ShowRatings", Config.MapShowRating, false);
+        addViewElement(icm, "ShowDT", Config.MapShowDT, false);
+        addViewElement(icm, "ShowTitle", Config.MapShowTitles, false);
+        addViewElement(icm, "ShowDirectLine", Config.ShowDirektLine, false);
+        addViewElement(icm, "MenuTextShowAccuracyCircle", Config.ShowAccuracyCircle, false);
+        addViewElement(icm, "ShowCenterCross", Config.ShowMapCenterCross, false);
         icm.show();
     }
 
+    private void addViewElement(Menu icm, String title, SettingBool setting, boolean withReload) {
+        icm.addCheckableMenuItem(title, "", null, setting.getValue(), new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (icm.mustHandle(event)) {
+                    MenuItem mi = (MenuItem) event.getListenerActor();
+                    mi.setChecked(!mi.isChecked());
+                    if (withReload) {
+                        setting.setValue(!setting.getValue());
+                        Config.AcceptChanges();
+                        setNewSettings();
+                    } else {
+                        setting.setValue(!setting.getValue());
+                        Config.AcceptChanges();
+                        setNewSettings();
+                    }
+                }
+            }
+        });
+    }
+
     private void showMapViewThemeMenu() {
-        mapViewThemeMenu = new Menu("MapViewThemeMenuTitle");
+        Menu mapViewThemeMenu = new Menu("MapViewThemeMenuTitle");
         //add default themes
         for (VtmThemes vtmTheme : VtmThemes.values()) {
-            mapViewThemeMenu.addCheckableMenuItem(vtmTheme.name(), vtmTheme.equals(CB.getCurrentTheme()), true,
+            mapViewThemeMenu.addCheckableMenuItem("", vtmTheme.name(), null, vtmTheme.equals(CB.getCurrentTheme()),
                     () -> {
-                        CB.setCurrentTheme(whichCase);
-                        cacheboxMapAdapter.setTheme(vtmTheme);
-                        // todo just save to config or load with defaults?
+                        // Apply Selection to map
+                        if (CB.currentThemeUsage == whichUsage) {
+                            IRenderTheme thisRenderTheme = CB.createTheme(CB.getConfigsThemePath(whichUsage), "");
+                            CB.setCurrentTheme(whichUsage, thisRenderTheme);
+                            cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
+                        } else {
+                            // remember the setup for this case
+                            // CB.setConfigsThemePath(whichUsage, vtmTheme.mPath);
+                        }
                     });
         }
 
@@ -917,19 +959,24 @@ public class MapView extends AbstractView {
             themesPath = folder.path();
 
         for (NamedExternalRenderTheme themeFile : themes) {
-            mapViewThemeMenu.addCheckableMenuItem(themeFile.name, CB.getConfigsThemePath(whichCase).equals(themeFile.path), true,
+            mapViewThemeMenu.addCheckableMenuItem("", themeFile.name, null, CB.getConfigsThemePath(whichUsage).equals(themeFile.path),
                     () -> {
-                        CB.setConfigsThemePath(whichCase,themeFile.path);
-                        CB.setCurrentTheme(whichCase);
-                        cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
-                        // todo just save to config or load with defaults?
+                        // apply theme to layer(s)
+                        if (CB.currentThemeUsage == whichUsage) {
+                            CB.setConfigsThemePath(whichUsage, themeFile.path);
+                            CB.setCurrentTheme(whichUsage, CB.createTheme(CB.getConfigsThemePath(whichUsage), CB.getConfigsMapStyle(whichUsage)));
+                            cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
+                        } else {
+                            // remember the setup for this case
+                            CB.setConfigsThemePath(whichUsage, themeFile.path);
+                        }
                     });
         }
 
         final String target = themesPath + "/Elevate4.zip";
         if (themesPath.length() > 0) {
             mapViewThemeMenu.addDivider(-1);
-            mapViewThemeMenu.addMenuItem("Download", "\n OpenAndroMaps", false,
+            mapViewThemeMenu.addMenuItem("Download", "\n OpenAndroMaps",
                     CB.getSkin().getMenuIcon.baseMapMapsforge,
                     new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
@@ -947,147 +994,168 @@ public class MapView extends AbstractView {
                             }
                         }
                     });
+            mapViewThemeMenu.addMenuItem("Download", "\n Freizeitkarte",
+                    CB.getSkin().getMenuIcon.baseMapFreizeitkarte, () -> showFZKDownloadMenu());
         }
-
-        addDownloadFZKRenderThemes();
 
         mapViewThemeMenu.show();
     }
 
-    private void addDownloadFZKRenderThemes() {
+    private void showFZKDownloadMenu() {
+        Menu mapViewFZKDownloadMenu = new Menu("Download");
 
         if (fzkThemesInfoList.size == 0) {
-            String repository_freizeitkarte_android = Webb.create()
+            fzkThemesInfoList = getMapInfoList(Webb.create()
                     .get("http://repository.freizeitkarte-osm.de/repository_freizeitkarte_android.xml")
                     .readTimeout(Config.socket_timeout.getValue())
                     .ensureSuccess()
-                    .asString()
-                    .getBody();
-            java.util.Map<String, String> values = new HashMap<>();
-            System.setProperty("sjxp.namespaces", "false");
-            Array<IRule<java.util.Map<String, String>>> ruleList = createRepositoryRules(new Array<>());
-            XMLParser<java.util.Map<String, String>> parserCache = new XMLParser<>(ruleList.toArray(IRule.class));
-            parserCache.parse(new ByteArrayInputStream(repository_freizeitkarte_android.getBytes()), values);
+                    .asStream()
+                    .getBody());
         }
 
         for (FZKThemesInfo fzkThemesInfo : fzkThemesInfoList) {
             // todo change to explicit clicklistener, if animation works
-            mapViewThemeMenu.addMenuItem("Download", "\n" + fzkThemesInfo.Description, CB.getSkin().getMenuIcon.baseMapFreizeitkarte, () -> {
+            mapViewFZKDownloadMenu.addMenuItem("Download", "\n" + fzkThemesInfo.Description, CB.getSkin().getMenuIcon.baseMapFreizeitkarte, () -> {
                 String zipFile = fzkThemesInfo.Url.substring(fzkThemesInfo.Url.lastIndexOf("/") + 1);
                 String target = themesPath + "/" + zipFile;
 
                 Download.Download(fzkThemesInfo.Url, target);
                 try {
-                    new UnZip().extractFolder(target, true);
+                    new UnZip().extractFolder(target);
                 } catch (Exception ex) {
                     MessageBox.show(ex.toString(), "Unzip", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
                 }
                 Gdx.files.absolute(target).delete();
             });
         }
+
+        mapViewFZKDownloadMenu.show();
     }
 
-    private Array<IRule<java.util.Map<String, String>>> createRepositoryRules(Array<IRule<java.util.Map<String, String>>> ruleList) {
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Name") {
+    private Array<FZKThemesInfo> getMapInfoList(InputStream stream) {
+        final FZKThemesInfo[] info = {new FZKThemesInfo()};
+        final Array<FZKThemesInfo> list = new Array<>();
+
+        XmlStreamParser parser = new XmlStreamParser();
+        parser.registerDataHandler("/Freizeitkarte/Theme/Name", new XmlStreamParser.DataHandler() {
             @Override
-            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                fzkThemesInfo.Name = text;
+            public void handleData(char[] data, int offset, int length) {
+                info[0].Name = new String(data, offset, length).trim();
             }
         });
-
-        if (Config.localisation.getValue().equals("de")) {
-            ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/DescriptionGerman") {
+        if (Config.localisation.getEnumValue() == Language.de) {
+            parser.registerDataHandler("/Freizeitkarte/Theme/DescriptionGerman", new XmlStreamParser.DataHandler() {
                 @Override
-                public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                    fzkThemesInfo.Description = text;
+                public void handleData(char[] data, int offset, int length) {
+                    info[0].Description = new String(data, offset, length).trim();
                 }
             });
         } else {
-            ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/DescriptionEnglish") {
+            parser.registerDataHandler("/Freizeitkarte/Theme/DescriptionEnglish", new XmlStreamParser.DataHandler() {
                 @Override
-                public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                    fzkThemesInfo.Description = text;
+                public void handleData(char[] data, int offset, int length) {
+                    info[0].Description = new String(data, offset, length).trim();
                 }
             });
         }
-
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Url") {
+        parser.registerDataHandler("/Freizeitkarte/Theme/Url", new XmlStreamParser.DataHandler() {
             @Override
-            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                fzkThemesInfo.Url = text;
+            public void handleData(char[] data, int offset, int length) {
+                info[0].Url = new String(data, offset, length).trim();
             }
         });
 
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Size") {
+        parser.registerDataHandler("/Freizeitkarte/Theme/Size", new XmlStreamParser.DataHandler() {
             @Override
-            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                fzkThemesInfo.Size = Integer.parseInt(text);
+            public void handleData(char[] data, int offset, int length) {
+                info[0].Size = CharSequenceUtil.parseInteger(data, offset, length);
+            }
+        });
+        // MD5 ignored
+
+
+        parser.registerEndTagHandler("/Freizeitkarte/Theme", new XmlStreamParser.EndTagHandler() {
+            @Override
+            protected void handleEndTag() {
+                list.add(info[0]);
+                info[0] = new FZKThemesInfo();
             }
         });
 
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.CHARACTER, "/Freizeitkarte/Theme/Checksum") {
-            @Override
-            public void handleParsedCharacters(XMLParser<java.util.Map<String, String>> parser, String text, java.util.Map<String, String> values) {
-                fzkThemesInfo.MD5 = text;
+        try {
+            parser.parse(stream);
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-
-        ruleList.add(new DefaultRule<java.util.Map<String, String>>(IRule.Type.TAG, "/Freizeitkarte/Theme") {
-            @Override
-            public void handleTag(XMLParser<java.util.Map<String, String>> parser, boolean isStartTag, java.util.Map<String, String> values) {
-                if (isStartTag) {
-                    fzkThemesInfo = new FZKThemesInfo();
-                } else {
-                    fzkThemesInfoList.add(fzkThemesInfo);
-                }
-            }
-        });
-        return ruleList;
+        }
+        info[0] = null;
+        return list;
     }
 
     private void showMapViewThemeStyleMenu() {
-        OptionMenu menuMapStyle = new OptionMenu("MapViewThemeStyleMenuTitle");
-        ObjectMap<String, String> mapStyles;
-        ThemeMenu themeMenu = new ThemeMenu(CB.getConfigsThemePath(whichCase));
+        Menu menuMapStyle = new Menu("MapViewThemeStyleMenuTitle");
+        ThemeMenu themeMenu = new ThemeMenu(CB.getConfigsThemePath(whichUsage));
         themeMenu.readTheme();
-        mapStyles = themeMenu.getStyles();
+        ObjectMap<String, String> mapStyles = themeMenu.getStyles();
+        final OptionMenu om = new OptionMenu("");
 
         for (String mapStyle : mapStyles.keys()) {
-            menuMapStyle.addCheckableMenuItem(mapStyle, false, true, () -> {
+            // check, if saved for selected layer
+            menuMapStyle.addMenuItem("", mapStyle, null, new Runnable() {
+                @Override
+                public void run() {
+                    showMapStyleOptions(om, mapStyle, mapStyles, themeMenu);
+                }
             });
         }
-
-        /*
-        ThemeMenu callback = (ThemeMenu) CB.actThemeFile.getMenuCallback();
-        Array<XmlRenderThemeStyleLayer> overlays = callback.getOverlays();
-        int id = 0;
-        String lang = "de";
-        for (XmlRenderThemeStyleLayer overlay : overlays) {
-
-            if (overlay.getCategories().size() > 1) {
-                MenuItem menuItem = icm.addItem(id, overlay.getTitle(lang), true);
-                OptionMenu moreMenu = new OptionMenu("-" + overlay.getTitle(lang));
-                for (String cat : overlay.getCategories()) {
-                    ObjectMap<String, Boolean> allCategories = callback.getAllCategories();
-                    moreMenu.addCheckableItem(id++, cat, allCategories.get(cat), true).setData(cat);
-                }
-                moreMenu.setOnItemClickListener(styleItemClickListener);
-                menuItem.setMoreMenu(moreMenu);
-            } else {
-                //get cat name
-                String cat = "";
-                for (String str : overlay.getCategories()) {
-                    cat = str;
-                    break;
-                }
-                icm.addCheckableItem(id++, overlay.getTitle(lang), callback.getAllCategories().get(cat), true).setData(cat);
+        if (mapStyles.size > 1)
+            menuMapStyle.show();
+        else {
+            for (String mapStyle : mapStyles.keys()) {
+                showMapStyleOptions(om, mapStyle, mapStyles, themeMenu);
             }
         }
-        icm.setOnItemClickListener(styleItemClickListener);
-        icm.setWindowCloseListener(closeStyleMenuListener);
+    }
 
-         */
-        menuMapStyle.show();
+    private void showMapStyleOptions(OptionMenu om, String mapStyle, ObjectMap<String, String> mapStyles, ThemeMenu themeMenu) {
+        om.setName("-" + mapStyle);
+        String mapStyleId = mapStyles.get(mapStyle);
+        ObjectMap<String, String> overlay = themeMenu.getOverlays(mapStyleId);
+        Set<String> configOverlays = themeMenu.readOverlays(mapStyleId);
+        for (ObjectMap.Entry entry : overlay) {
+            boolean checked;
+            if (configOverlays.size() > 0) {
+                checked = configOverlays.contains(((String) entry.value).substring(1));
+            } else {
+                checked = ((String) entry.value).startsWith("+");
+            }
+            om.addCheckableMenuItem("", entry.key.toString(), null, checked, new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    if (om.mustHandle(event)) {
+                        MenuItem mi = (MenuItem) event.getListenerActor();
+                        mi.setChecked(!mi.isChecked());
+                    }
+                }
+            });
+        }
+        om.addOnHideListener(() -> {
+            Array<String> result = new Array<>();
+            for (ListViewItem li : om.getItems()) {
+                MenuItem mi = (MenuItem) li;
+                if (mi.isChecked()) {
+                    result.add(overlay.get(mi.getTitle()).substring(1));
+                }
+            }
+            themeMenu.writeConfig(mapStyles.get(mapStyle), result);
+            themeMenu.applyConfig(mapStyles.get(mapStyle)); // or direct from result?
+            CB.setCurrentTheme(whichUsage, themeMenu.getRenderTheme());
+            CB.setConfigsMapStyle(whichUsage, mapStyles.get(mapStyle));
+            cacheboxMapAdapter.setTheme(CB.getCurrentTheme());
+        });
+        om.show();
     }
 
     private void searchThemes(FileHandle folder, Array<NamedExternalRenderTheme> themes) {
@@ -1098,9 +1166,9 @@ public class MapView extends AbstractView {
             } else if (handle.extension().equals("xml")) {
                 try {
                     NamedExternalRenderTheme extTheme = new NamedExternalRenderTheme(handle.nameWithoutExtension(),
-                            handle.file().getAbsolutePath());
+                            handle.file().getCanonicalPath());
                     themes.add(extTheme);
-                } catch (IRenderTheme.ThemeException e) {
+                } catch (IRenderTheme.ThemeException | IOException e) {
                     // is invalid Theme File
                     log.warn("Found invalid Theme file: {}", handle.file().getAbsolutePath());
                 }
@@ -1123,18 +1191,6 @@ public class MapView extends AbstractView {
             cm2.addMenuItem("pause", null, () -> TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
         cm2.addMenuItem("stop", null, () -> TrackRecorder.INSTANCE.stopRecording()).setEnabled(TrackRecorder.INSTANCE.recording | TrackRecorder.INSTANCE.pauseRecording);
         cm2.show();
-    }
-
-    private void toggleSetting(SettingBool setting) {
-        setting.setValue(!setting.getValue());
-        Config.AcceptChanges();
-        setNewSettings();
-    }
-
-    private void toggleSettingWithReload(SettingBool setting) {
-        setting.setValue(!setting.getValue());
-        Config.AcceptChanges();
-        setNewSettings();
     }
 
     public void clickOnItem(final MapWayPointItem item) {
@@ -1172,7 +1228,6 @@ public class MapView extends AbstractView {
         });
     }
 
-
     private void setInfoBubblePos() {
         if (this.cacheboxMapAdapter != null && infoBubble != null && screenPoint != null) {
             this.cacheboxMapAdapter.viewport().toScreenPoint(infoBubble.getCoordX(), infoBubble.getCoordY(), screenPoint);
@@ -1191,7 +1246,7 @@ public class MapView extends AbstractView {
         cacheboxMapAdapter.setMapPosition(actPosition);
     }
 
-    private class FZKThemesInfo {
+    public static class FZKThemesInfo {
         public String Name;
         public String Description;
         public String Url;

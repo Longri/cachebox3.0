@@ -22,19 +22,19 @@ import de.longri.cachebox3.utils.MathUtils;
  */
 public class CircularRegion extends Region {
 
-    public final LatLong center;
+    public final Coordinate center;
     public final double radius;
     private final float[] results = new float[1];
 
 
-    public CircularRegion(LatLong center, double radius) {
+    public CircularRegion(Coordinate center, double radius) {
         this.center = center;
         this.radius = radius;
     }
 
 
     @Override
-    public boolean contains(LatLong latLong) {
+    public boolean contains(Coordinate latLong) {
         MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, latLong.getLatitude(), latLong.getLongitude(), center.getLatitude(), center.getLongitude(), results);
         return results[0] < radius;
     }
@@ -53,6 +53,6 @@ public class CircularRegion extends Region {
 
     @Override
     public String toString() {
-        return "Region center:" + center.latitude + " , " + center.longitude + " radius:" + radius;
+        return "Region center:" + center.getLatitude() + " , " + center.getLongitude() + " radius:" + radius;
     }
 }

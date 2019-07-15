@@ -18,6 +18,7 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.math.MathUtils;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.utils.GeoUtils;
 import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -168,7 +169,7 @@ class CacheListTest {
 
     private Coordinate getNextCoordinate(float distance, Coordinate pos) {
         float direction = MathUtils.random(0, 360);
-        return Coordinate.Project(pos, direction, distance);
+        return GeoUtils.project(pos, direction, distance);
     }
 
     private void addCacheToList(CacheList caches, String gcCode, Coordinate coordinate) {

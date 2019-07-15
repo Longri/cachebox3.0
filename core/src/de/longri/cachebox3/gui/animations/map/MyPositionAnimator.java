@@ -16,7 +16,7 @@
 package de.longri.cachebox3.gui.animations.map;
 
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import org.oscim.layers.LocationTextureLayer;
 
 import static de.longri.cachebox3.gui.animations.map.DoubleAnimator.DEFAULT_DURATION;
@@ -68,7 +68,7 @@ public class MyPositionAnimator {
 
         if (posChanged) {
             myLocationLayer.setPosition(actLatitude, actLongitude, actHead, actAccuracy);
-            directLineLayer.redrawLine(new LatLong(actLatitude, actLongitude));
+            directLineLayer.redrawLine(new Coordinate(actLatitude, actLongitude));
         } else if (accuracyChanged || headingChanged) {
             myLocationLayer.setPosition(actLatitude, actLongitude, actHead, actAccuracy);
         }

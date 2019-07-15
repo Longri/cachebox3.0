@@ -1058,7 +1058,7 @@
     },
     "folder": {
       "path": "svg/folder.svg",
-      "scale": 1
+      "scale": 0.8
     },
     "found": {
       "path": "svg/log0icon.svg",
@@ -2924,10 +2924,10 @@
   },
   "de.longri.cachebox3.gui.skin.styles.FileChooserStyle": {
     "default": {
-      "itemNameFont": "normal_font",
+      "itemNameFont": "settings_default_value_font",
       "backItemNameFont": "normal_font",
       "itemNameFontColor": "font_color",
-      "backItemNameFontColor": "back_font_color",
+      "backItemNameFontColor": "font_color",
       "backIcon": "filebackIcon",
       "folderIcon": "folder",
       "fileIcon": "file",
@@ -3410,6 +3410,8 @@
   },
   "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
     "default": {
+      "overviewListStyle" : "spoilerOverview",
+      "galleryListStyle" : "spoilerGallery",
       "spoilerNameFont": "AboutInfo",
       "spoilerNameFontColor": "font_color"
     }

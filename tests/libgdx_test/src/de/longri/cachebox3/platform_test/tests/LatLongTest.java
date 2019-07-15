@@ -35,15 +35,15 @@ public class LatLongTest {
     @Test
     public void equalsTest() throws PlatformAssertionError {
 
-        LatLong latLong1 = new LatLong(52.605117, 13.358617);
-        LatLong latLong2 = new LatLong(52.60725, 13.363683);
-        LatLong latLong3 = new LatLong(52.60075, 13.362667);
+        Coordinate latLong1 = new Coordinate(52.605117, 13.358617);
+        Coordinate latLong2 = new Coordinate(52.60725, 13.363683);
+        Coordinate latLong3 = new Coordinate(52.60075, 13.362667);
 
-        LatLong latLong4 = new LatLong(52.605117, 13.358617);
-        LatLong latLong5 = new LatLong(52.60725, 13.363683);
-        LatLong latLong6 = new LatLong(52.60075, 13.362667);
+        Coordinate latLong4 = new Coordinate(52.605117, 13.358617);
+        Coordinate latLong5 = new Coordinate(52.60725, 13.363683);
+        Coordinate latLong6 = new Coordinate(52.60075, 13.362667);
 
-        LatLong latLong7 = new LatLong(52.6007500001, 13.362667000002);
+        Coordinate latLong7 = new Coordinate(52.6007500001, 13.362667000002);
 
         assertTrue(latLong1.equals(latLong1), "Coordinates.charSequenceEquals() must be true");
         assertTrue(latLong2.equals(latLong2), "Coordinates.charSequenceEquals() must be true");
