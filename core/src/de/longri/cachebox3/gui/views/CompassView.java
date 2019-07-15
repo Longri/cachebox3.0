@@ -170,9 +170,9 @@ public class CompassView extends AbstractView implements
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             if (showCoords) {
                 if (actWaypoint == null) {
-                    lineTable.add(new Label(actAbstractCache.FormatCoordinate(), infoStyle));
+                    lineTable.add(new Label(actAbstractCache.formatCoordinate(), infoStyle));
                 } else {
-                    lineTable.add(new Label(actWaypoint.FormatCoordinate(), infoStyle));
+                    lineTable.add(new Label(actWaypoint.formatCoordinate(), infoStyle));
                 }
             }
             if (showGcCode) {
@@ -356,7 +356,7 @@ public class CompassView extends AbstractView implements
             CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
                 @Override
                 public void run() {
-                    ownPositionLabel.setText(actCoord.FormatCoordinate());
+                    ownPositionLabel.setText(actCoord.formatCoordinate());
                 }
             });
         }

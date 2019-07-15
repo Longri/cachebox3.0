@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlStreamParser;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.FinishCallBack;
-import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
@@ -20,9 +19,6 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CharSequenceUtil;
-import de.longri.cachebox3.utils.Downloader;
-import de.longri.cachebox3.utils.UnZip;
-import de.longri.cachebox3.utils.http.Download;
 import de.longri.cachebox3.utils.http.ProgressCancelDownloader;
 import de.longri.cachebox3.utils.http.Webb;
 import de.longri.cachebox3.utils.http.ZipDownloader;
@@ -35,7 +31,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static de.longri.cachebox3.gui.menu.MenuID.AID_Download_FZK_Map;
-import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.GrabImagesSelectedByCache;
 
 public class Action_MapDownload extends AbstractAction {
     private static Logger log = LoggerFactory.getLogger(Action_MapDownload.class);

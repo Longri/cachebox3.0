@@ -53,6 +53,6 @@ public class CircularRegion extends Region {
 
     @Override
     public String toString() {
-        return "Region center:" + center.latitude + " , " + center.longitude + " radius:" + radius;
+        return "Region center:" + center.getLatitude() + " , " + center.getLongitude() + " radius:" + radius;
     }
 }

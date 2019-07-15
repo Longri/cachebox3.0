@@ -121,7 +121,7 @@ public class BackgroundTask implements Runnable {
 
                             @Override
                             public void newBearing(float bearing, boolean gps) {
-//                                log.debug("New Background Bearing!");
+//                                log.debug("New Background bearing!");
                             }
 
                             @Override

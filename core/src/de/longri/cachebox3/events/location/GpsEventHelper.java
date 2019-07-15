@@ -148,7 +148,7 @@ public class GpsEventHelper implements LocationEvents {
 
         bearing = ((int) (bearing * 10.0f)) / 10.0f;
 
-        log.debug("new Bearing {} ({})  GPS:{}", bearing, Math.toDegrees(bearing), gps);
+        log.debug("new bearing {} ({})  GPS:{}", bearing, Math.toDegrees(bearing), gps);
 
         if (gps) {
             CB.sensoerIO.write_newBearingGPS(bearing);

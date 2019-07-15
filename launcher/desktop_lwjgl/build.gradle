@@ -80,7 +80,7 @@ task launcherJar(type: Jar, dependsOn: classes) {
 
 task copyAssets(type: Copy) {
     from("../android/assets")
-    into("./workingDir")
+    into("../desktop/workingDir")
 }
 
 

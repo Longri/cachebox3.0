@@ -15,12 +15,11 @@
  */
 package de.longri.cachebox3.locator;
 
+import de.longri.cachebox3.utils.GeoUtils;
 import de.longri.cachebox3.utils.MathUtils;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by Longri on 25.10.2017.
@@ -33,7 +32,7 @@ class CoordinateTest {
         int distance = 24;//meter
 
         Coordinate c1 = new Coordinate(1, 1);
-        Coordinate c2 = Coordinate.Project(c1, 12, distance);
+        Coordinate c2 = GeoUtils.project(c1, 12, distance);
         int calculatedDistance = Math.round(c1.distance(c2, MathUtils.CalculationType.FAST));
 
         assertEquals(distance, calculatedDistance, "Distance must charSequenceEquals");

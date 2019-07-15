@@ -19,15 +19,13 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.locator.*;
-
-import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
+import de.longri.cachebox3.utils.GeoUtils;
+import de.longri.cachebox3.utils.MathUtils;
 
-import static de.longri.cachebox3.platform_test.Assert.assertEquals;
-import static de.longri.cachebox3.platform_test.Assert.assertTrue;
-import static de.longri.cachebox3.platform_test.Assert.assertFalse;
+import static de.longri.cachebox3.platform_test.Assert.*;
 
 /**
  * Created by Longri on 25.10.2017.
@@ -40,7 +38,7 @@ public class CoordinateTest {
         int distance = 24;//meter
 
         Coordinate c1 = new Coordinate(1, 1);
-        Coordinate c2 = Coordinate.Project(c1, 12, distance);
+        Coordinate c2 = GeoUtils.project(c1, 12, distance);
         int calculatedDistance = Math.round(c1.distance(c2, MathUtils.CalculationType.FAST));
 
         assertEquals(distance, calculatedDistance, "Distance must charSequenceEquals");

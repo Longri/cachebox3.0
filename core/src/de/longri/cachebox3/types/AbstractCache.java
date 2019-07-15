@@ -29,6 +29,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Longri on 16.10.2017.
  */
 public abstract class AbstractCache extends Coordinate implements Comparable<AbstractCache> {
+
+    public AbstractCache(AbstractCache abstractCache) {
+        super(abstractCache);
+    }
+
     public AbstractCache(double latitude, double longitude) {
         super(latitude, longitude);
     }
