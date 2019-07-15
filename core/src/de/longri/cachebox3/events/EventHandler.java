@@ -27,12 +27,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.location.*;
 import de.longri.cachebox3.locator.Coordinate;
-<<<<<<< HEAD
-import de.longri.cachebox3.locator.CoordinateGPS;
-import de.longri.cachebox3.locator.LatLong;
-=======
-import de.longri.cachebox3.locator.Coordinate;
->>>>>>> master
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Database;
@@ -182,7 +176,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     private AbstractCache selectedCache;
     private AbstractWaypoint selectedWayPoint;
     private Coordinate selectedCoordinate;
-    private CoordinateGPS myPosition;
+    private Coordinate myPosition;
     private float heading;
     private boolean spoilerLoaded = false;
 
@@ -395,7 +389,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public void positionChanged(PositionChangedEvent event) {
         if (event.isGpsProvided()) {
             if (this.myPosition == null) {
-                this.myPosition = new CoordinateGPS();
+                this.myPosition = new Coordinate();
             }
             this.myPosition.set(event);
             fireDistanceChanged(event.ID);
@@ -423,13 +417,13 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
 
-    public static CoordinateGPS getMyPosition() {
+    public static Coordinate getMyPosition() {
 
         if (INSTANCE.myPosition == null) {
             //return last stored Pos
             Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
             if (lastStoredPos == null) return null;
-            return new CoordinateGPS(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
+            return new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
         }
         return INSTANCE.myPosition;
     }

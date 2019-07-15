@@ -203,7 +203,7 @@ public class TrackRecorder implements PositionChangedListener {
         return "Track_" + sDate + ".gpx";
     }
 
-    CoordinateGPS newCoord = new CoordinateGPS();
+    Coordinate newCoord = new Coordinate();
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
@@ -273,7 +273,7 @@ public class TrackRecorder implements PositionChangedListener {
                     log.error("Trackrecorder", "IOException", e);
                 }
 
-                newPoint = new Coordinate(event.pos.getLatitude(), event.pos.getLongitude(), newCoord.getElevation(),
+                newPoint = new Coordinate(event.getLatitude(), event.getLongitude(), newCoord.getElevation(),
                         newCoord.getHeading(), new Date());
 
                 CB.actRoute.Points.add(newPoint);

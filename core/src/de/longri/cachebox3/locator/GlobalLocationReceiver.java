@@ -51,7 +51,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
     final private AtomicBoolean pendingWork = new AtomicBoolean(false);
     final private AtomicBoolean playSounds = new AtomicBoolean(false);
     final private AtomicBoolean approachSoundCompleted = new AtomicBoolean();
-    final private AtomicMutableCoordinate pendingCoordinate = new AtomicMutableCoordinate();
+    final private Coordinate pendingCoordinate = new Coordinate();
     private LocationManager locationManagerForeGround;
     private GpsEventHelper foreGroundHelper = new GpsEventHelper();
     private BackgroundTask backgroundTask;
@@ -72,7 +72,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
     @Override
     public void positionChanged(de.longri.cachebox3.events.location.PositionChangedEvent event) {
-        pendingCoordinate.set(event.pos);
+        pendingCoordinate.set(event);
         runAsync();
     }
 
@@ -107,10 +107,9 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                 AbstractWaypoint selectedWaypoint = EventHandler.getSelectedWaypoint();
 
                 if (selectedCache != null) {
-                    Coordinate pos = pendingCoordinate.get();
-                    float distance = selectedCache.distance(pos, MathUtils.CalculationType.FAST);
+                    float distance = selectedCache.distance(pendingCoordinate, MathUtils.CalculationType.FAST);
                     if (selectedWaypoint != null) {
-                        distance = selectedWaypoint.distance(pos, MathUtils.CalculationType.FAST);
+                        distance = selectedWaypoint.distance(pendingCoordinate, MathUtils.CalculationType.FAST);
                     }
 
                     if (distance < 0) return;
@@ -233,7 +232,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
             @Override
             public void run() {
                 PositionChangedEvent event = EventHandler.getPooledEvent(PositionChangedEvent.class);
-                event.setPos(lastBackgroundCoord.latitude, lastBackgroundCoord.longitude);
+                event.setPos(lastBackgroundCoord.getLatitude(), lastBackgroundCoord.getLongitude());
                 EventHandler.fire(event);
                 Pools.free(event);
             }

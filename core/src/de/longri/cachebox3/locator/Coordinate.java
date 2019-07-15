@@ -100,6 +100,18 @@ public class Coordinate {
         this.hash = other.hash;
     }
 
+    public void set(PositionChangedEvent event) {
+        this.latitude = event.getLatitude();
+        this.longitude = event.getLongitude();
+        this.elevation = event.getElevation();
+        this.speed = event.getSpeed();
+        this.heading = event.getHeading();
+        this.isGPSprovided = event.isGpsProvided();
+        this.accuracy = event.getAccuracy();
+        this.date = event.getDate();
+        this.hash = 0;
+    }
+
     public void setLatLon(double latitude, double longitude) {
         if (this.latitude != latitude || this.longitude != longitude) {
             this.latitude = latitude;
@@ -353,6 +365,4 @@ public class Coordinate {
     public String toString() {
         return formatCoordinate();
     }
-
-
 }

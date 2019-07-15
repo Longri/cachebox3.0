@@ -52,8 +52,8 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
     private final MyPositionAnimator myPositionAnimator;
 
     private float arrowHeading, mapBearing, userBearing, tilt;
-    private CoordinateGPS mapCenter = new CoordinateGPS();
-    private CoordinateGPS myPosition = new CoordinateGPS();
+    private Coordinate mapCenter = new Coordinate();
+    private Coordinate myPosition = new Coordinate();
     private final CacheboxMapAdapter map;
     private final AtomicBoolean isDisposed = new AtomicBoolean(false);
     private double lastDynZoom;

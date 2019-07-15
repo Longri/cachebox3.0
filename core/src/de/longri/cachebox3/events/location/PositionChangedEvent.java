@@ -16,18 +16,17 @@
 package de.longri.cachebox3.events.location;
 
 import com.badlogic.gdx.utils.Pool;
-import de.longri.cachebox3.events.AbstractEvent;
 import de.longri.cachebox3.events.AbstractPoolableEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.CoordinateGPS;
-import de.longri.cachebox3.locator.LatLong;
+
+import java.util.Date;
 
 /**
  * Created by Longri on 23.03.2017.
  */
 public class PositionChangedEvent extends AbstractPoolableEvent implements Pool.Poolable {
-    private final CoordinateGPS pos = new CoordinateGPS();
+    private final Coordinate pos = new Coordinate();
 
     public PositionChangedEvent() {
         super(Coordinate.class);
@@ -95,5 +94,17 @@ public class PositionChangedEvent extends AbstractPoolableEvent implements Pool.
 
     public int getAccuracy() {
         return pos.getAccuracy();
+    }
+
+    public double getSpeed() {
+        return this.pos.getSpeed();
+    }
+
+    public void setDate(Date date) {
+        this.pos.setDate(date);
+    }
+
+    public Date getDate() {
+        return this.pos.getDate();
     }
 }
