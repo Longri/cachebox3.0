@@ -19,6 +19,8 @@ import de.longri.cachebox3.utils.GeoUtils;
 import de.longri.cachebox3.utils.MathUtils;
 import org.junit.jupiter.api.Test;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -90,6 +92,121 @@ class CoordinateTest {
         assertFalse(corrd2.equals(corrd3), "Coordinates.charSequenceEquals() must be false");
         assertFalse(corrd3.equals(corrd2), "Coordinates.charSequenceEquals() must be false");
 
+    }
+
+    @Test
+    void resetHashTest() {
+        Coordinate RESET = new Coordinate();
+
+        assertFalse(RESET.isValid());
+        assertTrue(RESET.isZero());
+        assertEquals(-1836045267, RESET.hashCode());
+
+
+        Coordinate TEST_COORD = new Coordinate();
+        checkObjecktsResetet(RESET, TEST_COORD);
+
+        TEST_COORD.setLatitude(53.12345);
+        assertTrue(TEST_COORD.isValid());
+        assertFalse(TEST_COORD.isZero());
+        assertEquals(53.12345, TEST_COORD.getLatitude());
+        assertEquals(1097925113, TEST_COORD.hashCode());
+        assertNotEquals(RESET, TEST_COORD);
+
+        TEST_COORD.reset();
+        checkObjecktsResetet(RESET, TEST_COORD);
+
+        TEST_COORD.setLongitude(53.12345);
+        assertTrue(TEST_COORD.isValid());
+        assertFalse(TEST_COORD.isZero());
+        assertEquals(53.12345, TEST_COORD.getLongitude());
+        assertEquals(613903585, TEST_COORD.hashCode());
+        assertNotEquals(RESET, TEST_COORD);
+
+        TEST_COORD.reset();
+        checkObjecktsResetet(RESET, TEST_COORD);
+
+        TEST_COORD.setLatLon(53.12345, 13.12345);
+        assertTrue(TEST_COORD.isValid());
+        assertFalse(TEST_COORD.isZero());
+        assertEquals(53.12345, TEST_COORD.getLatitude());
+        assertEquals(13.12345, TEST_COORD.getLongitude());
+        assertEquals(1031028746, TEST_COORD.hashCode());
+        assertNotEquals(RESET, TEST_COORD);
+
+        TEST_COORD.set(RESET);
+        checkObjecktsResetet(RESET, TEST_COORD);
+
+
+        Date date = new Date(123456);
+        Coordinate coordinate = new Coordinate(53.12345, 13.12345, 46.23, 183.123456, date);
+        TEST_COORD.setLatLon(53.12345, 13.12345);
+        assertTrue(TEST_COORD.isValid());
+        assertFalse(TEST_COORD.isZero());
+        assertEquals(53.12345, TEST_COORD.getLatitude());
+        assertEquals(13.12345, TEST_COORD.getLongitude());
+        assertEquals(1031028746, TEST_COORD.hashCode());
+
+        TEST_COORD.setElevation(46.23);
+        assertTrue(TEST_COORD.isValid());
+        assertFalse(TEST_COORD.isZero());
+        assertEquals(53.12345, TEST_COORD.getLatitude());
+        assertEquals(13.12345, TEST_COORD.getLongitude());
+        assertEquals(46.23, TEST_COORD.getElevation());
+        assertEquals(559802583, TEST_COORD.hashCode());
+
+        TEST_COORD.setHeading(183.123456);
+        assertTrue(TEST_COORD.isValid());
+        assertFalse(TEST_COORD.isZero());
+        assertEquals(53.12345, TEST_COORD.getLatitude());
+        assertEquals(13.12345, TEST_COORD.getLongitude());
+        assertEquals(46.23, TEST_COORD.getElevation());
+        assertEquals(183.123456, TEST_COORD.getHeading());
+        assertEquals(1130699315, TEST_COORD.hashCode());
+
+        TEST_COORD.setDate(date);
+        assertTrue(TEST_COORD.isValid());
+        assertFalse(TEST_COORD.isZero());
+        assertEquals(53.12345, TEST_COORD.getLatitude());
+        assertEquals(13.12345, TEST_COORD.getLongitude());
+        assertEquals(46.23, TEST_COORD.getElevation());
+        assertEquals(183.123456, TEST_COORD.getHeading());
+        assertEquals(date, TEST_COORD.getDate());
+        assertEquals(1130822771, TEST_COORD.hashCode());
+
+        TEST_COORD.reset();
+        checkObjecktsResetet(RESET, TEST_COORD);
+
+        coordinate.reset();
+        checkObjecktsResetet(RESET, coordinate);
+
+
+        TEST_COORD.setLatLon(53.12345, 13.12345);
+        assertFalse(TEST_COORD.isGPSprovided());
+        assertEquals(0, TEST_COORD.getSpeed());
+        assertEquals(-1, TEST_COORD.getAccuracy());
+        TEST_COORD.setIsGpsProvided(true);
+        TEST_COORD.setSpeed(320);
+        TEST_COORD.setAccuracy(23.4567f); // will round to int (23)
+        assertTrue(TEST_COORD.isValid());
+        assertFalse(TEST_COORD.isZero());
+        assertTrue(TEST_COORD.isGPSprovided());
+        assertEquals(53.12345, TEST_COORD.getLatitude());
+        assertEquals(13.12345, TEST_COORD.getLongitude());
+        assertEquals(320, TEST_COORD.getSpeed());
+        assertEquals(23, TEST_COORD.getAccuracy());
+        assertEquals(1507626552, TEST_COORD.hashCode());
+        assertNotEquals(RESET, TEST_COORD);
+
+        TEST_COORD.reset();
+        checkObjecktsResetet(RESET, TEST_COORD);
+    }
+
+    private void checkObjecktsResetet(Coordinate RESET, Coordinate TEST_COORD) {
+        assertFalse(TEST_COORD.isValid());
+        assertTrue(TEST_COORD.isZero());
+        assertEquals(-1836045267, TEST_COORD.hashCode());
+        assertEquals(RESET, TEST_COORD);
     }
 
 }

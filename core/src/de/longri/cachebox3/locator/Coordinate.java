@@ -21,6 +21,7 @@ import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
 
 import java.util.Date;
+import java.util.Objects;
 
 import static de.longri.cachebox3.utils.GeoUtils.*;
 
@@ -47,6 +48,10 @@ public class Coordinate {
     private Date date = null;
 
 // constructors
+
+    public Coordinate() {
+        this(0, 0);
+    }
 
     public Coordinate(double latitude, double longitude, double elevation, double heading, Date date) {
         this(latitude, longitude);
@@ -183,7 +188,7 @@ public class Coordinate {
         if (date == null) {
             if (this.date == null) return;
         } else {
-            if (this.date.compareTo(date) == 0) return;
+            if (this.date != null && this.date.compareTo(date) == 0) return;
         }
         this.date = date;
         this.hash = 0;
@@ -196,7 +201,16 @@ public class Coordinate {
 // methods
 
     public void reset() {
+        this.latitude = 0;
+        this.longitude = 0;
+        this.heading = 0;
+        this.elevation = 0;
+        this.date = null;
+        this.speed = 0;
+        this.accuracy = -1;
+        this.isGPSprovided = false;
 
+        this.hash = 0;
     }
 
     /**
@@ -204,13 +218,11 @@ public class Coordinate {
      * 0,0 is in Range of max/min lat/lon, but we handle this as not valid
      */
     public boolean isValid() {
-        if (latitude < LATITUDE_MIN || latitude > LATITUDE_MAX || latitude == 0) return false;
-        return !(longitude < LONGITUDE_MIN) && !(longitude > LONGITUDE_MAX) && longitude != 0;
+        if (latitude < LATITUDE_MIN || latitude > LATITUDE_MAX || isZero()) return false;
+        return !(longitude < LONGITUDE_MIN) && !(longitude > LONGITUDE_MAX);
     }
 
     public boolean isZero() {
-        if (!isValid())
-            return false;
         return ((latitude == 0) && (longitude == 0));
     }
 
@@ -294,14 +306,14 @@ public class Coordinate {
     @Override
     public int hashCode() {
         if (hash != 0) return hash;
-        int prime = 31;
-        int result = 1;
-        long temp;
-        temp = Double.doubleToLongBits(this.latitude);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(this.longitude);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        hash = result;
+        hash = Objects.hash(this.latitude,
+                this.longitude,
+                this.accuracy,
+                this.elevation,
+                this.heading,
+                this.speed,
+                this.isGPSprovided,
+                this.date);
         if (hash == 0) { //realy?
             hash = 1;
         }
