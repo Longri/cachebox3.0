@@ -25,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextArea;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
@@ -39,11 +38,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
-import de.longri.cachebox3.gui.widgets.CB_Button;
-import de.longri.cachebox3.gui.widgets.CB_CheckBox;
-import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
-import de.longri.cachebox3.gui.widgets.CoordinateButton;
-import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -71,37 +66,46 @@ public class ImportGcPos extends BlockGpsActivityBase {
     private static final Logger log = LoggerFactory.getLogger(ImportGcPos.class);
 
     private final CB_Button bOK, bCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap;
-    private final VisLabel lblTitle, lblRadius, lblRadiusUnit, lblCaches, lblWaypoints, lblLogs, lblImages;
+    private final CB_Label lblTitle, lblRadius, lblRadiusUnit, lblCaches, lblWaypoints, lblLogs, lblImages;
     private final Image gsLogo;
     private final CoordinateButton coordBtn;
     private final CB_CheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
     private final VisTextArea textAreaRadius;
+    private final Image workAnimation;
+    private final CB_ProgressBar progressBar;
+    private final AtomicBoolean canceled = new AtomicBoolean(false);
     private Coordinate actSearchPos;
     private boolean importRuns = false;
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            if (importRuns) {
+                canceled.set(true);
+            } else {
+                finish();
+            }
+        }
+    };
     private boolean needLayout = true;
-    private final Image workAnimation;
-    private final CB_ProgressBar CBProgressBar;
-    private final AtomicBoolean canceled = new AtomicBoolean(false);
-
     /**
      * 0=GPS, 1= Map, 2= Manuell
      */
     private int searchState = 0;
-
 
     public ImportGcPos() {
         super("searchOverPosActivity");
         bOK = new CB_Button(Translation.get("import"));
         bCancel = new CB_Button(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
-        lblTitle = new VisLabel(Translation.get("importCachesOverPosition"));
-        lblRadius = new VisLabel(Translation.get("Radius"));
-        lblCaches = new VisLabel("Imported Caches: 0");
-        lblWaypoints = new VisLabel("Imported Waypoints: 0");
-        lblLogs = new VisLabel("Imported Log's: 0");
-        lblImages = new VisLabel("Imported Images: 0");
+        lblTitle = new CB_Label(Translation.get("importCachesOverPosition"));
+        lblRadius = new CB_Label(Translation.get("Radius"));
+
+        lblCaches = new CB_Label("Imported Caches: 0");
+        lblWaypoints = new CB_Label("Imported Waypoints: 0");
+        lblLogs = new CB_Label("Imported Log's: 0");
+        lblImages = new CB_Label("Imported Images: 0");
+
         textAreaRadius = new VisTextArea("default");
-        lblRadiusUnit = new VisLabel(Config.ImperialUnits.getValue() ? "mi" : "km");
+        lblRadiusUnit = new CB_Label(Config.ImperialUnits.getValue() ? "mi" : "km");
         btnMinus = new CB_Button("-");
         btnPlus = new CB_Button("+");
         checkBoxOnlyAvailable = new CB_CheckBox(Translation.get("SearchOnlyAvailable"));
@@ -113,7 +117,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
 
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);
-        CBProgressBar = new CB_ProgressBar(0, 100, 1, false, "default");
+        progressBar = new CB_ProgressBar(0, 100, 1, false, "default");
 
 
         createOkCancelBtn();
@@ -167,7 +171,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
         this.add(workAnimation).colspan(5).center();
         this.row();
         this.add();
-        this.add(CBProgressBar).colspan(3).center().expandX().fillX();
+        this.add(progressBar).colspan(3).center().expandX().fillX();
         this.row();
         this.add(lblCaches).colspan(5).left();
         this.row();
@@ -189,16 +193,14 @@ public class ImportGcPos extends BlockGpsActivityBase {
         needLayout = false;
     }
 
-
     private void setWorkAnimationVisible(boolean visible) {
         workAnimation.setVisible(visible);
-        CBProgressBar.setVisible(visible);
+        progressBar.setVisible(visible);
         lblCaches.setVisible(visible);
         lblWaypoints.setVisible(visible);
         lblLogs.setVisible(visible);
         lblImages.setVisible(visible);
     }
-
 
     private void createOkCancelBtn() {
 
@@ -217,16 +219,6 @@ public class ImportGcPos extends BlockGpsActivityBase {
         bCancel.addListener(cancelClickListener);
         CB.stageManager.registerForBackKey(cancelClickListener);
     }
-
-    private final ClickListener cancelClickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            if (importRuns) {
-                canceled.set(true);
-            } else {
-                finish();
-            }
-        }
-    };
 
     private void initialContent() {
         btnPlus.addListener(new ClickListener() {
@@ -346,7 +338,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
             public void progressChanged(final ImportProgressChangedEvent event) {
 
                 if (event.progress.msg.equals("Start parsing result")) {
-                    CBProgressBar.setVisible(true);
+                    progressBar.setVisible(true);
                     lblCaches.setVisible(true);
                     lblWaypoints.setVisible(true);
                     lblLogs.setVisible(true);
@@ -355,7 +347,7 @@ public class ImportGcPos extends BlockGpsActivityBase {
                 CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
                     @Override
                     public void run() {
-                        CBProgressBar.setValue(event.progress.progress);
+                        progressBar.setValue(event.progress.progress);
                         lblCaches.setText("Imported Caches: " + event.progress.caches);
                         lblWaypoints.setText("Imported Waypoints: " + event.progress.wayPoints);
                         lblLogs.setText("Imported Logs: " + event.progress.logs);

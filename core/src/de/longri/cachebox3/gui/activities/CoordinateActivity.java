@@ -30,15 +30,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.converter.UTMConvert;
@@ -56,22 +55,11 @@ public class CoordinateActivity extends ActivityBase {
     private final MinValues minValues = new MinValues();
     private final SecValues secValues = new SecValues();
     private final UtmValues utmValues = new UtmValues();
-    boolean calculated = false;
-    ClickListener cancelListener = new ClickListener() {
+    private boolean calculated = false;
+    private ClickListener cancelListener = new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
             callBack(null);
-            finish();
-        }
-    };
-    ClickListener okListener = new ClickListener() {
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-            if (actValueTable != null) {
-                callBack(actValueTable.getValue());
-            } else {
-                callBack(CoordinateActivity.this.coordinate);
-            }
             finish();
         }
     };
@@ -83,6 +71,17 @@ public class CoordinateActivity extends ActivityBase {
     private VisTextButton tglBtnUtm;
     private ButtonGroup<VisTextButton> btnGroup;
     private AbstractValueTable actValueTable;
+    ClickListener okListener = new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            if (actValueTable != null) {
+                callBack(actValueTable.getValue());
+            } else {
+                callBack(CoordinateActivity.this.coordinate);
+            }
+            finish();
+        }
+    };
     NumPad.IKeyEventListener keyEventListener = new NumPad.IKeyEventListener() {
         @Override
         public void KeyPressed(String value) {
@@ -139,6 +138,56 @@ public class CoordinateActivity extends ActivityBase {
 
         }
     };
+    private InputProcessor keyboardListener = new InputProcessor() {
+        private final char[] possibleUtmValues = new char[]{'Z', 'X', 'W', 'V', 'U', 'T', 'S', 'R', 'Q', 'P', 'N', 'M', 'L', 'K', 'J', 'H', 'G', 'F', 'E', 'D', 'C'};
+
+        @Override
+        public boolean keyDown(int keycode) {
+            return true;
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            return true;
+        }
+
+        @Override
+        public boolean keyTyped(char character) {
+            //check utm Zone
+            char upper = Character.toUpperCase(character);
+            for (int i = 0, n = possibleUtmValues.length - 1; i < n; i++) {
+                if (possibleUtmValues[i] == upper) {
+                    actValueTable.enterValue(String.valueOf(upper));
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            return true;
+        }
+
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            return true;
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            return true;
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            return true;
+        }
+
+        @Override
+        public boolean scrolled(int amount) {
+            return true;
+        }
+    };
 
     public CoordinateActivity(Coordinate coordinate) {
         super("CorrdinateActivity");
@@ -176,7 +225,7 @@ public class CoordinateActivity extends ActivityBase {
     private Group createPlaceHolder() {
         this.row();
         Group group = new Group();
-        group.addActor(new VisLabel(""));
+        group.addActor(new CB_Label(""));
         this.add(group);
         return group;
     }
@@ -268,6 +317,13 @@ public class CoordinateActivity extends ActivityBase {
     public void callBack(Coordinate coordinate) {
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        numPad.dispose();
+        numPad = null;
+    }
+
     private static abstract class AbstractValueTable extends Catch_Table {
 
         VisTextButton[] focusSequence;
@@ -307,8 +363,8 @@ public class CoordinateActivity extends ActivityBase {
                 } else {
                     if (actor instanceof VisTextButton) {
                         sb.append(((VisTextButton) actor).getText());
-                    } else if (actor instanceof VisLabel) {
-                        sb.append(((VisLabel) actor).getText());
+                    } else if (actor instanceof CB_Label) {
+                        sb.append(((CB_Label) actor).getText());
                     }
                 }
             }
@@ -356,10 +412,10 @@ public class CoordinateActivity extends ActivityBase {
     private static class DecValues extends AbstractValueTable {
 
         final VisTextButton l1_2 = null;
-        final VisLabel l1_5 = new VisLabel(".");
-        final VisLabel l1_11 = new VisLabel("°");
-        final VisLabel l2_5 = new VisLabel(".");
-        final VisLabel l2_11 = new VisLabel("°");
+        final CB_Label l1_5 = new CB_Label(".");
+        final CB_Label l1_11 = new CB_Label("°");
+        final CB_Label l2_5 = new CB_Label(".");
+        final CB_Label l2_11 = new CB_Label("°");
         VisTextButton.VisTextButtonStyle btnStyle = VisUI.getSkin().get("coordinateValues", VisTextButton.VisTextButtonStyle.class);
         final VisTextButton l1_1 = new VisTextButton("N", btnStyle);
         final VisTextButton l1_3 = new VisTextButton("5", btnStyle);
@@ -500,10 +556,10 @@ public class CoordinateActivity extends ActivityBase {
     private static class MinValues extends AbstractValueTable {
 
         final VisTextButton l1_2 = null;
-        final VisLabel l1_5 = new VisLabel("°");
-        final VisLabel l1_8 = new VisLabel(".");
-        final VisLabel l2_5 = new VisLabel("°");
-        final VisLabel l2_8 = new VisLabel(".");
+        final CB_Label l1_5 = new CB_Label("°");
+        final CB_Label l1_8 = new CB_Label(".");
+        final CB_Label l2_5 = new CB_Label("°");
+        final CB_Label l2_8 = new CB_Label(".");
         VisTextButton.VisTextButtonStyle btnStyle = VisUI.getSkin().get("coordinateValues", VisTextButton.VisTextButtonStyle.class);
         final VisTextButton l1_1 = new VisTextButton("N", btnStyle);
         final VisTextButton l1_3 = new VisTextButton("5", btnStyle);
@@ -654,12 +710,12 @@ public class CoordinateActivity extends ActivityBase {
     private static class SecValues extends AbstractValueTable {
 
         final VisTextButton l1_2 = null;
-        final VisLabel l1_5 = new VisLabel("°");
-        final VisLabel l1_8 = new VisLabel("'");
-        final VisLabel l1_11 = new VisLabel(".");
-        final VisLabel l2_5 = new VisLabel("°");
-        final VisLabel l2_8 = new VisLabel("'");
-        final VisLabel l2_11 = new VisLabel(".");
+        final CB_Label l1_5 = new CB_Label("°");
+        final CB_Label l1_8 = new CB_Label("'");
+        final CB_Label l1_11 = new CB_Label(".");
+        final CB_Label l2_5 = new CB_Label("°");
+        final CB_Label l2_8 = new CB_Label("'");
+        final CB_Label l2_11 = new CB_Label(".");
         VisTextButton.VisTextButtonStyle btnStyle = VisUI.getSkin().get("coordinateValues", VisTextButton.VisTextButtonStyle.class);
         final VisTextButton l1_1 = new VisTextButton("N", btnStyle);
         final VisTextButton l1_3 = new VisTextButton("5", btnStyle);
@@ -826,12 +882,12 @@ public class CoordinateActivity extends ActivityBase {
     }
 
     private class UtmValues extends AbstractValueTable {
-        final VisLabel l1_1 = new VisLabel("OstW");
+        final CB_Label l1_1 = new CB_Label("OstW");
         final VisTextButton l1_8 = null;
         final VisTextButton l1_9 = null;
-        final VisLabel l2_1 = new VisLabel("NordW");
+        final CB_Label l2_1 = new CB_Label("NordW");
         final VisTextButton l2_9 = null;
-        final VisLabel l3_1 = new VisLabel("Zone");
+        final CB_Label l3_1 = new CB_Label("Zone");
         private final UTMConvert convert = new UTMConvert();
         VisTextButton.VisTextButtonStyle btnStyle = VisUI.getSkin().get("coordinateValues", VisTextButton.VisTextButtonStyle.class);
         final VisTextButton l1_2 = new VisTextButton("5", btnStyle);
@@ -922,8 +978,8 @@ public class CoordinateActivity extends ActivityBase {
                 } else {
                     if (actor instanceof VisTextButton) {
                         sb.append(((VisTextButton) actor).getText());
-                    } else if (actor instanceof VisLabel) {
-                        sb.append(((VisLabel) actor).getText());
+                    } else if (actor instanceof CB_Label) {
+                        sb.append(((CB_Label) actor).getText());
                     }
                 }
             }
@@ -988,63 +1044,5 @@ public class CoordinateActivity extends ActivityBase {
 
 
         }
-    }
-
-    private InputProcessor keyboardListener = new InputProcessor() {
-        @Override
-        public boolean keyDown(int keycode) {
-            return true;
-        }
-
-        @Override
-        public boolean keyUp(int keycode) {
-            return true;
-        }
-
-        private final char[] possibleUtmValues = new char[]{'Z', 'X', 'W', 'V', 'U', 'T', 'S', 'R', 'Q', 'P', 'N', 'M', 'L', 'K', 'J', 'H', 'G', 'F', 'E', 'D', 'C'};
-
-        @Override
-        public boolean keyTyped(char character) {
-            //check utm Zone
-            char upper = Character.toUpperCase(character);
-            for (int i = 0, n = possibleUtmValues.length - 1; i < n; i++) {
-                if (possibleUtmValues[i] == upper) {
-                    actValueTable.enterValue(String.valueOf(upper));
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            return true;
-        }
-
-        @Override
-        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            return true;
-        }
-
-        @Override
-        public boolean touchDragged(int screenX, int screenY, int pointer) {
-            return true;
-        }
-
-        @Override
-        public boolean mouseMoved(int screenX, int screenY) {
-            return true;
-        }
-
-        @Override
-        public boolean scrolled(int amount) {
-            return true;
-        }
-    };
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        numPad.dispose();
-        numPad = null;
     }
 }

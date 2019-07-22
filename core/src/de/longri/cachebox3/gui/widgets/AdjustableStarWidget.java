@@ -37,16 +37,11 @@ public class AdjustableStarWidget extends Catch_Table {
 
     private final AbstractIntValueChangedWidget starsWidget;
     private final IntProperty value;
-    private final VisLabel valueLabel;
+    private final CB_Label valueLabel;
     private final int maxValue;
     private final int minValue;
     private final int step;
     private final Type type;
-
-    public enum Type {
-        STAR, SIZE
-    }
-
 
     public AdjustableStarWidget(Type type, CharSequence title, IntProperty valueProperty, StarsStyle starsStyletyle, CacheSizeStyle cacheSizeStyle) {
         this.type = type;
@@ -75,7 +70,7 @@ public class AdjustableStarWidget extends Catch_Table {
         VisTable line = new VisTable();
         line.add(starsWidget).left();
 
-        valueLabel = new VisLabel(Double.toString(value.getInt() / 2));
+        valueLabel = new CB_Label(Double.toString(value.getInt() / 2));
         if (type == Type.SIZE) {
             line.add((Actor) null).expandX().fillX();
             line.add(valueLabel).padRight(CB.scaledSizes.MARGINx2);
@@ -109,10 +104,6 @@ public class AdjustableStarWidget extends Catch_Table {
         setValue(valueProperty.getInt(), true);
     }
 
-    public void setValue(int value) {
-        setValue(value, false);
-    }
-
     private void setValue(final int value, final boolean force) {
         CB.postAsync(new NamedRunnable("AdjustStarWidget") {
             @Override
@@ -139,5 +130,13 @@ public class AdjustableStarWidget extends Catch_Table {
 
     public int getValue() {
         return this.value.getInt();
+    }
+
+    public void setValue(int value) {
+        setValue(value, false);
+    }
+
+    public enum Type {
+        STAR, SIZE
     }
 }

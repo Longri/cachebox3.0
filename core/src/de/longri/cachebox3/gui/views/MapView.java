@@ -65,7 +65,6 @@ import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
@@ -1104,12 +1103,7 @@ public class MapView extends AbstractView {
 
         for (String mapStyle : mapStyles.keys()) {
             // check, if saved for selected layer
-            menuMapStyle.addMenuItem("", mapStyle, null, new Runnable() {
-                @Override
-                public void run() {
-                    showMapStyleOptions(om, mapStyle, mapStyles, themeMenu);
-                }
-            });
+            menuMapStyle.addMenuItem("", mapStyle, null, () -> showMapStyleOptions(om, mapStyle, mapStyles, themeMenu));
         }
         if (mapStyles.size > 1)
             menuMapStyle.show();

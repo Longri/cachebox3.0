@@ -67,7 +67,6 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.isAccessTokenInvalid;
 import static de.longri.cachebox3.settings.Settings_Map.CurrentMapLayer;
 
 /**
@@ -434,10 +433,6 @@ public class CB {
                 return null;
             }
         });
-    }
-
-    public static boolean checkApiKeyNeeded() {
-        return isAccessTokenInvalid();
     }
 
     public static void wait(AtomicBoolean wait) {

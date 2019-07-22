@@ -48,6 +48,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static de.longri.cachebox3.CB.*;
+import static de.longri.cachebox3.apis.GroundspeakAPI.*;
+
 /**
  * Created by Longri on 12.04.2017.
  */
@@ -65,11 +68,17 @@ public class ShowImportMenu extends Menu {
         // ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
         addMenuItem("API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ, () -> new ImportPQActivity().show());
         addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
-        addMenuItem("API_IMPORT_OVER_POSITION", CB.getSkin().getMenuIcon.target, () -> CB.postAsync(new NamedRunnable("ShowImportMenu") {
+        addMenuItem("API_IMPORT_OVER_POSITION", CB.getSkin().getMenuIcon.target, () -> postAsync(new NamedRunnable("ShowImportMenu") {
             @Override
             public void run() {
-                if (!CB.checkApiKeyNeeded()) {
-                    CB.postOnGlThread(new NamedRunnable("ShowImportMenu") {
+                if (isAccessTokenInvalid()) {
+                    if (APIError == 401) {
+                        MessageBox.show(Translation.get("apiKeyNeeded"), Translation.get("ImportMenuTitle"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                    } else {
+                        MessageBox.show(Translation.get("getApiKey") + "\n" + LastAPIError, Translation.get("ImportMenuTitle"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                    }
+                } else {
+                    postOnGlThread(new NamedRunnable("ShowImportMenu") {
                         @Override
                         public void run() {
                             new ImportGcPos().show();
@@ -117,7 +126,7 @@ public class ShowImportMenu extends Menu {
             @Override
             public void selected(final FileHandle fileHandle) {
                 if (fileHandle == null) return;
-                CB.postAsync(new NamedRunnable("Import Gpx file") {
+                postAsync(new NamedRunnable("Import Gpx file") {
                     @Override
                     public void run() {
                         importGpxFile(fileHandle);
@@ -125,12 +134,12 @@ public class ShowImportMenu extends Menu {
                 });
             }
         });
-        folderChooser.setDirectory(Gdx.files.absolute(CB.WorkPath));
+        folderChooser.setDirectory(Gdx.files.absolute(WorkPath));
         folderChooser.show();
     }
 
     private void importGpxFile(final FileHandle fileHandle) {
-        CB.postOnGlThread(new NamedRunnable("Show cancel progress dialog for import gpx") {
+        postOnGlThread(new NamedRunnable("Show cancel progress dialog for import gpx") {
             @Override
             public void run() {
                 new CancelProgressDialog("Import Gpx", Translation.get("GPX_IMPORT").toString(),
@@ -190,23 +199,23 @@ public class ShowImportMenu extends Menu {
                                             + String.valueOf(waypointsCount.get()) + " Waypoints \n"
                                             + String.valueOf(logCount.get()) + " Logs \n"
                                             + "in " + String.valueOf(importTime / 1000) + " sec!";
-                                    CB.viewmanager.toast(msg, ViewManager.ToastLength.EXTRA_LONG);
+                                    viewmanager.toast(msg, ViewManager.ToastLength.EXTRA_LONG);
                                 } else {
                                     msg = "Import canceled";
-                                    CB.viewmanager.toast(msg);
+                                    viewmanager.toast(msg);
                                 }
                                 log.debug(msg);
 
-                                CB.postOnNextGlThread(new Runnable() {
+                                postOnNextGlThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        CB.postAsync(new NamedRunnable("Reload cacheList after import") {
+                                        postAsync(new NamedRunnable("Reload cacheList after import") {
                                             @Override
                                             public void run() {
                                                 Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
                                                 log.debug("Call loadFilteredCacheList()");
-                                                CB.loadFilteredCacheList(null);
-                                                CB.postOnNextGlThread(new Runnable() {
+                                                loadFilteredCacheList(null);
+                                                postOnNextGlThread(new Runnable() {
                                                     @Override
                                                     public void run() {
                                                         EventHandler.fire(new CacheListChangedEvent());
