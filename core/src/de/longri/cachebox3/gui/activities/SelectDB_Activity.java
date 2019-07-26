@@ -91,7 +91,7 @@ public class SelectDB_Activity extends ActivityBase {
     };
     private CustomAdapter lvAdapter;
     private String[] fileInfos;
-    private boolean mustSelect = false;
+    private boolean mustSelect;
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             stopTimer();

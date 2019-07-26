@@ -44,4 +44,8 @@ public class CB_Button extends Catch_VisTextButton {
         getLabel().setText(sequence);
         setSize(getPrefWidth(), getPrefHeight());
     }
+
+    public void setState(int i) {
+        setChecked(i == 0 ? false : true);
+    }
 }

@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ActivityBase extends Window implements Showable {
 
 
-    protected final ActivityBaseStyle style;
+    protected ActivityBaseStyle style;
     protected boolean needsLayout = true;
     private AtomicBoolean isDisposed = new AtomicBoolean(false);
 

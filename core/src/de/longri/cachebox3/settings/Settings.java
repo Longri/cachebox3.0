@@ -94,6 +94,7 @@ public class Settings extends Settings_Skin {
     public static final SettingBool quickButtonLastShow = (SettingBool) settingsList.addSetting(new SettingBool("quickButtonLastShow", QuickList, NEVER, false, Global, ACB));
     public static final SettingInt MultiDBAutoStartTime = (SettingInt) settingsList.addSetting(new SettingInt("MultiDBAutoStartTime", Internal, NEVER, 0, Global, ACB));
     public static final SettingInt lastSearchRadius = (SettingInt) settingsList.addSetting(new SettingInt("lastSearchRadius", API, NEVER, 5, Global, ACB));
+    public static final SettingInt ImportLimit = (SettingInt) settingsList.addSetting(new SettingInt("ImportLimit", API, NEVER, 50, Global, ACB));
     public static final SettingString quickButtonList = (SettingString) settingsList.addSetting(new SettingString("quickButtonList", QuickList, NEVER, "5,0,1,3,2", Global, ACB));
     public static final SettingString LastSelectedCache = (SettingString) settingsList.addSetting(new SettingString("LastSelectedCache", Misc, NEVER, "", Local, ALL));
     public static final SettingLongString FilterNew = (SettingLongString) settingsList.addSetting(new SettingLongString("FilterNew", Misc, NEVER, "", Local, ALL));

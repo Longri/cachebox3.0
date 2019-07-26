@@ -253,7 +253,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         });
     }
 
-    public void stopForgroundUpdates() {
+    public void stopForegroundUpdates() {
         log.debug("Stop foreground location listener");
         removeForegroundLocationListener();
     }

@@ -29,7 +29,7 @@ public class BlockGpsActivityBase extends ActivityBase {
 
     public void show() {
         super.show();
-        CB.viewmanager.locationReceiver.stopForgroundUpdates();
+        CB.viewmanager.locationReceiver.stopForegroundUpdates();
     }
 
     public void finish() {
