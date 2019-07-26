@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.Predicate;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 
@@ -481,11 +480,14 @@ public class CacheList extends Array<AbstractCache> {
         }
     }
 
+    /*
     public <V> V[] toArray(Class type) {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.toArray(type);
         }
     }
+
+     */
 
     public int getSize() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
