@@ -29,19 +29,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Longri on 19.03.2018.
- * Extension to simplify design by arbor95 25. July 2019 :
+ *
+ * Extension to simplify design by arbor95 28. July 2019 :
  * <why> Adding actors may force unpredictable layout) </why>
- * <Idea> The table is structured in subtables, each representing a line (or a block of lines) </Idea>
- * <HowTo>Create a subtable explicit with createSubTable
- * or  implicit with addNext, addNextNL, addNL, addNLNext, addLast
- * These commands add an actor just like the simple .add
- * To switch to the next line (subtable) explicit call endSubTable or addLast </HowTo>
- * <colspan>With these calls there is a automatic calculation for spanning of columns within the subtable.
- * For a cell to expand to a percentage width use 'cell'.colspan(-'percentvalue')
- * This will never be exact, but gives control over the layout with only liitle action</colspan>
+ * <Idea> The table is structured in subtables, each representing a line(row)</Idea>
+ * <not_implemented> (or a block of lines)</not_implemented>
+ * <HowTo>
+ *     Create a subtable explicit with startRow or  implicit with addNext, addLast
+ *     <not_implemented>, addNextNL, addNL, addNLNext</not_implemented>
+ *     These commands add an actor just like the simple .add
+ *     To switch to the next line/row (subtable) explicit call stopRow or addLast
+ *     <weight>With using 'weight' as second parameter to addNext/addLast
+ *
+ *     the weight factors the with splitting the whole width in equal width parts (actor)
+ *     (factor 0.5f means half of the normal cell width, or 2 means double default cell width)
+ *     the calculation is automatic at end of row and done by setting the colspan values correspondingly
+ *     This will never be exact, but gives control over the layout with only litle effort</weight>
+ * </HowTo>
+ * <Implementation>actorX is temporarily used to store the weight value, for not to extend the Cell.</Implementation>
  *
  * <Further>Common defaults can be set by a constructor with boolean parameter set to true or
- * an explicit call to setDefaults().</Further>
+ * an explicit call to setTableAndCellDefaults().</Further>
  *
  */
 public class Catch_Table extends VisTable {
@@ -49,8 +57,8 @@ public class Catch_Table extends VisTable {
     private final static Logger log = LoggerFactory.getLogger(Catch_Table.class);
     private final AtomicBoolean drawException = new AtomicBoolean(false);
     private final AtomicInteger drawCount = new AtomicInteger(0);
-    private Catch_Table currentSubTable;
-    private Cell currentSubTableCell;
+    private Catch_Table currentRow;
+    private final static float weightMax = 100f;
 
     public Catch_Table() {
         super();
@@ -59,12 +67,13 @@ public class Catch_Table extends VisTable {
     public Catch_Table(boolean withDefaults) {
         super();
         if (withDefaults)
-            setDefaults();
+            setTableAndCellDefaults();
     }
 
-    public Cell setDefaults() {
-        top();
-        return defaults().expandX().fill().pad(CB.scaledSizes.MARGIN);
+    public Cell setTableAndCellDefaults() {
+        top().left();
+        setDebug(true);
+        return defaults().expandX().fill().pad(CB.scaledSizes.MARGIN).colspan((int) weightMax);
     }
 
     @Override
@@ -80,72 +89,67 @@ public class Catch_Table extends VisTable {
         }
     }
 
-    public Catch_Table createSubTable() {
+    public Catch_Table startRow() {
         row();
-        currentSubTable = new Catch_Table(true);
-        currentSubTableCell = add(currentSubTable);
-        return currentSubTable;
+        currentRow = new Catch_Table(true);
+        currentRow.row();
+        add(currentRow);
+        return currentRow;
     }
 
     public <T extends Actor> Cell<T> addNext(T actor) {
-        if (currentSubTable == null)
-            createSubTable();
-        return currentSubTable.add(actor);
-    }
-
-    public <T extends Actor> Cell<T> addNextNL(T actor) {
-        if (currentSubTable == null)
-            createSubTable();
-        Cell<T> cell = currentSubTable.add(actor);
-        currentSubTable.row();
+        if (currentRow == null)
+            startRow();
+        Cell<T> cell = currentRow.add(actor);
+        cell.setActorX(1f);
         return cell;
     }
 
-    public void addNL() {
-        if (currentSubTable == null)
-            createSubTable();
-        currentSubTable.row();
-    }
-
-    public <T extends Actor> Cell<T> addNLNext(T actor) {
-        if (currentSubTable == null)
-            createSubTable();
-        currentSubTable.row();
-        return currentSubTable.add(actor);
+    public <T extends Actor> Cell<T> addNext(T actor, float weight) {
+        if (currentRow == null)
+            startRow();
+        Cell<T> cell = currentRow.add(actor);
+        cell.setActorX(weight);
+        return cell;
     }
 
     public <T extends Actor> Cell<T> addLast(T actor) {
-        if (currentSubTable == null)
-            createSubTable();
-        Cell<T> cell = currentSubTable.add(actor);
-        currentSubTable.prepareLayout();
-        currentSubTable = null;
+        if (currentRow == null)
+            startRow();
+        Cell<T> cell = currentRow.add(actor);
+        cell.setActorX(1f);
+        currentRow.prepareLayout();
+        currentRow = null;
         return cell;
     }
 
-    public <T extends Actor> Cell<T> addLastExpand(T actor) {
-        if (currentSubTable == null)
-            createSubTable();
-        currentSubTableCell.expand();
-        Cell<T> cell = currentSubTable.add(actor);
-        currentSubTable.prepareLayout();
-        currentSubTable = null;
+    public <T extends Actor> Cell<T> addLast(T actor, float weight) {
+        if (currentRow == null)
+            startRow();
+        Cell<T> cell = currentRow.add(actor);
+        cell.setActorX(weight);
+        currentRow.prepareLayout();
+        currentRow = null;
         return cell;
     }
 
-    public void endSubTable() {
-        if (currentSubTable != null) {
-            currentSubTable.prepareLayout();
-            currentSubTable = null;
+    public void stopRow() {
+        if (currentRow != null) {
+            currentRow.prepareLayout();
+            currentRow = null;
         }
     }
 
     public void prepareLayout() {
         row();
+        float weightSum = 0;
         for (Cell c : getCells()) {
-            if (c.getColspan() < 0) {
-                c.colspan((int) (getColumns() * (c.getColspan() / -100f) + 0.5));
-            }
+            weightSum = weightSum + c.getActorX();
+        }
+        float weightBase = weightMax / weightSum;
+        for (Cell c : getCells()) {
+            c.colspan((int) (c.getActorX() * weightBase));
+            // c.setActorX(0f);
         }
     }
 

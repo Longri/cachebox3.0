@@ -65,11 +65,9 @@ import static de.longri.cachebox3.apis.GroundspeakAPI.searchGeoCaches;
 public class ImportGCPosition extends BlockGpsActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(ImportGCPosition.class);
-
     private final CB_Button btnOK, btnCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap, tglBtnWeb, btnBeforeAfterEqual;
     private final CB_Label lblTitle, lblRadius, lblRadiusUnit, textAreaRadius, lblImportLimit, lblCacheName, lblOwner, lblPublished, lblCategory;
     private final VisTextField edtImportLimit, edtCacheName, edtOwner, edtDate, edtCategory;
-
     private final Image gsLogo;
     private final CoordinateButton coordinateButton;
     private final CB_CheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
@@ -78,7 +76,8 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     private final Image workAnimation;
     private final CB_ProgressBar progressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
-
+    private Catch_Table box;
+    private ScrollPane scrollPane;
     private boolean importRuns = false;
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
@@ -99,21 +98,24 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     public ImportGCPosition() {
         super("searchOverPosActivity");
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        lblTitle = new CB_Label(Translation.get("importCachesOverPosition"));
+        gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
+        box = new Catch_Table(true);
+        scrollPane = new ScrollPane(box);
         btnOK = new CB_Button(Translation.get("import"));
         btnCancel = new CB_Button(Translation.get("cancel"));
-        gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
-        lblTitle = new CB_Label(Translation.get("importCachesOverPosition"));
+
+        coordinateButton = new CoordinateButton(EventHandler.getMyPosition());
+        tglBtnGPS = new CB_Button(Translation.get("FromGps"), "toggle");
+        tglBtnMap = new CB_Button(Translation.get("FromMap"), "toggle");
+        tglBtnWeb = new CB_Button(Translation.get("FromWeb"), "toggle");
+
         lblRadius = new CB_Label(Translation.get("Radius"));
-
-        lblCaches = new CB_Label("Imported Caches: 0");
-        lblWaypoints = new CB_Label("Imported Waypoints: 0");
-        lblLogs = new CB_Label("Imported Log's: 0");
-        lblImages = new CB_Label("Imported Images: 0");
-
         textAreaRadius = new CB_Label("100");
         lblRadiusUnit = new CB_Label(Config.ImperialUnits.getValue() ? "mi" : "km");
         btnMinus = new CB_Button("-");
         btnPlus = new CB_Button("+");
+
         lblImportLimit = new CB_Label(Translation.get("ImportLimit"));
         edtImportLimit = new VisTextField("*" + Translation.get("ImportLimit"));
         lblCacheName = new CB_Label(Translation.get("Title"));
@@ -129,15 +131,14 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         checkBoxOnlyAvailable = new CB_CheckBox(Translation.get("SearchOnlyAvailable"));
         checkBoxExcludeHides = new CB_CheckBox(Translation.get("SearchWithoutOwns"));
         checkBoxExcludeFounds = new CB_CheckBox(Translation.get("SearchWithoutFounds"));
-        coordinateButton = new CoordinateButton(EventHandler.getMyPosition());
-        tglBtnGPS = new CB_Button(Translation.get("FromGps"), "toggle");
-        tglBtnMap = new CB_Button(Translation.get("FromMap"), "toggle");
-        tglBtnWeb = new CB_Button(Translation.get("FromWeb"), "toggle");
 
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);
         progressBar = new CB_ProgressBar(0, 100, 1, false, "default");
-
+        lblCaches = new CB_Label("Imported Caches: 0");
+        lblWaypoints = new CB_Label("Imported Waypoints: 0");
+        lblLogs = new CB_Label("Imported Log's: 0");
+        lblImages = new CB_Label("Imported Images: 0");
 
         initClickHandlersAndContent();
         setWorkAnimationVisible(false);
@@ -162,10 +163,46 @@ public class ImportGCPosition extends BlockGpsActivityBase {
             removeActor(actor);
 
         setFillParent(true);
-        setDebug(true, true);
+
+        setTableAndCellDefaults();
+        addNext(lblTitle, 2.0f);
+        addLast(gsLogo, 0.5f).fill(false).left();
+        /*
+        row();
+        add(scrollPane).expand();
+         */
+        addLast(scrollPane);
+        addNext(btnOK);
+        addLast(btnCancel);
+
+        box.addLast(coordinateButton);
+        box.addNext(tglBtnGPS);
+        box.addNext(tglBtnMap);
+        box.addLast(tglBtnWeb);
+        box.addNext(lblRadius, 2f);
+        box.addNext(textAreaRadius);
+        box.addNext(lblRadiusUnit);
+        box.addNext(btnMinus);
+        box.addLast(btnPlus);
+
+        box.addNext(lblImportLimit);
+        box.addLast(edtImportLimit, 2f);
+        box.addNext(lblCacheName);
+        box.addLast(edtCacheName, 2f);
+        box.addNext(lblOwner);
+        box.addLast(edtOwner, 2f);
+        box.addNext(lblPublished, 1.5f);
+        box.addNext(btnBeforeAfterEqual, 0.5f);
+        box.addLast(edtDate, 1.5f);
+        box.addNext(lblCategory);
+        box.addLast(edtCategory, 2f);
+        box.stopRow();
+
+        box.addLast(checkBoxOnlyAvailable);
+        box.addLast(checkBoxExcludeHides);
+        box.addLast(checkBoxExcludeFounds);
 
         /*
-
         add(workAnimation).colspan(5).center();
         row();
         add();
@@ -182,43 +219,6 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         add();
         row();
          */
-
-        setDefaults();
-        Catch_Table box = new Catch_Table(true);
-        ScrollPane scrollPane = new ScrollPane(box);
-        // scrollPane.setScrollingDisabled(true, false);
-        addNext(lblTitle);
-        addLast(gsLogo).fill(false);
-        addLastExpand(scrollPane);
-        addNext(btnOK);
-        addLast(btnCancel);
-
-        box.addLast(coordinateButton);
-        box.addNext(tglBtnGPS);
-        box.addNext(tglBtnMap);
-        box.addLast(tglBtnWeb);
-        box.addNext(lblRadius);
-        box.addNext(textAreaRadius);
-        box.addNext(lblRadiusUnit);
-        box.addNext(btnMinus);
-        box.addLast(btnPlus);
-
-        box.addNext(lblImportLimit);
-        box.addNextNL(edtImportLimit);
-        box.addNext(lblCacheName);
-        box.addNextNL(edtCacheName).colspan(-70);
-        box.addNext(lblOwner);
-        box.addNextNL(edtOwner).colspan(-70);
-        box.addNext(lblPublished);
-        box.addNext(btnBeforeAfterEqual);
-        box.addNextNL(edtDate);
-        box.addNext(lblCategory);
-        box.addNextNL(edtCategory).colspan(-70);
-        box.endSubTable();
-
-        box.addLast(checkBoxOnlyAvailable);
-        box.addLast(checkBoxExcludeHides);
-        box.addLast(checkBoxExcludeFounds);
 
         super.layout();
         needLayout = false;
