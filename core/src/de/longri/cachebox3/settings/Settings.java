@@ -28,6 +28,7 @@ import static de.longri.cachebox3.settings.types.SettingUsage.ALL;
  * Created by Longri on 31.07.16.
  */
 public class Settings extends Settings_Skin {
+    public static final Integer[] numberOfLogsArray = new Integer[]{0, 5, 30};
 
     // NORMAL visible
     public static final SettingString GcLogin = (SettingString) settingsList.addSetting(new SettingString("GcLogin", Login, NORMAL, "", Global, ALL));
@@ -90,6 +91,7 @@ public class Settings extends Settings_Skin {
     public static final SettingBool SearchWithoutFounds = (SettingBool) settingsList.addSetting(new SettingBool("SearchWithoutFounds", API, NEVER, true, Global, ACB));
     public static final SettingBool SearchWithoutOwns = (SettingBool) settingsList.addSetting(new SettingBool("SearchWithoutOwns", API, NEVER, true, Global, ACB));
     public static final SettingBool SearchOnlyAvailable = (SettingBool) settingsList.addSetting(new SettingBool("SearchOnlyAvailable", API, NEVER, true, Global, ACB));
+    public static final SettingIntArray numberOfLogs = (SettingIntArray) settingsList.addSetting(new SettingIntArray("NumberOfLogs", Misc, NORMAL, 5, Global, ACB, numberOfLogsArray));
     public static final SettingBool DescriptionNoAttributes = (SettingBool) settingsList.addSetting(new SettingBool("DescriptionNoAttributes", Misc, NEVER, false, Global, ACB));
     public static final SettingBool quickButtonLastShow = (SettingBool) settingsList.addSetting(new SettingBool("quickButtonLastShow", QuickList, NEVER, false, Global, ACB));
     public static final SettingInt MultiDBAutoStartTime = (SettingInt) settingsList.addSetting(new SettingInt("MultiDBAutoStartTime", Internal, NEVER, 0, Global, ACB));

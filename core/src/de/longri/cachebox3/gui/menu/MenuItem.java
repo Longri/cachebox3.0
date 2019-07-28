@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.menu;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -103,10 +102,12 @@ public class MenuItem extends ListViewItem {
         this.setHeight(prefHeight);
     }
 
+    /*
     @Override
     public boolean addListener(EventListener listener) {
         return super.addListener(listener);
     }
+     */
 
     protected synchronized void initial() {
         this.reset();

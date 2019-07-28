@@ -72,7 +72,7 @@ public class Catch_Table extends VisTable {
 
     public Cell setTableAndCellDefaults() {
         top().left();
-        setDebug(true);
+        //setDebug(true);
         return defaults().expandX().fill().pad(CB.scaledSizes.MARGIN).colspan((int) weightMax);
     }
 

@@ -19,8 +19,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
@@ -734,6 +737,16 @@ public class CB {
         memoryStringBuilder.append(format.format((allocatedMemory - freeMemory) / 1048576));
         memoryStringBuilder.append(" kb");
         return memoryStringBuilder.toString();
+    }
+
+    public static ClickListener addClickHandler(Actor actor, Runnable runnable) {
+        ClickListener clickListener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                runnable.run();
+            }
+        };
+        actor.addListener(clickListener);
+        return clickListener;
     }
 
     public float getGlobalScaleFactor() {

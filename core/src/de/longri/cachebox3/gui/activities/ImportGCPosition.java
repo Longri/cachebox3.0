@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -56,6 +55,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static de.longri.cachebox3.CB.addClickHandler;
 import static de.longri.cachebox3.apis.GroundspeakAPI.searchGeoCaches;
 
 
@@ -66,8 +66,8 @@ public class ImportGCPosition extends BlockGpsActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(ImportGCPosition.class);
     private final CB_Button btnOK, btnCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap, tglBtnWeb, btnBeforeAfterEqual;
-    private final CB_Label lblTitle, lblRadius, lblRadiusUnit, textAreaRadius, lblImportLimit, lblCacheName, lblOwner, lblPublished, lblCategory;
-    private final VisTextField edtImportLimit, edtCacheName, edtOwner, edtDate, edtCategory;
+    private final CB_Label lblTitle, lblRadius, lblRadiusUnit, lblImportLimit, lblCacheName, lblOwner, lblPublished, lblCategory;
+    private final VisTextField edtImportLimit, edtCacheName, edtOwner, edtDate, edtCategory, txtRadius;
     private final Image gsLogo;
     private final CoordinateButton coordinateButton;
     private final CB_CheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
@@ -79,21 +79,10 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     private Catch_Table box;
     private ScrollPane scrollPane;
     private boolean importRuns = false;
-    private final ClickListener cancelClickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            if (importRuns) {
-                canceled.set(true);
-            } else {
-                finish();
-            }
-        }
-    };
+    private ClickListener cancelClickListener;
     private Coordinate actSearchPos;
     private boolean needLayout = true;
-    /**
-     * 0=GPS, 1= Map, 2= Manuell
-     */
-    private int searchState = 0;
+    // private SearchCoordinates searchCoordinates;
 
     public ImportGCPosition() {
         super("searchOverPosActivity");
@@ -111,7 +100,7 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         tglBtnWeb = new CB_Button(Translation.get("FromWeb"), "toggle");
 
         lblRadius = new CB_Label(Translation.get("Radius"));
-        textAreaRadius = new CB_Label("100");
+        txtRadius = new VisTextField("100");
         lblRadiusUnit = new CB_Label(Config.ImperialUnits.getValue() ? "mi" : "km");
         btnMinus = new CB_Button("-");
         btnPlus = new CB_Button("+");
@@ -151,13 +140,6 @@ public class ImportGCPosition extends BlockGpsActivityBase {
             return;
         }
 
-        //check if map position actual
-        Coordinate mapCenter = MapView.getLastCenterPos();
-        if (mapCenter == null || mapCenter.isZero() || !mapCenter.isValid()) {
-            tglBtnMap.setDisabled(true);
-        }
-
-
         SnapshotArray<Actor> actors = getChildren();
         for (Actor actor : actors)
             removeActor(actor);
@@ -180,7 +162,7 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         box.addNext(tglBtnMap);
         box.addLast(tglBtnWeb);
         box.addNext(lblRadius, 2f);
-        box.addNext(textAreaRadius);
+        box.addNext(txtRadius);
         box.addNext(lblRadiusUnit);
         box.addNext(btnMinus);
         box.addLast(btnPlus);
@@ -234,117 +216,140 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     }
 
     private void initClickHandlersAndContent() {
-
-        btnOK.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                CB.postAsync(new NamedRunnable("ImportGCPosition") {
-                    @Override
-                    public void run() {
-                        startImport();
-                    }
-                });
+        addClickHandler(btnOK, () -> CB.postAsync(new NamedRunnable("ImportGCPosition") {
+            @Override
+            public void run() {
+                ImportNow();
+            }
+        }));
+        cancelClickListener = addClickHandler(btnCancel, () -> {
+            if (importRuns) {
+                canceled.set(true);
+            } else {
+                finish();
             }
         });
-
-        btnCancel.addListener(cancelClickListener);
-
         CB.stageManager.registerForBackKey(cancelClickListener);
-
-        btnPlus.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                incrementRadius(1);
-            }
+        addClickHandler(btnPlus, () -> incrementRadius(1));
+        addClickHandler(btnMinus, () -> incrementRadius(-1));
+        addClickHandler(tglBtnGPS, () -> {
+            actSearchPos = EventHandler.getMyPosition();
+            setToggleBtnState(0);
         });
-
-        btnMinus.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                incrementRadius(-1);
-            }
-        });
-
-        tglBtnGPS.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                actSearchPos = EventHandler.getMyPosition();
+        addClickHandler(tglBtnMap, () -> {
+            Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
+            if (tglBtnMap.isDisabled()) {
+                actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
                 setToggleBtnState(0);
+                return;
+            }
+            Coordinate mapCenterPos = MapView.getLastCenterPos();
+            if (mapCenterPos == null) {
+                actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
+            } else {
+                actSearchPos = mapCenterPos;
+            }
+            setToggleBtnState(1);
+        });
+        addClickHandler(tglBtnWeb, () -> {
+            actSearchPos = EventHandler.getMyPosition();
+            /*
+            // todo implement
+            searchCoordinates = new SearchCoordinates() {
+                public void callBack(Coordinate coordinate) {
+                    if (coordinate != null) {
+                        actSearchPos = coordinate;
+                        setToggleBtnState(2);
+                    }
+                    searchCoordinates.doFinish();
+                }
+            };
+            searchCoordinates.doShow();
+            */
+            setToggleBtnState(2);
+        });
+
+        addClickHandler(btnBeforeAfterEqual,() -> {
+            switch (btnBeforeAfterEqual.getText().toString()) {
+                case "X":
+                    btnBeforeAfterEqual.setText("<=");
+                    break;
+                case "<=":
+                    btnBeforeAfterEqual.setText("=");
+                    break;
+                case "=":
+                    btnBeforeAfterEqual.setText(">=");
+                    break;
+                default:
+                    btnBeforeAfterEqual.setText("X");
+                    break;
             }
         });
 
-        tglBtnMap.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
-                if (tglBtnMap.isDisabled()) {
-                    actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
-                    setToggleBtnState(0);
-                    return;
-                }
-                Coordinate mapCenterPos = MapView.getLastCenterPos();
-                if (mapCenterPos == null) {
-                    actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
-                } else {
-                    actSearchPos = mapCenterPos;
-                }
-                setToggleBtnState(1);
-            }
-        });
+        Coordinate mapCenterPos = MapView.getLastCenterPos();
+        if (mapCenterPos == null || mapCenterPos.isZero() || !mapCenterPos.isValid()) {
+            tglBtnMap.setDisabled(true);
+            /*
+            Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
+            actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
+             */
+            actSearchPos = EventHandler.getMyPosition();
+            setToggleBtnState(0);
+        } else {
+            actSearchPos = mapCenterPos;
+            setToggleBtnState(1);
+        }
+        coordinateButton.setCoordinate(actSearchPos);
 
         checkBoxExcludeFounds.setChecked(Config.SearchWithoutFounds.getValue());
         checkBoxOnlyAvailable.setChecked(Config.SearchOnlyAvailable.getValue());
         checkBoxExcludeHides.setChecked(Config.SearchWithoutOwns.getValue());
-        textAreaRadius.setText(String.valueOf(Config.lastSearchRadius.getValue()));
+        txtRadius.setText(String.valueOf(Config.lastSearchRadius.getValue()));
 
-        btnBeforeAfterEqual.setText("X");
-        edtImportLimit.setText("" + Config.ImportLimit.getValue()); // edtImportLimit.setInputType(InputType.TYPE_CLASS_NUMBER);
-        edtDate.setText(simpleDateFormat.format(new Date())); //edtDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
-
-        setToggleBtnState();
-
-    }
-
-    private void initialCoordinates() {
-        // initiate Coordinates to actual Map-Center or actual GPS Coordinate
-        switch (searchState) {
-            case 0:
-                actSearchPos = EventHandler.getMyPosition();
-                break;
-            case 1:
-                Coordinate mapCenterPos = MapView.getLastCenterPos();
-                if (mapCenterPos == null) {
-                    Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
-                    actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
-                } else {
-                    actSearchPos = mapCenterPos;
-                }
-                break;
+        // todo get category
+        edtCategory.setText("API-Import");
+        /*
+        if (GlobalCore.isSetSelectedCache()) {
+            long id = GlobalCore.getSelectedCache().getGPXFilename_ID();
+            Category c = CoreSettingsForward.Categories.getCategoryByGpxFilenameId(id);
+            if (c != null)
+                edtCategory.setText(c.GpxFilename);
         }
-        setToggleBtnState();
+        edtCategory.setCursorPosition(0);
+
+        Category category = CoreSettingsForward.Categories.getCategory(edtCategory.getText());
+        if (category.size() == 0)
+            btnBeforeAfterEqual.setText("<=");
+        else
+            btnBeforeAfterEqual.setText(">=");
+        edtDate.setText(simpleDateFormat.format(category.LastImported()));
+        */
+        edtDate.setText(simpleDateFormat.format(new Date()));
+        //edtDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
+        btnBeforeAfterEqual.setText("X");
+        edtImportLimit.setText(Config.ImportLimit.getValue().toString());
+
+        edtCacheName.setText("");
+        edtOwner.setText("");
+
     }
 
-    private void incrementRadius(int value) {
+    private void incrementRadius(int direction) {
         try {
-            int ist = Integer.parseInt(textAreaRadius.getText().toString());
-            ist += value;
-
+            int ist = Integer.parseInt(txtRadius.getText().toString());
+            ist += direction;
             if (ist > 100)
                 ist = 100;
             if (ist < 1)
                 ist = 1;
-
-            textAreaRadius.setText(String.valueOf(ist));
+            txtRadius.setText(String.valueOf(ist));
         } catch (NumberFormatException e) {
-
         }
     }
 
-    /**
-     * 0=GPS, 1= Map, 2= Manuell
-     */
-    public void setToggleBtnState(int value) {
-        searchState = value;
-        setToggleBtnState();
-    }
-
-    private void setToggleBtnState() {// 0=GPS, 1= Map, 2= Web, 3= Manuell
-        switch (searchState) {
+    private void setToggleBtnState(int value) {
+        // 0=GPS, 1= Map, 2= Web, 3= Manuell
+        switch (value) {
             case 0:
                 tglBtnGPS.setState(1);
                 tglBtnMap.setState(0);
@@ -371,7 +376,10 @@ public class ImportGCPosition extends BlockGpsActivityBase {
 
     }
 
-    private void startImport() {
+    private void ImportNow() {
+        btnOK.setDisabled(true);
+        importRuns = true;
+
         workAnimation.setVisible(true);
 
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
@@ -398,35 +406,11 @@ public class ImportGCPosition extends BlockGpsActivityBase {
             }
         };
         EventHandler.add(progressListener);
+        final Date importStartTime = new Date();
 
-        final Date ImportStart = new Date();
-        Config.SearchWithoutFounds.setValue(checkBoxExcludeFounds.isChecked());
-        Config.SearchOnlyAvailable.setValue(checkBoxOnlyAvailable.isChecked());
-        Config.SearchWithoutOwns.setValue(checkBoxExcludeHides.isChecked());
-
-        int radius = 0;
-        try {
-            radius = Integer.parseInt(textAreaRadius.getText().toString());
-        } catch (NumberFormatException ignore) {
-        }
-
-        if (radius != 0)
-            Config.lastSearchRadius.setValue(radius);
-
-        Config.AcceptChanges();
-
-        if (Config.ImperialUnits.getValue()) radius = UnitFormatter.getKilometer(radius);
-
-        btnOK.setDisabled(true);
-        importRuns = true;
-
-
-        if (actSearchPos != null) {
-            importNow(progressListener, ImportStart, radius);
-        } else {
+        if (actSearchPos == null) {
             //wait for act Position
             CB.viewmanager.toast(Translation.get("waiting_for_fix"), ViewManager.ToastLength.WAIT);
-
             while (actSearchPos == null) {
                 try {
                     Thread.sleep(200);
@@ -441,11 +425,21 @@ public class ImportGCPosition extends BlockGpsActivityBase {
                 }
             }
             ViewManager.ToastLength.WAIT.close();
-            importNow(progressListener, ImportStart, radius);
         }
-    }
 
-    private void importNow(final ImportProgressChangedListener progressListener, final Date importStart, int radius) {
+        Config.SearchWithoutFounds.setValue(checkBoxExcludeFounds.isChecked());
+        Config.SearchOnlyAvailable.setValue(checkBoxOnlyAvailable.isChecked());
+        Config.SearchWithoutOwns.setValue(checkBoxExcludeHides.isChecked());
+        Config.AcceptChanges();
+
+        Date tmpDate;
+        try {
+            tmpDate = simpleDateFormat.parse(edtDate.getText());
+        } catch (Exception ex) {
+            tmpDate = new Date();
+        }
+        final Date publishDate = tmpDate;
+
         // todo progressListener, importStart, cancel, ...
         Category category = CB.Categories.getCategory("API-Import");
         if (category != null) { // should not happen!!!
@@ -453,20 +447,32 @@ public class ImportGCPosition extends BlockGpsActivityBase {
             if (gpxFilename != null) {
                 GroundspeakAPI.Query q = new GroundspeakAPI.Query()
                         .resultWithFullFields()
-                        .resultWithLogs(30)
                         //.resultWithImages(30)
-                        //.publishedDate(publishDate, btnBeforeAfterEqual.getText()) // todo ACB2 extension
                         ;
-                q.searchInCircle(actSearchPos, radius * 1000);
+                if (!btnBeforeAfterEqual.getText().toString().equals("X")) {
+                    q.publishedDate(publishDate, btnBeforeAfterEqual.getText().toString());
+                }
+                if (Config.numberOfLogs.getValue() > 0) {
+                    q.resultWithLogs(Config.numberOfLogs.getValue());
+                }
+                if (txtRadius.getText().trim().length() > 0) {
+                    int radius;
+                    try {
+                        radius = Integer.parseInt(txtRadius.getText());
+                        if (Config.ImperialUnits.getValue()) radius = UnitFormatter.getKilometer(radius);
+                        Config.lastSearchRadius.setValue(radius);
+                        Config.AcceptChanges();
+                        q.searchInCircle(actSearchPos, radius * 1000);
+                    } catch (NumberFormatException nex) {
+                        q.searchInCircle(actSearchPos, Config.lastSearchRadius.getValue() * 1000);
+                    }
+                }
+                if (edtOwner.getText().trim().length() > 0) q.searchForOwner(edtOwner.getText().trim());
+                if (edtCacheName.getText().trim().length() > 0) q.searchForTitle(edtCacheName.getText().trim());
 
                 if (Config.SearchWithoutFounds.getValue()) q.excludeFinds();
                 if (Config.SearchWithoutOwns.getValue()) q.excludeOwn();
                 if (Config.SearchOnlyAvailable.getValue()) q.onlyActiveGeoCaches();
-
-                /*
-                // todo implement following ACB2 extensions
-                if (edtOwner.getText().trim().length() > 0) q.searchForOwner(edtOwner.getText().trim());
-                if (edtCacheName.getText().trim().length() > 0) q.searchForTitle(edtCacheName.getText().trim());
 
                 int importLimit;
                 try {
@@ -475,12 +481,10 @@ public class ImportGCPosition extends BlockGpsActivityBase {
                     importLimit = Config.ImportLimit.getDefaultValue();
                 }
                 q.setMaxToFetch(importLimit);
-                 */
-                q.setMaxToFetch(Integer.MAX_VALUE);
+                Config.ImportLimit.setValue(importLimit);
 
                 //dis.setAnimationType(AnimationType.Download);
                 Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = searchGeoCaches(q);
-
                 //dis.setAnimationType(AnimationType.Work);
                 if (GroundspeakAPI.APIError != GroundspeakAPI.OK) {
                     MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("importCachesOverPosition"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
@@ -516,72 +520,6 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     @Override
     public void dispose() {
         CB.stageManager.unRegisterForBackKey(cancelClickListener);
-
-//        if (btnOK != null)
-//            btnOK.dispose();
-//        btnOK = null;
-//        if (btnCancel != null)
-//            btnCancel.dispose();
-//        btnCancel = null;
-//        if (btnPlus != null)
-//            btnPlus.dispose();
-//        btnPlus = null;
-//        if (btnMinus != null)
-//            btnMinus.dispose();
-//        btnMinus = null;
-//        if (lblTitle != null)
-//            lblTitle.dispose();
-//        lblTitle = null;
-//        if (lblRadius != null)
-//            lblRadius.dispose();
-//        lblRadius = null;
-//        if (lblRadiusUnit != null)
-//            lblRadiusUnit.dispose();
-//        lblRadiusUnit = null;
-//        if (lblMarkerPos != null)
-//            lblMarkerPos.dispose();
-//        lblMarkerPos = null;
-//        if (lblExcludeFounds != null)
-//            lblExcludeFounds.dispose();
-//        lblExcludeFounds = null;
-//        if (lblOnlyAvailable != null)
-//            lblOnlyAvailable.dispose();
-//        lblOnlyAvailable = null;
-//        if (lblExcludeHides != null)
-//            lblExcludeHides.dispose();
-//        lblExcludeHides = null;
-//        if (gsLogo != null)
-//            gsLogo.dispose();
-//        gsLogo = null;
-//        if (coordinateButton != null)
-//            coordinateButton.dispose();
-//        coordinateButton = null;
-//        if (checkBoxExcludeFounds != null)
-//            checkBoxExcludeFounds.dispose();
-//        checkBoxExcludeFounds = null;
-//        if (checkBoxOnlyAvailable != null)
-//            checkBoxOnlyAvailable.dispose();
-//        checkBoxOnlyAvailable = null;
-//        if (checkBoxExcludeHides != null)
-//            checkBoxExcludeHides.dispose();
-//        checkBoxExcludeHides = null;
-//        if (textAreaRadius != null)
-//            textAreaRadius.dispose();
-//        textAreaRadius = null;
-//        if (tglBtnGPS != null)
-//            tglBtnGPS.dispose();
-//        tglBtnGPS = null;
-//        if (tglBtnMap != null)
-//            tglBtnMap.dispose();
-//        tglBtnMap = null;
-//        if (dis != null)
-//            dis.dispose();
-//        dis = null;
-//        if (box != null)
-//            box.dispose();
-//        box = null;
-//
-//        actSearchPos = null;
         super.dispose();
     }
 }
