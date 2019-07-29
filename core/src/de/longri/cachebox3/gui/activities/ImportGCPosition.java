@@ -82,13 +82,13 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     private ClickListener cancelClickListener;
     private Coordinate actSearchPos;
     private boolean needLayout = true;
-    // private SearchCoordinates searchCoordinates;
+    private SearchCoordinates searchCoordinates;
 
     public ImportGCPosition() {
         super("searchOverPosActivity");
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         lblTitle = new CB_Label(Translation.get("importCachesOverPosition"));
-        gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
+        gsLogo = new Image(CB.getSkin().getMenuIcon.gc_logo);
         box = new Catch_Table(true);
         scrollPane = new ScrollPane(box);
         btnOK = new CB_Button(Translation.get("import"));
@@ -253,19 +253,15 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         });
         addClickHandler(tglBtnWeb, () -> {
             actSearchPos = EventHandler.getMyPosition();
-            /*
-            // todo implement
             searchCoordinates = new SearchCoordinates() {
                 public void callBack(Coordinate coordinate) {
                     if (coordinate != null) {
                         actSearchPos = coordinate;
                         setToggleBtnState(2);
                     }
-                    searchCoordinates.doFinish();
                 }
             };
-            searchCoordinates.doShow();
-            */
+            searchCoordinates.show();
             setToggleBtnState(2);
         });
 
@@ -373,7 +369,6 @@ public class ImportGCPosition extends BlockGpsActivityBase {
 
         }
         coordinateButton.setCoordinate(actSearchPos);
-
     }
 
     private void ImportNow() {

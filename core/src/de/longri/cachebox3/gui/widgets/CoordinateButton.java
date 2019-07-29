@@ -54,6 +54,7 @@ public class CoordinateButton extends Catch_VisTextButton {
 
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
+        this.setText(coordinate.formatCoordinate());
     }
 
     public Coordinate getCoordinate() {
