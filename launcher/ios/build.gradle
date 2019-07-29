@@ -20,10 +20,10 @@ dependencies {
     //include libs
         compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    //vtm
-    implementation("org.mapsforge:vtm-ios:$vtmVersion") {
-        exclude group: 'org.slf4j', module: 'slf4j-simple'
-    }
+    //vtm disabled, use own classes
+//    implementation("org.mapsforge:vtm-ios:$vtmVersion") {
+//        exclude group: 'org.slf4j', module: 'slf4j-simple'
+//    }
     natives "org.mapsforge:vtm-ios:$vtmVersion:natives"
 
 
