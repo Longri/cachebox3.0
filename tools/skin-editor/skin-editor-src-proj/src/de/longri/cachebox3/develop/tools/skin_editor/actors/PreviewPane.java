@@ -356,11 +356,11 @@ public class PreviewPane extends Table {
                     } else if (widget.equals("Tree")) { // Tree
 
                         Tree w = new Tree(game.skinProject, key);
-                        Tree.Node node = new Tree.Node(new Label("This", game.skin));
-                        Tree.Node node1 = new Tree.Node(new Label("is", game.skin));
-                        Tree.Node node2 = new Tree.Node(new Label("a", game.skin));
-                        Tree.Node node3 = new Tree.Node(new Label("Tree", game.skin));
-                        Tree.Node node4 = new Tree.Node(new Label("Widget", game.skin));
+                        TreeNode node = new TreeNode(new Label("This", game.skin));
+                        TreeNode node1 = new TreeNode(new Label("is", game.skin));
+                        TreeNode node2 = new TreeNode(new Label("a", game.skin));
+                        TreeNode node3 = new TreeNode(new Label("Tree", game.skin));
+                        TreeNode node4 = new TreeNode(new Label("Widget", game.skin));
                         node3.add(node4);
                         node2.add(node3);
                         node1.add(node2);

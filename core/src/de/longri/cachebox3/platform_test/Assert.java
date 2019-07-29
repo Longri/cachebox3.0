@@ -75,6 +75,18 @@ public class Assert {
         }
     }
 
+    public static void assertNotEquals(Object expected, Object actual) throws PlatformAssertionError {
+        if (objectsAreEqual(expected, actual)) {
+            StringBuilder sb = new StringBuilder();
+            sb.appendLine("expected:");
+            sb.appendLine(String.valueOf(expected));
+            sb.appendLine("");
+            sb.appendLine("actual:");
+            sb.appendLine(String.valueOf(actual));
+            throw new PlatformAssertionError(sb.toString());
+        }
+    }
+
     static boolean objectsAreEqual(Object obj1, Object obj2) {
         if (obj1 == null) {
             return (obj2 == null);

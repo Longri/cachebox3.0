@@ -19,6 +19,7 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
+import de.longri.cachebox3.platform_test.Assert;
 import de.longri.cachebox3.socket.filebrowser.*;
 
 import com.badlogic.gdx.Gdx;
@@ -51,7 +52,7 @@ public class ServerFileTest {
     public void getDirectory() throws PlatformAssertionError {
         ServerFile root = ServerFile.getDirectory(workpath);
         assertThat("Root must be a Directory", root.isDirectory());
-        assertRecursiveDir(workpath, root, Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath());
+        assertRecursiveDir(workpath, root, (Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath()).replace("\\", "/"));
     }
 
     @Test
@@ -67,7 +68,7 @@ public class ServerFileTest {
         deserializeServerFile.deserialize(new BitStore(writer.getArray()));
 
 
-        String rootPath = Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath();
+        String rootPath = (Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath()).replace("\\", "/");
 
         assertRecursiveDir(workpath, root, rootPath);
         assertRecursiveDir(workpath, deserializeServerFile, rootPath);
@@ -79,14 +80,15 @@ public class ServerFileTest {
         if (!fileHandle.isDirectory()) {
             assertThat("FileName must Equals", fileHandle.name().equals(serverFile.getName()));
 
-            String handleAbsolut = fileHandle.file().getAbsolutePath().replace(rootPath, "");
+            String handleAbsolut = fileHandle.file().getAbsolutePath();
             String serverAbsolute = serverFile.getAbsolute();
 
             handleAbsolut = handleAbsolut.replace("\\", "/");
             serverAbsolute = serverAbsolute.replace("\\", "/");
 
-            assertThat("FileAbsolute must Equals", handleAbsolut.equals(serverAbsolute));
+            handleAbsolut = handleAbsolut.replace(rootPath, "");
 
+            Assert.assertEquals("FileAbsolute must Equals", handleAbsolut, serverAbsolute);
 
             return;
         }
