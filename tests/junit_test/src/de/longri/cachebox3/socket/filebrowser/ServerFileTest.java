@@ -82,7 +82,7 @@ class ServerFileTest {
 
             handleAbsolut = handleAbsolut.replace(rootPath, "");
 
-            assertEquals("FileAbsolute must Equals", handleAbsolut, serverAbsolute);
+            assertEquals( handleAbsolut, serverAbsolute,"FileAbsolute must Equals");
 
             return;
         }
