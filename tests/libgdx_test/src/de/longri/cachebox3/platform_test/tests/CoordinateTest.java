@@ -28,7 +28,11 @@ import de.longri.cachebox3.platform_test.Test;
 
 import java.util.Date;
 
-import static de.longri.cachebox3.platform_test.Assert.*;
+import static de.longri.cachebox3.platform_test.Assert.assertEquals;
+import static de.longri.cachebox3.platform_test.Assert.assertTrue;
+import static de.longri.cachebox3.platform_test.Assert.assertFalse;
+import static de.longri.cachebox3.platform_test.Assert.assertNotEquals;
+
 
 
 /**
@@ -209,8 +213,6 @@ public class CoordinateTest {
         TEST_COORD.reset();
         checkObjecktsResetet(RESET, TEST_COORD);
     }
-
-
 
     private void checkObjecktsResetet(Coordinate RESET, Coordinate TEST_COORD) throws PlatformAssertionError {
         assertFalse(TEST_COORD.isValid());

@@ -95,6 +95,8 @@ public class main {
     private static final String ASSERT_THAT_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertThat;";
     private static final String ASSERT_EQUALS = "Assertions.assertEquals;";
     private static final String ASSERT_EQUALS_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertEquals;";
+    private static final String ASSERT_NOT_EQUALS = "Assertions.assertNotEquals;";
+    private static final String ASSERT_NOT_EQUALS_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertNotEquals;";
     private static final String ASSERT_TRUE = "Assertions.assertTrue;";
     private static final String ASSERT_TRUE_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertTrue;";
     private static final String ASSERT_FALSE = "Assertions.assertFalse;";
@@ -279,6 +281,7 @@ public class main {
         boolean jupiterTestReplace = false;
         boolean assertThatReplace = false;
         boolean assertEqualseReplace = false;
+        boolean assertNotEqualseReplace = false;
         boolean assertTrueReplace = false;
         boolean assertFalseReplace = false;
         boolean assertNotNullReplace = false;
@@ -366,6 +369,10 @@ public class main {
             } else if (!assertEqualseReplace && line.endsWith(ASSERT_EQUALS)) {
                 assertEqualseReplace = true;
                 sb.appendLine(ASSERT_EQUALS_LINE);
+                continue;
+            } else if (!assertNotEqualseReplace && line.endsWith(ASSERT_NOT_EQUALS)) {
+                assertNotEqualseReplace = true;
+                sb.appendLine(ASSERT_NOT_EQUALS_LINE);
                 continue;
             } else if (!assertThatReplace && line.endsWith(ASSERT_THAT)) {
                 assertThatReplace = true;

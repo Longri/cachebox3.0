@@ -19,7 +19,6 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.platform_test.Assert;
 import de.longri.cachebox3.socket.filebrowser.*;
 
 import com.badlogic.gdx.Gdx;
@@ -31,7 +30,9 @@ import de.longri.cachebox3.platform_test.BeforeAll;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
 
+
 import static de.longri.cachebox3.platform_test.Assert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertEquals;
 
 /**
  * Created by Longri on 30.10.2017.
@@ -88,7 +89,7 @@ public class ServerFileTest {
 
             handleAbsolut = handleAbsolut.replace(rootPath, "");
 
-            Assert.assertEquals("FileAbsolute must Equals", handleAbsolut, serverAbsolute);
+            assertEquals("FileAbsolute must Equals", handleAbsolut, serverAbsolute);
 
             return;
         }
