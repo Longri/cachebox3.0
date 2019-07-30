@@ -44,6 +44,11 @@ public class EditTextField extends Catch_WidgetGroup {
     private CharSequence text;
     private EditTextStyle style;
     private float maxWidth;
+    private int inputType; // for Android InputType
+
+    public EditTextField(String text) {
+        this(false, text);
+    }
 
     public EditTextField(boolean multiLine) {
         this(multiLine, "");
@@ -81,9 +86,9 @@ public class EditTextField extends Catch_WidgetGroup {
                 };
 
                 if (singleLine) {
-                    PlatformConnector.getSinglelineTextInput(listener, "", EditTextField.this.text.toString(), "");
+                    PlatformConnector.getSinglelineTextInput(listener, inputType, "", EditTextField.this.text.toString(), "");
                 } else {
-                    PlatformConnector.getMultilineTextInput(listener, "", EditTextField.this.text.toString(), "");
+                    PlatformConnector.getMultilineTextInput(listener, inputType, "", EditTextField.this.text.toString(), "");
                 }
             }
         };
@@ -93,6 +98,7 @@ public class EditTextField extends Catch_WidgetGroup {
         minLineCount = 1;
         maxLineCount = 5;
         maxWidth = 0;
+        inputType = 0;
     }
 
     public void setStyle(EditTextStyle style) {
@@ -124,6 +130,14 @@ public class EditTextField extends Catch_WidgetGroup {
     public void setText(CharSequence text) {
         this.text = text;
         textLabel.setText(text);
+    }
+
+    public int getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(int type) {
+        inputType = type;
     }
 
     @Override
