@@ -88,7 +88,7 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         super("searchOverPosActivity");
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         lblTitle = new CB_Label(Translation.get("importCachesOverPosition"));
-        gsLogo = new Image(CB.getSkin().getMenuIcon.gc_logo);
+        gsLogo = new Image(CB.getSkin().getMenuIcon.target);
         box = new Catch_Table(true);
         scrollPane = new ScrollPane(box);
         btnOK = new CB_Button(Translation.get("import"));
@@ -147,8 +147,8 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         setFillParent(true);
 
         setTableAndCellDefaults();
-        addNext(lblTitle, 2.0f);
-        addLast(gsLogo, 0.5f).fill(false).left();
+        addNext(lblTitle, -0.8f);
+        addLast(gsLogo).left().fill(false);
         /*
         row();
         add(scrollPane).expand();
@@ -161,23 +161,23 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         box.addNext(tglBtnGPS);
         box.addNext(tglBtnMap);
         box.addLast(tglBtnWeb);
-        box.addNext(lblRadius, 2f);
-        box.addNext(txtRadius);
+        box.addNext(lblRadius, -0.4f);
+        box.addNext(txtRadius, -0.3f);
         box.addNext(lblRadiusUnit);
         box.addNext(btnMinus);
         box.addLast(btnPlus);
 
-        box.addNext(lblImportLimit);
-        box.addLast(edtImportLimit, 2f);
-        box.addNext(lblCacheName);
-        box.addLast(edtCacheName, 2f);
-        box.addNext(lblOwner);
-        box.addLast(edtOwner, 2f);
-        box.addNext(lblPublished, 1.5f);
-        box.addNext(btnBeforeAfterEqual, 0.5f);
-        box.addLast(edtDate, 1.5f);
-        box.addNext(lblCategory);
-        box.addLast(edtCategory, 2f);
+        box.addNext(lblImportLimit, -0.4f);
+        box.addLast(edtImportLimit);
+        box.addNext(lblCacheName, -0.4f);
+        box.addLast(edtCacheName);
+        box.addNext(lblOwner, -0.4f);
+        box.addLast(edtOwner);
+        box.addNext(lblPublished, -0.4f);
+        box.addNext(btnBeforeAfterEqual, -0.1f);
+        box.addLast(edtDate);
+        box.addNext(lblCategory, -0.4f);
+        box.addLast(edtCategory);
         box.stopRow();
 
         box.addLast(checkBoxOnlyAvailable);

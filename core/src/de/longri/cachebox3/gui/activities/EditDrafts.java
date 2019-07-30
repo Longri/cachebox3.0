@@ -36,7 +36,7 @@ import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CB_Button;
-import de.longri.cachebox3.gui.widgets.EditTextBox;
+import de.longri.cachebox3.gui.widgets.EditTextField;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.DraftEntry;
@@ -64,7 +64,7 @@ public class EditDrafts extends ActivityBase {
     private final DraftListItemStyle itemStyle;
     private final VisScrollPane scrollPane;
     private final VisLabel foundLabel, dateLabel, timeLabel;
-    private final EditTextBox dateTextArea, timeTextArea, commentTextArea;
+    private final EditTextField dateTextArea, timeTextArea, commentTextArea;
 
     private boolean isNewDraft;
     private ReturnListener returnListener;
@@ -148,14 +148,14 @@ public class EditDrafts extends ActivityBase {
         dateLabel = new VisLabel(Translation.get("wptDate") + ":");
         timeLabel = new VisLabel(Translation.get("time") + ":");
 
-        dateTextArea = new EditTextBox(false);
-        timeTextArea = new EditTextBox(false) {
+        dateTextArea = new EditTextField(false);
+        timeTextArea = new EditTextField(false) {
             //return same width like dateTextArea
             public float getPrefWidth() {
                 return dateTextArea.getPrefWidth();
             }
         };
-        commentTextArea = new EditTextBox(true);
+        commentTextArea = new EditTextField(true);
 
         dateTextArea.setText(iso8601FormatDate.format(note.timestamp));
         timeTextArea.setText(iso8601FormatTime.format(note.timestamp));

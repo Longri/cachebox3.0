@@ -33,23 +33,23 @@ import de.longri.cachebox3.utils.NamedRunnable;
 /**
  * Created by Longri on 18.05.2017.
  */
-public class EditTextBox extends Catch_WidgetGroup {
+public class EditTextField extends Catch_WidgetGroup {
 
-    private boolean singleLine = true;
-    private int minLineCount = 1;
-    private int maxLineCount = 5;
+    private boolean singleLine;
+    private int minLineCount;
+    private int maxLineCount;
     private VisLabel textLabel;
     private VisScrollPane scrollPane;
     private Button editButton;
     private CharSequence text;
     private EditTextStyle style;
-    private float maxWidth = 0;
+    private float maxWidth;
 
-    public EditTextBox(boolean multiLine) {
+    public EditTextField(boolean multiLine) {
         this(multiLine, "");
     }
 
-    public EditTextBox(boolean multiLine, String text) {
+    public EditTextField(boolean multiLine, String text) {
         this.singleLine = !multiLine;
         textLabel = new VisLabel(text);
         scrollPane = new VisScrollPane(textLabel);
@@ -81,15 +81,18 @@ public class EditTextBox extends Catch_WidgetGroup {
                 };
 
                 if (singleLine) {
-                    PlatformConnector.getSinglelineTextInput(listener, "", EditTextBox.this.text.toString(), "");
+                    PlatformConnector.getSinglelineTextInput(listener, "", EditTextField.this.text.toString(), "");
                 } else {
-                    PlatformConnector.getMultilineTextInput(listener, "", EditTextBox.this.text.toString(), "");
+                    PlatformConnector.getMultilineTextInput(listener, "", EditTextField.this.text.toString(), "");
                 }
             }
         };
 
         editButton.addListener(clickListener);
         this.addListener(clickListener);
+        minLineCount = 1;
+        maxLineCount = 5;
+        maxWidth = 0;
     }
 
     public void setStyle(EditTextStyle style) {

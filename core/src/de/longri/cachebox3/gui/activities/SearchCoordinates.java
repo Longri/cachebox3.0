@@ -38,6 +38,8 @@ public class SearchCoordinates extends ActivityBase {
         edtCity = new VisTextField("edtCity");
         lblStreet = new CB_Label(Translation.get("street"));
         edtStreet = new VisTextField("edtStreet");
+        setTableAndCellDefaults();
+        center();
         initClickHandlersAndContent();
     }
 
@@ -51,14 +53,12 @@ public class SearchCoordinates extends ActivityBase {
         for (Actor actor : actors)
             removeActor(actor);
         setFillParent(true);
-        setTableAndCellDefaults();
-        row();
         addLast(scrollBox);
         addNext(btnOK);
         addLast(btnCancel);
-        box.addNext(lblCity, 0.3f);
+        box.addNext(lblCity, -0.4f);
         box.addLast(edtCity);
-        box.addNext(lblStreet, 0.3f);
+        box.addNext(lblStreet, -0.4f);
         box.addLast(edtStreet);
         super.layout();
         needLayout = false;

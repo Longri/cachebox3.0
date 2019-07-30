@@ -39,14 +39,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  *     <not_implemented>, addNextNL, addNL, addNLNext</not_implemented>
  *     These commands add an actor just like the simple .add
  *     To switch to the next line/row (subtable) explicit call stopRow or addLast
- *     <weight>With using 'weight' as second parameter to addNext/addLast
+ *     <sizing>With using 'sizing' as second parameter to addNext/addLast
  *
- *     the weight factors the with splitting the whole width in equal width parts (actor)
+ *     the sizing factors the with splitting the whole width in equal width parts (actor)
  *     (factor 0.5f means half of the normal cell width, or 2 means double default cell width)
  *     the calculation is automatic at end of row and done by setting the colspan values correspondingly
- *     This will never be exact, but gives control over the layout with only litle effort</weight>
+ *     This will never be exact, but gives control over the layout with only litle effort</sizing>
  * </HowTo>
- * <Implementation>actorX is temporarily used to store the weight value, for not to extend the Cell.</Implementation>
+ * <Implementation>actorX is temporarily used to store the sizing value, for not to extend the Cell.</Implementation>
  *
  * <Further>Common defaults can be set by a constructor with boolean parameter set to true or
  * an explicit call to setTableAndCellDefaults().</Further>
@@ -58,7 +58,7 @@ public class Catch_Table extends VisTable {
     private final AtomicBoolean drawException = new AtomicBoolean(false);
     private final AtomicInteger drawCount = new AtomicInteger(0);
     private Catch_Table currentRow;
-    private final static float weightMax = 100f;
+    private final static float sizingMax = 100f;
 
     public Catch_Table() {
         super();
@@ -72,8 +72,8 @@ public class Catch_Table extends VisTable {
 
     public Cell setTableAndCellDefaults() {
         top().left();
-        //setDebug(true);
-        return defaults().expandX().fill().pad(CB.scaledSizes.MARGIN).colspan((int) weightMax);
+        // setDebug(true);
+        return defaults().expandX().fill().pad(CB.scaledSizes.MARGIN).colspan((int) sizingMax);
     }
 
     @Override
@@ -105,11 +105,11 @@ public class Catch_Table extends VisTable {
         return cell;
     }
 
-    public <T extends Actor> Cell<T> addNext(T actor, float weight) {
+    public <T extends Actor> Cell<T> addNext(T actor, float sizing) {
         if (currentRow == null)
             startRow();
         Cell<T> cell = currentRow.add(actor);
-        cell.setActorX(weight);
+        cell.setActorX(sizing);
         return cell;
     }
 
@@ -123,11 +123,11 @@ public class Catch_Table extends VisTable {
         return cell;
     }
 
-    public <T extends Actor> Cell<T> addLast(T actor, float weight) {
+    public <T extends Actor> Cell<T> addLast(T actor, float sizing) {
         if (currentRow == null)
             startRow();
         Cell<T> cell = currentRow.add(actor);
-        cell.setActorX(weight);
+        cell.setActorX(sizing);
         currentRow.prepareLayout();
         currentRow = null;
         return cell;
@@ -142,14 +142,29 @@ public class Catch_Table extends VisTable {
 
     public void prepareLayout() {
         row();
-        float weightSum = 0;
+        float remainingSize = sizingMax;
+        float sizingSum = 0;
         for (Cell c : getCells()) {
-            weightSum = weightSum + c.getActorX();
+            if (c.getActorX() < 0 && c.getActorX() > -1) {
+                float percent = c.getActorX() * (-1 * sizingMax);
+                c.colspan((int) percent);
+                remainingSize = remainingSize - percent;
+                // c.setActorX(0f);
+            }
         }
-        float weightBase = weightMax / weightSum;
-        for (Cell c : getCells()) {
-            c.colspan((int) (c.getActorX() * weightBase));
-            // c.setActorX(0f);
+        if (remainingSize > 0) {
+            for (Cell c : getCells()) {
+                if (c.getActorX() > 0) {
+                    sizingSum = sizingSum + c.getActorX();
+                }
+            }
+            float sizingBase = remainingSize / sizingSum;
+            for (Cell c : getCells()) {
+                if (c.getActorX() > 0) {
+                    c.colspan((int) (c.getActorX() * sizingBase));
+                    // c.setActorX(0f);
+                }
+            }
         }
     }
 
