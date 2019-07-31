@@ -49,26 +49,26 @@ public class Action_QuickDraft extends AbstractAction {
             case CITO:
                 cm.addMenuItem("attended", itemStyle.typeStyle.attended, () -> {
                     DraftsView.addNewDraft(LogTypes.attended, true);
-                    finalHandling(true);
+                    finalHandling(true, cache);
                 });
                 break;
             case Camera:
                 cm.addMenuItem("webCamFotoTaken", itemStyle.typeStyle.webcam_photo_taken, () -> {
                     DraftsView.addNewDraft(LogTypes.webcam_photo_taken, true);
-                    finalHandling(true);
+                    finalHandling(true, cache);
                 });
                 cm.addMenuItem("DNF", itemStyle.typeStyle.didnt_find, () -> {
-                    finalHandling(false);
+                    finalHandling(false, cache);
                 });
                 break;
             default:
                 cm.addMenuItem("found", itemStyle.typeStyle.found, () -> {
                     DraftsView.addNewDraft(LogTypes.found, true);
-                    finalHandling(true);
+                    finalHandling(true, cache);
                 });
                 cm.addMenuItem("DNF", itemStyle.typeStyle.didnt_find, () -> {
                     DraftsView.addNewDraft(LogTypes.didnt_find, true);
-                    finalHandling(false);
+                    finalHandling(false, cache);
                 });
                 break;
         }
@@ -77,11 +77,11 @@ public class Action_QuickDraft extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.fieldNote;
+        return CB.getSkin().getMenuIcon.draft;
     }
 
-    private void finalHandling(boolean found) {
-        DraftsView.getInstance().notifyDataSetChanged();
+    private void finalHandling(boolean found, AbstractCache cache) {
+        // CB2:
         // damit der Status geändert wird
         // damit die Icons in der Map aktualisiert werden
         /*
@@ -91,6 +91,25 @@ public class Action_QuickDraft extends AbstractAction {
         pop.show(PopUp_Base.SHOW_TIME_SHORT);
 
         PlatformConnector.vibrate();
+         */
+        /*
+        // todo show in CacheList and Map and others. Don't know what all has to be called!!!
+        // CB3: supposed, but not complete
+        cache.setFound(cache.isFound());
+        cache.updateBooleanStore(Database.Data);
+        DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, cache);
+        Config.FoundOffset.setValue(Config.FoundOffset.getValue() + (cache.isFound() ? 1 : - 1));
+        Config.AcceptChanges();
+        // jetzt noch diesen Cache in der aktuellen CacheListe suchen und auch da den Found-Status zurücksetzen
+        // damit das Smiley Symbol aus der Map und der CacheList verschwindet
+        synchronized (Database.Data.cacheList) {
+            AbstractCache tc = Database.Data.cacheList.GetCacheById(cache.getId());
+            if (tc != null) {
+                tc.setFound(cache.isFound());
+                tc.updateBooleanStore(Database.Data);
+            }
+        }
+        DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
          */
     }
 

@@ -70,7 +70,7 @@ public class AbstractViewSerialiseTest {
     public void DraftsViewTest() {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
-        DraftsView draftsView = new DraftsView();
+        DraftsView draftsView = DraftsView.getInstance();
         DraftsView newDraftsView = (DraftsView) TestUtils.assertAbstractViewSerialation(draftsView, DraftsView.class);
     }
 

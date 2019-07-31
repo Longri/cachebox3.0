@@ -28,6 +28,10 @@
       "path": "svg/map-state-overdraw.svg",
       "scale": 0.75
     },
+    "QuickDraft": {
+      "path": "svg/mapFound0.svg",
+      "scale": 0.73
+    },
     "TB": {
       "path": "svg/TB.svg",
       "scale": 0.08
@@ -888,10 +892,6 @@
       "path": "svg/default_button_pressed.svg",
       "scale": 0.5
     },
-    "delFile": {
-      "path": "svg/delFile.svg",
-      "scale": 0.13
-    },
     "delWp": {
       "path": "svg/delWp.svg",
       "scale": 0.23
@@ -1058,7 +1058,7 @@
     },
     "folder": {
       "path": "svg/folder.svg",
-      "scale": 0.8
+      "scale": 1
     },
     "found": {
       "path": "svg/log0icon.svg",
@@ -1127,10 +1127,6 @@
     "hu": {
       "path": "svg/hu.svg",
       "scale": 0.08
-    },
-    "image_off": {
-      "path": "svg/image_off.svg",
-      "scale": 0.195
     },
     "images-icon": {
       "path": "svg/images-icon.svg",
@@ -1786,7 +1782,7 @@
     },
     "search": {
       "path": "svg/search.svg",
-      "scale": 0.22
+      "scale": 1.48
     },
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
@@ -2501,24 +2497,6 @@
       "background": "transparent_drawable",
       "vScroll": "slider_drawable",
       "vScrollKnob": "sliderKnob"
-    },
-    "spoilerGallery": {
-      "firstItem": "NULL_DRAWABLE",
-      "secondItem": "NULL_DRAWABLE",
-      "selectedItem": "NULL_DRAWABLE",
-      "pad": 1,
-      "emptyFont": "coordinateValueFont",
-      "emptyFontColor": "settings_default_value_font_color",
-      "background": "NULL_DRAWABLE"
-    },
-    "spoilerOverview": {
-      "firstItem": "listrec_first_drawable",
-      "secondItem": "listrec_first_drawable",
-      "selectedItem": "listrec_selected_drawable",
-      "pad": 1,
-      "emptyFont": "coordinateValueFont",
-      "emptyFontColor": "settings_default_value_font_color",
-      "background": "NULL_DRAWABLE"
     }
   },
   "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
@@ -2874,6 +2852,7 @@
       "showWp": "showWp",
       "editWp": "editWp",
       "mesureWp": "mesureWp",
+      "draft": "QuickDraft",
       "hintIconOn": "hintOn",
       "hintIconOff": "hintOff",
       "my_parking": "mapMyParking",
@@ -2892,7 +2871,6 @@
       "solverIcon": "solver-icon",
       "solver2Icon": "solver-icon-2",
       "imagesIcon": "images-icon",
-      "imagesIconOff": "image_off",
       "cb": "cb",
       "tbListIcon": "tbListIcon",
       "waypointListIcon": "waypointListIcon",
@@ -2924,15 +2902,14 @@
   },
   "de.longri.cachebox3.gui.skin.styles.FileChooserStyle": {
     "default": {
-      "itemNameFont": "settings_default_value_font",
+      "itemNameFont": "normal_font",
       "backItemNameFont": "normal_font",
       "itemNameFontColor": "font_color",
-      "backItemNameFontColor": "font_color",
+      "backItemNameFontColor": "back_font_color",
       "backIcon": "filebackIcon",
       "folderIcon": "folder",
       "fileIcon": "file",
       "mapFileIcon": "mapFile",
-      "deleteBtnIcon": "delFile",
       "background": "activityBack_drawable"
     }
   },
@@ -3406,14 +3383,6 @@
     "default": {
       "backgroundColor": "background_color",
       "foregroundColor": "font_color"
-    }
-  },
-  "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
-    "default": {
-      "overviewListStyle" : "spoilerOverview",
-      "galleryListStyle" : "spoilerGallery",
-      "spoilerNameFont": "AboutInfo",
-      "spoilerNameFontColor": "font_color"
     }
   }
 }

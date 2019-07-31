@@ -109,8 +109,13 @@ public class DraftsView extends AbstractView {
         create();
     }
 
+    private static boolean isInstanceCreated() {
+        return that != null;
+    }
     public static DraftsView getInstance() {
-        if (that == null) that = new DraftsView();
+        if (that == null) {
+            that = new DraftsView();
+        }
         return that;
     }
 
@@ -161,7 +166,7 @@ public class DraftsView extends AbstractView {
                 }
             }
 
-            getInstance().notifyDataSetChanged();
+            notifyDataSetChanged();
             return;
         }
 
@@ -204,7 +209,6 @@ public class DraftsView extends AbstractView {
             aktDraft = newDraft;
         } else {
             tmpDrafts.removeValue(newDraft, false);
-
         }
 
         switch (type) {
@@ -251,11 +255,7 @@ public class DraftsView extends AbstractView {
                 break;
         }
 
-        if (!withoutShowEdit) {
-            efnActivity = new EditDrafts(newDraft, returnListener, true);
-            efnActivity.show();
-        } else {
-
+        if (withoutShowEdit) {
             // new Draft
             tmpDrafts.add(newDraft);
             newDraft.writeToDatabase();
@@ -288,8 +288,11 @@ public class DraftsView extends AbstractView {
 
             DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
 
-            getInstance().notifyDataSetChanged();
+            notifyDataSetChanged();
 
+        } else {
+            efnActivity = new EditDrafts(newDraft, returnListener, true);
+            efnActivity.show();
         }
     }
 
@@ -359,7 +362,7 @@ public class DraftsView extends AbstractView {
                 draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
             }
         }
-        getInstance().notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     private static void logOnline(final DraftEntry fieldNote, final boolean isNewFieldNote) {
@@ -556,7 +559,7 @@ public class DraftsView extends AbstractView {
                                 }
                             }, 300);
                         }
-                        DraftsView.this.notifyDataSetChanged();
+                        notifyDataSetChanged();
                     }
                 }
         ).show();
@@ -730,13 +733,15 @@ public class DraftsView extends AbstractView {
         }
     }
 
-    public void notifyDataSetChanged() {
-        CB.postOnGlThread(new NamedRunnable("DraftsView") {
-            @Override
-            public void run() {
-                loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
-            }
-        });
+    public static void notifyDataSetChanged() {
+        if (isInstanceCreated()) {
+            CB.postOnGlThread(new NamedRunnable("DraftsView") {
+                @Override
+                public void run() {
+                    DraftsView.getInstance().loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                }
+            });
+        }
     }
 
     //################### Context menu implementation ####################################
