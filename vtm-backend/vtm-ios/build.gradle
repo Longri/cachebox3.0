@@ -1,0 +1,15 @@
+apply plugin: "java"
+
+dependencies {
+    implementation "org.mapsforge:vtm-gdx:$vtmVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+    implementation "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+    implementation "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
+    implementation "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
+
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+sourceSets.main.java.srcDirs = [ "src/" ]
