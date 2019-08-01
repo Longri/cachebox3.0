@@ -24,6 +24,9 @@ dependencies {
 //    implementation("org.mapsforge:vtm-ios:$vtmVersion") {
 //        exclude group: 'org.slf4j', module: 'slf4j-simple'
 //    }
+    implementation project(":vtm-ios")
+
+
     natives "org.mapsforge:vtm-ios:$vtmVersion:natives"
 
 

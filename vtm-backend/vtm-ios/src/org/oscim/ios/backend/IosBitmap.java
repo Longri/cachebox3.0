@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 Longri
+ * Copyright 2016-2017 Longri
  * Copyright 2018 devemux86
  *
  * This program is free software: you can redistribute it and/or modify it under the
@@ -219,8 +219,14 @@ public class IosBitmap implements Bitmap {
             glFormat = pixmap.getGLFormat();
             glType = pixmap.getGLType();
 
-            directPixelBuffer = VM.newDirectByteBuffer(cgBitmapContext.getData(), (encodedData.length / 4) << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
+            //vtm-change
+            // - change to new pointer return of CgBitmapContext.getData() (RoboVm changes 2.3.8-SNAPSHOT)
+            // - directPixelBuffer = cgBitmapContext.getData().asIntBuffer(encodedData.length / 4);
+            directPixelBuffer = VM.newDirectByteBuffer(cgBitmapContext.getData(), (encodedData.length / 4) << 2)
+                    .order(ByteOrder.nativeOrder()).asIntBuffer();
+
             pixmap.dispose();
+
         }
 
         Gdx.gl.glTexImage2D(GL.TEXTURE_2D, 0, glInternalFormat, this.width, this.height, 0
