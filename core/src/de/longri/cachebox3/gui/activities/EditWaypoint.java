@@ -51,7 +51,7 @@ public class EditWaypoint extends ActivityBase {
     private final CB_Button btnOk, btnCancel;
     private final CB_Label cacheTitelLabel, titleLabel, typeLabel, descriptionLabel, clueLabel, startLabel;
     private final ScrollPane scrollPane;
-    private final EditTextBox titleTextArea, descriptionTextArea, clueTextArea;
+    private final EditTextField titleTextArea, descriptionTextArea, clueTextArea;
     private final VisTable contentTable;
     private final CoordinateButton coordinateButton;
     private final VisCheckBox startCheckBox;
@@ -76,9 +76,9 @@ public class EditWaypoint extends ActivityBase {
         descriptionLabel = new CB_Label(Translation.get("Description"));
         clueLabel = new CB_Label(Translation.get("Clue"));
         startLabel = new CB_Label(Translation.get("start"));
-        titleTextArea = new EditTextBox(false);
-        descriptionTextArea = new EditTextBox(true);
-        clueTextArea = new EditTextBox(true);
+        titleTextArea = new EditTextField(false);
+        descriptionTextArea = new EditTextField(true);
+        clueTextArea = new EditTextField(true);
         contentTable = new VisTable();
         coordinateButton = new CoordinateButton(waypoint);
         startCheckBox = new VisCheckBox("");

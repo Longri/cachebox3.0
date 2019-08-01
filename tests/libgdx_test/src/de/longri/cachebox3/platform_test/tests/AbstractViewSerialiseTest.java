@@ -19,11 +19,10 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.gui.views.*;
-
 import de.longri.cachebox3.TestUtils;
-import de.longri.cachebox3.platform_test.RunOnGL;
+import de.longri.cachebox3.gui.views.*;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.RunOnGL;
 import de.longri.cachebox3.platform_test.Test;
 
 /**
@@ -77,7 +76,7 @@ public class AbstractViewSerialiseTest {
     public void DraftsViewTest() throws PlatformAssertionError {
         TestUtils.initialVisUI();
         // About view have no member! check only serialization/deserialization!
-        DraftsView draftsView = new DraftsView();
+        DraftsView draftsView = DraftsView.getInstance();
         DraftsView newDraftsView = (DraftsView) TestUtils.assertAbstractViewSerialation(draftsView, DraftsView.class);
     }
 

@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisTextField;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.CacheListChangedEvent;
@@ -67,7 +66,7 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     private static final Logger log = LoggerFactory.getLogger(ImportGCPosition.class);
     private final CB_Button btnOK, btnCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap, tglBtnWeb, btnBeforeAfterEqual;
     private final CB_Label lblTitle, lblRadius, lblRadiusUnit, lblImportLimit, lblCacheName, lblOwner, lblPublished, lblCategory;
-    private final VisTextField edtImportLimit, edtCacheName, edtOwner, edtDate, edtCategory, txtRadius;
+    private final EditTextField edtImportLimit, edtCacheName, edtOwner, edtDate, edtCategory, txtRadius;
     private final Image gsLogo;
     private final CoordinateButton coordinateButton;
     private final CB_CheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
@@ -82,13 +81,13 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     private ClickListener cancelClickListener;
     private Coordinate actSearchPos;
     private boolean needLayout = true;
-    // private SearchCoordinates searchCoordinates;
+    private SearchCoordinates searchCoordinates;
 
     public ImportGCPosition() {
         super("searchOverPosActivity");
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         lblTitle = new CB_Label(Translation.get("importCachesOverPosition"));
-        gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
+        gsLogo = new Image(CB.getSkin().getMenuIcon.target);
         box = new Catch_Table(true);
         scrollPane = new ScrollPane(box);
         btnOK = new CB_Button(Translation.get("import"));
@@ -100,22 +99,25 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         tglBtnWeb = new CB_Button(Translation.get("FromWeb"), "toggle");
 
         lblRadius = new CB_Label(Translation.get("Radius"));
-        txtRadius = new VisTextField("100");
+        txtRadius = new EditTextField("100");
+        txtRadius.setInputType(InputType.TYPE_CLASS_NUMBER);
         lblRadiusUnit = new CB_Label(Config.ImperialUnits.getValue() ? "mi" : "km");
         btnMinus = new CB_Button("-");
         btnPlus = new CB_Button("+");
 
         lblImportLimit = new CB_Label(Translation.get("ImportLimit"));
-        edtImportLimit = new VisTextField("*" + Translation.get("ImportLimit"));
+        edtImportLimit = new EditTextField("*" + Translation.get("ImportLimit"));
+        edtImportLimit.setInputType(InputType.TYPE_CLASS_NUMBER);
         lblCacheName = new CB_Label(Translation.get("Title"));
-        edtCacheName = new VisTextField("*" + Translation.get("Title"));
+        edtCacheName = new EditTextField("*" + Translation.get("Title"));
         lblOwner = new CB_Label(Translation.get("Owner"));
-        edtOwner = new VisTextField("*" + Translation.get("Owner"));
+        edtOwner = new EditTextField("*" + Translation.get("Owner"));
         btnBeforeAfterEqual = new CB_Button("<=");
         lblPublished = new CB_Label(Translation.get("published"));
-        edtDate = new VisTextField("*" + Translation.get("published"));
+        edtDate = new EditTextField("*" + Translation.get("published"));
+        edtDate.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE);
         lblCategory = new CB_Label(Translation.get("category"));
-        edtCategory = new VisTextField("*" + Translation.get("category"));
+        edtCategory = new EditTextField("*" + Translation.get("category"));
 
         checkBoxOnlyAvailable = new CB_CheckBox(Translation.get("SearchOnlyAvailable"));
         checkBoxExcludeHides = new CB_CheckBox(Translation.get("SearchWithoutOwns"));
@@ -147,8 +149,8 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         setFillParent(true);
 
         setTableAndCellDefaults();
-        addNext(lblTitle, 2.0f);
-        addLast(gsLogo, 0.5f).fill(false).left();
+        addNext(lblTitle, -0.8f);
+        addLast(gsLogo).left().fill(false);
         /*
         row();
         add(scrollPane).expand();
@@ -161,23 +163,23 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         box.addNext(tglBtnGPS);
         box.addNext(tglBtnMap);
         box.addLast(tglBtnWeb);
-        box.addNext(lblRadius, 2f);
-        box.addNext(txtRadius);
+        box.addNext(lblRadius, -0.4f);
+        box.addNext(txtRadius, -0.3f);
         box.addNext(lblRadiusUnit);
         box.addNext(btnMinus);
         box.addLast(btnPlus);
 
-        box.addNext(lblImportLimit);
-        box.addLast(edtImportLimit, 2f);
-        box.addNext(lblCacheName);
-        box.addLast(edtCacheName, 2f);
-        box.addNext(lblOwner);
-        box.addLast(edtOwner, 2f);
-        box.addNext(lblPublished, 1.5f);
-        box.addNext(btnBeforeAfterEqual, 0.5f);
-        box.addLast(edtDate, 1.5f);
-        box.addNext(lblCategory);
-        box.addLast(edtCategory, 2f);
+        box.addNext(lblImportLimit, -0.4f);
+        box.addLast(edtImportLimit);
+        box.addNext(lblCacheName, -0.4f);
+        box.addLast(edtCacheName);
+        box.addNext(lblOwner, -0.4f);
+        box.addLast(edtOwner);
+        box.addNext(lblPublished, -0.4f);
+        box.addNext(btnBeforeAfterEqual, -0.1f);
+        box.addLast(edtDate);
+        box.addNext(lblCategory, -0.4f);
+        box.addLast(edtCategory);
         box.stopRow();
 
         box.addLast(checkBoxOnlyAvailable);
@@ -253,19 +255,15 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         });
         addClickHandler(tglBtnWeb, () -> {
             actSearchPos = EventHandler.getMyPosition();
-            /*
-            // todo implement
             searchCoordinates = new SearchCoordinates() {
                 public void callBack(Coordinate coordinate) {
                     if (coordinate != null) {
                         actSearchPos = coordinate;
                         setToggleBtnState(2);
                     }
-                    searchCoordinates.doFinish();
                 }
             };
-            searchCoordinates.doShow();
-            */
+            searchCoordinates.show();
             setToggleBtnState(2);
         });
 
@@ -335,11 +333,15 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     }
 
     private void incrementRadius(int direction) {
+        int maxRadius = 160;
+        if (Config.ImperialUnits.getValue()) {
+            maxRadius = 100;
+        }
         try {
-            int ist = Integer.parseInt(txtRadius.getText().toString());
+            int ist = Integer.parseInt(txtRadius.getText());
             ist += direction;
-            if (ist > 100)
-                ist = 100;
+            if (ist > maxRadius)
+                ist = maxRadius;
             if (ist < 1)
                 ist = 1;
             txtRadius.setText(String.valueOf(ist));
@@ -373,7 +375,6 @@ public class ImportGCPosition extends BlockGpsActivityBase {
 
         }
         coordinateButton.setCoordinate(actSearchPos);
-
     }
 
     private void ImportNow() {
@@ -459,7 +460,19 @@ public class ImportGCPosition extends BlockGpsActivityBase {
                     int radius;
                     try {
                         radius = Integer.parseInt(txtRadius.getText());
-                        if (Config.ImperialUnits.getValue()) radius = UnitFormatter.getKilometer(radius);
+                        if (Config.ImperialUnits.getValue()) {
+                            radius = UnitFormatter.getKilometer(radius);
+                            if (radius > 100) {
+                                radius = 100; // max 100 miles
+                                txtRadius.setText(String.valueOf(radius));
+                            }
+                        }
+                        else {
+                            if (radius > 160) {
+                                radius = 160; // max 100 miles
+                                txtRadius.setText(String.valueOf(radius));
+                            }
+                        }
                         Config.lastSearchRadius.setValue(radius);
                         Config.AcceptChanges();
                         q.searchInCircle(actSearchPos, radius * 1000);
