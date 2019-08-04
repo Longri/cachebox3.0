@@ -64,10 +64,12 @@ import static de.longri.cachebox3.apis.GroundspeakAPI.searchGeoCaches;
 public class ImportGCPosition extends BlockGpsActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(ImportGCPosition.class);
-    private final CB_Button btnOK, btnCancel, btnPlus, btnMinus, tglBtnGPS, tglBtnMap, tglBtnWeb, btnBeforeAfterEqual;
-    private final CB_Label lblTitle, lblRadius, lblRadiusUnit, lblImportLimit, lblCacheName, lblOwner, lblPublished, lblCategory;
-    private final EditTextField edtImportLimit, edtCacheName, edtOwner, edtDate, edtCategory, txtRadius;
+    private final CB_Label lblTitle;
     private final Image gsLogo;
+    private final CB_Button btnOK, btnCancel;
+    private final CB_Button btnPlus, btnMinus, tglBtnGPS, tglBtnMap, tglBtnWeb, btnBeforeAfterEqual;
+    private final CB_Label lblRadius, lblRadiusUnit, lblImportLimit, lblCacheName, lblOwner, lblPublished, lblCategory;
+    private final EditTextField edtImportLimit, edtCacheName, edtOwner, edtDate, edtCategory, txtRadius;
     private final CoordinateButton coordinateButton;
     private final CB_CheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
     private final SimpleDateFormat simpleDateFormat;
@@ -149,8 +151,8 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         setFillParent(true);
 
         setTableAndCellDefaults();
-        addNext(lblTitle, -0.8f);
-        addLast(gsLogo).left().fill(false);
+        addNext(gsLogo).left().fill(false);
+        addLast(lblTitle, -0.8f);
         /*
         row();
         add(scrollPane).expand();
@@ -267,7 +269,7 @@ public class ImportGCPosition extends BlockGpsActivityBase {
             setToggleBtnState(2);
         });
 
-        addClickHandler(btnBeforeAfterEqual,() -> {
+        addClickHandler(btnBeforeAfterEqual, () -> {
             switch (btnBeforeAfterEqual.getText().toString()) {
                 case "X":
                     btnBeforeAfterEqual.setText("<=");
@@ -466,8 +468,7 @@ public class ImportGCPosition extends BlockGpsActivityBase {
                                 radius = 100; // max 100 miles
                                 txtRadius.setText(String.valueOf(radius));
                             }
-                        }
-                        else {
+                        } else {
                             if (radius > 160) {
                                 radius = 160; // max 100 miles
                                 txtRadius.setText(String.valueOf(radius));

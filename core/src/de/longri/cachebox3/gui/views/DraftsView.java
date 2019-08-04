@@ -62,7 +62,7 @@ public class DraftsView extends AbstractView {
     private static DraftsView that;
     private static DraftEntry aktDraft;
     private static DraftList draftEntries;
-    private static EditDrafts.ReturnListener returnListener = (fieldNote, isNewDraft, directlog) -> addOrChangeDraft(fieldNote, isNewDraft, directlog);
+    private static EditDrafts.ReturnListener returnListener = DraftsView::addOrChangeDraft;
     private static EditDrafts efnActivity;
     private ListView listView = new ListView(VERTICAL);
     private DraftListItemStyle itemStyle;
@@ -104,6 +104,10 @@ public class DraftsView extends AbstractView {
         }
     };
 
+    public DraftsView(BitStore reader) {
+        super(reader);
+    }
+
     private DraftsView() {
         super("DraftsView");
         create();
@@ -112,6 +116,7 @@ public class DraftsView extends AbstractView {
     private static boolean isInstanceCreated() {
         return that != null;
     }
+
     public static DraftsView getInstance() {
         if (that == null) {
             that = new DraftsView();
@@ -296,42 +301,42 @@ public class DraftsView extends AbstractView {
         }
     }
 
-    private static void addOrChangeDraft(DraftEntry fieldNote, boolean isNewDraft, boolean directLog) {
+    private static void addOrChangeDraft(DraftEntry draftEntry, boolean isNewDraft, boolean directLog) {
 
         if (directLog) {
             // try to direct upload
-            logOnline(fieldNote, isNewDraft);
+            logOnline(draftEntry, isNewDraft);
             return;
         }
 
 
-        if (fieldNote != null) {
+        if (draftEntry != null) {
 
             if (isNewDraft) {
                 // nur, wenn eine Draft neu angelegt wurde
                 // new Draft
-                draftEntries.add(fieldNote);
+                draftEntries.add(draftEntry);
 
                 // eine evtl. vorhandene Draft /DNF löschen
-                if (fieldNote.type == LogTypes.attended //
-                        || fieldNote.type == LogTypes.found //
-                        || fieldNote.type == LogTypes.webcam_photo_taken //
-                        || fieldNote.type == LogTypes.didnt_find) {
-                    draftEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.found);
-                    draftEntries.deleteDraftByCacheId(fieldNote.CacheId, LogTypes.didnt_find);
+                if (draftEntry.type == LogTypes.attended //
+                        || draftEntry.type == LogTypes.found //
+                        || draftEntry.type == LogTypes.webcam_photo_taken //
+                        || draftEntry.type == LogTypes.didnt_find) {
+                    draftEntries.deleteDraftByCacheId(draftEntry.CacheId, LogTypes.found);
+                    draftEntries.deleteDraftByCacheId(draftEntry.CacheId, LogTypes.didnt_find);
                 }
             }
 
-            fieldNote.writeToDatabase();
-            aktDraft = fieldNote;
+            draftEntry.writeToDatabase();
+            aktDraft = draftEntry;
 
             if (isNewDraft) {
                 // nur, wenn eine Draft neu angelegt wurde
                 // wenn eine Draft neu angelegt werden soll dann kann hier auf SelectedCache zugegriffen werden, da nur für den
                 // SelectedCache eine fieldNote angelegt wird
-                if (fieldNote.type == LogTypes.found //
-                        || fieldNote.type == LogTypes.attended //
-                        || fieldNote.type == LogTypes.webcam_photo_taken) {
+                if (draftEntry.type == LogTypes.found //
+                        || draftEntry.type == LogTypes.attended //
+                        || draftEntry.type == LogTypes.webcam_photo_taken) {
                     // Found it! -> Cache als gefunden markieren
                     if (!EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(true);
@@ -341,7 +346,7 @@ public class DraftsView extends AbstractView {
                         Config.AcceptChanges();
                     }
 
-                } else if (fieldNote.type == LogTypes.didnt_find) { // DidNotFound -> Cache als nicht gefunden markieren
+                } else if (draftEntry.type == LogTypes.didnt_find) { // DidNotFound -> Cache als nicht gefunden markieren
                     if (EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(false);
                         EventHandler.getSelectedCache().updateBooleanStore(Database.Data);
@@ -403,6 +408,17 @@ public class DraftsView extends AbstractView {
             MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
         }
 
+    }
+
+    public static void notifyDataSetChanged() {
+        if (isInstanceCreated()) {
+            CB.postOnGlThread(new NamedRunnable("DraftsView") {
+                @Override
+                public void run() {
+                    DraftsView.getInstance().loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                }
+            });
+        }
     }
 
     @Override
@@ -730,17 +746,6 @@ public class DraftsView extends AbstractView {
             else if (cache.HasStartWaypoint())
                 finalWp = cache.GetStartWaypoint();
             EventHandler.setSelectedWaypoint(cache, finalWp);
-        }
-    }
-
-    public static void notifyDataSetChanged() {
-        if (isInstanceCreated()) {
-            CB.postOnGlThread(new NamedRunnable("DraftsView") {
-                @Override
-                public void run() {
-                    DraftsView.getInstance().loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
-                }
-            });
         }
     }
 

@@ -24,7 +24,9 @@ import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.views.DraftsView;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.DraftList;
 import de.longri.cachebox3.types.LogTypes;
 
 /**
@@ -109,8 +111,8 @@ public class Action_QuickDraft extends AbstractAction {
                 tc.updateBooleanStore(Database.Data);
             }
         }
-        DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
          */
+        DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
     }
 
 }
