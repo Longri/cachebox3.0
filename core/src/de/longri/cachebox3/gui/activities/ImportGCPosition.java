@@ -15,13 +15,9 @@
  */
 package de.longri.cachebox3.gui.activities;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
@@ -29,7 +25,7 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
-import de.longri.cachebox3.gui.BlockGpsActivityBase;
+import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
@@ -61,12 +57,9 @@ import static de.longri.cachebox3.apis.GroundspeakAPI.searchGeoCaches;
 /**
  * Created by Longri on 12.04.2017.
  */
-public class ImportGCPosition extends BlockGpsActivityBase {
+public class ImportGCPosition extends Activity {
 
     private static final Logger log = LoggerFactory.getLogger(ImportGCPosition.class);
-    private final CB_Label lblTitle;
-    private final Image gsLogo;
-    private final CB_Button btnOK, btnCancel;
     private final CB_Button btnPlus, btnMinus, tglBtnGPS, tglBtnMap, tglBtnWeb, btnBeforeAfterEqual;
     private final CB_Label lblRadius, lblRadiusUnit, lblImportLimit, lblCacheName, lblOwner, lblPublished, lblCategory;
     private final EditTextField edtImportLimit, edtCacheName, edtOwner, edtDate, edtCategory, txtRadius;
@@ -77,23 +70,13 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     private final Image workAnimation;
     private final CB_ProgressBar progressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
-    private Catch_Table box;
-    private ScrollPane scrollPane;
     private boolean importRuns = false;
-    private ClickListener cancelClickListener;
     private Coordinate actSearchPos;
-    private boolean needLayout = true;
     private SearchCoordinates searchCoordinates;
 
     public ImportGCPosition() {
-        super("searchOverPosActivity");
+        super("importCachesOverPosition", CB.getSkin().getMenuIcon.target);
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        lblTitle = new CB_Label(Translation.get("importCachesOverPosition"));
-        gsLogo = new Image(CB.getSkin().getMenuIcon.target);
-        box = new Catch_Table(true);
-        scrollPane = new ScrollPane(box);
-        btnOK = new CB_Button(Translation.get("import"));
-        btnCancel = new CB_Button(Translation.get("cancel"));
 
         coordinateButton = new CoordinateButton(EventHandler.getMyPosition());
         tglBtnGPS = new CB_Button(Translation.get("FromGps"), "toggle");
@@ -137,57 +120,6 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         setWorkAnimationVisible(false);
     }
 
-    @Override
-    public void layout() {
-        if (!needLayout) {
-            super.layout();
-            return;
-        }
-
-        SnapshotArray<Actor> actors = getChildren();
-        for (Actor actor : actors)
-            removeActor(actor);
-
-        setFillParent(true);
-
-        setTableAndCellDefaults();
-        addNext(gsLogo).left().fill(false);
-        addLast(lblTitle, -0.8f);
-        /*
-        row();
-        add(scrollPane).expand();
-         */
-        addLast(scrollPane);
-        addNext(btnOK);
-        addLast(btnCancel);
-
-        box.addLast(coordinateButton);
-        box.addNext(tglBtnGPS);
-        box.addNext(tglBtnMap);
-        box.addLast(tglBtnWeb);
-        box.addNext(lblRadius, -0.4f);
-        box.addNext(txtRadius, -0.3f);
-        box.addNext(lblRadiusUnit);
-        box.addNext(btnMinus);
-        box.addLast(btnPlus);
-
-        box.addNext(lblImportLimit, -0.4f);
-        box.addLast(edtImportLimit);
-        box.addNext(lblCacheName, -0.4f);
-        box.addLast(edtCacheName);
-        box.addNext(lblOwner, -0.4f);
-        box.addLast(edtOwner);
-        box.addNext(lblPublished, -0.4f);
-        box.addNext(btnBeforeAfterEqual, -0.1f);
-        box.addLast(edtDate);
-        box.addNext(lblCategory, -0.4f);
-        box.addLast(edtCategory);
-        box.stopRow();
-
-        box.addLast(checkBoxOnlyAvailable);
-        box.addLast(checkBoxExcludeHides);
-        box.addLast(checkBoxExcludeFounds);
-
         /*
         add(workAnimation).colspan(5).center();
         row();
@@ -206,8 +138,55 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         row();
          */
 
-        super.layout();
-        needLayout = false;
+    @Override
+    protected Catch_Table createMainContent() {
+
+        mainContent.addLast(coordinateButton);
+        mainContent.addNext(tglBtnGPS);
+        mainContent.addNext(tglBtnMap);
+        mainContent.addLast(tglBtnWeb);
+        mainContent.addNext(lblRadius, -0.4f);
+        mainContent.addNext(txtRadius, -0.3f);
+        mainContent.addNext(lblRadiusUnit);
+        mainContent.addNext(btnMinus);
+        mainContent.addLast(btnPlus);
+
+        mainContent.addNext(lblImportLimit, -0.4f);
+        mainContent.addLast(edtImportLimit);
+        mainContent.addNext(lblCacheName, -0.4f);
+        mainContent.addLast(edtCacheName);
+        mainContent.addNext(lblOwner, -0.4f);
+        mainContent.addLast(edtOwner);
+        mainContent.addNext(lblPublished, -0.4f);
+        mainContent.addNext(btnBeforeAfterEqual, -0.1f);
+        mainContent.addLast(edtDate);
+        mainContent.addNext(lblCategory, -0.4f);
+        mainContent.addLast(edtCategory);
+        mainContent.stopRow();
+
+        mainContent.addLast(checkBoxOnlyAvailable);
+        mainContent.addLast(checkBoxExcludeHides);
+        mainContent.addLast(checkBoxExcludeFounds);
+        return mainContent;
+    }
+
+    @Override
+    protected void runAtOk() {
+        CB.postAsync(new NamedRunnable("ImportGCPosition") {
+            @Override
+            public void run() {
+                ImportNow();
+            }
+        });
+    }
+
+    @Override
+    protected void runAtCancel() {
+        if (importRuns) {
+            canceled.set(true);
+        } else {
+            finish();
+        }
     }
 
     private void setWorkAnimationVisible(boolean visible) {
@@ -220,20 +199,6 @@ public class ImportGCPosition extends BlockGpsActivityBase {
     }
 
     private void initClickHandlersAndContent() {
-        addClickHandler(btnOK, () -> CB.postAsync(new NamedRunnable("ImportGCPosition") {
-            @Override
-            public void run() {
-                ImportNow();
-            }
-        }));
-        cancelClickListener = addClickHandler(btnCancel, () -> {
-            if (importRuns) {
-                canceled.set(true);
-            } else {
-                finish();
-            }
-        });
-        CB.stageManager.registerForBackKey(cancelClickListener);
         addClickHandler(btnPlus, () -> incrementRadius(1));
         addClickHandler(btnMinus, () -> incrementRadius(-1));
         addClickHandler(tglBtnGPS, () -> {
@@ -433,7 +398,6 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         Config.SearchWithoutFounds.setValue(checkBoxExcludeFounds.isChecked());
         Config.SearchOnlyAvailable.setValue(checkBoxOnlyAvailable.isChecked());
         Config.SearchWithoutOwns.setValue(checkBoxExcludeHides.isChecked());
-        Config.AcceptChanges();
 
         Date tmpDate;
         try {
@@ -475,7 +439,6 @@ public class ImportGCPosition extends BlockGpsActivityBase {
                             }
                         }
                         Config.lastSearchRadius.setValue(radius);
-                        Config.AcceptChanges();
                         q.searchInCircle(actSearchPos, radius * 1000);
                     } catch (NumberFormatException nex) {
                         q.searchInCircle(actSearchPos, Config.lastSearchRadius.getValue() * 1000);
@@ -497,6 +460,7 @@ public class ImportGCPosition extends BlockGpsActivityBase {
                 q.setMaxToFetch(importLimit);
                 Config.ImportLimit.setValue(importLimit);
 
+                Config.AcceptChanges();
                 //dis.setAnimationType(AnimationType.Download);
                 Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = searchGeoCaches(q);
                 //dis.setAnimationType(AnimationType.Work);
@@ -531,9 +495,18 @@ public class ImportGCPosition extends BlockGpsActivityBase {
         }
     }
 
+    public void show() {
+        super.show();
+        CB.viewmanager.locationReceiver.stopForegroundUpdates();
+    }
+
+    public void finish() {
+        super.finish();
+        CB.viewmanager.locationReceiver.resume();
+    }
+
     @Override
     public void dispose() {
-        CB.stageManager.unRegisterForBackKey(cancelClickListener);
         super.dispose();
     }
 }

@@ -1,78 +1,58 @@
 package de.longri.cachebox3.gui.activities;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.SnapshotArray;
-import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_Label;
+import de.longri.cachebox3.gui.widgets.EditTextField;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.translation.Translation;
 
-import static de.longri.cachebox3.CB.addClickHandler;
-
-public class SearchDialog extends ActivityBase {
-    private static SearchDialog searchDialog;
-    private CB_Label lblTitle;
-    private Image imgTitle;
-    private CB_Button btnOK, btnCancel;
-    private Catch_Table box;
-    private boolean needLayout = true;
-    Drawable icon;
+public class SearchDialog extends Activity {
+    private final CB_Label lblCachetitle, lblGcCode, lblOwner;
+    private final EditTextField edtCachetitle, edtGcCode, edtOwner;
+    private final CB_Button btnSearch, btnFilter, btnNext;
 
     private SearchDialog(String title, Drawable icon) {
-        super(title);
-        this.icon = icon;
-        lblTitle = new CB_Label(Translation.get(title));
-        imgTitle = new Image(icon);
-        box = new Catch_Table(true);
-        btnOK = new CB_Button(Translation.get("ok"));
-        btnCancel = new CB_Button(Translation.get("cancel"));
-        setTableAndCellDefaults();
-        center();
-        initClickHandlersAndContent();
+        super(title,icon);
+        lblCachetitle = new CB_Label(Translation.get("Title"));
+        lblGcCode = new CB_Label(Translation.get("GCCode"));
+        lblOwner = new CB_Label(Translation.get("Owner"));
+        edtCachetitle = new EditTextField("");
+        edtGcCode = new  EditTextField("");
+        edtOwner = new  EditTextField("");
+        btnSearch = new CB_Button(Translation.get("Search"));
+        btnFilter = new CB_Button(Translation.get("Filter"));
+        btnNext = new CB_Button(Translation.get("Next"));
     }
 
-    public static SearchDialog getInstance(String title, Drawable icon) {
-        if (searchDialog == null) searchDialog = new SearchDialog(title, icon);
-        return searchDialog;
-    }
-
-    @Override
-    public void layout() {
-        if (!needLayout) {
-            super.layout();
-            return;
+    public static Activity getInstance(String title, Drawable icon) {
+        if (activity == null) {
+            activity = new SearchDialog(title, icon);
+            activity.top();
+            activity.setHeight(activity.getPrefHeight() / 3);
         }
-        SnapshotArray<Actor> actors = getChildren();
-        for (Actor actor : actors)
-            removeActor(actor);
-        setFillParent(true);
-        addNext(imgTitle).left().fill(false);
-        addLast(lblTitle, -0.8f);
-        addLast(new ScrollPane(box));
-        addNext(btnOK);
-        addLast(btnCancel);
-
-        super.layout();
-        needLayout = false;
-
-        this.setStageBackground(icon);
+        return activity;
     }
 
-    private void initClickHandlersAndContent() {
-
-        addClickHandler(btnOK, () -> {
-            btnOK.setDisabled(true);
-        });
-
-        addClickHandler(btnCancel, () -> {
-            btnOK.setDisabled(false);
-            finish();
-        });
-
+    protected Catch_Table createMainContent() {
+        mainContent.addNext(lblCachetitle, -0.4f);
+        mainContent.addLast(edtCachetitle);
+        mainContent.addNext(lblGcCode, -0.4f);
+        mainContent.addLast(edtGcCode);
+        mainContent.addNext(lblOwner, -0.4f);
+        mainContent.addLast(edtOwner);
+        mainContent.addNext(btnFilter);
+        mainContent.addNext(btnSearch);
+        mainContent.addNext(btnNext);
+        return mainContent;
     }
 
+    protected void runAtOk() {
+        btnOK.setDisabled(true);
+    }
+
+    public void runAtCancel() {
+        finish();
+    }
 }
