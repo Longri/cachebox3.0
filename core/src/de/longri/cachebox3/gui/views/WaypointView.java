@@ -454,6 +454,6 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     private boolean isCorrectedFinal() {
         // return new String(Title, (UTF_8)).equals("Final GSAK Corrected");
         if (actWaypoint == null) return false;
-        return actWaypoint.getType() == CacheTypes.Final && actWaypoint.isUserWaypoint() && actWaypoint.isValid();
+        return actWaypoint.isCorrectedFinal();
     }
 }

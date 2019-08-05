@@ -40,12 +40,13 @@ public class CB_Button extends Catch_VisTextButton {
         setSize(getPrefWidth(), getPrefHeight());
     }
 
-    public void setText(CharSequence sequence) {
-        getLabel().setText(sequence);
+    public void setText(CharSequence text) {
+        getLabel().setText(text);
         setSize(getPrefWidth(), getPrefHeight());
     }
 
     public void setState(int i) {
         setChecked(i == 0 ? false : true);
     }
+
 }

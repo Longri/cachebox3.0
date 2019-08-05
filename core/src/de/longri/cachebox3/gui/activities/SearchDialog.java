@@ -1,58 +1,130 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.Activity;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.EditTextField;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
+
+import static de.longri.cachebox3.CB.addClickHandler;
 
 public class SearchDialog extends Activity {
     private final CB_Label lblCachetitle, lblGcCode, lblOwner;
     private final EditTextField edtCachetitle, edtGcCode, edtOwner;
-    private final CB_Button btnSearch, btnFilter, btnNext;
+    private final CB_Button btnFilter;
+    private String mTitle;
+    private String mGCCode;
+    private String mOwner;
+    private int beginnSearchIndex = -1;
 
     private SearchDialog(String title, Drawable icon) {
-        super(title,icon);
+        super(title, icon);
         lblCachetitle = new CB_Label(Translation.get("Title"));
         lblGcCode = new CB_Label(Translation.get("GCCode"));
         lblOwner = new CB_Label(Translation.get("Owner"));
         edtCachetitle = new EditTextField("");
-        edtGcCode = new  EditTextField("");
-        edtOwner = new  EditTextField("");
-        btnSearch = new CB_Button(Translation.get("Search"));
+        edtGcCode = new EditTextField("");
+        edtOwner = new EditTextField("");
         btnFilter = new CB_Button(Translation.get("Filter"));
-        btnNext = new CB_Button(Translation.get("Next"));
+        btnFilter.setDisabled(true);
+        addClickHandler(btnFilter, () -> {
+            // todo implement
+        });
+        btnCancel.setText(Translation.get("Search"));
     }
 
     public static Activity getInstance(String title, Drawable icon) {
         if (activity == null) {
             activity = new SearchDialog(title, icon);
             activity.top();
-            activity.setHeight(activity.getPrefHeight() / 3);
         }
         return activity;
     }
 
     protected Catch_Table createMainContent() {
-        mainContent.addNext(lblCachetitle, -0.4f);
+        mainContent.addLast(lblCachetitle);
         mainContent.addLast(edtCachetitle);
-        mainContent.addNext(lblGcCode, -0.4f);
+        mainContent.addLast(lblGcCode);
         mainContent.addLast(edtGcCode);
-        mainContent.addNext(lblOwner, -0.4f);
+        mainContent.addLast(lblOwner);
         mainContent.addLast(edtOwner);
-        mainContent.addNext(btnFilter);
-        mainContent.addNext(btnSearch);
-        mainContent.addNext(btnNext);
+        mainContent.addLast(btnFilter);
         return mainContent;
     }
 
+    /*
+    @Override
+    public void layout() {
+        super.layout();
+        // activity.setBounds(activity.getX(), activity.getY(), activity.getWidth(), activity.getPrefHeight() / 2);
+    }
+    */
+
     protected void runAtOk() {
-        btnOK.setDisabled(true);
+        finish();
     }
 
     public void runAtCancel() {
-        finish();
+        searchNow();
     }
+
+    private void searchNow() {
+        if (beginnSearchIndex < 0) {
+            mTitle = edtCachetitle.getText().toLowerCase().replace("\n", "").replace("\r", "");
+            mGCCode = edtGcCode.getText().toLowerCase().replace("\n", "").replace("\r", "");
+            mOwner = edtOwner.getText().toLowerCase().replace("\n", "").replace("\r", "");
+        }
+
+        boolean criterionMatches = false;
+
+        synchronized (Database.Data.cacheList) {
+
+            AbstractCache tmp = null;
+            if (beginnSearchIndex < 0) beginnSearchIndex = 0;
+            for (int i = beginnSearchIndex, n = Database.Data.cacheList.size; i < n; i++) {
+                tmp = Database.Data.cacheList.get(i);
+                if ((mTitle.length() > 0 && tmp.getName().toString().toLowerCase().contains(mTitle))
+                        || (mGCCode.length() > 0 && tmp.getGcCode().toString().toLowerCase().contains(mGCCode))
+                        || (mOwner.length() > 0 && tmp.getGcCode().toString().toLowerCase().contains(mOwner))) {
+                    edtCachetitle.setText(tmp.getName());
+                    edtGcCode.setText(tmp.getGcCode());
+                    edtOwner.setText(tmp.getOwner());
+                    criterionMatches = true;
+                    beginnSearchIndex = i + 1;
+                    break;
+                }
+            }
+
+            if (criterionMatches) {
+                if (tmp != null) {
+                    AbstractWaypoint finalWp = tmp.getCorrectedFinal();
+                    if (finalWp == null)
+                        finalWp = tmp.getStartWaypoint();
+                    EventHandler.setSelectedWaypoint(tmp, finalWp);
+                    // todo do correct cachelist selection
+                    CacheListView view = new CacheListView();
+                    CB.viewmanager.showView(view);
+                }
+                CB.setAutoResort(false);
+            } else {
+                beginnSearchIndex = -1;
+                edtCachetitle.setText(mTitle);
+                edtGcCode.setText(mGCCode);
+                edtOwner.setText(mOwner);
+                MessageBox.show(Translation.get("NoCacheFound"), Translation.get("Search"), MessageBoxButtons.OK, MessageBoxIcon.Asterisk, null);
+            }
+        }
+    }
+
 }

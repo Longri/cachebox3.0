@@ -160,7 +160,7 @@ public class CacheList extends Array<AbstractCache> {
                     // wenn ein Cache keinen Final Waypoint hat dann wird überprüft, ob dieser einen Startpunkt definiert hat
                     // Wenn ein Cache einen Startpunkt definiert hat dann wird beim Selektieren dieses Caches gleich dieser Startpunkt
                     // selektiert
-                    waypoint = nextAbstractCache.GetStartWaypoint();
+                    waypoint = nextAbstractCache.getStartWaypoint();
                 }
 
                 retValue = new CacheWithWP(nextAbstractCache, waypoint);

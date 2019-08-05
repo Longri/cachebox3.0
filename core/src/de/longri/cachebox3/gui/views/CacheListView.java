@@ -353,12 +353,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         cm.addMenuItem("Filter", CB.getSkin().getMenuIcon.filterIcon, () -> new Action_EditFilterSettings().execute());
         cm.addMenuItem("MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon, () -> CB.viewmanager.setNewFilter(FilterInstances.ALL));
         cm.addMenuItem("Search", CB.getSkin().getMenuIcon.searchIcon, () -> new Action_SearchDialog().execute());// todo ISSUE (#115 Add search Dialog for ListView)
-        /*
-        if (SearchDialog.that == null) {
-            new SearchDialog();
-        }
-        SearchDialog.that.showNotCloseAutomatically();
-         */
+        // SearchDialog.that.showNotCloseAutomatically();
         cm.addMenuItem("importExport", CB.getSkin().getMenuIcon.importIcon, () -> {}).setMoreMenu(new ShowImportMenu());
         cm.addMenuItem("manage", "  (" + DBName + ")", CB.getSkin().getMenuIcon.manageDB, () -> CB.postAsync(
                 new NamedRunnable("CacheListView:showSelectDbDialog") {
