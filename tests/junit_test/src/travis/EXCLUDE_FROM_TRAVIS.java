@@ -41,4 +41,8 @@ public class EXCLUDE_FROM_TRAVIS {
         Config.AccessTokenForTest.setValue("A" + GCAPI);
         Config.AccessToken.setValue("A" + GCAPI);
     }
+
+    public static boolean isDummY() {
+        return GCAPI.equals(DUMMY_API_KEY);
+    }
 }
