@@ -19,10 +19,11 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.gui.views.*;
-import de.longri.cachebox3.platform_test.PlatformAssertionError;
+
+import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.platform_test.RunOnGL;
+import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
 
 /**
