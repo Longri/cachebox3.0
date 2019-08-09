@@ -385,9 +385,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                             {
                                 try {
                                     cache.setFavorite(finalchecked);
-                                    Database.Parameters args = new Database.Parameters();
-                                    args.put("BooleanStore", cache.getBooleanStore());
-                                    Database.Data.update("CacheCoreInfo", args, "id=" + cache.getId(), null);
+                                    cache.updateBooleanStore(Database.Data);
                                 } catch (Exception exc) {
                                     log.error("Update_Favorite", exc);
                                 }

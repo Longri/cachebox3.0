@@ -230,7 +230,7 @@ public class GroundspeakAPI {
     }
 
     private static void writeSearchResultsToDisc(JSONArray fetchedCaches, Descriptor descriptor) {
-        /* todo
+        /* todo implent livemap
         Writer writer = null;
         try {
             String Path = descriptor.getLocalCachePath(LiveMapQue.LIVE_CACHE_NAME) + LiveMapQue.LIVE_CACHE_EXTENSION;
@@ -1785,6 +1785,6 @@ public class GroundspeakAPI {
     }
 
     public class Descriptor {
-        //todo is dummy for Descriptor for life api
+        //todo is dummy for Descriptor for livemap
     }
 }

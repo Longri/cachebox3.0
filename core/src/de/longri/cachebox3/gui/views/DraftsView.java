@@ -745,7 +745,7 @@ public class DraftsView extends AbstractView {
                 finalWp = cache.GetFinalWaypoint();
             else if (cache.hasStartWaypoint())
                 finalWp = cache.getStartWaypoint();
-            EventHandler.setSelectedWaypoint(cache, finalWp);
+            EventHandler.fireSelectedWaypointChanged(cache, finalWp);
         }
     }
 

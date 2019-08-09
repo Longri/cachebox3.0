@@ -18,13 +18,16 @@ package de.longri.cachebox3.gui.actions.show_activities;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.views.DraftsView;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.DraftList;
 import de.longri.cachebox3.types.LogTypes;
@@ -83,34 +86,22 @@ public class Action_QuickDraft extends AbstractAction {
     }
 
     private void finalHandling(boolean found, AbstractCache cache) {
-        // CB2:
-        // damit der Status geändert wird
-        // damit die Icons in der Map aktualisiert werden
+        cache.setFound(found);
+        cache.updateBooleanStore(Database.Data);
+        // todo check if following is perhaps necessary
+        // DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, cache);
+
+        Config.FoundOffset.setValue(Config.FoundOffset.getValue() + (cache.isFound() ? 1 : - 1));
+        Config.AcceptChanges();
+
+        EventHandler.fire(new CacheListChangedEvent());
+        EventHandler.fire(new SelectedCacheChangedEvent(cache));
         /*
-        CacheListChangedEventList.Call();
-        SelectedCacheEventList.Call(GlobalCore.getSelectedCache(), GlobalCore.getSelectedWaypoint());
+        todo following and perhaps more
         QuickDraftFeedbackPopUp pop = new QuickDraftFeedbackPopUp(found);
         pop.show(PopUp_Base.SHOW_TIME_SHORT);
 
         PlatformConnector.vibrate();
-         */
-        /*
-        // todo show in CacheList and Map and others. Don't know what all has to be called!!!
-        // CB3: supposed, but not complete
-        cache.setFound(cache.isFound());
-        cache.updateBooleanStore(Database.Data);
-        DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, cache);
-        Config.FoundOffset.setValue(Config.FoundOffset.getValue() + (cache.isFound() ? 1 : - 1));
-        Config.AcceptChanges();
-        // jetzt noch diesen Cache in der aktuellen CacheListe suchen und auch da den Found-Status zurücksetzen
-        // damit das Smiley Symbol aus der Map und der CacheList verschwindet
-        synchronized (Database.Data.cacheList) {
-            AbstractCache tc = Database.Data.cacheList.GetCacheById(cache.getId());
-            if (tc != null) {
-                tc.setFound(cache.isFound());
-                tc.updateBooleanStore(Database.Data);
-            }
-        }
          */
         DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
     }

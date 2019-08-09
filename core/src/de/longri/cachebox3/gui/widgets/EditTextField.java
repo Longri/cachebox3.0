@@ -50,6 +50,10 @@ public class EditTextField extends Catch_WidgetGroup {
         this(false, text);
     }
 
+    public EditTextField(CharSequence text) {
+        this(false, text.toString());
+    }
+
     public EditTextField(boolean multiLine) {
         this(multiLine, "");
     }

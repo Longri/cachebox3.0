@@ -433,7 +433,7 @@ public class ViewManager extends NamedStage
             AbstractCache selectedInQuery = Database.Data.cacheList.GetCacheById(selectedCache.getId());
             if (selectedInQuery == null) {
                 //reset
-                EventHandler.setSelectedWaypoint(null, null);
+                EventHandler.fireSelectedWaypointChanged(null, null);
             }
         }
     }
