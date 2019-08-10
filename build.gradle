@@ -47,7 +47,6 @@ allprojects {
     }
 }
 
-
 project(":core") {
     apply plugin: "java-library"
 
@@ -212,7 +211,8 @@ project(":vtm-ios") {
 }
 
 project(":junit_test") {
-    apply plugin: "java-library"
+    apply plugin: 'java-library'
+    apply plugin: 'org.junit.platform.gradle.plugin'
 
     dependencies {
         implementation project(":core")
@@ -245,6 +245,36 @@ project(":junit_test") {
         api "org.mapsforge:vtm:$vtmVersion"
         api "org.mapsforge:vtm-gdx:$vtmVersion"
         api "org.mapsforge:vtm-themes:$vtmVersion"
+
+    }
+}
+
+project(":libgdx_test") {
+    apply plugin: "java-library"
+
+    dependencies {
+        // own modules
+        implementation project(":core")
+
+        //LibGdx
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+        // VTM
+        api("org.mapsforge:vtm-desktop:$vtmVersion") {
+            exclude group: 'com.metsci.ext.com.kitfox.svg'
+        }
+        api("org.mapsforge:vtm-desktop-lwjgl:$vtmVersion")
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
+
+
+        api "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+        api "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
+        api "org.slf4j:slf4j-api:$slf4jVersion"
+        api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
 
     }
 }

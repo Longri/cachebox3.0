@@ -21,7 +21,6 @@ task copyIosNatives() {
 
     configurations.natives.files.each { jar ->
         def outputDir = null
-        print 'file: '
         if (jar.name.endsWith("natives.jar")) outputDir = file("build/native/")
         if (outputDir != null) {
             copy {
