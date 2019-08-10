@@ -1,4 +1,4 @@
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
@@ -7,27 +7,18 @@ configurations { natives }
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]
 
 ext {
     mainClassName = "de.longri.cachebox3.IOS_Launcher"
 }
 
-launchIPhoneSimulator.dependsOn build
-launchIPadSimulator.dependsOn build
-launchIOSDevice.dependsOn build
-createIPA.dependsOn build
-
-robovm {
-    archs = "thumbv7:arm64"
-}
-
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper build/ folders
 // so they get packed with the IPA.
-task copyNatives() {
+task copyIosNatives() {
     println 'create build natvie directory'
-    file("build/native/").mkdirs();
+    file("build/native/").mkdirs()
 
     println 'start copyNatives'
     configurations.natives.files.each { jar ->
@@ -61,4 +52,16 @@ task copyNatives() {
     println 'finish copySvg'
 }
 
-copyNatives.dependsOn classes
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn copyIosNatives
+}
+
+launchIPhoneSimulator.dependsOn build
+launchIPadSimulator.dependsOn build
+launchIOSDevice.dependsOn build
+createIPA.dependsOn build
+
+robovm {
+    archs = "thumbv7:arm64"
+}
+
