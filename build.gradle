@@ -10,11 +10,10 @@ buildscript {
         google()
     }
     dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
         classpath 'org.wisepersist:gwt-gradle-plugin:1.0.9'
         classpath 'com.android.tools.build:gradle:3.4.1'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.7'
-
-
     }
 }
 

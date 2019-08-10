@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'org.junit.platform.gradle.plugin'
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
