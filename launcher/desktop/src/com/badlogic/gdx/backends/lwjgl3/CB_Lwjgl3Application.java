@@ -15,44 +15,22 @@ package com.badlogic.gdx.backends.lwjgl3;
  * limitations under the License.
  ******************************************************************************/
 
-import java.io.File;
-import java.io.PrintStream;
-import java.nio.IntBuffer;
-
-import com.badlogic.gdx.ApplicationLogger;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.backends.lwjgl3.audio.OpenALAudio;
+import com.badlogic.gdx.backends.lwjgl3.audio.mock.MockAudio;
 import com.badlogic.gdx.graphics.glutils.GLVersion;
+import com.badlogic.gdx.utils.*;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.AMDDebugOutput;
-import org.lwjgl.opengl.ARBDebugOutput;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL43;
-import org.lwjgl.opengl.GLCapabilities;
-import org.lwjgl.opengl.GLUtil;
-import org.lwjgl.opengl.KHRDebug;
+import org.lwjgl.opengl.*;
 import org.lwjgl.system.Callback;
-
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Audio;
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.LifecycleListener;
-import com.badlogic.gdx.Net;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.backends.lwjgl3.audio.OpenALAudio;
-import com.badlogic.gdx.backends.lwjgl3.audio.mock.MockAudio;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Clipboard;
-import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.PrintStream;
+import java.nio.IntBuffer;
 
 public class CB_Lwjgl3Application implements Application {
 
@@ -108,7 +86,7 @@ public class CB_Lwjgl3Application implements Application {
             this.audio = Gdx.audio = new MockAudio();
         }
         this.files = Gdx.files = new Lwjgl3Files();
-        this.net = Gdx.net = new Lwjgl3Net();
+        this.net = Gdx.net = new Lwjgl3Net(this.config);
         this.clipboard = new Lwjgl3Clipboard();
 
         Lwjgl3Window window = createWindow(config, listener, 0);

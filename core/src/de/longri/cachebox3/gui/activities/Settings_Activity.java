@@ -160,6 +160,7 @@ public class Settings_Activity extends ActivityBase {
 
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+// todo implement  QuickButton config setting
 
 //                String ActionsString = "";
 //                int counter = 0;
@@ -734,7 +735,7 @@ public class Settings_Activity extends ActivityBase {
                         public void canceled() {
 
                         }
-                    }, Translation.get(setting.getName()).toString(), setting.getValue(), "");
+                    },0, Translation.get(setting.getName()).toString(), setting.getValue(), "");
                     event.cancel();
                     event.handle();
                 }

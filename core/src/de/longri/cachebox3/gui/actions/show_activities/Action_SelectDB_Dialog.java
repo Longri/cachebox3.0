@@ -51,17 +51,9 @@ public class Action_SelectDB_Dialog extends AbstractAction {
 
     @Override
     public void execute() {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                final SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
-                    @Override
-                    public void back() {
-                        returnFromSelectDB();
-                    }
-                }, Action_SelectDB_Dialog.this.viewMode == ViewMode.FORCE_SHOW);
-                selectDBDialog.show();
-            }
+        Gdx.app.postRunnable(() -> {
+            final SelectDB_Activity selectDBDialog = new SelectDB_Activity(this::returnFromSelectDB, Action_SelectDB_Dialog.this.viewMode == ViewMode.FORCE_SHOW);
+            selectDBDialog.show();
         });
     }
 

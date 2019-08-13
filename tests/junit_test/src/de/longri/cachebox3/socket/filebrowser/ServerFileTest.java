@@ -20,11 +20,12 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.serializable.BitStore;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 30.10.2017.
@@ -81,7 +82,7 @@ class ServerFileTest {
 
             handleAbsolut = handleAbsolut.replace(rootPath, "");
 
-            Assert.assertEquals("FileAbsolute must Equals", handleAbsolut, serverAbsolute);
+            assertEquals( handleAbsolut, serverAbsolute,"FileAbsolute must Equals");
 
             return;
         }

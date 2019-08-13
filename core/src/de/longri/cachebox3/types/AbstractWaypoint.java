@@ -71,6 +71,8 @@ public abstract class AbstractWaypoint extends Coordinate {
 
     public abstract void dispose();
 
+    public abstract boolean isCorrectedFinal();
+
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;

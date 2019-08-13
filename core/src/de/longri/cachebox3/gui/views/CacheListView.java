@@ -18,6 +18,8 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.CacheListChangedEvent;
@@ -28,11 +30,16 @@ import de.longri.cachebox3.events.location.OrientationChangedEvent;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
+import de.longri.cachebox3.gui.actions.Action_SearchDialog;
 import de.longri.cachebox3.gui.actions.ShowDeleteMenu;
 import de.longri.cachebox3.gui.actions.ShowImportMenu;
 import de.longri.cachebox3.gui.actions.show_activities.Action_EditFilterSettings;
 import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.activities.EditCache;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -351,14 +358,46 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         cm.addMenuItem("ResortList", CB.getSkin().getMenuIcon.sortIcon, () -> cacheListView.resort());
         cm.addMenuItem("Filter", CB.getSkin().getMenuIcon.filterIcon, () -> new Action_EditFilterSettings().execute());
         cm.addMenuItem("MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon, () -> CB.viewmanager.setNewFilter(FilterInstances.ALL));
-        cm.addMenuItem("Search", CB.getSkin().getMenuIcon.searchIcon, () -> CB.viewmanager.toast("NOT IMPLEMENTED")).setEnabled(false);// todo ISSUE (#115 Add search Dialog for ListView)
-        /*
-        if (SearchDialog.that == null) {
-            new SearchDialog();
-        }
-        SearchDialog.that.showNotCloseAutomatically();
-         */
+        cm.addMenuItem("Search", CB.getSkin().getMenuIcon.searchIcon, () -> new Action_SearchDialog().execute());// todo ISSUE (#115 Add search Dialog for ListView)
+        // SearchDialog.that.showNotCloseAutomatically();
         cm.addMenuItem("importExport", CB.getSkin().getMenuIcon.importIcon, () -> {}).setMoreMenu(new ShowImportMenu());
+        mi = cm.addCheckableMenuItem("setOrResetFavorites", "", CB.getSkin().getMenuIcon.favorit, true, new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (cm.mustHandle(event)) {
+                    MenuItem mi = (MenuItem) event.getListenerActor();
+                    boolean checked = mi.isChecked();
+                    if (event.getTarget().toString().contains("Drawable")) {
+                        // checkbox clicked
+                        checked = !checked;
+                    }
+                    mi.setChecked(!mi.isChecked());
+                    String msgText;
+                    if (checked) {
+                        msgText = "askSetFavorites";
+                    } else {
+                        msgText = "askResetFavorites";
+                    }
+                    final boolean finalchecked = checked;
+                    MessageBox.show(Translation.get(msgText), Translation.get("Favorites"), MessageBoxButtons.OKCancel, MessageBoxIcon.Question, (which, data) -> {
+                        if (which == ButtonDialog.BUTTON_POSITIVE) {
+                            Database.Data.beginTransaction();
+                            for (AbstractCache cache: Database.Data.cacheList)
+                            {
+                                try {
+                                    cache.setFavorite(finalchecked);
+                                    cache.updateBooleanStore(Database.Data);
+                                } catch (Exception exc) {
+                                    log.error("Update_Favorite", exc);
+                                }
+                            }
+                            Database.Data.endTransaction();
+                            EventHandler.fire(new CacheListChangedEvent());
+                        }
+                        return true;
+                    });
+                }
+            }
+        });
         cm.addMenuItem("manage", "  (" + DBName + ")", CB.getSkin().getMenuIcon.manageDB, () -> CB.postAsync(
                 new NamedRunnable("CacheListView:showSelectDbDialog") {
                     @Override

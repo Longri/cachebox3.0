@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.text.InputType;
 import android.view.Gravity;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.badlogic.gdx.Gdx;
@@ -43,19 +44,19 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
-import static de.longri.cachebox3.Utils.THUMB;
-
 /**
  * Created by Longri on 17.07.16.
  */
 public class AndroidPlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
     private static final int REQUEST_CODE_GET_API_KEY = 987;
-    private final AndroidLauncherfragment application;
     public static AndroidPlatformConnector platformConnector;
+    private final AndroidLauncherfragment application;
     private final Handler handle;
     private final Context context;
     private final AndroidFlashLight flashLight;
+    public GenericCallBack<String> callBack;
+    private AndroidDescriptionView descriptionView;
 
     public AndroidPlatformConnector(AndroidLauncherfragment app) {
         this.application = app;
@@ -167,7 +168,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
         }
     }
 
-
     @Override
     public Bitmap getRealScaledSVG(String name, InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
 
@@ -175,7 +175,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
         bmp.name = name;
         return bmp;
     }
-
 
     @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
@@ -190,8 +189,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/Cachebox3";
     }
 
-    public GenericCallBack<String> callBack;
-
     @Override
     protected void generateApiKey(GenericCallBack<String> callBack) {
         this.callBack = callBack;
@@ -203,8 +200,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
         }
 
     }
-
-    private AndroidDescriptionView descriptionView;
 
     @Override
     protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
@@ -287,7 +282,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     }
 
     @Override
-    public void _getMultilineTextInput(final Input.TextInputListener listener, final String title, final String text,
+    public void _getTextInput(boolean singleLine, final Input.TextInputListener listener, int inputType, final String title, final String text,
                                        final String hint) {
         this.handle.post(new Runnable() {
             public void run() {
@@ -301,13 +296,23 @@ public class AndroidPlatformConnector extends PlatformConnector {
                 alert.setCustomTitle(myMsg);
 
 
-                final EditText input = new EditText(AndroidPlatformConnector.this.context);
+                Context activity = AndroidPlatformConnector.this.context;
+                final EditText input = new EditText(activity);
                 input.setHint(hint);
                 input.setText(text);
-                input.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                input.setSingleLine(false);
-                input.setLines(5);
-                input.setMaxLines(8);
+                if (inputType == 0)
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+                else
+                    input.setInputType(inputType);
+                input.setSingleLine(singleLine);
+                if (singleLine) {
+                    input.setLines(1);
+                    input.setMaxLines(1);
+                }
+                else {
+                    input.setLines(5);
+                    input.setMaxLines(8);
+                }
                 input.setGravity(Gravity.LEFT | Gravity.TOP);
                 alert.setView(input);
                 alert.setPositiveButton(AndroidPlatformConnector.this.context.getString(17039370), new DialogInterface.OnClickListener() {
@@ -338,6 +343,13 @@ public class AndroidPlatformConnector extends PlatformConnector {
 //                    }
 //                });
                 alert.show();
+                InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                input.postDelayed(() -> {
+                    input.requestFocus();
+                    input.setSelection(input.getText().length());
+                    manager.showSoftInput(input, 0);
+                }, 100);
+
             }
         });
     }

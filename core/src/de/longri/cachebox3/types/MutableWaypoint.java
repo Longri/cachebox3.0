@@ -231,4 +231,9 @@ public class MutableWaypoint extends AbstractWaypoint {
         description = null;
         clue = null;
     }
+
+    @Override
+    public boolean isCorrectedFinal() {
+        return getType() == CacheTypes.Final && isUserWaypoint() && isValid();
+    }
 }

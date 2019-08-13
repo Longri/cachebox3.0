@@ -19,6 +19,7 @@ import com.kotcrab.vis.ui.widget.VisCheckBox;
 
 /**
  * Created by Longri on 30.10.2017.
+ * add left() arbor95 26.07.2019
  */
 public class CB_CheckBox extends VisCheckBox {
 
@@ -26,15 +27,18 @@ public class CB_CheckBox extends VisCheckBox {
 
     public CB_CheckBox(CharSequence text) {
         super(EMPTY);
+        left();
         getLabel().setText(text);
     }
 
     public CB_CheckBox(CharSequence text, String styleName) {
         super(EMPTY, styleName);
+        left();
         getLabel().setText(text);
     }
 
     public void setText(CharSequence sequence) {
+        left();
         getLabel().setText(sequence);
     }
 }

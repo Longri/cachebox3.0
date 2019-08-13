@@ -23,15 +23,15 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.gui.map.baseMap.BaseMapManager;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.CreateCbDirectoryStructure;
 import de.longri.cachebox3.platform_test.AfterAll;
 import de.longri.cachebox3.platform_test.BeforeAll;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
-import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.utils.CreateCbDirectoryStructure;
 
-import static de.longri.cachebox3.platform_test.Assert.assertEquals;
 import static de.longri.cachebox3.platform_test.Assert.assertThat;
+import static de.longri.cachebox3.platform_test.Assert.assertEquals;
 
 /**
  * Created by Longri on 10.11.2017.
@@ -49,8 +49,6 @@ public class issue_166 {
     @BeforeAll
     public static void setUp() {
         TestUtils.initialGdx();
-
-
     }
 
     @AfterAll
@@ -62,7 +60,7 @@ public class issue_166 {
 
     @Test
     public void testMapCount() throws PlatformAssertionError {
-        testWorkpath = TestUtils.getResourceFileHandle((TestUtils.isPlatformTest() ? CB.WorkPath : "") + "/testsResources", false).child("TestMapDirs");
+        testWorkpath = TestUtils.getResourceFileHandle((TestUtils.isPlatformTest() ? CB.WorkPath : ".") + "/testsResources", false).child("TestMapDirs");
 
         if (testWorkpath.exists()) testWorkpath.deleteDirectory();
         testWorkpath.mkdirs();
@@ -121,7 +119,7 @@ public class issue_166 {
         Config.AcceptChanges();
 
         BaseMapManager manager = new BaseMapManager();
-        manager.refreshMaps();
+        manager.refreshMaps(testWorkpath);
 
         assertEquals(11, manager.size, "BasManager must found 11 maps");
         assertThat("Map 'Hike Bike' notFound", findMap(manager, "Hike Bike"));

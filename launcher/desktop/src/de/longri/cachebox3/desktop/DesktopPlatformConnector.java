@@ -27,7 +27,6 @@ import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.NamedRunnable;
-import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import org.oscim.awt.DesktopRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -216,7 +215,7 @@ public class DesktopPlatformConnector extends PlatformConnector {
     }
 
     @Override
-    public void _getMultilineTextInput(final Input.TextInputListener listener, final String title,
+    public void _getTextInput(boolean singleLine, final Input.TextInputListener listener, int inputType, final String title,
                                        final String text, final String hint) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override

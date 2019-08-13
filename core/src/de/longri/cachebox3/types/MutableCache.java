@@ -303,12 +303,12 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public boolean HasStartWaypoint() {
+    public boolean hasStartWaypoint() {
         return false;
     }
 
     @Override
-    public AbstractWaypoint GetStartWaypoint() {
+    public AbstractWaypoint getStartWaypoint() {
         return null;
     }
 
@@ -703,6 +703,14 @@ public class MutableCache extends AbstractCache {
     @Override
     public void setWaypoints(Array<AbstractWaypoint> waypoints) {
         this.waypoints = waypoints;
+    }
+
+    @Override
+    public AbstractWaypoint getCorrectedFinal() {
+        for (AbstractWaypoint wp : waypoints) {
+            if (wp.isCorrectedFinal()) return wp;
+        }
+        return null;
     }
 
     @Override

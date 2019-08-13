@@ -362,7 +362,7 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
             }
         };
 
-        PlatformConnector.getSinglelineTextInput(listener, Translation.get("NewUserPreset"), "", Translation.get("InsNewUserPreset"));
+        PlatformConnector.getSinglelineTextInput(listener,0, Translation.get("NewUserPreset"), "", Translation.get("InsNewUserPreset"));
     }
 
 

@@ -87,7 +87,7 @@ public class ViewManager extends NamedStage
     private final Action_Show_DraftsView action_show_DraftsView = new Action_Show_DraftsView();
 
     private FilterProperties actFilter = FilterInstances.ALL;
-    private final AtomicBoolean isFilters = new AtomicBoolean(false);
+    private final AtomicBoolean isFiltered = new AtomicBoolean(false);
     public final GlobalLocationReceiver locationReceiver;
 
     public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
@@ -163,7 +163,7 @@ public class ViewManager extends NamedStage
             log.debug("set New Filter: {}", filter.toString());
 
             actFilter = filter;
-            isFilters.set(!actFilter.equals(FilterInstances.ALL));
+            isFiltered.set(!actFilter.equals(FilterInstances.ALL));
 
             // store filter to config
             Config.FilterNew.setValue(actFilter.getJsonString());
@@ -181,8 +181,8 @@ public class ViewManager extends NamedStage
         }
     }
 
-    public boolean isFilters() {
-        return isFilters.get();
+    public boolean isFiltered() {
+        return isFiltered.get();
     }
 
     private String terrDiffToShortString(float value) {
@@ -433,7 +433,7 @@ public class ViewManager extends NamedStage
             AbstractCache selectedInQuery = Database.Data.cacheList.GetCacheById(selectedCache.getId());
             if (selectedInQuery == null) {
                 //reset
-                EventHandler.setSelectedWaypoint(null, null);
+                EventHandler.fireSelectedWaypointChanged(null, null);
             }
         }
     }

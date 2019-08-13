@@ -53,7 +53,7 @@ public class UnZip {
      * @throws IOException with IO error
      */
     public FileHandle extractFolder(String zipFile) throws IOException {
-        return extractFolder(Gdx.files.absolute(zipFile));
+        return extractFolder(Gdx.files.absolute(zipFile), null);
     }
 
     /**
@@ -64,7 +64,7 @@ public class UnZip {
      * @throws IOException with IO error
      */
     public FileHandle extractFolder(FileHandle zipFile) throws IOException {
-        return extractFolder(zipFile);
+        return extractFolder(zipFile, null);
     }
 
     /**

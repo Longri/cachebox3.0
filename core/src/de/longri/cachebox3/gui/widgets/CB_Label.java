@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
@@ -23,21 +22,13 @@ import com.kotcrab.vis.ui.widget.VisLabel;
  * Created by Longri on 02.04.2019.
  */
 public class CB_Label extends VisLabel {
+
     public CB_Label() {
         super();
     }
 
     public CB_Label(CharSequence text,LabelStyle style) {
         super(text,style);
-    }
-
-    public CB_Label(CharSequence text, Color textColor) {
-        super(text, textColor);
-        setColor(textColor);
-    }
-
-    public CB_Label(CharSequence text, int alignment) {
-        super(text, alignment);
     }
 
     public CB_Label(CharSequence name) {

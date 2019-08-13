@@ -153,7 +153,7 @@ public class FilterSetListView extends Catch_Table implements EditFilterSettings
         final IntPropertyListView listingChanged = new IntPropertyListView(listViewItems.size + 8,
                 filterSettings.filterProperties.ListingChanged, style.ListingChanged, Translation.get("ListingChanged"));
         final IntPropertyListView manualwaypoint = new IntPropertyListView(listViewItems.size + 9,
-                filterSettings.filterProperties.WithManualWaypoint, style.ManualWaypoint, Translation.get("manualwaypoint"));
+                filterSettings.filterProperties.WithManualWaypoint, style.ManualWaypoint, Translation.get("manualWayPoint"));
         final IntPropertyListView corrected = new IntPropertyListView(listViewItems.size + 10,
                 filterSettings.filterProperties.hasCorrectedCoordinates, style.CoorectedCoord, Translation.get("hasCorrectedCoordinates"));
 

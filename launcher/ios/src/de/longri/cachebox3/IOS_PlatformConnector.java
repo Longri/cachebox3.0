@@ -293,7 +293,7 @@ public class IOS_PlatformConnector extends PlatformConnector {
     IOS_TextInputView textInputView;
 
     @Override
-    public void _getMultilineTextInput(final Input.TextInputListener listener, String title, String text, String hint) {
+    public void _getTextInput(boolean singleLine, final Input.TextInputListener listener, int inputType, String title, String text, String hint) {
 
         textInputView = new IOS_TextInputView(((IOSApplication) Gdx.app).getUIWindow()
                 .getRootViewController(), text, new IOS_TextInputView.Callback() {

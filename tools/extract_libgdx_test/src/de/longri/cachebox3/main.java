@@ -34,6 +34,8 @@ import static java.lang.System.exit;
  */
 public class main {
 
+    private final static String LINE_SEPARATOR = System.lineSeparator();
+
     public static void main(String[] args) throws Exception {
 
         CommandLine cmd = getCommandLine(args);
@@ -74,12 +76,13 @@ public class main {
     private static FileHandle junitSrcDir;
     private static FileHandle libgdxTestSrcDir;
     private static final String ASSET_DIR = "./launcher/android/assets/platform_test/";
+    private static final String BUILD_GRADLE_FILE = "./core/build.gradle";
     private static final String TEST_JSON = "tests.json";
     private static final String TEST_SRC_DIR = "./tests/junit_test/src";
     private static final String TEST_RESOURCES_DIR = "./tests/junit_test/testsResources";
     private static final String TEST_TARGET_DIR = "./tests/libgdx_test/src/de/longri/cachebox3/platform_test/tests";
     private static final String TARGET_PACKAGE_LINE = "package de.longri.cachebox3.platform_test.tests;";
-    private static final String GENERATE = "\n\n//  Don't modify this file, it's created by tool 'extract_libgdx_test\n\n";
+    private static final String GENERATE = LINE_SEPARATOR + LINE_SEPARATOR + "//  Don't modify this file, it's created by tool 'extract_libgdx_test" + LINE_SEPARATOR + LINE_SEPARATOR;
     private static final String IMPORT = "import";
     private static final String JUPITER_TEST = "org.junit.jupiter.api.Test";
     private static final String AFTER_ALL = "AfterAll";
@@ -89,12 +92,14 @@ public class main {
     private static final String IMPORT_BEFORE_ALL = "import de.longri.cachebox3.platform_test.BeforeAll;";
     private static final String IMPORT_BEFORE_EACH = "import de.longri.cachebox3.platform_test.BeforeEach;";
 
-    private static final String IMPORT_TEST_ANNOTATION = "import de.longri.cachebox3.platform_test.PlatformAssertionError;\n" +
+    private static final String IMPORT_TEST_ANNOTATION = "import de.longri.cachebox3.platform_test.PlatformAssertionError;" + LINE_SEPARATOR +
             "import de.longri.cachebox3.platform_test.Test;";
     private static final String ASSERT_THAT = "Assert.assertThat;";
     private static final String ASSERT_THAT_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertThat;";
     private static final String ASSERT_EQUALS = "Assertions.assertEquals;";
     private static final String ASSERT_EQUALS_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertEquals;";
+    private static final String ASSERT_NOT_EQUALS = "Assertions.assertNotEquals;";
+    private static final String ASSERT_NOT_EQUALS_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertNotEquals;";
     private static final String ASSERT_TRUE = "Assertions.assertTrue;";
     private static final String ASSERT_TRUE_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertTrue;";
     private static final String ASSERT_FALSE = "Assertions.assertFalse;";
@@ -148,12 +153,12 @@ public class main {
                     throw new RuntimeException("Can't generate/(delete) target file:" + source.name());
                 }
             }
-            targetFileHandle.writeString(generateTestFile(source, json), false);
+            targetFileHandle.writeString(generateTestFile(source, json), false, "UTF-8");
         }
         json.writeObjectEnd();
         String jsonString = stringWriter.toString();
         testJsonFile.writeString(jsonString, false);
-
+        changeBuildGradle(true);
         if (mustCopyTestCacheNameSpace) {
             FileHandle testCacheSourceDir = junitSrcDir.child("de/longri/cachebox3/types/test_caches");
             FileHandle testCacheTargetDir = libgdxTestSrcDir.child("../../types");
@@ -163,7 +168,7 @@ public class main {
             FileHandle AbstractTestCache_Java = testCacheTargetDir.child("test_caches/AbstractTestCache.java");
             String strAbstractTestCache = AbstractTestCache_Java.readString();
             strAbstractTestCache = strAbstractTestCache.replace("import static org.junit.jupiter.api.Assertions.assertEquals;", "import static de.longri.cachebox3.platform_test.Assert.assertEquals;");
-            strAbstractTestCache = strAbstractTestCache.replace("import static org.junit.jupiter.api.Assertions.assertTrue;", "import static de.longri.cachebox3.platform_test.Assert.assertTrue;\n" +
+            strAbstractTestCache = strAbstractTestCache.replace("import static org.junit.jupiter.api.Assertions.assertTrue;", "import static de.longri.cachebox3.platform_test.Assert.assertTrue;" + LINE_SEPARATOR +
                     "import de.longri.cachebox3.platform_test.PlatformAssertionError;");
             strAbstractTestCache = strAbstractTestCache.replace(" public void assertCache(AbstractCache other, Database database) {", " public void assertCache(AbstractCache other, Database database) throws PlatformAssertionError {");
             strAbstractTestCache = strAbstractTestCache.replace(" private void assertLogs(Database database) {", " private void assertLogs(Database database) throws PlatformAssertionError {");
@@ -187,17 +192,77 @@ public class main {
         FileHandle assetDirDesk = Gdx.files.absolute("./launcher/desktop/workingDir/platform_test");
         assetDirDesk.deleteDirectory();
 
+        changeBuildGradle(false);
 
+    }
+
+    private static void changeBuildGradle(boolean enable) {
+        FileHandle gradleFile = Gdx.files.absolute(BUILD_GRADLE_FILE);
+
+        String original = gradleFile.readString("UTF-8");
+        StringBuilder sb = new StringBuilder() {
+            @Override
+            public StringBuilder appendLine(String str) {
+                append(str);
+                append(LINE_SEPARATOR);
+                return this;
+            }
+        };
+        boolean sourceSetsLineFound = false;
+        boolean sourceSetsTestLineFound = false;
+        boolean sourceSetChanged = false;
+
+        for (String line : original.split(LINE_SEPARATOR)) {
+            if (line.contains("sourceSets.main.java.srcDirs")) {
+                if (line.contains("\"src/\", \"../tests/libgdx_test/src\"")) {
+                    sourceSetsTestLineFound = true;
+                    if (line.startsWith("//") && enable) {
+                        sourceSetChanged = true;
+                        line = "sourceSets.main.java.srcDirs = [\"src/\", \"../tests/libgdx_test/src\"]";
+                    } else if (!line.startsWith("//") && !enable) {
+                        sourceSetChanged = true;
+                        line = "//sourceSets.main.java.srcDirs = [\"src/\", \"../tests/libgdx_test/src\"]";
+                    }
+                } else if (line.contains("[\"src/\"]")) {
+                    sourceSetsLineFound = true;
+                    if (line.startsWith("//") && !enable) {
+                        sourceSetChanged = true;
+                        line = "sourceSets.main.java.srcDirs = [\"src/\"]";
+                    } else if (!line.startsWith("//") && enable) {
+                        sourceSetChanged = true;
+                        line = "//sourceSets.main.java.srcDirs = [\"src/\"]";
+                    }
+                } else {
+                    throw new RuntimeException("SourceSet line are wrong: " + line.trim());
+                }
+            }
+
+            sb.append(line);
+            sb.append(LINE_SEPARATOR);
+        }
+
+        if (!sourceSetsLineFound || !sourceSetsTestLineFound) {
+            if (!sourceSetsLineFound && !sourceSetsTestLineFound) {
+                throw new RuntimeException("No sourceSet line found on build.gradle");
+            } else if (!sourceSetsLineFound) {
+                throw new RuntimeException("Missing sourceSet line on build.gradle");
+            } else {
+                throw new RuntimeException("Missing sourceSet line for test's on build.gradle");
+            }
+        }
+
+        if (sourceSetChanged) { // override build.gradle file only with changes
+            gradleFile.writeString(sb.toString(), false, "UTF-8");
+        }
     }
 
     private static void readIgnoreFile() {
         FileHandle ignoreFile = junitSrcDir.child("libgdx_test.ignore");
-        String[] lines = ignoreFile.readString().split("\n");
+        String[] lines = ignoreFile.readString().split(LINE_SEPARATOR);
 
         onlyFlagSet = false;
 
         for (String line : lines) {
-            line = line.replace("\r", "");
 
             if (line.isEmpty()) continue;
 
@@ -270,15 +335,23 @@ public class main {
     }
 
     private static String generateTestFile(FileHandle fileHandle, Json json) {
-        StringBuilder sb = new StringBuilder(GENERATE);
-        String source = fileHandle.readString();
-        String[] lines = source.split("\n");
+        StringBuilder sb = new StringBuilder(GENERATE) {
+            @Override
+            public StringBuilder appendLine(String str) {
+                append(str);
+                append(LINE_SEPARATOR);
+                return this;
+            }
+        };
+        String source = fileHandle.readString("UTF-8");
+        String[] lines = source.split(LINE_SEPARATOR);
 
         boolean packageReplace = false;
         boolean travisReplace = false;
         boolean jupiterTestReplace = false;
         boolean assertThatReplace = false;
         boolean assertEqualseReplace = false;
+        boolean assertNotEqualseReplace = false;
         boolean assertTrueReplace = false;
         boolean assertFalseReplace = false;
         boolean assertNotNullReplace = false;
@@ -294,7 +367,7 @@ public class main {
         if (source.contains("@AfterAll") || source.contains("@BeforeAll")) {
             for (int i = 0; i < lines.length; i++) {
                 String line = lines[i];
-                line = line.replace("\r", "");
+                line = line.replace(LINE_SEPARATOR, "");
                 if (line.contains("@AfterAll")) {
                     try {
                         int pos = lines[i + 1].indexOf(VOID) + VOID.length();
@@ -318,8 +391,6 @@ public class main {
 
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-
-            line = line.replace("\r", "");
 
             if (!mustCopyTestCacheNameSpace && line.contains(TEST_CACHE_NAME_SPACE))
                 mustCopyTestCacheNameSpace = true;
@@ -366,6 +437,10 @@ public class main {
             } else if (!assertEqualseReplace && line.endsWith(ASSERT_EQUALS)) {
                 assertEqualseReplace = true;
                 sb.appendLine(ASSERT_EQUALS_LINE);
+                continue;
+            } else if (!assertNotEqualseReplace && line.endsWith(ASSERT_NOT_EQUALS)) {
+                assertNotEqualseReplace = true;
+                sb.appendLine(ASSERT_NOT_EQUALS_LINE);
                 continue;
             } else if (!assertThatReplace && line.endsWith(ASSERT_THAT)) {
                 assertThatReplace = true;
@@ -496,7 +571,7 @@ public class main {
 
         if (cmd.getOptions() == null || cmd.getOptions().length == 0) {
             formatter.printHelp("Extract Platform Test need one of two options," +
-                    "\n 'enable' or 'disable' !\n\n", options);
+                    LINE_SEPARATOR + " 'enable' or 'disable' !" + LINE_SEPARATOR + LINE_SEPARATOR, options);
 
             System.exit(1);
             return null;

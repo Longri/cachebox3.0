@@ -63,6 +63,7 @@ public class SelectDB_Activity extends ActivityBase {
     final static Logger log = LoggerFactory.getLogger(SelectDB_Activity.class);
     private final IReturnListener returnListener;
     Timer updateTimer;
+    NewDB_InputBox inputBox;
     private int autoStartTime = 10;
     private int autoStartCounter = 0;
     private String DBPath;
@@ -91,7 +92,7 @@ public class SelectDB_Activity extends ActivityBase {
     };
     private CustomAdapter lvAdapter;
     private String[] fileInfos;
-    private boolean mustSelect = false;
+    private boolean mustSelect;
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             stopTimer();
@@ -128,36 +129,28 @@ public class SelectDB_Activity extends ActivityBase {
         bNew.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 stopTimer();
-
-                NewDB_InputBox inputBox = new NewDB_InputBox(new OnMsgBoxClickListener() {
-                    @Override
-                    public boolean onClick(int which, Object data) {
-                        switch (which) {
-                            case ButtonDialog.BUTTON_POSITIVE: // ok clicked
-                                Object[] dataObjects = (Object[]) data;
-
-                                Boolean ownRepository = !(Boolean) dataObjects[0];
-                                String NewDB_Name = (String) dataObjects[1];
-
-                                if (Database.createNewDB(Database.Data, Gdx.files.absolute(CB.WorkPath), NewDB_Name, ownRepository))
+                inputBox = new NewDB_InputBox((which, data) -> {
+                    switch (which) {
+                        case ButtonDialog.BUTTON_POSITIVE: // ok clicked
+                            String newDB_Name = inputBox.getNewDB_Name();
+                            if (newDB_Name.length()>0) {
+                                if (Database.createNewDB(Database.Data, Gdx.files.absolute(CB.WorkPath), newDB_Name, inputBox.ownRepository()))
                                     return true;
                                 Config.AcceptChanges();
-                                Config.DatabaseName.setValue(NewDB_Name + ".db3");
-
+                                Config.DatabaseName.setValue(newDB_Name + ".db3");
                                 Database.Data.cacheList.clear();
-
-                                finish();
-                                break;
-                            case ButtonDialog.BUTTON_NEUTRAL: // cancel clicked
-
-                                break;
-                            case ButtonDialog.BUTTON_NEGATIVE:
-
-                                break;
-                        }
-
-                        return true;
+                            }
+                            else {
+                                CB.viewmanager.toast(Translation.get("MustEnterName"));
+                            }
+                            break;
+                        case ButtonDialog.BUTTON_NEUTRAL:
+                            break;
+                        case ButtonDialog.BUTTON_NEGATIVE:
+                            break;
                     }
+                    inputBox.hide(); // todo check if necessary (reset continous rendering)
+                    return true;
                 });
                 inputBox.show();
             }

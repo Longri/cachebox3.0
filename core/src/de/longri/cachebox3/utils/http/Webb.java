@@ -1,5 +1,6 @@
 package de.longri.cachebox3.utils.http;
 
+import de.longri.cachebox3.settings.Config;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -40,6 +41,7 @@ public class Webb {
     protected Webb() {
         setDefaultHeader("User-Agent", DEFAULT_USER_AGENT);
         setDefaultHeader(HDR_ACCEPT_ENCODING, "gzip");
+        setTimeout(Config.socket_timeout.getValue());
     }
 
     /**

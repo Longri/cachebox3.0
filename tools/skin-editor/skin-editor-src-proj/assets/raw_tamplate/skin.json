@@ -28,6 +28,10 @@
       "path": "svg/map-state-overdraw.svg",
       "scale": 0.75
     },
+    "QuickDraft": {
+      "path": "svg/mapFound0.svg",
+      "scale": 0.73
+    },
     "TB": {
       "path": "svg/TB.svg",
       "scale": 0.08
@@ -754,7 +758,7 @@
     },
     "cacheListIcon": {
       "path": "svg/cacheListIcon.svg",
-      "scale": 0.18
+      "scale": 0.22
     },
     "cache_pressed": {
       "path": "svg/cache_pressed.svg",
@@ -887,6 +891,10 @@
     "default_button_pressed": {
       "path": "svg/default_button_pressed.svg",
       "scale": 0.5
+    },
+    "delFile": {
+      "path": "svg/delFile.svg",
+      "scale": 0.13
     },
     "delWp": {
       "path": "svg/delWp.svg",
@@ -1096,6 +1104,10 @@
       "path": "svg/gc_liveIcon.svg",
       "scale": 0.8
     },
+    "gc_logo": {
+      "path": "svg/gc_logo.svg",
+      "scale": 1.8
+    },
     "giga": {
       "path": "svg/giga.svg",
       "scale": 0.2
@@ -1119,6 +1131,10 @@
     "hu": {
       "path": "svg/hu.svg",
       "scale": 0.08
+    },
+    "image_off": {
+      "path": "svg/image_off.svg",
+      "scale": 0.195
     },
     "images-icon": {
       "path": "svg/images-icon.svg",
@@ -1414,7 +1430,7 @@
     },
     "mapMyParking": {
       "path": "svg/mapMyParking.svg",
-      "scale": 0.15
+      "scale": 0.18
     },
     "mapMystery": {
       "path": "svg/myterie.svg",
@@ -1772,6 +1788,10 @@
       "path": "svg/reviewer_note.svg",
       "scale": 0.12
     },
+    "search": {
+      "path": "svg/search.svg",
+      "scale": 0.19
+    },
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
       "scale": 0.15
@@ -1847,6 +1867,10 @@
     "toast_background": {
       "path": "svg/toast_background.svg",
       "scale": 1
+    },
+    "todo": {
+      "path": "svg/todo.svg",
+      "scale": 0.38
     },
     "toggleOff": {
       "path": "svg/toggleOff.svg",
@@ -2481,6 +2505,24 @@
       "background": "transparent_drawable",
       "vScroll": "slider_drawable",
       "vScrollKnob": "sliderKnob"
+    },
+    "spoilerGallery": {
+      "firstItem": "NULL_DRAWABLE",
+      "secondItem": "NULL_DRAWABLE",
+      "selectedItem": "NULL_DRAWABLE",
+      "pad": 1,
+      "emptyFont": "coordinateValueFont",
+      "emptyFontColor": "settings_default_value_font_color",
+      "background": "NULL_DRAWABLE"
+    },
+    "spoilerOverview": {
+      "firstItem": "listrec_first_drawable",
+      "secondItem": "listrec_first_drawable",
+      "selectedItem": "listrec_selected_drawable",
+      "pad": 1,
+      "emptyFont": "coordinateValueFont",
+      "emptyFontColor": "settings_default_value_font_color",
+      "background": "NULL_DRAWABLE"
     }
   },
   "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
@@ -2827,6 +2869,7 @@
       "sortIcon": "sortIcon",
       "filterIcon": "filter",
       "resetFilterIcon": "filterReset",
+      "searchIcon": "search",
       "importIcon": "import",
       "cacheListIcon": "cacheListIcon",
       "addWp": "add-wp",
@@ -2835,8 +2878,10 @@
       "showWp": "showWp",
       "editWp": "editWp",
       "mesureWp": "mesureWp",
+      "draft": "QuickDraft",
       "hintIconOn": "hintOn",
       "hintIconOff": "hintOff",
+      "my_parking": "mapMyParking",
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",
@@ -2852,11 +2897,13 @@
       "solverIcon": "solver-icon",
       "solver2Icon": "solver-icon-2",
       "imagesIcon": "images-icon",
+      "imagesIconOff": "image_off",
       "cb": "cb",
       "tbListIcon": "tbListIcon",
       "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
       "GC_Live": "gc_liveMenuIcon",
+      "gc_logo": "gc_logo",
       "viewSettings": "view",
       "reloadCacheIcon": "reload_cache",
       "deleteCaches": "delete_Caches",
@@ -2868,7 +2915,8 @@
       "friendsLogs": "friendsLogs",
       "downloadLogs": "downloadLogs",
       "downloadFriendsLogs": "downloadFriendsLogs",
-      "downloadLogImages": "downloadLogImages"
+      "downloadLogImages": "downloadLogImages",
+      "todo": "todo"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
@@ -3275,14 +3323,13 @@
       "arrow": "arrow-compass",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
-      "typeStyle": "cacheList"
+      "typeStyle": "bubble"
     },
     "bubble": {
       "nameFont": "mapPanelUnit",
       "nameFontColor": "font_color",
       "distanceFont": "AboutInfo",
-      "distanceFontColor": "font_color",
-      "typeStyle": "bubble"
+      "distanceFontColor": "font_color"
     },
     "logListItems": {}
   },
@@ -3363,6 +3410,14 @@
     "default": {
       "backgroundColor": "background_color",
       "foregroundColor": "font_color"
+    }
+  },
+  "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
+    "default": {
+      "overviewListStyle" : "spoilerOverview",
+      "galleryListStyle" : "spoilerGallery",
+      "spoilerNameFont": "AboutInfo",
+      "spoilerNameFontColor": "font_color"
     }
   }
 }

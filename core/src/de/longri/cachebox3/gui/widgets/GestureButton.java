@@ -373,13 +373,13 @@ public class GestureButton extends Button {
     public void draw(Batch batch, float parentAlpha) {
 
         //check if filter changed
-        if (viewManager.isFilters() != isLastFiltered) {
-            if (viewManager.isFilters() && style.upFiltered != null) {
+        if (viewManager.isFiltered() != isLastFiltered) {
+            if (viewManager.isFiltered() && style.upFiltered != null) {
                 this.setStyle(filterStyle);
             } else {
                 this.setStyle(style);
             }
-            isLastFiltered = viewManager.isFilters();
+            isLastFiltered = viewManager.isFiltered();
         }
 
         super.draw(batch, parentAlpha);
@@ -389,7 +389,7 @@ public class GestureButton extends Button {
             Vector2 stagePos = new Vector2();
             this.localToStageCoordinates(stagePos);
 
-            boolean isFiltered = viewManager.isFilters();
+            boolean isFiltered = viewManager.isFiltered();
 
             if (!isFiltered && style.hasMenu != null) {
                 style.hasMenu.draw(batch, stagePos.x, stagePos.y, this.getWidth(), this.getHeight());
