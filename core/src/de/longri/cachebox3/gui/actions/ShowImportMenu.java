@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.longri.cachebox3.CB.*;
+import static de.longri.cachebox3.apis.GroundspeakAPI.*;
 
 /**
  * Created by Longri on 12.04.2017.
@@ -70,13 +71,6 @@ public class ShowImportMenu extends Menu {
         addMenuItem("API_IMPORT_OVER_POSITION", CB.getSkin().getMenuIcon.target, () -> postAsync(new NamedRunnable("ShowImportMenu") {
             @Override
             public void run() {
-                postOnGlThread(new NamedRunnable("ShowImportMenu") {
-                    @Override
-                    public void run() {
-                        new ImportGCPosition().show();
-                    }
-                });
-                /*
                 if (isAccessTokenInvalid()) {
                     if (APIError == 401) {
                         MessageBox.show(Translation.get("apiKeyNeeded"), Translation.get("ImportMenuTitle"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
@@ -91,8 +85,6 @@ public class ShowImportMenu extends Menu {
                         }
                     });
                 }
-
-                 */
             }
         }));
         // todo ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");

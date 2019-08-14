@@ -15,17 +15,13 @@
  */
 package de.longri.cachebox3.gui.activities;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.ImportProgressChangedEvent;
-import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.Activity;
+import de.longri.cachebox3.gui.dialogs.InfoBox;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
@@ -48,7 +44,6 @@ import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.CB.addClickHandler;
 import static de.longri.cachebox3.apis.GroundspeakAPI.searchGeoCaches;
@@ -66,11 +61,7 @@ public class ImportGCPosition extends Activity {
     private final CoordinateButton coordinateButton;
     private final CB_CheckBox checkBoxExcludeFounds, checkBoxOnlyAvailable, checkBoxExcludeHides;
     private final SimpleDateFormat simpleDateFormat;
-    private final CB_Label lblCaches, lblWaypoints, lblLogs, lblImages;
-    private final Image workAnimation;
-    private final CB_ProgressBar progressBar;
-    private final AtomicBoolean canceled = new AtomicBoolean(false);
-    private boolean importRuns = false;
+
     private Coordinate actSearchPos;
     private SearchCoordinates searchCoordinates;
 
@@ -108,35 +99,8 @@ public class ImportGCPosition extends Activity {
         checkBoxExcludeHides = new CB_CheckBox(Translation.get("SearchWithoutOwns"));
         checkBoxExcludeFounds = new CB_CheckBox(Translation.get("SearchWithoutFounds"));
 
-        Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
-        workAnimation = new Image(animationDrawable);
-        progressBar = new CB_ProgressBar(0, 100, 1, false, "default");
-        lblCaches = new CB_Label("Imported Caches: 0");
-        lblWaypoints = new CB_Label("Imported Waypoints: 0");
-        lblLogs = new CB_Label("Imported Log's: 0");
-        lblImages = new CB_Label("Imported Images: 0");
-
         initClickHandlersAndContent();
-        setWorkAnimationVisible(false);
     }
-
-        /*
-        add(workAnimation).colspan(5).center();
-        row();
-        add();
-        add(progressBar).colspan(3).center().expandX().fillX();
-        row();
-        add(lblCaches).colspan(5).left();
-        row();
-        add(lblWaypoints).colspan(5).left();
-        row();
-        add(lblLogs).colspan(5).left();
-        row();
-        add(lblImages).colspan(5).left();
-        row().expandY().fillY().bottom();
-        add();
-        row();
-         */
 
     @Override
     protected Catch_Table createMainContent() {
@@ -172,30 +136,18 @@ public class ImportGCPosition extends Activity {
 
     @Override
     protected void runAtOk() {
+        final InfoBox infoBox = new InfoBox(InfoBox.Infotype.PROGRESS, "Import").open();
         CB.postAsync(new NamedRunnable("ImportGCPosition") {
             @Override
             public void run() {
-                ImportNow();
+                ImportNow(infoBox);
             }
         });
     }
 
     @Override
     protected void runAtCancel() {
-        if (importRuns) {
-            canceled.set(true);
-        } else {
-            finish();
-        }
-    }
-
-    private void setWorkAnimationVisible(boolean visible) {
-        workAnimation.setVisible(visible);
-        progressBar.setVisible(visible);
-        lblCaches.setVisible(visible);
-        lblWaypoints.setVisible(visible);
-        lblLogs.setVisible(visible);
-        lblImages.setVisible(visible);
+        finish();
     }
 
     private void initClickHandlersAndContent() {
@@ -252,7 +204,7 @@ public class ImportGCPosition extends Activity {
         });
 
         Coordinate mapCenterPos = MapView.getLastCenterPos();
-        if (mapCenterPos == null || mapCenterPos.isZero() || !mapCenterPos.isValid()) {
+        if (mapCenterPos.isZero() || !mapCenterPos.isValid()) {
             tglBtnMap.setDisabled(true);
             /*
             Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
@@ -312,7 +264,7 @@ public class ImportGCPosition extends Activity {
             if (ist < 1)
                 ist = 1;
             txtRadius.setText(String.valueOf(ist));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ignored) {
         }
     }
 
@@ -344,37 +296,8 @@ public class ImportGCPosition extends Activity {
         coordinateButton.setCoordinate(actSearchPos);
     }
 
-    private void ImportNow() {
+    private void ImportNow(InfoBox infobox) {
         btnOK.setDisabled(true);
-        importRuns = true;
-
-        workAnimation.setVisible(true);
-
-        final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
-            @Override
-            public void progressChanged(final ImportProgressChangedEvent event) {
-
-                if (event.progress.msg.equals("Start parsing result")) {
-                    progressBar.setVisible(true);
-                    lblCaches.setVisible(true);
-                    lblWaypoints.setVisible(true);
-                    lblLogs.setVisible(true);
-                    lblImages.setVisible(true);
-                }
-                CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
-                    @Override
-                    public void run() {
-                        progressBar.setValue(event.progress.progress);
-                        lblCaches.setText("Imported Caches: " + event.progress.caches);
-                        lblWaypoints.setText("Imported Waypoints: " + event.progress.wayPoints);
-                        lblLogs.setText("Imported Logs: " + event.progress.logs);
-                        lblImages.setText("Imported Images: " + event.progress.images);
-                    }
-                });
-            }
-        };
-        EventHandler.add(progressListener);
-        final Date importStartTime = new Date();
 
         if (actSearchPos == null) {
             //wait for act Position
@@ -382,15 +305,9 @@ public class ImportGCPosition extends Activity {
             while (actSearchPos == null) {
                 try {
                     Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException ignored) {
                 }
                 actSearchPos = EventHandler.getMyPosition();
-                //TODO react of CANCEL
-                if (canceled.get()) {
-                    finish();
-                    return;
-                }
             }
             ViewManager.ToastLength.WAIT.close();
         }
@@ -407,7 +324,6 @@ public class ImportGCPosition extends Activity {
         }
         final Date publishDate = tmpDate;
 
-        // todo progressListener, importStart, cancel, ...
         Category category = CB.Categories.getCategory("API-Import");
         if (category != null) { // should not happen!!!
             GpxFilename gpxFilename = category.addGpxFilename("API-Import");
@@ -461,22 +377,36 @@ public class ImportGCPosition extends Activity {
                 Config.ImportLimit.setValue(importLimit);
 
                 Config.AcceptChanges();
-                //dis.setAnimationType(AnimationType.Download);
+
+                q.infoBox = infobox;
+
                 Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = searchGeoCaches(q);
-                //dis.setAnimationType(AnimationType.Work);
                 if (GroundspeakAPI.APIError != GroundspeakAPI.OK) {
                     MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("importCachesOverPosition"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                 } else {
-                    // WriteIntoDB.CachesAndLogsAndImagesIntoDB(geoCacheRelateds, gpxFilename);
-                    // todo set gpxfilename / category
-                    Cache3DAO dao = new Cache3DAO();
-                    for (GroundspeakAPI.GeoCacheRelated cacheEntry : fetchedCaches) {
-                        dao.writeToDatabase(Database.Data, cacheEntry.cache, true);
+                    if (!infobox.isCanceled()) {
+                        // WriteIntoDB.CachesAndLogsAndImagesIntoDB(geoCacheRelateds, gpxFilename);
+                        // todo set gpxfilename / category
+                        Cache3DAO dao = new Cache3DAO();
+                        int count = 0;
+                        infobox.setTitle("Import to database");
+                        for (GroundspeakAPI.GeoCacheRelated cacheEntry : fetchedCaches) {
+                            count++;
+                            infobox.setProgress(100 * count / fetchedCaches.size, cacheEntry.cache.getGcCode());
+                            // this sleep is simply for demonstration
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            dao.writeToDatabase(Database.Data, cacheEntry.cache, true);
 
-                        LogDAO logdao = new LogDAO();
-                        logdao.writeToDB(Database.Data, cacheEntry.logs);
+                            LogDAO logdao = new LogDAO();
+                            logdao.writeToDB(Database.Data, cacheEntry.logs);
+                        }
                     }
                 }
+                infobox.close();
 
                 CB.postOnNextGlThread(() -> CB.postAsync(new NamedRunnable("Reload cacheList after import") {
                     @Override

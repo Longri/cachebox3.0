@@ -450,7 +450,7 @@ public class CB {
 
         boolean checkCancel = iCancel != null;
 
-        while (negate ? !wait.get() : wait.get()) {
+        while (negate != wait.get()) {
             if (checkCancel) {
                 if (iCancel.cancel()) return;
             }

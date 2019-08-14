@@ -31,7 +31,6 @@ import de.longri.cachebox3.events.location.OrientationChangedEvent;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
-import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.activities.ProjectionCoordinate;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
@@ -309,7 +308,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
     private void deleteWP() {
         //name, msg, title, buttons, icon, OnMsgBoxClickListener
-        Window dialog = new ButtonDialog("delete Waypoint",
+        ButtonDialog dialog = new ButtonDialog("delete Waypoint",
                 Translation.get("?DelWP") + "\n[" + actWaypoint.getTitle() + "]\n",
                 Translation.get("!DelWP"), MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                 (which, data) -> {
