@@ -1,45 +1,13 @@
-apply plugin: 'java'
+apply plugin: "java"
 
-
-dependencies {
-    implementation "org.slf4j:slf4j-api:$slf4jVersion"
-    implementation fileTree(dir: 'libs', include: ['json-20180813.jar'])
-    implementation fileTree(dir: 'libs', include: ['libPP-jar-0.9.0-SNAPSHOT.jar'])
-
-    // libgdx
-    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
-
-    //vtm
-    implementation "org.mapsforge:vtm:$vtmVersion"
-    implementation "org.mapsforge:vtm-gdx:$vtmVersion"
-    implementation "org.mapsforge:vtm-themes:$vtmVersion"
-
-    implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
-    implementation "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
-
-    implementation "commons-codec:commons-codec:1.9"
-    
-    // implementation "org.json:json:20180813"
-    
-}
-
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-//sourceSets.test.java.srcDirs = ["tests/"]
-sourceSets.test.resources.srcDirs = ["testsResources/"]
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 //sourceSets with including LibGdx Tests for run unit tests on device
-sourceSets.main.java.srcDirs = ["src/", "../tests/libgdx_test/src"]
+//sourceSets.main.java.srcDirs = ["src/", "../tests/libgdx_test/src"]
 
 //sourceSets without LibGdx tests (aka release)
-//sourceSets.main.java.srcDirs = ["src/"]
+sourceSets.main.java.srcDirs = ["src/"]
 
 
 task saveBuildInfo {

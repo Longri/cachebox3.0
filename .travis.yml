@@ -20,6 +20,7 @@ cache:
 global: GRADLE_OPTS="-Xmx2048m"
 before_script:
   - mv travis_settings.gradle settings.gradle
+  - mv travis_build.gradle build.gradle
 script:
 - ./gradlew junit_test:junitPlatformTest #--stacktrace --debug
 

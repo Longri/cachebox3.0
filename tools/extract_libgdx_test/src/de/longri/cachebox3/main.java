@@ -76,7 +76,9 @@ public class main {
     private static FileHandle junitSrcDir;
     private static FileHandle libgdxTestSrcDir;
     private static final String ASSET_DIR = "./launcher/android/assets/platform_test/";
+    private static final String ASSET_WORKING_DIR = "./launcher/desktop/workingDir/";
     private static final String BUILD_GRADLE_FILE = "./core/build.gradle";
+    private static final String BUILD = "./core/build";
     private static final String TEST_JSON = "tests.json";
     private static final String TEST_SRC_DIR = "./tests/junit_test/src";
     private static final String TEST_RESOURCES_DIR = "./tests/junit_test/testsResources";
@@ -181,6 +183,10 @@ public class main {
             AbstractTestCache_Java.writeString(strAbstractTestCache, false);
         }
 
+        // copy generated test files also to desktop/workingDir
+        FileHandle workingDirAssets = Gdx.files.absolute(ASSET_WORKING_DIR);
+        assetDir.copyTo(workingDirAssets);
+
     }
 
     private static void disable() {
@@ -253,6 +259,12 @@ public class main {
 
         if (sourceSetChanged) { // override build.gradle file only with changes
             gradleFile.writeString(sb.toString(), false, "UTF-8");
+
+            // with any build.gradle file changes we must clear the build directory
+            FileHandle build = Gdx.files.absolute(BUILD);
+            if (!build.deleteDirectory()) {
+                System.out.println("can't clear core/build directory");
+            }
         }
     }
 
