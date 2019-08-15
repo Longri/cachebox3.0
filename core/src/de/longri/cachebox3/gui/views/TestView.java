@@ -39,7 +39,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.ActivityBase;
-import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -749,7 +748,7 @@ public class TestView extends AbstractView {
         {
             CharSequence Msg = Translation.get("QuitReally");
             CharSequence Title = Translation.get("Quit?");
-            Window dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null);
+            ButtonDialog dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null);
 
             dialog.setStageBackground(null);
 

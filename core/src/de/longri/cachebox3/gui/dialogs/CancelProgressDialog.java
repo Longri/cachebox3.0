@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.callbacks.FinishCallBack;
@@ -51,7 +50,7 @@ public class CancelProgressDialog extends ButtonDialog {
     }
 
 
-    private static Table getProgressContentTable() {
+    private static Catch_Table getProgressContentTable() {
 
         ProgressTable contentTable = new ProgressTable();
         float contentWidth = (Gdx.graphics.getWidth() * 0.75f);

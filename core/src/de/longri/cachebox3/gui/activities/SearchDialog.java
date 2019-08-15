@@ -2,12 +2,12 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.EditTextField;
@@ -111,10 +111,11 @@ public class SearchDialog extends Activity {
                     AbstractWaypoint finalWp = tmp.getCorrectedFinal();
                     if (finalWp == null)
                         finalWp = tmp.getStartWaypoint();
-                    EventHandler.setSelectedWaypoint(tmp, finalWp);
+                    EventHandler.fireSelectedWaypointChanged(tmp, finalWp);
                     // todo do correct cachelist selection
-                    CacheListView view = new CacheListView();
-                    CB.viewmanager.showView(view);
+                    // CacheListView view = new CacheListView();
+                    // CB.viewmanager.showView(view);
+                    EventHandler.fire(new CacheListChangedEvent());
                 }
                 CB.setAutoResort(false);
             } else {

@@ -18,6 +18,7 @@ package de.longri.cachebox3.apis;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import de.longri.cachebox3.gui.dialogs.InfoBox;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
@@ -183,6 +184,9 @@ public class GroundspeakAPI {
                     try {
                         if (query.maxToFetch < skip + take)
                             take = query.maxToFetch - skip;
+                        if (query.infoBox != null)
+                            query.infoBox.setProgress(100 * skip / query.maxToFetch, skip + "/" + query.maxToFetch + " (max) ");
+                        //  query.infoBox.setProgress(100 * skip / query.maxToFetch, getUrl(1, "geocaches/search"));
                         Response<JSONArray> r = query.putQuery(getNetz()
                                 .get(getUrl(1, "geocaches/search"))
                                 .param("skip", skip)
@@ -199,6 +203,13 @@ public class GroundspeakAPI {
                             writeSearchResultsToDisc(fetchedCaches, query.descriptor);
                         }
                         fetchResults.addAll(getGeoCacheRelateds(fetchedCaches, fields, null));
+                        if (query.infoBox != null && query.infoBox.isCanceled()) {
+                            take = 0;
+                            APIError = ERROR;
+                            LastAPIError = "Canceled by user";
+                            return fetchResults;
+                            // throw new Exception("Canceled by user"); // APIError not set ?!
+                        }
 
                         if (fetchedCaches.length() < take || take < maxCachesPerHttpCall) {
                             take = 0; // we got all
@@ -230,7 +241,7 @@ public class GroundspeakAPI {
     }
 
     private static void writeSearchResultsToDisc(JSONArray fetchedCaches, Descriptor descriptor) {
-        /* todo
+        /* todo implent livemap
         Writer writer = null;
         try {
             String Path = descriptor.getLocalCachePath(LiveMapQue.LIVE_CACHE_NAME) + LiveMapQue.LIVE_CACHE_EXTENSION;
@@ -1555,6 +1566,10 @@ public class GroundspeakAPI {
         }
     }
 
+    public static int getAPIError() {
+        return APIError;
+    }
+
     private enum MemberShipTypes {Unknown, Basic, Charter, Premium}
 
     public static class PQ implements Serializable, Comparable {
@@ -1610,12 +1625,12 @@ public class GroundspeakAPI {
         private static final String LiteFields = "referenceCode,favoritePoints,userData,name,difficulty,terrain,placedDate,geocacheType.id,geocacheSize.id,location,postedCoordinates,status,owner.username,ownerAlias";
         private static final String NotLiteFields = "hints,attributes,longDescription,shortDescription,additionalWaypoints,userWaypoints";
         private static final String StatusFields = "referenceCode,favoritePoints,status,trackableCount";
+        public InfoBox infoBox;
         private StringBuilder qString;
         private StringBuilder fieldsString;
         private StringBuilder expandString;
         private int maxToFetch;
         private Descriptor descriptor;
-
 
         public Query() {
             qString = new StringBuilder();
@@ -1785,6 +1800,6 @@ public class GroundspeakAPI {
     }
 
     public class Descriptor {
-        //todo is dummy for Descriptor for life api
+        //todo is dummy for Descriptor for livemap
     }
 }

@@ -160,6 +160,7 @@ public class Settings_Activity extends ActivityBase {
 
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+// todo implement  QuickButton config setting
 
 //                String ActionsString = "";
 //                int counter = 0;

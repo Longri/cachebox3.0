@@ -32,6 +32,9 @@ import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
  * Created by Longri on 18.05.2017.
+ * todo? missing : positioning the input cursor to a position or the visible text to a position
+ * todo? missing : disable input (like label but with copy to clipboard, with scrollpane)
+ *
  */
 public class EditTextField extends Catch_WidgetGroup {
 
@@ -48,6 +51,10 @@ public class EditTextField extends Catch_WidgetGroup {
 
     public EditTextField(String text) {
         this(false, text);
+    }
+
+    public EditTextField(CharSequence text) {
+        this(false, text.toString());
     }
 
     public EditTextField(boolean multiLine) {
