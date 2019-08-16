@@ -98,7 +98,7 @@ public class EditWaypoint extends ActivityBase {
         selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                EditWaypoint.this.waypoint.setType(selectBox.getSelected());
+                waypoint.setType(selectBox.getSelected());
                 showCbStartPoint(EditWaypoint.this.waypoint.getType() == CacheTypes.MultiStage);
             }
         });

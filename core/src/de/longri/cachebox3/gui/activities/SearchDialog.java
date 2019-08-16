@@ -63,14 +63,6 @@ public class SearchDialog extends Activity {
         return mainContent;
     }
 
-    /*
-    @Override
-    public void layout() {
-        super.layout();
-        // activity.setBounds(activity.getX(), activity.getY(), activity.getWidth(), activity.getPrefHeight() / 2);
-    }
-    */
-
     protected void runAtOk() {
         finish();
     }

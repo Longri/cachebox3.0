@@ -29,6 +29,10 @@ public class CoordinateButton extends Catch_VisTextButton {
 
     private Coordinate coordinate;
 
+    public CoordinateButton() {
+        this(null);
+    }
+
     public CoordinateButton(Coordinate coordinate) {
         super(coordinate == null ? new Coordinate(0, 0).formatCoordinate() :
                 coordinate.formatCoordinate(), VisUI.getSkin().get("coordinate", VisTextButtonStyle.class));
