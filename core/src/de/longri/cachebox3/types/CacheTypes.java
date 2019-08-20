@@ -16,7 +16,7 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ public enum CacheTypes implements SelectBoxItem {
     ;
 
     private final static Logger log = LoggerFactory.getLogger(CacheTypes.class);
-    static CacheTypeStyle cacheListTypeStyle;
+    static CacheTypeStyle cacheTypeStyle;
     private boolean isCache;
 
     CacheTypes(boolean isCache) {
@@ -198,8 +198,8 @@ public enum CacheTypes implements SelectBoxItem {
     @Override
     public Drawable getDrawable() {
         // for select Box interface, use 'cacheList' style
-        if (cacheListTypeStyle == null) cacheListTypeStyle = VisUI.getSkin().get("bubble", CacheTypeStyle.class);
-        return getDrawable(cacheListTypeStyle);
+        if (cacheTypeStyle == null) cacheTypeStyle = CB.getSkin().get("cacheList", CacheTypeStyle.class);
+        return getDrawable(cacheTypeStyle);
     }
 
     public Drawable getDrawable(CacheTypeStyle style) {

@@ -15,7 +15,12 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
 /**
@@ -27,17 +32,40 @@ public class CB_Label extends VisLabel {
         super();
     }
 
-    public CB_Label(CharSequence text,LabelStyle style) {
-        super(text,style);
+    public CB_Label(CharSequence text, LabelStyle style) {
+        super(text, style);
     }
 
     public CB_Label(CharSequence name) {
         super(name);
     }
 
-    public void draw (Batch batch, float parentAlpha) {
+    public CB_Label setBackgroundColor(Color color) {
+        Pixmap labelColor = new Pixmap(100, 100, Pixmap.Format.RGB888);
+        labelColor.setColor(color);
+        labelColor.fill();
+        LabelStyle thisStyle = new LabelStyle(getStyle());
+        thisStyle.background = new Image(new Texture(labelColor)).getDrawable();
+        setStyle(thisStyle);
+        labelColor.dispose();
+        return this;
+    }
+
+    public CB_Label setBackground(Drawable drawable) {
+        LabelStyle thisStyle = new LabelStyle(getStyle());
+        thisStyle.background = drawable;
+        setStyle(thisStyle);
+        return this;
+    }
+
+    public CB_Label setForegroundColor(Color color) {
+        super.setColor(color);
+        return this;
+    }
+
+    public void draw(Batch batch, float parentAlpha) {
         try {
-            super.draw(batch,parentAlpha);
+            super.draw(batch, parentAlpha);
         } catch (Exception e) {
             this.setText("can't draw text");
         }

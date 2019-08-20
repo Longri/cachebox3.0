@@ -182,11 +182,17 @@ public class CB {
     }
 
     public static void setActSkin(SvgSkin skin) {
-        if (actSkin != null) {
-            VisUI.dispose();
+        setActSkin(skin, true);
+    }
+
+    public static void setActSkin(SvgSkin skin, boolean reload) {
+        if (reload) {
+            if (actSkin != null) {
+                VisUI.dispose();
+            }
+            VisUI.load(skin);
         }
         actSkin = skin;
-        VisUI.load(actSkin);
 
         // calculate scaled sizes
         float button_width = CB.getScaledFloat(actSkin.get("button_width", ScaledSize.class).value);

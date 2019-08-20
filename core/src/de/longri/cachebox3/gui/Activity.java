@@ -45,7 +45,7 @@ public abstract class Activity extends ActivityBase {
         for (Actor actor : actors)
             removeActor(actor);
         setFillParent(true);
-        addNext(imgTitle).left().fill(false);
+        addNext(imgTitle, -1.2f);
         addLast(lblTitle, -0.8f);
         addLast(new ScrollPane(createMainContent()));
         addNext(btnOK);

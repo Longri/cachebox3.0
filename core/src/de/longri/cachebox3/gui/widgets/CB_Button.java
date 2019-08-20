@@ -33,6 +33,7 @@ public class CB_Button extends IconButton {
     public CB_Button(CharSequence text, VisTextButtonStyle buttonStyle) {
         super(text, buttonStyle);
     }
+
     public CB_Button(CharSequence text, Drawable icon) {
         super(text, icon);
     }

@@ -57,6 +57,7 @@ public class EditCache extends Activity {
         cacheState = new EditTextField();
         cacheCountry = new EditTextField();
         cacheTyp = new CB_Button("EditCacheType", "toggle"); // selectBoxStyle.selectIcon
+        // cacheType.getDrawable(VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class).typeStyle)
         //, cacheTypList(), cacheTypSelection());
         cacheDescription = new EditTextField(true);
         //.setWrapType(WrapType.WRAPPED);

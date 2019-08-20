@@ -43,13 +43,13 @@ public class AdjustableStarWidget extends Catch_Table {
     private final int step;
     private final Type type;
 
-    public AdjustableStarWidget(Type type, CharSequence title, IntProperty valueProperty, StarsStyle starsStyletyle, CacheSizeStyle cacheSizeStyle) {
+    public AdjustableStarWidget(Type type, CharSequence title, IntProperty valueProperty, StarsStyle starsStyle, CacheSizeStyle cacheSizeStyle) {
         this.type = type;
         this.value = valueProperty;
         maxValue = type == Type.STAR ? 10 : 6;
         minValue = type == Type.STAR ? 0 : 0;
         step = type == Type.STAR ? 1 : 1;
-        starsWidget = type == Type.STAR ? new Stars(value.getInt(), starsStyletyle) : new CacheSizeWidget(value.getInt(), cacheSizeStyle);
+        starsWidget = type == Type.STAR ? new Stars(value.getInt(), starsStyle) : new CacheSizeWidget(value.getInt(), cacheSizeStyle);
         VisTextButton minusBtn = new VisTextButton("-") {
             @Override
             public float getPrefWidth() {
@@ -84,6 +84,7 @@ public class AdjustableStarWidget extends Catch_Table {
         this.add(centerTable).left().expandX().fillX().padRight(new Value.Fixed(CB.scaledSizes.MARGIN));
         if (type == Type.STAR) this.add(valueLabel).right().padRight(new Value.Fixed(CB.scaledSizes.MARGINx2));
         this.add(plusBtn).right();
+        row();
 
         plusBtn.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
