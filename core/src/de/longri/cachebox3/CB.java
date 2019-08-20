@@ -182,8 +182,8 @@ public class CB {
     }
 
     public static void setActSkin(SvgSkin skin) {
-        if (actSkin != null) {
-            VisUI.dispose();
+        if (VisUI.isLoaded()) {
+            VisUI.dispose(true);
         }
         actSkin = skin;
         VisUI.load(actSkin);
@@ -232,6 +232,13 @@ public class CB {
     }
 
     private static void calcScaleFactor() {
+
+        if (BuildInfo.getRevision().equals("JUnitTest")) {
+            scalefactor = 1;
+            return;
+        }
+
+
         if (CanvasAdapter.platform.isDesktop()) {
             //Desktop
             scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;

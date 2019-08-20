@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.skin.styles.*;
@@ -48,6 +49,7 @@ import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.GeoUtils;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.apache.commons.codec.Charsets;
+import org.oscim.awt.AwtGraphics;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -87,6 +89,14 @@ public class TestUtils {
         VisUI.load(new Skin());
         CB.initThreadCheck();
         Gdx.gl = mock(GL20.class);
+
+
+        //initialize platform bitmap factory
+        AwtGraphics.init();
+
+        //initialize platform connector
+        PlatformConnector.init(new DesktopPlatformConnector());
+
     }
 
     public static void initialVisUI() {

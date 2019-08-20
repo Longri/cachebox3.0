@@ -216,6 +216,7 @@ project(":junit_test") {
 
     dependencies {
         implementation project(":core")
+        implementation project(":desktop")
 
         testRuntime(
                 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
