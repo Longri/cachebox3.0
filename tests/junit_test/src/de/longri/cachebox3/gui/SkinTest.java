@@ -236,4 +236,9 @@ public class SkinTest {
     }
 
 
+    @Test
+    void menuIconSizeCheck(){
+//        CB.getSkin().getMenuIcon
+    }
+
 }

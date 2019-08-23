@@ -23,6 +23,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
+import de.longri.cachebox3.utils.BuildInfo;
 import org.oscim.awt.AwtGraphics;
 
 import java.awt.*;
@@ -38,6 +39,8 @@ public class SkinEditorDesktopLauncher {
      * Entry point
      */
     public static void main(String[] arg) {
+
+        BuildInfo.setBuildInfo("SkinEditor");
 
         // Set look and feel for Swing dialogs
         try {
