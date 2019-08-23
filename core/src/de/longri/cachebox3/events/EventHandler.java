@@ -442,4 +442,18 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     public void orientationChanged(OrientationChangedEvent event) {
         INSTANCE.heading = event.getOrientation();
     }
+
+    private final static Pool<PositionChangedEvent> POOL_PositionChangedEvent = Pools.get(PositionChangedEvent.class, 100);
+    private final static Pool<IncrementProgressEvent> POOL_IncrementProgressEvent = Pools.get(IncrementProgressEvent.class, 5);
+
+    static {
+        Pools.set(PositionChangedEvent.class, POOL_PositionChangedEvent);
+        Pools.set(IncrementProgressEvent.class, POOL_IncrementProgressEvent);
+    }
+
+    public static <T extends AbstractPoolableEvent> T getPooledEvent(Class<T> type) {
+        return Pools.get(type).obtain();
+    }
+
+
 }

@@ -115,7 +115,10 @@ public class LoadDbTask extends AbstractInitTask {
                                 if (doesNotExist)
                                     Config.DatabaseName.setValue(Utils.getFileName(fileList.get(0).getName()));
                             }
-                            EventHandler.fire(new IncrementProgressEvent(10, "load db"));
+
+                            IncrementProgressEvent event = EventHandler.getPooledEvent(IncrementProgressEvent.class);
+                            event.set(10, "load db");
+                            EventHandler.fireAsync(event);
                             selectDbDialog.loadSelectedDB();
                         });
                     }
