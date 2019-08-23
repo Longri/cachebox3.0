@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.actions.show_activities;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
@@ -45,33 +44,33 @@ public class Action_QuickDraft extends AbstractAction {
     public void execute() {
         Menu cm = new Menu("QuickDraft");
         AbstractCache cache = EventHandler.getSelectedCache();
-        DraftListItemStyle itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
+        DraftListItemStyle draftListItemStyle = CB.getSkin().get("DraftListItemStyle", DraftListItemStyle.class);
 
         switch (cache.getType()) {
             case Event:
             case MegaEvent:
             case Giga:
             case CITO:
-                cm.addMenuItem("attended", itemStyle.typeStyle.attended, () -> {
+                cm.addMenuItem("attended", draftListItemStyle.logTypesStyle.attended, () -> {
                     DraftsView.addNewDraft(LogTypes.attended, true);
                     finalHandling(true, cache);
                 });
                 break;
             case Camera:
-                cm.addMenuItem("webCamFotoTaken", itemStyle.typeStyle.webcam_photo_taken, () -> {
+                cm.addMenuItem("webCamFotoTaken", draftListItemStyle.logTypesStyle.webcam_photo_taken, () -> {
                     DraftsView.addNewDraft(LogTypes.webcam_photo_taken, true);
                     finalHandling(true, cache);
                 });
-                cm.addMenuItem("DNF", itemStyle.typeStyle.didnt_find, () -> {
+                cm.addMenuItem("DNF", draftListItemStyle.logTypesStyle.didnt_find, () -> {
                     finalHandling(false, cache);
                 });
                 break;
             default:
-                cm.addMenuItem("found", itemStyle.typeStyle.found, () -> {
+                cm.addMenuItem("found", draftListItemStyle.logTypesStyle.found, () -> {
                     DraftsView.addNewDraft(LogTypes.found, true);
                     finalHandling(true, cache);
                 });
-                cm.addMenuItem("DNF", itemStyle.typeStyle.didnt_find, () -> {
+                cm.addMenuItem("DNF", draftListItemStyle.logTypesStyle.didnt_find, () -> {
                     DraftsView.addNewDraft(LogTypes.didnt_find, true);
                     finalHandling(false, cache);
                 });

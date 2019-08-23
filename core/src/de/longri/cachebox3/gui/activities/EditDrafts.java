@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -61,7 +60,7 @@ public class EditDrafts extends ActivityBase {
 
     private final VisTable contentTable;
     private final CB_Button btnOk, btnCancel;
-    private final DraftListItemStyle itemStyle;
+    private final DraftListItemStyle draftListItemStyle;
     private final VisScrollPane scrollPane;
     private final VisLabel foundLabel, dateLabel, timeLabel;
     private final EditTextField dateTextArea, timeTextArea, commentTextArea;
@@ -124,7 +123,7 @@ public class EditDrafts extends ActivityBase {
 
     public EditDrafts(DraftEntry note, ReturnListener returnListener, boolean isNewDraft) {
         super("EditDraft");
-        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
+        draftListItemStyle = CB.getSkin().get("DraftListItemStyle", DraftListItemStyle.class);
 
         btnOk = new CB_Button(Translation.get("save"));
         btnOk.addListener(saveClickListener);
@@ -134,7 +133,7 @@ public class EditDrafts extends ActivityBase {
         setDraft(note, returnListener, isNewDraft);
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
             gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"),
-                    new IntProperty(), itemStyle.starStyle, itemStyle.cacheSizeStyle);
+                    new IntProperty(), draftListItemStyle.starStyle, draftListItemStyle.cacheSizeStyle);
             gcVoteWidget.setBackground(CB.getSkin().get(ListViewStyle.class).firstItem);
         }
 
@@ -208,18 +207,18 @@ public class EditDrafts extends ActivityBase {
         y += CB.scaledSizes.MARGIN + btnCancel.getHeight();
 
         Label.LabelStyle headerLabelStyle = new Label.LabelStyle();
-        headerLabelStyle.font = this.itemStyle.headerFont;
-        headerLabelStyle.fontColor = this.itemStyle.headerFontColor;
+        headerLabelStyle.font = this.draftListItemStyle.headerFont;
+        headerLabelStyle.fontColor = this.draftListItemStyle.headerFontColor;
 
         Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
-        commentLabelStyle.font = this.itemStyle.descriptionFont;
-        commentLabelStyle.fontColor = this.itemStyle.descriptionFontColor;
+        commentLabelStyle.font = this.draftListItemStyle.descriptionFont;
+        commentLabelStyle.fontColor = this.draftListItemStyle.descriptionFontColor;
 
 
         VisTable cacheTable = new VisTable();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(actDraft.cacheType.getCacheWidget(itemStyle.cacheTypeStyle, null, null, null, null));
+        iconTable.add(actDraft.cacheType.getCacheWidget(draftListItemStyle.cacheTypeStyle, null, null, null, null));
         iconTable.pack();
         iconTable.layout();
 
@@ -238,7 +237,7 @@ public class EditDrafts extends ActivityBase {
         cacheTable.add(gcLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
 
         VisTable foundRow = new VisTable();
-        Image typeIcon = new Image(actDraft.type.getDrawable(itemStyle.typeStyle));
+        Image typeIcon = new Image(actDraft.type.getDrawable(draftListItemStyle.logTypesStyle));
         foundRow.defaults().pad(CB.scaledSizes.MARGINx2);
         foundRow.add(typeIcon);
         foundRow.add(foundLabel);

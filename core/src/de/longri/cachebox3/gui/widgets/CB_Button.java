@@ -15,34 +15,36 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 /**
  * Created by Longri on 27.10.2017.
  */
-public class CB_Button extends Catch_VisTextButton {
+public class CB_Button extends IconButton {
 
     public CB_Button(CharSequence text) {
-        super(EMPTY);
-        getLabel().setText(text);
-        setSize(getPrefWidth(), getPrefHeight());
+        super(text);
     }
 
     public CB_Button(CharSequence text, String styleName) {
-        super(EMPTY, styleName);
-        getLabel().setText(text);
-        setSize(getPrefWidth(), getPrefHeight());
+        super(text, styleName);
     }
 
     public CB_Button(CharSequence text, VisTextButtonStyle buttonStyle) {
-        super(EMPTY, buttonStyle);
-        getLabel().setText(text);
-        setSize(getPrefWidth(), getPrefHeight());
+        super(text, buttonStyle);
+    }
+
+    public CB_Button(CharSequence text, Drawable icon) {
+        super(text, icon);
+    }
+
+    public CB_Button(Drawable icon) {
+        super(icon);
     }
 
     public void setText(CharSequence text) {
         getLabel().setText(text);
-        setSize(getPrefWidth(), getPrefHeight());
+        setSize(preferredWidth, preferredHeight);
     }
 
     public void setState(int i) {

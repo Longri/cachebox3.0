@@ -1,58 +1,13 @@
-apply plugin: "java"
-apply plugin: "robovm"
+sourceSets.main.java.srcDirs = ["src/"]
 
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 configurations { natives }
-
-dependencies {
-
-    implementation project(":core")
-    implementation "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
-    implementation "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
-    implementation "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
-    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-    implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
-
-
-    implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
-    natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-ios"
-
-    //include libs
-        compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    //vtm disabled, use own classes
-//    implementation("org.mapsforge:vtm-ios:$vtmVersion") {
-//        exclude group: 'org.slf4j', module: 'slf4j-simple'
-//    }
-    implementation project(":vtm-ios")
-
-
-    natives "org.mapsforge:vtm-ios:$vtmVersion:natives"
-
-
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    // libgdx
-    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
-
-    //vtm
-    implementation "org.mapsforge:vtm:$vtmVersion"
-    implementation "org.mapsforge:vtm-gdx:$vtmVersion"
-    implementation "org.mapsforge:vtm-themes:$vtmVersion"
-
-    implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
-    implementation "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
-
-    implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
-}
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]
 
 ext {
     mainClassName = "de.longri.cachebox3.IOS_Launcher"
@@ -61,8 +16,9 @@ ext {
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper build/ folders
 // so they get packed with the IPA.
-task copyNatives() {
-    file("build/native/").mkdirs();
+task copyIosNatives() {
+    file("build/native/").mkdirs()
+
     configurations.natives.files.each { jar ->
         def outputDir = null
         if (jar.name.endsWith("natives.jar")) outputDir = file("build/native/")
@@ -89,7 +45,16 @@ task copyNatives() {
     }
 }
 
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn copyIosNatives
+}
+
 launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
 createIPA.dependsOn build
+
+robovm {
+    archs = "thumbv7:arm64"
+}
+

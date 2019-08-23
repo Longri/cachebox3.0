@@ -3334,15 +3334,17 @@
     "logListItems": {}
   },
   "de.longri.cachebox3.gui.skin.styles.DraftListItemStyle": {
-    "fieldNoteListItemStyle": {
+    "DraftListItemStyle": {
       "headerFont": "normal_bold_font",
       "headerFontColor": "font_color",
       "descriptionFont": "normal_font",
       "descriptionFontColor": "font_color",
-      "typeStyle": "logViewLogStyles",
+      "logTypesStyle": "logViewLogStyles",
       "cacheTypeStyle": "cacheList",
       "headerBackground": "list_rec_header_9_Patch",
-      "uploadedIcon": "DraftUploaded"
+      "uploadedIcon": "DraftUploaded",
+      "starStyle": "cachelist",
+      "cacheSizeStyle": "cachelist"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.FilterStyle": {
@@ -3414,8 +3416,6 @@
   },
   "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
     "default": {
-      "overviewListStyle" : "spoilerOverview",
-      "galleryListStyle" : "spoilerGallery",
       "spoilerNameFont": "AboutInfo",
       "spoilerNameFontColor": "font_color"
     }

@@ -27,7 +27,7 @@ public class DraftListItemStyle {
     public Color headerFontColor;
     public BitmapFont descriptionFont;
     public Color descriptionFontColor;
-    public LogTypesStyle typeStyle;
+    public LogTypesStyle logTypesStyle;
     public CacheTypeStyle cacheTypeStyle;
     public Drawable headerBackground;
     public Drawable uploadedOverlay;
