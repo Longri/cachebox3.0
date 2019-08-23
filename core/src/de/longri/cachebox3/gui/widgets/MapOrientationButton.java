@@ -30,7 +30,7 @@ public class MapOrientationButton extends Button {
     private State state;
 
     public MapOrientationButton() {
-        super(VisUI.getSkin().get("toggle", ButtonStyle.class));
+        super(VisUI.getSkin().get("toggle", Button.ButtonStyle.class));
     }
 
     @Override
