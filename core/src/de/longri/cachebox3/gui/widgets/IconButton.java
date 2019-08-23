@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButton;
@@ -33,7 +34,7 @@ public class IconButton extends Catch_VisTextButton {
 
     public IconButton(String text) {
         super(text);
-        setStyle(getVisTextButtonStyle());
+        setStyle(VisUI.getSkin().get(VisTextButton.VisTextButtonStyle.class));
         image = new com.badlogic.gdx.scenes.scene2d.ui.Image(new ColorDrawable(new HSV_Color(0)));
         this.getLabel().setAlignment(Align.center | Align.left);
         this.addActor(image);
@@ -42,7 +43,7 @@ public class IconButton extends Catch_VisTextButton {
 
     public IconButton(Drawable icon) {
         super("");
-        setStyle(getVisTextButtonStyle());
+        setStyle(VisUI.getSkin().get(VisTextButton.VisTextButtonStyle.class));
         image = new com.badlogic.gdx.scenes.scene2d.ui.Image(icon);
         this.getLabel().setAlignment(Align.center | Align.left);
         this.addActor(image);
@@ -53,7 +54,7 @@ public class IconButton extends Catch_VisTextButton {
     public IconButton(CharSequence text) {
         super(EMPTY);
         getLabel().setText(text);
-        setStyle(getVisTextButtonStyle());
+        setStyle(VisUI.getSkin().get(VisTextButton.VisTextButtonStyle.class));
         image = new com.badlogic.gdx.scenes.scene2d.ui.Image(new ColorDrawable(new HSV_Color(0)));
         this.getLabel().setAlignment(Align.center | Align.left);
         this.addActor(image);
@@ -63,16 +64,12 @@ public class IconButton extends Catch_VisTextButton {
     public IconButton(CharSequence text, Drawable icon) {
         super(EMPTY);
         getLabel().setText(text);
-        setStyle(getVisTextButtonStyle());
+        setStyle(VisUI.getSkin().get(VisTextButton.VisTextButtonStyle.class));
         image = new com.badlogic.gdx.scenes.scene2d.ui.Image(icon);
         this.getLabel().setAlignment(Align.center | Align.left);
         this.addActor(image);
         this.setIcon(icon);
         setSize(getPrefWidth(), getPrefHeight());
-    }
-
-    private VisTextButtonStyle getVisTextButtonStyle() {
-        return VisUI.getSkin().get(VisTextButtonStyle.class);
     }
 
     @Override

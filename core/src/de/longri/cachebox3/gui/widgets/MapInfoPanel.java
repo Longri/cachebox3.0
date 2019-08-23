@@ -25,6 +25,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.SpeedChangedEvent;
 import de.longri.cachebox3.events.location.SpeedChangedListener;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
+import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
 import de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.locator.Coordinate;
@@ -46,8 +47,9 @@ public class MapInfoPanel extends Catch_Table implements SpeedChangedListener, D
     public MapInfoPanel() {
         EventHandler.add(this);
         MapInfoPanelStyle style = VisUI.getSkin().get("infoPanel", MapInfoPanelStyle.class);
+        CompassViewStyle compssstyle = VisUI.getSkin().get("mapCompassStyle", CompassViewStyle.class);
         this.setBackground(style.background);
-        compass = new Compass("mapCompassStyle", true);
+        compass = new Compass(compssstyle, true);
 
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();

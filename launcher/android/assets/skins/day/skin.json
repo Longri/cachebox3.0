@@ -2807,6 +2807,21 @@
       "middle": "mapWikipedia1",
       "large": "mapWikipedia2"
     },
+    "mapAPE": {
+      "small": "mapWikipedia0",
+      "middle": "mapWikipedia1",
+      "large": "mapWikipedia2"
+    },
+    "mapAdventuresExhibit": {
+      "small": "mapWikipedia0",
+      "middle": "mapWikipedia1",
+      "large": "mapWikipedia2"
+    },
+    "mapHQ": {
+      "small": "mapWikipedia0",
+      "middle": "mapWikipedia1",
+      "large": "mapWikipedia2"
+    },
     "selectOverlay": {
       "small": "selectOverlay",
       "middle": "selectOverlay",
@@ -3030,6 +3045,23 @@
   },
   "de.longri.cachebox3.gui.skin.styles.CompassViewStyle": {
     "compassViewStyle": {
+      "splitHandle": "pane_slider_vertical_9_Patch",
+      "background": "color_background_drawable",
+      "splitBackground": "activityBack_drawable",
+      "distanceBackground": "map-info-panel-background_9_Patch",
+      "distnaceFont": "normal_bold_font",
+      "accurateFont": "mapPanelUnit",
+      "infoFont": "normal_font",
+      "distanceColor": "font_color",
+      "accurateColor": "font_color",
+      "infoColor": "font_color",
+      "starStyle": "cachelist",
+      "cacheSizeStyle": "cachelist",
+      "frameNorthOrient": "compass_1_frame",
+      "scale": "compass_1_scale",
+      "arrow": "compass_1_arrow"
+    },
+    "mapCompassStyle": {
       "splitHandle": "pane_slider_vertical_9_Patch",
       "background": "color_background_drawable",
       "splitBackground": "activityBack_drawable",
