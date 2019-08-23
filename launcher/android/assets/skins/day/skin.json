@@ -82,7 +82,7 @@
     },
     "add-wp": {
       "path": "svg/add-wp.svg",
-      "scale": 0.18
+      "scale": 0.175
     },
     "addCacheIcon": {
       "path": "svg/addCacheIcon.svg",
@@ -662,7 +662,7 @@
     },
     "baseMapMapsforge": {
       "path": "svg/baseMapMapsforge.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "baseMapOnlineBitmap": {
       "path": "svg/baseMapOnlineBitmap.svg",
@@ -758,7 +758,7 @@
     },
     "cacheListIcon": {
       "path": "svg/cacheListIcon.svg",
-      "scale": 0.22
+      "scale": 0.18
     },
     "cache_pressed": {
       "path": "svg/cache_pressed.svg",
@@ -850,7 +850,7 @@
     },
     "database": {
       "path": "svg/database.svg",
-      "scale": 0.225
+      "scale": 0.19
     },
     "db": {
       "path": "svg/db.svg",
@@ -898,7 +898,7 @@
     },
     "delWp": {
       "path": "svg/delWp.svg",
-      "scale": 0.23
+      "scale": 0.225
     },
     "deleteIcon": {
       "path": "svg/deleteIcon.svg",
@@ -906,19 +906,19 @@
     },
     "delete_Archieved": {
       "path": "svg/delete_Archieved.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "delete_Caches": {
       "path": "svg/delete_Caches.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "delete_Filter": {
       "path": "svg/delete_Filter.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "delete_Founds": {
       "path": "svg/delete_Founds.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "description": {
       "path": "svg/description.svg",
@@ -974,11 +974,11 @@
     },
     "downloadFriendsLogs": {
       "path": "svg/downloadFriendsLogs.svg",
-      "scale": 0.22
+      "scale": 0.17
     },
     "downloadLogImages": {
       "path": "svg/downloadLogImages.svg",
-      "scale": 0.22
+      "scale": 0.18
     },
     "downloadLogs": {
       "path": "svg/downloadLogs.svg",
@@ -994,7 +994,7 @@
     },
     "editWp": {
       "path": "svg/editWp.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "enabled": {
       "path": "svg/enabled.svg",
@@ -1014,7 +1014,7 @@
     },
     "favIcon": {
       "path": "svg/favIcon.svg",
-      "scale": 0.16
+      "scale": 0.18
     },
     "favpoint": {
       "path": "svg/favpoint.svg",
@@ -1022,7 +1022,7 @@
     },
     "favpointFilter": {
       "path": "svg/favpoint.svg",
-      "scale": 0.43
+      "scale": 0.51
     },
     "fieldnoteListIcon": {
       "path": "svg/fieldnoteListIcon.svg",
@@ -1034,7 +1034,7 @@
     },
     "fileTransfer": {
       "path": "svg/fileTransfer.svg",
-      "scale": 0.21
+      "scale": 0.2
     },
     "filebackIcon": {
       "path": "svg/backIcon.svg",
@@ -1042,11 +1042,11 @@
     },
     "filter": {
       "path": "svg/filter.svg",
-      "scale": 0.16
+      "scale": 0.18
     },
     "filterReset": {
       "path": "svg/filterReset.svg",
-      "scale": 0.16
+      "scale": 0.18
     },
     "finger": {
       "path": "svg/finger.svg",
@@ -1082,11 +1082,11 @@
     },
     "friends": {
       "path": "svg/friends.svg",
-      "scale": 0.22
+      "scale": 0.18
     },
     "friendsLogs": {
       "path": "svg/friendsLogs.svg",
-      "scale": 0.22
+      "scale": 0.17
     },
     "gb": {
       "path": "svg/gb.svg",
@@ -1098,15 +1098,15 @@
     },
     "gc_liveIcon": {
       "path": "svg/gc_liveIcon.svg",
-      "scale": 0.87
+      "scale": 0.75
     },
     "gc_liveMenuIcon": {
       "path": "svg/gc_liveIcon.svg",
-      "scale": 0.8
+      "scale": 0.75
     },
     "gc_logo": {
       "path": "svg/gc_logo.svg",
-      "scale": 1.8
+      "scale": 1.4
     },
     "giga": {
       "path": "svg/giga.svg",
@@ -1134,15 +1134,15 @@
     },
     "image_off": {
       "path": "svg/image_off.svg",
-      "scale": 0.195
+      "scale": 0.18
     },
     "images-icon": {
       "path": "svg/images-icon.svg",
-      "scale": 0.195
+      "scale": 0.18
     },
     "import": {
       "path": "svg/import.svg",
-      "scale": 0.23
+      "scale": 0.21
     },
     "infoIcon": {
       "path": "svg/infoIcon.svg",
@@ -1202,7 +1202,7 @@
     },
     "map-layer": {
       "path": "svg/map-layer.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "mapCITO": {
       "path": "svg/cito.svg",
@@ -1274,7 +1274,7 @@
     },
     "mapFile": {
       "path": "svg/mapFile.svg",
-      "scale": 1
+      "scale": 0.9
     },
     "mapFinal": {
       "path": "svg/final.svg",
@@ -1630,7 +1630,7 @@
     },
     "map_theme_setting": {
       "path": "svg/map_theme_setting.svg",
-      "scale": 0.185
+      "scale": 0.18
     },
     "mega": {
       "path": "svg/mega.svg",
@@ -1650,7 +1650,7 @@
     },
     "mesureWp": {
       "path": "svg/mesureWp.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "micro": {
       "path": "svg/micro.svg",
@@ -1722,7 +1722,7 @@
     },
     "noteIcon": {
       "path": "svg/noteIcon.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "noteIconType": {
       "path": "svg/noteIcon.svg",
@@ -1766,7 +1766,7 @@
     },
     "projectWp": {
       "path": "svg/projectWp.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "pt": {
       "path": "svg/pt.svg",
@@ -1782,7 +1782,7 @@
     },
     "reload_cache": {
       "path": "svg/reload_cache.svg",
-      "scale": 0.2
+      "scale": 0.19
     },
     "reviewer_note": {
       "path": "svg/reviewer_note.svg",
@@ -1790,7 +1790,7 @@
     },
     "search": {
       "path": "svg/search.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "selectOverlay": {
       "path": "svg/selectOverlay.svg",
@@ -1802,11 +1802,11 @@
     },
     "settings_icon": {
       "path": "svg/settings_icon.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "showWp": {
       "path": "svg/showWp.svg",
-      "scale": 0.19
+      "scale": 0.18
     },
     "slider": {
       "path": "svg/slider.svg",
@@ -1822,11 +1822,11 @@
     },
     "solver-icon": {
       "path": "svg/solver-icon.svg",
-      "scale": 0.195
+      "scale": 0.18
     },
     "solver-icon-2": {
       "path": "svg/solver-icon-2.svg",
-      "scale": 0.195
+      "scale": 0.18
     },
     "sortIcon": {
       "path": "svg/sortIcon.svg",
@@ -1858,7 +1858,7 @@
     },
     "tbListIcon": {
       "path": "svg/tbListIcon.svg",
-      "scale": 0.19455253
+      "scale": 0.18
     },
     "tempDisabled": {
       "path": "svg/tempDisabled.svg",
@@ -1898,7 +1898,7 @@
     },
     "trackListIcon": {
       "path": "svg/trackListIcon.svg",
-      "scale": 0.19455253
+      "scale": 0.18
     },
     "traddi": {
       "path": "svg/traddi.svg",
@@ -1906,7 +1906,7 @@
     },
     "view": {
       "path": "svg/view.svg",
-      "scale": 0.23
+      "scale": 0.21
     },
     "virtual": {
       "path": "svg/virtual.svg",
@@ -2662,6 +2662,16 @@
       "middle": "disabledOverlay1",
       "large": "disabledOverlay2"
     },
+    "mapAPE": {
+      "small": "mapWikipedia0",
+      "middle": "mapWikipedia1",
+      "large": "mapWikipedia2"
+    },
+    "mapAdventuresExhibit": {
+      "small": "mapWikipedia0",
+      "middle": "mapWikipedia1",
+      "large": "mapWikipedia2"
+    },
     "mapCITO": {
       "small": "mapCITO0",
       "middle": "mapCITO1",
@@ -2701,6 +2711,11 @@
       "small": "mapGiga0",
       "middle": "mapGiga1",
       "large": "mapGiga2"
+    },
+    "mapHQ": {
+      "small": "mapWikipedia0",
+      "middle": "mapWikipedia1",
+      "large": "mapWikipedia2"
     },
     "mapLabCache": {
       "small": "mapLabCache0",
@@ -2803,21 +2818,6 @@
       "large": "mapWherigo2"
     },
     "mapWikipedia": {
-      "small": "mapWikipedia0",
-      "middle": "mapWikipedia1",
-      "large": "mapWikipedia2"
-    },
-    "mapAPE": {
-      "small": "mapWikipedia0",
-      "middle": "mapWikipedia1",
-      "large": "mapWikipedia2"
-    },
-    "mapAdventuresExhibit": {
-      "small": "mapWikipedia0",
-      "middle": "mapWikipedia1",
-      "large": "mapWikipedia2"
-    },
-    "mapHQ": {
       "small": "mapWikipedia0",
       "middle": "mapWikipedia1",
       "large": "mapWikipedia2"
@@ -3446,8 +3446,6 @@
   },
   "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
     "default": {
-      "overviewListStyle" : "spoilerOverview",
-      "galleryListStyle" : "spoilerGallery",
       "spoilerNameFont": "AboutInfo",
       "spoilerNameFontColor": "font_color"
     }

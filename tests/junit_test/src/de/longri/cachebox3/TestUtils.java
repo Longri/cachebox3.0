@@ -95,7 +95,7 @@ public class TestUtils {
     public static void initialGdx() {
         if (gdxIsInitial) return;
         gdxIsInitial = true;
-        BuildInfo.setTestBuildInfo("JUnitTest");
+        BuildInfo.setBuildInfo("JUnitTest");
         Gdx.app = new HeadlessApplication(new Game() {
             @Override
             public void create() {
