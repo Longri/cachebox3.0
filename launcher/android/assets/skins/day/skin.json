@@ -982,7 +982,7 @@
     },
     "downloadLogs": {
       "path": "svg/downloadLogs.svg",
-      "scale": 0.22
+      "scale": 0.18
     },
     "earth": {
       "path": "svg/earth.svg",
@@ -1086,7 +1086,7 @@
     },
     "friendsLogs": {
       "path": "svg/friendsLogs.svg",
-      "scale": 0.17
+      "scale": 0.18
     },
     "gb": {
       "path": "svg/gb.svg",
@@ -1870,7 +1870,7 @@
     },
     "todo": {
       "path": "svg/todo.svg",
-      "scale": 0.38
+      "scale": 0.34
     },
     "toggleOff": {
       "path": "svg/toggleOff.svg",
