@@ -24,5 +24,4 @@ public abstract class AbstractIconStyle {
 
     public abstract int getPrefHeight();
 
-
 }

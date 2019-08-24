@@ -59,14 +59,6 @@ public class Compass extends Catch_WidgetGroup implements Layout {
     private StateChanged stateChangedListener;
     private boolean layoutChanged = false;
 
-    public Compass(String style) {
-        this(VisUI.getSkin().get(style, CompassStyle.class), false);
-    }
-
-    public Compass(String style, boolean useState) {
-        this(VisUI.getSkin().get(style, CompassStyle.class), useState, false);
-    }
-
     public Compass(CompassStyle style, boolean canScale) {
         this(style, false, canScale);
     }

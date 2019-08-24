@@ -182,17 +182,11 @@ public class CB {
     }
 
     public static void setActSkin(SvgSkin skin) {
-        setActSkin(skin, true);
-    }
-
-    public static void setActSkin(SvgSkin skin, boolean reload) {
-        if (reload) {
-            if (actSkin != null) {
-                VisUI.dispose();
-            }
-            VisUI.load(skin);
+        if (VisUI.isLoaded()) {
+            VisUI.dispose(true);
         }
         actSkin = skin;
+        VisUI.load(actSkin);
 
         // calculate scaled sizes
         float button_width = CB.getScaledFloat(actSkin.get("button_width", ScaledSize.class).value);
@@ -238,6 +232,13 @@ public class CB {
     }
 
     private static void calcScaleFactor() {
+
+        if (BuildInfo.getRevision().equals("JUnitTest")) {
+            scalefactor = 1;
+            return;
+        }
+
+
         if (CanvasAdapter.platform.isDesktop()) {
             //Desktop
             scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;

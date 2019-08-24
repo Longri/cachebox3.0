@@ -181,7 +181,7 @@ public class MainScreen implements Screen {
 
         FileHandle skinFolder = (Gdx.files.local("projects/" + currentProject));
         game.skinProject = new SavableSvgSkin(true, currentProject, SvgSkin.StorageType.LOCAL, skinFolder);
-        CB.setActSkin(game.skinProject, false);
+        CB.setActSkin(game.skinProject);
 
     }
 
