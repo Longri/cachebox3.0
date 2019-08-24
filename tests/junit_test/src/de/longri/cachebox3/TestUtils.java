@@ -120,7 +120,9 @@ public class TestUtils {
 
     public static void initialVisUI() {
         initialGdx();
-        if (!VisUI.isLoaded()) VisUI.load();
+        if (!VisUI.isLoaded()) {
+            VisUI.load();
+        }
         CB.scaledSizes = new ScaledSizes(100, 50, 150, 10,
                 50, 10);
         CB.backgroundImage = new Image((Drawable) null);
@@ -172,9 +174,9 @@ public class TestUtils {
         ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
         VisUI.getSkin().add("list", scrollPaneStyle, ScrollPane.ScrollPaneStyle.class);
 
-        //de.longri.cachebox3.gui.skin.styles.DraftListItemStyle registered with name: fieldNoteListItemStyle
+        //de.longri.cachebox3.gui.skin.styles.DraftListItemStyle registered with name: DraftListItemStyle
         DraftListItemStyle draftListItemStyle = new DraftListItemStyle();
-        VisUI.getSkin().add("fieldNoteListItemStyle", draftListItemStyle, DraftListItemStyle.class);
+        VisUI.getSkin().add("DraftListItemStyle", draftListItemStyle, DraftListItemStyle.class);
 
         //de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle registered with name: default
         ActivityBase.ActivityBaseStyle activityBaseStyle = new ActivityBase.ActivityBaseStyle();

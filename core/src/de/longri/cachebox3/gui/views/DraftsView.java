@@ -65,7 +65,7 @@ public class DraftsView extends AbstractView {
     private static EditDrafts.ReturnListener returnListener = DraftsView::addOrChangeDraft;
     private static EditDrafts efnActivity;
     private ListView listView = new ListView(VERTICAL);
-    private DraftListItemStyle itemStyle;
+    private DraftListItemStyle draftListItemStyle;
     private Array<ListViewItem> items;
     private ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
@@ -423,7 +423,7 @@ public class DraftsView extends AbstractView {
 
     @Override
     protected void create() {
-        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
+        draftListItemStyle = VisUI.getSkin().get("DraftListItemStyle", DraftListItemStyle.class);
 
         draftEntries = new DraftList();
         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
@@ -484,7 +484,7 @@ public class DraftsView extends AbstractView {
 
         int idx = 0;
         for (DraftEntry entry : draftEntries) {
-            items.add(new DraftsViewItem(idx++, entry, itemStyle));
+            items.add(new DraftsViewItem(idx++, entry, draftListItemStyle));
         }
         CB.postOnNextGlThread(() -> listView.setAdapter(listViewAdapter));
     }
@@ -584,9 +584,9 @@ public class DraftsView extends AbstractView {
     private Menu getSecondMenu() {
         Menu sm = new Menu("OwnerLogTypesTitle");
         boolean IM_owner = EventHandler.getSelectedCache().ImTheOwner();
-        sm.addMenuItem("enabled", itemStyle.typeStyle.enabled, () -> addNewDraft(LogTypes.enabled)).setEnabled(IM_owner);
-        sm.addMenuItem("temporarilyDisabled", itemStyle.typeStyle.temporarily_disabled, () -> addNewDraft(LogTypes.temporarily_disabled)).setEnabled(IM_owner);
-        sm.addMenuItem("ownerMaintenance", itemStyle.typeStyle.owner_maintenance, () -> addNewDraft(LogTypes.owner_maintenance)).setEnabled(IM_owner);
+        sm.addMenuItem("enabled", draftListItemStyle.logTypesStyle.enabled, () -> addNewDraft(LogTypes.enabled)).setEnabled(IM_owner);
+        sm.addMenuItem("temporarilyDisabled", draftListItemStyle.logTypesStyle.temporarily_disabled, () -> addNewDraft(LogTypes.temporarily_disabled)).setEnabled(IM_owner);
+        sm.addMenuItem("ownerMaintenance", draftListItemStyle.logTypesStyle.owner_maintenance, () -> addNewDraft(LogTypes.owner_maintenance)).setEnabled(IM_owner);
         // todo check if needed: addNewFieldnote(LogTypes.reviewer_note)
         return sm;
     }
@@ -772,24 +772,24 @@ public class DraftsView extends AbstractView {
                 case MegaEvent:
                 case Event:
                 case CITO:
-                    cm.addMenuItem("will-attended", itemStyle.typeStyle.will_attend, () -> addNewDraft(LogTypes.will_attend));
-                    cm.addMenuItem("attended", itemStyle.typeStyle.attended, () -> addNewDraft(LogTypes.attended));
+                    cm.addMenuItem("will-attended", draftListItemStyle.logTypesStyle.will_attend, () -> addNewDraft(LogTypes.will_attend));
+                    cm.addMenuItem("attended", draftListItemStyle.logTypesStyle.attended, () -> addNewDraft(LogTypes.attended));
                     break;
                 case Camera:
-                    cm.addMenuItem("webCamFotoTaken", itemStyle.typeStyle.webcam_photo_taken, () -> addNewDraft(LogTypes.webcam_photo_taken));
+                    cm.addMenuItem("webCamFotoTaken", draftListItemStyle.logTypesStyle.webcam_photo_taken, () -> addNewDraft(LogTypes.webcam_photo_taken));
                     break;
                 default:
-                    cm.addMenuItem("found", itemStyle.typeStyle.found, () -> addNewDraft(LogTypes.found));
+                    cm.addMenuItem("found", draftListItemStyle.logTypesStyle.found, () -> addNewDraft(LogTypes.found));
                     break;
             }
 
-            cm.addMenuItem("DNF", itemStyle.typeStyle.didnt_find, () -> addNewDraft(LogTypes.didnt_find));
+            cm.addMenuItem("DNF", draftListItemStyle.logTypesStyle.didnt_find, () -> addNewDraft(LogTypes.didnt_find));
         }
 
         // Aktueller Cache ist von geocaching.com dann weitere Menüeinträge freigeben
         if (abstractCache != null && abstractCache.getGcCode().toString().toLowerCase().startsWith("gc")) {
-            cm.addMenuItem("maintenance", itemStyle.typeStyle.needs_maintenance, () -> addNewDraft(LogTypes.needs_maintenance));
-            cm.addMenuItem("writenote", itemStyle.typeStyle.note, () -> addNewDraft(LogTypes.note));
+            cm.addMenuItem("maintenance", draftListItemStyle.logTypesStyle.needs_maintenance, () -> addNewDraft(LogTypes.needs_maintenance));
+            cm.addMenuItem("writenote", draftListItemStyle.logTypesStyle.note, () -> addNewDraft(LogTypes.note));
         }
 
         cm.addMenuItem("uploadDrafts", CB.getSkin().getMenuIcon.uploadDraft, this::uploadDrafts);

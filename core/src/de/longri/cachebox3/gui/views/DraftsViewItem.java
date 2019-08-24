@@ -36,16 +36,16 @@ import java.util.Locale;
 public class DraftsViewItem extends ListViewItem {
     private final static SimpleDateFormat postFormatter = new SimpleDateFormat("dd.MMM.yy (HH:mm)", Locale.getDefault());
 
-    final private DraftListItemStyle style;
+    final private DraftListItemStyle draftListItemStyle;
 
     private boolean needsLayout = true;
     private DraftEntry entry;
     private VisTable headerTable;
 
-    public DraftsViewItem(int listIndex, DraftEntry entry, DraftListItemStyle style) {
+    public DraftsViewItem(int listIndex, DraftEntry entry, DraftListItemStyle draftListItemStyle) {
         super(listIndex);
         this.entry = entry;
-        this.style = style;
+        this.draftListItemStyle = draftListItemStyle;
     }
 
     @Override
@@ -59,16 +59,16 @@ public class DraftsViewItem extends ListViewItem {
         this.clear();
 
         Label.LabelStyle headerLabelStyle = new Label.LabelStyle();
-        headerLabelStyle.font = this.style.headerFont;
-        headerLabelStyle.fontColor = this.style.headerFontColor;
+        headerLabelStyle.font = this.draftListItemStyle.headerFont;
+        headerLabelStyle.fontColor = this.draftListItemStyle.headerFontColor;
 
         Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
-        commentLabelStyle.font = this.style.descriptionFont;
-        commentLabelStyle.fontColor = this.style.descriptionFontColor;
+        commentLabelStyle.font = this.draftListItemStyle.descriptionFont;
+        commentLabelStyle.fontColor = this.draftListItemStyle.descriptionFontColor;
 
         headerTable = new VisTable();
-        headerTable.add(new Image(this.entry.type.getDrawable(style.typeStyle)));
-        if (entry.uploaded) headerTable.add(new Image(style.uploadedIcon));
+        headerTable.add(new Image(this.entry.type.getDrawable(draftListItemStyle.logTypesStyle)));
+        if (entry.uploaded) headerTable.add(new Image(draftListItemStyle.uploadedIcon));
         headerTable.add((Actor) null).left().padLeft(CB.scaledSizes.MARGINx2).expandX().fillX();
 
         String foundNumber = "";
@@ -90,7 +90,7 @@ public class DraftsViewItem extends ListViewItem {
         VisTable cacheTable = new VisTable();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(entry.cacheType.getCacheWidget(style.cacheTypeStyle, null, null, null, null));
+        iconTable.add(entry.cacheType.getCacheWidget(draftListItemStyle.cacheTypeStyle, null, null, null, null));
         iconTable.pack();
         iconTable.layout();
 
@@ -131,10 +131,10 @@ public class DraftsViewItem extends ListViewItem {
     protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
         super.drawBackground(batch, parentAlpha, x, y);
         super.drawBackground(batch, 0.4f, x, y);
-        if (style.headerBackground != null && headerTable != null) {
+        if (draftListItemStyle.headerBackground != null && headerTable != null) {
             float height = headerTable.getHeight() + this.getPadTop() + this.getPadBottom();
             batch.setColor(1, 1, 1, 1);
-            style.headerBackground.draw(batch, x, y + (getHeight() - height), getWidth(), height);
+            draftListItemStyle.headerBackground.draw(batch, x, y + (getHeight() - height), getWidth(), height);
         }
     }
 
@@ -142,9 +142,9 @@ public class DraftsViewItem extends ListViewItem {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        if (entry.uploaded && style.uploadedOverlay != null) {
+        if (entry.uploaded && draftListItemStyle.uploadedOverlay != null) {
             //draw uploaded overlay
-            style.uploadedOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
+            draftListItemStyle.uploadedOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
         }
     }
 

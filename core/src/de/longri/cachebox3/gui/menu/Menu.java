@@ -101,7 +101,8 @@ public class Menu extends Window {
         item.setTitle((titleTranlationId.length() == 0 ? "" : Translation.get(titleTranlationId.toString()).toString()) + addUnTranslatedPart);
         if (icon != null)
             item.setIcon(icon);
-        item.addListener(clickListener);
+        if (clickListener != null)
+            item.addListener(clickListener);
         mItems.add(item);
         return item;
     }
@@ -113,14 +114,20 @@ public class Menu extends Window {
         return item;
     }
 
+    public MenuItem addMoreMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Menu moreMenu) {
+        MenuItem mi = addMenuItem(titleTranlationId, titleExtension, icon, (Runnable) null);
+        mi.setMoreMenu(moreMenu);
+        return mi;
+    }
+
     public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Runnable runnable) {
         return addMenuItem(titleTranlationId, titleExtension, icon, new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        if (mustHandle(event)) {
-                            runnable.run();
-                        }
-                    }
-                });
+            public void clicked(InputEvent event, float x, float y) {
+                if (mustHandle(event)) {
+                    runnable.run();
+                }
+            }
+        });
     }
 
     public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, Runnable runnable) {
@@ -133,6 +140,7 @@ public class Menu extends Window {
         item.setChecked(checked);
         return item;
     }
+
     public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, boolean checked, Runnable runnable) {
         return addCheckableMenuItem(titleTranlationId, "", null, checked, runnable);
     }

@@ -49,6 +49,10 @@ public class EditTextField extends Catch_WidgetGroup {
     private float maxWidth;
     private int inputType; // for Android InputType
 
+    public EditTextField() {
+        this(false, "");
+    }
+
     public EditTextField(String text) {
         this(false, text);
     }
