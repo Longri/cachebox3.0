@@ -32,6 +32,7 @@ import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
 import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.platform_test.AfterAll;
+import de.longri.cachebox3.platform_test.StyleEntry;
 import de.longri.cachebox3.types.CacheTypes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -103,7 +104,7 @@ public class SkinTest {
     @Test
     void parseUsedStylesAndCheckExist() throws IOException {
 
-        Array<GetStyleEntry> caller = new Array<>();
+        Array<StyleEntry> caller = new Array<>();
         FileHandle srcCoreFolder = Gdx.files.absolute("../../core/src");
 
         getAllStyleCallers(srcCoreFolder, caller);
@@ -112,7 +113,7 @@ public class SkinTest {
 
 
         // check if for every used style a entry on loaded Skin
-        for (GetStyleEntry styleEntry : caller) {
+        for (StyleEntry styleEntry : caller) {
             Object style = null;
             try {
                 style = testSkin.get(styleEntry.name, styleEntry.clazz);
@@ -121,11 +122,9 @@ public class SkinTest {
             }
             assertNotNull(style, "No '" + styleEntry.clazz.toString() + "'style found for name '" + styleEntry.name + "'!");
         }
-
-
     }
 
-    private void getAllStyleCallers(FileHandle src, Array<GetStyleEntry> caller) {
+    private void getAllStyleCallers(FileHandle src, Array<StyleEntry> caller) {
         for (FileHandle fileHandle : src.list()) {
             if (fileHandle.isDirectory()) {
                 getAllStyleCallers(fileHandle, caller);
@@ -137,21 +136,21 @@ public class SkinTest {
                     while ((pos = 20 + fileStr.indexOf("VisUI.getSkin().get(", pos)) >= 20) {
                         if (fileStr.substring(pos).startsWith("symbolStyleName, MapWayPointItemStyle.class)")) {
                             // add all used Styles for WaypointLayer and skip parsing of this file!
-                            GetStyleEntry entry = new GetStyleEntry("mapStar", MapWayPointItemStyle.class);
+                            StyleEntry entry = new StyleEntry("mapStar", MapWayPointItemStyle.class);
                             if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new GetStyleEntry("mapFound", MapWayPointItemStyle.class);
+                            entry = new StyleEntry("mapFound", MapWayPointItemStyle.class);
                             if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new GetStyleEntry("mapSolved", MapWayPointItemStyle.class);
+                            entry = new StyleEntry("mapSolved", MapWayPointItemStyle.class);
                             if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new GetStyleEntry("mapMultiStartP", MapWayPointItemStyle.class);
+                            entry = new StyleEntry("mapMultiStartP", MapWayPointItemStyle.class);
                             if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new GetStyleEntry("mapMysteryStartP", MapWayPointItemStyle.class);
+                            entry = new StyleEntry("mapMysteryStartP", MapWayPointItemStyle.class);
                             if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new GetStyleEntry("mapMultiStageStartP", MapWayPointItemStyle.class);
+                            entry = new StyleEntry("mapMultiStageStartP", MapWayPointItemStyle.class);
                             if (!caller.contains(entry, false)) caller.add(entry);
 
                             for (CacheTypes type : CacheTypes.values()) {
-                                entry = new GetStyleEntry("map" + type.name(), MapWayPointItemStyle.class);
+                                entry = new StyleEntry("map" + type.name(), MapWayPointItemStyle.class);
                                 if (!caller.contains(entry, false)) caller.add(entry);
                             }
                             break;
@@ -217,34 +216,13 @@ public class SkinTest {
                         }
 
                         if (clazz != null) {
-                            GetStyleEntry entry = new GetStyleEntry(styleName, clazz);
+                            StyleEntry entry = new StyleEntry(styleName, clazz);
                             if (!caller.contains(entry, false))
                                 caller.add(entry);
                         }
                     }
                 }
             }
-        }
-    }
-
-    static class GetStyleEntry {
-        private Class clazz;
-        private String name;
-
-        public GetStyleEntry(String styleName, Class clazz) {
-            this.clazz = clazz;
-            this.name = styleName;
-        }
-
-        @Override
-        public boolean equals(Object other) {
-            if (other instanceof GetStyleEntry) {
-                GetStyleEntry otherEntry = (GetStyleEntry) other;
-                if (!otherEntry.name.equals(this.name)) return false;
-                if (otherEntry.clazz.equals(this.clazz)) return true;
-                return false;
-            }
-            return false;
         }
     }
 
