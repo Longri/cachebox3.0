@@ -216,6 +216,7 @@ project(":junit_test") {
 
     dependencies {
         implementation project(":core")
+        implementation project(":desktop")
 
         testRuntime(
                 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
@@ -274,6 +275,41 @@ project(":libgdx_test") {
         api "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
         api "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
         api "org.slf4j:slf4j-api:$slf4jVersion"
+        api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+
+    }
+}
+
+project(":skin-editor-src-proj") {
+    apply plugin: "java-library"
+
+
+    dependencies {
+        implementation project(":core")
+        implementation project(":desktop")
+        implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+
+        api group: 'commons-cli', name: 'commons-cli', version: '1.4'
+        api 'com.kitfox.svg:svg-salamander:1.0'
+
+        api "com.kotcrab.vis:vis-ui:$visUiVersion"
+        api group: 'commons-codec', name: 'commons-codec', version: '1.9'
+        api group: 'org.json', name: 'json', version: '20180813'
+
+        //vtm
+        api "org.mapsforge:vtm-gdx:$vtmVersion"
+        api "org.mapsforge:vtm-desktop:$vtmVersion"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
+
         api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
 
     }

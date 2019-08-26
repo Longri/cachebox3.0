@@ -87,10 +87,6 @@ public class Menu extends Window {
         hideWithItemClick = true;
     }
 
-    public Menu(CharSequence name, String styleName) {
-        this(name, VisUI.getSkin().get(styleName, MenuStyle.class));
-    }
-
     public void setCompoundMenu(Menu compoundMenu) {
         this.compoundMenu = compoundMenu;
     }

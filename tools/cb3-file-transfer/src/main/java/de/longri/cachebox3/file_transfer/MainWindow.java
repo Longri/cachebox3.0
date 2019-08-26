@@ -41,7 +41,7 @@ public class MainWindow extends Application {
     public void init() {
 
         if (Gdx.net != null) return;
-        BuildInfo.setTestBuildInfo("JUnitTest");
+        BuildInfo.setBuildInfo("JUnitTest");
 
         Gdx.app = new HeadlessApplication(new Game() {
             @Override

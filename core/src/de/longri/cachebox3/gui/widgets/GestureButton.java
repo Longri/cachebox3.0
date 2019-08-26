@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.actions.AbstractAction;
@@ -69,8 +68,8 @@ public class GestureButton extends Button {
         this.hasContextMenu = hasContextMenu;
     }
 
-    public GestureButton(String styleName, ViewManager viewManager) {
-        style = VisUI.getSkin().get(styleName, GestureButtonStyle.class);
+    public GestureButton(GestureButtonStyle style, ViewManager viewManager) {
+        this.style = style;
         style.checked = style.select;
 
         filterStyle = new GestureButtonStyle();

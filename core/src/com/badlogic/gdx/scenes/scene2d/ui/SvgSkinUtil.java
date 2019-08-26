@@ -32,6 +32,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.drawables.*;
 import de.longri.cachebox3.gui.skin.styles.*;
+import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SkinColor;
 import de.longri.libPP.PixmapPacker;
@@ -105,7 +106,7 @@ public class SvgSkinUtil {
             @Override
             public void run() {
                 boolean forcePot = CanvasAdapter.platform == Platform.IOS;
-                packer[0] = new PixmapPacker(forcePot, PixmapPacker.getDeviceMaxGlTextureSize(), padding);
+                packer[0] = new PixmapPacker(forcePot, BuildInfo.getRevision().equals("JUnitTest") ? 4096 : PixmapPacker.getDeviceMaxGlTextureSize(), padding);
             }
         }, true);
 

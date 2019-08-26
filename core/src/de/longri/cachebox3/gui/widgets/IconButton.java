@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButton;
 
@@ -64,10 +65,6 @@ public class IconButton extends Catch_VisTextButton {
         super(EMPTY);
         this.setIcon(icon);
         setSize(preferredWidth, preferredHeight);
-    }
-
-    private VisTextButtonStyle getVisTextButtonStyle() {
-        return VisUI.getSkin().get(VisTextButtonStyle.class);
     }
 
     @Override

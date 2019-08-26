@@ -359,46 +359,6 @@ public class ButtonDialog extends Window {
         autoHide = false;
     }
 
-//    @Override
-//    public float getMinWidth() {
-//        float min =
-//                (titleTable != null ? titleTable.getMinWidth() : 0)
-//                        + (style.title != null ? style.title.getMinWidth() : 0)
-//                        + (style.header != null ? style.header.getMinWidth() : 0);
-//
-//        float maxButtonWidth = 0;
-//        VisTextButton.VisTextButtonStyle buttonStyle = VisUI.getSkin().get(VisTextButton.VisTextButtonStyle.class);
-//        BitmapFont font = buttonStyle.font;
-//        float minButtonWidth = (buttonStyle.up.getMinWidth() + CB.scaledSizes.MARGINx2) * 4;
-//        if (buttons == MessageBoxButtons.YesNoRetry) {
-//            String alltext = Translation.get("yes") + Translation.get("no") + Translation.get("retry");
-//            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
-//        } else if (buttons == MessageBoxButtons.AbortRetryIgnore) {
-//            String alltext = Translation.get("abort") + Translation.get("retry") + Translation.get("ignore");
-//            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
-//        } else if (buttons == MessageBoxButtons.OK) {
-//            String alltext = Translation.get("ok");
-//            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (2 * CB.scaledSizes.MARGIN) + (minButtonWidth);
-//        } else if (buttons == MessageBoxButtons.OKCancel) {
-//            String alltext = Translation.get("ok") + Translation.get("cancel");
-//            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (3 * CB.scaledSizes.MARGIN) + (2 * minButtonWidth);
-//        } else if (buttons == MessageBoxButtons.RetryCancel) {
-//            String alltext = Translation.get("retry") + Translation.get("cancel");
-//            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (3 * CB.scaledSizes.MARGIN) + (2 * minButtonWidth);
-//        } else if (buttons == MessageBoxButtons.YesNo) {
-//            String alltext = Translation.get("yes") + Translation.get("no");
-//            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (3 * CB.scaledSizes.MARGIN) + (2 * minButtonWidth);
-//        } else if (buttons == MessageBoxButtons.YesNoCancel) {
-//            String alltext = Translation.get("yes") + Translation.get("no") + Translation.get("cancel");
-//            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (4 * CB.scaledSizes.MARGIN) + (3 * minButtonWidth);
-//        } else if (buttons == MessageBoxButtons.Cancel) {
-//            String alltext = Translation.get("cancel");
-//            maxButtonWidth = MesureFontUtil.Measure(font, alltext).width + (2 * CB.scaledSizes.MARGIN) + (minButtonWidth);
-//        }
-//
-//        return Math.min(Math.max(min, maxButtonWidth), Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx2);
-//    }
-
     @Override
     public float getPrefWidth() {
         return Gdx.graphics.getWidth() * 0.96f;
