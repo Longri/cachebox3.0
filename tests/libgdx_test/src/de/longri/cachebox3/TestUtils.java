@@ -368,5 +368,7 @@ public class TestUtils {
         return result;
     }
 
-
+    public static FileHandle getSkinFileHandle() {
+        return Gdx.files.internal("skins/day");
+    }
 }

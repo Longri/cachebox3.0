@@ -564,5 +564,8 @@ public class TestUtils {
         return result;
     }
 
+    public static FileHandle getSkinFileHandle() {
+        return Gdx.files.absolute("../../launcher/android/assets/skins/day");
+    }
 
 }

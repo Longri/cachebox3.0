@@ -49,21 +49,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SkinTest {
 
     static SvgSkin testSkin;
-
+    static float ICON_MIN_WIDTH;
+    static float ICON_MIN_HEIGHT;
+    static float ICON_MAX_WIDTH;
+    static float ICON_MAX_HEIGHT;
 
     @BeforeAll
-    static void initial() {
+    public static void initial() {
         TestUtils.initialGdx();
-        final FileHandle androidAssetSkin = Gdx.files.absolute("../../launcher/android/assets/skins/day");
+        final FileHandle androidAssetSkin = TestUtils.getSkinFileHandle();
         final String finalSkinName = "internalDefault";
         final SvgSkin.StorageType finalType = SvgSkin.StorageType.INTERNAL;
         testSkin = new SvgSkin(true, finalSkinName, finalType, androidAssetSkin);
-        CB.setActSkin(testSkin);
-        CB.backgroundColor = CB.getColor("background");
+
+        ICON_MIN_WIDTH = CB.getScaledInt(20);
+        ICON_MIN_HEIGHT = CB.getScaledInt(43);
+        ICON_MAX_WIDTH = CB.getScaledInt(55);
+        ICON_MAX_HEIGHT = CB.getScaledInt(48);
     }
 
     @AfterAll
-    static void clear() {
+    public static void clear() {
         FileHandle resourceFileHandle = TestUtils.getResourceFileHandle("testsResources", true);
         resourceFileHandle.child("skins").deleteDirectory();
         resourceFileHandle.parent().child("user").deleteDirectory();
@@ -241,12 +247,6 @@ public class SkinTest {
             return false;
         }
     }
-
-
-    static final float ICON_MIN_WIDTH = 20.0f;
-    static final float ICON_MIN_HEIGHT = 44.0f;
-    static final float ICON_MAX_WIDTH = 55.0f;
-    static final float ICON_MAX_HEIGHT = 47.0f;
 
     @Test
     void menuIconSizeCheck() {
