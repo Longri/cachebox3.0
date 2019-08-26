@@ -128,4 +128,8 @@ public class Assert {
     public static void assertNotNull(Object obj, String message) throws PlatformAssertionError {
         if (obj == null) throw new PlatformAssertionError(message);
     }
+
+    public static void fail(String message) throws PlatformAssertionError {
+        throw new PlatformAssertionError(message);
+    }
 }

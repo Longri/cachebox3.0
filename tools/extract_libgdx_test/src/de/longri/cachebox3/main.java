@@ -109,6 +109,10 @@ public class main {
     private static final String ASSERT_NOT_NULL = "Assertions.assertNotNull;";
     private static final String ASSERT_NOT_NULL_LINE = "import static de.longri.cachebox3.platform_test.Assert.assertNotNull;";
     private static final String TEST_CACHE_NAME_SPACE = "import de.longri.cachebox3.types.test_caches.";
+    private static final String ASSERT_FAIL = "import org.junit.jupiter.api.Assertions;";
+    private static final String ASSERT_FAIL_LINE = "import de.longri.cachebox3.platform_test.Assert;";
+    private static final String ASSERTATION_FAIL = "Assertions.fail(";
+    private static final String ASSERTATION_FAIL_REPLACE = "Assert.fail(";
 
 
     private static final String CLASS = "class ";
@@ -367,6 +371,7 @@ public class main {
         boolean assertTrueReplace = false;
         boolean assertFalseReplace = false;
         boolean assertNotNullReplace = false;
+        boolean assertFailReplace = false;
         boolean publicClassReplace = false;
         boolean fileObjStartWritten = false;
         boolean beforeAllReplace = false;
@@ -479,7 +484,13 @@ public class main {
                 }
                 sb.appendLine(line.replace(CLASS, PUBLIC + CLASS));
                 continue;
+            } else if (!assertFailReplace && line.contains(ASSERT_FAIL)) {
+                assertFailReplace = true;
+                sb.appendLine(ASSERT_FAIL_LINE);
+                continue;
             }
+
+            if (line.contains(ASSERTATION_FAIL)) line = line.replace(ASSERTATION_FAIL, ASSERTATION_FAIL_REPLACE);
 
             if (line.contains(VOID)) {
                 //check public have @Test annotation
@@ -524,6 +535,7 @@ public class main {
                             lines[j].contains("assertNotNull(") ||
                             lines[j].contains("assertRecursiveDir(") ||
                             lines[j].contains("assertCache(") ||
+                            lines[j].contains("Assertions.fail(") ||
                             lines[j].contains("assertAbstractViewSerialation(")) {
                         hasAssertCall = true;
                         break;
