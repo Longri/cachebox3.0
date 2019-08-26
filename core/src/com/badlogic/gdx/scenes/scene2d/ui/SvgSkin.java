@@ -119,11 +119,13 @@ public class SvgSkin extends Skin {
         try {
             getIcon = get(IconsStyle.class);
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         try {
             getMenuIcon = get(MenuIconStyle.class);
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -134,7 +136,7 @@ public class SvgSkin extends Skin {
         try {
             return get(name, SkinColor.class);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return super.getColor(name);
     }

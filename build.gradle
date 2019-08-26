@@ -80,6 +80,7 @@ project(":desktop") {
         implementation project(":core")
         implementation project(':gps-simulator')
         implementation project(':cb3-file-transfer')
+        api fileTree(include: ['*.jar'], dir: 'libs')
 
         //LibGdx
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
@@ -115,6 +116,7 @@ project(":desktop_lwjgl") {
         implementation project(":core")
         implementation project(':gps-simulator')
         implementation project(':cb3-file-transfer')
+        api fileTree(include: ['*.jar'], dir: 'libs')
 
         //LibGdx
         api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"

@@ -46,6 +46,7 @@ import de.longri.serializable.BitStore;
 import org.oscim.backend.GL;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.theme.XmlThemeBuilder;
 import org.oscim.utils.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +83,7 @@ public class CacheboxMain extends ApplicationAdapter {
         EXCLUDE_LIST.add(StageManager.class.getName());
         EXCLUDE_LIST.add(NamedStage.class.getName());
         EXCLUDE_LIST.add(CB.class.getName());
+        EXCLUDE_LIST.add(XmlThemeBuilder.class.getName());
 //
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
