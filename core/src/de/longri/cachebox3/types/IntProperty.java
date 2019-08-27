@@ -24,6 +24,10 @@ public class IntProperty extends Property<Integer> {
         value = new Integer(0);
     }
 
+    public IntProperty(int value) {
+        this.value = value;
+    }
+
     @Override
     protected boolean isEquals(Integer other) {
         return value == other;

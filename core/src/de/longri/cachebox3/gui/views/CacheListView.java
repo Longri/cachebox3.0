@@ -337,7 +337,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         cm.addCheckableMenuItem("setOrResetFavorites", "", CB.getSkin().getMenuIcon.favorit, true, setOrResetFavorites(cm));
         cm.addMenuItem("manage", getSelectDBTitleExtension(), CB.getSkin().getMenuIcon.manageDB, this::selectDbDialog);
         cm.addCheckableMenuItem("AutoResort", "", null, CB.getAutoResort(), this::setAutoResort).setEnabled(false); // todo ISSUE (#116 addAutoResort)   icon: CB.getSkin().getMenuIcon.MI_AUTO_RESORT
-        cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon, () -> EditCache.getInstance("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon).show()); //todo ISSUE (#118 add new Cache)
+        cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon, () -> editCache()); //todo ISSUE (#118 add new Cache)
         cm.addMoreMenuItem("DeleteCaches", "", CB.getSkin().getMenuIcon.deleteCaches, new ShowDeleteMenu());
         return cm;
     }
@@ -421,6 +421,10 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
             }
         }
          */
+    }
+
+    private void editCache() {
+        EditCache.getInstance("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon).update(EventHandler.getSelectedCache());
     }
 
 }

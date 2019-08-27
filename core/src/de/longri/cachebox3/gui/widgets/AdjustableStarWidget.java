@@ -38,10 +38,17 @@ public class AdjustableStarWidget extends Catch_Table {
     private final AbstractIntValueChangedWidget starsWidget;
     private final IntProperty value;
     private final CB_Label valueLabel;
-    private final int maxValue;
-    private final int minValue;
+    private int maxValue;
+    private int minValue;
     private final int step;
     private final Type type;
+
+    public AdjustableStarWidget(CharSequence title) {
+        // for Difficulty and Terrain
+        this(Type.STAR, title, new IntProperty(2) , CB.getSkin().get("cachelist", StarsStyle.class), null);
+        minValue = 2;
+        maxValue = 10;
+    }
 
     public AdjustableStarWidget(Type type, CharSequence title, IntProperty valueProperty, StarsStyle starsStyle, CacheSizeStyle cacheSizeStyle) {
         this.type = type;

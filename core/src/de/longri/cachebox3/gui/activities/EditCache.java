@@ -1,23 +1,22 @@
 package de.longri.cachebox3.gui.activities;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Activity;
-import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
-import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
-import de.longri.cachebox3.gui.widgets.CB_Button;
-import de.longri.cachebox3.gui.widgets.CB_Label;
-import de.longri.cachebox3.gui.widgets.CoordinateButton;
-import de.longri.cachebox3.gui.widgets.EditTextField;
+import de.longri.cachebox3.gui.views.MapView;
+import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.MutableCache;
 
-import static de.longri.cachebox3.CB.addClickHandler;
+import java.util.Date;
 
 /**
  * Created by Longri on 23.08.2016.
@@ -25,26 +24,15 @@ import static de.longri.cachebox3.CB.addClickHandler;
 public class EditCache extends Activity {
     private final CB_Label lblCachetitle, lblGcCode, lblOwner, lblCountry, lblState, lblDescription;
     private final EditTextField cacheTitle, cacheCode, cacheOwner, cacheCountry, cacheState, cacheDescription;
-    // Allgemein
-    private final CacheTypes[] CacheTypNumbers = CacheTypes.caches();
-    private final CacheSizes[] CacheSizeNumbers = new CacheSizes[]{CacheSizes.other, // 0
-            CacheSizes.micro, // 1
-            CacheSizes.small, // 2
-            CacheSizes.regular, // 3
-            CacheSizes.large // 4
-    };
     private CoordinateButton cacheCoords;
-    private CB_Button cacheTyp, cacheSize, cacheDifficulty, cacheTerrain;
-    private AbstractCache cache, newValues;
+    private SelectBox<CacheTypes> cacheTyp;
+    private SelectBox<CacheSizes> cacheSize;
+    private AdjustableStarWidget cacheDifficulty;
+    private AdjustableStarWidget cacheTerrain;
+    private MutableCache cache, newValues;
 
     private EditCache(String title, Drawable icon) {
         super(title, icon);
-        SelectBoxStyle selectBoxStyle = VisUI.getSkin().get("default", SelectBoxStyle.class);
-        VisTextButton.VisTextButtonStyle selectButtonStyle = new VisTextButton.VisTextButtonStyle();
-        selectButtonStyle.up = selectBoxStyle.up;
-        selectButtonStyle.down = selectBoxStyle.down;
-        selectButtonStyle.font = selectBoxStyle.font;
-        selectButtonStyle.fontColor = selectBoxStyle.fontColor;
         lblCachetitle = new CB_Label(Translation.get("Title"));
         lblGcCode = new CB_Label(Translation.get("GCCode"));
         lblOwner = new CB_Label(Translation.get("Owner"));
@@ -56,72 +44,134 @@ public class EditCache extends Activity {
         cacheOwner = new EditTextField();
         cacheState = new EditTextField();
         cacheCountry = new EditTextField();
-        cacheTyp = new CB_Button("EditCacheType", "toggle"); // selectBoxStyle.selectIcon
-        // cacheType.getDrawable(VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class).typeStyle)
-        //, cacheTypList(), cacheTypSelection());
-        cacheDescription = new EditTextField(true);
-        //.setWrapType(WrapType.WRAPPED);
-        cacheDifficulty = new CB_Button("EditCacheDifficulty");
-        // , cacheDifficultyList(), cacheDifficultySelection()
-        cacheSize = new CB_Button("EditCacheSize");
-        //, cacheSizeList(), cacheSizeSelection());
-        cacheTerrain = new CB_Button("EditCacheTerrain");
-        //, cacheTerrainList(), cacheTerrainSelection());
+        cacheTyp = new SelectBox();
+        cacheTyp.setSelectTitle("EditCacheType");
+        cacheTyp.set(CacheTypes.caches());
+        cacheDifficulty = new AdjustableStarWidget(Translation.get("EditCacheDifficulty"));
+        cacheTerrain = new AdjustableStarWidget(Translation.get("EditCacheTerrain"));
+        cacheSize = new SelectBox();
+        cacheSize.setSelectTitle("EditCacheSize");
+        cacheSize.set(CacheSizes.Values());
         cacheCoords = new CoordinateButton();
+        cacheDescription = new EditTextField(true);
     }
 
-    public static Activity getInstance(String title, Drawable icon) {
+    public static EditCache getInstance(String title, Drawable icon) {
         if (activity == null) {
             activity = new EditCache(title, icon);
             activity.top();
         }
-        return activity;
+        return (EditCache) activity;
     }
 
     @Override
     protected Catch_Table createMainContent() {
-        mainContent.addNext(lblGcCode);
+        mainContent.addNext(lblGcCode, -0.2f);
         mainContent.addLast(cacheCode);
-        mainContent.addNext(cacheTyp);
-        mainContent.addLast(cacheDifficulty, 0.3f);
-        mainContent.addNext(cacheSize);
-        mainContent.addLast(cacheTerrain, 0.3f);
-        mainContent.addLast(lblCachetitle);
+        mainContent.addNext(lblCachetitle, -0.2f);
         mainContent.addLast(cacheTitle);
+        mainContent.addLast(cacheTyp);
+        mainContent.addLast(cacheDifficulty);
+        mainContent.addLast(cacheTerrain);
+        mainContent.addLast(cacheSize);
         mainContent.addLast(cacheCoords);
-        mainContent.addLast(lblOwner);
+        mainContent.addNext(lblOwner, -0.2f);
         mainContent.addLast(cacheOwner);
-        mainContent.addLast(lblOwner);
-        mainContent.addLast(cacheOwner);
-        mainContent.addLast(lblCountry);
+        mainContent.addNext(lblCountry, -0.2f);
         mainContent.addLast(cacheCountry);
-        mainContent.addLast(lblState);
+        mainContent.addNext(lblState, -0.2f);
         mainContent.addLast(cacheState);
-        mainContent.addLast(cacheDescription);
-        addClickHandler(cacheTyp, this::selectCacheTyp);
-        addClickHandler(cacheDifficulty, this::selectcacheDifficulty);
-        addClickHandler(cacheSize, this::selectCacheSize);
-        addClickHandler(cacheTerrain, this::selectCacheTerrain);
+        mainContent.addLast(cacheDescription); //.width(getWidth() - 4 * CB.scaledSizes.MARGIN);
+
+        cacheTyp.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            }
+        });
+
+        cacheSize.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            }
+        });
 
         return mainContent;
     }
 
-    private void selectCacheTerrain() {
-    }
-
-    private void selectCacheSize() {
-    }
-
-    private void selectcacheDifficulty() {
-    }
-
-    private void selectCacheTyp() {
-        Menu menu = new Menu("");
-        for (CacheTypes cacheType : CacheTypes.caches()) {
-            menu.addMenuItem("", cacheType.toString(), cacheType.getDrawable(VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class).typeStyle), () -> {
-            });
+    public void update(AbstractCache cache) {
+        newValues = new MutableCache(cache); // copy from cache with Details
+        newValues.setShortDescription("");
+        if (newValues.getLongDescription() == null) {
+            newValues.setLongDescription(getStringFromDB(Database.Data, "SELECT Description FROM CacheText WHERE Id=?", newValues.getId()));
+            //set on Cache Object for next showing
+            cache.setLongDescription(newValues.getLongDescription() );
         }
-        menu.show();
+
+        if (newValues.getShortDescription() == null) {
+            newValues.setShortDescription(getStringFromDB(Database.Data, "SELECT ShortDescription FROM CacheText WHERE Id=?", newValues.getId()));
+            //set on Cache Object for next showing
+            cache.setShortDescription(newValues.getShortDescription());
+        }
+        cache.setLongDescription(newValues.getLongDescription());
+        this.cache = (MutableCache) cache;
+        setValues();
+    }
+
+    private static String getStringFromDB(Database database, String statement, long cacheID) {
+        String[] args = new String[]{Long.toString(cacheID)};
+        return database.getString(statement, args);
+    }
+
+    public void create() {
+        String tmpGCCode;
+        // GC - Code bestimmen für freies CWxxxx = CustomWaypint
+        String prefix = "CW";
+        int count = 0;
+        do {
+            count++;
+            tmpGCCode = prefix + String.format("%04d", count);
+        } while (Database.Data.cacheList.GetCacheById(MutableCache.GenerateCacheId(tmpGCCode)) != null);
+        Coordinate actSearchPos;
+        Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
+        Coordinate mapCenterPos = MapView.getLastCenterPos();
+        if (mapCenterPos == null) {
+            actSearchPos = new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
+        } else {
+            actSearchPos = mapCenterPos;
+        }
+        newValues = new MutableCache(actSearchPos.getLatitude(), actSearchPos.getLongitude(), tmpGCCode, CacheTypes.Traditional, tmpGCCode); // with Details
+        newValues.setSize(CacheSizes.micro);
+        newValues.setDifficulty(1);
+        newValues.setTerrain(1);
+        newValues.setOwner("Unbekannt");
+        newValues.setState("");
+        newValues.setCountry("");
+        newValues.setDateHidden(new Date());
+        newValues.setArchived(false);
+        newValues.setAvailable(true);
+        newValues.setFound(false);
+        newValues.setNumTravelbugs((short) 0);
+        newValues.setShortDescription("");
+        newValues.setLongDescription("");
+        this.cache = newValues;
+        setValues();
+    }
+
+    private void setValues() {
+        cacheCode.setText(cache.getGcCode());
+        cacheTyp.select(cache.getType());
+        cacheSize.select(cache.getSize());
+        cacheDifficulty.setValue((int) (cache.getDifficulty() * 2 - 2));
+        cacheTerrain.setValue((int) (cache.getTerrain() * 2 - 2));
+        cacheCoords.setCoordinate(new Coordinate(cache.getLatitude(), cache.getLongitude()));
+        cacheTitle.setText(cache.getName());
+        cacheOwner.setText(cache.getOwner());
+        cacheState.setText(cache.getState());
+        cacheCountry.setText(cache.getCountry());
+        if (cache.getLongDescription().equals("\n") || cache.getLongDescription().equals("\n\r"))
+            cache.setLongDescription("");
+        cacheDescription.setText(cache.getLongDescription());
+        show();
     }
 
     @Override

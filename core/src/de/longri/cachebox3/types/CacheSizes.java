@@ -15,7 +15,11 @@
  */
 package de.longri.cachebox3.types;
 
-public enum CacheSizes {
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
+
+public enum CacheSizes implements SelectBoxItem {
     micro,     // 0
     small,     // 1
     regular,   // 2
@@ -120,4 +124,23 @@ public enum CacheSizes {
         return "?";
     }
 
+    // for SelectBoxItem
+    @Override
+    public Drawable getDrawable() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return this.toString();
+    }
+
+    // for SelectBox SelectionList
+    public final static Array<CacheSizes> Values() {
+        Array<CacheSizes> result = new Array<>();
+        for (CacheSizes c : CacheSizes.values()) {
+            result.add(c);
+        }
+        return result;
+    }
 }

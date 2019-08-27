@@ -16,16 +16,14 @@
 package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-
 public enum CacheTypes implements SelectBoxItem {
-
     Traditional(true), // = 0,
 
     Multi(true), // = 1,
@@ -87,14 +85,14 @@ public enum CacheTypes implements SelectBoxItem {
         this.isCache = isCache;
     }
 
-    public final static CacheTypes[] caches() {
-        ArrayList<CacheTypes> result = new ArrayList<CacheTypes>();
+    public final static Array<CacheTypes> caches() {
+        Array<CacheTypes> result = new Array<>();
         for (CacheTypes c : CacheTypes.values()) {
             if (c.isCache) {
                 result.add(c);
             }
         }
-        return result.toArray(new CacheTypes[result.size()]);
+        return result;
     }
 
     /**
