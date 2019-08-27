@@ -22,6 +22,7 @@ import de.longri.cachebox3.gui.dialogs.InfoBox;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.ICancel;
@@ -496,34 +497,48 @@ public class GroundspeakAPI {
         }
     }
 
-    public static int UploadDraftOrLog(String cacheCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog) {
+    public static String UploadDraftOrLog(String gcCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog) {
         log.info("UploadDraftOrLog");
 
-        if (isAccessTokenInvalid()) return ERROR; // should be checked in advance
+        if (isAccessTokenInvalid()) {
+            LastAPIError = Translation.get("apiKeyInvalid").toString();
+            APIError = ERROR;
+            return ""; // should be checked in advance
+        }
 
         try {
+            String logReferenceCode = "";
             if (directLog) {
                 if (note.length() == 0) {
                     LastAPIError = Translation.get("emptyLog").toString();
-                    return ERROR;
+                    return "";
                 }
                 log.debug("is Log");
-                getNetz()
-                        .post(getUrl(1, "geocachelogs"))
+                ObjectMap<String, Object> params = new ObjectMap<String, Object>();
+                params.put("fields", "owner.username,loggedDate,text,type,referenceCode");
+                JSONObject geocacheLog = getNetz()
+                        .post(getUrl(1, "geocachelogs") + "?" + WebbUtils.queryString(params))
                         .body(new JSONObject()
-                                .put("geocacheCode", cacheCode)
+                                .put("geocacheCode", gcCode)
                                 .put("type", wptLogTypeId)
                                 .put("loggedDate", getDate(dateLogged))
                                 .put("text", prepareNote(note))
                         )
                         .ensureSuccess()
-                        .asVoid();
+                        .asJsonObject()
+                        .getBody();
+                long cacheId = MutableCache.GenerateCacheId(gcCode);
+                // Cache cache = new CacheDAO().getFromDbByCacheId(cacheId);
+                LogEntry logEntry = createLog(geocacheLog, cacheId);
+                new LogDAO().WriteToDatabase(logEntry);
+                // logReferenceCode is return value
+                logReferenceCode = geocacheLog.optString("referenceCode", ""); // as return value
             } else {
                 log.debug("is draft");
                 getNetz()
                         .post(getUrl(1, "logdrafts"))
                         .body(new JSONObject()
-                                .put("geocacheCode", cacheCode)
+                                .put("geocacheCode", gcCode)
                                 .put("logType", wptLogTypeId)
                                 .put("loggedDate", getDate(dateLogged))
                                 .put("note", prepareNote(note))
@@ -533,11 +548,11 @@ public class GroundspeakAPI {
             }
             LastAPIError = "";
             log.info("UploadDraftOrLog done");
-            return OK;
+            return logReferenceCode;
         } catch (Exception e) {
             retry(e);
-            log.error("UploadDraftOrLog geocacheCode: " + cacheCode + " logType: " + wptLogTypeId + ".\n" + LastAPIError, e);
-            return ERROR;
+            log.error("UploadDraftOrLog geocacheCode: " + gcCode + " logType: " + wptLogTypeId + ".\n" + LastAPIError, e);
+            return "";
         }
     }
 
@@ -583,7 +598,7 @@ public class GroundspeakAPI {
                             friendList.removeValue(finder.toLowerCase(Locale.US), false);
                         }
 
-                        logList.add(createLog(geocacheLog, cache));
+                        logList.add(createLog(geocacheLog, cache.getId()));
                     }
 
                     // all logs loaded or all friends found
@@ -870,6 +885,28 @@ public class GroundspeakAPI {
 
     private static String prepareNote(String note) {
         return note.replace("\r", "");
+    }
+
+    public static void uploadLogImage(String logReferenceCode, String image, String description) {
+        LastAPIError = "";
+        APIError = OK;
+        JSONObject url = new JSONObject();
+        JSONObject uploading;
+        try {
+            url = getNetz()
+                    .post(getUrl(1, "geocachelogs/" + logReferenceCode + "/images"))
+                    .body(uploading = new JSONObject()
+                            .put("base64ImageData", image)
+                            .put("description", description)
+                    )
+                    .ensureSuccess()
+                    .asJsonObject()
+                    .getBody();
+            log.info("uploadLogImage done");
+        } catch (Exception ex) {
+            APIError = ERROR;
+            LastAPIError = ex.toString() + url.toString();
+        }
     }
 
     public static boolean isAccessTokenInvalid() {
@@ -1302,15 +1339,15 @@ public class GroundspeakAPI {
         Array<LogEntry> logList = new Array<>();
         if (geocacheLogs != null) {
             for (int ii = 0; ii < geocacheLogs.length(); ii++) {
-                logList.add(createLog((JSONObject) geocacheLogs.get(ii), cache));
+                logList.add(createLog((JSONObject) geocacheLogs.get(ii), cache.getId()));
             }
         }
         return logList;
     }
 
-    private static LogEntry createLog(JSONObject geocacheLog, AbstractCache cache) {
+    private static LogEntry createLog(JSONObject geocacheLog, long cacheId) {
         LogEntry logEntry = new LogEntry();
-        logEntry.CacheId = cache.getId();
+        logEntry.CacheId = cacheId;
         logEntry.Comment = geocacheLog.optString("text", "");
         logEntry.Finder = getStringValue(geocacheLog, "owner", "username");
         String dateCreated = geocacheLog.optString("loggedDate", "");

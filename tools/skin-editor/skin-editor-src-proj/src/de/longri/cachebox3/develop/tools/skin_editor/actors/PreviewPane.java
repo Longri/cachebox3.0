@@ -482,9 +482,9 @@ public class PreviewPane extends Table {
                             }
                         }
                         tbl.newLine();
-                        add(tbl).width(getWidth());
+                        add(tbl).width(getWidth()).row();
                     } else {
-                        add(new Label("Preview of Widget \"" + widget + "\" not implemented! ", game.skin, "error")).pad(10).padBottom(20).row();
+                        add(new Label("Preview of Widget \"" + widget + "/" + key + "\" not implemented! ", game.skin, "error")).pad(10).padBottom(20).row();
                     }
                 } catch (Exception e) {
                     add(new Label("Please fill all required fields", game.skin, "error")).pad(10).padBottom(20).row();

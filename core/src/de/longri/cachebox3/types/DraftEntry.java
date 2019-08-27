@@ -22,7 +22,6 @@ import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,6 +38,7 @@ public class DraftEntry {
     public long Id;
     public long CacheId;
     public String gcCode = "";
+    public String GcId = ""; // (mis)used for LogId (or ReferenceCode)
     public Date timestamp;
     public String typeString = "";
     public LogTypes type;
@@ -61,6 +61,7 @@ public class DraftEntry {
         this.Id = fne.Id;
         this.CacheId = fne.CacheId;
         this.gcCode = fne.gcCode;
+        GcId=fne.GcId;
         this.timestamp = fne.timestamp;
         this.typeString = fne.typeString;
         this.type = fne.type;
@@ -112,7 +113,8 @@ public class DraftEntry {
         TrackingNumber = reader.getString(16);
         isDirectLog = reader.getInt(17) != 0;
         fillType();
-
+        GcId = reader.getString("GcId");
+        if (GcId == null) GcId = "";
     }
 
     public void fillType() {
@@ -160,6 +162,7 @@ public class DraftEntry {
             args.put("id", Id); // with Update!!!
         args.put("cacheid", CacheId);
         args.put("gccode", gcCode);
+        args.put("GcId", GcId);
         args.put("name", CacheName);
         String stimestamp = Database.cbDbFormat.format(timestamp);
         args.put("timestamp", stimestamp);
@@ -184,7 +187,7 @@ public class DraftEntry {
         }
         // search Draft Id
         GdxSqliteCursor reader = Database.Drafts
-                .rawQuery("select CacheId, GcCode, Name, CacheType, Timestamp, Type, FoundNumber, Comment, Id, Url, Uploaded, gc_Vote, TbFieldNote, TbName, TbIconUrl, TravelBugCode, TrackingNumber, directLog from FieldNotes where GcCode='" + gcCode
+                .rawQuery("select CacheId, GcCode, Name, CacheType, Timestamp, Type, FoundNumber, Comment, Id, Url, Uploaded, gc_Vote, TbFieldNote, TbName, TbIconUrl, TravelBugCode, TrackingNumber, directLog, GcId from FieldNotes where GcCode='" + gcCode
                         + "' and Type=" + type.getGcLogTypeId(), (String[]) null);
 
         if (reader == null) {
@@ -207,6 +210,7 @@ public class DraftEntry {
         Database.Parameters args = new Database.Parameters();
         args.put("cacheid", CacheId);
         args.put("gccode", gcCode);
+        args.put("GcId", GcId);
         args.put("name", CacheName);
         String stimestamp = Database.cbDbFormat.format(timestamp);
         args.put("timestamp", stimestamp);
@@ -243,6 +247,8 @@ public class DraftEntry {
     }
 
     public boolean equals(DraftEntry fne) {
+        if (!GcId.equals(fne.GcId))
+            return false;
         if (this.Id != fne.Id)
             return false;
         if (this.CacheId != fne.CacheId)

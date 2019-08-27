@@ -1,11 +1,11 @@
 package de.longri.cachebox3.utils.http;
 
+import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.utils.ICancel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Request {
@@ -20,7 +20,7 @@ public class Request {
     Integer timeout;
     Map<String, Object> headers;
     Object payload;
-    Map<String, Object> params;
+    ObjectMap<String, Object> params;
     boolean ensureSuccess;
     ICancel icancel;
 
@@ -38,7 +38,7 @@ public class Request {
 
     public Request param(String name, Object value) {
         if (params == null) {
-            params = new LinkedHashMap<>();
+            params = new ObjectMap<>();
         }
         params.put(name, value);
         return this;
@@ -58,7 +58,7 @@ public class Request {
      */
     public Request param(String name, Iterable<Object> values) {
         if (params == null) {
-            params = new LinkedHashMap<>();
+            params = new ObjectMap<>();
         }
         params.put(name, values);
         return this;

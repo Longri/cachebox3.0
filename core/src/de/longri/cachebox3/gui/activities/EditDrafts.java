@@ -19,7 +19,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -56,21 +55,19 @@ public class EditDrafts extends ActivityBase {
     private final static DateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.getDefault());
     private final static DateFormat iso8601FormatDate = new SimpleDateFormat("yyyy-MM-dd");
     private final static DateFormat iso8601FormatTime = new SimpleDateFormat("HH:mm");
-
-
+    private static EditDrafts editDrafts;
     private final VisTable contentTable;
     private final CB_Button btnOk, btnCancel;
     private final DraftListItemStyle draftListItemStyle;
     private final VisScrollPane scrollPane;
     private final VisLabel foundLabel, dateLabel, timeLabel;
     private final EditTextField dateTextArea, timeTextArea, commentTextArea;
-
     private boolean isNewDraft;
     private ReturnListener returnListener;
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             if (returnListener != null)
-                returnListener.returnedDraft(null, false, false);
+                returnListener.returnedDraft(null, false);
             finish();
         }
     };
@@ -115,13 +112,13 @@ public class EditDrafts extends ActivityBase {
                     actDraft.updateDatabase();
                     DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
                 }
-                returnListener.returnedDraft(actDraft, isNewDraft, actDraft.isDirectLog);
+                returnListener.returnedDraft(actDraft, isNewDraft);
             }
             finish();
         }
     };
 
-    public EditDrafts(DraftEntry note, ReturnListener returnListener, boolean isNewDraft) {
+    private EditDrafts() {
         super("EditDraft");
         draftListItemStyle = CB.getSkin().get("DraftListItemStyle", DraftListItemStyle.class);
 
@@ -130,7 +127,7 @@ public class EditDrafts extends ActivityBase {
         btnCancel = new CB_Button(Translation.get("cancel"));
         btnCancel.addListener(cancelClickListener);
         contentTable = new VisTable();
-        setDraft(note, returnListener, isNewDraft);
+
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
             gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"),
                     new IntProperty(), draftListItemStyle.starStyle, draftListItemStyle.cacheSizeStyle);
@@ -139,12 +136,9 @@ public class EditDrafts extends ActivityBase {
 
         scrollPane = new VisScrollPane(contentTable);
 
-        if (note.isTbDraft)
-            foundLabel = new VisLabel("");
-        else
-            foundLabel = new VisLabel("Founds: #" + note.foundNumber);
+        foundLabel = new VisLabel("");
 
-        dateLabel = new VisLabel(Translation.get("wptDate") + ":");
+        dateLabel = new VisLabel(Translation.get("date") + ":");
         timeLabel = new VisLabel(Translation.get("time") + ":");
 
         dateTextArea = new EditTextField(false);
@@ -156,10 +150,13 @@ public class EditDrafts extends ActivityBase {
         };
         commentTextArea = new EditTextField(true);
 
-        dateTextArea.setText(iso8601FormatDate.format(note.timestamp));
-        timeTextArea.setText(iso8601FormatTime.format(note.timestamp));
-        commentTextArea.setText(note.comment);
+    }
 
+    public static EditDrafts getInstance() {
+        if (editDrafts == null || editDrafts.isDisposed()) {
+            editDrafts = new EditDrafts();
+        }
+        return editDrafts;
     }
 
     @Override
@@ -189,6 +186,15 @@ public class EditDrafts extends ActivityBase {
 //        this.setDebug(true);
 
         if (!needsLayout) return;
+
+        if (actDraft.isTbDraft)
+            foundLabel.setText("");
+        else
+            foundLabel.setText("Founds: #" + actDraft.foundNumber);
+
+        dateTextArea.setText(iso8601FormatDate.format(actDraft.timestamp));
+        timeTextArea.setText(iso8601FormatTime.format(actDraft.timestamp));
+        commentTextArea.setText(actDraft.comment);
 
         this.clear();
         contentTable.clear();
@@ -257,6 +263,7 @@ public class EditDrafts extends ActivityBase {
         timeRow.add(timeTextArea);
 
 
+        /*
         VisTable optionTable = new VisTable();
         optionTable.defaults().pad(CB.scaledSizes.MARGINx2);
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
@@ -287,6 +294,8 @@ public class EditDrafts extends ActivityBase {
         optionTable.add(fieldNoteOption).left();
         optionTable.add(fieldNoteOptionLabel).left().expandX().fillX();
 
+         */
+
 //        contentTable.setDebug(true);
 //        timeRow.setDebug(true);
         contentTable.defaults().pad(CB.scaledSizes.MARGIN);
@@ -303,8 +312,8 @@ public class EditDrafts extends ActivityBase {
         contentTable.row();
         contentTable.add(commentTextArea).expandX().fillX();
         contentTable.row();
-        contentTable.add(optionTable).expandX().fillX();
-        contentTable.row();
+        // contentTable.add(optionTable).expandX().fillX();
+        // contentTable.row();
 
 
         contentTable.add((Actor) null).expand().fill();//Fill
@@ -317,7 +326,7 @@ public class EditDrafts extends ActivityBase {
     }
 
     public interface ReturnListener {
-        void returnedDraft(DraftEntry fn, boolean isNewDraft, boolean directlog);
+        void returnedDraft(DraftEntry fn, boolean isNewDraft);
     }
 
 
