@@ -34,6 +34,7 @@ import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.platform_test.AfterAll;
 import de.longri.cachebox3.platform_test.StyleEntry;
 import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.utils.ReflectionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -84,7 +85,7 @@ public class SkinTest {
 
     @Test
     void existAllStyleClasses() throws ClassNotFoundException {
-        List<Class<?>> clazzList = TestUtils.getClassesInSamePackage(AbstractIconStyle.class);
+        List<Class<?>> clazzList = TestUtils.getUsedStyleClasses();
         for (Class<?> clazz : clazzList) {
             if (clazz.equals(AbstractIconStyle.class)) {
                 System.out.println("ignore AbstractIconStyle.class");
@@ -103,15 +104,7 @@ public class SkinTest {
 
     @Test
     void parseUsedStylesAndCheckExist() throws IOException {
-
-        Array<StyleEntry> caller = new Array<>();
-        FileHandle srcCoreFolder = Gdx.files.absolute("../../core/src");
-
-        getAllStyleCallers(srcCoreFolder, caller);
-
-        assertTrue(caller.size > 0, "No style call found on core src! Wrong path? " + srcCoreFolder.file().getCanonicalPath());
-
-
+        Array<StyleEntry> caller = TestUtils.getStyleCaller();
         // check if for every used style a entry on loaded Skin
         for (StyleEntry styleEntry : caller) {
             Object style = null;
@@ -124,107 +117,7 @@ public class SkinTest {
         }
     }
 
-    private void getAllStyleCallers(FileHandle src, Array<StyleEntry> caller) {
-        for (FileHandle fileHandle : src.list()) {
-            if (fileHandle.isDirectory()) {
-                getAllStyleCallers(fileHandle, caller);
-            } else {
-                if (fileHandle.extension().equals("java")) {
-                    // read file and search for call of "VisUI.getSkin().get("
-                    String fileStr = fileHandle.readString("UTF-8");
-                    int pos = -1;
-                    while ((pos = 20 + fileStr.indexOf("VisUI.getSkin().get(", pos)) >= 20) {
-                        if (fileStr.substring(pos).startsWith("symbolStyleName, MapWayPointItemStyle.class)")) {
-                            // add all used Styles for WaypointLayer and skip parsing of this file!
-                            StyleEntry entry = new StyleEntry("mapStar", MapWayPointItemStyle.class);
-                            if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new StyleEntry("mapFound", MapWayPointItemStyle.class);
-                            if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new StyleEntry("mapSolved", MapWayPointItemStyle.class);
-                            if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new StyleEntry("mapMultiStartP", MapWayPointItemStyle.class);
-                            if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new StyleEntry("mapMysteryStartP", MapWayPointItemStyle.class);
-                            if (!caller.contains(entry, false)) caller.add(entry);
-                            entry = new StyleEntry("mapMultiStageStartP", MapWayPointItemStyle.class);
-                            if (!caller.contains(entry, false)) caller.add(entry);
 
-                            for (CacheTypes type : CacheTypes.values()) {
-                                entry = new StyleEntry("map" + type.name(), MapWayPointItemStyle.class);
-                                if (!caller.contains(entry, false)) caller.add(entry);
-                            }
-                            break;
-                        }
-
-
-                        String styleName = "default";
-
-                        int classSearchPos = pos;
-                        boolean defaultName = true;
-                        if (fileStr.charAt(pos) == '\"' || fileStr.charAt(pos + 1) == '\"') {
-                            int endNamePos = fileStr.indexOf('\"', pos + 2);
-                            styleName = fileStr.substring(pos, endNamePos).replace('"', ' ').trim();
-                            classSearchPos = endNamePos;
-                            defaultName = false;
-                        }
-
-                        int classNamePos = defaultName ? pos : 1 + fileStr.indexOf(',', classSearchPos);
-                        int classNameEndpos = fileStr.indexOf(".class", classNamePos);
-                        String className = fileStr.substring(classNamePos, classNameEndpos).trim();
-                        String subClassName = "";
-                        int dotPos = className.indexOf('.');
-                        if (dotPos >= 0) {
-                            subClassName = className.substring(dotPos).replace(".", "$");
-                            className = className.substring(0, dotPos);
-                        }
-                        Class clazz = null;
-
-                        try {
-                            clazz = Class.forName(className);
-                        } catch (ClassNotFoundException e) {
-                            // if class not found
-
-                            // try with own package
-                            int packageStartPos = fileStr.indexOf("package") + 8;
-                            int packageEndPos = fileStr.indexOf(";", packageStartPos);
-                            String packageName = fileStr.substring(packageStartPos, packageEndPos).trim();
-
-                            if (fileStr.contains("class " + className + " ")) {
-                                try {
-                                    clazz = Class.forName(packageName + "." + fileHandle.nameWithoutExtension() + "$" + className);
-                                } catch (ClassNotFoundException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
-
-                            if (clazz == null) {
-                                try {
-                                    clazz = Class.forName(packageName + "." + className);
-                                } catch (ClassNotFoundException ex) {
-                                    // search import for determine Class with imported package
-                                    int importEnd = fileStr.indexOf(className) + className.length();
-                                    int importStart = 6 + fileStr.lastIndexOf("import", importEnd);
-
-                                    String classNameWithPackage = (fileStr.substring(importStart, importEnd).trim() + subClassName);
-                                    try {
-                                        clazz = Class.forName(classNameWithPackage);
-                                    } catch (ClassNotFoundException exx) {
-                                        exx.printStackTrace();
-                                    }
-                                }
-                            }
-                        }
-
-                        if (clazz != null) {
-                            StyleEntry entry = new StyleEntry(styleName, clazz);
-                            if (!caller.contains(entry, false))
-                                caller.add(entry);
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     @Test
     void menuIconSizeCheck() {

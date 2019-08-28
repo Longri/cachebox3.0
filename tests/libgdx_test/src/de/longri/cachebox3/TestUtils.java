@@ -17,16 +17,20 @@ package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import de.longri.cachebox3.gui.skin.styles.AbstractIconStyle;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
+import de.longri.cachebox3.platform_test.StyleEntry;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.GeoUtils;
+import de.longri.cachebox3.utils.ReflectionUtils;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 
@@ -370,5 +374,17 @@ public class TestUtils {
 
     public static FileHandle getSkinFileHandle() {
         return Gdx.files.internal("skins/day");
+    }
+
+    public static List<Class<?>> getUsedStyleClasses() throws ClassNotFoundException {
+        return ReflectionUtils.getClassesInSamePackage(AbstractIconStyle.class);
+    }
+
+    public static Array<StyleEntry> getStyleCaller() {
+        Array<StyleEntry> caller = new Array<>();
+
+        //TODO read from json file
+
+        return caller;
     }
 }
