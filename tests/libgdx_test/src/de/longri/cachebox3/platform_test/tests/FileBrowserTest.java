@@ -56,7 +56,7 @@ public class FileBrowserTest {
 
 
     @BeforeAll
-    static void setUp() {
+    public static void setUp() {
         TestUtils.initialGdx();
 
         workpath = TestUtils.getResourceFileHandle("testsResources", true);
@@ -66,7 +66,7 @@ public class FileBrowserTest {
     }
 
     @AfterAll
-    static void tearDown() {
+    public static void tearDown() {
     }
 
 

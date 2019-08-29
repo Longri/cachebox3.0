@@ -23,6 +23,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.StringBuilder;
+import de.longri.cachebox3.platform_test.StyleEntry;
+import de.longri.cachebox3.utils.ReflectionUtils;
 import org.apache.commons.cli.*;
 
 import java.io.StringWriter;
@@ -80,6 +82,7 @@ public class main {
     private static final String BUILD_GRADLE_FILE = "./core/build.gradle";
     private static final String BUILD = "./core/build";
     private static final String TEST_JSON = "tests.json";
+    private static final String STYLE_CALLER_JSON = "style.json";
     private static final String TEST_SRC_DIR = "./tests/junit_test/src";
     private static final String TEST_RESOURCES_DIR = "./tests/junit_test/testsResources";
     private static final String TEST_TARGET_DIR = "./tests/libgdx_test/src/de/longri/cachebox3/platform_test/tests";
@@ -133,6 +136,7 @@ public class main {
         // create asset dir
         FileHandle assetDir = Gdx.files.absolute(ASSET_DIR);
         FileHandle testJsonFile = assetDir.child(TEST_JSON);
+        FileHandle styleJsonFile = assetDir.child(STYLE_CALLER_JSON);
 
         if (!assetDir.isDirectory()) {
             assetDir.mkdirs();
@@ -191,6 +195,28 @@ public class main {
         FileHandle workingDirAssets = Gdx.files.absolute(ASSET_WORKING_DIR);
         assetDir.copyTo(workingDirAssets);
 
+        writeStyleCallerJson(styleJsonFile);
+
+    }
+
+    private static void writeStyleCallerJson(FileHandle styleJsonFile) {
+        StringWriter stringWriter = new StringWriter();
+        JsonWriter writer = new JsonWriter(stringWriter);
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json);
+        json.setWriter(writer);
+        json.writeObjectStart();
+
+        Array<StyleEntry> caller = new Array<>();
+        FileHandle srcCoreFolder = Gdx.files.absolute("./core/src");
+        ReflectionUtils.getAllStyleCallers(srcCoreFolder, caller);
+
+        for (StyleEntry entry : caller) {
+            json.writeValue(entry.name,entry.clazz.toString());
+        }
+        json.writeObjectEnd();
+        String jsonString = stringWriter.toString();
+        styleJsonFile.writeString(jsonString, false);
     }
 
     private static void disable() {

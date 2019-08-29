@@ -18,6 +18,8 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -383,7 +385,20 @@ public class TestUtils {
     public static Array<StyleEntry> getStyleCaller() {
         Array<StyleEntry> caller = new Array<>();
 
-        //TODO read from json file
+        FileHandle jsnFile = Gdx.files.internal("platform_test/style.json");
+        JsonReader reader = new JsonReader();
+        JsonValue result = reader.parse(jsnFile);
+        int idx = 0;
+        for (Iterator<JsonValue> it = result.iterator().iterator(); it.hasNext(); ) {
+            JsonValue jsonValue = it.next();
+            try {
+                StyleEntry entry = new StyleEntry(jsonValue.name, Class.forName(jsonValue.asString().replace("class ", "").trim()));
+                caller.add(entry);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
 
         return caller;
     }
