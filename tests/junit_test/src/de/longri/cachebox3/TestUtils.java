@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -39,6 +40,7 @@ import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.platform_test.StyleEntry;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.AbstractTranslationHandler;
 import de.longri.cachebox3.translation.Translation;
@@ -47,6 +49,7 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.GeoUtils;
+import de.longri.cachebox3.utils.ReflectionUtils;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.apache.commons.codec.Charsets;
 import org.oscim.awt.AwtGraphics;
@@ -418,154 +421,18 @@ public class TestUtils {
 
     static int BUFFER_SIZE = 10 * 1024;
 
-    /**
-     * Attempts to list all the classes in the specified package as determined
-     * by the context class loader...
-     *
-     * @param classes the package name to search
-     * @return a list of classes that exist within that package
-     * @throws ClassNotFoundException if something went wrong
-     */
-    public static List<Class<?>> getClassesInSamePackage(Class<?>... classes) throws ClassNotFoundException {
-        ArrayList<Class<?>> result = new ArrayList<Class<?>>();
-        if (classes == null || classes.length == 0)
-            return result;
-        // This will hold a list of directories matching the pckgname. There may be more than one if
-        // a package is split over multiple jars/paths
-        ArrayList<File> directories = new ArrayList<File>();
-        HashMap<File, String> packageNames = null;
-        String pckgname = null;
-        try {
-            ClassLoader cld = Thread.currentThread().getContextClassLoader();
-            if (cld == null) {
-                throw new ClassNotFoundException("Can't get class loader.");
-            }
-            for (Class<?> clazz : classes) {
-                // TODO: this would not work in a non OSGi environment
-                String syspath = getBundlePath(clazz);
-                if (syspath.endsWith("/")) {
-                    syspath = syspath.substring(0, syspath.length() - 1);
-                } else if (syspath.endsWith(".jar")) {
-                    getClassesInSamePackageFromJar(result, classes, syspath);
-                    continue;
-                }
-                pckgname = clazz.getPackage().getName();
-                String path = pckgname.replace('.', '/');
-                // Ask for all resources for the path
-                Enumeration<URL> resources = cld.getResources(path);
-                File directory = null;
-                while (resources.hasMoreElements()) {
-                    String path2 = resources.nextElement().getPath();
-                    if (!path2.contains(syspath)) {
-                        // needed to get it working on Eclipse 3.5
-                        if (syspath.indexOf("/bin") < 1) {
-                            syspath = syspath + "/bin";
-                        }
-                        directory = new File(URLDecoder.decode(syspath + path2, "UTF-8"));
-                    } else
-                        directory = new File(URLDecoder.decode(path2, "UTF-8"));
-                    directories.add(directory);
-                }
-                if (packageNames == null)
-                    packageNames = new HashMap<File, String>();
-                packageNames.put(directory, pckgname);
-            }
-        } catch (NullPointerException x) {
-            throw new ClassNotFoundException(pckgname + " does not appear to be a valid package (Null pointer exception)");
-        } catch (UnsupportedEncodingException encex) {
-            throw new ClassNotFoundException(pckgname + " does not appear to be a valid package (Unsupported encoding)");
-        } catch (IOException ioex) {
-            throw new ClassNotFoundException("IOException was thrown when trying to get all resources for " + pckgname);
-        }
-
-        // For every directory identified capture all the .class files
-        for (File directory : directories) {
-            if (directory.exists()) {
-                // Get the list of the files contained in the package
-                String[] files = directory.list();
-                for (String file : files) {
-                    // we are only interested in .class files
-                    if (file.endsWith(".class")) {
-                        try {
-                            // removes the .class extension
-                            Class<?> clazz = Class.forName(packageNames.get(directory) + '.' + file.substring(0, file.length() - 6));
-                            if (!Modifier.isAbstract(clazz.getModifiers()))
-                                result.add(clazz);
-                        } catch (Throwable e) {
-                            // ignore exception and continue
-                        }
-                    }
-                }
-            } else {
-                throw new ClassNotFoundException(pckgname + " (" + directory.getPath() + ") does not appear to be a valid package");
-            }
-        }
-        return result;
-    }
-
-
-    /**
-     * Returns the list of classes in the same directories as Classes in <code>classes</code>.
-     *
-     * @param result
-     * @param classes
-     * @param jarPath
-     */
-    private static void getClassesInSamePackageFromJar(List<Class<?>> result, Class<?>[] classes, String jarPath) {
-        JarFile jarFile = null;
-        try {
-            jarFile = new JarFile(jarPath);
-            //ClassLoader cld = Thread.currentThread().getContextClassLoader();
-            Enumeration<JarEntry> en = jarFile.entries();
-            while (en.hasMoreElements()) {
-                JarEntry entry = en.nextElement();
-                String entryName = entry.getName();
-                for (Class<?> clazz : classes) {
-                    String packageName = clazz.getPackage().getName().replace('.', '/');
-                    if (entryName != null && entryName.endsWith(".class") && entryName.startsWith(packageName)) {
-                        try {
-                            Class<?> entryClass = Class.forName(entryName.substring(0, entryName.length() - 6).replace('/', '.'));
-                            if (entryClass != null)
-                                result.add(entryClass);
-                        } catch (Throwable e) {
-                            // do nothing, just continue processing classes
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            result.addAll(Arrays.asList(classes));
-        } finally {
-            try {
-                if (jarFile != null)
-                    jarFile.close();
-            } catch (Exception e) {
-            }
-        }
-    }
-
-    /**
-     * Returns the location of the
-     *
-     * @param clazz
-     * @return
-     */
-    public static String getBundlePath(Class<?> clazz) {
-        ProtectionDomain pd = clazz.getProtectionDomain();
-        if (pd == null)
-            return null;
-        CodeSource cs = pd.getCodeSource();
-        if (cs == null)
-            return null;
-        URL url = cs.getLocation();
-        if (url == null)
-            return null;
-        String result = url.getFile();
-        return result;
-    }
-
     public static FileHandle getSkinFileHandle() {
         return Gdx.files.absolute("../../launcher/android/assets/skins/day");
     }
 
+    public static List<Class<?>> getUsedStyleClasses() throws ClassNotFoundException {
+        return ReflectionUtils.getClassesInSamePackage(AbstractIconStyle.class);
+    }
+
+    public static Array<StyleEntry> getStyleCaller() {
+        Array<StyleEntry> caller = new Array<>();
+        FileHandle srcCoreFolder = Gdx.files.absolute("../../core/src");
+        ReflectionUtils.getAllStyleCallers(srcCoreFolder, caller);
+        return caller;
+    }
 }

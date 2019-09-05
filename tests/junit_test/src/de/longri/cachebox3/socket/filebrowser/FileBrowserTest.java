@@ -49,7 +49,7 @@ class FileBrowserTest {
 
 
     @BeforeAll
-    static void setUp() {
+    public static void setUp() {
         TestUtils.initialGdx();
 
         workpath = TestUtils.getResourceFileHandle("testsResources", true);
@@ -59,12 +59,12 @@ class FileBrowserTest {
     }
 
     @AfterAll
-    static void tearDown() {
+    public static void tearDown() {
     }
 
 
     @Test
-    void getRootDir() throws InterruptedException {
+    public  void getRootDir() throws InterruptedException {
 
         if (EXCLUDE_FROM_TRAVIS.VALUE) return;
 
@@ -116,7 +116,7 @@ class FileBrowserTest {
 
 
     @Test
-    void getFileTest() throws InterruptedException, IOException {
+    public void getFileTest() throws InterruptedException, IOException {
 
         if (EXCLUDE_FROM_TRAVIS.VALUE) return;
 
@@ -172,7 +172,7 @@ class FileBrowserTest {
 
 
     @Test
-    void DeleteFileTest() throws InterruptedException, IOException {
+    public void DeleteFileTest() throws InterruptedException, IOException {
         if (EXCLUDE_FROM_TRAVIS.VALUE) return;
         assertThat("Connection must be established", clint.connect());
 

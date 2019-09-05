@@ -30,13 +30,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class TranslationListTest {
 
     @BeforeAll
-    static void setUp() throws SQLiteGdxException {
+    public static void setUp() throws SQLiteGdxException {
         TestUtils.initialGdx();
     }
 
 
     @Test
-    void load() {
+    public void load() {
         FileHandle fileHandle = TestUtils.getResourceFileHandle("testsResources/strings.ini", true);
 
         TranslationList translationList = new TranslationList();
