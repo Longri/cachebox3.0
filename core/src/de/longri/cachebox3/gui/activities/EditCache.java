@@ -1,20 +1,30 @@
 package de.longri.cachebox3.gui.activities;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.Activity;
+import de.longri.cachebox3.gui.skin.styles.EditTextStyle;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.Cache3DAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.MutableCache;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 import java.util.Date;
 
@@ -23,7 +33,8 @@ import java.util.Date;
  */
 public class EditCache extends Activity {
     private final CB_Label lblCachetitle, lblGcCode, lblOwner, lblCountry, lblState, lblDescription;
-    private final EditTextField cacheTitle, cacheCode, cacheOwner, cacheCountry, cacheState, cacheDescription;
+    private final EditTextField cacheTitle, cacheCode, cacheOwner, cacheCountry, cacheState;
+    private final CB_Label cacheDescription;
     private CoordinateButton cacheCoords;
     private SelectBox<CacheTypes> cacheTyp;
     private SelectBox<CacheSizes> cacheSize;
@@ -53,7 +64,12 @@ public class EditCache extends Activity {
         cacheSize.setSelectTitle("EditCacheSize");
         cacheSize.set(CacheSizes.Values());
         cacheCoords = new CoordinateButton();
-        cacheDescription = new EditTextField(true);
+        EditTextStyle edtStyle = VisUI.getSkin().get("default", EditTextStyle.class);
+        Label.LabelStyle  cacheDescriptionStyle = new Label.LabelStyle(edtStyle.font, edtStyle.fontColor);
+        cacheDescriptionStyle.background = edtStyle.background;
+        cacheDescription = new CB_Label();
+        cacheDescription.setWrap(true);
+        cacheDescription.setStyle(cacheDescriptionStyle);
     }
 
     public static EditCache getInstance(String title, Drawable icon) {
@@ -66,20 +82,20 @@ public class EditCache extends Activity {
 
     @Override
     protected Catch_Table createMainContent() {
-        mainContent.addNext(lblGcCode, -0.2f);
+        mainContent.addNext(lblGcCode, -0.3f);
         mainContent.addLast(cacheCode);
-        mainContent.addNext(lblCachetitle, -0.2f);
+        mainContent.addNext(lblCachetitle, -0.3f);
         mainContent.addLast(cacheTitle);
         mainContent.addLast(cacheTyp);
         mainContent.addLast(cacheDifficulty);
         mainContent.addLast(cacheTerrain);
         mainContent.addLast(cacheSize);
         mainContent.addLast(cacheCoords);
-        mainContent.addNext(lblOwner, -0.2f);
+        mainContent.addNext(lblOwner, -0.3f);
         mainContent.addLast(cacheOwner);
-        mainContent.addNext(lblCountry, -0.2f);
+        mainContent.addNext(lblCountry, -0.3f);
         mainContent.addLast(cacheCountry);
-        mainContent.addNext(lblState, -0.2f);
+        mainContent.addNext(lblState, -0.3f);
         mainContent.addLast(cacheState);
         mainContent.addLast(cacheDescription); //.width(getWidth() - 4 * CB.scaledSizes.MARGIN);
 
@@ -94,6 +110,32 @@ public class EditCache extends Activity {
             public void changed(ChangeEvent event, Actor actor) {
             }
         });
+
+
+        cacheDescription.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+
+                Input.TextInputListener listener = new Input.TextInputListener() {
+                    @Override
+                    public void input(final String text) {
+                        CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
+                            @Override
+                            public void run() {
+                                cacheDescription.setText(text);
+                                invalidate();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void canceled() {
+                        // do nothing
+                    }
+                };
+                PlatformConnector.getMultilineTextInput(listener, 0, "", cacheDescription.getText().toString(), "");
+            }
+        });
+
 
         return mainContent;
     }
@@ -161,8 +203,8 @@ public class EditCache extends Activity {
         cacheCode.setText(cache.getGcCode());
         cacheTyp.select(cache.getType());
         cacheSize.select(cache.getSize());
-        cacheDifficulty.setValue((int) (cache.getDifficulty() * 2 - 2));
-        cacheTerrain.setValue((int) (cache.getTerrain() * 2 - 2));
+        cacheDifficulty.setValue((int) (cache.getDifficulty() * 2));
+        cacheTerrain.setValue((int) (cache.getTerrain() * 2));
         cacheCoords.setCoordinate(new Coordinate(cache.getLatitude(), cache.getLongitude()));
         cacheTitle.setText(cache.getName());
         cacheOwner.setText(cache.getOwner());
@@ -176,6 +218,44 @@ public class EditCache extends Activity {
 
     @Override
     protected void runAtOk() {
+        boolean update = false;
+        String gcc = cacheCode.getText().toUpperCase();
+        cache.setId(AbstractCache.GenerateCacheId(gcc));
+
+        AbstractCache cl = Database.Data.cacheList.GetCacheById(cache.getId());
+
+        if (cl != null) {
+            update = true;
+            // if (newValues.getType() == CacheTypes.Mystery) {
+                if (cache.getLatitude() != newValues.getLatitude() || cache.getLongitude() != newValues.getLongitude()) {
+                    cache.setHasCorrectedCoordinates(true);
+                }
+            //}
+        }
+
+        cache.setGcCode(gcc);
+        cache.setType(cacheTyp.getSelected());
+        cache.setSize(cacheSize.getSelected());
+        cache.setDifficulty(cacheDifficulty.getValue() / 2f);
+        cache.setTerrain(cacheTerrain.getValue() / 2f);
+        cache.setLatitude(cacheCoords.getCoordinate().getLatitude());
+        cache.setLongitude(cacheCoords.getCoordinate().getLongitude());
+        cache.setName(cacheTitle.getText());
+        cache.setOwner(cacheOwner.getText());
+        cache.setState(cacheState.getText());
+        cache.setCountry(cacheCountry.getText());
+        cache.setLongDescription(cacheDescription.getText());
+        Cache3DAO dao = new Cache3DAO();
+        if (update) {
+            dao.updateDatabase(Database.Data, cache, true);
+        } else {
+            Database.Data.cacheList.add(cache);
+            dao.writeToDatabase(Database.Data, cache, true);
+            EventHandler.updateSelectedCache(cache);
+        }
+
+        // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
+        // cache.setLongDescription("");
         finish();
     }
 

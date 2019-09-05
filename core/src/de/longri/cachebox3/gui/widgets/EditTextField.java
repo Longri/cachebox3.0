@@ -34,7 +34,6 @@ import de.longri.cachebox3.utils.NamedRunnable;
  * Created by Longri on 18.05.2017.
  * todo? missing : positioning the input cursor to a position or the visible text to a position
  * todo? missing : disable input (like label but with copy to clipboard, with scrollpane)
- *
  */
 public class EditTextField extends Catch_WidgetGroup {
 
@@ -112,35 +111,12 @@ public class EditTextField extends Catch_WidgetGroup {
         inputType = 0;
     }
 
-    public void setStyle(EditTextStyle style) {
-        this.style = style;
-        ScrollPane.ScrollPaneStyle sps = new ScrollPane.ScrollPaneStyle();
-        sps.background = style.background;
-        this.scrollPane.setStyle(sps);
-
-        Label.LabelStyle ls = new Label.LabelStyle();
-        ls.font = style.font;
-        ls.fontColor = style.fontColor;
-        this.textLabel.setStyle(ls);
-
-        Button.ButtonStyle bs = new Button.ButtonStyle();
-        bs.up = style.editIcon;
-        bs.down = style.editIcon;
-        editButton.setStyle(bs);
-    }
-
     public void setMinLineCount(int min) {
         this.minLineCount = min;
     }
 
     public void setMaxLineCount(int max) {
         this.maxLineCount = max;
-    }
-
-
-    public void setText(CharSequence text) {
-        this.text = text;
-        textLabel.setText(text);
     }
 
     public int getInputType() {
@@ -158,7 +134,6 @@ public class EditTextField extends Catch_WidgetGroup {
                 this.getHeight() - style.editIcon.getMinHeight(),
                 style.editIcon.getMinWidth(), style.editIcon.getMinHeight());
     }
-
 
     @Override
     public float getMinWidth() {
@@ -193,7 +168,6 @@ public class EditTextField extends Catch_WidgetGroup {
         return maxWidth;
     }
 
-
     public void setMaxWidth(float value) {
         this.maxWidth = value;
     }
@@ -203,12 +177,36 @@ public class EditTextField extends Catch_WidgetGroup {
         return (textLabel.getStyle().font.getLineHeight() * maxLineCount) + style.background.getMinHeight();
     }
 
-
     public String getText() {
         return this.text.toString();
     }
 
+    public void setText(CharSequence text) {
+        if (text == null)
+            this.text = "";
+        else
+            this.text = text;
+        textLabel.setText(text);
+    }
+
     public EditTextStyle getStyle() {
         return this.style;
+    }
+
+    public void setStyle(EditTextStyle style) {
+        this.style = style;
+        ScrollPane.ScrollPaneStyle sps = new ScrollPane.ScrollPaneStyle();
+        sps.background = style.background;
+        this.scrollPane.setStyle(sps);
+
+        Label.LabelStyle ls = new Label.LabelStyle();
+        ls.font = style.font;
+        ls.fontColor = style.fontColor;
+        this.textLabel.setStyle(ls);
+
+        Button.ButtonStyle bs = new Button.ButtonStyle();
+        bs.up = style.editIcon;
+        bs.down = style.editIcon;
+        editButton.setStyle(bs);
     }
 }

@@ -424,7 +424,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
     }
 
     private void editCache() {
-        EditCache.getInstance("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon).update(EventHandler.getSelectedCache());
+        EditCache.getInstance("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon).create();
     }
 
 }

@@ -27,6 +27,7 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
+import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
@@ -443,8 +444,10 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             SolverView view = new SolverView();
             CB.viewmanager.showView(view);
         }).setEnabled(false);
-        cm.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
-        }).setEnabled(false);
+        cm.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> {
+            EditCache.getInstance("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).update(EventHandler.getSelectedCache());
+        }); // todo create/change icon
+
         cm.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
         }).setEnabled(false);
 
