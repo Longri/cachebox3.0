@@ -3074,9 +3074,9 @@
       "infoColor": "font_color",
       "starStyle": "cachelist",
       "cacheSizeStyle": "cachelist",
-      "frameNorthOrient": "compass_1_frame",
-      "scale": "compass_1_scale",
-      "arrow": "compass_1_arrow"
+      "frameNorthOrient": "map_compass_1_frame",
+      "scale": "map_compass_1_scale",
+      "arrow": "map_compass_1_arrow"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.AttributesStyle": {
@@ -3448,8 +3448,6 @@
   },
   "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {
     "default": {
-      "overviewListStyle": "spoilerOverview",
-      "galleryListStyle": "spoilerGallery",
       "spoilerNameFont": "AboutInfo",
       "spoilerNameFontColor": "font_color"
     }
