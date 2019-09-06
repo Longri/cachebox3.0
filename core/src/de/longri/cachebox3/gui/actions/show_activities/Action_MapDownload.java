@@ -34,7 +34,6 @@ import static de.longri.cachebox3.gui.menu.MenuID.AID_Download_FZK_Map;
 
 public class Action_MapDownload extends AbstractAction {
     private static Logger log = LoggerFactory.getLogger(Action_MapDownload.class);
-    private MapRepositoryInfo mapInfo;
     private Menu icm;
 
     public Action_MapDownload() {

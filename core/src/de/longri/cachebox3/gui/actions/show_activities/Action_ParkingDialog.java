@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
  */
 public class Action_ParkingDialog extends AbstractAction {
     public Action_ParkingDialog() {
-        super(IMPLEMENTED, "MyParking", MenuID.AID_SHOW_PARKING_DIALOG);
+        super(NOT_IMPLEMENTED, "MyParking", MenuID.AID_SHOW_PARKING_DIALOG);
     }
 
     @Override

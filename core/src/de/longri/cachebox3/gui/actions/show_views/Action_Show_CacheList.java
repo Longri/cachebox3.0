@@ -35,7 +35,7 @@ public class Action_Show_CacheList extends Abstract_Action_ShowView {
 
     private final StringBuilder sb = new StringBuilder();
 
-    public String getNameExtention() {
+    public String getNameExtension() {
 
         int unFiltered = Database.Data.cacheList.getUnFilteredSize();
 
