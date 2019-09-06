@@ -84,11 +84,11 @@ public class SearchDialog extends Activity {
 
             AbstractCache tmp = null;
             if (beginnSearchIndex < 0) beginnSearchIndex = 0;
-            for (int i = beginnSearchIndex, n = Database.Data.cacheList.size; i < n; i++) {
+            for (int i = beginnSearchIndex; i < Database.Data.cacheList.size; i++) {
                 tmp = Database.Data.cacheList.get(i);
                 if ((mTitle.length() > 0 && tmp.getName().toString().toLowerCase().contains(mTitle))
                         || (mGCCode.length() > 0 && tmp.getGcCode().toString().toLowerCase().contains(mGCCode))
-                        || (mOwner.length() > 0 && tmp.getGcCode().toString().toLowerCase().contains(mOwner))) {
+                        || (mOwner.length() > 0 && tmp.getOwner().toString().toLowerCase().contains(mOwner))) {
                     edtCachetitle.setText(tmp.getName());
                     edtGcCode.setText(tmp.getGcCode());
                     edtOwner.setText(tmp.getOwner());
