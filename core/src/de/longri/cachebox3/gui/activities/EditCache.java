@@ -140,28 +140,10 @@ public class EditCache extends Activity {
         return mainContent;
     }
 
-    public void update(AbstractCache cache) {
+    public void edit(AbstractCache cache) {
         newValues = new MutableCache(cache); // copy from cache with Details
-        newValues.setShortDescription("");
-        if (newValues.getLongDescription() == null) {
-            newValues.setLongDescription(getStringFromDB(Database.Data, "SELECT Description FROM CacheText WHERE Id=?", newValues.getId()));
-            //set on Cache Object for next showing
-            cache.setLongDescription(newValues.getLongDescription() );
-        }
-
-        if (newValues.getShortDescription() == null) {
-            newValues.setShortDescription(getStringFromDB(Database.Data, "SELECT ShortDescription FROM CacheText WHERE Id=?", newValues.getId()));
-            //set on Cache Object for next showing
-            cache.setShortDescription(newValues.getShortDescription());
-        }
-        cache.setLongDescription(newValues.getLongDescription());
         this.cache = (MutableCache) cache;
         setValues();
-    }
-
-    private static String getStringFromDB(Database database, String statement, long cacheID) {
-        String[] args = new String[]{Long.toString(cacheID)};
-        return database.getString(statement, args);
     }
 
     public void create() {
@@ -181,7 +163,7 @@ public class EditCache extends Activity {
         } else {
             actSearchPos = mapCenterPos;
         }
-        newValues = new MutableCache(actSearchPos.getLatitude(), actSearchPos.getLongitude(), tmpGCCode, CacheTypes.Traditional, tmpGCCode); // with Details
+        newValues = new MutableCache(actSearchPos.getLatitude(), actSearchPos.getLongitude(), tmpGCCode, CacheTypes.Traditional, tmpGCCode);
         newValues.setSize(CacheSizes.micro);
         newValues.setDifficulty(1);
         newValues.setTerrain(1);
@@ -253,9 +235,6 @@ public class EditCache extends Activity {
             dao.writeToDatabase(Database.Data, cache, true);
             EventHandler.updateSelectedCache(cache);
         }
-
-        // Delete LongDescription from this Cache! LongDescription is Loading by showing DescriptionView direct from DB
-        // cache.setLongDescription("");
         finish();
     }
 

@@ -29,6 +29,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class AbstractCache extends Coordinate implements Comparable<AbstractCache> {
 
+    protected boolean infoRead;
+    protected boolean textRead;
+
     public AbstractCache(AbstractCache abstractCache) {
         super(abstractCache);
     }

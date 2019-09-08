@@ -36,42 +36,22 @@ public class MutableCache extends AbstractCache {
     // so we use one Short for Store all Boolean and Use a BitMask
     // ########################################################
 
-    // Masks
-    private final static short MASK_HAS_HINT = 1 << 0;
-    private final static short MASK_CORECTED_COORDS = 1 << 1; //   2
     public final static short MASK_ARCHIVED = 1 << 2;        //   4
     public final static short MASK_AVAILABLE = 1 << 3;       //   8
     public final static short MASK_FAVORITE = 1 << 4;        //  16
     public final static short MASK_FOUND = 1 << 5;           //  32
-    private final static short MASK_IS_LIVE = 1 << 6;         //  64
-    private final static short MASK_SOLVER1CHANGED = 1 << 7;  // 128
     public final static short MASK_HAS_USER_DATA = 1 << 8;   // 256
     public final static short MASK_LISTING_CHANGED = 1 << 9; // 512
     public final static short MASK_SHOW_ORIGINAL_HTML_COLOR = 1 << 10; // 1024
-
-    public static boolean getMaskValue(short mask, short bitFlags) {
-        return (bitFlags & mask) == mask;
-    }
-
-    public static short setMaskValue(short mask, boolean value, short bitFlags) {
-        if (getMaskValue(mask, bitFlags) == value) {
-            return bitFlags;
-        }
-
-        if (value) {
-            bitFlags |= mask;
-        } else {
-            bitFlags &= ~mask;
-        }
-        return bitFlags;
-    }
-
     public final static byte NOT_LIVE = 0;
     public final static byte IS_LITE = 1;
     public final static byte IS_FULL = 2;
-
+    // Masks
+    private final static short MASK_HAS_HINT = 1 << 0;
+    private final static short MASK_CORECTED_COORDS = 1 << 1; //   2
+    private final static short MASK_IS_LIVE = 1 << 6;         //  64
+    private final static short MASK_SOLVER1CHANGED = 1 << 7;  // 128
     private short booleanStore;
-
     private Array<Attributes> attributes;
     private CharSequence name, gcCode, placedBy, owner, gcId;
     private short rating, numTravelbugs;
@@ -80,8 +60,6 @@ public class MutableCache extends AbstractCache {
     private CacheTypes type;
     private CacheSizes size;
     private float difficulty, terrain;
-
-
     private Array<AbstractWaypoint> waypoints = new Array<>();
     private CharSequence longDescription;
     private CharSequence shortDescription;
@@ -98,10 +76,11 @@ public class MutableCache extends AbstractCache {
     private CharSequence tourName;
     private long gpxFilenameId;
 
-
     public MutableCache(double latitude, double longitude) {
         super(latitude, longitude);
         type = CacheTypes.Undefined;
+        infoRead = false;
+        textRead = false;
     }
 
     public MutableCache(AbstractCache cache) {
@@ -141,7 +120,10 @@ public class MutableCache extends AbstractCache {
         this.apiState = cache.getApiState();
         this.note = cache.getTmpNote();
         this.solver = cache.getTmpSolver();
+        this.infoRead = cache.infoRead;
+        this.textRead = cache.textRead;
     }
+
 
     public MutableCache(double latitude, double longitude, String name, CacheTypes type, String gcCode) {
         super(latitude, longitude);
@@ -158,6 +140,8 @@ public class MutableCache extends AbstractCache {
         this.owner = "";
         this.gcId = "";
         this.favPoints = 0;
+        this.infoRead = false;
+        this.textRead = false;
     }
 
     public MutableCache(GdxSqliteCursor cursor) {
@@ -190,6 +174,8 @@ public class MutableCache extends AbstractCache {
 
         this.booleanStore = cursor.getShort(14);
         this.favPoints = cursor.getInt(15);
+        this.infoRead = false;
+        this.textRead = false;
     }
 
     public MutableCache(Object[] values) {
@@ -210,6 +196,25 @@ public class MutableCache extends AbstractCache {
 
         this.booleanStore = ((Long) values[14]).shortValue();
         this.favPoints = values[15] == null ? 0 : ((Long) values[15]).intValue();
+        this.infoRead = false;
+        this.textRead = false;
+    }
+
+    public static boolean getMaskValue(short mask, short bitFlags) {
+        return (bitFlags & mask) == mask;
+    }
+
+    public static short setMaskValue(short mask, boolean value, short bitFlags) {
+        if (getMaskValue(mask, bitFlags) == value) {
+            return bitFlags;
+        }
+
+        if (value) {
+            bitFlags |= mask;
+        } else {
+            bitFlags &= ~mask;
+        }
+        return bitFlags;
     }
 
     @Override
@@ -232,7 +237,17 @@ public class MutableCache extends AbstractCache {
         this.state = new CharSequenceArray(cursor.getString(6));
         this.country = new CharSequenceArray(cursor.getString(7));
         this.apiState = cursor.getByte(8);
+        this.infoRead = true;
+    }
 
+    private void readInfoFromDB() {
+        String statement = "SELECT * from CacheInfo WHERE Id=?";
+        GdxSqliteCursor cursor = Database.Data.rawQuery(statement, new String[]{String.valueOf(id)});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            setInfo(cursor);
+            cursor.close();
+        }
     }
 
     @Override
@@ -252,6 +267,38 @@ public class MutableCache extends AbstractCache {
         this.note = new CharSequenceArray(cursor.getString(4));
         this.solver = new CharSequenceArray(cursor.getString(5));
         this.shortDescription = new CharSequenceArray(cursor.getString(6));
+        textRead = true;
+    }
+
+    private void readTextFromDB() {
+        String statement = "SELECT * from CacheText WHERE Id=?";
+        GdxSqliteCursor cursor = Database.Data.rawQuery(statement, new String[]{String.valueOf(id)});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            setText(cursor);
+            cursor.close();
+        }
+    }
+
+    @Override
+    public void updateBooleanStore(Database database) {
+        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
+    }
+
+    @Override
+    public Array<Attributes> getAttributes() {
+        if (this.attributes == null) {
+            if (attributesPositive == null || attributesNegative == null) {
+                GdxSqliteCursor cursor = Database.Data.rawQuery("SELECT * from Attributes WHERE Id=?", new String[]{String.valueOf(id)});
+                if (cursor != null) {
+                    cursor.moveToFirst();
+                    setAttributes(cursor);
+                    cursor.close();
+                }
+            }
+            this.attributes = Attributes.getAttributes(attributesPositive, attributesNegative);
+        }
+        return this.attributes;
     }
 
     @Override
@@ -267,24 +314,31 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void updateBooleanStore(Database database) {
-        DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
-    }
+    public void setAttributes(Array<Attributes> attributes) {
+        this.attributes = attributes;
 
-    @Override
-    public Array<Attributes> getAttributes() {
-        if (this.attributes == null) {
-            if (attributesPositive == null || attributesNegative == null) {
-                GdxSqliteCursor cursor = Database.Data.rawQuery("SELECT * from Attributes WHERE Id=?", new String[]{String.valueOf(this.getId())});
-                if (cursor != null) {
-                    cursor.moveToFirst();
-                    setAttributes(cursor);
-                }
-                cursor.close();
-            }
-            this.attributes = Attributes.getAttributes(attributesPositive, attributesNegative);
+        if (attributesNegative == null) {
+            attributesNegative = new DLong(0, 0);
+        } else {
+            attributesNegative.reset();
         }
-        return this.attributes;
+
+        if (attributesPositive == null) {
+            attributesPositive = new DLong(0, 0);
+        } else {
+            attributesPositive.reset();
+        }
+
+
+        int n = attributes.size;
+        while (n-- > 0) {
+            Attributes a = attributes.get(n);
+            if (a.isNegative()) {
+                attributesNegative.BitOr(Attributes.GetAttributeDlong(a));
+            } else {
+                attributesPositive.BitOr(Attributes.GetAttributeDlong(a));
+            }
+        }
     }
 
     @Override
@@ -364,6 +418,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getHint() {
+        if (!textRead) readTextFromDB();
         return this.hint;
     }
 
@@ -374,6 +429,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public long getGPXFilename_ID() {
+        if (!infoRead) readInfoFromDB();
         return this.gpxFilenameId;
     }
 
@@ -492,7 +548,6 @@ public class MutableCache extends AbstractCache {
         setMaskValue(MASK_LISTING_CHANGED, listingChanged);
     }
 
-
     @Override
     public CharSequence getPlacedBy() {
         return placedBy;
@@ -505,6 +560,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public Date getDateHidden() {
+        if (!infoRead) readInfoFromDB();
         return this.dateHidden;
     }
 
@@ -515,6 +571,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public byte getApiState() {
+        if (!infoRead) readInfoFromDB();
         return this.apiState;
     }
 
@@ -535,6 +592,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getTmpNote() {
+        if (!textRead) readTextFromDB();
         return this.note;
     }
 
@@ -555,6 +613,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getTmpSolver() {
+        if (!textRead) readTextFromDB();
         return this.solver;
     }
 
@@ -565,6 +624,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getUrl() {
+        if (!textRead) readTextFromDB();
         return this.url;
     }
 
@@ -575,6 +635,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getCountry() {
+        if (!infoRead) readInfoFromDB();
         return this.country;
     }
 
@@ -585,6 +646,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getState() {
+        if (!infoRead) readInfoFromDB();
         return this.state;
     }
 
@@ -611,13 +673,13 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public DLong getAttributesNegative() {
-        return attributesNegative;
+    public void setAttributesPositive(DLong dLong) {
+        attributesPositive = dLong;
     }
 
     @Override
-    public void setAttributesPositive(DLong dLong) {
-        attributesPositive = dLong;
+    public DLong getAttributesNegative() {
+        return attributesNegative;
     }
 
     @Override
@@ -626,13 +688,20 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
+    public CharSequence getLongDescription() {
+        if (!textRead) readTextFromDB();
+        return this.longDescription;
+    }
+
+    @Override
     public void setLongDescription(CharSequence value) {
         this.longDescription = value;
     }
 
     @Override
-    public CharSequence getLongDescription() {
-        return this.longDescription;
+    public CharSequence getShortDescription() {
+        if (!textRead) readTextFromDB();
+        return this.shortDescription;
     }
 
     @Override
@@ -641,18 +710,14 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public CharSequence getShortDescription() {
-        return this.shortDescription;
+    public CharSequence getTourName() {
+        if (!infoRead) readInfoFromDB();
+        return this.tourName;
     }
 
     @Override
     public void setTourName(CharSequence value) {
         this.tourName = value;
-    }
-
-    @Override
-    public CharSequence getTourName() {
-        return this.tourName;
     }
 
     @Override
@@ -681,18 +746,16 @@ public class MutableCache extends AbstractCache {
         return attributesNegative.BitAndBiggerNull(Attributes.GetAttributeDlong(attribute));
     }
 
+    @Override
+    public int getFavoritePoints() {
+        return this.favPoints;
+    }
 
     @Override
     public void setFavoritePoints(int value) {
         if (this.favPoints != value)
             isChanged.set(true);
         this.favPoints = value;
-    }
-
-
-    @Override
-    public int getFavoritePoints() {
-        return this.favPoints;
     }
 
     @Override
@@ -766,13 +829,13 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setShowOriginalHtmlColor(boolean value) {
-        this.setMaskValue(MASK_SHOW_ORIGINAL_HTML_COLOR, value);
+    public boolean getShowOriginalHtmlColor() {
+        return this.getMaskValue(MASK_SHOW_ORIGINAL_HTML_COLOR);
     }
 
     @Override
-    public boolean getShowOriginalHtmlColor() {
-        return this.getMaskValue(MASK_SHOW_ORIGINAL_HTML_COLOR);
+    public void setShowOriginalHtmlColor(boolean value) {
+        this.setMaskValue(MASK_SHOW_ORIGINAL_HTML_COLOR, value);
     }
 
     @Override
@@ -780,40 +843,10 @@ public class MutableCache extends AbstractCache {
 
     }
 
-
     @Override
     public AbstractCache getCopy() {
         return new MutableCache(this);
     }
-
-    @Override
-    public void setAttributes(Array<Attributes> attributes) {
-        this.attributes = attributes;
-
-        if (attributesNegative == null) {
-            attributesNegative = new DLong(0, 0);
-        } else {
-            attributesNegative.reset();
-        }
-
-        if (attributesPositive == null) {
-            attributesPositive = new DLong(0, 0);
-        } else {
-            attributesPositive.reset();
-        }
-
-
-        int n = attributes.size;
-        while (n-- > 0) {
-            Attributes a = attributes.get(n);
-            if (a.isNegative()) {
-                attributesNegative.BitOr(Attributes.GetAttributeDlong(a));
-            } else {
-                attributesPositive.BitOr(Attributes.GetAttributeDlong(a));
-            }
-        }
-    }
-
 
     @Override
     public short getBooleanStore() {

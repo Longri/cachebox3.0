@@ -1153,7 +1153,9 @@ public class GroundspeakAPI {
                         JSONObject location = API1Cache.optJSONObject(switchValue);
                         // switch subValue
                         cache.setCountry(location.optString("country", ""));
-                        cache.setState(location.optString("state", ""));
+                        String state = location.optString("state", "");
+                        if (state.toLowerCase().equals("none")) state = "";
+                        cache.setState(state);
                         break;
                     case "status":
                         String status = API1Cache.optString(switchValue, "");

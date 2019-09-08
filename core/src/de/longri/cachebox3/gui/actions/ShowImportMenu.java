@@ -68,7 +68,7 @@ public class ShowImportMenu extends Menu {
         // ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
         addMenuItem("API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ, () -> new ImportPQActivity().show());
         addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
-        addMenuItem("API_IMPORT_OVER_POSITION", CB.getSkin().getMenuIcon.target, () -> postAsync(new NamedRunnable("ShowImportMenu") {
+        addMenuItem("importCachesOverPosition", CB.getSkin().getMenuIcon.target, () -> postAsync(new NamedRunnable("ShowImportMenu") {
             @Override
             public void run() {
                 if (isAccessTokenInvalid()) {

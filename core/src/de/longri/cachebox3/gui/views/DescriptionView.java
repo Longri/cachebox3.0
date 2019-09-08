@@ -445,7 +445,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             CB.viewmanager.showView(view);
         }).setEnabled(false);
         cm.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> {
-            EditCache.getInstance("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).update(EventHandler.getSelectedCache());
+            EditCache.getInstance("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).edit(EventHandler.getSelectedCache());
         }); // todo create/change icon
 
         cm.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
