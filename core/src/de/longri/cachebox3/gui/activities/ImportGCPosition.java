@@ -290,7 +290,7 @@ public class ImportGCPosition extends Activity {
         coordinateButton.setCoordinate(actSearchPos);
     }
 
-    private void ImportNow(InfoBox infobox) {
+    private void ImportNow(InfoBox infoBox) {
         btnOK.setDisabled(true);
 
         if (actSearchPos == null) {
@@ -372,21 +372,21 @@ public class ImportGCPosition extends Activity {
 
                 Config.AcceptChanges();
 
-                q.infoBox = infobox;
+                q.infoBox = infoBox;
 
                 Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = searchGeoCaches(q);
                 if (GroundspeakAPI.APIError != GroundspeakAPI.OK) {
                     MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("importCachesOverPosition"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                 } else {
-                    if (!infobox.isCanceled()) {
+                    if (!infoBox.isCanceled()) {
                         // WriteIntoDB.CachesAndLogsAndImagesIntoDB(geoCacheRelateds, gpxFilename);
                         // todo set gpxfilename / category
                         Cache3DAO dao = new Cache3DAO();
                         int count = 0;
-                        infobox.setTitle("Import to database");
+                        infoBox.setTitle("Import to database");
                         for (GroundspeakAPI.GeoCacheRelated cacheEntry : fetchedCaches) {
                             count++;
-                            infobox.setProgress(100 * count / fetchedCaches.size, cacheEntry.cache.getGcCode());
+                            infoBox.setProgress(100 * count / fetchedCaches.size, cacheEntry.cache.getGcCode());
                             // this sleep is simply for demonstration
                             try {
                                 Thread.sleep(50);
@@ -400,7 +400,7 @@ public class ImportGCPosition extends Activity {
                         }
                     }
                 }
-                infobox.close();
+                infoBox.close();
 
                 CB.postOnNextGlThread(() -> CB.postAsync(new NamedRunnable("Reload cacheList after import") {
                     @Override

@@ -2,23 +2,24 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.ArrayMap;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.apis.gcvote_api.GCVote;
 import de.longri.cachebox3.gui.Activity;
+import de.longri.cachebox3.gui.dialogs.InfoBox;
 import de.longri.cachebox3.gui.widgets.CB_CheckBox;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.utils.NamedRunnable;
 
 public class SelectableImport extends Activity {
+    final InfoBox infoBox;
     private final CB_CheckBox cbPocketQuery, cbGPX, cbGCVotes, cbLogs, cbImages, cbSpoiler, cbDeleteLogs, cbCompressDB, cbServer;
 
     private SelectableImport(String title, Drawable icon) {
         super(title, icon);
-        Config.GcLogin.setValue("arbor95");
-        Config.GcVotePassword.setValue("ZvncaG_54");
-        Config.AcceptChanges();
         cbPocketQuery = new CB_CheckBox(Translation.get("PQfromGC"));
         cbGPX = new CB_CheckBox(Translation.get("GPX"));
         cbGCVotes = new CB_CheckBox(Translation.get("GCVoteRatings"));
@@ -29,6 +30,7 @@ public class SelectableImport extends Activity {
         cbCompressDB = new CB_CheckBox(Translation.get("CompactDB"));
         cbServer = new CB_CheckBox(Translation.get("FromCBServer"));
         cbServer.setDisabled(true);
+        infoBox = new InfoBox(InfoBox.Infotype.PROGRESS, Translation.get(title).toString());
     }
 
     public static SelectableImport getInstance(String title, Drawable icon) {
@@ -54,37 +56,46 @@ public class SelectableImport extends Activity {
 
     @Override
     protected void runAtOk() {
-        if (cbPocketQuery.isChecked()) {
+        infoBox.open();
+        CB.postAsync(new NamedRunnable("SelectableImport") {
+            @Override
+            public void run() {
+                if (cbPocketQuery.isChecked() && !infoBox.isCanceled()) {
 
-        }
-        if (cbGPX.isChecked()) {
+                }
+                if (cbGPX.isChecked() && !infoBox.isCanceled()) {
 
-        }
-        if (cbGCVotes.isChecked()) {
-            importGCVote();
-        }
-        if (cbLogs.isChecked()) {
+                }
+                if (cbGCVotes.isChecked() && !infoBox.isCanceled()) {
+                    infoBox.setTitle(Translation.get("GCVoteRatings").toString());
+                    importGCVote();
+                }
+                if (cbLogs.isChecked() && !infoBox.isCanceled()) {
 
-        }
-        if (cbImages.isChecked()) {
+                }
+                if (cbImages.isChecked() && !infoBox.isCanceled()) {
 
-        }
-        if (cbSpoiler.isChecked()) {
+                }
+                if (cbSpoiler.isChecked() && !infoBox.isCanceled()) {
 
-        }
-        if (cbDeleteLogs.isChecked()) {
+                }
+                if (cbDeleteLogs.isChecked() && !infoBox.isCanceled()) {
 
-        }
-        if (cbCompressDB.isChecked()) {
+                }
+                if (cbCompressDB.isChecked() && !infoBox.isCanceled()) {
 
-        }
-        if (cbServer.isChecked()) {
+                }
+                if (cbServer.isChecked() && !infoBox.isCanceled()) {
 
-        }
-        finish();
+                }
+                // todo make changes visible (without reload ?)
+                infoBox.close();
+                finish();
+            }
+        });
     }
 
-    private void importGCVote() {
+    public void importGCVote() {
         int take = 50;
         ArrayMap<String, AbstractCache> waypoints = new ArrayMap<>();
         for (int skip = 0; skip < Database.Data.cacheList.size; skip = skip + take) {
@@ -92,14 +103,8 @@ public class SelectableImport extends Activity {
             for (int i = skip; i < limit; i++) {
                 waypoints.put(Database.Data.cacheList.get(i).getGcCode().toString(), Database.Data.cacheList.get(i));
             }
-            Database.Data.beginTransaction();
-            Database.Parameters args = new Database.Parameters();
-            for (AbstractCache a : GCVote.getVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints)) {
-                args.put("Rating", (int) (a.getRating() * 200));
-                Database.Data.update("CacheCoreInfo", args, "WHERE id=?", new String[]{Long.toString(a.getId())});
-                args.clear();
-            }
-            Database.Data.endTransaction();
+            infoBox.setProgress(100 * skip / Database.Data.cacheList.size, Translation.get("GCVoteRatings").toString());
+            GCVote.getVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
         }
     }
 }

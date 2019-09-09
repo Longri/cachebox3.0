@@ -54,7 +54,7 @@ public class MutableCache extends AbstractCache {
     private short booleanStore;
     private Array<Attributes> attributes;
     private CharSequence name, gcCode, placedBy, owner, gcId;
-    private short rating, numTravelbugs;
+    private short rating, vote, numTravelbugs;
     private int favPoints;
     private long id;
     private CacheTypes type;
@@ -151,7 +151,7 @@ public class MutableCache extends AbstractCache {
         this.difficulty = (float) cursor.getShort(4) / 2.0f;
         this.terrain = (float) cursor.getShort(5) / 2.0f;
         this.type = CacheTypes.get(cursor.getShort(6));
-        this.rating = (short) (cursor.getShort(7) / 100);
+        this.rating = cursor.getShort(7);
         this.numTravelbugs = cursor.getShort(8);
 
         this.gcCode = new CharSequenceArray(cursor.getString(9));
@@ -174,6 +174,7 @@ public class MutableCache extends AbstractCache {
 
         this.booleanStore = cursor.getShort(14);
         this.favPoints = cursor.getInt(15);
+        this.vote = cursor.getShort(16);
         this.infoRead = false;
         this.textRead = false;
     }
@@ -185,7 +186,7 @@ public class MutableCache extends AbstractCache {
         this.difficulty = (float) ((Long) values[4]) / 2.0f;
         this.terrain = (float) ((Long) values[5]) / 2.0f;
         this.type = CacheTypes.get(((Long) values[6]).intValue());
-        this.rating = (short) (((Long) values[7]).shortValue() / 100);
+        this.rating = (short) (((Long) values[7]).shortValue());
         this.numTravelbugs = ((Long) values[8]).shortValue();
 
         this.gcCode = new CharSequenceArray((String) values[9]);
@@ -196,6 +197,7 @@ public class MutableCache extends AbstractCache {
 
         this.booleanStore = ((Long) values[14]).shortValue();
         this.favPoints = values[15] == null ? 0 : ((Long) values[15]).intValue();
+        this.vote = (((Long) values[16]).shortValue());
         this.infoRead = false;
         this.textRead = false;
     }
@@ -790,12 +792,30 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public float getRating() {
-        return rating / 2.0f;
+        return rating / 200.0f;
     }
 
     @Override
-    public void setRating(short rating) {
-        this.rating = (short) (rating * 2);
+    public void setRating(float rating) {
+        this.rating = (short) ((int) (rating * 100 + 0.5) * 2);
+    }
+
+    public short getRatingInternal() {
+        return rating;
+    }
+
+    @Override
+    public float getVote() {
+        return vote / 2.0f;
+    }
+
+    @Override
+    public void setVote(float vote) {
+        this.vote = (short) (vote * 2 + 0.5);
+    }
+
+    public short getVoteInternal() {
+        return vote;
     }
 
     @Override

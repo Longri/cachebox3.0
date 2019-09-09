@@ -310,11 +310,18 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract void setId(long id);
 
     /**
-     * Durchschnittliche Bewertung des Caches von GcVote
+     * average of cache votes at GcVote (any value between 0 and 5; presented by 0 bis 5 stars with half stars)
      */
     public abstract float getRating();
 
-    public abstract void setRating(short rating);
+    public abstract void setRating(float rating);
+
+    /**
+     * own vote at GcVote (values 0, 0.5, 1, 1.5, .., 5; presented by 0 bis 5 stars with half stars)
+     */
+    public abstract float getVote();
+
+    public abstract void setVote(float vote);
 
     /**
      * Groesse des Caches. Bei Wikipediaeintraegen enthaelt dieses Feld den Radius in m

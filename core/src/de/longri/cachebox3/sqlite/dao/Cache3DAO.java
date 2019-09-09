@@ -83,7 +83,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("GcId", abstractCache.getGcId());
         args.put("BooleanStore", abstractCache.getBooleanStore());
         args.put("FavPoints", abstractCache.getFavoritePoints());
-        args.put("Vote", (int) (abstractCache.getRating() * 2));
+        args.put("Vote", (int) (abstractCache.getVote() * 2));
 
         if (args.size() > 0) {
             if (update) {

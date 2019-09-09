@@ -18,7 +18,9 @@ package de.longri.cachebox3.apis.gcvote_api;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.MutableCache;
 import de.longri.cachebox3.utils.http.Webb;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -34,11 +36,11 @@ public class GCVote {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(GCVote.class);
 
 
-    public static Array<AbstractCache> getVotes(String User, String password, ArrayMap<String, AbstractCache> waypoints) {
+    public static void getVotes(String User, String password, ArrayMap<String, AbstractCache> waypoints) {
         Array<AbstractCache> result = new Array<>();
 
         StringBuilder data = new StringBuilder("userName=" + User + "&password=" + password + "&waypoints=");
-        String separator= "";
+        String separator = "";
         for (String k : waypoints.keys()) {
             data.append(separator).append(k);
             separator = ",";
@@ -56,32 +58,50 @@ public class GCVote {
             Document doc = db.parse(is);
             is.close();
             NodeList nodelist = doc.getElementsByTagName("vote");
+            Database.Data.beginTransaction();
+            Database.Parameters args = new Database.Parameters();
 
             for (Integer i = 0; i < nodelist.getLength(); i++) {
                 Node node = nodelist.item(i);
-                // RatingData ratingData = new RatingData();
                 String rating = node.getAttributes().getNamedItem("voteAvg").getNodeValue();
-                // ratingData.Rating = Float.valueOf(rating);
-                String userVote = node.getAttributes().getNamedItem("voteUser").getNodeValue();
-                // ratingData.Vote = (userVote == "") ? 0 : Float.valueOf(userVote);
+                String vote = node.getAttributes().getNamedItem("voteUser").getNodeValue();
                 String GCCode = node.getAttributes().getNamedItem("waypoint").getNodeValue();
-                // ratingData.Waypoint = node.getAttributes().getNamedItem("waypoint").getNodeValue();
-                AbstractCache changed = waypoints.get(GCCode);
+                MutableCache theCache = (MutableCache) waypoints.get(GCCode);
+                boolean changed = false;
                 try {
-                    short gotRating = (short) (Double.parseDouble(rating) + 0.5);
-                    if (gotRating != changed.getRating()) {
-                        changed.setRating(gotRating);
-                        result.add(changed);
+                    if (rating.length() > 0) {
+                        float ratingFromGCVote = Float.parseFloat(rating);
+                        // multiply with 100 would be sufficiant, but for compatibilty with CB2 using 100 * 2
+                        float oldRating = theCache.getRating();
+                        theCache.setRating(ratingFromGCVote);
+                        float newRating = theCache.getRating();
+                        if (oldRating != newRating) {
+                            changed = true;
+                        }
                     }
-                }
-                catch (Exception ignored) {
+                    if (vote.length() > 0) {
+                        float voteFromGCVote = Float.parseFloat(vote);
+                        float oldVote = theCache.getVote();
+                        theCache.setVote(voteFromGCVote);
+                        float newVote = theCache.getVote();
+                        if (oldVote != newVote) {
+                            changed = true;
+                        }
+                    }
+                    if (changed) {
+                        args.put("Rating", theCache.getRatingInternal());
+                        args.put("Vote", theCache.getVoteInternal());
+                        Database.Data.update("CacheCoreInfo", args, "WHERE id=?", new String[]{Long.toString(theCache.getId())});
+                        args.clear();
+                    }
+                } catch (Exception ignored) {
                 }
             }
+            Database.Data.endTransaction();
 
         } catch (Exception e) {
             log.error("getVotes", e);
         }
-        return result;
 
     }
 
