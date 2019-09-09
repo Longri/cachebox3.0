@@ -15,7 +15,10 @@
  */
 package de.longri.cachebox3.apis.gcvote_api;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.http.Webb;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -25,21 +28,20 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 
 public class GCVote {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(GCVote.class);
 
 
-    public static ArrayList<RatingData> getVotes(String User, String password, ArrayList<String> Waypoints) {
-        ArrayList<RatingData> result = new ArrayList<>();
+    public static Array<AbstractCache> getVotes(String User, String password, ArrayMap<String, AbstractCache> waypoints) {
+        Array<AbstractCache> result = new Array<>();
 
         StringBuilder data = new StringBuilder("userName=" + User + "&password=" + password + "&waypoints=");
-        for (int i = 0; i < Waypoints.size(); i++) {
-            data.append(Waypoints.get(i));
-            if (i < (Waypoints.size() - 1))
-                data.append(",");
+        String separator= "";
+        for (String k : waypoints.keys()) {
+            data.append(separator).append(k);
+            separator = ",";
         }
 
         try {
@@ -57,19 +59,27 @@ public class GCVote {
 
             for (Integer i = 0; i < nodelist.getLength(); i++) {
                 Node node = nodelist.item(i);
-
-                RatingData ratingData = new RatingData();
-                ratingData.Rating = Float.valueOf(node.getAttributes().getNamedItem("voteAvg").getNodeValue());
+                // RatingData ratingData = new RatingData();
+                String rating = node.getAttributes().getNamedItem("voteAvg").getNodeValue();
+                // ratingData.Rating = Float.valueOf(rating);
                 String userVote = node.getAttributes().getNamedItem("voteUser").getNodeValue();
-                ratingData.Vote = (userVote == "") ? 0 : Float.valueOf(userVote);
-                ratingData.Waypoint = node.getAttributes().getNamedItem("waypoint").getNodeValue();
-                result.add(ratingData);
-
+                // ratingData.Vote = (userVote == "") ? 0 : Float.valueOf(userVote);
+                String GCCode = node.getAttributes().getNamedItem("waypoint").getNodeValue();
+                // ratingData.Waypoint = node.getAttributes().getNamedItem("waypoint").getNodeValue();
+                AbstractCache changed = waypoints.get(GCCode);
+                try {
+                    short gotRating = (short) (Double.parseDouble(rating) + 0.5);
+                    if (gotRating != changed.getRating()) {
+                        changed.setRating(gotRating);
+                        result.add(changed);
+                    }
+                }
+                catch (Exception ignored) {
+                }
             }
 
         } catch (Exception e) {
             log.error("getVotes", e);
-            return null;
         }
         return result;
 

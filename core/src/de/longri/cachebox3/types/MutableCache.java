@@ -241,6 +241,7 @@ public class MutableCache extends AbstractCache {
     }
 
     private void readInfoFromDB() {
+        if (Database.Data == null) return;
         String statement = "SELECT * from CacheInfo WHERE Id=?";
         GdxSqliteCursor cursor = Database.Data.rawQuery(statement, new String[]{String.valueOf(id)});
         if (cursor != null) {
@@ -271,6 +272,7 @@ public class MutableCache extends AbstractCache {
     }
 
     private void readTextFromDB() {
+        if (Database.Data == null) return;
         String statement = "SELECT * from CacheText WHERE Id=?";
         GdxSqliteCursor cursor = Database.Data.rawQuery(statement, new String[]{String.valueOf(id)});
         if (cursor != null) {

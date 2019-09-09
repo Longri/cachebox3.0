@@ -15,7 +15,6 @@ import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.skin.styles.EditTextStyle;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.*;
-import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.Cache3DAO;
@@ -65,7 +64,7 @@ public class EditCache extends Activity {
         cacheSize.set(CacheSizes.Values());
         cacheCoords = new CoordinateButton();
         EditTextStyle edtStyle = VisUI.getSkin().get("default", EditTextStyle.class);
-        Label.LabelStyle  cacheDescriptionStyle = new Label.LabelStyle(edtStyle.font, edtStyle.fontColor);
+        Label.LabelStyle cacheDescriptionStyle = new Label.LabelStyle(edtStyle.font, edtStyle.fontColor);
         cacheDescriptionStyle.background = edtStyle.background;
         cacheDescription = new CB_Label();
         cacheDescription.setWrap(true);
@@ -81,7 +80,7 @@ public class EditCache extends Activity {
     }
 
     @Override
-    protected Catch_Table createMainContent() {
+    protected void createMainContent() {
         mainContent.addNext(lblGcCode, -0.3f);
         mainContent.addLast(cacheCode);
         mainContent.addNext(lblCachetitle, -0.3f);
@@ -135,9 +134,6 @@ public class EditCache extends Activity {
                 PlatformConnector.getMultilineTextInput(listener, 0, "", cacheDescription.getText().toString(), "");
             }
         });
-
-
-        return mainContent;
     }
 
     public void edit(AbstractCache cache) {
@@ -209,9 +205,9 @@ public class EditCache extends Activity {
         if (cl != null) {
             update = true;
             // if (newValues.getType() == CacheTypes.Mystery) {
-                if (cache.getLatitude() != newValues.getLatitude() || cache.getLongitude() != newValues.getLongitude()) {
-                    cache.setHasCorrectedCoordinates(true);
-                }
+            if (cache.getLatitude() != newValues.getLatitude() || cache.getLongitude() != newValues.getLongitude()) {
+                cache.setHasCorrectedCoordinates(true);
+            }
             //}
         }
 
@@ -235,11 +231,6 @@ public class EditCache extends Activity {
             dao.writeToDatabase(Database.Data, cache, true);
             EventHandler.updateSelectedCache(cache);
         }
-        finish();
-    }
-
-    @Override
-    protected void runAtCancel() {
         finish();
     }
 }

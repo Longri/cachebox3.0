@@ -28,7 +28,6 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.*;
-import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -103,7 +102,7 @@ public class ImportGCPosition extends Activity {
     }
 
     @Override
-    protected Catch_Table createMainContent() {
+    protected void createMainContent() {
 
         mainContent.addLast(coordinateButton);
         mainContent.addNext(tglBtnGPS);
@@ -131,7 +130,6 @@ public class ImportGCPosition extends Activity {
         mainContent.addLast(checkBoxOnlyAvailable);
         mainContent.addLast(checkBoxExcludeHides);
         mainContent.addLast(checkBoxExcludeFounds);
-        return mainContent;
     }
 
     @Override
@@ -143,11 +141,7 @@ public class ImportGCPosition extends Activity {
                 ImportNow(infoBox);
             }
         });
-    }
-
-    @Override
-    protected void runAtCancel() {
-        finish();
+        // finish() or not
     }
 
     private void initClickHandlersAndContent() {

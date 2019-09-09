@@ -11,7 +11,6 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.EditTextField;
-import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
@@ -42,6 +41,7 @@ public class SearchDialog extends Activity {
             // todo implement
         });
         btnCancel.setText(Translation.get("Search"));
+        // todo implent buttontext "search next"
     }
 
     public static Activity getInstance(String title, Drawable icon) {
@@ -52,7 +52,7 @@ public class SearchDialog extends Activity {
         return activity;
     }
 
-    protected Catch_Table createMainContent() {
+    protected void createMainContent() {
         mainContent.addLast(lblCachetitle);
         mainContent.addLast(edtCachetitle);
         mainContent.addLast(lblGcCode);
@@ -60,7 +60,6 @@ public class SearchDialog extends Activity {
         mainContent.addLast(lblOwner);
         mainContent.addLast(edtOwner);
         mainContent.addLast(btnFilter);
-        return mainContent;
     }
 
     protected void runAtOk() {
@@ -68,6 +67,7 @@ public class SearchDialog extends Activity {
     }
 
     public void runAtCancel() {
+        btnCancel.setText(Translation.get("Next"));
         searchNow();
     }
 
@@ -111,6 +111,7 @@ public class SearchDialog extends Activity {
                 }
                 CB.setAutoResort(false);
             } else {
+                btnCancel.setText(Translation.get("Search"));
                 beginnSearchIndex = -1;
                 edtCachetitle.setText(mTitle);
                 edtGcCode.setText(mGCCode);

@@ -18,17 +18,12 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.gcvote_api.GCVote;
-import de.longri.cachebox3.apis.gcvote_api.RatingData;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gpx.GpxWptCounter;
 import de.longri.cachebox3.gpx.GroundspeakGpxStreamImporter;
 import de.longri.cachebox3.gpx.ImportHandler;
-import de.longri.cachebox3.gui.activities.FileChooser;
-import de.longri.cachebox3.gui.activities.ImportGCPosition;
-import de.longri.cachebox3.gui.activities.ImportPQActivity;
-import de.longri.cachebox3.gui.activities.UpdateStatusAndOthers;
+import de.longri.cachebox3.gui.activities.*;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
@@ -36,16 +31,13 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.longri.cachebox3.CB.*;
@@ -68,7 +60,26 @@ public class ShowImportMenu extends Menu {
         // ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
         addMenuItem("API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ, () -> new ImportPQActivity().show());
         addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
-        addMenuItem("importCachesOverPosition", CB.getSkin().getMenuIcon.target, () -> postAsync(new NamedRunnable("ShowImportMenu") {
+        addMenuItem("moreImport", CB.getSkin().getMenuIcon.importIcon, this::selectableImport);
+        addMenuItem("importCachesOverPosition", CB.getSkin().getMenuIcon.target, this::importOverPosition);
+        // todo ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
+        addMenuItem("GCVoteRatings", null, () -> {
+        }); // todo create icon: CB.getSkin().getMenuIcon.importGCVote
+
+        addDivider(0);
+
+        //todo ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
+        //if (!StringH.isEmpty(Config.CBS_IP.getValue()))
+        //    addItem(MenuID.MI_IMPORT_CBS, "CB-Server");
+
+    }
+
+    private void selectableImport() {
+        SelectableImport.getInstance("moreImport", CB.getSkin().getMenuIcon.importIcon).show();
+    }
+
+    private void importOverPosition() {
+        postAsync(new NamedRunnable("ShowImportMenu") {
             @Override
             public void run() {
                 if (isAccessTokenInvalid()) {
@@ -86,37 +97,7 @@ public class ShowImportMenu extends Menu {
                     });
                 }
             }
-        }));
-        // todo ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
-        addMenuItem("GCVoteRatings", null, () -> {
-            // todo create a importGCVote(). ISSUE #122 add GC_Vote import. This is only a simple test for inputstream function;
-            ArrayList<String> waypoints = new ArrayList<>();
-            for (AbstractCache cache : Database.Data.cacheList) {
-                // todo only x caches at a time
-                waypoints.add(cache.getGcCode().toString());
-            }
-            ArrayList<RatingData> ratingData;
-            try {
-                ratingData = GCVote.getVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
-            } catch (Exception e) {
-                // The NPE I got is due to a problem with classes for Json are not loaded
-                // the thread can't throw an exception !!! Must be handled there
-                ratingData = new ArrayList<>();
-            }
-            if (ratingData.size() > 0) {
-                MessageBox.show("Got " + ratingData.size() + " ratings. Write to db not implemented yet", "Not implemented", MessageBoxButtons.Cancel, MessageBoxIcon.Information, null);
-                // todo write to db
-            } else {
-                MessageBox.show("Did not fetch any vote!", "Got no votes", MessageBoxButtons.Cancel, MessageBoxIcon.Information, null);
-            }
-        }); // todo create icon: CB.getSkin().getMenuIcon.importGCVote
-
-        addDivider(0);
-
-        //todo ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");
-        //if (!StringH.isEmpty(Config.CBS_IP.getValue()))
-        //    addItem(MenuID.MI_IMPORT_CBS, "CB-Server");
-
+        });
     }
 
     private void importGpxFile() {

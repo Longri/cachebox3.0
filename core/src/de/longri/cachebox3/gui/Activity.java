@@ -47,7 +47,8 @@ public abstract class Activity extends ActivityBase {
         setFillParent(true);
         addNext(imgTitle, -1.2f);
         addLast(lblTitle, -0.8f);
-        addLast(new ScrollPane(createMainContent()));
+        createMainContent();
+        addLast(new ScrollPane(mainContent));
         addNext(btnOK);
         addLast(btnCancel);
 
@@ -55,11 +56,13 @@ public abstract class Activity extends ActivityBase {
         needLayout = false;
     }
 
-    protected abstract Catch_Table createMainContent();
+    protected abstract void createMainContent();
 
     protected abstract void runAtOk();
 
-    protected abstract void runAtCancel();
+    protected void runAtCancel() {
+        finish();
+    }
 
     private void init() {
         addClickHandler(btnOK, this::runAtOk);
