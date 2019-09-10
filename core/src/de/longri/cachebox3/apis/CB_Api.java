@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.longri.cachebox3.apis.cachebox_api;
+package de.longri.cachebox3.apis;
 
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.http.Webb;

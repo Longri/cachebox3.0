@@ -1,18 +1,11 @@
 package de.longri.cachebox3.gui.activities;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.Activity;
-import de.longri.cachebox3.gui.skin.styles.EditTextStyle;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.locator.Coordinate;
@@ -23,7 +16,6 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.MutableCache;
-import de.longri.cachebox3.utils.NamedRunnable;
 
 import java.util.Date;
 
@@ -33,7 +25,7 @@ import java.util.Date;
 public class EditCache extends Activity {
     private final CB_Label lblCachetitle, lblGcCode, lblOwner, lblCountry, lblState, lblDescription;
     private final EditTextField cacheTitle, cacheCode, cacheOwner, cacheCountry, cacheState;
-    private final CB_Label cacheDescription;
+    private final EditTextField cacheDescription;
     private CoordinateButton cacheCoords;
     private SelectBox<CacheTypes> cacheTyp;
     private SelectBox<CacheSizes> cacheSize;
@@ -63,12 +55,8 @@ public class EditCache extends Activity {
         cacheSize.setSelectTitle("EditCacheSize");
         cacheSize.set(CacheSizes.Values());
         cacheCoords = new CoordinateButton();
-        EditTextStyle edtStyle = VisUI.getSkin().get("default", EditTextStyle.class);
-        Label.LabelStyle cacheDescriptionStyle = new Label.LabelStyle(edtStyle.font, edtStyle.fontColor);
-        cacheDescriptionStyle.background = edtStyle.background;
-        cacheDescription = new CB_Label();
+        cacheDescription = new EditTextField();
         cacheDescription.setWrap(true);
-        cacheDescription.setStyle(cacheDescriptionStyle);
     }
 
     public static EditCache getInstance(String title, Drawable icon) {
@@ -107,31 +95,6 @@ public class EditCache extends Activity {
         cacheSize.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            }
-        });
-
-
-        cacheDescription.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-
-                Input.TextInputListener listener = new Input.TextInputListener() {
-                    @Override
-                    public void input(final String text) {
-                        CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
-                            @Override
-                            public void run() {
-                                cacheDescription.setText(text);
-                                invalidate();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void canceled() {
-                        // do nothing
-                    }
-                };
-                PlatformConnector.getMultilineTextInput(listener, 0, "", cacheDescription.getText().toString(), "");
             }
         });
     }
