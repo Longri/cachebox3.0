@@ -266,7 +266,10 @@ public class DescriptionImageGrabber {
         return images;
     }
 
-    public static void GrabImagesSelectedByCache(ProgressCancelDownloader ip, boolean descriptionImagesUpdated, boolean additionalImagesUpdated, long id, String gcCode, String description, String url, boolean withLogImages) {
+    public static void GrabImagesSelectedByCache(Database database, ProgressCancelDownloader ip,
+                                                 boolean descriptionImagesUpdated, boolean additionalImagesUpdated,
+                                                 long id, String gcCode, String description, String url,
+                                                 boolean withLogImages) {
         boolean imageLoadError = false;
 
         if (!descriptionImagesUpdated) {
@@ -290,7 +293,7 @@ public class DescriptionImageGrabber {
             if (!imageLoadError) {
                 Database.Parameters args = new Database.Parameters();
                 args.put("DescriptionImagesUpdated", descriptionImagesUpdated);
-                Database.Data.update("Caches", args, "Id = ?", new String[]{String.valueOf(id)});
+                database.update("Caches", args, "Id = ?", new String[]{String.valueOf(id)});
             }
             log.debug("GrabImagesSelectedByCache done");
         }

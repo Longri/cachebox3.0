@@ -423,7 +423,7 @@ public class ViewManager extends NamedStage
 
         // add Parking Cache
         if (Config.ParkingLatitude.getValue() != 0) {
-            abstractCache = new MutableCache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
+            abstractCache = new MutableCache(Database.Data, Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
             Database.Data.cacheList.insert(0, abstractCache);
         }
 

@@ -318,7 +318,7 @@ public class ImportGCPosition extends Activity {
         }
         final Date publishDate = tmpDate;
 
-        Category category = CB.Categories.getCategory("API-Import");
+        Category category = CB.Categories.getCategory(Database.Data, "API-Import");
         if (category != null) { // should not happen!!!
             GpxFilename gpxFilename = category.addGpxFilename("API-Import");
             if (gpxFilename != null) {
@@ -374,7 +374,7 @@ public class ImportGCPosition extends Activity {
 
                 q.infoBox = infoBox;
 
-                Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = searchGeoCaches(q);
+                Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = searchGeoCaches(Database.Data, q);
                 if (GroundspeakAPI.APIError != GroundspeakAPI.OK) {
                     MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("importCachesOverPosition"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                 } else {

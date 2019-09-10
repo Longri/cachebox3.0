@@ -24,6 +24,7 @@ import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.GalleryViewStyle;
 import de.longri.cachebox3.gui.widgets.GalleryView;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.ImageDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
@@ -194,7 +195,7 @@ public class SpoilerView extends AbstractView {
         final ProgressCancelDownloader downloader = new ProgressCancelDownloader();
 
         //add downloader objects
-        GrabImagesSelectedByCache(downloader, true, false,
+        GrabImagesSelectedByCache(Database.Data, downloader, true, false,
                 EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(),
                 "", "", withLogs);
 

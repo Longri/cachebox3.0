@@ -7,7 +7,11 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.views.MapView;
-import de.longri.cachebox3.gui.widgets.*;
+import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
+import de.longri.cachebox3.gui.widgets.CB_Label;
+import de.longri.cachebox3.gui.widgets.CoordinateButton;
+import de.longri.cachebox3.gui.widgets.EditTextField;
+import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.Cache3DAO;
@@ -26,6 +30,7 @@ public class EditCache extends Activity {
     private final CB_Label lblCachetitle, lblGcCode, lblOwner, lblCountry, lblState, lblDescription;
     private final EditTextField cacheTitle, cacheCode, cacheOwner, cacheCountry, cacheState;
     private final EditTextField cacheDescription;
+    private final Database database;
     private CoordinateButton cacheCoords;
     private SelectBox<CacheTypes> cacheTyp;
     private SelectBox<CacheSizes> cacheSize;
@@ -33,8 +38,9 @@ public class EditCache extends Activity {
     private AdjustableStarWidget cacheTerrain;
     private MutableCache cache, newValues;
 
-    private EditCache(String title, Drawable icon) {
+    private EditCache(Database database, String title, Drawable icon) {
         super(title, icon);
+        this.database = database;
         lblCachetitle = new CB_Label(Translation.get("Title"));
         lblGcCode = new CB_Label(Translation.get("GCCode"));
         lblOwner = new CB_Label(Translation.get("Owner"));
@@ -59,9 +65,9 @@ public class EditCache extends Activity {
         cacheDescription.setWrap(true);
     }
 
-    public static EditCache getInstance(String title, Drawable icon) {
+    public static EditCache getInstance(Database database, String title, Drawable icon) {
         if (activity == null) {
-            activity = new EditCache(title, icon);
+            activity = new EditCache(database, title, icon);
             activity.top();
         }
         return (EditCache) activity;
@@ -100,7 +106,7 @@ public class EditCache extends Activity {
     }
 
     public void edit(AbstractCache cache) {
-        newValues = new MutableCache(cache); // copy from cache with Details
+        newValues = new MutableCache(database, cache); // copy from cache with Details
         this.cache = (MutableCache) cache;
         setValues();
     }
@@ -113,7 +119,7 @@ public class EditCache extends Activity {
         do {
             count++;
             tmpGCCode = prefix + String.format("%04d", count);
-        } while (Database.Data.cacheList.GetCacheById(MutableCache.GenerateCacheId(tmpGCCode)) != null);
+        } while (database.cacheList.GetCacheById(MutableCache.GenerateCacheId(tmpGCCode)) != null);
         Coordinate actSearchPos;
         Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
         Coordinate mapCenterPos = MapView.getLastCenterPos();
@@ -122,7 +128,7 @@ public class EditCache extends Activity {
         } else {
             actSearchPos = mapCenterPos;
         }
-        newValues = new MutableCache(actSearchPos.getLatitude(), actSearchPos.getLongitude(), tmpGCCode, CacheTypes.Traditional, tmpGCCode);
+        newValues = new MutableCache(database, actSearchPos.getLatitude(), actSearchPos.getLongitude(), tmpGCCode, CacheTypes.Traditional, tmpGCCode);
         newValues.setSize(CacheSizes.micro);
         newValues.setDifficulty(1);
         newValues.setTerrain(1);
@@ -163,7 +169,7 @@ public class EditCache extends Activity {
         String gcc = cacheCode.getText().toUpperCase();
         cache.setId(AbstractCache.GenerateCacheId(gcc));
 
-        AbstractCache cl = Database.Data.cacheList.GetCacheById(cache.getId());
+        AbstractCache cl = database.cacheList.GetCacheById(cache.getId());
 
         if (cl != null) {
             update = true;
@@ -188,10 +194,10 @@ public class EditCache extends Activity {
         cache.setLongDescription(cacheDescription.getText());
         Cache3DAO dao = new Cache3DAO();
         if (update) {
-            dao.updateDatabase(Database.Data, cache, true);
+            dao.updateDatabase(database, cache, true);
         } else {
-            Database.Data.cacheList.add(cache);
-            dao.writeToDatabase(Database.Data, cache, true);
+            database.cacheList.add(cache);
+            dao.writeToDatabase(database, cache, true);
             EventHandler.updateSelectedCache(cache);
         }
         finish();

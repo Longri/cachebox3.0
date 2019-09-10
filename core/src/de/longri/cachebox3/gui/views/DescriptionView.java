@@ -53,7 +53,13 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.*;
+import static de.longri.cachebox3.apis.GroundspeakAPI.APIError;
+import static de.longri.cachebox3.apis.GroundspeakAPI.LastAPIError;
+import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
+import static de.longri.cachebox3.apis.GroundspeakAPI.fetchMyCacheLimits;
+import static de.longri.cachebox3.apis.GroundspeakAPI.fetchMyUserInfos;
+import static de.longri.cachebox3.apis.GroundspeakAPI.isDownloadLimitExceeded;
+import static de.longri.cachebox3.apis.GroundspeakAPI.isPremiumMember;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -415,7 +421,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 AbstractCache selectedCache = EventHandler.getSelectedCache();
 
                 selectedCache.setFavorite(!selectedCache.isFavorite());
-                selectedCache.updateBooleanStore(Database.Data);
+                selectedCache.updateBooleanStore();
 
                 DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache, true);
 
@@ -445,7 +451,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             CB.viewmanager.showView(view);
         }).setEnabled(false);
         cm.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> {
-            EditCache.getInstance("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).edit(EventHandler.getSelectedCache());
+            EditCache.getInstance(Database.Data, "MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).edit(EventHandler.getSelectedCache());
         }); // todo create/change icon
 
         cm.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
@@ -455,7 +461,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             AbstractCache actCache = EventHandler.getSelectedCache();
 
             actCache.setShowOriginalHtmlColor(!actCache.getShowOriginalHtmlColor());
-            actCache.updateBooleanStore(Database.Data);
+            actCache.updateBooleanStore();
 
             DaoFactory.CACHE_DAO.updateDatabase(Database.Data, actCache, true);
 

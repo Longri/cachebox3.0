@@ -21,12 +21,28 @@ import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.gui.dialogs.InfoBox;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
 import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.types.CacheSizes;
+import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.DLong;
+import de.longri.cachebox3.types.ImageEntry;
+import de.longri.cachebox3.types.LogEntry;
+import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.MutableCache;
+import de.longri.cachebox3.types.MutableWaypoint;
+import de.longri.cachebox3.types.Trackable;
 import de.longri.cachebox3.utils.ICancel;
-import de.longri.cachebox3.utils.http.*;
+import de.longri.cachebox3.utils.http.Request;
+import de.longri.cachebox3.utils.http.Response;
+import de.longri.cachebox3.utils.http.Webb;
+import de.longri.cachebox3.utils.http.WebbException;
+import de.longri.cachebox3.utils.http.WebbUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -155,7 +171,7 @@ public class GroundspeakAPI {
         return retryCount > 0;
     }
 
-    public static Array<GeoCacheRelated> searchGeoCaches(Query query) {
+    public static Array<GeoCacheRelated> searchGeoCaches(Database database, Query query) {
         // fetch/update geocaches consumes a lite or full cache
         Array<GeoCacheRelated> fetchResults = new Array<>();
         log.debug("searchGeoCaches start " + query.toString());
@@ -203,7 +219,7 @@ public class GroundspeakAPI {
                         if (query.descriptor != null) {
                             writeSearchResultsToDisc(fetchedCaches, query.descriptor);
                         }
-                        fetchResults.addAll(getGeoCacheRelateds(fetchedCaches, fields, null));
+                        fetchResults.addAll(getGeoCacheRelateds(database, fetchedCaches, fields, null));
                         if (query.infoBox != null && query.infoBox.isCanceled()) {
                             take = 0;
                             APIError = ERROR;
@@ -261,13 +277,13 @@ public class GroundspeakAPI {
         */
     }
 
-    public static Array<GeoCacheRelated> updateStatusOfGeoCaches(Array<AbstractCache> caches) {
+    public static Array<GeoCacheRelated> updateStatusOfGeoCaches(Database database, Array<AbstractCache> caches) {
         // fetch/update geocaches consumes a lite or full cache
         Query query = new Query().resultForStatusFields().setMaxToFetch(caches.size);
-        return updateGeoCaches(query, caches);
+        return updateGeoCaches(database, query, caches);
     }
 
-    public static Array<GeoCacheRelated> updateGeoCache(AbstractCache cache) {
+    public static Array<GeoCacheRelated> updateGeoCache(Database database, AbstractCache cache) {
         Array<AbstractCache> caches = new Array<>();
         caches.add(cache);
         // not .onlyActiveGeoCaches() : must be updated to the latest status
@@ -276,28 +292,28 @@ public class GroundspeakAPI {
                 .resultWithLogs(30)
                 //.resultWithImages(30) // todo maybe remove, cause not used from DB
                 ;
-        return updateGeoCaches(query, caches);
+        return updateGeoCaches(database, query, caches);
     }
 
-    public static Array<GeoCacheRelated> fetchGeoCache(Query query, String GcCode) {
-        AbstractCache cache = new MutableCache(0, 0);
+    public static Array<GeoCacheRelated> fetchGeoCache(Database database, Query query, String GcCode) {
+        AbstractCache cache = new MutableCache(database, 0, 0);
         cache.setGcCode(GcCode);
         Array<AbstractCache> caches = new Array<>();
         caches.add(cache);
-        return updateGeoCaches(query, caches);
+        return updateGeoCaches(database, query, caches);
     }
 
-    public static Array<GeoCacheRelated> fetchGeoCaches(Query query, String CacheCodes) {
+    public static Array<GeoCacheRelated> fetchGeoCaches(Database database, Query query, String CacheCodes) {
         Array<AbstractCache> caches = new Array<>();
         for (String GcCode : CacheCodes.split(",")) {
-            MutableCache cache = new MutableCache(0, 0);
+            MutableCache cache = new MutableCache(database, 0, 0);
             cache.setGcCode(GcCode);
             caches.add(cache);
         }
-        return updateGeoCaches(query, caches);
+        return updateGeoCaches(database, query, caches);
     }
 
-    public static Array<GeoCacheRelated> updateGeoCaches(Query query, Array<AbstractCache> caches) {
+    public static Array<GeoCacheRelated> updateGeoCaches(Database database, Query query, Array<AbstractCache> caches) {
         // fetch/update geocaches consumes a lite or full cache
         Array<GeoCacheRelated> fetchResults = new Array<>();
         try {
@@ -344,7 +360,7 @@ public class GroundspeakAPI {
 
                         retryCount = 0;
 
-                        fetchResults.addAll(getGeoCacheRelateds(r.getBody(), fields, mapOfCaches));
+                        fetchResults.addAll(getGeoCacheRelateds(database, r.getBody(), fields, mapOfCaches));
 
                     } catch (Exception ex) {
                         doRetry = retry(ex);
@@ -374,7 +390,7 @@ public class GroundspeakAPI {
         return fetchResults;
     }
 
-    public static Array<GeoCacheRelated> getGeoCacheRelateds(JSONArray fetchedCaches, Array<String> fields, ObjectMap<String, AbstractCache> mapOfCaches) {
+    public static Array<GeoCacheRelated> getGeoCacheRelateds(Database database, JSONArray fetchedCaches, Array<String> fields, ObjectMap<String, AbstractCache> mapOfCaches) {
         Array<GeoCacheRelated> fetchResults = new Array<>();
         for (int ii = 0; ii < fetchedCaches.length(); ii++) {
             JSONObject fetchedCache = (JSONObject) fetchedCaches.get(ii);
@@ -384,7 +400,7 @@ public class GroundspeakAPI {
             } else {
                 originalCache = mapOfCaches.get(fetchedCache.optString("referenceCode"));
             }
-            AbstractCache cache = createGeoCache(fetchedCache, fields, originalCache);
+            AbstractCache cache = createGeoCache(database, fetchedCache, fields, originalCache);
             if (cache != null) {
                 Array<LogEntry> logs = createLogs(cache, fetchedCache.optJSONArray("geocacheLogs"));
                 Array<ImageEntry> images = createImageList(fetchedCache.optJSONArray("images"), cache.getGcCode().toString(), false);
@@ -1088,11 +1104,11 @@ public class GroundspeakAPI {
         }
     }
 
-    private static AbstractCache createGeoCache(JSONObject API1Cache, Array<String> fields, AbstractCache cache) {
+    private static AbstractCache createGeoCache(Database database, JSONObject API1Cache, Array<String> fields, AbstractCache cache) {
         // see https://api.groundspeak.com/documentation#geocache
         // see https://api.groundspeak.com/documentation#lite-geocache
         if (cache == null) {
-            cache = new MutableCache(0, 0);
+            cache = new MutableCache(database, 0, 0);
             cache.setApiState(IS_LITE);
         }
         if (cache.getWaypoints() != null) {

@@ -76,15 +76,19 @@ public class MutableCache extends AbstractCache {
     private CharSequence tourName;
     private long gpxFilenameId;
 
-    public MutableCache(double latitude, double longitude) {
+    private final Database database;
+
+    public MutableCache(Database database, double latitude, double longitude) {
         super(latitude, longitude);
+        this.database = database;
         type = CacheTypes.Undefined;
         infoRead = false;
         textRead = false;
     }
 
-    public MutableCache(AbstractCache cache) {
+    public MutableCache(Database database, AbstractCache cache) {
         super(cache);
+        this.database = database;
         this.attributes = null;
         this.attributesPositive = cache.getAttributesPositive();
         this.attributesNegative = cache.getAttributesNegative();
@@ -124,9 +128,9 @@ public class MutableCache extends AbstractCache {
         this.textRead = cache.textRead;
     }
 
-
-    public MutableCache(double latitude, double longitude, String name, CacheTypes type, String gcCode) {
+    public MutableCache(Database database, double latitude, double longitude, String name, CacheTypes type, String gcCode) {
         super(latitude, longitude);
+        this.database = database;
         this.id = 0;
         this.size = CacheSizes.regular;
         this.difficulty = 0.0f;
@@ -144,8 +148,9 @@ public class MutableCache extends AbstractCache {
         this.textRead = false;
     }
 
-    public MutableCache(GdxSqliteCursor cursor) {
+    public MutableCache(Database database, GdxSqliteCursor cursor) {
         super(cursor.getDouble(1), cursor.getDouble(2));
+        this.database = database;
         this.id = cursor.getLong(0);
         this.size = CacheSizes.parseInt(cursor.getShort(3));
         this.difficulty = (float) cursor.getShort(4) / 2.0f;
@@ -179,8 +184,9 @@ public class MutableCache extends AbstractCache {
         this.textRead = false;
     }
 
-    public MutableCache(Object[] values) {
+    public MutableCache(Database database, Object[] values) {
         super((double) values[1], (double) values[2]);
+        this.database = database;
         this.id = (long) values[0];
         this.size = CacheSizes.parseInt(((Long) values[3]).intValue());
         this.difficulty = (float) ((Long) values[4]) / 2.0f;
@@ -197,7 +203,7 @@ public class MutableCache extends AbstractCache {
 
         this.booleanStore = ((Long) values[14]).shortValue();
         this.favPoints = values[15] == null ? 0 : ((Long) values[15]).intValue();
-        this.vote = (((Long) values[16]).shortValue());
+        this.vote = values[15] == null ? 0 : (((Long) values[16]).shortValue());
         this.infoRead = false;
         this.textRead = false;
     }
@@ -243,9 +249,8 @@ public class MutableCache extends AbstractCache {
     }
 
     private void readInfoFromDB() {
-        if (Database.Data == null) return;
         String statement = "SELECT * from CacheInfo WHERE Id=?";
-        GdxSqliteCursor cursor = Database.Data.rawQuery(statement, new String[]{String.valueOf(id)});
+        GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(id)});
         if (cursor != null) {
             cursor.moveToFirst();
             setInfo(cursor);
@@ -274,9 +279,8 @@ public class MutableCache extends AbstractCache {
     }
 
     private void readTextFromDB() {
-        if (Database.Data == null) return;
         String statement = "SELECT * from CacheText WHERE Id=?";
-        GdxSqliteCursor cursor = Database.Data.rawQuery(statement, new String[]{String.valueOf(id)});
+        GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(id)});
         if (cursor != null) {
             cursor.moveToFirst();
             setText(cursor);
@@ -285,7 +289,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void updateBooleanStore(Database database) {
+    public void updateBooleanStore() {
         DaoFactory.CACHE_DAO.writeCacheBooleanStore(database, booleanStore, getId());
     }
 
@@ -293,7 +297,7 @@ public class MutableCache extends AbstractCache {
     public Array<Attributes> getAttributes() {
         if (this.attributes == null) {
             if (attributesPositive == null || attributesNegative == null) {
-                GdxSqliteCursor cursor = Database.Data.rawQuery("SELECT * from Attributes WHERE Id=?", new String[]{String.valueOf(id)});
+                GdxSqliteCursor cursor = database.rawQuery("SELECT * from Attributes WHERE Id=?", new String[]{String.valueOf(id)});
                 if (cursor != null) {
                     cursor.moveToFirst();
                     setAttributes(cursor);
@@ -867,7 +871,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public AbstractCache getCopy() {
-        return new MutableCache(this);
+        return new MutableCache(this.database, this);
     }
 
     @Override

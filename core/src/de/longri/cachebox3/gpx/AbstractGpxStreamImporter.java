@@ -254,7 +254,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     }
 
     private void createCache() {
-        AbstractCache cache = new MutableCache(this.latitude, this.longitude);
+        AbstractCache cache = new MutableCache(this.database, this.latitude, this.longitude);
         cache.setType(this.type);
         cache.setGcCode(this.gcCode);
         cache.setName(this.title);
@@ -269,13 +269,13 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         cache.setTerrain(this.terrain);
         cache.setCountry(this.country);
         cache.setState(this.state);
-        cache.setHint( this.hint);
-        cache.setLongDescription( this.longDescription);
-        cache.setShortDescription( this.shortDescription);
-        cache.setFound( this.found);
+        cache.setHint(this.hint);
+        cache.setLongDescription(this.longDescription);
+        cache.setShortDescription(this.shortDescription);
+        cache.setFound(this.found);
         cache.setNumTravelbugs((short) this.tbCount);
         cache.setTmpNote(note);
-        cache.setTmpSolver( solver);
+        cache.setTmpSolver(solver);
         if (favPoints >= 0) cache.setFavoritePoints(favPoints);
 
 
@@ -418,7 +418,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                 boolean inDbFound = MutableCache.getMaskValue(MASK_FAVORITE, booleanStore);
                                 cache.setFavorite(inDbFavorite);
                                 if (inDbFound) {
-                                    cache.setFound( true);
+                                    cache.setFound(true);
                                 }
                             }
 
