@@ -39,6 +39,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
@@ -63,8 +64,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.fetchMyUserInfos;
-import static de.longri.cachebox3.apis.GroundspeakAPI.setAuthorization;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
 import static de.longri.cachebox3.settings.Settings.GcLogin;
@@ -550,8 +549,8 @@ public class Settings_Activity extends ActivityBase {
                         } else {
                             Config.AccessToken.setEncryptedValue(accessToken);
                         }
-                        setAuthorization();
-                        String userNameOfAuthorization = fetchMyUserInfos().username;
+                        GroundspeakAPI.getInstance().setAuthorization();
+                        String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
                         GcLogin.setValue(userNameOfAuthorization);
                         // do not Config.AcceptChanges(); if you do the settings will be restored
                         // refresh settings view
@@ -735,7 +734,7 @@ public class Settings_Activity extends ActivityBase {
                         public void canceled() {
 
                         }
-                    },0, Translation.get(setting.getName()).toString(), setting.getValue(), "");
+                    }, 0, Translation.get(setting.getName()).toString(), setting.getValue(), "");
                     event.cancel();
                     event.handle();
                 }

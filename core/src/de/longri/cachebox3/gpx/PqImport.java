@@ -39,6 +39,8 @@ import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
+
 /**
  * Created by Longri on 11.05.18.
  */
@@ -110,8 +112,8 @@ public class PqImport {
                 for (ListViewItemInterface item : selectedItems) {
                     GroundspeakAPI.PQ pqItem = ((PqListItem) item).getPocketQuery();
                     String pqFolder = Config.PocketQueryFolder.getValue();
-                    GroundspeakAPI.fetchPocketQuery(pqItem, pqFolder); //TODO handle progress with parallel download
-                    if (GroundspeakAPI.APIError == GroundspeakAPI.OK) {
+                    GroundspeakAPI.getInstance().fetchPocketQuery(pqItem, pqFolder); //TODO handle progress with parallel download
+                    if (GroundspeakAPI.getInstance().APIError == OK) {
                         downloadedFiles.add(new FileHandle(pqFolder + "/" + pqItem.GUID + ".zip"));
                     }
                 }

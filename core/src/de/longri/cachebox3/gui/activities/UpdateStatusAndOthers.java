@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.*;
+import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
 
 
 /**
@@ -206,7 +206,7 @@ public class UpdateStatusAndOthers extends ActivityBase {
                         }
                         skip += BlockSize;
 
-                        for (GroundspeakAPI.GeoCacheRelated ci : updateStatusOfGeoCaches(Database.Data, caches)) {
+                        for (GroundspeakAPI.GeoCacheRelated ci : GroundspeakAPI.getInstance().updateStatusOfGeoCaches(caches)) {
                             AbstractCache ca = ci.cache;
                             /*
                              todo in ACB2 the DAO checks for changes by reading the database
@@ -223,8 +223,8 @@ public class UpdateStatusAndOthers extends ActivityBase {
                             changedCount++; // is all without compare
                         }
 
-                        if (APIError != OK) {
-                            CB.viewmanager.toast(LastAPIError);
+                        if (GroundspeakAPI.getInstance().APIError != OK) {
+                            CB.viewmanager.toast(GroundspeakAPI.getInstance().LastAPIError);
                             break;
                         }
 

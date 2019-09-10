@@ -49,7 +49,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.UploadDraftOrLog;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
@@ -482,15 +481,15 @@ public class DraftsView extends AbstractView {
                                 int result;
 
                                 if (draft.isTbDraft) {
-                                    result = GroundspeakAPI.uploadTrackableLog(draft.TravelBugCode, draft.TrackingNumber, draft.gcCode, LogTypes.CB_LogType2GC(draft.type), draft.timestamp, draft.comment);
+                                    result = GroundspeakAPI.getInstance().uploadTrackableLog(draft.TravelBugCode, draft.TrackingNumber, draft.gcCode, LogTypes.CB_LogType2GC(draft.type), draft.timestamp, draft.comment);
                                 } else {
-                                    String logReferenceCode = UploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, uploadLog);
+                                    String logReferenceCode = GroundspeakAPI.getInstance().UploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, uploadLog);
                                     draft.GcId = logReferenceCode;
-                                    result = GroundspeakAPI.APIError;
+                                    result = GroundspeakAPI.getInstance().APIError;
                                 }
 
                                 if (result == GroundspeakAPI.ERROR) {
-                                    UploadMeldung.append(draft.gcCode).append("\n").append(GroundspeakAPI.LastAPIError).append("\n");
+                                    UploadMeldung.append(draft.gcCode).append("\n").append(GroundspeakAPI.getInstance().LastAPIError).append("\n");
                                 } else {
                                     // set Draft as uploaded
                                     draft.uploaded = true;

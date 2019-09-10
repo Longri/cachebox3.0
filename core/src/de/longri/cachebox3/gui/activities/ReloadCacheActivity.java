@@ -164,9 +164,9 @@ public class ReloadCacheActivity extends ActivityBase {
 
         AbstractCache aktCache = EventHandler.getSelectedCache();
         if (aktCache != null) {
-            Array<GroundspeakAPI.GeoCacheRelated> updatedCaches = GroundspeakAPI.updateGeoCache(Database.Data, aktCache);
-            if (GroundspeakAPI.APIError != GroundspeakAPI.OK) {
-                MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("ReloadCacheAPI"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+            Array<GroundspeakAPI.GeoCacheRelated> updatedCaches = GroundspeakAPI.getInstance().updateGeoCache(aktCache);
+            if (GroundspeakAPI.getInstance().APIError != GroundspeakAPI.OK) {
+                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("ReloadCacheAPI"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             } else {
                 for (GroundspeakAPI.GeoCacheRelated updatedCache : updatedCaches) {
                     Cache3DAO dao = new Cache3DAO();

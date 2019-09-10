@@ -56,7 +56,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
-import static de.longri.cachebox3.apis.GroundspeakAPI.UploadDraftOrLog;
 import static de.longri.cachebox3.gui.views.DraftsView.draftEntries;
 
 /**
@@ -251,11 +250,11 @@ public class DraftsViewItem extends ListViewItem {
                                 Config.AcceptChanges();
                                 try {
                                     String image = Base64.encodeBytes(fileHandle.readBytes());
-                                    GroundspeakAPI.uploadLogImage(entry.GcId, image, description);
-                                    if (GroundspeakAPI.APIError == OK) {
+                                    GroundspeakAPI.getInstance().uploadLogImage(entry.GcId, image, description);
+                                    if (GroundspeakAPI.getInstance().APIError == OK) {
                                         MessageBox.show(Translation.get("ok") + ":\n", Translation.get("uploadLogImage"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                                     } else {
-                                        MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("uploadLogImage"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                                        MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("uploadLogImage"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                                     }
                                 } catch (Exception ex) {
                                     MessageBox.show(ex.toString(), Translation.get("uploadLogImage"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
@@ -295,8 +294,8 @@ public class DraftsViewItem extends ListViewItem {
             }
         }
 
-        String logReferenceCode = UploadDraftOrLog(entry.gcCode, entry.type.getGcLogTypeId(), entry.timestamp, entry.comment, directLog);
-        if (GroundspeakAPI.APIError == OK) {
+        String logReferenceCode = GroundspeakAPI.getInstance().UploadDraftOrLog(entry.gcCode, entry.type.getGcLogTypeId(), entry.timestamp, entry.comment, directLog);
+        if (GroundspeakAPI.getInstance().APIError == OK) {
             // after direct Log change state to uploaded
             entry.uploaded = true;
             if (directLog && !entry.isTbDraft) {
@@ -319,8 +318,8 @@ public class DraftsViewItem extends ListViewItem {
                 return true;
             });
         }
-        if (GroundspeakAPI.LastAPIError.length() > 0) {
-            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+        if (GroundspeakAPI.getInstance().LastAPIError.length() > 0) {
+            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
         }
 
     }

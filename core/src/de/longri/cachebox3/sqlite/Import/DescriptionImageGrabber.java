@@ -19,15 +19,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.ImageEntry;
 import de.longri.cachebox3.utils.Downloader;
-import de.longri.cachebox3.utils.ICancel;
-import de.longri.cachebox3.utils.NetUtils;
 import de.longri.cachebox3.utils.http.ProgressCancelDownloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +36,7 @@ import java.net.URI;
 import java.net.URL;
 
 import static de.longri.cachebox3.Utils.sdbm;
-import static de.longri.cachebox3.apis.GroundspeakAPI.*;
+import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
 
 public class DescriptionImageGrabber {
     final static Logger log = LoggerFactory.getLogger(DescriptionImageGrabber.class);
@@ -317,8 +315,8 @@ public class DescriptionImageGrabber {
 
             // todo always take from database. They are not downloaded yet
             // todo else don't write them to database on fetch/update cache
-            Array<ImageEntry> imageEntries = downloadImageListForGeocache(gcCode, withLogImages);
-            if (APIError != OK) {
+            Array<ImageEntry> imageEntries = GroundspeakAPI.getInstance().downloadImageListForGeocache(gcCode, withLogImages);
+            if (GroundspeakAPI.getInstance().APIError != OK) {
                 return;
             }
 

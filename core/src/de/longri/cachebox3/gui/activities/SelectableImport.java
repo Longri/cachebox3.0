@@ -43,7 +43,7 @@ public class SelectableImport extends Activity {
 
     @Override
     protected void createMainContent() {
-        if (GroundspeakAPI.isPremiumMember()) mainContent.addLast(cbPocketQuery);
+        if (GroundspeakAPI.getInstance().isPremiumMember()) mainContent.addLast(cbPocketQuery);
         mainContent.addLast(cbGPX);
         if (Config.GcVotePassword.getValue().length() > 0) mainContent.addLast(cbGCVotes);
         mainContent.addLast(cbLogs);

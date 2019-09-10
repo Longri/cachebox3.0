@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gpx.GpxWptCounter;
@@ -41,7 +42,6 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.longri.cachebox3.CB.*;
-import static de.longri.cachebox3.apis.GroundspeakAPI.*;
 
 /**
  * Created by Longri on 12.04.2017.
@@ -78,11 +78,11 @@ public class ShowImportMenu extends Menu {
         postAsync(new NamedRunnable("ShowImportMenu") {
             @Override
             public void run() {
-                if (isAccessTokenInvalid()) {
-                    if (APIError == 401) {
+                if (GroundspeakAPI.getInstance().isAccessTokenInvalid()) {
+                    if (GroundspeakAPI.getInstance().APIError == 401) {
                         MessageBox.show(Translation.get("apiKeyNeeded"), Translation.get("ImportMenuTitle"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                     } else {
-                        MessageBox.show(Translation.get("getApiKey") + "\n" + LastAPIError, Translation.get("ImportMenuTitle"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                        MessageBox.show(Translation.get("getApiKey") + "\n" + GroundspeakAPI.getInstance().LastAPIError, Translation.get("ImportMenuTitle"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                     }
                 } else {
                     postOnGlThread(new NamedRunnable("ShowImportMenu") {

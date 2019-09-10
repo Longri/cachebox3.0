@@ -435,13 +435,13 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         // todo icon for UploadCorrectedCoordinates
         MenuItem mi = cm.addMenuItem("UploadCorrectedCoordinates", null, () -> {
             if (actAbstractCache.hasCorrectedCoordinates())
-                GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
+                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
             else if (isCorrectedFinal())
-                GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
-            if (GroundspeakAPI.APIError == GroundspeakAPI.OK) {
+                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
+            if (GroundspeakAPI.getInstance().APIError == GroundspeakAPI.OK) {
                 MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             } else {
-                MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             }
         });
         mi.setEnabled(actAbstractCache.hasCorrectedCoordinates() || isCorrectedFinal());

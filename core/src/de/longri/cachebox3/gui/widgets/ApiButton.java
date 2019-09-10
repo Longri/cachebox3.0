@@ -17,14 +17,12 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.skin.styles.ApiButtonStyle;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static de.longri.cachebox3.apis.GroundspeakAPI.isAccessTokenInvalid;
-import static de.longri.cachebox3.apis.GroundspeakAPI.isPremiumMember;
 
 /**
  * Created by Longri on 11.04.2017.
@@ -67,12 +65,12 @@ public class ApiButton extends IconButton {
         }
 
         if (Entry) {
-            if (isAccessTokenInvalid()) {
+            if (GroundspeakAPI.getInstance().isAccessTokenInvalid()) {
                 image.setDrawable(style.invalid);
                 // image.setDrawable(style.expired);
                 // image.setDrawable(style.check);
             } else {
-                if (isPremiumMember()) {
+                if (GroundspeakAPI.getInstance().isPremiumMember()) {
                     image.setDrawable(style.unchecked);
                 } else {
                     image.setDrawable(style.unchecked);

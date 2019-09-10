@@ -35,11 +35,7 @@ import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
-import de.longri.cachebox3.gui.widgets.list_view.DefaultListViewAdapter;
-import de.longri.cachebox3.gui.widgets.list_view.ListView;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewItemInterface;
-import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
-import de.longri.cachebox3.gui.widgets.list_view.SelectionChangedEvent;
+import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.ICancel;
@@ -236,7 +232,7 @@ public class ImportPQActivity extends BlockGpsActivityBase {
                 pqListViewItemArray.clear();
 
                 int idx = 0;
-                Array<GroundspeakAPI.PQ> pqList = GroundspeakAPI.fetchPocketQueryList();
+                Array<GroundspeakAPI.PQ> pqList = GroundspeakAPI.getInstance().fetchPocketQueryList();
                 pqList.sort();
                 for (GroundspeakAPI.PQ pq : pqList) {
                     //Check last import

@@ -10,6 +10,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 
+import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
 import static de.longri.cachebox3.gui.menu.MenuID.AID_GET_FRIENDS;
 
 public class Action_GetFriends extends AbstractAction {
@@ -20,13 +21,13 @@ public class Action_GetFriends extends AbstractAction {
 
     @Override
     public void execute() {
-        String friends = GroundspeakAPI.fetchFriends();
-        if (GroundspeakAPI.APIError == GroundspeakAPI.OK) {
+        String friends = GroundspeakAPI.getInstance().fetchFriends();
+        if (GroundspeakAPI.getInstance().APIError == OK) {
             Config.Friends.setValue(friends);
             Config.AcceptChanges();
             MessageBox.show(Translation.get("ok") + ":\n" + friends, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
         } else {
-            MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
         }
     }
 

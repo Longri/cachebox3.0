@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.CacheListChangedEvent;
@@ -53,13 +54,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.APIError;
-import static de.longri.cachebox3.apis.GroundspeakAPI.LastAPIError;
 import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
-import static de.longri.cachebox3.apis.GroundspeakAPI.fetchMyCacheLimits;
-import static de.longri.cachebox3.apis.GroundspeakAPI.fetchMyUserInfos;
-import static de.longri.cachebox3.apis.GroundspeakAPI.isDownloadLimitExceeded;
-import static de.longri.cachebox3.apis.GroundspeakAPI.isPremiumMember;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -99,17 +94,17 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                     @Override
                     public void run() {
 
-                        fetchMyCacheLimits();
-                        if (APIError != OK) {
-                            MessageBox.show(LastAPIError, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                        GroundspeakAPI.getInstance().fetchMyCacheLimits();
+                        if (GroundspeakAPI.getInstance().APIError != OK) {
+                            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                             // onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(1));
                             return;
                         }
-                        if (isDownloadLimitExceeded()) {
+                        if (GroundspeakAPI.getInstance().isDownloadLimitExceeded()) {
                             String msg;
-                            if (isPremiumMember()) {
-                                msg = "You have left " + fetchMyUserInfos().remaining + " full and " + fetchMyUserInfos().remainingLite + " lite caches.";
-                                msg += "The time to wait is " + fetchMyUserInfos().remainingTime + "/" + fetchMyUserInfos().remainingLiteTime;
+                            if (GroundspeakAPI.getInstance().isPremiumMember()) {
+                                msg = "You have left " + GroundspeakAPI.getInstance().fetchMyUserInfos().remaining + " full and " + GroundspeakAPI.getInstance().fetchMyUserInfos().remainingLite + " lite caches.";
+                                msg += "The time to wait is " + GroundspeakAPI.getInstance().fetchMyUserInfos().remainingTime + "/" + GroundspeakAPI.getInstance().fetchMyUserInfos().remainingLiteTime;
                             } else {
                                 msg = "Upgrade to Geocaching.com Premium Membership today\n"
                                         + "for as little at $2.50 per month\n"
@@ -126,9 +121,9 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                             return;
                         }
 
-                        if (!isPremiumMember()) {
+                        if (!GroundspeakAPI.getInstance().isPremiumMember()) {
                             String msg = "Download Details of this cache?\n";
-                            msg += "Full Downloads left: " + fetchMyUserInfos().remaining + "\n";
+                            msg += "Full Downloads left: " + GroundspeakAPI.getInstance().fetchMyUserInfos().remaining + "\n";
                             //message = msg;
                             //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(3));
                             return;

@@ -45,7 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static de.longri.cachebox3.CB.addClickHandler;
-import static de.longri.cachebox3.apis.GroundspeakAPI.searchGeoCaches;
+import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
 
 
 /**
@@ -374,9 +374,9 @@ public class ImportGCPosition extends Activity {
 
                 q.infoBox = infoBox;
 
-                Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = searchGeoCaches(Database.Data, q);
-                if (GroundspeakAPI.APIError != GroundspeakAPI.OK) {
-                    MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("importCachesOverPosition"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = GroundspeakAPI.getInstance().searchGeoCaches(q);
+                if (GroundspeakAPI.getInstance().APIError != OK) {
+                    MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("importCachesOverPosition"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
                 } else {
                     if (!infoBox.isCanceled()) {
                         // WriteIntoDB.CachesAndLogsAndImagesIntoDB(geoCacheRelateds, gpxFilename);
