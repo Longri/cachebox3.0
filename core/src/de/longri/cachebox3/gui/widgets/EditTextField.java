@@ -47,6 +47,7 @@ public class EditTextField extends Catch_WidgetGroup {
     private EditTextStyle style;
     private float maxWidth;
     private int inputType; // for Android InputType
+    private ClickListener clickListener;
 
     public EditTextField() {
         this(false, "");
@@ -73,8 +74,7 @@ public class EditTextField extends Catch_WidgetGroup {
         this.addActor(editButton);
         this.setStyle(VisUI.getSkin().get("default", EditTextStyle.class));
         this.setText(text);
-
-        ClickListener clickListener = new ClickListener() {
+        clickListener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 
                 Input.TextInputListener listener = new Input.TextInputListener() {
@@ -187,6 +187,23 @@ public class EditTextField extends Catch_WidgetGroup {
         else
             this.text = text;
         textLabel.setText(text);
+    }
+
+    public void setWrap(boolean wrap) {
+        textLabel.setWrap(wrap);
+    }
+
+    public void setEditable(boolean value) {
+        if (!value) {
+            editButton.removeListener(clickListener);
+            removeListener(clickListener);
+            editButton.setVisible(false);
+        }
+        else {
+            editButton.addListener(clickListener);
+            this.addListener(clickListener);
+            editButton.setVisible(true);
+        }
     }
 
     public EditTextStyle getStyle() {

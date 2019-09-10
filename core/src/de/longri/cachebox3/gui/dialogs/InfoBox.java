@@ -46,7 +46,9 @@ public class InfoBox {
             case DISPLAY:
                 maxVisibleLines = 10;
                 edtInfo = new EditTextField(true);
+                edtInfo.setEditable(false);
                 edtInfo.setMinLineCount(maxVisibleLines);
+                edtInfo.setWrap(true);
                 contentBox.addLast(edtInfo);
                 break;
             case INPUT:
@@ -60,7 +62,9 @@ public class InfoBox {
                 contentBox.addLast(progressBar);
                 maxVisibleLines = 1;
                 edtInfo = new EditTextField(false);
+                edtInfo.setEditable(false);
                 edtInfo.setMinLineCount(maxVisibleLines);
+                edtInfo.setWrap(true);
                 contentBox.addLast(edtInfo);
                 // Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
                 // workAnimation = new Image(animationDrawable);
@@ -138,6 +142,10 @@ public class InfoBox {
      */
     public boolean isCanceled() {
         return isCanceled;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 
     public enum Infotype {CHECKBOX, INPUT, DISPLAY, PROGRESS}

@@ -54,18 +54,14 @@ public class ShowImportMenu extends Menu {
         super("ImportMenuTitle");
 
         addMenuItem("chkState", CB.getSkin().getMenuIcon.gc_logo, () -> new UpdateStatusAndOthers().show());
-        // addMenuItem("API_IMPORT", CB.getSkin().getMenuIcon.GC_Live, () -> { }).setMoreMenu(getGcImportMenu());
-        // does no longer exist in ACB2
-        // in ACB2 is  a combined import with selection by checkboxes and then executed one after the other, seems to be the following issue:
-        // ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
         addMenuItem("API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ, () -> new ImportPQActivity(Database.Data).show());
         addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
-        addMenuItem("moreImport", CB.getSkin().getMenuIcon.importIcon, this::selectableImport);
+        addMenuItem("moreImport", CB.getSkin().getMenuIcon.importIcon, this::selectableImport); // todo ISSUE (#123 add More Import)
         addMenuItem("importCachesOverPosition", CB.getSkin().getMenuIcon.target, this::importOverPosition);
         // todo ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
         addMenuItem("GCVoteRatings", null, () -> {
+            SelectableImport.getInstance("moreImport", CB.getSkin().getMenuIcon.importIcon).importGCVote();
         }); // todo create icon: CB.getSkin().getMenuIcon.importGCVote
-
         addDivider(0);
 
         //todo ISSUE (#121 add GPX export)  addItem(MenuID.MI_EXPORT_RUN, "export");

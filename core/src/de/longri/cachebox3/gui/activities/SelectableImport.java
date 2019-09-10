@@ -3,8 +3,8 @@ package de.longri.cachebox3.gui.activities;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.ArrayMap;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.GCVote;
 import de.longri.cachebox3.apis.GroundspeakAPI;
-import de.longri.cachebox3.apis.gcvote_api.GCVote;
 import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.dialogs.InfoBox;
 import de.longri.cachebox3.gui.widgets.CB_CheckBox;
@@ -67,7 +67,6 @@ public class SelectableImport extends Activity {
 
                 }
                 if (cbGCVotes.isChecked() && !infoBox.isCanceled()) {
-                    infoBox.setTitle(Translation.get("GCVoteRatings").toString());
                     importGCVote();
                 }
                 if (cbLogs.isChecked() && !infoBox.isCanceled()) {
@@ -96,6 +95,14 @@ public class SelectableImport extends Activity {
     }
 
     public void importGCVote() {
+
+        boolean mustCloseInfoBox = false;
+        if (!infoBox.isRunning()) {
+            infoBox.open();
+            mustCloseInfoBox = true;
+        }
+        infoBox.setTitle(Translation.get("GCVoteRatings").toString());
+
         int take = 50;
         ArrayMap<String, AbstractCache> waypoints = new ArrayMap<>();
         for (int skip = 0; skip < Database.Data.cacheList.size; skip = skip + take) {
@@ -106,5 +113,7 @@ public class SelectableImport extends Activity {
             infoBox.setProgress(100 * skip / Database.Data.cacheList.size, Translation.get("GCVoteRatings").toString());
             GCVote.getVotes(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
         }
+
+        if (mustCloseInfoBox) infoBox.close();
     }
 }
