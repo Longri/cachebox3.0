@@ -117,7 +117,7 @@ public class AlterCacheboxDB {
                     if (!categories.containsKey(entry.getValue())) {
                         // add new Category
                         Categories cs = new Categories();
-                        Category category = cs.createNewCategory(entry.getValue());
+                        Category category = cs.createNewCategory(database, entry.getValue());
                         // and store
                         categories.put(entry.getValue(), category.Id);
                     }

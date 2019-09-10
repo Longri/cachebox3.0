@@ -86,7 +86,7 @@ public class Action_QuickDraft extends AbstractAction {
 
     private void finalHandling(boolean found, AbstractCache cache) {
         cache.setFound(found);
-        cache.updateBooleanStore(Database.Data);
+        cache.updateBooleanStore();
         // todo check if following is perhaps necessary
         // DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, cache);
 

@@ -386,7 +386,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                             for (AbstractCache cache : Database.Data.cacheList) {
                                 try {
                                     cache.setFavorite(finalchecked);
-                                    cache.updateBooleanStore(Database.Data);
+                                    cache.updateBooleanStore();
                                 } catch (Exception exc) {
                                     log.error("Update_Favorite", exc);
                                 }
@@ -424,7 +424,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
     }
 
     private void createCache() {
-        EditCache.getInstance("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon).create();
+        EditCache.getInstance(Database.Data, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon).create();
     }
 
 }

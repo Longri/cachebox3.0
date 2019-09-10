@@ -361,7 +361,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setAttributes(GdxSqliteCursor cursor);
 
-    public abstract void updateBooleanStore(Database database);
+    public abstract void updateBooleanStore();
 
     public abstract void setShowOriginalHtmlColor(boolean value);
 

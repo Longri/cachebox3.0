@@ -104,7 +104,7 @@ public class SelectableImport extends Activity {
                 waypoints.put(Database.Data.cacheList.get(i).getGcCode().toString(), Database.Data.cacheList.get(i));
             }
             infoBox.setProgress(100 * skip / Database.Data.cacheList.size, Translation.get("GCVoteRatings").toString());
-            GCVote.getVotes(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
+            GCVote.getVotes(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
         }
     }
 }

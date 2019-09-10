@@ -49,7 +49,7 @@ class ImmutableCacheTest {
     @Test
     void getUrl() {
 
-        MutableCache mutableCache = new MutableCache(0, 0);
+        MutableCache mutableCache = new MutableCache(cb3Database, 0, 0);
         mutableCache.setId(123456789l);
         String url = "HTTP://team-cachebox.de";
 

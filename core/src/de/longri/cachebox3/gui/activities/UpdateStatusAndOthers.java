@@ -206,7 +206,7 @@ public class UpdateStatusAndOthers extends ActivityBase {
                         }
                         skip += BlockSize;
 
-                        for (GroundspeakAPI.GeoCacheRelated ci : updateStatusOfGeoCaches(caches)) {
+                        for (GroundspeakAPI.GeoCacheRelated ci : updateStatusOfGeoCaches(Database.Data, caches)) {
                             AbstractCache ca = ci.cache;
                             /*
                              todo in ACB2 the DAO checks for changes by reading the database

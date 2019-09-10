@@ -58,7 +58,7 @@ public class ShowImportMenu extends Menu {
         // does no longer exist in ACB2
         // in ACB2 is  a combined import with selection by checkboxes and then executed one after the other, seems to be the following issue:
         // ISSUE (#123 add More Import)   addItem(MenuID.MI_IMPORT, "moreImport");
-        addMenuItem("API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ, () -> new ImportPQActivity().show());
+        addMenuItem("API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ, () -> new ImportPQActivity(Database.Data).show());
         addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
         addMenuItem("moreImport", CB.getSkin().getMenuIcon.importIcon, this::selectableImport);
         addMenuItem("importCachesOverPosition", CB.getSkin().getMenuIcon.target, this::importOverPosition);

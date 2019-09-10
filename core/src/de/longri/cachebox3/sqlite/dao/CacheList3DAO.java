@@ -83,7 +83,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
                 @Override
                 public void newRow(String[] columnName, Object[] value, int[] types) {
-                    cacheList.add(new MutableCache(value));
+                    cacheList.add(new MutableCache(database, value));
                     actCacheCount++;
                     progressFireCount++;
                     if (progressFireCount >= progressEventcount) {
@@ -213,7 +213,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
         cursor.moveToFirst();
         MutableCache newCache = null;
         while (!cursor.isAfterLast()) {
-            newCache = new MutableCache(cursor);
+            newCache = new MutableCache(database, cursor);
             cursor.moveToNext();
         }
         cursor.close();

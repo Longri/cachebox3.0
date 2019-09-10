@@ -36,7 +36,7 @@ public class GCVote {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(GCVote.class);
 
 
-    public static void getVotes(String User, String password, ArrayMap<String, AbstractCache> waypoints) {
+    public static void getVotes(Database database, String User, String password, ArrayMap<String, AbstractCache> waypoints) {
         Array<AbstractCache> result = new Array<>();
 
         StringBuilder data = new StringBuilder("userName=" + User + "&password=" + password + "&waypoints=");
@@ -58,7 +58,7 @@ public class GCVote {
             Document doc = db.parse(is);
             is.close();
             NodeList nodelist = doc.getElementsByTagName("vote");
-            Database.Data.beginTransaction();
+            database.beginTransaction();
             Database.Parameters args = new Database.Parameters();
 
             for (Integer i = 0; i < nodelist.getLength(); i++) {
@@ -91,13 +91,13 @@ public class GCVote {
                     if (changed) {
                         args.put("Rating", theCache.getRatingInternal());
                         args.put("Vote", theCache.getVoteInternal());
-                        Database.Data.update("CacheCoreInfo", args, "WHERE id=?", new String[]{Long.toString(theCache.getId())});
+                        database.update("CacheCoreInfo", args, "WHERE id=?", new String[]{Long.toString(theCache.getId())});
                         args.clear();
                     }
                 } catch (Exception ignored) {
                 }
             }
-            Database.Data.endTransaction();
+            database.endTransaction();
 
         } catch (Exception e) {
             log.error("getVotes", e);

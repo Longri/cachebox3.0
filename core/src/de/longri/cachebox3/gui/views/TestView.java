@@ -67,6 +67,7 @@ import de.longri.cachebox3.gui.widgets.list_view.DefaultListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
+import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
@@ -273,7 +274,7 @@ public class TestView extends AbstractView {
 
         {// test Map Info Bubble
 
-            AbstractCache cache = new MutableCache(0, 0);
+            AbstractCache cache = new MutableCache(Database.Data, 0, 0);
             cache.setSize(CacheSizes.regular);
             cache.setType(CacheTypes.Traditional);
             cache.setName("CacheName CacheName CacheName CacheName");

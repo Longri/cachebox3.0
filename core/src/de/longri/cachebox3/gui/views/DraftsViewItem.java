@@ -359,7 +359,7 @@ public class DraftsViewItem extends ListViewItem {
                     if (abstractCache != null) {
                         if (abstractCache.isFound()) {
                             abstractCache.setFound(false);
-                            abstractCache.updateBooleanStore(Database.Data);
+                            abstractCache.updateBooleanStore();
                             DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, abstractCache);
                             Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                             Config.AcceptChanges();
@@ -369,7 +369,7 @@ public class DraftsViewItem extends ListViewItem {
                                 AbstractCache tc = Database.Data.cacheList.GetCacheById(abstractCache.getId());
                                 if (tc != null) {
                                     tc.setFound(false);
-                                    tc.updateBooleanStore(Database.Data);
+                                    tc.updateBooleanStore();
                                 }
                             }
                         }

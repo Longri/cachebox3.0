@@ -18,23 +18,23 @@ package de.longri.cachebox3.types;
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Category extends ArrayList<GpxFilename> implements Comparable<Category> {
-    /**
-     *
-     */
-    private static final long serialVersionUID = -7257078663021910097L;
+    private final static Logger log = LoggerFactory.getLogger(Category.class);
+
     public long Id;
     public String GpxFilename;
     public boolean pinned;
     public boolean Checked;
+    private final Database database;
 
-    public Category() {
+    public Category(Database database) {
+        this.database = database;
     }
 
     /**
@@ -53,14 +53,14 @@ public class Category extends ArrayList<GpxFilename> implements Comparable<Categ
         String stimestamp = Database.cbDbFormat.format(new Date());
         args.put("Imported", stimestamp);
         try {
-            Database.Data.insert("GpxFilenames", args);
+            this.database.insert("GpxFilenames", args);
         } catch (Exception exc) {
-            //Log.err(log, "CreateNewGpxFilename", filename, exc);
+            log.error("CreateNewGpxFilename: " + filename, exc);
         }
 
         long GPXFilename_ID = 0;
 
-        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from GpxFilenames", (String[]) null);
+        GdxSqliteCursor reader = this.database.rawQuery("Select max(ID) from GpxFilenames", (String[]) null);
         reader.moveToFirst();
         if (!reader.isAfterLast()) {
             GPXFilename_ID = reader.getLong(0);
