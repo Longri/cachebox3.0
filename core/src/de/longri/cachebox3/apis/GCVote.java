@@ -34,119 +34,134 @@ import java.io.InputStream;
 
 public class GCVote {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(GCVote.class);
+    private final Database database;
+    private final String user, password;
 
-
-    public static void getVotes(Database database, String User, String password, ArrayMap<String, AbstractCache> waypoints) {
-        Array<AbstractCache> result = new Array<>();
-
-        StringBuilder data = new StringBuilder("userName=" + User + "&password=" + password + "&waypoints=");
-        String separator = "";
-        for (String k : waypoints.keys()) {
-            data.append(separator).append(k);
-            separator = ",";
-        }
-
-        try {
-            InputStream is = Webb.create()
-                    .get("http://gcvote.com/getVotes.php?" + data)
-                    .readTimeout(Config.socket_timeout.getValue())
-                    .ensureSuccess()
-                    .asStream()
-                    .getBody();
-
-            DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = db.parse(is);
-            is.close();
-            NodeList nodelist = doc.getElementsByTagName("vote");
-            database.beginTransaction();
-            Database.Parameters args = new Database.Parameters();
-
-            for (Integer i = 0; i < nodelist.getLength(); i++) {
-                Node node = nodelist.item(i);
-                String rating = node.getAttributes().getNamedItem("voteAvg").getNodeValue();
-                String vote = node.getAttributes().getNamedItem("voteUser").getNodeValue();
-                String GCCode = node.getAttributes().getNamedItem("waypoint").getNodeValue();
-                MutableCache theCache = (MutableCache) waypoints.get(GCCode);
-                boolean changed = false;
-                try {
-                    if (rating.length() > 0) {
-                        float ratingFromGCVote = Float.parseFloat(rating);
-                        // multiply with 100 would be sufficiant, but for compatibilty with CB2 using 100 * 2
-                        float oldRating = theCache.getRating();
-                        theCache.setRating(ratingFromGCVote);
-                        float newRating = theCache.getRating();
-                        if (oldRating != newRating) {
-                            changed = true;
-                        }
-                    }
-                    if (vote.length() > 0) {
-                        float voteFromGCVote = Float.parseFloat(vote);
-                        float oldVote = theCache.getVote();
-                        theCache.setVote(voteFromGCVote);
-                        float newVote = theCache.getVote();
-                        if (oldVote != newVote) {
-                            changed = true;
-                        }
-                    }
-                    if (changed) {
-                        args.put("Rating", theCache.getRatingInternal());
-                        args.put("Vote", theCache.getVoteInternal());
-                        database.update("CacheCoreInfo", args, "WHERE id=?", new String[]{Long.toString(theCache.getId())});
-                        args.clear();
-                    }
-                } catch (Exception ignored) {
-                }
-            }
-            database.endTransaction();
-
-        } catch (Exception e) {
-            log.error("getVotes", e);
-        }
-
+    public GCVote(Database database, String user, String password) {
+        this.database = database;
+        this.user = user;
+        this.password = password;
     }
 
-    public static boolean sendVote(String User, String password, int vote, String url, String waypoint) {
-        url = url.replace("http:", "https:"); // automatic redirect doesn't work from http to https
-        int pos = url.indexOf("guid=");
-        String guid = "";
-        if (pos > -1) {
-            guid = url.substring(pos + 5).trim();
-        } else {
-            // fetch guid from gc : works without login
+    public void getVotes(ArrayMap<String, AbstractCache> waypoints) {
+        if (password.length() > 0) {
+            Array<AbstractCache> result = new Array<>();
+
+            StringBuilder data = new StringBuilder("userName=" + user + "&password=" + password + "&waypoints=");
+            String separator = "";
+            for (String k : waypoints.keys()) {
+                data.append(separator).append(k);
+                separator = ",";
+            }
+
             try {
-                String page = Webb.create()
-                        .get(url)
+                InputStream is = Webb.create()
+                        .get("http://gcvote.com/getVotes.php?" + data)
+                        .readTimeout(Config.socket_timeout.getValue())
+                        .ensureSuccess()
+                        .asStream()
+                        .getBody();
+
+                DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                Document doc = db.parse(is);
+                is.close();
+                NodeList nodelist = doc.getElementsByTagName("vote");
+                database.beginTransaction();
+                Database.Parameters args = new Database.Parameters();
+
+                for (Integer i = 0; i < nodelist.getLength(); i++) {
+                    Node node = nodelist.item(i);
+                    String rating = node.getAttributes().getNamedItem("voteAvg").getNodeValue();
+                    String vote = node.getAttributes().getNamedItem("voteUser").getNodeValue();
+                    String GCCode = node.getAttributes().getNamedItem("waypoint").getNodeValue();
+                    MutableCache theCache = (MutableCache) waypoints.get(GCCode);
+                    boolean changed = false;
+                    try {
+                        if (rating.length() > 0) {
+                            float ratingFromGCVote = Float.parseFloat(rating);
+                            // multiply with 100 would be sufficiant, but for compatibilty with CB2 using 100 * 2
+                            float oldRating = theCache.getRating();
+                            theCache.setRating(ratingFromGCVote);
+                            float newRating = theCache.getRating();
+                            if (oldRating != newRating) {
+                                changed = true;
+                            }
+                        }
+                        if (vote.length() > 0) {
+                            float voteFromGCVote = Float.parseFloat(vote);
+                            float oldVote = theCache.getVote();
+                            theCache.setVote(voteFromGCVote);
+                            float newVote = theCache.getVote();
+                            if (oldVote != newVote) {
+                                changed = true;
+                            }
+                        }
+                        if (changed) {
+                            args.put("Rating", theCache.getRatingInternal());
+                            args.put("Vote", theCache.getVoteInternal());
+                            database.update("CacheCoreInfo", args, "WHERE id=?", new String[]{Long.toString(theCache.getId())});
+                            args.clear();
+                        }
+                    } catch (Exception ignored) {
+                    }
+                }
+                database.endTransaction();
+
+            } catch (Exception e) {
+                log.error("getVotes", e);
+            }
+
+        }
+    }
+
+    public boolean sendVote(int vote, String url, String waypoint) {
+        if (password.length() > 0) {
+            url = url.replace("http:", "https:"); // automatic redirect doesn't work from http to https
+            int pos = url.indexOf("guid=");
+            String guid = "";
+            if (pos > -1) {
+                guid = url.substring(pos + 5).trim();
+            } else {
+                // fetch guid from gc : works without login
+                try {
+                    String page = Webb.create()
+                            .get(url)
+                            .ensureSuccess()
+                            .asString()
+                            .getBody();
+                    String toSearch = "cache_details.aspx?guid=";
+                    pos = page.indexOf(toSearch);
+                    if (pos > -1) {
+                        int start = pos + toSearch.length();
+                        int stop = page.indexOf("\"", start);
+                        guid = page.substring(start, stop);
+                    }
+                } catch (Exception e) {
+                    log.error("Send GCVote: Can't get GUID for " + waypoint, e);
+                }
+            }
+            if (guid.length() == 0) return false;
+
+            String data = "userName=" + user + "&password=" + password + "&voteUser=" + String.valueOf(vote / 100.0) + "&cacheId=" + guid + "&waypoint=" + waypoint;
+
+            try {
+                String responseString = Webb.create()
+                        .get("http://gcvote.com/setVote.php?" + data)
+                        .readTimeout(Config.socket_timeout.getValue())
                         .ensureSuccess()
                         .asString()
                         .getBody();
-                String toSearch = "cache_details.aspx?guid=";
-                pos = page.indexOf(toSearch);
-                if (pos > -1) {
-                    int start = pos + toSearch.length();
-                    int stop = page.indexOf("\"", start);
-                    guid = page.substring(start, stop);
-                }
-            } catch (Exception e) {
-                log.error("Send GCVote: Can't get GUID for " + waypoint, e);
+                return responseString.equals("OK");
+
+            } catch (Exception ex) {
+                return false;
             }
+
         }
-        if (guid.length() == 0) return false;
-
-        String data = "userName=" + User + "&password=" + password + "&voteUser=" + String.valueOf(vote / 100.0) + "&cacheId=" + guid + "&waypoint=" + waypoint;
-
-        try {
-            String responseString = Webb.create()
-                    .get("http://gcvote.com/setVote.php?" + data)
-                    .readTimeout(Config.socket_timeout.getValue())
-                    .ensureSuccess()
-                    .asString()
-                    .getBody();
-            return responseString.equals("OK");
-
-        } catch (Exception ex) {
-            return false;
-        }
-
+        return false;
     }
 
+    public boolean isPossible() {
+        return password.length() > 0;
+    }
 }

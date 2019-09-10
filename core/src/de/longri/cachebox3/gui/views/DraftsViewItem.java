@@ -279,12 +279,15 @@ public class DraftsViewItem extends ListViewItem {
 
     private void logOnline(final boolean directLog) {
 
-        if (Config.GcVotePassword.getEncryptedValue().length() > 0 && !entry.isTbDraft) {
+        if (!entry.isTbDraft) {
             if (entry.gc_Vote > 0) {
                 // Stimme abgeben
                 try {
-                    if (!GCVote.sendVote(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), entry.gc_Vote, entry.CacheUrl, entry.gcCode)) {
-                        log.error(entry.gcCode + " GC-Vote");
+                    GCVote gcVote = new GCVote(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue());
+                    if (gcVote.isPossible()) {
+                        if (!gcVote.sendVote(entry.gc_Vote, entry.CacheUrl, entry.gcCode)) {
+                            log.error(entry.gcCode + " GC-Vote");
+                        }
                     }
                 } catch (Exception e) {
                     log.error(entry.gcCode + " GC-Vote");

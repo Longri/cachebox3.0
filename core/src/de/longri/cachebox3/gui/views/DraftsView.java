@@ -24,12 +24,7 @@ import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.EditDrafts;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
+import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.popUps.QuickDraftFeedbackPopUp;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
@@ -457,7 +452,7 @@ public class DraftsView extends AbstractView {
                                 anzahl++;
                         }
 
-                        boolean sendGCVote = !Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("");
+                        GCVote gcVote = new GCVote(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue());
 
                         StringBuilder UploadMeldung = new StringBuilder();
                         if (anzahl > 0) {
@@ -472,13 +467,15 @@ public class DraftsView extends AbstractView {
                                 // Progress status Melden
                                 setProgress((100 * count) / anzahl, draft.CacheName);
 
-                                if (sendGCVote && !draft.isTbDraft) {
-                                    try {
-                                        if (!GCVote.sendVote(Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), draft.gc_Vote, draft.CacheUrl, draft.gcCode)) {
+                                if (!draft.isTbDraft) {
+                                    if (gcVote.isPossible()) {
+                                        try {
+                                            if (!gcVote.sendVote(draft.gc_Vote, draft.CacheUrl, draft.gcCode)) {
+                                                UploadMeldung.append(draft.gcCode).append("\n").append("GC-Vote Error").append("\n");
+                                            }
+                                        } catch (Exception e) {
                                             UploadMeldung.append(draft.gcCode).append("\n").append("GC-Vote Error").append("\n");
                                         }
-                                    } catch (Exception e) {
-                                        UploadMeldung.append(draft.gcCode).append("\n").append("GC-Vote Error").append("\n");
                                     }
                                 }
 

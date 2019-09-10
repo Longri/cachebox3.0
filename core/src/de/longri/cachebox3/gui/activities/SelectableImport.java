@@ -105,15 +105,17 @@ public class SelectableImport extends Activity {
 
         int take = 50;
         ArrayMap<String, AbstractCache> waypoints = new ArrayMap<>();
-        for (int skip = 0; skip < Database.Data.cacheList.size; skip = skip + take) {
-            int limit = Math.min(skip + take, Database.Data.cacheList.size);
-            for (int i = skip; i < limit; i++) {
-                waypoints.put(Database.Data.cacheList.get(i).getGcCode().toString(), Database.Data.cacheList.get(i));
+        GCVote gcVote = new GCVote(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue());
+        if (gcVote.isPossible()) {
+            for (int skip = 0; skip < Database.Data.cacheList.size; skip = skip + take) {
+                int limit = Math.min(skip + take, Database.Data.cacheList.size);
+                for (int i = skip; i < limit; i++) {
+                    waypoints.put(Database.Data.cacheList.get(i).getGcCode().toString(), Database.Data.cacheList.get(i));
+                }
+                infoBox.setProgress(100 * skip / Database.Data.cacheList.size, Translation.get("GCVoteRatings").toString());
+                gcVote.getVotes(waypoints);
             }
-            infoBox.setProgress(100 * skip / Database.Data.cacheList.size, Translation.get("GCVoteRatings").toString());
-            GCVote.getVotes(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue(), waypoints);
         }
-
         if (mustCloseInfoBox) infoBox.close();
     }
 }
