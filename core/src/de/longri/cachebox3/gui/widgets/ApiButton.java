@@ -50,9 +50,11 @@ public class ApiButton extends IconButton {
     public void layout() {
         this.getLabel().setHeight(this.getHeight());
         this.getCell(this.getLabel()).spaceLeft(CB.scaledSizes.MARGINx2);
-        image.setBounds(this.getWidth() - (style.unchecked.getMinHeight() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN, style.unchecked.getMinHeight(), style.unchecked.getMinHeight());
+        if (image != null && style != null && style.unchecked != null)
+            image.setBounds(this.getWidth() - (style.unchecked.getMinHeight() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN, style.unchecked.getMinHeight(), style.unchecked.getMinHeight());
         super.layout();
     }
+
 
     protected void setIcon() {
         boolean Entry = false;
@@ -66,18 +68,18 @@ public class ApiButton extends IconButton {
 
         if (Entry) {
             if (GroundspeakAPI.getInstance().isAccessTokenInvalid()) {
-                image.setDrawable(style.invalid);
-                // image.setDrawable(style.expired);
-                // image.setDrawable(style.check);
+                setIcon(style.invalid);
+                // setIcon(style.expired);
+                // setIcon(style.check);
             } else {
                 if (GroundspeakAPI.getInstance().isPremiumMember()) {
-                    image.setDrawable(style.unchecked);
+                    setIcon(style.unchecked);
                 } else {
-                    image.setDrawable(style.unchecked);
+                    setIcon(style.unchecked);
                 }
             }
         } else {
-            image.setDrawable(style.unchecked);
+            setIcon(style.unchecked);
         }
 
     }
