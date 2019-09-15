@@ -85,8 +85,9 @@ public class TouchLwjgl3Launcher {
             config.windowHeight *= scale;
         }
 
+        JFrame f = null;
         if (cmd.hasOption("gps")) {
-            JFrame f;
+
             try {
                 f = SimulatorMain.createFrame();
                 f.pack();
@@ -95,7 +96,7 @@ public class TouchLwjgl3Launcher {
                 f.setBounds(0, 0, f.getWidth(), f.getHeight());
 
                 config.windowX = f.getX() + f.getWidth() + 10;
-                config.windowY = f.getY();
+                config.windowY = f.getY() + 30;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -110,6 +111,9 @@ public class TouchLwjgl3Launcher {
         // Cachebox use the slf4j implematation for LibGdx as Log engine.
         // so set LogLevel on CB.class if you wont (USED_LOG_LEVEL)
         new CB_Lwjgl3Application(new DesktopMain(), config);
+
+        if (f != null)
+            f.setVisible(false);
 
 
     }

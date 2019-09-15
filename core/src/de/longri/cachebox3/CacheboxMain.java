@@ -283,10 +283,10 @@ public class CacheboxMain extends ApplicationAdapter {
             } else {
                 log.debug("save instance state");
                 BitStore saveInstanceStateWriter = new BitStore();
-                saveInstanceStateWriter.write(false); // nothing to restore
+                saveInstanceStateWriter.write(false);
 
                 //store DB name
-                saveInstanceStateWriter.write(Config.DatabaseName.getValue());
+                saveInstanceStateWriter.write(Config.DatabaseName.getValue().replace(CB.WorkPath, "?"));
                 saveInstanceState(saveInstanceStateWriter);
 
                 Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);

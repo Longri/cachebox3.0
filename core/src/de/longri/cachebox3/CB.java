@@ -99,6 +99,8 @@ public class CB {
     public static final String splashMsg = AboutMsg + br + br + "POWERED BY:";
     public final static SensorIO sensoerIO = new SensorIO();
     static final Logger log = LoggerFactory.getLogger(CB.class);
+    static final Logger errorLog = LoggerFactory.getLogger("CB.errorLog");
+    
     final static float PPI_DEFAULT = 163;
     final static AtomicInteger executeCount = new AtomicInteger(0);
     final static Array<String> runningRunnables = new Array<>();
@@ -372,7 +374,7 @@ public class CB {
             try {
                 runnable.run();
             } catch (Exception e) {
-                log.error("postOnGlThread:" + runnable.name, e);
+                errorLog.error("postOnGlThread:" + runnable.name, e);
                 CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
             }
             return;
@@ -384,7 +386,7 @@ public class CB {
                 try {
                     runnable.run();
                 } catch (Exception e) {
-                    log.error("postOnGlThread:" + runnable.name, e);
+                    errorLog.error("postOnGlThread:" + runnable.name, e);
                     if (CB.stageManager != null) CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                 }
                 WAIT.set(false);
@@ -412,7 +414,7 @@ public class CB {
                         try {
                             runnable.run();
                         } catch (Exception e) {
-                            log.error("postAsyncDelayd:" + runnable.name, e);
+                            errorLog.error("postAsyncDelayd:" + runnable.name, e);
                             CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                         }
                     }
@@ -436,7 +438,7 @@ public class CB {
                     runningRunnables.removeValue(runnable.name, false);
                     log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
                 } catch (final Exception e) {
-                    log.error("postAsync:" + runnable.name, e);
+                    errorLog.error("postAsync:" + runnable.name, e);
                     CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                     executeCount.decrementAndGet();
                 }
@@ -525,7 +527,7 @@ public class CB {
                         EventHandler.fire(new SelectedCacheChangedEvent(c));
                         lastSelectedAbstractCache = c;
                     } catch (Exception e) {
-                        log.error("set last selected Cache", e);
+                        errorLog.error("set last selected Cache", e);
                     }
                     break;
                 }
@@ -661,7 +663,7 @@ public class CB {
                 statement.close();
             }
         } catch (Exception e) {
-            log.error("Can't writeThemeOfMap", e);
+            errorLog.error("Can't writeThemeOfMap", e);
         }
 
     }

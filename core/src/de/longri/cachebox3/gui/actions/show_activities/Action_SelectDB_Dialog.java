@@ -30,6 +30,8 @@ import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class Action_SelectDB_Dialog extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_SelectDB_Dialog.class);
 
@@ -74,6 +76,15 @@ public class Action_SelectDB_Dialog extends AbstractAction {
         }
 
         FileHandle fileHandle = Gdx.files.absolute(CB.WorkPath + "/" + Config.DatabaseName.getValue());
+        if (!fileHandle.exists() || fileHandle.isDirectory()) {
+            try {
+                log.debug("can't open Database! File not exist : \n{}", fileHandle.file().getCanonicalPath());
+            } catch (IOException e) {
+                log.warn("can't open Database! File not exist : \n{}", fileHandle.file().getAbsolutePath());
+            }
+            return;
+        }
+
 
         try {
             Database.Data.startUp(fileHandle);

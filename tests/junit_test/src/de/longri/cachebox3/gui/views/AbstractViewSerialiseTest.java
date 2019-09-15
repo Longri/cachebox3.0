@@ -17,7 +17,11 @@ package de.longri.cachebox3.gui.views;
 
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.platform_test.RunOnGL;
+import de.longri.cachebox3.settings.Config;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 25.03.2019.
@@ -30,6 +34,8 @@ public class AbstractViewSerialiseTest {
         // About view have no member! check only serialization/deserialization!
         AboutView aboutView = new AboutView();
         AboutView newAboutView = (AboutView) TestUtils.assertAbstractViewSerialation(aboutView, AboutView.class);
+
+        assertEquals(aboutView, newAboutView);
     }
 
 
@@ -44,9 +50,38 @@ public class AbstractViewSerialiseTest {
     @Test
     public void CompassViewTest() {
         TestUtils.initialVisUI();
-        // About view have no member! check only serialization/deserialization!
+        // CompassView read some settings from Config 
+        boolean showMap = Config.CompassShowMap.getValue();
+        boolean showName = Config.CompassShowWP_Name.getValue();
+        boolean showIcon = Config.CompassShowWP_Icon.getValue();
+        boolean showAtt = Config.CompassShowAttributes.getValue();
+        boolean showGcCode = Config.CompassShowGcCode.getValue();
+        boolean showCoords = Config.CompassShowCoords.getValue();
+        boolean showWpDesc = Config.CompassShowWpDesc.getValue();
+        boolean showSatInfos = Config.CompassShowSatInfos.getValue();
+        boolean showSunMoon = Config.CompassShowSunMoon.getValue();
+        boolean showTargetDirection = Config.CompassShowTargetDirection.getValue();
+        boolean showSDT = Config.CompassShowSDT.getValue();
+        boolean showLastFound = Config.CompassShowLastFound.getValue();
+
+        Config.CompassShowMap.setValue(!showMap);
+        Config.CompassShowWP_Name.setValue(!showName);
+        Config.CompassShowWP_Icon.setValue(!showIcon);
+        Config.CompassShowAttributes.setValue(!showAtt);
+        Config.CompassShowGcCode.setValue(!showGcCode);
+        Config.CompassShowCoords.setValue(!showCoords);
+        Config.CompassShowWpDesc.setValue(!showWpDesc);
+        Config.CompassShowSatInfos.setValue(!showSatInfos);
+        Config.CompassShowSunMoon.setValue(!showSunMoon);
+        Config.CompassShowTargetDirection.setValue(!showTargetDirection);
+        Config.CompassShowSDT.setValue(!showSDT);
+        Config.CompassShowLastFound.setValue(!showLastFound);
+
+        Config.AcceptChanges();
+
         CompassView compassView = new CompassView();
         CompassView newCompassView = (CompassView) TestUtils.assertAbstractViewSerialation(compassView, CompassView.class);
+        assertEquals(compassView, newCompassView);
     }
 
     @Test

@@ -204,7 +204,7 @@ public class ViewManager extends NamedStage
 
         if (actView != null) {
             final AbstractView dispView = actView;
-            log.debug("remove and dispose actView" + dispView.getName());
+            log.debug("remove and dispose actView: " + dispView.getName());
             this.getRoot().removeActor(dispView);
             CB.postAsync(new NamedRunnable("Dispose last View") {
                 @Override
