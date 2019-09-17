@@ -1,3 +1,4 @@
+apply plugin: 'java-library'
 apply plugin: 'java'
 
 dependencies {
@@ -5,21 +6,20 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // libgdx
-    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
 
-    implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    api "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
-    implementation "org.mapsforge:mapsforge-core:$mapsforgeVersion"
-    implementation "org.mapsforge:mapsforge-themes:$mapsforgeVersion"
-    implementation "org.mapsforge:mapsforge-map:$mapsforgeVersion"
-    implementation "org.mapsforge:mapsforge-map-reader:$mapsforgeVersion"
-    implementation "org.mapsforge:mapsforge-map-awt:$mapsforgeVersion"
-    implementation 'com.kitfox.svg:svg-salamander:1.0'
-    implementation 'net.sf.kxml:kxml2:2.3.0'
+    api "org.mapsforge:mapsforge-core:$mapsforgeVersion"
+    api "org.mapsforge:mapsforge-themes:$mapsforgeVersion"
+    api "org.mapsforge:mapsforge-map:$mapsforgeVersion"
+    api "org.mapsforge:mapsforge-map-reader:$mapsforgeVersion"
+    api "org.mapsforge:mapsforge-map-awt:$mapsforgeVersion"
+    api 'com.kitfox.svg:svg-salamander:1.0'
+    api 'net.sf.kxml:kxml2:2.3.0'
 
-
-    implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+    api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
 }
 
 

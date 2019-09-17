@@ -3,7 +3,7 @@ targetCompatibility = "1.8"
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["./workingDir"]
 
-project.ext.mainClassName = "de.longri.cachebox3.desktop.touch.TouchLauncher"
+project.ext.mainClassName = "com.badlogic.gdx.backends.lwjgl3.TouchLwjgl3Launcher"
 project.ext.assetsDir = new File("./workingDir")
 
 task run(dependsOn: classes, type: JavaExec) {

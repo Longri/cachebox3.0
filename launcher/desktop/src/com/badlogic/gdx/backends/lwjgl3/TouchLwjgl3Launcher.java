@@ -115,6 +115,7 @@ public class TouchLwjgl3Launcher {
         if (f != null)
             f.setVisible(false);
 
+        System.exit(0);
 
     }
 
