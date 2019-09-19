@@ -155,7 +155,7 @@ public class GpxFileImporterTest {
         //store changed
         cache.setFound(true);
         cache.setFavorite(true);
-        cache.updateBooleanStore(TEST_DB);
+        cache.updateBooleanStore();
 
 
         //check if changes stored in DB

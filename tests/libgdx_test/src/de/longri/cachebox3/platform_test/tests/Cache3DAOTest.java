@@ -110,7 +110,7 @@ public class Cache3DAOTest {
 
     @Test
     public void writeToDatabase() throws PlatformAssertionError {
-        AbstractCache cache = new MutableCache(should_latitude, should_longitude);
+        AbstractCache cache = new MutableCache(null, should_latitude, should_longitude);
 
         cache.setLatLon(should_latitude, should_longitude);
         cache.setDateHidden(should_DateHidden);

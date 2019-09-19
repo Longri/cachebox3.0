@@ -18,6 +18,7 @@ package com.badlogic.gdx.backends.lwjgl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.CB_Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.apis.CB_Api;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
@@ -153,8 +154,8 @@ public class GenerateApiKeyWebView extends Window {
                                         String loadedUrl = engine.getLocation();
                                         log.debug("DidFinishHtmlLoad {}", loadedUrl);
 
-                                        if (loadedUrl.startsWith("http://oauth.team-cachebox.de/")
-                                                || loadedUrl.startsWith("http://staging.oauth.team-cachebox.de/")) {
+                                        if (loadedUrl.startsWith(PlatformConnector.REDIRECT_URL)
+                                                || loadedUrl.startsWith(PlatformConnector.REDIRECT_STAGING_URL)) {
 
                                             if (!secondLoad) {
                                                 secondLoad = true;
