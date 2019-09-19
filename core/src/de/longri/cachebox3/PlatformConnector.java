@@ -30,6 +30,9 @@ import java.io.InputStream;
  */
 public abstract class PlatformConnector {
 
+    public static final String REDIRECT_URL = "https://gc-oauth.longri.de/index.php?";
+    public static final String REDIRECT_STAGING_URL = "https://staging.gc-oauth.longri.de/index.php?";
+
     static PlatformConnector platformConnector;
 
     public static void init(PlatformConnector connector) {
