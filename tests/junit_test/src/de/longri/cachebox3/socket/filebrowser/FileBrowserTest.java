@@ -64,7 +64,7 @@ class FileBrowserTest {
 
 
     @Test
-    public  void getRootDir() throws InterruptedException {
+    public void getRootDir() throws InterruptedException {
 
         if (EXCLUDE_FROM_TRAVIS.VALUE) return;
 

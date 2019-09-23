@@ -20,7 +20,6 @@ import de.longri.cachebox3.platform_test.RunOnGL;
 import de.longri.cachebox3.settings.Config;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
