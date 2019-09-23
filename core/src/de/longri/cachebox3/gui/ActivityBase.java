@@ -32,9 +32,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ActivityBase extends Window implements Showable {
 
 
-    protected final ActivityBaseStyle style;
+    protected ActivityBaseStyle style;
     protected boolean needsLayout = true;
     private AtomicBoolean isDisposed = new AtomicBoolean(false);
+
+    public ActivityBase() {
+        this("nameless", VisUI.getSkin().get("default", ActivityBaseStyle.class));
+    }
 
     public ActivityBase(String name) {
         this(name, VisUI.getSkin().get("default", ActivityBaseStyle.class));
@@ -93,10 +97,6 @@ public class ActivityBase extends Window implements Showable {
         return isDisposed.get();
     }
 
-    public static class ActivityBaseStyle {
-        public Drawable background, stageBackground;
-    }
-
     @Override
     public float getPrefWidth() {
         return Gdx.graphics.getWidth();
@@ -105,6 +105,10 @@ public class ActivityBase extends Window implements Showable {
     @Override
     public float getPrefHeight() {
         return Gdx.graphics.getHeight();
+    }
+
+    public static class ActivityBaseStyle {
+        public Drawable background, stageBackground;
     }
 
 }

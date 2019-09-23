@@ -73,3 +73,5 @@ testData.db3
 
 *.apk
 launcher/android/release/output.json
+
+!.idea/

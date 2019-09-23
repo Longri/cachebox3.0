@@ -23,17 +23,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.CoordinateButton;
-import de.longri.cachebox3.gui.widgets.EditTextBox;
-import de.longri.cachebox3.gui.widgets.SelectBox;
+import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -52,10 +48,10 @@ public class EditWaypoint extends ActivityBase {
 
     private final EditWaypointStyle style;
     private final AbstractWaypoint waypoint;
-    private final CharSequenceButton btnOk, btnCancel;
-    private final VisLabel cacheTitelLabel, titleLabel, typeLabel, descriptionLabel, clueLabel, startLabel;
+    private final CB_Button btnOk, btnCancel;
+    private final CB_Label cacheTitelLabel, titleLabel, typeLabel, descriptionLabel, clueLabel, startLabel;
     private final ScrollPane scrollPane;
-    private final EditTextBox titleTextArea, descriptionTextArea, clueTextArea;
+    private final EditTextField titleTextArea, descriptionTextArea, clueTextArea;
     private final VisTable contentTable;
     private final CoordinateButton coordinateButton;
     private final VisCheckBox startCheckBox;
@@ -72,17 +68,17 @@ public class EditWaypoint extends ActivityBase {
         this.callBack = callBack;
         this.onlyShow = onlyShow;
 
-        btnOk = new CharSequenceButton(Translation.get("save"));
-        btnCancel = new CharSequenceButton(Translation.get("cancel"));
-        cacheTitelLabel = new VisLabel(Database.Data.cacheList.GetCacheById(waypoint.getCacheId()).getName());
-        typeLabel = new VisLabel(Translation.get("type"));
-        titleLabel = new VisLabel(Translation.get("Title"));
-        descriptionLabel = new VisLabel(Translation.get("Description"));
-        clueLabel = new VisLabel(Translation.get("Clue"));
-        startLabel = new VisLabel(Translation.get("start"));
-        titleTextArea = new EditTextBox(false);
-        descriptionTextArea = new EditTextBox(true);
-        clueTextArea = new EditTextBox(true);
+        btnOk = new CB_Button(Translation.get("save"));
+        btnCancel = new CB_Button(Translation.get("cancel"));
+        cacheTitelLabel = new CB_Label(Database.Data.cacheList.GetCacheById(waypoint.getCacheId()).getName());
+        typeLabel = new CB_Label(Translation.get("type"));
+        titleLabel = new CB_Label(Translation.get("Title"));
+        descriptionLabel = new CB_Label(Translation.get("Description"));
+        clueLabel = new CB_Label(Translation.get("Clue"));
+        startLabel = new CB_Label(Translation.get("start"));
+        titleTextArea = new EditTextField(false);
+        descriptionTextArea = new EditTextField(true);
+        clueTextArea = new EditTextField(true);
         contentTable = new VisTable();
         coordinateButton = new CoordinateButton(waypoint);
         startCheckBox = new VisCheckBox("");
@@ -102,7 +98,7 @@ public class EditWaypoint extends ActivityBase {
         selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                EditWaypoint.this.waypoint.setType(selectBox.getSelected());
+                waypoint.setType(selectBox.getSelected());
                 showCbStartPoint(EditWaypoint.this.waypoint.getType() == CacheTypes.MultiStage);
             }
         });

@@ -38,8 +38,8 @@ import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.Cache3DAO;
 import de.longri.cachebox3.sqlite.dao.LogDAO;
@@ -59,11 +59,11 @@ public class ReloadCacheActivity extends ActivityBase {
 
     private static final Logger log = LoggerFactory.getLogger(ReloadCacheActivity.class);
 
-    private final CharSequenceButton bCancel;
+    private final CB_Button bCancel;
     private final VisLabel lblTitle;
     private final Image gsLogo;
     private final Image workAnimation;
-    private final CB_ProgressBar CBProgressBar;
+    private final CB_ProgressBar progressBar;
     private final AtomicBoolean canceled = new AtomicBoolean(false);
     private boolean importRuns = false;
     private final ClickListener cancelClickListener = new ClickListener() {
@@ -78,7 +78,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
     public ReloadCacheActivity() {
         super("UpdateStatusAndOthers");
-        bCancel = new CharSequenceButton(Translation.get("cancel"));
+        bCancel = new CB_Button(Translation.get("cancel"));
         gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
         lblTitle = new VisLabel(Translation.get("ReloadCacheAPI"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());
@@ -86,7 +86,7 @@ public class ReloadCacheActivity extends ActivityBase {
         lblTitle.setStyle(style);
         Drawable animationDrawable = VisUI.getSkin().getDrawable("download-animation");
         workAnimation = new Image(animationDrawable);
-        CBProgressBar = new CB_ProgressBar(0, 100, 1, false, "default");
+        progressBar = new CB_ProgressBar(0, 100, 1, false, "default");
 
         createOkCancelBtn();
         setWorkAnimationVisible(false);
@@ -117,7 +117,7 @@ public class ReloadCacheActivity extends ActivityBase {
         this.add(workAnimation).colspan(5).center();
         this.row();
         this.add();
-        this.add(CBProgressBar).colspan(3).center().expandX().fillX();
+        this.add(progressBar).colspan(3).center().expandX().fillX();
         this.row();
         Table nestedTable2 = new Table();
         nestedTable2.defaults().pad(CB.scaledSizes.MARGIN).bottom();
@@ -130,7 +130,7 @@ public class ReloadCacheActivity extends ActivityBase {
 
     private void setWorkAnimationVisible(boolean visible) {
         workAnimation.setVisible(visible);
-        CBProgressBar.setVisible(visible);
+        progressBar.setVisible(visible);
     }
 
     private void createOkCancelBtn() {
@@ -147,14 +147,14 @@ public class ReloadCacheActivity extends ActivityBase {
 
         setWorkAnimationVisible(true);
 
-        CBProgressBar.setAnimateDuration(0);
+        progressBar.setAnimateDuration(0);
         final ImportProgressChangedListener progressListener = new ImportProgressChangedListener() {
             @Override
             public void progressChanged(final ImportProgressChangedEvent event) {
                 CB.postOnGlThread(new NamedRunnable("ReloadCacheActivity") {
                     @Override
                     public void run() {
-                        CBProgressBar.setValue(event.progress.progress);
+                        progressBar.setValue(event.progress.progress);
                     }
                 });
             }
@@ -164,9 +164,9 @@ public class ReloadCacheActivity extends ActivityBase {
 
         AbstractCache aktCache = EventHandler.getSelectedCache();
         if (aktCache != null) {
-            Array<GroundspeakAPI.GeoCacheRelated> updatedCaches = GroundspeakAPI.updateGeoCache(aktCache);
-            if (GroundspeakAPI.APIError != GroundspeakAPI.OK) {
-                MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("ReloadCacheAPI"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+            Array<GroundspeakAPI.GeoCacheRelated> updatedCaches = GroundspeakAPI.getInstance().updateGeoCache(aktCache);
+            if (GroundspeakAPI.getInstance().APIError != GroundspeakAPI.OK) {
+                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("ReloadCacheAPI"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             } else {
                 for (GroundspeakAPI.GeoCacheRelated updatedCache : updatedCaches) {
                     Cache3DAO dao = new Cache3DAO();

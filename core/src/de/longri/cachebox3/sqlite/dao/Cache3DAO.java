@@ -83,7 +83,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("GcId", abstractCache.getGcId());
         args.put("BooleanStore", abstractCache.getBooleanStore());
         args.put("FavPoints", abstractCache.getFavoritePoints());
-        args.put("Vote", (int) (abstractCache.getRating() * 2));
+        args.put("Vote", (int) (abstractCache.getVote() * 2));
 
         if (args.size() > 0) {
             if (update) {
@@ -225,7 +225,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         if (cursor == null) return null;
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
-            AbstractCache cache = new MutableCache(cursor);
+            AbstractCache cache = new MutableCache(database, cursor);
             if (withWaypoints) {
                 cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cacheID, fullData));
             }
@@ -252,7 +252,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         if (cursor == null) return null;
         cursor.moveToFirst();
         if (!cursor.isAfterLast()) {
-            AbstractCache cache = new MutableCache(cursor);
+            AbstractCache cache = new MutableCache(database, cursor);
             if (withWaypoints) {
                 cache.setWaypoints(getWaypointDAO().getWaypointsFromCacheID(database, cache.getId(), fullData));
             }

@@ -30,16 +30,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.converter.UTMConvert;
 import org.slf4j.Logger;
@@ -56,14 +55,22 @@ public class CoordinateActivity extends ActivityBase {
     private final MinValues minValues = new MinValues();
     private final SecValues secValues = new SecValues();
     private final UtmValues utmValues = new UtmValues();
-    boolean calculated = false;
-    ClickListener cancelListener = new ClickListener() {
+    private boolean calculated = false;
+    private ClickListener cancelListener = new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
             callBack(null);
             finish();
         }
     };
+    private boolean isCreated = false;
+    private double lat, lon;
+    private CB_Button tglBtnDec;
+    private CB_Button tglBtnMin;
+    private CB_Button tglBtnSec;
+    private CB_Button tglBtnUtm;
+    private ButtonGroup<CB_Button> btnGroup;
+    private AbstractValueTable actValueTable;
     ClickListener okListener = new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
@@ -75,14 +82,6 @@ public class CoordinateActivity extends ActivityBase {
             finish();
         }
     };
-    private boolean isCreated = false;
-    private double lat, lon;
-    private VisTextButton tglBtnDec;
-    private VisTextButton tglBtnMin;
-    private VisTextButton tglBtnSec;
-    private VisTextButton tglBtnUtm;
-    private ButtonGroup<VisTextButton> btnGroup;
-    private AbstractValueTable actValueTable;
     NumPad.IKeyEventListener keyEventListener = new NumPad.IKeyEventListener() {
         @Override
         public void KeyPressed(String value) {
@@ -109,11 +108,11 @@ public class CoordinateActivity extends ActivityBase {
     private final ClickListener tglListener = new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            VisTextButton checkedButton = btnGroup.getChecked();
+            CB_Button checkedButton = btnGroup.getChecked();
 
             log.debug("Toggle to: " + checkedButton.getText());
             if (actValueTable != null) {
-                LatLong latLong = actValueTable.getValue();
+                Coordinate latLong = actValueTable.getValue();
                 if (latLong != null) {
                     lat = latLong.getLatitude();
                     lon = latLong.getLongitude();
@@ -137,6 +136,56 @@ public class CoordinateActivity extends ActivityBase {
             CoordinateActivity.this.layout();
 
 
+        }
+    };
+    private InputProcessor keyboardListener = new InputProcessor() {
+        private final char[] possibleUtmValues = new char[]{'Z', 'X', 'W', 'V', 'U', 'T', 'S', 'R', 'Q', 'P', 'N', 'M', 'L', 'K', 'J', 'H', 'G', 'F', 'E', 'D', 'C'};
+
+        @Override
+        public boolean keyDown(int keycode) {
+            return true;
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            return true;
+        }
+
+        @Override
+        public boolean keyTyped(char character) {
+            //check utm Zone
+            char upper = Character.toUpperCase(character);
+            for (int i = 0, n = possibleUtmValues.length - 1; i < n; i++) {
+                if (possibleUtmValues[i] == upper) {
+                    actValueTable.enterValue(String.valueOf(upper));
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            return true;
+        }
+
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            return true;
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            return true;
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            return true;
+        }
+
+        @Override
+        public boolean scrolled(int amount) {
+            return true;
         }
     };
 
@@ -176,7 +225,7 @@ public class CoordinateActivity extends ActivityBase {
     private Group createPlaceHolder() {
         this.row();
         Group group = new Group();
-        group.addActor(new VisLabel(""));
+        group.addActor(new CB_Label(""));
         this.add(group);
         return group;
     }
@@ -196,12 +245,12 @@ public class CoordinateActivity extends ActivityBase {
 
     private void createToggleBtn() {
 
-        btnGroup = new ButtonGroup<VisTextButton>();
+        btnGroup = new ButtonGroup<CB_Button>();
 
-        tglBtnDec = new VisTextButton("Dec", "toggle");
-        tglBtnMin = new VisTextButton("Min", "toggle");
-        tglBtnSec = new VisTextButton("Sec", "toggle");
-        tglBtnUtm = new VisTextButton("UTM", "toggle");
+        tglBtnDec = new CB_Button("Dec", "toggle");
+        tglBtnMin = new CB_Button("Min", "toggle");
+        tglBtnSec = new CB_Button("Sec", "toggle");
+        tglBtnUtm = new CB_Button("UTM", "toggle");
 
         tglBtnDec.addListener(tglListener);
         tglBtnMin.addListener(tglListener);
@@ -232,8 +281,8 @@ public class CoordinateActivity extends ActivityBase {
         this.row();
         Table cancelOkTable = new Table();
 
-        CharSequenceButton btnOk = new CharSequenceButton(Translation.get("ok"));
-        CharSequenceButton btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        CB_Button btnOk = new CB_Button(Translation.get("ok"));
+        CB_Button btnCancel = new CB_Button(Translation.get("cancel"));
 
         btnOk.addListener(okListener);
         btnCancel.addListener(cancelListener);
@@ -268,9 +317,16 @@ public class CoordinateActivity extends ActivityBase {
     public void callBack(Coordinate coordinate) {
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        numPad.dispose();
+        numPad = null;
+    }
+
     private static abstract class AbstractValueTable extends Catch_Table {
 
-        VisTextButton[] focusSequence;
+        CB_Button[] focusSequence;
         int focusButton;
         int focusLineEnd;
         int focusNextLineBegin;
@@ -305,10 +361,10 @@ public class CoordinateActivity extends ActivityBase {
                 if (actor == null) {
                     sb.append(" ");
                 } else {
-                    if (actor instanceof VisTextButton) {
-                        sb.append(((VisTextButton) actor).getText());
-                    } else if (actor instanceof VisLabel) {
-                        sb.append(((VisLabel) actor).getText());
+                    if (actor instanceof CB_Button) {
+                        sb.append(((CB_Button) actor).getText());
+                    } else if (actor instanceof CB_Label) {
+                        sb.append(((CB_Label) actor).getText());
                     }
                 }
             }
@@ -347,7 +403,7 @@ public class CoordinateActivity extends ActivityBase {
             onFocusSet(focusSequence[focusButton]);
         }
 
-        protected void onFocusSet(VisTextButton button) {
+        protected void onFocusSet(CB_Button button) {
         }
 
 
@@ -355,29 +411,29 @@ public class CoordinateActivity extends ActivityBase {
 
     private static class DecValues extends AbstractValueTable {
 
-        final VisTextButton l1_2 = null;
-        final VisLabel l1_5 = new VisLabel(".");
-        final VisLabel l1_11 = new VisLabel("°");
-        final VisLabel l2_5 = new VisLabel(".");
-        final VisLabel l2_11 = new VisLabel("°");
+        final CB_Button l1_2 = null;
+        final CB_Label l1_5 = new CB_Label(".");
+        final CB_Label l1_11 = new CB_Label("°");
+        final CB_Label l2_5 = new CB_Label(".");
+        final CB_Label l2_11 = new CB_Label("°");
         VisTextButton.VisTextButtonStyle btnStyle = VisUI.getSkin().get("coordinateValues", VisTextButton.VisTextButtonStyle.class);
-        final VisTextButton l1_1 = new VisTextButton("N", btnStyle);
-        final VisTextButton l1_3 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_4 = new VisTextButton("2", btnStyle);
-        final VisTextButton l1_6 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_7 = new VisTextButton("7", btnStyle);
-        final VisTextButton l1_8 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_9 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_10 = new VisTextButton("5", btnStyle);
-        final VisTextButton l2_1 = new VisTextButton("N", btnStyle);
-        final VisTextButton l2_2 = new VisTextButton("0", btnStyle);
-        final VisTextButton l2_3 = new VisTextButton("1", btnStyle);
-        final VisTextButton l2_4 = new VisTextButton("3", btnStyle);
-        final VisTextButton l2_6 = new VisTextButton("3", btnStyle);
-        final VisTextButton l2_7 = new VisTextButton("9", btnStyle);
-        final VisTextButton l2_8 = new VisTextButton("1", btnStyle);
-        final VisTextButton l2_9 = new VisTextButton("7", btnStyle);
-        final VisTextButton l2_10 = new VisTextButton("8", btnStyle);
+        final CB_Button l1_1 = new CB_Button("N", btnStyle);
+        final CB_Button l1_3 = new CB_Button("5", btnStyle);
+        final CB_Button l1_4 = new CB_Button("2", btnStyle);
+        final CB_Button l1_6 = new CB_Button("5", btnStyle);
+        final CB_Button l1_7 = new CB_Button("7", btnStyle);
+        final CB_Button l1_8 = new CB_Button("5", btnStyle);
+        final CB_Button l1_9 = new CB_Button("5", btnStyle);
+        final CB_Button l1_10 = new CB_Button("5", btnStyle);
+        final CB_Button l2_1 = new CB_Button("N", btnStyle);
+        final CB_Button l2_2 = new CB_Button("0", btnStyle);
+        final CB_Button l2_3 = new CB_Button("1", btnStyle);
+        final CB_Button l2_4 = new CB_Button("3", btnStyle);
+        final CB_Button l2_6 = new CB_Button("3", btnStyle);
+        final CB_Button l2_7 = new CB_Button("9", btnStyle);
+        final CB_Button l2_8 = new CB_Button("1", btnStyle);
+        final CB_Button l2_9 = new CB_Button("7", btnStyle);
+        final CB_Button l2_10 = new CB_Button("8", btnStyle);
 
         DecValues() {
 
@@ -411,7 +467,7 @@ public class CoordinateActivity extends ActivityBase {
             this.add(l2_10).width(new Value.Fixed(minBtnWidth));
             this.add(l2_11).top();
 
-            focusSequence = new VisTextButton[]{l1_3, l1_4, l1_6, l1_7, l1_8, l1_9, l1_10, l2_2, l2_3, l2_4, l2_6, l2_7, l2_8, l2_9, l2_10};
+            focusSequence = new CB_Button[]{l1_3, l1_4, l1_6, l1_7, l1_8, l1_9, l1_10, l2_2, l2_3, l2_4, l2_6, l2_7, l2_8, l2_9, l2_10};
             focusBegin = 2;
             focusLineEnd = 6;
             focusNextLineBegin = 10;
@@ -499,29 +555,29 @@ public class CoordinateActivity extends ActivityBase {
 
     private static class MinValues extends AbstractValueTable {
 
-        final VisTextButton l1_2 = null;
-        final VisLabel l1_5 = new VisLabel("°");
-        final VisLabel l1_8 = new VisLabel(".");
-        final VisLabel l2_5 = new VisLabel("°");
-        final VisLabel l2_8 = new VisLabel(".");
+        final CB_Button l1_2 = null;
+        final CB_Label l1_5 = new CB_Label("°");
+        final CB_Label l1_8 = new CB_Label(".");
+        final CB_Label l2_5 = new CB_Label("°");
+        final CB_Label l2_8 = new CB_Label(".");
         VisTextButton.VisTextButtonStyle btnStyle = VisUI.getSkin().get("coordinateValues", VisTextButton.VisTextButtonStyle.class);
-        final VisTextButton l1_1 = new VisTextButton("N", btnStyle);
-        final VisTextButton l1_3 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_4 = new VisTextButton("2", btnStyle);
-        final VisTextButton l1_6 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_7 = new VisTextButton("7", btnStyle);
-        final VisTextButton l1_9 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_10 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_11 = new VisTextButton("5", btnStyle);
-        final VisTextButton l2_1 = new VisTextButton("N", btnStyle);
-        final VisTextButton l2_2 = new VisTextButton("0", btnStyle);
-        final VisTextButton l2_3 = new VisTextButton("1", btnStyle);
-        final VisTextButton l2_4 = new VisTextButton("3", btnStyle);
-        final VisTextButton l2_6 = new VisTextButton("3", btnStyle);
-        final VisTextButton l2_7 = new VisTextButton("9", btnStyle);
-        final VisTextButton l2_9 = new VisTextButton("1", btnStyle);
-        final VisTextButton l2_10 = new VisTextButton("7", btnStyle);
-        final VisTextButton l2_11 = new VisTextButton("8", btnStyle);
+        final CB_Button l1_1 = new CB_Button("N", btnStyle);
+        final CB_Button l1_3 = new CB_Button("5", btnStyle);
+        final CB_Button l1_4 = new CB_Button("2", btnStyle);
+        final CB_Button l1_6 = new CB_Button("5", btnStyle);
+        final CB_Button l1_7 = new CB_Button("7", btnStyle);
+        final CB_Button l1_9 = new CB_Button("5", btnStyle);
+        final CB_Button l1_10 = new CB_Button("5", btnStyle);
+        final CB_Button l1_11 = new CB_Button("5", btnStyle);
+        final CB_Button l2_1 = new CB_Button("N", btnStyle);
+        final CB_Button l2_2 = new CB_Button("0", btnStyle);
+        final CB_Button l2_3 = new CB_Button("1", btnStyle);
+        final CB_Button l2_4 = new CB_Button("3", btnStyle);
+        final CB_Button l2_6 = new CB_Button("3", btnStyle);
+        final CB_Button l2_7 = new CB_Button("9", btnStyle);
+        final CB_Button l2_9 = new CB_Button("1", btnStyle);
+        final CB_Button l2_10 = new CB_Button("7", btnStyle);
+        final CB_Button l2_11 = new CB_Button("8", btnStyle);
 
 
         MinValues() {
@@ -556,7 +612,7 @@ public class CoordinateActivity extends ActivityBase {
             this.add(l2_10).width(new Value.Fixed(minBtnWidth));
             this.add(l2_11).width(new Value.Fixed(minBtnWidth));
 
-            focusSequence = new VisTextButton[]{l1_3, l1_4, l1_6, l1_7, l1_9, l1_10, l1_11, l2_2, l2_3, l2_4, l2_6, l2_7, l2_9, l2_10, l2_11};
+            focusSequence = new CB_Button[]{l1_3, l1_4, l1_6, l1_7, l1_9, l1_10, l1_11, l2_2, l2_3, l2_4, l2_6, l2_7, l2_9, l2_10, l2_11};
             focusBegin = 2;
             focusLineEnd = 6;
             focusNextLineBegin = 10;
@@ -653,33 +709,33 @@ public class CoordinateActivity extends ActivityBase {
 
     private static class SecValues extends AbstractValueTable {
 
-        final VisTextButton l1_2 = null;
-        final VisLabel l1_5 = new VisLabel("°");
-        final VisLabel l1_8 = new VisLabel("'");
-        final VisLabel l1_11 = new VisLabel(".");
-        final VisLabel l2_5 = new VisLabel("°");
-        final VisLabel l2_8 = new VisLabel("'");
-        final VisLabel l2_11 = new VisLabel(".");
+        final CB_Button l1_2 = null;
+        final CB_Label l1_5 = new CB_Label("°");
+        final CB_Label l1_8 = new CB_Label("'");
+        final CB_Label l1_11 = new CB_Label(".");
+        final CB_Label l2_5 = new CB_Label("°");
+        final CB_Label l2_8 = new CB_Label("'");
+        final CB_Label l2_11 = new CB_Label(".");
         VisTextButton.VisTextButtonStyle btnStyle = VisUI.getSkin().get("coordinateValues", VisTextButton.VisTextButtonStyle.class);
-        final VisTextButton l1_1 = new VisTextButton("N", btnStyle);
-        final VisTextButton l1_3 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_4 = new VisTextButton("2", btnStyle);
-        final VisTextButton l1_6 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_7 = new VisTextButton("7", btnStyle);
-        final VisTextButton l1_9 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_10 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_12 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_13 = new VisTextButton("5", btnStyle);
-        final VisTextButton l2_1 = new VisTextButton("N", btnStyle);
-        final VisTextButton l2_2 = new VisTextButton("0", btnStyle);
-        final VisTextButton l2_3 = new VisTextButton("1", btnStyle);
-        final VisTextButton l2_4 = new VisTextButton("3", btnStyle);
-        final VisTextButton l2_6 = new VisTextButton("3", btnStyle);
-        final VisTextButton l2_7 = new VisTextButton("9", btnStyle);
-        final VisTextButton l2_9 = new VisTextButton("1", btnStyle);
-        final VisTextButton l2_10 = new VisTextButton("7", btnStyle);
-        final VisTextButton l2_12 = new VisTextButton("5", btnStyle);
-        final VisTextButton l2_13 = new VisTextButton("5", btnStyle);
+        final CB_Button l1_1 = new CB_Button("N", btnStyle);
+        final CB_Button l1_3 = new CB_Button("5", btnStyle);
+        final CB_Button l1_4 = new CB_Button("2", btnStyle);
+        final CB_Button l1_6 = new CB_Button("5", btnStyle);
+        final CB_Button l1_7 = new CB_Button("7", btnStyle);
+        final CB_Button l1_9 = new CB_Button("5", btnStyle);
+        final CB_Button l1_10 = new CB_Button("5", btnStyle);
+        final CB_Button l1_12 = new CB_Button("5", btnStyle);
+        final CB_Button l1_13 = new CB_Button("5", btnStyle);
+        final CB_Button l2_1 = new CB_Button("N", btnStyle);
+        final CB_Button l2_2 = new CB_Button("0", btnStyle);
+        final CB_Button l2_3 = new CB_Button("1", btnStyle);
+        final CB_Button l2_4 = new CB_Button("3", btnStyle);
+        final CB_Button l2_6 = new CB_Button("3", btnStyle);
+        final CB_Button l2_7 = new CB_Button("9", btnStyle);
+        final CB_Button l2_9 = new CB_Button("1", btnStyle);
+        final CB_Button l2_10 = new CB_Button("7", btnStyle);
+        final CB_Button l2_12 = new CB_Button("5", btnStyle);
+        final CB_Button l2_13 = new CB_Button("5", btnStyle);
 
 
         SecValues() {
@@ -718,7 +774,7 @@ public class CoordinateActivity extends ActivityBase {
             this.add(l2_12).width(new Value.Fixed(minBtnWidth));
             this.add(l2_13).width(new Value.Fixed(minBtnWidth));
 
-            focusSequence = new VisTextButton[]{l1_3, l1_4, l1_6, l1_7, l1_9, l1_10, l1_12, l1_13, l2_2, l2_3, l2_4, l2_6, l2_7, l2_9, l2_10, l2_12, l2_13};
+            focusSequence = new CB_Button[]{l1_3, l1_4, l1_6, l1_7, l1_9, l1_10, l1_12, l1_13, l2_2, l2_3, l2_4, l2_6, l2_7, l2_9, l2_10, l2_12, l2_13};
             focusBegin = 2;
             focusLineEnd = 7;
             focusNextLineBegin = 11;
@@ -826,30 +882,30 @@ public class CoordinateActivity extends ActivityBase {
     }
 
     private class UtmValues extends AbstractValueTable {
-        final VisLabel l1_1 = new VisLabel("OstW");
-        final VisTextButton l1_8 = null;
-        final VisTextButton l1_9 = null;
-        final VisLabel l2_1 = new VisLabel("NordW");
-        final VisTextButton l2_9 = null;
-        final VisLabel l3_1 = new VisLabel("Zone");
+        final CB_Label l1_1 = new CB_Label("OstW");
+        final CB_Button l1_8 = null;
+        final CB_Button l1_9 = null;
+        final CB_Label l2_1 = new CB_Label("NordW");
+        final CB_Button l2_9 = null;
+        final CB_Label l3_1 = new CB_Label("Zone");
         private final UTMConvert convert = new UTMConvert();
         VisTextButton.VisTextButtonStyle btnStyle = VisUI.getSkin().get("coordinateValues", VisTextButton.VisTextButtonStyle.class);
-        final VisTextButton l1_2 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_3 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_4 = new VisTextButton("2", btnStyle);
-        final VisTextButton l1_5 = new VisTextButton("2", btnStyle);
-        final VisTextButton l1_6 = new VisTextButton("5", btnStyle);
-        final VisTextButton l1_7 = new VisTextButton("7", btnStyle);
-        final VisTextButton l2_2 = new VisTextButton("5", btnStyle);
-        final VisTextButton l2_3 = new VisTextButton("5", btnStyle);
-        final VisTextButton l2_4 = new VisTextButton("2", btnStyle);
-        final VisTextButton l2_5 = new VisTextButton("2", btnStyle);
-        final VisTextButton l2_6 = new VisTextButton("5", btnStyle);
-        final VisTextButton l2_7 = new VisTextButton("7", btnStyle);
-        final VisTextButton l2_8 = new VisTextButton("7", btnStyle);
-        final VisTextButton l3_2 = new VisTextButton("5", btnStyle);
-        final VisTextButton l3_3 = new VisTextButton("5", btnStyle);
-        final VisTextButton l3_4 = new VisTextButton("Z", btnStyle);
+        final CB_Button l1_2 = new CB_Button("5", btnStyle);
+        final CB_Button l1_3 = new CB_Button("5", btnStyle);
+        final CB_Button l1_4 = new CB_Button("2", btnStyle);
+        final CB_Button l1_5 = new CB_Button("2", btnStyle);
+        final CB_Button l1_6 = new CB_Button("5", btnStyle);
+        final CB_Button l1_7 = new CB_Button("7", btnStyle);
+        final CB_Button l2_2 = new CB_Button("5", btnStyle);
+        final CB_Button l2_3 = new CB_Button("5", btnStyle);
+        final CB_Button l2_4 = new CB_Button("2", btnStyle);
+        final CB_Button l2_5 = new CB_Button("2", btnStyle);
+        final CB_Button l2_6 = new CB_Button("5", btnStyle);
+        final CB_Button l2_7 = new CB_Button("7", btnStyle);
+        final CB_Button l2_8 = new CB_Button("7", btnStyle);
+        final CB_Button l3_2 = new CB_Button("5", btnStyle);
+        final CB_Button l3_3 = new CB_Button("5", btnStyle);
+        final CB_Button l3_4 = new CB_Button("Z", btnStyle);
 
 
         UtmValues() {
@@ -887,7 +943,7 @@ public class CoordinateActivity extends ActivityBase {
             this.add(l3_3).width(new Value.Fixed(minBtnWidth));
             this.add(l3_4).width(new Value.Fixed(minBtnWidth));
 
-            focusSequence = new VisTextButton[]{l1_2, l1_3, l1_4, l1_5, l1_6, l1_7, l2_2, l2_3, l2_4, l2_5, l2_6, l2_7, l2_8, l3_2, l3_3, l3_4};
+            focusSequence = new CB_Button[]{l1_2, l1_3, l1_4, l1_5, l1_6, l1_7, l2_2, l2_3, l2_4, l2_5, l2_6, l2_7, l2_8, l3_2, l3_3, l3_4};
             focusBegin = 0;
             focusLineEnd = -1;
             focusNextLineBegin = 0;
@@ -920,10 +976,10 @@ public class CoordinateActivity extends ActivityBase {
                 if (actor == null) {
                     sb.append(" ");
                 } else {
-                    if (actor instanceof VisTextButton) {
-                        sb.append(((VisTextButton) actor).getText());
-                    } else if (actor instanceof VisLabel) {
-                        sb.append(((VisLabel) actor).getText());
+                    if (actor instanceof CB_Button) {
+                        sb.append(((CB_Button) actor).getText());
+                    } else if (actor instanceof CB_Label) {
+                        sb.append(((CB_Label) actor).getText());
                     }
                 }
             }
@@ -968,7 +1024,7 @@ public class CoordinateActivity extends ActivityBase {
         }
 
         @Override
-        protected void onFocusSet(VisTextButton button) {
+        protected void onFocusSet(CB_Button button) {
             //  Enable/Disable numPad or keyPad
 
             if (button == l3_4) {
@@ -988,63 +1044,5 @@ public class CoordinateActivity extends ActivityBase {
 
 
         }
-    }
-
-    private InputProcessor keyboardListener = new InputProcessor() {
-        @Override
-        public boolean keyDown(int keycode) {
-            return true;
-        }
-
-        @Override
-        public boolean keyUp(int keycode) {
-            return true;
-        }
-
-        private final char[] possibleUtmValues = new char[]{'Z', 'X', 'W', 'V', 'U', 'T', 'S', 'R', 'Q', 'P', 'N', 'M', 'L', 'K', 'J', 'H', 'G', 'F', 'E', 'D', 'C'};
-
-        @Override
-        public boolean keyTyped(char character) {
-            //check utm Zone
-            char upper = Character.toUpperCase(character);
-            for (int i = 0, n = possibleUtmValues.length - 1; i < n; i++) {
-                if (possibleUtmValues[i] == upper) {
-                    actValueTable.enterValue(String.valueOf(upper));
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            return true;
-        }
-
-        @Override
-        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            return true;
-        }
-
-        @Override
-        public boolean touchDragged(int screenX, int screenY, int pointer) {
-            return true;
-        }
-
-        @Override
-        public boolean mouseMoved(int screenX, int screenY) {
-            return true;
-        }
-
-        @Override
-        public boolean scrolled(int amount) {
-            return true;
-        }
-    };
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        numPad.dispose();
-        numPad = null;
     }
 }

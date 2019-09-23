@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="desktop LWJGL-2 GPS" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="de.longri.cachebox3.desktop.touch.TouchLauncher" />
+    <module name="desktop_lwjgl" />
+    <option name="PROGRAM_PARAMETERS" value="-s 2.5 -g " />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/launcher/desktop/workingDir" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

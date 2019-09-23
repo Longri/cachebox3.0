@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.actors.MenuBar;
 import de.longri.cachebox3.develop.tools.skin_editor.actors.OptionsPane;
@@ -180,6 +181,7 @@ public class MainScreen implements Screen {
 
         FileHandle skinFolder = (Gdx.files.local("projects/" + currentProject));
         game.skinProject = new SavableSvgSkin(true, currentProject, SvgSkin.StorageType.LOCAL, skinFolder);
+        CB.setActSkin(game.skinProject);
 
     }
 

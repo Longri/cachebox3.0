@@ -263,13 +263,13 @@ public class WelcomeScreen implements Screen {
 
         //create folder "svg" and copy default svg's from classpath
         projectFolder.child("svg").mkdirs();
-        FileHandle svgFolder = resourceFolder.child("raw_tamplate/svg");
+        FileHandle svgFolder = resourceFolder.child("raw_template/svg");
         svgFolder.copyTo(projectFolder);
 
 
         //create folder "fonts" and copy default fonts from classpath
         projectFolder.child("fonts").mkdirs();
-        FileHandle fontFolder = resourceFolder.child("raw_tamplate/fonts");
+        FileHandle fontFolder = resourceFolder.child("raw_template/fonts");
         fontFolder.copyTo(projectFolder);
 
 
@@ -284,8 +284,8 @@ public class WelcomeScreen implements Screen {
 
 
         //load default skin and save into project folder
-        FileHandle skinFolder = Gdx.files.internal("skin-editor-src-proj/assets/raw_tamplate");
-        SavableSvgSkin defaultSkin = new SavableSvgSkin(true, "raw_tamplate", SvgSkin.StorageType.INTERNAL, skinFolder);
+        FileHandle skinFolder = Gdx.files.internal("skin-editor-src-proj/assets/raw_template");
+        SavableSvgSkin defaultSkin = new SavableSvgSkin(true, "raw_template", SvgSkin.StorageType.INTERNAL, skinFolder);
         defaultSkin.save(projectFolder.child("skin.json"));
 
 

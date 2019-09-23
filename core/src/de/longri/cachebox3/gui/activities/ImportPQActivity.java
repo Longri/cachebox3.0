@@ -33,8 +33,8 @@ import de.longri.cachebox3.gui.BlockGpsActivityBase;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
 import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -55,7 +55,7 @@ public class ImportPQActivity extends BlockGpsActivityBase {
 
     private final static Logger log = LoggerFactory.getLogger(ImportPQActivity.class);
     private final ListView pqListView = new ListView(ListViewType.VERTICAL, false);
-    private final CharSequenceButton bOK, bCancel;
+    private final CB_Button bOK, bCancel;
     private final DefaultListViewAdapter pqListViewItemArray = new DefaultListViewAdapter();
     private final AtomicBoolean canceled = new AtomicBoolean(false);
     private final ICancel iCancel = new ICancel() {
@@ -72,9 +72,11 @@ public class ImportPQActivity extends BlockGpsActivityBase {
     private final AligmentLabel importLabel;
     private final CB_ProgressBar importProgress;
     private final AligmentLabel correctedLabel;
+    private final Database database;
 
-    public ImportPQActivity() {
+    public ImportPQActivity(Database database) {
         super("ImportPQActivity");
+        this.database = database;
         this.itemStyle = VisUI.getSkin().get(PqListItemStyle.class);
 
         float contentWidth = Gdx.graphics.getWidth() - CB.scaledSizes.MARGINx4;
@@ -145,14 +147,14 @@ public class ImportPQActivity extends BlockGpsActivityBase {
 
         // fill and add Buttons
         this.row();
-        bOK = new CharSequenceButton(Translation.get("import"));
+        bOK = new CB_Button(Translation.get("import"));
         bOK.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 bOK.setDisabled(true);
                 importNow();
             }
         });
-        bCancel = new CharSequenceButton(Translation.get("cancel"));
+        bCancel = new CB_Button(Translation.get("cancel"));
         bOK.setDisabled(true);
         bCancel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -168,7 +170,7 @@ public class ImportPQActivity extends BlockGpsActivityBase {
     }
 
     private void importNow() {
-        PqImport pqImport = new PqImport(Database.Data);
+        PqImport pqImport = new PqImport(database);
         final long importStart = System.currentTimeMillis();
         PqImport.IReadyHandler readyHandler = new PqImport.IReadyHandler() {
             public void ready(int importedCaches, int importedWaypoints, int importedLogs) {
@@ -193,7 +195,7 @@ public class ImportPQActivity extends BlockGpsActivityBase {
                 CB.postOnNextGlThread(() -> CB.postAsync(new NamedRunnable("Reload cacheList after import") {
                     @Override
                     public void run() {
-                        Database.Data.cacheList.setUnfilteredSize(Database.Data.getCacheCountOnThisDB());
+                        ImportPQActivity.this.database.cacheList.setUnfilteredSize(ImportPQActivity.this.database.getCacheCountOnThisDB());
                         log.debug("Call loadFilteredCacheList()");
                         CB.loadFilteredCacheList(null);
                         CB.postOnNextGlThread(() -> EventHandler.fire(new CacheListChangedEvent()));
@@ -230,11 +232,11 @@ public class ImportPQActivity extends BlockGpsActivityBase {
                 pqListViewItemArray.clear();
 
                 int idx = 0;
-                Array<GroundspeakAPI.PQ> pqList = GroundspeakAPI.fetchPocketQueryList();
+                Array<GroundspeakAPI.PQ> pqList = GroundspeakAPI.getInstance().fetchPocketQueryList();
                 pqList.sort();
                 for (GroundspeakAPI.PQ pq : pqList) {
                     //Check last import
-                    GdxSqliteCursor cursor = Database.Data.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
+                    GdxSqliteCursor cursor = ImportPQActivity.this.database.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
                     if (cursor != null) {
                         cursor.moveToFirst();
                         String dateTimeString = cursor.getString(2);

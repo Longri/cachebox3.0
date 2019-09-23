@@ -16,7 +16,6 @@
 package de.longri.cachebox3.types;
 
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 
@@ -71,6 +70,8 @@ public abstract class AbstractWaypoint extends Coordinate {
     public abstract void setStart(boolean start);
 
     public abstract void dispose();
+
+    public abstract boolean isCorrectedFinal();
 
     @Override
     public boolean equals(Object other) {

@@ -16,11 +16,13 @@
 package de.longri.cachebox3.locator.track;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.locator.Coordinate;
 
 import java.util.ArrayList;
 
 public class Track {
-    public ArrayList<TrackPoint> Points;
+    public Array<Coordinate> Points;
     public CharSequence Name;
     public String FileName;
     public boolean ShowRoute = false;
@@ -30,7 +32,7 @@ public class Track {
     public double AltitudeDifference;
 
     public Track(CharSequence name, Color color) {
-        Points = new ArrayList<TrackPoint>();
+        Points = new Array<>();
         Name = name;
         mColor = color;
     }

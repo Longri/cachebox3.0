@@ -16,12 +16,12 @@
 package ch.fhnw.imvs.gpssimulator.data;
 
 import com.badlogic.gdx.utils.StringBuilder;
-import de.longri.cachebox3.locator.CoordinateGPS;
+import de.longri.cachebox3.locator.Coordinate;
 
 /**
  * Created by Longri on 2019-03-09.
  */
-public class CoordinateGPS_Simulator extends CoordinateGPS {
+public class CoordinateGPS_Simulator extends Coordinate {
 
 
     static double round(double value) {

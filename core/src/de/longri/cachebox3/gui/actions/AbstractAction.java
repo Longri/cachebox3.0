@@ -32,7 +32,7 @@ public abstract class AbstractAction {
     protected final boolean functionDisabled;
     protected final String name;
     protected final int id;
-    protected String nameExtention = "";
+    protected String nameExtension = "";
 
     /**
      * Constructor
@@ -40,18 +40,18 @@ public abstract class AbstractAction {
      * @param name = Translation ID
      * @param id   = AbstractAction ID ( AID_xxxx )
      */
-    public AbstractAction(boolean disabled, String name, int id) {
-        //super();
-        this.name = name;
-        this.id = id;
-        this.functionDisabled = disabled;
+    public AbstractAction(String name, int id) {
+        this(IMPLEMENTED, name, "", id);
     }
 
-    public AbstractAction(boolean disabled, String name, String nameExtention, int id) {
-        //super();
+    public AbstractAction(boolean disabled, String name, int id) {
+        this(disabled, name, "", id);
+    }
+
+    public AbstractAction(boolean disabled, String name, String nameExtension, int id) {
         this.name = name;
         this.id = id;
-        this.nameExtention = nameExtention;
+        this.nameExtension = nameExtension;
         this.functionDisabled = disabled;
     }
 
@@ -62,19 +62,16 @@ public abstract class AbstractAction {
         return name;
     }
 
-    public String getNameExtention() {
-        return nameExtention;
+    public String getNameExtension() {
+        if (functionDisabled)
+            return nameExtension + " (Not implemented yet)";
+        return nameExtension;
     }
 
     public int getId() {
         return id;
     }
 
-    /**
-     * hiermit kann der Menüpunkt enabled oder disabled werden
-     *
-     * @return
-     */
     public final boolean getEnabled() {
         return !functionDisabled;
     }

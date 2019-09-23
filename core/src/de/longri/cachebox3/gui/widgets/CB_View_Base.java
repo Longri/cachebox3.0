@@ -29,6 +29,10 @@ public abstract class CB_View_Base extends Catch_WidgetGroup implements Disposab
 
     public final String NAME;
 
+    public CB_View_Base() {
+        this.NAME = "CB_View_Base";
+    }
+
     public CB_View_Base(String name) {
         this.NAME = name;
     }

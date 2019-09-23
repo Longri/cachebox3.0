@@ -16,6 +16,7 @@
 package de.longri.cachebox3.develop.tools.skin_editor.actors;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -23,28 +24,37 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
-import com.kotcrab.vis.ui.VisUI;
+import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.screens.MainScreen;
 import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
-import de.longri.cachebox3.gui.skin.styles.CircularProgressStyle;
-import de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle;
-import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
-import de.longri.cachebox3.gui.skin.styles.ScaledSize;
+import de.longri.cachebox3.gui.skin.styles.*;
+import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
+import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
+import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.DraftEntry;
+import de.longri.cachebox3.types.IntProperty;
+import de.longri.cachebox3.types.LogTypes;
 import de.longri.cachebox3.utils.ScaledSizes;
+import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.oscim.backend.canvas.Bitmap;
 
 import java.io.IOException;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A table representing the right part of the interface
@@ -57,6 +67,7 @@ public class PreviewPane extends Table {
 
     final private SkinEditorGame game;
     final private MainScreen mainScreen;
+    DraftEntry entry = new DraftEntry(LogTypes.found);
 
 
     // An input listener to use on items inside a scroll pane, thanks to Tomski for the hint.
@@ -79,6 +90,8 @@ public class PreviewPane extends Table {
         this.mainScreen = mainScreen;
         top();
         left();
+
+        entry.uploaded = true;
 
     }
 
@@ -356,11 +369,11 @@ public class PreviewPane extends Table {
                     } else if (widget.equals("Tree")) { // Tree
 
                         Tree w = new Tree(game.skinProject, key);
-                        Tree.Node node = new Tree.Node(new Label("This", game.skin));
-                        Tree.Node node1 = new Tree.Node(new Label("is", game.skin));
-                        Tree.Node node2 = new Tree.Node(new Label("a", game.skin));
-                        Tree.Node node3 = new Tree.Node(new Label("Tree", game.skin));
-                        Tree.Node node4 = new Tree.Node(new Label("Widget", game.skin));
+                        TreeNode node = new TreeNode(new Label("This", game.skin));
+                        TreeNode node1 = new TreeNode(new Label("is", game.skin));
+                        TreeNode node2 = new TreeNode(new Label("a", game.skin));
+                        TreeNode node3 = new TreeNode(new Label("Tree", game.skin));
+                        TreeNode node4 = new TreeNode(new Label("Widget", game.skin));
                         node3.add(node4);
                         node2.add(node3);
                         node1.add(node2);
@@ -376,9 +389,102 @@ public class PreviewPane extends Table {
                         float width = frameAnimationStyle.frames.first().getRegionWidth();
                         float height = frameAnimationStyle.frames.first().getRegionHeight();
                         add(image).pad(10).padBottom(20).width(width).height(height).row();
+                    } else if (widget.equals("DraftListItemStyle")) {
+                        Catch_Table tbl = new Catch_Table(true);
+                        tbl.defaults().pad(0);
+                        // tbl.setDebug(true);
+                        DraftListItemStyle draftListItemStyle = game.skinProject.get("DraftListItemStyle", DraftListItemStyle.class);
+                        entry.foundNumber = 12345;
+                        entry.timestamp = new Date();
+                        entry.cacheType = CacheTypes.Traditional;
+                        entry.CacheName = "Dies ist ein Testcache";
+                        entry.gcCode = "GC123456";
+                        entry.comment = "Diesen Cache habe ich heute gefunden.\nWir hatten viel Vergnügen.\nTFTC theFinder.";
+                        Catch_Table header = new Catch_Table(true);
+                        header.setBackgroundDrawable(draftListItemStyle.headerBackground);
+                        header.addLast(new CB_Label("DraftListItem Head follows:").setBackgroundColor(Color.BLUE).setForegroundColor(Color.WHITE));
+                        Label.LabelStyle headerLabelStyle = new Label.LabelStyle();
+                        headerLabelStyle.font = draftListItemStyle.headerFont;
+                        headerLabelStyle.fontColor = draftListItemStyle.headerFontColor;
+                        header.addNext(new Image(entry.type.getDrawable(draftListItemStyle.logTypesStyle)), -1.02f);
+                        if (entry.uploaded)
+                            header.addNext(new Image(draftListItemStyle.uploadedIcon), -1.02f);
+                        String foundNumber = "";
+                        if (entry.foundNumber > 0) {
+                            foundNumber = "#" + entry.foundNumber + " @ ";
+                        }
+                        CB_Label dateLabel = new CB_Label(foundNumber + new SimpleDateFormat("dd.MMM.yy (HH:mm)", Locale.getDefault()).format(entry.timestamp), headerLabelStyle);
+                        header.addLast(dateLabel);
+                        dateLabel.setAlignment(Align.right);
+                        header.addNext(entry.cacheType.getCacheWidget(draftListItemStyle.cacheTypeStyle, null, null, null, null), -1.05f);
+                        CB_Label gcLabel = new CB_Label(entry.gcCode, headerLabelStyle);
+                        gcLabel.setWrap(true);
+                        header.addLast(gcLabel, -0.7f);
+                        CB_Label nameLabel = new CB_Label(entry.CacheName, headerLabelStyle);
+                        header.addLast(nameLabel);
+                        nameLabel.setWrap(true);
+                        tbl.add(header).row();
 
+                        Catch_Table body = new Catch_Table(true);
+                        body.addLast(new CB_Label("DraftListItem Description follows:").setBackgroundColor(Color.BLUE).setForegroundColor(Color.WHITE));
+                        if (entry.uploaded)
+                            if (draftListItemStyle.uploadedOverlay != null)
+                                body.setBackgroundDrawable(draftListItemStyle.uploadedOverlay);
+                            else
+                                body.setBackgroundColor(Color.LIGHT_GRAY); // new Color(1, 1, 1, 0.4f)
+                        else
+                            body.setBackgroundColor(Color.WHITE);
+                        Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
+                        commentLabelStyle.font = draftListItemStyle.descriptionFont;
+                        commentLabelStyle.fontColor = draftListItemStyle.descriptionFontColor;
+                        CB_Label commentLabel = new CB_Label(entry.comment, commentLabelStyle);
+                        commentLabel.setWrap(true);
+                        body.addLast(commentLabel);
+                        tbl.add(body);
+
+                        CB_Button btnUploaded;
+                        tbl.addLast(btnUploaded = new CB_Button("Toggle Uploaded"));
+                        btnUploaded.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                entry.uploaded = !entry.uploaded;
+                                refresh();
+                            }
+                        });
+
+                        tbl.addLast(new CB_Label("GCVoteWidget follows:").setBackgroundColor(Color.BLUE).setForegroundColor(Color.WHITE));
+                        AdjustableStarWidget gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, "maxRating",
+                                new IntProperty(), draftListItemStyle.starStyle, draftListItemStyle.cacheSizeStyle);
+                        Catch_Table gcVote = new Catch_Table(true);
+                        gcVote.addLast(gcVoteWidget);
+                        gcVoteWidget.setBackgroundDrawable(CB.getSkin().get(ListViewStyle.class).selectedItem);
+                        gcVote.setBackgroundDrawable(CB.getSkin().get(ListViewStyle.class).firstItem);
+                        tbl.addLast(gcVote);
+
+                        add(tbl).pad(10).width(getWidth() / 2).padBottom(20).row();
+                    } else if (widget.equals("CacheTypeStyle")) {
+                        CacheTypeStyle cacheTypeStyle = game.skinProject.get(key, CacheTypeStyle.class);
+                        Catch_Table tbl = new Catch_Table(true);
+                        tbl.addLast(new CB_Label("Subtype " + key).setBackgroundColor(Color.BLUE).setForegroundColor(Color.WHITE));
+                        int count = 0;
+                        int newLineAt = CacheTypes.values().length / 3;
+                        for (CacheTypes cacheType : CacheTypes.values()) {
+                            if (cacheType.isCache()) {
+                                count++;
+                                getCacheTypeItem(tbl, cacheType, cacheTypeStyle, count % newLineAt == 0);
+                            }
+                        }
+                        tbl.newLine();
+                        count = 0;
+                        for (CacheTypes cacheType : CacheTypes.values()) {
+                            if (!cacheType.isCache()) {
+                                count++;
+                                getCacheTypeItem(tbl, cacheType, cacheTypeStyle,  count % newLineAt == 0);
+                            }
+                        }
+                        tbl.newLine();
+                        add(tbl).width(getWidth()).row();
                     } else {
-                        add(new Label("Unknown widget type!", game.skin, "error")).pad(10).padBottom(20).row();
+                        add(new Label("Preview of Widget \"" + widget + "/" + key + "\" not implemented! ", game.skin, "error")).pad(10).padBottom(20).row();
                     }
                 } catch (Exception e) {
                     add(new Label("Please fill all required fields", game.skin, "error")).pad(10).padBottom(20).row();
@@ -386,6 +492,21 @@ public class PreviewPane extends Table {
             }
 
         }
+    }
+
+    private Catch_Table getCacheTypeItem(Catch_Table tbl, CacheTypes cacheType, CacheTypeStyle cacheTypeStyle, boolean newLine) {
+        Catch_Table itm = new Catch_Table(true);
+        Image img = new Image(cacheType.getDrawable(cacheTypeStyle));
+        img.setScaling(Scaling.none);
+        itm.addLast(img);
+        CB_Label lblType = new CB_Label(cacheType.getName());
+        lblType.setAlignment(Align.center);
+        itm.addLast(lblType);
+        if (newLine)
+            tbl.addLast(itm);
+        else
+            tbl.addNext(itm);
+        return itm;
     }
 
     public void selectedStyleChanged() {

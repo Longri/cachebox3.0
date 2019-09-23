@@ -25,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.stages.NamedStage;
-import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.utils.Showable;
 import org.slf4j.Logger;
@@ -42,20 +41,19 @@ public class Window extends Catch_Table implements Disposable {
 
     static private final Vector2 tmpPosition = new Vector2();
     static private final Vector2 tmpSize = new Vector2();
-
+    protected NamedStage showingStage;
     private Drawable stageBackground;
+    private WindowCloseListener windowCloseListener;
+
+    public Window(String name) {
+        super();
+        this.setName(name);
+    }
 
     @Override
     public void dispose() {
 
     }
-
-
-    public interface WindowCloseListener {
-        void windowClosed();
-    }
-
-    private WindowCloseListener windowCloseListener;
 
     public void setWindowCloseListener(WindowCloseListener listener) {
         this.windowCloseListener = listener;
@@ -65,21 +63,13 @@ public class Window extends Catch_Table implements Disposable {
         this.windowCloseListener = null;
     }
 
-
-    public Window(String name) {
-        super();
-        this.setName(name);
+    protected Drawable getStageBackground() {
+        return this.stageBackground;
     }
 
     public void setStageBackground(Drawable drawable) {
         this.stageBackground = drawable;
     }
-
-    protected Drawable getStageBackground() {
-        return this.stageBackground;
-    }
-
-    protected NamedStage showingStage;
 
     public void show() {
         if (CB.stageManager == null) return;
@@ -130,5 +120,9 @@ public class Window extends Catch_Table implements Disposable {
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         stageBackground.draw(batch, getX() + tmpPosition.x, getY() + tmpPosition.y, getX() + tmpSize.x,
                 getY() + tmpSize.y);
+    }
+
+    public interface WindowCloseListener {
+        void windowClosed();
     }
 }

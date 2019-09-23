@@ -30,6 +30,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by Longri on 19.03.2018.
  */
 public class Catch_VisTextButton extends VisTextButton {
+    protected final static String EMPTY = "";
+
     public Catch_VisTextButton(String text, String styleName) {
         super(text, styleName);
     }

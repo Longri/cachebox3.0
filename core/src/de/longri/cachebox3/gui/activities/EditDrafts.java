@@ -19,11 +19,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -35,8 +33,8 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.EditTextBox;
+import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.EditTextField;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.DraftEntry;
@@ -57,21 +55,19 @@ public class EditDrafts extends ActivityBase {
     private final static DateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.getDefault());
     private final static DateFormat iso8601FormatDate = new SimpleDateFormat("yyyy-MM-dd");
     private final static DateFormat iso8601FormatTime = new SimpleDateFormat("HH:mm");
-
-
+    private static EditDrafts editDrafts;
     private final VisTable contentTable;
-    private final CharSequenceButton btnOk, btnCancel;
-    private final DraftListItemStyle itemStyle;
+    private final CB_Button btnOk, btnCancel;
+    private final DraftListItemStyle draftListItemStyle;
     private final VisScrollPane scrollPane;
     private final VisLabel foundLabel, dateLabel, timeLabel;
-    private final EditTextBox dateTextArea, timeTextArea, commentTextArea;
-
+    private final EditTextField dateTextArea, timeTextArea, commentTextArea;
     private boolean isNewDraft;
     private ReturnListener returnListener;
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             if (returnListener != null)
-                returnListener.returnedDraft(null, false, false);
+                returnListener.returnedDraft(null, false);
             finish();
         }
     };
@@ -116,51 +112,51 @@ public class EditDrafts extends ActivityBase {
                     actDraft.updateDatabase();
                     DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
                 }
-                returnListener.returnedDraft(actDraft, isNewDraft, actDraft.isDirectLog);
+                returnListener.returnedDraft(actDraft, isNewDraft);
             }
             finish();
         }
     };
 
-    public EditDrafts(DraftEntry note, ReturnListener returnListener, boolean isNewDraft) {
+    private EditDrafts() {
         super("EditDraft");
-        itemStyle = VisUI.getSkin().get("fieldNoteListItemStyle", DraftListItemStyle.class);
+        draftListItemStyle = CB.getSkin().get("DraftListItemStyle", DraftListItemStyle.class);
 
-        btnOk = new CharSequenceButton(Translation.get("save"));
+        btnOk = new CB_Button(Translation.get("save"));
         btnOk.addListener(saveClickListener);
-        btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        btnCancel = new CB_Button(Translation.get("cancel"));
         btnCancel.addListener(cancelClickListener);
         contentTable = new VisTable();
-        setDraft(note, returnListener, isNewDraft);
+
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
             gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"),
-                    new IntProperty(), itemStyle.starStyle, itemStyle.cacheSizeStyle);
+                    new IntProperty(), draftListItemStyle.starStyle, draftListItemStyle.cacheSizeStyle);
             gcVoteWidget.setBackground(CB.getSkin().get(ListViewStyle.class).firstItem);
         }
 
         scrollPane = new VisScrollPane(contentTable);
 
-        if (note.isTbDraft)
-            foundLabel = new VisLabel("");
-        else
-            foundLabel = new VisLabel("Founds: #" + note.foundNumber);
+        foundLabel = new VisLabel("");
 
-        dateLabel = new VisLabel(Translation.get("wptDate") + ":");
+        dateLabel = new VisLabel(Translation.get("date") + ":");
         timeLabel = new VisLabel(Translation.get("time") + ":");
 
-        dateTextArea = new EditTextBox(false);
-        timeTextArea = new EditTextBox(false) {
+        dateTextArea = new EditTextField(false);
+        timeTextArea = new EditTextField(false) {
             //return same width like dateTextArea
             public float getPrefWidth() {
                 return dateTextArea.getPrefWidth();
             }
         };
-        commentTextArea = new EditTextBox(true);
+        commentTextArea = new EditTextField(true);
 
-        dateTextArea.setText(iso8601FormatDate.format(note.timestamp));
-        timeTextArea.setText(iso8601FormatTime.format(note.timestamp));
-        commentTextArea.setText(note.comment);
+    }
 
+    public static EditDrafts getInstance() {
+        if (editDrafts == null || editDrafts.isDisposed()) {
+            editDrafts = new EditDrafts();
+        }
+        return editDrafts;
     }
 
     @Override
@@ -191,6 +187,15 @@ public class EditDrafts extends ActivityBase {
 
         if (!needsLayout) return;
 
+        if (actDraft.isTbDraft)
+            foundLabel.setText("");
+        else
+            foundLabel.setText("Founds: #" + actDraft.foundNumber);
+
+        dateTextArea.setText(iso8601FormatDate.format(actDraft.timestamp));
+        timeTextArea.setText(iso8601FormatTime.format(actDraft.timestamp));
+        commentTextArea.setText(actDraft.comment);
+
         this.clear();
         contentTable.clear();
         this.addActor(btnOk);
@@ -208,18 +213,18 @@ public class EditDrafts extends ActivityBase {
         y += CB.scaledSizes.MARGIN + btnCancel.getHeight();
 
         Label.LabelStyle headerLabelStyle = new Label.LabelStyle();
-        headerLabelStyle.font = this.itemStyle.headerFont;
-        headerLabelStyle.fontColor = this.itemStyle.headerFontColor;
+        headerLabelStyle.font = this.draftListItemStyle.headerFont;
+        headerLabelStyle.fontColor = this.draftListItemStyle.headerFontColor;
 
         Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
-        commentLabelStyle.font = this.itemStyle.descriptionFont;
-        commentLabelStyle.fontColor = this.itemStyle.descriptionFontColor;
+        commentLabelStyle.font = this.draftListItemStyle.descriptionFont;
+        commentLabelStyle.fontColor = this.draftListItemStyle.descriptionFontColor;
 
 
         VisTable cacheTable = new VisTable();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(actDraft.cacheType.getCacheWidget(itemStyle.cacheTypeStyle, null, null, null, null));
+        iconTable.add(actDraft.cacheType.getCacheWidget(draftListItemStyle.cacheTypeStyle, null, null, null, null));
         iconTable.pack();
         iconTable.layout();
 
@@ -238,7 +243,7 @@ public class EditDrafts extends ActivityBase {
         cacheTable.add(gcLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
 
         VisTable foundRow = new VisTable();
-        Image typeIcon = new Image(actDraft.type.getDrawable(itemStyle.typeStyle));
+        Image typeIcon = new Image(actDraft.type.getDrawable(draftListItemStyle.logTypesStyle));
         foundRow.defaults().pad(CB.scaledSizes.MARGINx2);
         foundRow.add(typeIcon);
         foundRow.add(foundLabel);
@@ -258,6 +263,7 @@ public class EditDrafts extends ActivityBase {
         timeRow.add(timeTextArea);
 
 
+        /*
         VisTable optionTable = new VisTable();
         optionTable.defaults().pad(CB.scaledSizes.MARGINx2);
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
@@ -288,6 +294,8 @@ public class EditDrafts extends ActivityBase {
         optionTable.add(fieldNoteOption).left();
         optionTable.add(fieldNoteOptionLabel).left().expandX().fillX();
 
+         */
+
 //        contentTable.setDebug(true);
 //        timeRow.setDebug(true);
         contentTable.defaults().pad(CB.scaledSizes.MARGIN);
@@ -304,8 +312,8 @@ public class EditDrafts extends ActivityBase {
         contentTable.row();
         contentTable.add(commentTextArea).expandX().fillX();
         contentTable.row();
-        contentTable.add(optionTable).expandX().fillX();
-        contentTable.row();
+        // contentTable.add(optionTable).expandX().fillX();
+        // contentTable.row();
 
 
         contentTable.add((Actor) null).expand().fill();//Fill
@@ -318,7 +326,7 @@ public class EditDrafts extends ActivityBase {
     }
 
     public interface ReturnListener {
-        void returnedDraft(DraftEntry fn, boolean isNewDraft, boolean directlog);
+        void returnedDraft(DraftEntry fn, boolean isNewDraft);
     }
 
 

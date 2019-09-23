@@ -39,6 +39,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
@@ -46,7 +47,7 @@ import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.ApiButton;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.FloatControl;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
@@ -63,8 +64,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.fetchMyUserInfos;
-import static de.longri.cachebox3.apis.GroundspeakAPI.setAuthorization;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
 import static de.longri.cachebox3.settings.Settings.GcLogin;
@@ -84,7 +83,7 @@ public class Settings_Activity extends ActivityBase {
         }
     };
     private Label.LabelStyle nameStyle, descStyle, defaultValueStyle, valueStyle;
-    private CharSequenceButton btnOk, btnCancel, btnMenu;
+    private CB_Button btnOk, btnCancel, btnMenu;
     private float itemWidth;
     private Array<WidgetGroup> listViews = new Array<>();
     private Array<CharSequence> listViewsNames = new Array<>();
@@ -126,9 +125,9 @@ public class Settings_Activity extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new CharSequenceButton(Translation.get("save"));
-        btnMenu = new CharSequenceButton("...");
-        btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        btnOk = new CB_Button(Translation.get("save"));
+        btnMenu = new CB_Button("...");
+        btnCancel = new CB_Button(Translation.get("cancel"));
 
         this.addActor(btnOk);
         this.addActor(btnMenu);
@@ -160,6 +159,7 @@ public class Settings_Activity extends ActivityBase {
 
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+// todo implement  QuickButton config setting
 
 //                String ActionsString = "";
 //                int counter = 0;
@@ -549,8 +549,8 @@ public class Settings_Activity extends ActivityBase {
                         } else {
                             Config.AccessToken.setEncryptedValue(accessToken);
                         }
-                        setAuthorization();
-                        String userNameOfAuthorization = fetchMyUserInfos().username;
+                        GroundspeakAPI.getInstance().setAuthorization();
+                        String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
                         GcLogin.setValue(userNameOfAuthorization);
                         // do not Config.AcceptChanges(); if you do the settings will be restored
                         // refresh settings view
@@ -734,7 +734,7 @@ public class Settings_Activity extends ActivityBase {
                         public void canceled() {
 
                         }
-                    }, Translation.get(setting.getName()).toString(), setting.getValue(), "");
+                    }, 0, Translation.get(setting.getName()).toString(), setting.getValue(), "");
                     event.cancel();
                     event.handle();
                 }
@@ -896,7 +896,7 @@ public class Settings_Activity extends ActivityBase {
                                 valuelabel.setText("Value: " + String.valueOf(setting.getValue()));
                             }
                         });
-                        folderChooser.setDirectory(Gdx.files.absolute(setting.getValue()));
+                        folderChooser.setDirectory(CB.WorkPathFileHandle, true);
                         folderChooser.show();
                     });
                     selectClearMenu.addMenuItem("ClearPath", null, () -> {

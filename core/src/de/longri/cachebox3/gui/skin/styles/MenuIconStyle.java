@@ -55,7 +55,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable editWp;
     public Drawable mesureWp;
     public Drawable navigate;
-    public Drawable fieldNote;
+    public Drawable draft;
     public Drawable videoIcon;
     public Drawable voiceRecIcon;
     public Drawable hintIconOn;

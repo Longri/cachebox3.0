@@ -110,33 +110,33 @@ public class ListView extends Catch_WidgetGroup {
         OnDrawListener onDrawListener = new OnDrawListener() {
             @Override
             public void onDraw(ListViewItem item) {
-                if (adapter != null) {
-                    if (selectionType != NONE) {
-                        boolean isSelected;
-                        if (selectionType == SINGLE) {
-                            isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, false);
-                        } else {
-                            isSelected = selectedItemList.contains(item, false);
-                        }
 
-                        if (isSelected) {
-                            item.setBackground(ListView.this.style.selectedItem);
-                        } else {
-                            if (ListView.this.style.secondItem != null && item.getListIndex() % 2 == 1) {
-                                item.setBackground(ListView.this.style.secondItem);
-                            } else {
-                                item.setBackground(ListView.this.style.firstItem);
-                            }
-                        }
+                if (adapter != null && selectionType != NONE && !Gdx.input.isTouched()) {
+                    boolean isSelected;
 
-                        //add ClickListener
-                        item.addListener(onListItemClickListener);
+                    if (selectionType == SINGLE) {
+                        isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, true);
+                    } else {
+                        isSelected = selectedItemList.contains(item, true);
                     }
-                    try {
-                        adapter.update(item);
-                    } catch (Exception e) {
-                        log.error("Update:", e);
+
+                    if (isSelected) {
+                        item.setBackground(ListView.this.style.selectedItem);
+                    } else {
+                        if (ListView.this.style.secondItem != null && item.getListIndex() % 2 == 1) {
+                            item.setBackground(ListView.this.style.secondItem);
+                        } else {
+                            item.setBackground(ListView.this.style.firstItem);
+                        }
                     }
+
+                    //add ClickListener
+                    item.addListener(onListItemClickListener);
+                }
+                try {
+                    adapter.update(item);
+                } catch (Exception e) {
+                    log.error("Update:", e);
                 }
             }
         };
@@ -226,21 +226,22 @@ public class ListView extends Catch_WidgetGroup {
         }
 
         @Override
-        public boolean longClicked(Actor actor, float x, float y) {
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
             log.debug("ListViewItem longClicked on x:{}  y:{}", x, y);
             SnapshotArray<Actor> childs = ((ListViewItemLinkedList) scrollPane.getChildren().get(0)).getChildren();
             for (int i = 0, n = childs.size; i < n; i++) {
                 ListViewItem item = (ListViewItem) childs.get(i);
                 Vector2 vec = item.localToStageCoordinates(new Vector2());
                 tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
-                if (tempClickRec.contains(x, y)) {
+                if (tempClickRec.contains(touchDownStageX, touchDownStageY)) {
+                    item.setBackground(ListView.this.style.selectedItem);
                     // item Clicked
                     log.debug("ListViewItem {} LongClicked", i);
                     Array<EventListener> listeners = item.getListeners();
                     boolean handeld = false;
                     for (EventListener listener : listeners) {
                         if (listener instanceof ClickLongClickListener) {
-                            if (((ClickLongClickListener) listener).longClicked(actor, x, y)) {
+                            if (((ClickLongClickListener) listener).longClicked(actor, x, y, touchDownStageX, touchDownStageY)) {
                                 handeld = true;
                             }
                         }
@@ -455,7 +456,7 @@ public class ListView extends Catch_WidgetGroup {
         }
 
         @Override
-        public boolean longClicked(Actor actor, float x, float y) {
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
             return false;
         }
     };

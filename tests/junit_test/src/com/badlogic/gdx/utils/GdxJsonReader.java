@@ -2,6 +2,7 @@ package com.badlogic.gdx.utils;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by longri on 13.05.17.
@@ -10,7 +11,13 @@ public class GdxJsonReader extends JsonReaderCpy {
 
 
     public JsonValue parse(InputStream input, long length) {
-        InputStreamReader reader = new InputStreamReader(input);
+        InputStreamReader reader = null;
+        try {
+            reader = new InputStreamReader(input, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
         return parse(reader);
     }
 

@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import de.longri.cachebox3.settings.Config;
@@ -31,9 +32,24 @@ public abstract class ClickLongClickListener extends ActorGestureListener {
         this.getGestureDetector().setLongPressSeconds((Config.LongClicktime.getValue() / 1000f));
     }
 
+    float touchDownStageX, touchDownStageY;
+
+    public boolean handle(Event e) {
+        boolean retValue = super.handle(e);
+
+        if ((e instanceof InputEvent)) {
+            InputEvent event = (InputEvent) e;
+            if (event.getType() == InputEvent.Type.touchDown) {
+                touchDownStageX = event.getStageX();
+                touchDownStageY = event.getStageY();
+            }
+        }
+        return retValue;
+    }
+
     public abstract boolean clicked(InputEvent event, float x, float y);
 
-    public abstract boolean longClicked(Actor actor, float x, float y);
+    public abstract boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY);
 
 
     public boolean longPress(Actor actor, float x, float y) {
@@ -42,7 +58,8 @@ public abstract class ClickLongClickListener extends ActorGestureListener {
 
     public boolean longPress(Actor actor, float x, float y, boolean force) {
         if (force || Gdx.input.isTouched()) {
-            return longClicked(actor, x, y);
+
+            return longClicked(actor, x, y, touchDownStageX, touchDownStageY);
         }
         return false;
     }

@@ -22,15 +22,9 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
  * Created by Longri on 24.07.16.
  */
 public class ActionButton {
-    public enum GestureDirection {
-        None, Right, Up, Left, Down
-    }
-
-
     private final AbstractAction action;
     private final boolean defaultAction;
-    private GestureDirection gestureDirection = GestureDirection.None;
-
+    private GestureDirection gestureDirection;
     public ActionButton(AbstractAction action, boolean defaultAction, GestureDirection gestureDirection) {
         this.action = action;
         this.defaultAction = defaultAction;
@@ -63,7 +57,13 @@ public class ActionButton {
         return action.getIcon();
     }
 
+    public enum GestureDirection {
+        None, Right, Up, Left, Down
+    }
+
+    /*
     public void setGestureDirection(GestureDirection gesture) {
         gestureDirection = gesture;
     }
+     */
 }

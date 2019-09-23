@@ -37,7 +37,7 @@ import static de.longri.cachebox3.platform_test.Assert.assertThat;
 public class TranslationListTest {
 
     @BeforeAll
-    static void setUp() throws SQLiteGdxException {
+    public static void setUp() throws SQLiteGdxException {
         TestUtils.initialGdx();
     }
 

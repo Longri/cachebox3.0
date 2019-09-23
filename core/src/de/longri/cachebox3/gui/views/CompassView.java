@@ -67,7 +67,7 @@ public class CompassView extends AbstractView implements
     private CompassPanel compassPanel;
     private VisSplitPane splitPane;
     private Table topTable, bottomTable;
-    private CompassViewStyle style;
+    private final CompassViewStyle style;
     private Image backgroundWidget;
     private final float result[] = new float[4];
 
@@ -80,6 +80,42 @@ public class CompassView extends AbstractView implements
 
     public CompassView(BitStore reader) {
         super(reader);
+        style = VisUI.getSkin().get("compassViewStyle", CompassViewStyle.class);
+
+        if (CB.isMocked()) return;
+
+        //background
+        backgroundWidget = new Image(style.background);
+        backgroundWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
+        this.addActor(backgroundWidget);
+
+
+        topTable = new Table();
+        bottomTable = new Table() {
+            public void sizeChanged() {
+                compassPanel.setSize(bottomTable.getWidth(), bottomTable.getHeight());
+            }
+        };
+
+
+        topTable.setBackground(style.splitBackground);
+        bottomTable.setBackground(style.splitBackground);
+
+        VisSplitPane.VisSplitPaneStyle visSplitPaneStyle = new VisSplitPane.VisSplitPaneStyle();
+        visSplitPaneStyle.handle = style.splitHandle;
+
+        VisScrollPane scrollPane = new VisScrollPane(topTable);
+
+        splitPane = new VisSplitPane(scrollPane, bottomTable, true, visSplitPaneStyle);
+        this.addChild(splitPane);
+
+        compassPanel = new CompassPanel(style);
+        bottomTable.add(compassPanel).expand().fill().center();
+
+        splitPane.setMinSplitAmount(0.25f);
+        splitPane.setMaxSplitAmount(0.59f);
+
+        layoutInfoPanel();
     }
 
     public CompassView() {
@@ -104,6 +140,7 @@ public class CompassView extends AbstractView implements
         topTable.setBackground(style.splitBackground);
         bottomTable.setBackground(style.splitBackground);
 
+        readSettings();
 
         if (CB.isMocked()) return;
 
@@ -118,14 +155,19 @@ public class CompassView extends AbstractView implements
         compassPanel = new CompassPanel(style);
         bottomTable.add(compassPanel).expand().fill().center();
 
-        readSettings();
-
         splitPane.setMinSplitAmount(0.25f);
         splitPane.setMaxSplitAmount(0.59f);
 
+        layoutInfoPanel();
     }
 
     private void layoutInfoPanel() {
+        // get last Coord and set values
+        actCoord = EventHandler.getMyPosition();
+        actHeading = EventHandler.getHeading();
+        refreshOrientationInfo();
+
+
         topTable.clear();
 
         Label.LabelStyle infoStyle = new Label.LabelStyle();
@@ -170,9 +212,9 @@ public class CompassView extends AbstractView implements
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
             if (showCoords) {
                 if (actWaypoint == null) {
-                    lineTable.add(new Label(actAbstractCache.FormatCoordinate(), infoStyle));
+                    lineTable.add(new Label(actAbstractCache.formatCoordinate(), infoStyle));
                 } else {
-                    lineTable.add(new Label(actWaypoint.FormatCoordinate(), infoStyle));
+                    lineTable.add(new Label(actWaypoint.formatCoordinate(), infoStyle));
                 }
             }
             if (showGcCode) {
@@ -292,12 +334,7 @@ public class CompassView extends AbstractView implements
 
             showAnyContent = showMap || showName || showIcon || showAtt || showGcCode || showCoords || showWpDesc || showSatInfos || showSunMoon || showTargetDirection || showSDT || showLastFound;
 
-            layoutInfoPanel();
-
-            // get last Coord and set values
-            actCoord = EventHandler.getMyPosition();
-            actHeading = EventHandler.getHeading();
-            refreshOrientationInfo();
+            if (CB.isMocked()) return;
         }
     }
 
@@ -356,40 +393,50 @@ public class CompassView extends AbstractView implements
             CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
                 @Override
                 public void run() {
-                    ownPositionLabel.setText(actCoord.FormatCoordinate());
+                    ownPositionLabel.setText(actCoord.formatCoordinate());
                 }
             });
         }
 
         final float heading = actHeading;
         final Coordinate dest = EventHandler.getSelectedCoord();
+        if (dest == null) {
+            log.debug("No own position, return refresh Compass ");
+            return;
+        }
 
         CB.postOnGlThread(new NamedRunnable("Set compass values") {
             @Override
             public void run() {
-                try {
-                    MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.ACCURATE, actCoord.getLatitude(),
-                            actCoord.getLongitude(), dest.getLatitude(), dest.getLongitude(), result);
-                } catch (Exception e) {
-                    log.error("Compute distance and bearing", e);
-                    return;
-                }
+                if(actCoord!=null){
+                    try {
+                        MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.ACCURATE,
+                                actCoord.getLatitude(),
+                                actCoord.getLongitude(),
+                                dest.getLatitude(),
+                                dest.getLongitude(),
+                                result);
+                    } catch (Exception e) {
+                        log.error("Compute distance and bearing", e);
+                        return;
+                    }
 
-                float distance = result[0];
-                float bearing = result[1];
-                log.debug("set Compass heading to {}", heading);
-                compassPanel.setInfo(distance, heading, bearing, accuracy);
+                    float distance = result[0];
+                    float bearing = result[1];
+                    log.debug("set Compass heading to {}", heading);
+                    compassPanel.setInfo(distance, heading, bearing, accuracy);
 
-                if (targetdirectionLabel != null) {
-                    double directionToTarget = 0;
-                    if (bearing < 0)
-                        directionToTarget = 360 + bearing;
-                    else
-                        directionToTarget = bearing;
+                    if (targetdirectionLabel != null) {
+                        double directionToTarget = 0;
+                        if (bearing < 0)
+                            directionToTarget = 360 + bearing;
+                        else
+                            directionToTarget = bearing;
 
-                    String sBearing = Translation.get("directionToTarget") + " : " +
-                            String.format("%.0f", directionToTarget) + "°";
-                    targetdirectionLabel.setText(sBearing);
+                        String sBearing = Translation.get("directionToTarget") + " : " +
+                                String.format("%.0f", directionToTarget) + "°";
+                        targetdirectionLabel.setText(sBearing);
+                    }
                 }
             }
         });
@@ -449,4 +496,70 @@ public class CompassView extends AbstractView implements
     public void accuracyChanged(AccuracyChangedEvent event) {
         this.accuracy = event.accuracy;
     }
+
+    //#################### save/restore instance state ######################################
+
+    @Override
+    public void saveInstanceState(BitStore writer) {
+        writer.write(resetLayout);
+        writer.write(showMap);
+        writer.write(showName);
+        writer.write(showIcon);
+        writer.write(showAtt);
+        writer.write(showGcCode);
+        writer.write(showCoords);
+        writer.write(showWpDesc);
+        writer.write(showSatInfos);
+        writer.write(showSunMoon);
+        writer.write(showAnyContent);
+        writer.write(showTargetDirection);
+        writer.write(showSDT);
+        writer.write(showLastFound);
+        writer.write(accuracy);
+    }
+
+    @Override
+    protected void restoreInstanceState(BitStore reader) {
+        resetLayout = reader.readBool();
+        showMap = reader.readBool();
+        showName = reader.readBool();
+        showIcon = reader.readBool();
+        showAtt = reader.readBool();
+        showGcCode = reader.readBool();
+        showCoords = reader.readBool();
+        showWpDesc = reader.readBool();
+        showSatInfos = reader.readBool();
+        showSunMoon = reader.readBool();
+        showAnyContent = reader.readBool();
+        showTargetDirection = reader.readBool();
+        showSDT = reader.readBool();
+        showLastFound = reader.readBool();
+        accuracy = reader.readFloat();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (!(other instanceof CompassView)) return false;
+
+        CompassView otherView = (CompassView) other;
+        if (otherView.resetLayout != resetLayout) return false;
+        if (otherView.showMap != showMap) return false;
+        if (otherView.showName != showName) return false;
+        if (otherView.showIcon != showIcon) return false;
+        if (otherView.showAtt != showAtt) return false;
+        if (otherView.showGcCode != showGcCode) return false;
+        if (otherView.showCoords != showCoords) return false;
+        if (otherView.showWpDesc != showWpDesc) return false;
+        if (otherView.showSatInfos != showSatInfos) return false;
+        if (otherView.showSunMoon != showSunMoon) return false;
+        if (otherView.showAnyContent != showAnyContent) return false;
+        if (otherView.showTargetDirection != showTargetDirection) return false;
+        if (otherView.showSDT != showSDT) return false;
+        if (otherView.showLastFound != showLastFound) return false;
+        if (otherView.accuracy != accuracy) return false;
+
+        return true;
+    }
+
 }

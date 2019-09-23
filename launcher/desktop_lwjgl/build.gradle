@@ -1,0 +1,47 @@
+apply plugin: "java"
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.resources.srcDirs = ["../desktop/workingDir"]
+
+project.ext.mainClassName = "de.longri.cachebox3.desktop.touch.TouchLauncher"
+project.ext.assetsDir = new File("./workingDir")
+
+task run(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+}
+
+task debug(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+    debug = true
+}
+
+task dist(type: Jar) {
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+    from {
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+
+dist.dependsOn classes
+
+
+task copyAssets(type: Copy) {
+    from("../android/assets")
+    into("../desktop/workingDir")
+}
+
+copyAssets.dependsOn classes

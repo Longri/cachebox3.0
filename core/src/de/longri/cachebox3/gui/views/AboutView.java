@@ -65,10 +65,11 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
         contentTable.add(versionLabel).center();
         contentTable.row();
 
-        Label.LabelStyle style = null;
+        Label.LabelStyle style;
         try {
             style = VisUI.getSkin().get("AboutViewVersionInfoStyle", Label.LabelStyle.class);
         } catch (Exception e) {
+            style = null;
         }
         VisLabel versionInfoLabel = new VisLabel("(" + BuildInfo.getBranch() + " " + BuildInfo.getBuildDate() +
                 " " + BuildInfo.getSHA() + ")", style == null ? VisUI.getSkin().get(Label.LabelStyle.class) : style);
@@ -76,10 +77,11 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
         contentTable.add(versionInfoLabel).center();
         contentTable.row();
 
-        Label.LabelStyle aboutStyle = null;
+        Label.LabelStyle aboutStyle;
         try {
             aboutStyle = VisUI.getSkin().get("AboutSmall", Label.LabelStyle.class);
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            aboutStyle = null;
         }
 
         VisLabel aboutLabel1 = new VisLabel(aboutMsg1, aboutStyle == null ? VisUI.getSkin().get(Label.LabelStyle.class) : aboutStyle);
@@ -126,12 +128,6 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
         de.longri.cachebox3.events.EventHandler.remove(this);
     }
 
-//    protected void boundsChanged(float x, float y, float width, float height) {
-//        super.boundsChanged(x, y, width, height);
-//
-//    }
-
-
     Coordinate pos;
     float distance = -1;
 
@@ -161,5 +157,13 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
     @Override
     public Menu getContextMenu() {
         return null;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (!(other instanceof AboutView)) return false;
+
+        return true;
     }
 }

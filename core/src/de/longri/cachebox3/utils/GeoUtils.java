@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.utils;
 
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.converter.UTMConvert;
 
 import java.util.ArrayList;
@@ -23,6 +24,33 @@ import java.util.ArrayList;
  * Created by Longri on 20.06.2017.
  */
 public class GeoUtils {
+
+    private GeoUtils() {
+        // all is static
+    }
+
+    private static final double EARTH_RADIUS = 6378137.0;
+
+    /**
+     * Maximum possible latitude coordinate.
+     */
+    public static final double LATITUDE_MAX = 90;
+
+    /**
+     * Minimum possible latitude coordinate.
+     */
+    public static final double LATITUDE_MIN = -LATITUDE_MAX;
+
+    /**
+     * Maximum possible longitude coordinate.
+     */
+    public static final double LONGITUDE_MAX = 180;
+
+    /**
+     * Minimum possible longitude coordinate.
+     */
+    public static final double LONGITUDE_MIN = -LONGITUDE_MAX;
+
 
     /**
      * Conversion factor from degrees to microdegrees.
@@ -204,4 +232,72 @@ public class GeoUtils {
     public static double microdegreesToDegrees(int coordinate) {
         return coordinate / CONVERSION_FACTOR;
     }
+
+    public static Coordinate project(Coordinate coord, double Direction, double Distance) {
+        return project(coord.getLatitude(), coord.getLongitude(), Direction, Distance);
+    }
+
+    public static Coordinate project(double Latitude, double Longitude, double Direction, double Distance) {
+        double dist = Distance / EARTH_RADIUS; // convert dist to angular distance in radians
+        double brng = Direction * MathUtils.DEG_RAD; //
+        double lat1 = Latitude * MathUtils.DEG_RAD;
+        double lon1 = Longitude * MathUtils.DEG_RAD;
+
+        double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) + Math.cos(lat1) * Math.sin(dist) * Math.cos(brng));
+        double lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dist) * Math.cos(lat1), Math.cos(dist) - Math.sin(lat1) * Math.sin(lat2));
+        lon2 = (lon2 + 3 * Math.PI) % (2 * Math.PI) - Math.PI; // normalise to -180°..+180°
+
+        Coordinate result = new Coordinate(lat2 * MathUtils.RAD_DEG, lon2 * MathUtils.RAD_DEG);
+        return result;
+    }
+
+
+
+
+    public static double bearing(MathUtils.CalculationType type, Coordinate coord1, Coordinate coord2) {
+        return bearing(type, coord1.getLatitude(), coord1.getLongitude(), coord2.getLatitude(), coord2.getLongitude());
+    }
+
+    public static double bearing(MathUtils.CalculationType type, double froLatitude, double fromLongitude, double toLatitude, double toLongitude) {
+        return new Coordinate(froLatitude, fromLongitude).bearingTo(new Coordinate(toLatitude, toLongitude), type);
+    }
+
+    public static Coordinate intersection(Coordinate coord1, Coordinate coord2, Coordinate coord3, Coordinate coord4) {
+        Coordinate result = null;
+
+        double[] x = new double[4];
+        double[] y = new double[4];
+        x[0] = coord1.getLongitude();
+        y[0] = coord1.getLatitude();
+        x[1] = coord2.getLongitude();
+        y[1] = coord2.getLatitude();
+        x[2] = coord3.getLongitude();
+        y[2] = coord3.getLatitude();
+        x[3] = coord4.getLongitude();
+        y[3] = coord4.getLatitude();
+
+        // Steigungen
+        double steig1 = (y[1] - y[0]) / (x[1] - x[0]);
+        double steig2 = (y[3] - y[2]) / (x[3] - x[2]);
+        // Nullwerte
+        double null1 = y[0] - x[0] * steig1;
+        double null2 = y[2] - x[2] * steig2;
+        // Schnittpunkt
+        double X = (null2 - null1) / (steig1 - steig2);
+        double Y = steig1 * X + null1;
+        // Konvertieren in Lat-Lon
+
+        result = new Coordinate(Y, X);
+        return result;
+    }
+
+    public static Coordinate crossbearing(MathUtils.CalculationType type, Coordinate coord1, double direction1, Coordinate coord2, double direction2) {
+        float[] dist = new float[4];
+        MathUtils.computeDistanceAndBearing(type, coord1.getLatitude(), coord1.getLongitude(), coord2.getLatitude(), coord2.getLongitude(), dist);
+        double distance = dist[0];
+        Coordinate coord3 = GeoUtils.project(coord1, direction1, distance);
+        Coordinate coord4 = GeoUtils.project(coord2, direction2, distance);
+        return intersection(coord1, coord3, coord2, coord4);
+    }
+
 }

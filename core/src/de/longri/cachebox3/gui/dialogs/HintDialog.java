@@ -17,15 +17,13 @@ package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.UnitFormatter;
 
@@ -35,7 +33,7 @@ import de.longri.cachebox3.utils.UnitFormatter;
 public class HintDialog extends ButtonDialog {
     private final CharSequence hintFromDB;
     private final VisLabel hintLabel;
-    private final CharSequenceButton encodeButton;
+    private final CB_Button encodeButton;
     private boolean encoded = false;
 
     public HintDialog() {
@@ -44,19 +42,19 @@ public class HintDialog extends ButtonDialog {
                 : UnitFormatter.rot13(EventHandler.getSelectedCache().getHint());
 
 
-        hintLabel = (VisLabel) ((ScrollPane) this.contentBox.getCells().get(0).getActor()).getActor();
+        hintLabel = (VisLabel) ((ScrollPane) contentBox.getCells().get(0).getActor()).getActor();
 
         hintLabel.setWrap(true);
 
-        SnapshotArray<Actor> childs = this.buttonTable.getChildren();
-        encodeButton = ((CharSequenceButton) childs.get(0));
+        SnapshotArray<Actor> childs = buttonTable.getChildren();
+        encodeButton = ((CB_Button) childs.get(0));
         encodeButton.setText(Translation.get("decode"));
-        ((CharSequenceButton) childs.get(1)).setText(Translation.get("close"));
+        ((CB_Button) childs.get(1)).setText(Translation.get("close"));
         result(BUTTON_POSITIVE);
     }
 
-    private static Table createContentBox() {
-        Table contentBox = new Table();
+    private static Catch_Table createContentBox() {
+        Catch_Table contentBox = new Catch_Table();
         VisScrollPane scrollPane = new VisScrollPane(new VisLabel());
         contentBox.defaults().pad(CB.scaledSizes.MARGIN);
         contentBox.add(scrollPane).expand().fill();

@@ -141,9 +141,9 @@ class ThreadStackTest {
 
 
             runnables.pushAndStart(runnable1);
-            sleep(5);
+            sleep(10);
             runnables.pushAndStart(runnable2);
-            sleep(5);
+            sleep(10);
             runnables.pushAndStart(runnable3);
 
 
@@ -193,7 +193,7 @@ class ThreadStackTest {
             runnables.pushAndStart(runnable3);
             sleep(100);
             runnables.pushAndStart(runnable4);
-            sleep(10);
+            sleep(20);
             runnables.pushAndStart(runnable5);
 
 

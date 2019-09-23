@@ -17,11 +17,10 @@ package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.fetchMyUserInfos;
-import static de.longri.cachebox3.apis.GroundspeakAPI.setAuthorization;
 import static de.longri.cachebox3.settings.Settings.GcLogin;
 
 /**
@@ -54,8 +53,8 @@ public class GetApiKeyQuestionDialog extends ButtonDialog {
                             } else {
                                 Config.AccessToken.setEncryptedValue(accessToken);
                             }
-                            setAuthorization();
-                            String userNameOfAuthorization = fetchMyUserInfos().username;
+                            GroundspeakAPI.getInstance().setAuthorization();
+                            String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
                             GcLogin.setValue(userNameOfAuthorization);
                             Config.AcceptChanges();
                         }));

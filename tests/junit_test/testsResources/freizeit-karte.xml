@@ -1,0 +1,1845 @@
+<Freizeitkarte>
+<General>
+<Homepage>http://freizeitkarte-osm.de</Homepage>
+<Timestamp>2019-06-07 09:44:38.000000</Timestamp>
+<Release>1906</Release>
+<HeaderHintGerman>
+Die Freizeitkarten Ausgabe 1906 basierend auf den OpenStreetMap-Daten vom 03.06.2019.
+</HeaderHintGerman>
+<FooterHintGerman>
+Viel Freude an den Freizeitkarten ... und viele interessante Touren damit.
+</FooterHintGerman>
+<HeaderHintEnglish>
+The Freizeitkarte maps release 1906 are based on OpenStreetMap data of the 2019/06/03
+</HeaderHintEnglish>
+<FooterHintEnglish>
+We wish you lots of fun with the Freizeitkarte maps ... and many interesting trips.
+</FooterHintEnglish>
+<BackgroundPicture/>
+<ChecksumAlgorithm>MD5</ChecksumAlgorithm>
+</General>
+<Map>
+<Name>Freizeitkarte_BADEN-WUERTTEMBERG</Name>
+<DescriptionGerman>Freizeitkarte Baden-Württemberg</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Baden-Wuerttemberg</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_baden-wuerttemberg.map.zip
+</Url>
+<Size>274632406</Size>
+<Checksum>abff36c09edabdfe74c77a419b385b9b</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_baden-wuerttemberg.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>381544515</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:21:10.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>47530000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>7510000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>49800000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>10520000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_BAYERN</Name>
+<DescriptionGerman>Freizeitkarte Bayern</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Bavaria</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_bayern.map.zip
+</Url>
+<Size>354906415</Size>
+<Checksum>5bc34702e138c7a1fdba85463699860d</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_bayern.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>495797876</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:29:51.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>47270000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>8980000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>50560000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>13840000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_BERLIN</Name>
+<DescriptionGerman>Freizeitkarte Berlin</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Berlin</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_berlin.map.zip
+</Url>
+<Size>27681515</Size>
+<Checksum>bcadb908b8c966766109a379be83e057</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_berlin.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>37916870</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:37:24.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>52330000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>13080000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>52680000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>13770000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_BRANDENBURG</Name>
+<DescriptionGerman>Freizeitkarte Brandenburg</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Brandenburg</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_brandenburg.map.zip
+</Url>
+<Size>107781967</Size>
+<Checksum>f39289f2ce4b18a040a0a1fc00954a66</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_brandenburg.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>147174400</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:38:47.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>51350000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>11220000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>53580000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>14780000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_BREMEN</Name>
+<DescriptionGerman>Freizeitkarte Bremen</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Bremen</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_bremen.map.zip
+</Url>
+<Size>8742557</Size>
+<Checksum>9eb07a0c6f04b14f0d0de77fac0faa8d</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_bremen.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>12389468</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:40:37.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>53010000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>8480000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>53620000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>9000000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_HAMBURG</Name>
+<DescriptionGerman>Freizeitkarte Hamburg</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Hamburg</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_hamburg.map.zip
+</Url>
+<Size>17164112</Size>
+<Checksum>4f17d235f24739e4641be89603cb3300</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_hamburg.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>24073033</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:41:00.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>53380000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>9610000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>53750000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>10340000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_HESSEN</Name>
+<DescriptionGerman>Freizeitkarte Hessen</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Hesse</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_hessen.map.zip
+</Url>
+<Size>138659993</Size>
+<Checksum>7ef3dc93db03000ee062844d74e2b8a2</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_hessen.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>195834318</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:42:39.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>49390000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>7760000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>51670000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>10250000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_MECKLENBURG-VORPOMMERN</Name>
+<DescriptionGerman>Freizeitkarte Mecklenburg-Vorpommern</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Mecklenburg-Western Pomerania</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_mecklenburg-vorpommern.map.zip
+</Url>
+<Size>63261066</Size>
+<Checksum>0773b47165eef9cd6998a07b9e03748a</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_mecklenburg-vorpommern.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>87304636</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:45:23.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>53090000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>10580000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>54990000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>14430000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_NIEDERSACHSEN</Name>
+<DescriptionGerman>Freizeitkarte Niedersachsen</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Lower Saxony</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_niedersachsen.map.zip
+</Url>
+<Size>204053946</Size>
+<Checksum>a410c1179b7a4d6eacece87eb36821d3</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_niedersachsen.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>282142676</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:49:55.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>51280000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>6450000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>54180000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>11650000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_NORDRHEIN-WESTFALEN</Name>
+<DescriptionGerman>Freizeitkarte Nordrhein-Westfalen</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte North Rhine-Westphalia</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_nordrhein-westfalen.map.zip
+</Url>
+<Size>386660539</Size>
+<Checksum>ede00874f419139bcfe9831db101b6d0</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_nordrhein-westfalen.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>531852235</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 04:57:59.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>50310000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>5860000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>52540000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>9470000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_RHEINLAND-PFALZ</Name>
+<DescriptionGerman>Freizeitkarte Rheinland-Pfalz</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Rhineland-Palatinate</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rheinland-pfalz.map.zip
+</Url>
+<Size>108136358</Size>
+<Checksum>9928b079bc1eb1648d27eefcb7bbcbb9</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_rheinland-pfalz.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>149711719</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:03:53.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>48960000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>6100000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>50960000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>8520000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_SAARLAND</Name>
+<DescriptionGerman>Freizeitkarte Saarland</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Saarland</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_saarland.map.zip
+</Url>
+<Size>22805661</Size>
+<Checksum>66c6b60bef92962b8612c831ba4b5201</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_saarland.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>31306722</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:05:48.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>49100000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>6350000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>49650000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>7410000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_SACHSEN</Name>
+<DescriptionGerman>Freizeitkarte Sachsen</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Saxony</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_sachsen.map.zip
+</Url>
+<Size>110977480</Size>
+<Checksum>f694be35257116e1adcd74e33da8ea34</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_sachsen.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>152999505</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:07:22.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>50160000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>11860000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>51690000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>15060000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_SACHSEN-ANHALT</Name>
+<DescriptionGerman>Freizeitkarte Sachsen-Anhalt</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Saxony-Anhalt</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_sachsen-anhalt.map.zip
+</Url>
+<Size>64721274</Size>
+<Checksum>130663ca470c7f2547eca2f9d82f3c7a</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_sachsen-anhalt.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>88140019</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:09:37.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>50920000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>10540000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>53060000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>13220000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_SCHLESWIG-HOLSTEIN</Name>
+<DescriptionGerman>Freizeitkarte Schleswig-Holstein</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Schleswig-Holstein</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_schleswig-holstein.map.zip
+</Url>
+<Size>68146290</Size>
+<Checksum>659e43ec03a271d8d8d986c118864d24</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_schleswig-holstein.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>94621502</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:11:29.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>53350000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>7460000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>55150000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>11930000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_THUERINGEN</Name>
+<DescriptionGerman>Freizeitkarte Th�ringen</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Thuringia</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_thueringen.map.zip
+</Url>
+<Size>68406694</Size>
+<Checksum>5f54147ae9a4f9df6018cacd82d981fa</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_thueringen.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>93366786</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:13:16.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>50190000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>9860000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>51660000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>12680000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_CYP</Name>
+<DescriptionGerman>Freizeitkarte Zypern</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Cyprus</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_cyp.map.zip
+</Url>
+<Size>12983828</Size>
+<Checksum>52edbddb00ae07e3eec423d383b703f6</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_cyp.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>17283928</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:14:21.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>34240000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>31960000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>36000000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>34960000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_AZORES</Name>
+<DescriptionGerman>Freizeitkarte Azoren</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Azores</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_azores.map.zip
+</Url>
+<Size>8285280</Size>
+<Checksum>816579c88336245deb6e21d47cb75422</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_azores.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>15230283</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:14:49.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>36680000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-31500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>40070000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>-24710000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_MLT</Name>
+<DescriptionGerman>Freizeitkarte Malta</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Malta</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_mlt.map.zip
+</Url>
+<Size>2364074</Size>
+<Checksum>2e8f3810104fd4c47bb566e6ad0534dc</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_mlt.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>3272507</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 06:01:55.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>35780000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>14100000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>36110000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>14610000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_CANARY-ISLANDS</Name>
+<DescriptionGerman>Freizeitkarte Kanarische Inseln</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Canary Islands</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_canary-islands.map.zip
+</Url>
+<Size>27438028</Size>
+<Checksum>220d4aa2591e1db677f70a2f00efb4d9</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_canary-islands.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>39385792</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:15:26.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>26580000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-18640000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>29940000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>-12830000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_ISL</Name>
+<DescriptionGerman>Freizeitkarte Island</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Iceland</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_isl.map.zip
+</Url>
+<Size>80222408</Size>
+<Checksum>49cb2b704aabddc1833b9b562e26ddaa</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_isl.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>123025536</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:17:51.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>62850000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-25700000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>67500000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>-12410000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_TUR</Name>
+<DescriptionGerman>Freizeitkarte T�rkei</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Turkey</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_tur.map.zip
+</Url>
+<Size>725991773</Size>
+<Checksum>91a891e5cbc0e94fadc306f6cb133749</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_tur.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>918481458</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 05:37:53.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>35720000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>25610000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>42390000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>44900000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_FRO</Name>
+<DescriptionGerman>Freizeitkarte F�r�er-Inseln</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Faroe Islands</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_fro.map.zip
+</Url>
+<Size>3781379</Size>
+<Checksum>507e3a401da1655f8f51b25669b52602</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_fro.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>5628971</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 06:02:09.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>61300000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-8000000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>63000000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>-6000000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_GBR</Name>
+<DescriptionGerman>Freizeitkarte Gross Britannien (Insel)</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Great Britain (Isle)</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_gbr.map.zip
+</Url>
+<Size>718945818</Size>
+<Checksum>ed79f4c410ad2be10681f5a40622120c</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_gbr.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1005325332</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 06:58:58.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>48760000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-9410000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>61130000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>2250000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_IMN</Name>
+<DescriptionGerman>Freizeitkarte Insel Man</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Isle of man</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_imn.map.zip
+</Url>
+<Size>1575690</Size>
+<Checksum>4127b62feaa9f4a2ffee430739feb048</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_imn.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>2463274</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 08:24:24.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>53710000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-5440000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>54670000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>-3680000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_IRL</Name>
+<DescriptionGerman>Freizeitkarte Irland (Insel)</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Ireland (Isle)</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_irl.map.zip
+</Url>
+<Size>135201790</Size>
+<Checksum>db5f0e9f044d389d1ffeed31c8c267da</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_irl.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>208284019</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 08:27:37.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>51080000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-11400000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>55700000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>-5059000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_AUT</Name>
+<DescriptionGerman>Freizeitkarte �sterreich</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Austria</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_aut.map.zip
+</Url>
+<Size>533064895</Size>
+<Checksum>981cfb4fc402f74cd74107390d497511</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_aut.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>701627642</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 15:38:20.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>46370000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>9530000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>49020000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>17160000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_AND</Name>
+<DescriptionGerman>Freizeitkarte Andorra</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Andorra</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_and.map.zip
+</Url>
+<Size>1672827</Size>
+<Checksum>f0766ab0c93c1788cb64e5795dcd17b0</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_and.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>2148678</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 06:02:01.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>42430000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>1418000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>42660000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>1782000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_LUX</Name>
+<DescriptionGerman>Freizeitkarte Luxemburg</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Luxembourg</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_lux.map.zip
+</Url>
+<Size>16458180</Size>
+<Checksum>14ec4beaf0f262e4b764399ba50c909a</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_lux.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>23813863</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 15:50:56.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>49450000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>5740000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>50180000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>6530000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_AUT+</Name>
+<DescriptionGerman>Freizeitkarte �sterreich+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Austria+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_aut+.map.zip
+</Url>
+<Size>945934100</Size>
+<Checksum>c4d874393bf7a5cd845901f8321c3d05</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_aut+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1240204578</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 04:02:57.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>45800000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>9000000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>49600000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>17800000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_CHE+</Name>
+<DescriptionGerman>Freizeitkarte Schweiz+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Switzerland+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_che+.map.zip
+</Url>
+<Size>630906640</Size>
+<Checksum>64c6092899baa1ce1a81b462b7ec61b4</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_che+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>833519902</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 05:59:45.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>45200000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>5400000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>48400000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>11100000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_DEU+OST</Name>
+<DescriptionGerman>Freizeitkarte Deutschland+ Ost</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Germany+ East</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_deu+ost.map.zip
+</Url>
+<Size>632658368</Size>
+<Checksum>ad1036ca3046a5c86ba9606dd5ccac38</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_deu+ost.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>868008401</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 15:14:35.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>49530000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>9270000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>53790000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>16399999</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_DEU+WEST</Name>
+<DescriptionGerman>Freizeitkarte Deutschland+ West</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Germany+ West</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_deu+west.map.zip
+</Url>
+<Size>867679299</Size>
+<Checksum>e54988be3c52d770349ad5aaebc396e0</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_deu+west.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1204415161</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 13:55:59.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>48750000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>5290000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>52400000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>10120000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_DEU+NORD</Name>
+<DescriptionGerman>Freizeitkarte Deutschland+ Nord</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Germany+ North</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_deu+nord.map.zip
+</Url>
+<Size>676599715</Size>
+<Checksum>712140db78a6325ae8099925dea371cb</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_deu+nord.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>927984424</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 16:24:04.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>50990000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>5500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>55670000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>15750000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_DEU+SUED</Name>
+<DescriptionGerman>Freizeitkarte Deutschland+ S�d</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Germany+ South</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_deu+sued.map.zip
+</Url>
+<Size>901230965</Size>
+<Checksum>ad4a8a7154fd2f46dbf3a965bdd08111</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_deu+sued.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1244611720</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 18:44:20.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>46980000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>7090000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>50790000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>14200000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_ALPS+WEST</Name>
+<DescriptionGerman>Freizeitkarte Alpen+ West</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Alps+ West</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_alps+west.map.zip
+</Url>
+<Size>1118352045</Size>
+<Checksum>6e8c4371557cd86a72b19dfdccabf24d</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_alps+west.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1470975371</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 12:42:15.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>42700000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>4400000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>48000000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>10900000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_ALPS+EAST</Name>
+<DescriptionGerman>Freizeitkarte Alpen+ Ost</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Alps+ East</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_alps+east.map.zip
+</Url>
+<Size>1176475489</Size>
+<Checksum>7fb0be3b018bcdfa0ba8365f1db0784b</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_alps+east.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1533727913</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 09:36:37.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>45300000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>9300000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>49300000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>17600000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_POL+</Name>
+<DescriptionGerman>Freizeitkarte Polen+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Poland+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_pol+.map.zip
+</Url>
+<Size>1072622936</Size>
+<Checksum>7f62a87423669f63c0f559772a9ad54d</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_pol+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1436438782</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 22:17:53.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>48400000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>13500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>55600000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>24700000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_CZE+</Name>
+<DescriptionGerman>Freizeitkarte Tschechien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Czechia+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_cze+.map.zip
+</Url>
+<Size>842059702</Size>
+<Checksum>bf5a17ee13aea5fc3a6460d3eeaf498f</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_cze+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1145535132</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 01:18:06.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>48000000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>11500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>51700000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>19500000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_LUX+</Name>
+<DescriptionGerman>Freizeitkarte Luxemburg+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Luxembourg+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_lux+.map.zip
+</Url>
+<Size>116244267</Size>
+<Checksum>e9240f40847c5b4985a66a71da7634c3</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_lux+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>158784164</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 06:13:26.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>48800000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>5100000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>50800000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>7100000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_BEL+</Name>
+<DescriptionGerman>Freizeitkarte Belgien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Belgium+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_bel+.map.zip
+</Url>
+<Size>678863081</Size>
+<Checksum>5a83fc1a90e7e286d4fabd6e290f9105</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_bel+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>936102481</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 07:21:28.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>48900000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>1800000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>52200000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>7000000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_NLD+</Name>
+<DescriptionGerman>Freizeitkarte Niederlande+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Netherlands+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_nld+.map.zip
+</Url>
+<Size>896962500</Size>
+<Checksum>ea070eed50837f325dd714d823a55eb1</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_nld+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1245837302</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 09:51:27.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>50200000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>2500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>54300000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>7800000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_FRA+NORTH</Name>
+<DescriptionGerman>Freizeitkarte Frankreich+ Nord</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte France+ North</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_fra+north.map.zip
+</Url>
+<Size>502611815</Size>
+<Checksum>40247806166be9655195f93ecf91f025</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_fra+north.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>685858413</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 17:01:50.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>47020000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-5930000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>51420000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>4430000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_FRA+EAST</Name>
+<DescriptionGerman>Freizeitkarte Frankreich+ Ost</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte France+ East</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_fra+east.map.zip
+</Url>
+<Size>739294717</Size>
+<Checksum>8ae041168be229aaf89347e024bd76f0</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_fra+east.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>978953215</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 18:46:01.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>44000000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>3120000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>50400000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>8470000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_FRA+CENTRE</Name>
+<DescriptionGerman>Freizeitkarte Frankreich+ Zentral</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte France+ Centre</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_fra+centre.map.zip
+</Url>
+<Size>563669757</Size>
+<Checksum>7e6443c91311f012f4744878c60e4440</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_fra+centre.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>747354183</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 20:08:12.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>44470000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-150000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>49510000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>5660000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_FRA+WEST</Name>
+<DescriptionGerman>Freizeitkarte Frankreich+ West</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte France+ West</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_fra+west.map.zip
+</Url>
+<Size>483713277</Size>
+<Checksum>0070f2140c48b1028607c28e5c563179</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_fra+west.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>642236958</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 20:24:51.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>42510000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-3050000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>48690000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>1660000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_FRA+SOUTH</Name>
+<DescriptionGerman>Freizeitkarte Frankreich+ S�d</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte France+ South</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_fra+south.map.zip
+</Url>
+<Size>577505284</Size>
+<Checksum>2ec0819333ea2f3c2f9ed3678ea61f0b</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_fra+south.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>756717227</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 20:42:32.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>41200000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-630000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>45210000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>9970000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_CARPATHIAN</Name>
+<DescriptionGerman>Freizeitkarte Karpaten</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Carpathian</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_carpathian.map.zip
+</Url>
+<Size>749904540</Size>
+<Checksum>86bce6a6c55093fce142c79d01a06006</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_carpathian.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>986085613</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 16:04:52.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>43150000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>16059999</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>50250000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>27760000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_PYRENEES</Name>
+<DescriptionGerman>Freizeitkarte Pyren�en</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Pyrenees</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_pyrenees.map.zip
+</Url>
+<Size>316098162</Size>
+<Checksum>23726468f891126f388b499d7ea1732f</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_pyrenees.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>415895325</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 16:46:20.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>40800000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-2550000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>43970000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>3550000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_DNK+</Name>
+<DescriptionGerman>Freizeitkarte D�nemark+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Denmark+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_dnk+.map.zip
+</Url>
+<Size>285183326</Size>
+<Checksum>7080ad8158042e98a2a4e0ef510ecf97</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_dnk+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>389583495</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 21:06:10.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>53900000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>7100000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>58600000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>16590000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_NOR+NORTH</Name>
+<DescriptionGerman>Freizeitkarte Norwegen+ Nord</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Norway+ North</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_nor+north.map.zip
+</Url>
+<Size>320345893</Size>
+<Checksum>4fd4b43aa4adef62a7cbdfdb723349b3</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_nor+north.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>462197723</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 14:52:03.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>64099999</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>8560000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>72000000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>32400000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_NOR+SOUTH</Name>
+<DescriptionGerman>Freizeitkarte Norwegen+ S�d</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Norway+ South</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_nor+south.map.zip
+</Url>
+<Size>615303180</Size>
+<Checksum>c33eff7f7628a36252cea2cfe22bc413</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_nor+south.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>793048282</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 15:16:27.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>57200000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>3500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>66129999</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>15460000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_SWE+</Name>
+<DescriptionGerman>Freizeitkarte Schweden+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Sweden+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_swe+.map.zip
+</Url>
+<Size>642785712</Size>
+<Checksum>611617c37693e8363f2e6d1ddb385434</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_swe+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>894078561</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 15:53:24.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>54500000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>10000000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>69700000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>24800000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_FIN+</Name>
+<DescriptionGerman>Freizeitkarte Finnland+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Finland+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_fin+.map.zip
+</Url>
+<Size>451523440</Size>
+<Checksum>d18a05df4ebeedd62ae77487947b9f4a</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_fin+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>634408547</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 17:01:13.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>58900000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>18500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>70700000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>32200000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_ESP+</Name>
+<DescriptionGerman>Freizeitkarte Spanien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Spain+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_esp+.map.zip
+</Url>
+<Size>888557814</Size>
+<Checksum>1d183de1c88cd6992869cd64f4d56bd6</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_esp+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1190482911</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 04:03:23.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>34600000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-10200000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>44600000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>5200000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_PRT+</Name>
+<DescriptionGerman>Freizeitkarte Portugal+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Portugal+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_prt+.map.zip
+</Url>
+<Size>193097482</Size>
+<Checksum>023fcb1e9d994495e01060a7c982cf70</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_prt+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>262915264</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 06:10:08.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>36100000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-10400000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>42800000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>-5600000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_GRC+</Name>
+<DescriptionGerman>Freizeitkarte Griechenland+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Greece+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_grc+.map.zip
+</Url>
+<Size>301248421</Size>
+<Checksum>c00d7d7f745e70442b475747f8d6fe7b</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_grc+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>400967879</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 06:18:01.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>34100000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>18600000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>42300000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>30300000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_ITA+NORTH</Name>
+<DescriptionGerman>Freizeitkarte Italien+ Nord</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Italy+ North</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_ita+north.map.zip
+</Url>
+<Size>1019323813</Size>
+<Checksum>15229539d059f10ddc0b8f2ef35e6450</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_ita+north.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1323271530</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-05 22:27:28.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>43090000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>6080000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>47630000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>14900000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_ITA+SOUTH</Name>
+<DescriptionGerman>Freizeitkarte Italien+ S�d</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Italy+ South</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_ita+south.map.zip
+</Url>
+<Size>457829366</Size>
+<Checksum>5f93be0a44575e727effe98182fd8e70</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_ita+south.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>611886887</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 00:32:55.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>34450000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>7380000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>44160000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>19330000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_ALB+</Name>
+<DescriptionGerman>Freizeitkarte Albanien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Albania+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_alb+.map.zip
+</Url>
+<Size>104462821</Size>
+<Checksum>99c7f70e502100d12b7ece1bfcf76765</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_alb+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>132374827</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 00:44:19.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>39000000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>18500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>43300000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>21700000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_BGR+</Name>
+<DescriptionGerman>Freizeitkarte Bulgarien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Bulgaria+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_bgr+.map.zip
+</Url>
+<Size>194783405</Size>
+<Checksum>34e9d336fb36f21aa865b6719aae45a5</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_bgr+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>255487370</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 00:49:05.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>40600000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>21800000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>44800000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>29500000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_BIH+</Name>
+<DescriptionGerman>Freizeitkarte Bosnien-Herzegowina+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Bosnia-Herzegovina+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_bih+.map.zip
+</Url>
+<Size>182191968</Size>
+<Checksum>fd696e6dc4923fe2eb666b7006e6d68c</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_bih+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>233304988</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 00:58:56.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>42000000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>15100000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>45900000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>20200000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_HRV+</Name>
+<DescriptionGerman>Freizeitkarte Kroatien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Croatia+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_hrv+.map.zip
+</Url>
+<Size>371740080</Size>
+<Checksum>5348a9fff98400d109014f0d75ebc645</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_hrv+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>469965737</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 01:08:32.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>41600000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>12600000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>47200000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>20000000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_HUN+</Name>
+<DescriptionGerman>Freizeitkarte Ungarn+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Hungary+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_hun+.map.zip
+</Url>
+<Size>333991419</Size>
+<Checksum>68a0b635c48433102e7293a5950d0830</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_hun+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>455984650</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 01:20:45.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>45100000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>15500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>49200000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>23500000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_MKD+</Name>
+<DescriptionGerman>Freizeitkarte Mazedonien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Macedonia+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_mkd+.map.zip
+</Url>
+<Size>97989945</Size>
+<Checksum>752b0b2040d63879f5b11af9972dae4c</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_mkd+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>126549008</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 01:34:28.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>40300000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>19900000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>43000000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>23600000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_MNE+</Name>
+<DescriptionGerman>Freizeitkarte Montenegro+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Montenegro+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_mne+.map.zip
+</Url>
+<Size>80239155</Size>
+<Checksum>190eb0be5abca5b7107a49c0cc860981</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_mne+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>101909726</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 01:37:38.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>41200000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>17800000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>44200000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>21000000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_ROU+</Name>
+<DescriptionGerman>Freizeitkarte Rum�nien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Romania+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rou+.map.zip
+</Url>
+<Size>372090638</Size>
+<Checksum>8a9923d3a7cb5a610a28e80271c11a08</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_rou+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>476793252</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 01:43:44.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>43000000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>19700000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>48900000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>30600000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_SRB+</Name>
+<DescriptionGerman>Freizeitkarte Serbien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Serbia+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_srb+.map.zip
+</Url>
+<Size>226413011</Size>
+<Checksum>efc17203ec3eda341cccf0c38a36823d</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_srb+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>294702007</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 02:20:07.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>41300000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>18200000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>46800000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>23600000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_UKR+</Name>
+<DescriptionGerman>Freizeitkarte Ukraine+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Ukraine+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_ukr+.map.zip
+</Url>
+<Size>664382689</Size>
+<Checksum>b5dd9b297e182123081b963ceb9eca02</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_ukr+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>933974678</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 06:36:56.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>43600000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>21500000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>53000000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>40800000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_MDA+</Name>
+<DescriptionGerman>Freizeitkarte Moldawien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Moldova+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_mda+.map.zip
+</Url>
+<Size>77086725</Size>
+<Checksum>de66c45e96ff7d9be87f9f4431d5d4ba</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_mda+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>106015364</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 07:11:36.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>44900000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>26000000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>49100000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>30800000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_BLR+</Name>
+<DescriptionGerman>Freizeitkarte Wei�russland+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Belarus+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_blr+.map.zip
+</Url>
+<Size>257776758</Size>
+<Checksum>3272bc4b99c194417a5ff26d1ab071bf</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_blr+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>372033450</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 07:19:42.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>50700000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>22600000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>56800000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>33400000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_LTU+</Name>
+<DescriptionGerman>Freizeitkarte Litauen+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Lithuania+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_ltu+.map.zip
+</Url>
+<Size>152561017</Size>
+<Checksum>8721c5cd3cd0a67d81239c282b6d5ad3</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_ltu+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>204477831</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 07:37:22.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>53300000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>20100000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>57000000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>27400000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_LVA+</Name>
+<DescriptionGerman>Freizeitkarte Lettland+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Latvia+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_lva+.map.zip
+</Url>
+<Size>117476160</Size>
+<Checksum>02ba0e2b953236a7b08b69e540d8b73e</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_lva+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>161218674</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 07:43:58.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>55100000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>20100000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>58700000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>28800000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_EST+</Name>
+<DescriptionGerman>Freizeitkarte Estland+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Estonia+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_est+.map.zip
+</Url>
+<Size>106747474</Size>
+<Checksum>634ffa79551ca8118715352e2d695dbe</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_est+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>148014165</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 07:50:30.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>56900000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>20800000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>60500000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>28800000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_RUS+KGD</Name>
+<DescriptionGerman>Freizeitkarte Russland Kaliningrad+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Russia Kaliningrad+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rus+kgd.map.zip
+</Url>
+<Size>61400458</Size>
+<Checksum>965f174b39bd6af6910f310f99d02048</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_rus+kgd.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>80635412</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 07:57:21.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>53700000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>18800000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>56000000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>23500000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_BALEARICS</Name>
+<DescriptionGerman>Freizeitkarte Balearen</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Balearics</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_balearics.map.zip
+</Url>
+<Size>15922723</Size>
+<Checksum>c6549ba5d556edfd058ebd3cf0f9ed3c</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_balearics.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>22405822</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 02:29:43.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>38360000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>800000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>40380000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>4660000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_SVK+</Name>
+<DescriptionGerman>Freizeitkarte Slowakei+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Slovakia+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_svk+.map.zip
+</Url>
+<Size>413787326</Size>
+<Checksum>4596e64ba24f68a59f6fef2235f7e201</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_svk+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>559314693</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 02:36:06.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>47100000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>16200000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>50200000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>23200000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_SVN+</Name>
+<DescriptionGerman>Freizeitkarte Slowenien+</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Slovenia+</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_svn+.map.zip
+</Url>
+<Size>357510565</Size>
+<Checksum>9abd4fe8af863b8acf6470a348f94bcd</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_svn+.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>445739893</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 02:54:41.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>44800000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>12800000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>47500000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>17200000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_MADEIRA</Name>
+<DescriptionGerman>Freizeitkarte Madeira</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Madeira</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_madeira.map.zip
+</Url>
+<Size>4795287</Size>
+<Checksum>a324116fec5bacf1b221895c652e6647</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_madeira.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>7529933</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-06 20:09:30.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>32040000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>-17760000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>33509999</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>-15760000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_RUS_CENTRAL</Name>
+<DescriptionGerman>Freizeitkarte Russland FK Zentralrussland</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Russia Central FD</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rus_central.map.zip
+</Url>
+<Size>506317648</Size>
+<Checksum>5584cc1a0e64e0d2f2d34ae1e63e960b</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_rus_central.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>723845003</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 08:47:34.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>49510000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>30700000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>59650000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>47570000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_RUS_CRIMEA</Name>
+<DescriptionGerman>Freizeitkarte Russland FK Krim</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Russia Crimean FD</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rus_crimea.map.zip
+</Url>
+<Size>24939147</Size>
+<Checksum>af14ca9c67f410c47d43ad23ebb4e3e8</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_rus_crimea.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>35560484</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 09:12:11.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>44140000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>32159999</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>46280000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>36680000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_RUS_NORTHCAUCASUS</Name>
+<DescriptionGerman>Freizeitkarte Russland FK Nordkaukasus</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Russia North Caucasian FD</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rus_northcaucasus.map.zip
+</Url>
+<Size>156139725</Size>
+<Checksum>fc604c13f9dc016ed407cfad5f359060</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_rus_northcaucasus.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>209684807</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 09:15:35.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>41140000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>40680000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>46230000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>48860000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_RUS_NORTHWEST</Name>
+<DescriptionGerman>Freizeitkarte Russland FK Nordwestrussland</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Russia Northwestern FD</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rus_northwest.map.zip
+</Url>
+<Size>618581677</Size>
+<Checksum>4ac285d95b63378390d6cdb0b56c0407</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_rus_northwest.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>1468812739</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 10:23:58.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>54320000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>19410000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>82540000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>72620000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_RUS_SOUTH</Name>
+<DescriptionGerman>Freizeitkarte Russland FK S�drussland</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Russia Southern FD</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rus_south.map.zip
+</Url>
+<Size>175749288</Size>
+<Checksum>3e879a51d68fc9553acd6614bb7ee113</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_rus_south.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>272244013</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 14:02:27.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>43190000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>36530000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>51250000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>49930000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Map>
+<Name>Freizeitkarte_RUS_VOLGA</Name>
+<DescriptionGerman>Freizeitkarte Russland FK Wolga</DescriptionGerman>
+<DescriptionEnglish>Freizeitkarte Russia Volga FD</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte_rus_volga.map.zip
+</Url>
+<Size>508725912</Size>
+<Checksum>5a8f0d9907724f820a99eae3cc99654d</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_map_freizeitkarte_rus_volga.xml
+</LocusActionLink>
+<MapsforgeFileVersion>4</MapsforgeFileVersion>
+<MapsforgeFileSize>736912343</MapsforgeFileSize>
+<MapsforgeDateOfCreation>2019-06-04 14:53:11.000000</MapsforgeDateOfCreation>
+<MapsforgeBoundingBoxMinLat>49760000</MapsforgeBoundingBoxMinLat>
+<MapsforgeBoundingBoxMinLon>41730000</MapsforgeBoundingBoxMinLon>
+<MapsforgeBoundingBoxMaxLat>61710000</MapsforgeBoundingBoxMaxLat>
+<MapsforgeBoundingBoxMaxLon>61730000</MapsforgeBoundingBoxMaxLon>
+<MapsforgeTileSize>256</MapsforgeTileSize>
+</Map>
+<Theme>
+<Name>freizeitkarte-v5</Name>
+<DescriptionGerman>Standard-Design V5</DescriptionGerman>
+<DescriptionEnglish>Default design v5</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/freizeitkarte-v5.zip
+</Url>
+<Size>299570</Size>
+<Checksum>d5a0b7ca7b51a7b1036983ceade5fd84</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_theme_freizeitkarte-v5.xml
+</LocusActionLink>
+</Theme>
+<Theme>
+<Name>fzk-outdoor-contrast-v5</Name>
+<DescriptionGerman>Outdoor-Design Kontrast V5</DescriptionGerman>
+<DescriptionEnglish>Outdoor design contrast v5</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/fzk-outdoor-contrast-v5.zip
+</Url>
+<Size>325668</Size>
+<Checksum>d00d5552322fa87db051723d4effcd4e</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_theme_fzk-outdoor-contrast-v5.xml
+</LocusActionLink>
+</Theme>
+<Theme>
+<Name>fzk-outdoor-soft-v5</Name>
+<DescriptionGerman>Outdoor-Design Soft V5</DescriptionGerman>
+<DescriptionEnglish>Outdoor design soft v5</DescriptionEnglish>
+<Url>
+http://download.freizeitkarte-osm.de/android/1906/fzk-outdoor-soft-v5.zip
+</Url>
+<Size>323459</Size>
+<Checksum>572aab32e44b2edf073c8282744117ea</Checksum>
+<LocusActionLink>
+locus-actions://http/download.freizeitkarte-osm.de/android/1906/locus_install_theme_fzk-outdoor-soft-v5.xml
+</LocusActionLink>
+</Theme>
+</Freizeitkarte>

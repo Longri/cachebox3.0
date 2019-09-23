@@ -25,7 +25,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.location.*;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Database;
@@ -57,11 +56,21 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     private static final EventHandler INSTANCE = new EventHandler();
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(20);
+    private static short lastID;
+    private final Array<ImageEntry> spoilerResources = new Array<>();
+    private AbstractCache selectedCache;
+    private AbstractWaypoint selectedWayPoint;
+    private Coordinate selectedCoordinate;
+    private Coordinate myPosition;
+    private float heading;
+    private boolean spoilerLoaded = false;
+    private float lastDistance;
+    private EventHandler() {
+        add(this);
+    }
 
     public static void INIT() {
     }
-
-    private static short lastID;
 
     public static short getId() {
         return lastID++;
@@ -152,25 +161,96 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         }
     }
 
-    private EventHandler() {
-        add(this);
-    }
-
-    private final Array<ImageEntry> spoilerResources = new Array<>();
-    private AbstractCache selectedCache;
-    private AbstractWaypoint selectedWayPoint;
-    private Coordinate selectedCoordinate;
-    private Coordinate myPosition;
-    private float heading;
-    private boolean spoilerLoaded = false;
-
     public static boolean actCacheHasSpoiler() {
         if (!INSTANCE.spoilerLoaded) INSTANCE.reloadCacheSpoiler();
         return INSTANCE.spoilerResources.size > 0;
     }
 
+    public static void forceReloadSpoiler() {
+        INSTANCE.spoilerLoaded = false;
+    }
+
     public static Array<ImageEntry> getSelectedCacheSpoiler() {
         return actCacheHasSpoiler() ? INSTANCE.spoilerResources : null;
+    }
+
+    private static void loadSpoilerResourcesFromPath(final String directory, final AbstractCache cache, Array<ImageEntry> spoilerResources) {
+        log.debug("LoadSpoilerResourcesFromPath from " + directory);
+
+        FileHandle dir = Gdx.files.absolute(directory);
+
+        if (!dir.isDirectory()) return;
+
+        FileFilter filter = pathname -> {
+            String filename = pathname.getName();
+            filename = filename.toLowerCase(Locale.getDefault());
+            if (filename.contains(cache.getGcCode().toString().toLowerCase(Locale.getDefault()))) {
+                if (filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".bmp") || filename.endsWith(".png") || filename.endsWith(".gif")) {
+                    // don't load Thumbs
+                    return !filename.startsWith(Utils.THUMB) && !filename.startsWith(Utils.THUMB_OVERVIEW + Utils.THUMB);
+                }
+            }
+            return false;
+        };
+        FileHandle[] files = dir.list(filter);
+
+        if (!(files == null)) {
+            if (files.length > 0) {
+                for (FileHandle file : files) {
+                    String ext = file.extension();
+                    if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("bmp") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("gif")) {
+                        ImageEntry imageEntry = new ImageEntry();
+                        imageEntry.LocalPath = file.file().getAbsolutePath();
+                        imageEntry.Name = file.name();
+                        log.debug(imageEntry.Name);
+                        spoilerResources.add(imageEntry);
+                    }
+                }
+            }
+        }
+    }
+
+    public static AbstractCache getSelectedCache() {
+        return INSTANCE.selectedCache;
+    }
+
+    public static boolean isSelectedCache(AbstractCache abstractCache) {
+        return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(abstractCache));
+    }
+
+    public static AbstractWaypoint getSelectedWaypoint() {
+        return INSTANCE.selectedWayPoint;
+    }
+
+    public static Coordinate getSelectedCoord() {
+        return INSTANCE.selectedCoordinate;
+    }
+
+    public static Coordinate getMyPosition() {
+
+        if (INSTANCE.myPosition == null) {
+            //return last stored Pos
+            Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
+            if (lastStoredPos == null) return null;
+            return new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
+        }
+        return INSTANCE.myPosition;
+    }
+
+    public static float getHeading() {
+        return INSTANCE.heading;
+    }
+
+    public static void fireSelectedWaypointChanged(AbstractCache cache, AbstractWaypoint wp) {
+        if (cache == null || !cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
+        if (wp == null || !wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
+    }
+
+    public static void updateSelectedCache(AbstractCache selectedCache) {
+        if (INSTANCE.selectedCache.getId() != selectedCache.getId()) {
+            log.warn("update Selected Cache with new Cache! Fire Change Event?");
+        }
+        INSTANCE.selectedCache = selectedCache;
     }
 
     private void reloadCacheSpoiler() {
@@ -237,43 +317,6 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
         spoilerLoaded = true;
     }
-
-    private static void loadSpoilerResourcesFromPath(final String directory, final AbstractCache cache, Array<ImageEntry> spoilerResources) {
-        log.debug("LoadSpoilerResourcesFromPath from " + directory);
-
-        FileHandle dir = Gdx.files.absolute(directory);
-
-        if (!dir.isDirectory()) return;
-
-        FileFilter filter = pathname -> {
-            String filename = pathname.getName();
-            filename = filename.toLowerCase(Locale.getDefault());
-            if (filename.contains(cache.getGcCode().toString().toLowerCase(Locale.getDefault()))) {
-                if (filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".bmp") || filename.endsWith(".png") || filename.endsWith(".gif")) {
-                    // don't load Thumbs
-                    return !filename.startsWith(Utils.THUMB) && !filename.startsWith(Utils.THUMB_OVERVIEW + Utils.THUMB);
-                }
-            }
-            return false;
-        };
-        FileHandle[] files = dir.list(filter);
-
-        if (!(files == null)) {
-            if (files.length > 0) {
-                for (FileHandle file : files) {
-                    String ext = file.extension();
-                    if (ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg") || ext.equalsIgnoreCase("bmp") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("gif")) {
-                        ImageEntry imageEntry = new ImageEntry();
-                        imageEntry.LocalPath = file.file().getAbsolutePath();
-                        imageEntry.Name = file.name();
-                        log.debug(imageEntry.Name);
-                        spoilerResources.add(imageEntry);
-                    }
-                }
-            }
-        }
-    }
-
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
@@ -345,7 +388,6 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         }
     }
 
-
     private void fireCoordChanged(SelectedCoordChangedEvent event) {
         if (this.selectedCoordinate == null || !this.selectedCoordinate.equals(event.coordinate)) {
             this.selectedCoordinate = event.coordinate;
@@ -353,8 +395,6 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
             fireDistanceChanged(event.ID);
         }
     }
-
-    private float lastDistance;
 
     private void fireDistanceChanged(short id) {
         if (this.myPosition != null && this.selectedCoordinate != null) {
@@ -376,56 +416,12 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         }
     }
 
-    public static AbstractCache getSelectedCache() {
-        return INSTANCE.selectedCache;
-    }
-
-    public static boolean isSelectedCache(AbstractCache abstractCache) {
-        return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(abstractCache));
-    }
-
-    public static AbstractWaypoint getSelectedWaypoint() {
-        return INSTANCE.selectedWayPoint;
-    }
-
-    public static Coordinate getSelectedCoord() {
-        return INSTANCE.selectedCoordinate;
-    }
-
     public String toString() {
         return "EventHandler";
-    }
-
-
-    public static Coordinate getMyPosition() {
-
-        if (INSTANCE.myPosition == null) {
-            //return last stored Pos
-            LatLong lastStoredPos = CB.lastMapState.getFreePosition();
-            if (lastStoredPos == null) return null;
-            return new Coordinate(lastStoredPos.getLatitude(), lastStoredPos.getLongitude());
-        }
-        return INSTANCE.myPosition;
-    }
-
-    public static float getHeading() {
-        return INSTANCE.heading;
     }
 
     @Override
     public void orientationChanged(OrientationChangedEvent event) {
         INSTANCE.heading = event.getOrientation();
-    }
-
-    public static void setSelectedWaypoint(AbstractCache cache, AbstractWaypoint wp) {
-        if (cache == null || !cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
-        if (wp == null || !wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
-    }
-
-    public static void updateSelectedCache(AbstractCache selectedCache) {
-        if (INSTANCE.selectedCache.getId() != selectedCache.getId()) {
-            log.warn("update Selected Cache with new Cache! Fire Change Event?");
-        }
-        INSTANCE.selectedCache = selectedCache;
     }
 }

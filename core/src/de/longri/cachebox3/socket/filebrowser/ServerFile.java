@@ -19,7 +19,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.serializable.Serializable;
 import de.longri.serializable.StoreBase;
-import javafx.scene.input.Dragboard;
 
 import java.io.File;
 
@@ -32,7 +31,6 @@ public class ServerFile implements Serializable {
     private String parent;
     private Array<ServerFile> files = new Array<>();
     private boolean isDir = false;
-    private Dragboard dragBoard;
 
 
     public ServerFile(String parent, String name, boolean isDir) {
@@ -136,14 +134,6 @@ public class ServerFile implements Serializable {
 
     public ServerFile child(String name, boolean isDir) {
         return new ServerFile(this.getAbsolute(), name, isDir);
-    }
-
-    public void setDragBoard(Dragboard dragBoard) {
-        this.dragBoard = dragBoard;
-    }
-
-    public Dragboard getDragBoard() {
-        return dragBoard;
     }
 
     public String getParent() {

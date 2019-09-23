@@ -28,6 +28,7 @@ import static de.longri.cachebox3.settings.types.SettingUsage.ALL;
  * Created by Longri on 31.07.16.
  */
 public class Settings extends Settings_Skin {
+    public static final Integer[] numberOfLogsArray = new Integer[]{0, 5, 30};
 
     // NORMAL visible
     public static final SettingString GcLogin = (SettingString) settingsList.addSetting(new SettingString("GcLogin", Login, NORMAL, "", Global, ALL));
@@ -83,6 +84,7 @@ public class Settings extends Settings_Skin {
     public static final SettingBool CompassShowSDT = (SettingBool) settingsList.addSetting(new SettingBool("CompassShowSDT", Compass, NEVER, true, Global, ACB));
     public static final SettingBool CompassShowLastFound = (SettingBool) settingsList.addSetting(new SettingBool("CompassShowLastFound", Compass, NEVER, true, Global, ACB));
     public static final SettingString OverrideUrl = (SettingString) settingsList.addSetting(new SettingString("OverrideUrl", Login, NEVER, "", Global, ACB));
+
     public static final SettingFile DatabaseName = (SettingFile) settingsList.addSetting(new SettingFile("DatabaseName", Folder, NEVER, "?/cachebox.db3", Global, ACB, "db3"));
     public static final SettingBool StartWithAutoSelect = (SettingBool) settingsList.addSetting(new SettingBool("StartWithAutoSelect", Misc, EXPERT, false, Global, ACB));
     public static final SettingBool MultiDBAsk = (SettingBool) settingsList.addSetting(new SettingBool("MultiDBAsk", Internal, NEVER, true, Global, ACB));
@@ -90,13 +92,25 @@ public class Settings extends Settings_Skin {
     public static final SettingBool SearchWithoutFounds = (SettingBool) settingsList.addSetting(new SettingBool("SearchWithoutFounds", API, NEVER, true, Global, ACB));
     public static final SettingBool SearchWithoutOwns = (SettingBool) settingsList.addSetting(new SettingBool("SearchWithoutOwns", API, NEVER, true, Global, ACB));
     public static final SettingBool SearchOnlyAvailable = (SettingBool) settingsList.addSetting(new SettingBool("SearchOnlyAvailable", API, NEVER, true, Global, ACB));
+    public static final SettingIntArray numberOfLogs = (SettingIntArray) settingsList.addSetting(new SettingIntArray("NumberOfLogs", Misc, NORMAL, 5, Global, ACB, numberOfLogsArray));
     public static final SettingBool DescriptionNoAttributes = (SettingBool) settingsList.addSetting(new SettingBool("DescriptionNoAttributes", Misc, NEVER, false, Global, ACB));
     public static final SettingBool quickButtonLastShow = (SettingBool) settingsList.addSetting(new SettingBool("quickButtonLastShow", QuickList, NEVER, false, Global, ACB));
     public static final SettingInt MultiDBAutoStartTime = (SettingInt) settingsList.addSetting(new SettingInt("MultiDBAutoStartTime", Internal, NEVER, 0, Global, ACB));
     public static final SettingInt lastSearchRadius = (SettingInt) settingsList.addSetting(new SettingInt("lastSearchRadius", API, NEVER, 5, Global, ACB));
+    public static final SettingInt ImportLimit = (SettingInt) settingsList.addSetting(new SettingInt("ImportLimit", API, NEVER, 50, Global, ACB));
     public static final SettingString quickButtonList = (SettingString) settingsList.addSetting(new SettingString("quickButtonList", QuickList, NEVER, "5,0,1,3,2", Global, ACB));
     public static final SettingString LastSelectedCache = (SettingString) settingsList.addSetting(new SettingString("LastSelectedCache", Misc, NEVER, "", Local, ALL));
     public static final SettingLongString FilterNew = (SettingLongString) settingsList.addSetting(new SettingLongString("FilterNew", Misc, NEVER, "", Local, ALL));
+
+    public static final SettingString GSAKLastUsedDatabasePath = (SettingString) settingsList.addSetting(new SettingString("GSAKLastUsedDatabasePath", Internal, NEVER, "", Global, ACB));
+    public static final SettingString GSAKLastUsedDatabaseName = (SettingString) settingsList.addSetting(new SettingString("GSAKLastUsedDatabaseName", Internal, NEVER, "", Global, ACB));
+    public static final SettingString GSAKLastUsedImageDatabasePath = (SettingString) settingsList.addSetting(new SettingString("GSAKLastUsedImageDatabasePath", Internal, NEVER, "", Global, ACB));
+    public static final SettingString GSAKLastUsedImageDatabaseName = (SettingString) settingsList.addSetting(new SettingString("GSAKLastUsedImageDatabaseName", Internal, NEVER, "", Global, ACB));
+    public static final SettingString GSAKLastUsedImagesPath = (SettingString) settingsList.addSetting(new SettingString("GSAKLastUsedImagesPath", Internal, NEVER, "", Global, ACB));
+    public static final SettingBool withLogImages = (SettingBool) settingsList.addSetting(new SettingBool("withLogImages", Internal, NEVER, false, Global, ACB));
+    public static final SettingString TemplateLastUsedPath = (SettingString) settingsList.addSetting(new SettingString("TemplateLastUsedPath", Internal, NEVER, "", Global, ACB));
+    public static final SettingString TemplateLastUsedName = (SettingString) settingsList.addSetting(new SettingString("TemplateLastUsedName", Internal, NEVER, "", Global, ACB));
+    public static final SettingString ImageUploadLastUsedPath = (SettingString) settingsList.addSetting(new SettingString("ImageUploadLastUsedPath", Internal, NEVER, "", Global, ACB));
 
 
     // AudioSettings

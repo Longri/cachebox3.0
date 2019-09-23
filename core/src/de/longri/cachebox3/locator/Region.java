@@ -20,6 +20,6 @@ package de.longri.cachebox3.locator;
  */
 public abstract class Region {
 
-    public abstract boolean contains(LatLong latLong);
+    public abstract boolean contains(Coordinate latLong);
 
 }

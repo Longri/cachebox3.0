@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.gui.activities.CoordinateActivity;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButton;
 import de.longri.cachebox3.locator.Coordinate;
@@ -29,9 +30,13 @@ public class CoordinateButton extends Catch_VisTextButton {
 
     private Coordinate coordinate;
 
+    public CoordinateButton() {
+        this(null);
+    }
+
     public CoordinateButton(Coordinate coordinate) {
-        super(coordinate == null ? new Coordinate(0, 0).FormatCoordinate() :
-                coordinate.FormatCoordinate(), VisUI.getSkin().get("coordinate", VisTextButtonStyle.class));
+        super(coordinate == null ? new Coordinate(0, 0).formatCoordinate() :
+                coordinate.formatCoordinate(), VisUI.getSkin().get("coordinate", VisTextButton.VisTextButtonStyle.class));
         this.coordinate = coordinate;
         this.addListener(clickListener);
     }
@@ -44,7 +49,7 @@ public class CoordinateButton extends Catch_VisTextButton {
                 public void callBack(Coordinate coordinate) {
                     if (coordinate != null) {
                         CoordinateButton.this.coordinate = coordinate;
-                        CoordinateButton.this.setText(coordinate.FormatCoordinate());
+                        CoordinateButton.this.setText(coordinate.formatCoordinate());
                     }
                 }
             };
@@ -54,6 +59,7 @@ public class CoordinateButton extends Catch_VisTextButton {
 
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
+        this.setText(coordinate.formatCoordinate());
     }
 
     public Coordinate getCoordinate() {

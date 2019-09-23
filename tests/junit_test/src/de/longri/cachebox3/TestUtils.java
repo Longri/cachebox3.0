@@ -26,11 +26,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.skin.styles.*;
@@ -38,6 +40,7 @@ import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.MapStateButton;
 import de.longri.cachebox3.gui.widgets.ZoomButton;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.platform_test.StyleEntry;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.AbstractTranslationHandler;
 import de.longri.cachebox3.translation.Translation;
@@ -46,10 +49,13 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.GeoUtils;
+import de.longri.cachebox3.utils.ReflectionUtils;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.apache.commons.codec.Charsets;
+import org.oscim.awt.AwtGraphics;
 
 import java.io.*;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -57,6 +63,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Created by longri on 14.04.17.
@@ -74,7 +98,7 @@ public class TestUtils {
     public static void initialGdx() {
         if (gdxIsInitial) return;
         gdxIsInitial = true;
-        BuildInfo.setTestBuildInfo("JUnitTest");
+        BuildInfo.setBuildInfo("JUnitTest");
         Gdx.app = new HeadlessApplication(new Game() {
             @Override
             public void create() {
@@ -87,11 +111,21 @@ public class TestUtils {
         VisUI.load(new Skin());
         CB.initThreadCheck();
         Gdx.gl = mock(GL20.class);
+
+
+        //initialize platform bitmap factory
+        AwtGraphics.init();
+
+        //initialize platform connector
+        PlatformConnector.init(new DesktopPlatformConnector());
+
     }
 
     public static void initialVisUI() {
         initialGdx();
-        if (!VisUI.isLoaded()) VisUI.load();
+        if (!VisUI.isLoaded()) {
+            VisUI.load();
+        }
         CB.scaledSizes = new ScaledSizes(100, 50, 150, 10,
                 50, 10);
         CB.backgroundImage = new Image((Drawable) null);
@@ -143,9 +177,9 @@ public class TestUtils {
         ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
         VisUI.getSkin().add("list", scrollPaneStyle, ScrollPane.ScrollPaneStyle.class);
 
-        //de.longri.cachebox3.gui.skin.styles.DraftListItemStyle registered with name: fieldNoteListItemStyle
+        //de.longri.cachebox3.gui.skin.styles.DraftListItemStyle registered with name: DraftListItemStyle
         DraftListItemStyle draftListItemStyle = new DraftListItemStyle();
-        VisUI.getSkin().add("fieldNoteListItemStyle", draftListItemStyle, DraftListItemStyle.class);
+        VisUI.getSkin().add("DraftListItemStyle", draftListItemStyle, DraftListItemStyle.class);
 
         //de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle registered with name: default
         ActivityBase.ActivityBaseStyle activityBaseStyle = new ActivityBase.ActivityBaseStyle();
@@ -217,6 +251,13 @@ public class TestUtils {
         //de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle registered with name: default
         IconsStyle iconsStyle = new IconsStyle();
         VisUI.getSkin().add("default", iconsStyle, IconsStyle.class);
+
+        //de.longri.cachebox3.gui.skin.styles.GalleryViewStyle registered with name: default
+        GalleryViewStyle galleryViewStyle = new GalleryViewStyle();
+        galleryViewStyle.galleryListStyle = listViewStyle;
+        galleryViewStyle.overviewListStyle = listViewStyle;
+
+        VisUI.getSkin().add("default", galleryViewStyle, GalleryViewStyle.class);
 
     }
 
@@ -378,4 +419,20 @@ public class TestUtils {
         return newInstanceAbstractView;
     }
 
+    static int BUFFER_SIZE = 10 * 1024;
+
+    public static FileHandle getSkinFileHandle() {
+        return Gdx.files.absolute("../../launcher/android/assets/skins/day");
+    }
+
+    public static List<Class<?>> getUsedStyleClasses() throws ClassNotFoundException {
+        return ReflectionUtils.getClassesInSamePackage(AbstractIconStyle.class);
+    }
+
+    public static Array<StyleEntry> getStyleCaller() {
+        Array<StyleEntry> caller = new Array<>();
+        FileHandle srcCoreFolder = Gdx.files.absolute("../../core/src");
+        ReflectionUtils.getAllStyleCallers(srcCoreFolder, caller);
+        return caller;
+    }
 }

@@ -31,7 +31,7 @@ public class Categories extends MoveableList<Category> {
     public Categories() {
     }
 
-    public Category getCategory(String filename) {
+    public Category getCategory(Database database, String filename) {
         filename = Gdx.files.local(filename).file().getName();
         for (int i = 0, n = this.size; i < n; i++) {
             Category category = this.get(i);
@@ -40,7 +40,7 @@ public class Categories extends MoveableList<Category> {
             }
         }
 
-        Category cat = createNewCategory(filename);
+        Category cat = createNewCategory(database, filename);
         this.add(cat);
         return cat;
     }
@@ -55,23 +55,23 @@ public class Categories extends MoveableList<Category> {
 //		return null;
 //	}
 
-    public Category createNewCategory(String filename) {
+    public Category createNewCategory(Database database, String filename) {
         filename = Gdx.files.local(filename).file().getName();
 
         // neue Category in DB anlegen
-        Category result = new Category();
+        Category result = new Category(database);
 
         Parameters args = new Parameters();
         args.put("GPXFilename", filename);
         try {
-            Database.Data.insert("Category", args);
+            database.insert("Category", args);
         } catch (Exception exc) {
             //Log.err(log, "CreateNewCategory", filename, exc);
         }
 
         long Category_ID = 0;
 
-        GdxSqliteCursor reader = Database.Data.rawQuery("Select max(ID) from Category", (String[]) null);
+        GdxSqliteCursor reader = database.rawQuery("Select max(ID) from Category", (String[]) null);
         reader.moveToFirst();
         if (!reader.isAfterLast()) {
             Category_ID = reader.getLong(0);

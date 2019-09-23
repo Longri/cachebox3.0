@@ -32,7 +32,7 @@ import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.gui.widgets.list_view.*;
 import de.longri.cachebox3.settings.Config;
@@ -69,14 +69,11 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
         presetListView.setSelectable(SINGLE);
         this.add(presetListView).expand().fill();
         presetListView.setEmptyString("EmptyList");
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                setListViewAdapter();
-                presetListView.pack();
-                presetListView.invalidateHierarchy();
-                setSelected();
-            }
+        Gdx.app.postRunnable(() -> {
+            setListViewAdapter();
+            presetListView.pack();
+            presetListView.invalidateHierarchy();
+            setSelected();
         });
 
         //selection changed listener
@@ -213,7 +210,7 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
                     }
 
                     @Override
-                    public boolean longClicked(Actor actor, float x, float y) {
+                    public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
 
                         String name = "";
 
@@ -280,7 +277,7 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
 
         public ButtonListViewItem(int listIndex) {
             super(listIndex);
-            CharSequenceButton btn = new CharSequenceButton(Translation.get("AddOwnFilterPreset"));
+            CB_Button btn = new CB_Button(Translation.get("AddOwnFilterPreset"));
 
             btn.getLabel().setWrap(true);
 
@@ -365,7 +362,7 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
             }
         };
 
-        PlatformConnector.getSinglelineTextInput(listener, Translation.get("NewUserPreset"), "", Translation.get("InsNewUserPreset"));
+        PlatformConnector.getSinglelineTextInput(listener,0, Translation.get("NewUserPreset"), "", Translation.get("InsNewUserPreset"));
     }
 
 

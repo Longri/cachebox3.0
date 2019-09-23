@@ -16,7 +16,10 @@
 package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.apis.cachebox_api.CB_Api;
+import com.badlogic.gdx.backends.lwjgl3.CB_Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.apis.CB_Api;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import javafx.application.Platform;
@@ -27,7 +30,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.lwjgl.opengl.Display;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,7 +107,11 @@ public class GenerateApiKeyWebView extends Window {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                GenerateApiKeyWebView.this.setBounds(Display.getX(), Display.getY() + 22, Display.getWidth(), Display.getHeight());
+                Lwjgl3Window window = ((CB_Lwjgl3Application) Gdx.app).currentWindow;
+                int width[] = new int[1];
+                int height[] = new int[1];
+                GLFW.glfwGetWindowSize(window.getWindowHandle(), width, height);
+                GenerateApiKeyWebView.this.setBounds(window.getPositionX(), window.getPositionY() + 22, width[0], height[0]);
                 GenerateApiKeyWebView.this.setAlwaysOnTop(true);
                 GenerateApiKeyWebView.this.setFocusable(true);
 //                log.debug("loop");
@@ -147,8 +154,8 @@ public class GenerateApiKeyWebView extends Window {
                                         String loadedUrl = engine.getLocation();
                                         log.debug("DidFinishHtmlLoad {}", loadedUrl);
 
-                                        if (loadedUrl.startsWith("http://oauth.team-cachebox.de/")
-                                                || loadedUrl.startsWith("http://staging.oauth.team-cachebox.de/")) {
+                                        if (loadedUrl.startsWith(PlatformConnector.REDIRECT_URL)
+                                                || loadedUrl.startsWith(PlatformConnector.REDIRECT_STAGING_URL)) {
 
                                             if (!secondLoad) {
                                                 secondLoad = true;

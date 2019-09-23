@@ -17,11 +17,11 @@ package de.longri.cachebox3.gui.map.baseMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.lists.CB_List;
 
-import java.io.File;
 import java.io.FileFilter;
 
 /**
@@ -34,36 +34,36 @@ public final class BaseMapManager extends CB_List<AbstractManagedMapLayer> {
     public BaseMapManager() {
     }
 
+    public void refreshMaps() {
+        refreshMaps(Gdx.files.absolute(CB.WorkPath));
+    }
+
     public void refreshMaps(FileHandle workPath) {
         this.clear();
-
         // add map files from repository
-        addMapFiles(workPath.child("repository").child("maps"));
+        String repositoryMaps = addMapFiles(workPath.child("repository").child("maps"));
 
         // add map files from act selected repository
         String actRepositoryName = Config.DatabaseName.getValue().replace(".db3", "");
         addMapFiles(workPath.child("repositories").child(actRepositoryName).child("maps"));
 
-        // add map files from setet user map folder
-        String userMapFolder = Config.MapPackFolder.getValue();
-        addMapFiles(Gdx.files.absolute(userMapFolder));
+        // add map files from user map folder
+        FileHandle userMapFolder = Gdx.files.absolute(Config.MapPackFolder.getValue());
+        if (!userMapFolder.path().equals(repositoryMaps))
+            addMapFiles(userMapFolder);
 
         this.addStaticMaps();
         this.sort();
     }
 
-    private void addMapFiles(FileHandle workPath) {
-        FileFilter mapFileFilter = new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return Utils.getFileExtension(pathname.getAbsolutePath()).toLowerCase().equals("map");
-            }
-        };
+    private String addMapFiles(FileHandle workPath) {
+        FileFilter mapFileFilter = pathname -> Utils.getFileExtension(pathname.getAbsolutePath()).toLowerCase().equals("map");
         FileHandle[] mapFiles = workPath.list(mapFileFilter);
 
         for (FileHandle mapFile : mapFiles) {
             this.add(new MapsforgeSingleMap(mapFile));
         }
+        return workPath.path();
     }
 
     private void addStaticMaps() {

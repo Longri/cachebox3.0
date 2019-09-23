@@ -28,8 +28,11 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.filter_settings.*;
+import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.filter_settings.CategoriesListView;
+import de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView;
+import de.longri.cachebox3.gui.widgets.filter_settings.PresetListView;
+import de.longri.cachebox3.gui.widgets.filter_settings.TextFilterView;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.FilterProperties;
 import org.slf4j.Logger;
@@ -46,11 +49,11 @@ public class EditFilterSettings extends ActivityBase {
         void onShow();
     }
 
-    private CharSequenceButton tglBtnPreset;
-    private CharSequenceButton tglBtnSet;
-    private CharSequenceButton tglBtnCategory;
-    private CharSequenceButton tglBtnText;
-    private ButtonGroup<CharSequenceButton> btnGroup;
+    private CB_Button tglBtnPreset;
+    private CB_Button tglBtnSet;
+    private CB_Button tglBtnCategory;
+    private CB_Button tglBtnText;
+    private ButtonGroup<CB_Button> btnGroup;
     private Table actViewTable;
     private Cell viewCell;
     private Group placeHolder;
@@ -156,10 +159,10 @@ public class EditFilterSettings extends ActivityBase {
         buttonStyle.font = style.toggleButtonFont;
         buttonStyle.fontColor = style.toggleButtonFontColor;
 
-        tglBtnPreset = new CharSequenceButton(Translation.get("preset"), buttonStyle);
-        tglBtnSet = new CharSequenceButton(Translation.get("setting"), buttonStyle);
-        tglBtnCategory = new CharSequenceButton(Translation.get("category"), buttonStyle);
-        tglBtnText = new CharSequenceButton(Translation.get("text"), buttonStyle);
+        tglBtnPreset = new CB_Button(Translation.get("preset"), buttonStyle);
+        tglBtnSet = new CB_Button(Translation.get("setting"), buttonStyle);
+        tglBtnCategory = new CB_Button(Translation.get("category"), buttonStyle);
+        tglBtnText = new CB_Button(Translation.get("text"), buttonStyle);
 
         tglBtnPreset.addListener(tglListener);
         tglBtnSet.addListener(tglListener);
@@ -199,8 +202,8 @@ public class EditFilterSettings extends ActivityBase {
         Table cancelOkTable = new Table();
         cancelOkTable.defaults().pad(CB.scaledSizes.MARGIN);
 
-        CharSequenceButton btnOk = new CharSequenceButton(Translation.get("ok"));
-        CharSequenceButton btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        CB_Button btnOk = new CB_Button(Translation.get("ok"));
+        CB_Button btnCancel = new CB_Button(Translation.get("cancel"));
 
         btnOk.addListener(okListener);
         btnCancel.addListener(cancelListener);

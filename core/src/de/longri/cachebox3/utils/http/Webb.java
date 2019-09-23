@@ -1,5 +1,6 @@
 package de.longri.cachebox3.utils.http;
 
+import de.longri.cachebox3.settings.Config;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -38,6 +39,9 @@ public class Webb {
     Map<String, Object> defaultHeaders;
 
     protected Webb() {
+        setDefaultHeader("User-Agent", DEFAULT_USER_AGENT);
+        setDefaultHeader(HDR_ACCEPT_ENCODING, "gzip");
+        setTimeout(Config.socket_timeout.getValue());
     }
 
     /**
@@ -103,7 +107,7 @@ public class Webb {
                     !request.params.isEmpty()) {
                 uri += "?" + WebbUtils.queryString(request.params);
             }
-            log.debug("url " + URLDecoder.decode(uri,"UTF-8"));
+            log.debug("url " + URLDecoder.decode(uri, "UTF-8"));
             connection.setUrl(uri);
             if (request.followRedirects != null) {
                 connection.setFollowRedirects(request.followRedirects.booleanValue());
@@ -114,7 +118,6 @@ public class Webb {
             if (clazz == JSONObject.class || clazz == JSONArray.class) {
                 connection.ensureRequestProperty(HDR_ACCEPT, APP_JSON);
             }
-
 
             if (request.method == Request.Method.POST || request.method == Request.Method.PUT) {
                 String requestBody = WebbUtils.getPayloadAsBytesAndSetContentType(connection, request, jsonIndentFactor);

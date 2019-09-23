@@ -16,10 +16,14 @@
 package de.longri.cachebox3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
@@ -29,10 +33,8 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
-import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
-import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
-import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
+import de.longri.cachebox3.gui.map.layer.ThemeMenu;
 import de.longri.cachebox3.gui.skin.styles.ScaledSize;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -49,12 +51,13 @@ import de.longri.cachebox3.types.Categories;
 import de.longri.cachebox3.types.FilterInstances;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.*;
+import de.longri.gdx.sqlite.GdxSqliteCursor;
+import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.core.Tile;
 import org.oscim.renderer.atlas.TextureRegion;
 import org.oscim.theme.IRenderTheme;
-import org.oscim.theme.ThemeFile;
 import org.oscim.theme.ThemeLoader;
 import org.oscim.theme.VtmThemes;
 import org.slf4j.Logger;
@@ -67,7 +70,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.isAccessTokenInvalid;
+import static de.longri.cachebox3.settings.Settings_Map.CurrentMapLayer;
 
 /**
  * Static class
@@ -88,7 +91,6 @@ public class CB {
     public static final String LOG_LEVEL_TRACE = "TRACE";
     public static final String USED_LOG_LEVEL = LOG_LEVEL_DEBUG;
     public static final float WINDOW_FADE_TIME = 0.5f;
-    public static final MapState actMapState = new MapState();
     public static final MapState lastMapState = new MapState();
     public static final MapState lastMapStateBeforeCar = new MapState();
     public static final String br = System.getProperty("line.separator");
@@ -97,6 +99,8 @@ public class CB {
     public static final String splashMsg = AboutMsg + br + br + "POWERED BY:";
     public final static SensorIO sensoerIO = new SensorIO();
     static final Logger log = LoggerFactory.getLogger(CB.class);
+    static final Logger errorLog = LoggerFactory.getLogger("CB.errorLog");
+    
     final static float PPI_DEFAULT = 163;
     final static AtomicInteger executeCount = new AtomicInteger(0);
     final static Array<String> runningRunnables = new Array<>();
@@ -119,17 +123,18 @@ public class CB {
      * or to the "SandBox" on the external SD
      */
     public static String WorkPath;
+    public static FileHandle WorkPathFileHandle;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
     public static ScaledSizes scaledSizes;
     public static Track actRoute;
     public static int actRouteCount;
-    public static ThemeFile actThemeFile;
-    public static IRenderTheme actTheme;
     public static LinkedHashMap<Object, TextureRegion> textureRegionMap;
     public static Image CB_Logo;
     public static Image backgroundImage;
     public static boolean isBackground = false;
+    public static ThemeUsage currentThemeUsage = ThemeUsage.day;
     static boolean mapScaleInitial = false;
+    private static IRenderTheme actTheme;
     private static float globalScale = 1;
     private static AbstractCache nearestAbstractCache = null;
     private static boolean autoResort;
@@ -159,10 +164,12 @@ public class CB {
                 CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
                 CanvasAdapter.textScale = text;
                 Tile.SIZE = Tile.calculateTileSize();
-                loadThemeFile(CB.actThemeFile);
             }
         }
     };
+    static private Runtime runtime;
+    static private StringBuilder memoryStringBuilder = new StringBuilder();
+    static private NumberFormat format = NumberFormat.getInstance();
 
     private CB() {
     }
@@ -177,8 +184,8 @@ public class CB {
     }
 
     public static void setActSkin(SvgSkin skin) {
-        if (actSkin != null) {
-            VisUI.dispose();
+        if (VisUI.isLoaded()) {
+            VisUI.dispose(true);
         }
         actSkin = skin;
         VisUI.load(actSkin);
@@ -227,6 +234,13 @@ public class CB {
     }
 
     private static void calcScaleFactor() {
+
+        if (BuildInfo.getRevision().equals("JUnitTest")) {
+            scalefactor = 1;
+            return;
+        }
+
+
         if (CanvasAdapter.platform.isDesktop()) {
             //Desktop
             scalefactor = (Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY()) / PPI_DEFAULT) * globalScale;
@@ -277,7 +291,7 @@ public class CB {
     }
 
     public static boolean selectedCachehasSpoiler() {
-        return false; //TODO
+        return EventHandler.actCacheHasSpoiler();
     }
 
     public static void requestRendering() {
@@ -360,7 +374,7 @@ public class CB {
             try {
                 runnable.run();
             } catch (Exception e) {
-                log.error("postOnGlThread:" + runnable.name, e);
+                errorLog.error("postOnGlThread:" + runnable.name, e);
                 CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
             }
             return;
@@ -372,7 +386,7 @@ public class CB {
                 try {
                     runnable.run();
                 } catch (Exception e) {
-                    log.error("postOnGlThread:" + runnable.name, e);
+                    errorLog.error("postOnGlThread:" + runnable.name, e);
                     if (CB.stageManager != null) CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                 }
                 WAIT.set(false);
@@ -400,7 +414,7 @@ public class CB {
                         try {
                             runnable.run();
                         } catch (Exception e) {
-                            log.error("postAsyncDelayd:" + runnable.name, e);
+                            errorLog.error("postAsyncDelayd:" + runnable.name, e);
                             CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                         }
                     }
@@ -424,17 +438,13 @@ public class CB {
                     runningRunnables.removeValue(runnable.name, false);
                     log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
                 } catch (final Exception e) {
-                    log.error("postAsync:" + runnable.name, e);
+                    errorLog.error("postAsync:" + runnable.name, e);
                     CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
                     executeCount.decrementAndGet();
                 }
                 return null;
             }
         });
-    }
-
-    public static boolean checkApiKeyNeeded() {
-        return isAccessTokenInvalid();
     }
 
     public static void wait(AtomicBoolean wait) {
@@ -449,7 +459,7 @@ public class CB {
 
         boolean checkCancel = iCancel != null;
 
-        while (negate ? !wait.get() : wait.get()) {
+        while (negate != wait.get()) {
             if (checkCancel) {
                 if (iCancel.cancel()) return;
             }
@@ -517,7 +527,7 @@ public class CB {
                         EventHandler.fire(new SelectedCacheChangedEvent(c));
                         lastSelectedAbstractCache = c;
                     } catch (Exception e) {
-                        log.error("set last selected Cache", e);
+                        errorLog.error("set last selected Cache", e);
                     }
                     break;
                 }
@@ -570,66 +580,161 @@ public class CB {
     }
 
     public static void postOnNextGlThread(final Runnable runnable) {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        runnable.run();
-                        requestRendering();
-                    }
-                });
-            }
-        });
+        Gdx.app.postRunnable(() -> Gdx.app.postRunnable(() -> {
+            runnable.run();
+            requestRendering();
+        }));
     }
 
-    public static boolean loadThemeFile(ThemeFile themeFile) {
+    /**
+     * @param isCarMode   depends on car mode
+     * @param isNightMode depends on night mode
+     * @return true if there is a change
+     */
+    public static boolean setCurrentThemeUsage(boolean isCarMode, boolean isNightMode) {
+        // CB.setCurrentThemeUsage(MapView.isCarMode(), Config.nightMode.getValue());
+        ThemeUsage oldValue = currentThemeUsage;
+        if (isCarMode)
+            if (isNightMode)
+                currentThemeUsage = ThemeUsage.carnight;
+            else
+                currentThemeUsage = ThemeUsage.carday;
+        else if (isNightMode)
+            currentThemeUsage = ThemeUsage.night;
+        else
+            currentThemeUsage = ThemeUsage.day;
+        return oldValue != currentThemeUsage;
+    }
 
+    public static IRenderTheme getCurrentTheme() {
+        return actTheme;
+    }
+
+    public static void setCurrentTheme(ThemeUsage themeUsage, IRenderTheme theme) {
+        currentThemeUsage = themeUsage;
+        actTheme = theme;
+    }
+
+    public static IRenderTheme createTheme(String cThemePath, String cMapStyle) {
+        if (cThemePath.startsWith("VTM:") || cThemePath.length() == 0) {
+            VtmThemes themeFile;
+            if (cThemePath.length() == 0) {
+                themeFile = VtmThemes.DEFAULT; // or VtmThemes.OSMARENDER
+            } else {
+                themeFile = VtmThemes.valueOf(cThemePath.replace("VTM:", ""));
+            }
+            return ThemeLoader.load(themeFile);
+        } else {
+            ThemeMenu themeMenu = new ThemeMenu(cThemePath);
+            themeMenu.applyConfig(cMapStyle);
+            return themeMenu.getRenderTheme();
+        }
+    }
+
+    public static void setScaleChangedListener() {
         if (!mapScaleInitial) {
             Settings.MapViewDPIFaktor.addChangedEventListener(mapScaleSettingChanged);
             Settings.MapViewTextFaktor.addChangedEventListener(mapScaleSettingChanged);
             mapScaleInitial = true;
         }
+    }
 
-        log.debug("load new Theme: {}", CB.actTheme);
-
-        //store theme on config
-        String path;
-        if (themeFile instanceof NamedExternalRenderTheme) {
-            path = ((NamedExternalRenderTheme) themeFile).path;
-        } else if (themeFile instanceof VtmThemes) {
-            path = "VTM:" + ((VtmThemes) themeFile).name();
-        } else {
-            log.warn("Cant store Theme instanceOf: {}", themeFile.getClass().getName());
-            return false;
+    public static String readThemeOfMap(String layerName, ThemeUsage themeUsage) {
+        GdxSqliteCursor cursor = Database.Settings.rawQuery("SELECT LongString FROM Config WHERE Key=\"" + layerName + "|" + themeUsage + "\"");
+        if (cursor != null) {
+            try {
+                cursor.moveToFirst();
+                return cursor.getString(0);
+            } catch (Exception e) {
+                return "";
+            }
         }
-        if (!Config.nightMode.getValue()) {
-            Config.MapsforgeDayTheme.setValue(path);
-        } else {
-            Config.MapsforgeNightTheme.setValue(path);
+        return "";
+    }
+
+    public static void writeThemeOfMap(ThemeUsage themeUsage) {
+        // store map, themeUsage -> last used theme to config : to read, when map is selected
+        try {
+            String[] currentLayer = CurrentMapLayer.getValue();
+            for (int j = 0, m = currentLayer.length; j < m; j++) {
+                GdxSqlitePreparedStatement statement = Database.Settings.myDB.prepare("INSERT OR REPLACE into Config VALUES(?,?,?,?,?)");
+                statement.bind(currentLayer[j] + "|" + themeUsage, null, getConfigsThemePath(themeUsage), null, null);
+                statement.commit();
+                statement.close();
+            }
+        } catch (Exception e) {
+            errorLog.error("Can't writeThemeOfMap", e);
         }
 
-        // before we load the theme, we must set the MenuCallback
-        themeFile.setMenuCallback(new ThemeMenuCallback(path));
-
-        CB.actTheme = ThemeLoader.load(themeFile);
-        CB.actThemeFile = themeFile;
-        Config.AcceptChanges();
-        return true;
     }
 
-    public static boolean isCarMode() {
-        return actMapState.getMapMode() == MapMode.CAR;
+    public static String getConfigsThemePath(ThemeUsage themeUsage) {
+        switch (themeUsage) {
+            case day:
+                return Config.MapsforgeDayTheme.getValue();
+            case night:
+                return Config.MapsforgeNightTheme.getValue();
+            case carday:
+                return Config.MapsforgeCarDayTheme.getValue();
+            default: //case carnight:
+                return Config.MapsforgeCarNightTheme.getValue();
+        }
     }
 
-    public float getGlobalScaleFactor() {
-        return globalScale;
+    public static boolean setConfigsThemePath(ThemeUsage themeUsage, String path) {
+        String oldValue;
+        if (path.length() == 0) return false;
+        switch (themeUsage) {
+            case day:
+                oldValue = Config.MapsforgeDayTheme.getValue();
+                Config.MapsforgeDayTheme.setValue(path);
+                break;
+            case night:
+                oldValue = Config.MapsforgeNightTheme.getValue();
+                Config.MapsforgeNightTheme.setValue(path);
+                break;
+            case carday:
+                oldValue = Config.MapsforgeCarDayTheme.getValue();
+                Config.MapsforgeCarDayTheme.setValue(path);
+                break;
+            default: //case carnight:
+                oldValue = Config.MapsforgeCarNightTheme.getValue();
+                Config.MapsforgeCarNightTheme.setValue(path);
+        }
+        return oldValue != path;
     }
 
-    static private Runtime runtime;
-    static private StringBuilder memoryStringBuilder = new StringBuilder();
-    static private NumberFormat format = NumberFormat.getInstance();
+    public static String getConfigsMapStyle(ThemeUsage themeUsage) {
+        // todo: the configs mapstyle is possibly not suitable for this layer
+        // this must be detected somehow
+        switch (themeUsage) {
+            case day:
+                return Config.MapsforgeDayStyle.getValue();
+            case night:
+                return Config.MapsforgeNightStyle.getValue();
+            case carday:
+                return Config.MapsforgeCarDayStyle.getValue();
+            default: //case carnight:
+                return Config.MapsforgeCarNightStyle.getValue();
+        }
+    }
+
+    public static void setConfigsMapStyle(ThemeUsage themeUsage, String mapStyle) {
+        switch (themeUsage) {
+            case day:
+                Config.MapsforgeDayStyle.setValue(mapStyle);
+                break;
+            case night:
+                Config.MapsforgeNightStyle.setValue(mapStyle);
+                break;
+            case carday:
+                Config.MapsforgeCarDayStyle.setValue(mapStyle);
+                break;
+            case carnight:
+                Config.MapsforgeCarNightStyle.setValue(mapStyle);
+                break;
+        }
+    }
 
     public static String getMemoryUsage() {
         if (runtime == null) runtime = Runtime.getRuntime();
@@ -642,5 +747,24 @@ public class CB {
         memoryStringBuilder.append(" kb");
         return memoryStringBuilder.toString();
     }
+
+    public static ClickListener addClickHandler(Actor actor, Runnable runnable) {
+        ClickListener clickListener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                runnable.run();
+            }
+        };
+        actor.addListener(clickListener);
+        return clickListener;
+    }
+
+    public float getGlobalScaleFactor() {
+        return globalScale;
+    }
+
+    public enum ThemeUsage {
+        day, night, carday, carnight
+    }
+
 }
 
