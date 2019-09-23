@@ -41,6 +41,12 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.impl.LibgdxLogger;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
 
 public class TouchLwjgl3Launcher {
     public static void main(String[] args) {
@@ -79,6 +85,24 @@ public class TouchLwjgl3Launcher {
 
         if (cmd.hasOption("scale")) {
             String value = cmd.getOptionValue("scale");
+
+
+            // maybe it exist a local.properties file with individual scale factor
+            try {
+                File file = new File("../../../local.properties");
+                FileInputStream fileInput = new FileInputStream(file);
+                Properties properties = new Properties();
+                properties.load(fileInput);
+                fileInput.close();
+                if (properties.containsKey("desktop.scale"))
+                    value = properties.getProperty("desktop.scale");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
             float scale = Float.parseFloat(value);
             CB.setGlobalScale(scale);
             config.windowWidth *= scale;
