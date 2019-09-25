@@ -25,10 +25,11 @@ import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.animations.map.MyPositionAnimator;
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.IChanged;
@@ -146,7 +147,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                             CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
                         }
 
-                        LatLong latLon = CB.lastMapState.getFreePosition();
+                        Coordinate latLon = CB.lastMapState.getFreePosition();
                         if (latLon != null) {
                             this.myPosition = new Coordinate(latLon);
                         }
@@ -164,11 +165,11 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
             myPositionAnimator.setPosition(lat, lon);
 
             //force full tilt on CarMode
-            if (CB.isCarMode())
+            if (MapView.isCarMode())
                 mapAnimator.tilt(map.viewport().getMaxTilt());
 
 
-            if (dynZoomEnabled && CB.isCarMode()) {
+            if (dynZoomEnabled && MapView.isCarMode()) {
                 // calculate dynamic Zoom
                 double percent = actSpeed / maxSpeed;
                 double dynZoom = (float) (maxZoom - ((maxZoom - minZoom) * percent));
@@ -185,7 +186,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
             }
 
             float bearing = -EventHandler.getHeading();
-            if (CB.isCarMode()) {
+            if (MapView.isCarMode()) {
                 this.infoPanel.setMapOrientationMode(MapOrientationMode.COMPASS);
                 //change bearing only with speed over 10 kmh
                 if (actSpeed < 10 && lastBearing >= 0) {
@@ -253,7 +254,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
 
     @Override
     public void orientationChanged(OrientationChangedEvent event) {
-        if (CB.isCarMode()) {
+        if (MapView.isCarMode()) {
             this.mapBearing = event.getOrientation();
             this.arrowHeading = 0;
         }

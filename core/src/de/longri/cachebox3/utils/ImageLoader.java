@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -31,9 +31,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.settings.Settings;
-import de.longri.cachebox3.utils.exceptions.NotImplementedException;
 import de.longri.cachebox3.utils.texturepacker.TexturePacker_Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +42,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -110,6 +111,8 @@ public class ImageLoader {
      * Pack the images from Folder into a Atlas and Load the Image from Atlas
      */
     private void packImagesToTextureAtlas(String ImagePath, boolean reziseHeight) {
+        CB.assertGlThread();
+
         if (isPacking)
             return;
         isPacking = true;
@@ -141,7 +144,7 @@ public class ImageLoader {
         textureSettings.fast = false;
         textureSettings.debug = false;
 
-        String inputFolder = Utils.GetDirectoryName(ImagePath);
+        String inputFolder = Utils.getDirectoryName(ImagePath);
         String outputFolder = Settings.ImageCacheFolder.getValue();
         String Name = getCachedAtlasName(inputFolder);
 
@@ -167,36 +170,53 @@ public class ImageLoader {
         return Name;
     }
 
-    private Sprite tryToLoadFromCreatedAtlas(String ImagePath) {
+    private Sprite tryToLoadFromCreatedAtlas(final String ImagePath) {
+        AtomicBoolean WAIT = new AtomicBoolean(true);
+        final Sprite[] tmp = {null};
 
-        if (Atlanten == null)
-            Atlanten = new HashMap<String, TextureAtlas>();
+        CB.postOnGlThread(new NamedRunnable("ImageLoader") {
+            @Override
+            public void run() {
+                if (Atlanten == null)
+                    Atlanten = new HashMap<String, TextureAtlas>();
 
-        String inputFolder = Utils.GetDirectoryName(ImagePath);
-        String ImageName = Utils.GetFileNameWithoutExtension(ImagePath);
-        String Name = getCachedAtlasName(inputFolder);
+                String inputFolder = Utils.getDirectoryName(ImagePath);
+                String ImageName = Utils.getFileNameWithoutExtension(ImagePath);
+                String Name = getCachedAtlasName(inputFolder);
 
-        final String AtlasPath = Settings.ImageCacheFolder.getValue() + "/" + Name;
-        if (!Utils.FileExistsNotEmpty(AtlasPath))
-            return null;
-        TextureAtlas atlas = null;
-        if (Atlanten.containsKey(AtlasPath)) {
-            atlas = Atlanten.get(AtlasPath);
-        } else {
-            this.AtlasPath = AtlasPath;
-            this.ImgName = ImageName;
-            State = 6;
+                final String AtlasPath = Settings.ImageCacheFolder.getValue() + "/" + Name;
+                if (!Utils.fileExistsNotEmpty(AtlasPath)) {
+                    tmp[0] = null;
+                    WAIT.set(false);
+                }
+                TextureAtlas atlas = null;
+                if (Atlanten.containsKey(AtlasPath)) {
+                    atlas = Atlanten.get(AtlasPath);
+                } else {
+                    ImageLoader.this.AtlasPath = AtlasPath;
+                    ImageLoader.this.ImgName = ImageName;
+                    State = 6;
+                }
+
+
+                if (atlas != null) {
+                    tmp[0] = atlas.createSprite(ImageName);
+                }
+            }
+        });
+
+        while (WAIT.get()) {
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
-        Sprite tmp = null;
-        if (atlas != null) {
-            tmp = atlas.createSprite(ImageName);
-        }
-        return tmp;
-
+        return tmp[0];
     }
 
     void setAtlas(String atlasPath, String imgName, boolean reziseHeight) {
+        CB.assertGlThread();
         State = 7;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.absolute(atlasPath));
         Atlanten.put(atlasPath, atlas);
@@ -227,7 +247,6 @@ public class ImageLoader {
             @Override
             public void run() {
                 Sprite spt = tryToLoadFromCreatedAtlas(mPath);
-
                 if (spt != null) {
                     setSprite(spt, reziseHeight);
                 } else {
@@ -287,7 +306,7 @@ public class ImageLoader {
                 final String LocalPath = iconUrl.substring(slashPos);
 
                 // check if Image exist on Cache
-                if (Utils.FileExistsNotEmpty(CachePath + LocalPath)) {
+                if (Utils.fileExistsNotEmpty(CachePath + LocalPath)) {
                     setImage(CachePath + LocalPath);
                     return;
                 }
@@ -307,7 +326,7 @@ public class ImageLoader {
                             inLoad = false;
 
                             // chk if Download complied
-                            if (!Utils.FileExistsNotEmpty(CachePath + LocalPath)) {
+                            if (!Utils.fileExistsNotEmpty(CachePath + LocalPath)) {
                                 // Download Error
                                 ImageLoadError = true;
                                 return;
@@ -453,14 +472,13 @@ public class ImageLoader {
     private String originalPath = null;
 
     private void createThumb() {
-        throw new NotImplementedException("Create Thump is not implemented");
-//		String tmp = FileFactory.createThumb(mPath, (int) resizeWidth, ThumbPräfix);
-//		if (tmp != null) {
-//			originalPath = mPath;
-//			mPath = tmp;
-//		} else {
-//			log.error( "Thumb not generated for " + mPath + " ! " + ThumbPräfix);
-//		}
+        String tmp = PlatformConnector.createThumb(mPath, (int) resizeWidth, ThumbPräfix);
+        if (tmp != null) {
+            originalPath = mPath;
+            mPath = tmp;
+        } else {
+            log.error("Thumb not generated for " + mPath + " ! " + ThumbPräfix);
+        }
     }
 
     /**

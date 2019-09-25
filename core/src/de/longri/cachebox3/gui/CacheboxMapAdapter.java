@@ -18,13 +18,10 @@ package de.longri.cachebox3.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
 import de.longri.cachebox3.gui.map.baseMap.AbstractManagedMapLayer;
 import de.longri.cachebox3.gui.map.baseMap.AbstractVectorLayer;
-import de.longri.cachebox3.gui.map.layer.ThemeMenuCallback;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
-import de.longri.cachebox3.utils.EQUALS;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.core.MapPosition;
@@ -37,12 +34,10 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Map;
-import org.oscim.theme.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.AbstractList;
-import java.util.Set;
 
 /**
  * Created by Longri on 08.09.2016.
@@ -51,19 +46,24 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
 
 
     private final static Logger log = LoggerFactory.getLogger(CacheboxMapAdapter.class);
+    private final Runnable mRedrawCb = new Runnable() {
+        @Override
+        public void run() {
+            prepareFrame();
+            Gdx.graphics.requestRendering();
+        }
+    };
+    private boolean mRenderWait;
+    private boolean mRenderRequest;
+    private int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight(), xOffset, yOffset;
+    private VectorTileLayer vectorTileLayer;
+    private AbstractManagedMapLayer baseMap;
 
     public CacheboxMapAdapter() {
         super();
         events.bind(this); //register Update listener
         this.viewport().setMaxTilt(65f);
     }
-
-
-    private boolean mRenderWait;
-    private boolean mRenderRequest;
-    private int width = Gdx.graphics.getWidth(), height = Gdx.graphics.getHeight(), xOffset, yOffset;
-    private VectorTileLayer vectorTileLayer;
-
 
     @Override
     public int getWidth() {
@@ -101,14 +101,6 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         return yOffset;
     }
 
-    private final Runnable mRedrawCb = new Runnable() {
-        @Override
-        public void run() {
-            prepareFrame();
-            Gdx.graphics.requestRendering();
-        }
-    };
-
     @Override
     public void updateMap() {
         updateMap(true);
@@ -125,7 +117,6 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             }
         }
     }
-
 
     @Override
     public void render() {
@@ -181,9 +172,9 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
                 if (mapPosition.getTilt() > 0) {
                     float offset = MathUtils.linearInterpolation
                             (viewport().getMinTilt(), viewport().getMaxTilt(), 0, 0.8f, mapPosition.getTilt());
-                    viewport().setMapViewCenter(0f,offset);
+                    viewport().setMapViewCenter(0f, offset);
                 } else {
-                    viewport().setMapViewCenter(0f,0f);
+                    viewport().setMapViewCenter(0f, 0f);
                 }
             }
         }
@@ -195,7 +186,12 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         return super.handleGesture(g, e);
     }
 
+    public AbstractManagedMapLayer getBaseMap() {
+        return baseMap;
+    }
+
     public void setNewBaseMap(final AbstractManagedMapLayer baseMap) {
+        this.baseMap = baseMap;
         if (this.layers().size() > 1)
             this.layers().remove(1);
 
@@ -210,7 +206,6 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
         }
 
         if (baseMap.isVector()) {
-
             if (vectorTileLayer == null) {
                 vectorTileLayer = (VectorTileLayer) baseMap.getTileLayer(this);
             } else {
@@ -218,14 +213,8 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             }
             tileLayer = this.setBaseMap(vectorTileLayer);
 
-            if (CB.actThemeFile == null) {
-                this.setTheme(VtmThemes.OSMARENDER);
-            } else {
-                this.setTheme(CB.actThemeFile);
-            }
-
+            setTheme(CB.getCurrentTheme()); // apply theme to the layer
             ((AbstractList) this.layers()).add(2, new BuildingLabelLayer(this, vectorTileLayer));
-
         } else {
             tileLayer = this.setBaseMap(baseMap.getTileLayer(this));
         }
@@ -253,19 +242,6 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             this.layers.add(this.buildingLayer);
             this.layers.add(new LabelLayer(map, vectorTileLayer));
         }
-    }
-
-    public void setTheme(ThemeFile themeFile) {
-        if (themeFile == null) {
-            log.warn("Can't set Theme, is NULL");
-            return;
-        }
-        if (CB.actThemeFile != null && EQUALS.is(CB.actThemeFile, themeFile)) {
-            log.debug("set cached Theme");
-        } else {
-            if (!CB.loadThemeFile(themeFile)) return;
-        }
-        setTheme(CB.actTheme, false);
     }
 }
 

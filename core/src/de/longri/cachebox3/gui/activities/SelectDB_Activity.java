@@ -32,7 +32,7 @@ import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
@@ -63,13 +63,14 @@ public class SelectDB_Activity extends ActivityBase {
     final static Logger log = LoggerFactory.getLogger(SelectDB_Activity.class);
     private final IReturnListener returnListener;
     Timer updateTimer;
+    NewDB_InputBox inputBox;
     private int autoStartTime = 10;
     private int autoStartCounter = 0;
     private String DBPath;
-    private CharSequenceButton bNew;
-    private CharSequenceButton bSelect;
-    private CharSequenceButton bCancel;
-    private CharSequenceButton bAutostart;
+    private CB_Button bNew;
+    private CB_Button bSelect;
+    private CB_Button bCancel;
+    private CB_Button bAutostart;
     private ListView lvFiles;
     TimerTask timerTask = new TimerTask() {
         @Override
@@ -91,7 +92,7 @@ public class SelectDB_Activity extends ActivityBase {
     };
     private CustomAdapter lvAdapter;
     private String[] fileInfos;
-    private boolean mustSelect = false;
+    private boolean mustSelect;
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             stopTimer();
@@ -114,10 +115,10 @@ public class SelectDB_Activity extends ActivityBase {
         this.addActor(lvFiles);
 
 
-        bNew = new CharSequenceButton(Translation.get("NewDB"));
-        bSelect = new CharSequenceButton(Translation.get("confirm"));
-        bCancel = new CharSequenceButton(Translation.get("cancel"));
-        bAutostart = new CharSequenceButton("");
+        bNew = new CB_Button(Translation.get("NewDB"));
+        bSelect = new CB_Button(Translation.get("confirm"));
+        bCancel = new CB_Button(Translation.get("cancel"));
+        bAutostart = new CB_Button("");
 
         this.addActor(bSelect);
         this.addActor(bNew);
@@ -128,36 +129,28 @@ public class SelectDB_Activity extends ActivityBase {
         bNew.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 stopTimer();
-
-                NewDB_InputBox inputBox = new NewDB_InputBox(new OnMsgBoxClickListener() {
-                    @Override
-                    public boolean onClick(int which, Object data) {
-                        switch (which) {
-                            case ButtonDialog.BUTTON_POSITIVE: // ok clicked
-                                Object[] dataObjects = (Object[]) data;
-
-                                Boolean ownRepository = !(Boolean) dataObjects[0];
-                                String NewDB_Name = (String) dataObjects[1];
-
-                                if (Database.createNewDB(Database.Data, Gdx.files.absolute(CB.WorkPath), NewDB_Name, ownRepository))
+                inputBox = new NewDB_InputBox((which, data) -> {
+                    switch (which) {
+                        case ButtonDialog.BUTTON_POSITIVE: // ok clicked
+                            String newDB_Name = inputBox.getNewDB_Name();
+                            if (newDB_Name.length()>0) {
+                                if (Database.createNewDB(Database.Data, Gdx.files.absolute(CB.WorkPath), newDB_Name, inputBox.ownRepository()))
                                     return true;
                                 Config.AcceptChanges();
-                                Config.DatabaseName.setValue(NewDB_Name + ".db3");
-
+                                Config.DatabaseName.setValue(newDB_Name + ".db3");
                                 Database.Data.cacheList.clear();
-
-                                finish();
-                                break;
-                            case ButtonDialog.BUTTON_NEUTRAL: // cancel clicked
-
-                                break;
-                            case ButtonDialog.BUTTON_NEGATIVE:
-
-                                break;
-                        }
-
-                        return true;
+                            }
+                            else {
+                                CB.viewmanager.toast(Translation.get("MustEnterName"));
+                            }
+                            break;
+                        case ButtonDialog.BUTTON_NEUTRAL:
+                            break;
+                        case ButtonDialog.BUTTON_NEGATIVE:
+                            break;
                     }
+                    inputBox.hide(); // todo check if necessary (reset continous rendering)
+                    return true;
                 });
                 inputBox.show();
             }
@@ -522,7 +515,7 @@ public class SelectDB_Activity extends ActivityBase {
                     }
 
                     @Override
-                    public boolean longClicked(Actor actor, float x, float y) {
+                    public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
                         if (actor instanceof SelectDBItem) {
                             log.debug("longClick on Item {}", files.get(listIndex).getName());
                             deleteDatabase(files.get(listIndex));

@@ -31,7 +31,6 @@ import de.longri.cachebox3.events.location.OrientationChangedEvent;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
-import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.activities.ProjectionCoordinate;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
@@ -55,6 +54,7 @@ import de.longri.cachebox3.types.MutableWaypoint;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.UnitFormatter;
+import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +77,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         }
 
         @Override
-        public boolean longClicked(Actor actor, float x, float y) {
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
             if (!(actor instanceof ListViewItem)) return false;
             int listIndex = ((ListViewItem) actor).getListIndex();
 
@@ -91,6 +91,10 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             return true;
         }
     };
+
+    public WaypointView(BitStore reader) {
+        super(reader);
+    }
 
     public WaypointView() {
         super("WaypointView");
@@ -304,7 +308,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
 
     private void deleteWP() {
         //name, msg, title, buttons, icon, OnMsgBoxClickListener
-        Window dialog = new ButtonDialog("delete Waypoint",
+        ButtonDialog dialog = new ButtonDialog("delete Waypoint",
                 Translation.get("?DelWP") + "\n[" + actWaypoint.getTitle() + "]\n",
                 Translation.get("!DelWP"), MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                 (which, data) -> {
@@ -431,13 +435,13 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         // todo icon for UploadCorrectedCoordinates
         MenuItem mi = cm.addMenuItem("UploadCorrectedCoordinates", null, () -> {
             if (actAbstractCache.hasCorrectedCoordinates())
-                GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
+                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
             else if (isCorrectedFinal())
-                GroundspeakAPI.uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
-            if (GroundspeakAPI.APIError == GroundspeakAPI.OK) {
+                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
+            if (GroundspeakAPI.getInstance().APIError == GroundspeakAPI.OK) {
                 MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             } else {
-                MessageBox.show(GroundspeakAPI.LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
             }
         });
         mi.setEnabled(actAbstractCache.hasCorrectedCoordinates() || isCorrectedFinal());
@@ -449,6 +453,6 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     private boolean isCorrectedFinal() {
         // return new String(Title, (UTF_8)).equals("Final GSAK Corrected");
         if (actWaypoint == null) return false;
-        return actWaypoint.getType() == CacheTypes.Final && actWaypoint.isUserWaypoint() && actWaypoint.isValid();
+        return actWaypoint.isCorrectedFinal();
     }
 }

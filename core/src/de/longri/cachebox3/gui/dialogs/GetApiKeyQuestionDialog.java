@@ -16,8 +16,12 @@
 package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.gui.widgets.ApiButton;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.apis.GroundspeakAPI;
+import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
+
+import static de.longri.cachebox3.settings.Settings.GcLogin;
 
 /**
  * Created by longri on 11.06.17.
@@ -33,27 +37,29 @@ public class GetApiKeyQuestionDialog extends ButtonDialog {
         this(msg, MessageBoxIcon.Question);
     }
 
-    public GetApiKeyQuestionDialog(CharSequence msg,MessageBoxIcon icon) {
-        this(msg,Translation.get("apiKeyNeeded"), MessageBoxIcon.Question);
+    public GetApiKeyQuestionDialog(CharSequence msg, MessageBoxIcon icon) {
+        this(msg, Translation.get("apiKeyNeeded"), MessageBoxIcon.Question);
     }
 
-    public GetApiKeyQuestionDialog(CharSequence msg,CharSequence title, MessageBoxIcon icon) {
+    public GetApiKeyQuestionDialog(CharSequence msg, CharSequence title, MessageBoxIcon icon) {
         super("GetApiKeyQuestionDialog", msg, title,
                 MessageBoxButtons.YesNo, icon,
-                new OnMsgBoxClickListener() {
-                    @Override
-                    public boolean onClick(int which, Object data) {
-                        if (which == BUTTON_POSITIVE) {
-                            // open create api key dialog
-                            Gdx.app.postRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new ApiButton().generateKey();
-                                }
-                            });
-                        }
-                        return true;
+                (which, data) -> {
+                    if (which == BUTTON_POSITIVE) {
+                        Gdx.app.postRunnable(() -> PlatformConnector.getApiKey(accessToken -> {
+                            // store the encrypted AccessToken in the Config file
+                            if (Config.UseTestUrl.getValue()) {
+                                Config.AccessTokenForTest.setEncryptedValue(accessToken);
+                            } else {
+                                Config.AccessToken.setEncryptedValue(accessToken);
+                            }
+                            GroundspeakAPI.getInstance().setAuthorization();
+                            String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
+                            GcLogin.setValue(userNameOfAuthorization);
+                            Config.AcceptChanges();
+                        }));
                     }
+                    return true;
                 });
     }
 }

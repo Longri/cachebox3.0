@@ -369,8 +369,8 @@ public class OptionsPane extends Table {
                         LogListItemStyle logListItemStyle = game.skinProject.get("logListItems", LogListItemStyle.class);
                         styles.put("logListItems", logListItemStyle);
 
-                        DraftListItemStyle fieldNoteListItemStyle = game.skinProject.get("fieldNoteListItemStyle", DraftListItemStyle.class);
-                        styles.put("fieldNoteListItemStyle", fieldNoteListItemStyle);
+                        DraftListItemStyle draftListItemStyle = game.skinProject.get("DraftListItemStyle", DraftListItemStyle.class);
+                        styles.put("DraftListItemStyle", draftListItemStyle);
 
                     }
 
@@ -459,7 +459,6 @@ public class OptionsPane extends Table {
         for (final Field field : fields) {
             try {
 
-
                 Actor actor = null;
 
                 // field type
@@ -487,7 +486,6 @@ public class OptionsPane extends Table {
                 } else if (field.getType().isEnum()) {
                     actor = getEnumActor(field, obj);
                 } else {
-
                     //if Type any Style
                     String fullName = field.getType().getName();
                     for (final Class clazz : StyleTypes.items) {
@@ -505,7 +503,6 @@ public class OptionsPane extends Table {
                             String selectedName = SvgSkinUtil.resolveObjectName(game.skinProject, clazz, field.get(currentStyle));
                             if (selectedName == null) selectedName = "";
                             selectBox.setSelected(selectedName);
-
                             selectBox.addListener(new ChangeListener() {
 
                                 @Override
@@ -546,10 +543,10 @@ public class OptionsPane extends Table {
                     // Grey optional
                     if (game.opt.isFieldOptional(currentStyle.getClass(), field.getName())) {
 
-                        tableFields.add(new Label(field.getName(), game.skin, "optional")).left();
+                        tableFields.add(new Label(field.getName() + "(" + name +")", game.skin, "optional")).left();
 
                     } else {
-                        tableFields.add(new Label(field.getName(), game.skin, "default")).left();
+                        tableFields.add(new Label(field.getName() + "(" + name +")", game.skin, "default")).left();
 
                     }
 //                    tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();

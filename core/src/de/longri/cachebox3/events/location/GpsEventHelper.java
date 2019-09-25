@@ -148,7 +148,7 @@ public class GpsEventHelper implements LocationEvents {
 
         bearing = ((int) (bearing * 10.0f)) / 10.0f;
 
-        log.debug("new Bearing {} ({})  GPS:{}", bearing, Math.toDegrees(bearing), gps);
+        log.debug("new bearing {} ({})  GPS:{}", bearing, Math.toDegrees(bearing), gps);
 
         if (gps) {
             CB.sensoerIO.write_newBearingGPS(bearing);
@@ -169,7 +169,7 @@ public class GpsEventHelper implements LocationEvents {
             }
         }
 
-        if (!useCompassOnly && (lastSpeed > compassLevel || CB.isCarMode())) {
+        if (!useCompassOnly && (lastSpeed > compassLevel || MapView.isCarMode())) {
             EventHandler.fire(new OrientationChangedEvent((float) lastGpsHeading));
             log.debug("fire GPS heading event {} (rad:{}) ", lastGpsHeading, Math.toRadians(lastGpsHeading));
         } else {
@@ -236,8 +236,8 @@ public class GpsEventHelper implements LocationEvents {
 ////        log.debug("Gps state changed to {}", state);
 //    }
 //
-//    public CoordinateGPS getLastGpsCoordinate() {
-//        CoordinateGPS coord = new CoordinateGPS(this.lastGpsLat, this.lastGpsLon);
+//    public Coordinate getLastGpsCoordinate() {
+//        Coordinate coord = new Coordinate(this.lastGpsLat, this.lastGpsLon);
 //        coord.setAccuracy(this.lastGpsAccuracy);
 //        coord.setElevation(this.lastGpsElevation);
 //        coord.setHeading(this.lastCompassHeading);

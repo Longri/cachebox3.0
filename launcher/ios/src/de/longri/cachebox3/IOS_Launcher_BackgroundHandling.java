@@ -20,7 +20,7 @@ import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.SoundCache;
@@ -131,7 +131,7 @@ public abstract class IOS_Launcher_BackgroundHandling extends IOSApplication.Del
 //                        if (newCoords.get()) {
 //                            log.debug("new background coords");
 //                            //calculate distance
-//                            LatLong latLong = new LatLong(latInt.get() / 1000000, lonInt.get() / 1000000);
+//                            Coordinate latLong = new Coordinate(latInt.get() / 1000000, lonInt.get() / 1000000);
 //                            double distance = target.distance(latLong, MathUtils.CalculationType.FAST);
 //
 //                            if (distance < soundApproachDistance.get() / 1000000) {

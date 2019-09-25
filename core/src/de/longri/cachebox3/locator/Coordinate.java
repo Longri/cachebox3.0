@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2018 team-cachebox.de
+ * Copyright (C) 2011-2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,61 +20,209 @@ import de.longri.cachebox3.utils.GeoUtils;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.cachebox3.utils.MathUtils.CalculationType;
 
-public class Coordinate extends LatLong {
+import java.util.Date;
+import java.util.Objects;
 
-    static final String br = System.getProperty("line.separator");
+import static de.longri.cachebox3.utils.GeoUtils.*;
 
-    /**
-     * Maximum possible latitude coordinate.
-     */
-    public static final double LATITUDE_MAX = 90;
+/**
+ * Created by Longri on 27.07.2016.
+ */
+public class Coordinate {
 
-    /**
-     * Minimum possible latitude coordinate.
-     */
-    public static final double LATITUDE_MIN = -LATITUDE_MAX;
+    private final static double TOLERANCE = 0.000008;
+    private final static String br = System.getProperty("line.separator");
+    private final static float[] mResults = new float[2];
 
-    /**
-     * Maximum possible longitude coordinate.
-     */
-    public static final double LONGITUDE_MAX = 180;
 
-    /**
-     * Minimum possible longitude coordinate.
-     */
-    public static final double LONGITUDE_MIN = -LONGITUDE_MAX;
+// private member
 
-    private static final float[] mResults = new float[2];
+    private double latitude; // The latitude coordinate of this Coordinate in degrees.
+    private double longitude; //The longitude coordinate of this Coordinate in degrees.
+    private int accuracy = -1;
+    private double elevation = 0;
+    private int hash = 0;
+    private double heading = 0.0;
+    private boolean isGPSprovided = false;
+    private double speed = 0.0;
+    private Date date = null;
 
-    public Coordinate(LatLong latLon) {
-        super(latLon);
+// constructors
+
+    public Coordinate() {
+        this(0, 0);
     }
 
-    public static Coordinate Project(Coordinate coord, double Direction, double Distance) {
-        return Project(coord.getLatitude(), coord.getLongitude(), Direction, Distance);
+    public Coordinate(double latitude, double longitude, double elevation, double heading, Date date) {
+        this(latitude, longitude);
+        this.elevation = elevation;
+        this.heading = heading;
+        this.date = date;
+    }
+
+    public Coordinate(Coordinate parent) {
+        this(parent.latitude, parent.longitude);
+        this.hash = parent.hash;
+        this.elevation = parent.elevation;
+        this.speed = parent.speed;
+        this.heading = parent.heading;
+        this.isGPSprovided = parent.isGPSprovided;
+        this.accuracy = parent.accuracy;
+        this.date = parent.date;
+    }
+
+    public Coordinate(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public Coordinate(String text) {
+        this(GeoUtils.parseCoordinate(text));
+    }
+
+    public Coordinate(double[] coordinate) {
+        this(coordinate[0], coordinate[1]);
+    }
+
+
+// getter / setter
+
+    public void set(Coordinate other) {
+        this.latitude = other.latitude;
+        this.longitude = other.longitude;
+        this.elevation = other.elevation;
+        this.speed = other.speed;
+        this.heading = other.heading;
+        this.isGPSprovided = other.isGPSprovided;
+        this.accuracy = other.accuracy;
+        this.date = other.date;
+        this.hash = other.hash;
+    }
+
+    public void setLatLon(double latitude, double longitude) {
+        if (this.latitude != latitude || this.longitude != longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.hash = 0;
+        }
+    }
+
+    public void setLatitude(double latitude) {
+        if (this.latitude != latitude) {
+            this.latitude = latitude;
+            this.hash = 0;
+        }
+    }
+
+    public double getLatitude() {
+        return this.latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        if (this.longitude != longitude) {
+            this.longitude = longitude;
+            this.hash = 0;
+        }
+    }
+
+    public double getLongitude() {
+        return this.longitude;
+    }
+
+    public void setAccuracy(float accuracy) {
+        if (this.accuracy != accuracy) {
+            this.accuracy = (int) accuracy;
+            this.hash = 0;
+        }
+    }
+
+    public int getAccuracy() {
+        return this.accuracy;
+    }
+
+    public void setElevation(double elevation) {
+        if (this.elevation != elevation) {
+            this.elevation = elevation;
+            this.hash = 0;
+        }
+    }
+
+    public double getElevation() {
+        return this.elevation;
+    }
+
+    public void setHeading(double heading) {
+        if (this.heading != heading) {
+            this.heading = heading;
+            this.hash = 0;
+        }
+    }
+
+    public double getHeading() {
+        return this.heading;
+    }
+
+    public void setIsGpsProvided(boolean isGpsProvided) {
+        if (this.isGPSprovided != isGpsProvided) {
+            this.isGPSprovided = isGpsProvided;
+            this.hash = 0;
+        }
+    }
+
+    public boolean isGPSprovided() {
+        return this.isGPSprovided;
+    }
+
+    public void setSpeed(double speed) {
+        if (this.speed != speed) {
+            this.speed = speed;
+            this.hash = 0;
+        }
+    }
+
+    public double getSpeed() {
+        return this.speed;
+    }
+
+    public void setDate(Date date) {
+        if (date == null) {
+            if (this.date == null) return;
+        } else {
+            if (this.date != null && this.date.compareTo(date) == 0) return;
+        }
+        this.date = date;
+        this.hash = 0;
+    }
+
+    public Date getDate() {
+        return this.date;
+    }
+
+// methods
+
+    public void reset() {
+        this.latitude = 0;
+        this.longitude = 0;
+        this.heading = 0;
+        this.elevation = 0;
+        this.date = null;
+        this.speed = 0;
+        this.accuracy = -1;
+        this.isGPSprovided = false;
+
+        this.hash = 0;
     }
 
     /**
      * A Coordinate is valid, if lat/lon in range and not 0,0!
      * 0,0 is in Range of max/min lat/lon, but we handle this as not valid
-     *
-     * @return
      */
     public boolean isValid() {
-
-        //we use getLatitude() and getLongitude() because some extended classes use their own value!
-        double lat = getLatitude();
-        double lon = getLongitude();
-
-        if (lat < LATITUDE_MIN || lat > LATITUDE_MAX || lat == 0) return false;
-        if (lon < LONGITUDE_MIN || lon > LONGITUDE_MAX || lon == 0) return false;
-
-        return true;
+        if (latitude < LATITUDE_MIN || latitude > LATITUDE_MAX || isZero()) return false;
+        return !(longitude < LONGITUDE_MIN) && !(longitude > LONGITUDE_MAX);
     }
 
     public boolean isZero() {
-        if (!isValid())
-            return false;
         return ((latitude == 0) && (longitude == 0));
     }
 
@@ -87,9 +235,9 @@ public class Coordinate extends LatLong {
      *
      * @return
      */
-    public String FormatCoordinate() {
+    public String formatCoordinate() {
         if (isValid())
-            return Formatter.FormatLatitudeDM(getLatitude()) + " / " + Formatter.FormatLongitudeDM(getLongitude());
+            return Formatter.FormatLatitudeDM(this.latitude) + " / " + Formatter.FormatLongitudeDM(this.longitude);
         else
             return "not Valid";
     }
@@ -101,63 +249,9 @@ public class Coordinate extends LatLong {
      */
     public String formatCoordinateLineBreak() {
         if (isValid())
-            return Formatter.FormatLatitudeDM(getLatitude()) + br + Formatter.FormatLongitudeDM(getLongitude());
+            return Formatter.FormatLatitudeDM(this.latitude) + br + Formatter.FormatLongitudeDM(this.longitude);
         else
             return "not Valid";
-    }
-
-    private static final double EARTH_RADIUS = 6378137.0;
-
-    public static Coordinate Project(double Latitude, double Longitude, double Direction, double Distance) {
-        double dist = Distance / EARTH_RADIUS; // convert dist to angular distance in radians
-        double brng = Direction * MathUtils.DEG_RAD; //
-        double lat1 = Latitude * MathUtils.DEG_RAD;
-        double lon1 = Longitude * MathUtils.DEG_RAD;
-
-        double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) + Math.cos(lat1) * Math.sin(dist) * Math.cos(brng));
-        double lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dist) * Math.cos(lat1), Math.cos(dist) - Math.sin(lat1) * Math.sin(lat2));
-        lon2 = (lon2 + 3 * Math.PI) % (2 * Math.PI) - Math.PI; // normalise to -180°..+180°
-
-        Coordinate result = new Coordinate(lat2 * MathUtils.RAD_DEG, lon2 * MathUtils.RAD_DEG);
-        return result;
-
-    }
-
-    public static double Bearing(CalculationType type, Coordinate coord1, Coordinate coord2) {
-        return Bearing(type, coord1.getLatitude(), coord1.getLongitude(), coord2.getLatitude(), coord2.getLongitude());
-    }
-
-    public static double Bearing(CalculationType type, double froLatitude, double fromLongitude, double toLatitude, double toLongitude) {
-        return new Coordinate(froLatitude, fromLongitude).bearingTo(new Coordinate(toLatitude, toLongitude), type);
-    }
-
-    public static Coordinate Intersection(Coordinate coord1, Coordinate coord2, Coordinate coord3, Coordinate coord4) {
-        Coordinate result = null;
-
-        double[] x = new double[4];
-        double[] y = new double[4];
-        x[0] = coord1.getLongitude();
-        y[0] = coord1.getLatitude();
-        x[1] = coord2.getLongitude();
-        y[1] = coord2.getLatitude();
-        x[2] = coord3.getLongitude();
-        y[2] = coord3.getLatitude();
-        x[3] = coord4.getLongitude();
-        y[3] = coord4.getLatitude();
-
-        // Steigungen
-        double steig1 = (y[1] - y[0]) / (x[1] - x[0]);
-        double steig2 = (y[3] - y[2]) / (x[3] - x[2]);
-        // Nullwerte
-        double null1 = y[0] - x[0] * steig1;
-        double null2 = y[2] - x[2] * steig2;
-        // Schnittpunkt
-        double X = (null2 - null1) / (steig1 - steig2);
-        double Y = steig1 * X + null1;
-        // Konvertieren in Lat-Lon
-
-        result = new Coordinate(Y, X);
-        return result;
     }
 
     /**
@@ -168,22 +262,10 @@ public class Coordinate extends LatLong {
      * @param dest the destination location
      * @return the initial bearing in degrees
      */
-    public float bearingTo(LatLong dest, CalculationType type) {
+    public float bearingTo(Coordinate dest, CalculationType type) {
         synchronized (mResults) {
-            // See if we already have the result
-            // if (getLatitude() != mLat1 || getLongitude() != mLon1 || dest.getLatitude() != mLat2 || dest.getLongitude() != mLon2)
-            // {
-            // MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), dest.getLatitude(), dest.getLongitude(), mResults);
-            // mLat1 = getLatitude();
-            // mLon1 = getLongitude();
-            // mLat2 = dest.getLatitude();
-            // mLon2 = dest.getLongitude();
-            // mInitialBearing = mResults[1];
-            // }
-            // return mInitialBearing;
-
             synchronized (mResults) {
-                MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), dest.getLatitude(), dest.getLongitude(), mResults);
+                MathUtils.computeDistanceAndBearing(type, this.latitude, this.longitude, dest.latitude, dest.longitude, mResults);
                 return mResults[1];
             }
         }
@@ -195,9 +277,9 @@ public class Coordinate extends LatLong {
      * @param coord
      * @return
      */
-    public float distance(LatLong coord, CalculationType type) {
+    public float distance(Coordinate coord, CalculationType type) {
         if (coord == null) return -1;
-        MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), coord.getLatitude(), coord.getLongitude(), mResults);
+        MathUtils.computeDistanceAndBearing(type, this.latitude, this.longitude, coord.latitude, coord.longitude, mResults);
         return mResults[0];
     }
 
@@ -208,12 +290,35 @@ public class Coordinate extends LatLong {
      */
     public float distance(CalculationType type) {
         float[] dist = new float[1];
-        LatLong myPos = EventHandler.getMyPosition();
-        MathUtils.computeDistanceAndBearing(type, getLatitude(), getLongitude(), myPos.latitude, myPos.longitude, dist);
+        Coordinate myPos = EventHandler.getMyPosition();
+        MathUtils.computeDistanceAndBearing(type, this.latitude, this.longitude, myPos.latitude, myPos.longitude, dist);
         return dist[0];
     }
 
-    private final static double TOL = 0.000008;
+    /**
+     * Returns the approximate distance in degrees between this location and the
+     * given location, calculated in Euclidean space.
+     */
+    public double distance(Coordinate other) {
+        return Math.hypot(this.longitude - other.longitude, this.latitude - other.latitude);
+    }
+
+    @Override
+    public int hashCode() {
+        if (hash != 0) return hash;
+        hash = Objects.hash(this.latitude,
+                this.longitude,
+                this.accuracy,
+                this.elevation,
+                this.heading,
+                this.speed,
+                this.isGPSprovided,
+                this.date);
+        if (hash == 0) { //realy?
+            hash = 1;
+        }
+        return hash;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -235,53 +340,17 @@ public class Coordinate extends LatLong {
         if (lo < 0)
             lo *= -1;
 
-        if (la > TOL)
+        if (la > TOLERANCE)
             return false;
-        if (lo > TOL)
+        if (lo > TOLERANCE)
             return false;
 
         return true;
     }
 
-    public static Coordinate Crossbearing(CalculationType type, Coordinate coord1, double direction1, Coordinate coord2, double direction2) {
-        float[] dist = new float[4];
-        MathUtils.computeDistanceAndBearing(type, coord1.getLatitude(), coord1.getLongitude(), coord2.getLatitude(), coord2.getLongitude(), dist);
-        double distance = dist[0];
-        Coordinate coord3 = Project(coord1, direction1, distance);
-        Coordinate coord4 = Project(coord2, direction2, distance);
-
-        return Intersection(coord1, coord3, coord2, coord4);
-    }
-
-    public Coordinate(Coordinate parent) {
-        super(parent.latitude, parent.longitude);
-    }
-
-    public Coordinate(double latitude, double longitude) {
-        super(latitude, longitude);
-    }
-
-    public Coordinate(int latitude, int longitude) {
-        super(latitude, longitude);
-        if (latitude == 0 && longitude == 0)
-            return;
-    }
-
-    public Coordinate(String text) {
-        this(GeoUtils.parseCoordinate(text));
-    }
-
-    public Coordinate(double[] coordinate) {
-        super(coordinate[0], coordinate[1]);
-    }
-
-    public Coordinate copy() {
-        return new Coordinate(this);
-    }
-
     @Override
     public String toString() {
-        return FormatCoordinate();
+        return formatCoordinate();
     }
 
 }

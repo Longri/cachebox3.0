@@ -82,24 +82,24 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
 
     private void checkCacheTypes() {
         //Check Cache, I'm the owner
-        AbstractCache ownerAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Cache, "GCCODE");
+        AbstractCache ownerAbstractCache = new MutableCache(null, 0, 0, "test", CacheTypes.Cache, "GCCODE");
         checkCache(ownerAbstractCache);
 
         //Check Cache, found
-        AbstractCache foundAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Cache, "GCCODE");
+        AbstractCache foundAbstractCache = new MutableCache(null, 0, 0, "test", CacheTypes.Cache, "GCCODE");
         foundAbstractCache.setOwner("nicht meiner");
         foundAbstractCache.setFound(true);
         checkCache(foundAbstractCache);
 
         //Check Cache, solved
-        AbstractCache solvedAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
+        AbstractCache solvedAbstractCache = new MutableCache(null, 0, 0, "test", CacheTypes.Mystery, "GCCODE");
         solvedAbstractCache.setOwner("nicht meiner");
         solvedAbstractCache.setHasCorrectedCoordinates(true);
         checkCache(solvedAbstractCache);
 
 
         //Check Cache, multi start
-        AbstractCache multiStartAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Multi, "GCCODE");
+        AbstractCache multiStartAbstractCache = new MutableCache(null, 0, 0, "test", CacheTypes.Multi, "GCCODE");
         multiStartAbstractCache.setOwner("nicht meiner");
         AbstractWaypoint wp = new MutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
         wp.setStart(true);
@@ -107,7 +107,7 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
         checkCache(multiStartAbstractCache);
 
         //Check Cache, myst start
-        AbstractCache mystStartAbstractCache = new MutableCache(0, 0, "test", CacheTypes.Mystery, "GCCODE");
+        AbstractCache mystStartAbstractCache = new MutableCache(null, 0, 0, "test", CacheTypes.Mystery, "GCCODE");
         mystStartAbstractCache.setOwner("nicht meiner");
         MutableWaypoint wpm = new MutableWaypoint("wp", CacheTypes.MultiStage, 0, 0, 100, "");
         wpm.setStart(true);
@@ -138,7 +138,7 @@ public class Validate_MapWayPointItemStyle extends ValidationTask {
 
         for (CacheTypes type : CacheTypes.values()) {
             // create a Temp Cache
-            AbstractCache abstractCache = new MutableCache(0, 0, "test", type, "GCCODE");
+            AbstractCache abstractCache = new MutableCache(null, 0, 0, "test", type, "GCCODE");
             abstractCache.setOwner("nicht meiner");
             checkCache(abstractCache);
         }

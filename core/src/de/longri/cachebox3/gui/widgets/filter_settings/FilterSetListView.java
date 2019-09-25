@@ -37,7 +37,7 @@ import de.longri.cachebox3.gui.skin.styles.CacheSizeStyle;
 import de.longri.cachebox3.gui.skin.styles.FilterStyle;
 import de.longri.cachebox3.gui.skin.styles.StarsStyle;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
@@ -153,7 +153,7 @@ public class FilterSetListView extends Catch_Table implements EditFilterSettings
         final IntPropertyListView listingChanged = new IntPropertyListView(listViewItems.size + 8,
                 filterSettings.filterProperties.ListingChanged, style.ListingChanged, Translation.get("ListingChanged"));
         final IntPropertyListView manualwaypoint = new IntPropertyListView(listViewItems.size + 9,
-                filterSettings.filterProperties.WithManualWaypoint, style.ManualWaypoint, Translation.get("manualwaypoint"));
+                filterSettings.filterProperties.WithManualWaypoint, style.ManualWaypoint, Translation.get("manualWayPoint"));
         final IntPropertyListView corrected = new IntPropertyListView(listViewItems.size + 10,
                 filterSettings.filterProperties.hasCorrectedCoordinates, style.CoorectedCoord, Translation.get("hasCorrectedCoordinates"));
 
@@ -317,7 +317,7 @@ public class FilterSetListView extends Catch_Table implements EditFilterSettings
         public ButtonListViewItem(int listIndex, CharSequence text, ClickListener clickListener) {
             super(listIndex);
             this.clickListener = clickListener;
-            CharSequenceButton btn = new CharSequenceButton(text);
+            CB_Button btn = new CB_Button(text);
             btn.getLabel().setWrap(true);
 
             // add own clicklistener for detect Click and scroll this Item to top of ListView

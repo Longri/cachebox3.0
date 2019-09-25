@@ -94,6 +94,7 @@ public class StyleTypes {
         items.add(MapBubbleStyle.class);
         items.add(PqListItemStyle.class);
         items.add(DescriptionViewStyle.class);
+        items.add(GalleryViewStyle.class);
     }
 
 }

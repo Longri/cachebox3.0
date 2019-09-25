@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014-2016 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -24,8 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -33,7 +31,7 @@ public class CategoryDAO {
     final static Logger log = LoggerFactory.getLogger(CategoryDAO.class);
 
     public Category ReadFromCursor(GdxSqliteCursor reader) {
-        Category result = new Category();
+        Category result = new Category(Database.Data);
 
         result.Id = reader.getLong(0);
         result.GpxFilename = reader.getString(1);
@@ -58,7 +56,7 @@ public class CategoryDAO {
         filename = new File(filename).getName();
 
         // neue Category in DB anlegen
-        Category result = new Category();
+        Category result = new Category(Database.Data);
 
         Parameters args = new Parameters();
         args.put("GPXFilename", filename);

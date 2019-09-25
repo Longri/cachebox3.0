@@ -20,12 +20,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.text.InputType;
 import android.view.Gravity;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.badlogic.gdx.Gdx;
@@ -40,9 +42,7 @@ import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * Created by Longri on 17.07.16.
@@ -50,11 +50,13 @@ import java.io.InputStream;
 public class AndroidPlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
     private static final int REQUEST_CODE_GET_API_KEY = 987;
-    private final AndroidLauncherfragment application;
     public static AndroidPlatformConnector platformConnector;
+    private final AndroidLauncherfragment application;
     private final Handler handle;
     private final Context context;
     private final AndroidFlashLight flashLight;
+    public GenericCallBack<String> callBack;
+    private AndroidDescriptionView descriptionView;
 
     public AndroidPlatformConnector(AndroidLauncherfragment app) {
         this.application = app;
@@ -64,6 +66,84 @@ public class AndroidPlatformConnector extends PlatformConnector {
         this.flashLight = new AndroidFlashLight(this.context);
     }
 
+    @Override
+    protected String _createThumb(String path, int scaledWidth, String thumbPrefix) {
+        String storePath = Utils.getDirectoryName(path) + "/";
+        String storeName = Utils.getFileNameWithoutExtension(path);
+        String storeExt = Utils.getFileExtension(path).toLowerCase();
+        String ThumbPath = storePath + thumbPrefix + Utils.THUMB + storeName + "." + storeExt;
+
+        java.io.File ThumbFile = new java.io.File(ThumbPath);
+
+        if (ThumbFile.exists())
+            return ThumbPath;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        if (BitmapFactory.decodeFile(path, options) == null) {
+            // seems as if decodeFile always returns null (independant from success)
+            // todo delete a bad original file (Path)
+            // return null;
+            // will now perhaps produce bad thumbs
+        }
+
+        int oriWidth = options.outWidth;
+        int oriHeight = options.outHeight;
+        float scalefactor = (float) scaledWidth / (float) oriWidth;
+
+        if (scalefactor >= 1)
+            return path; // don't need a thumb, return original path
+
+        int newHeight = (int) (oriHeight * scalefactor);
+        int newWidth = (int) (oriWidth * scalefactor);
+
+        final int REQUIRED_WIDTH = newWidth;
+        final int REQUIRED_HIGHT = newHeight;
+        //Find the correct scale value. It should be the power of 2.
+        int scale = 1;
+        while (oriWidth / scale / 2 >= REQUIRED_WIDTH && oriHeight / scale / 2 >= REQUIRED_HIGHT)
+            scale *= 2;
+
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        android.graphics.Bitmap resized = null;
+        try {
+            resized = BitmapFactory.decodeStream(new FileInputStream(path), null, o2);
+        } catch (FileNotFoundException e1) {
+
+            e1.printStackTrace();
+        }
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(ThumbPath);
+            android.graphics.Bitmap.CompressFormat format = android.graphics.Bitmap.CompressFormat.PNG;
+
+            if (storeExt.equals("jpg"))
+                format = android.graphics.Bitmap.CompressFormat.JPEG;
+
+            if (out == null || format == null || resized == null) {
+                return null;
+            }
+            resized.compress(format, 80, out);
+
+            resized.recycle();
+
+            return ThumbPath;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     @Override
     protected boolean _isTorchAvailable() {
@@ -88,7 +168,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
         }
     }
 
-
     @Override
     public Bitmap getRealScaledSVG(String name, InputStream inputStream, PlatformConnector.SvgScaleType scaleType, float scaleValue) throws IOException {
 
@@ -96,7 +175,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
         bmp.name = name;
         return bmp;
     }
-
 
     @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
@@ -111,8 +189,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/Cachebox3";
     }
 
-    public GenericCallBack<String> callBack;
-
     @Override
     protected void generateApiKey(GenericCallBack<String> callBack) {
         this.callBack = callBack;
@@ -125,19 +201,14 @@ public class AndroidPlatformConnector extends PlatformConnector {
 
     }
 
-    private AndroidDescriptionView descriptionView;
-
     @Override
     protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
 
-        this.application.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (descriptionView == null)
-                    descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
-                callBack.callBack(descriptionView);
+        this.application.runOnUiThread(() -> {
+            if (descriptionView == null)
+                descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
+            callBack.callBack(descriptionView);
 
-            }
         });
     }
 
@@ -211,7 +282,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     }
 
     @Override
-    public void _getMultilineTextInput(final Input.TextInputListener listener, final String title, final String text,
+    public void _getTextInput(boolean singleLine, final Input.TextInputListener listener, int inputType, final String title, final String text,
                                        final String hint) {
         this.handle.post(new Runnable() {
             public void run() {
@@ -225,13 +296,23 @@ public class AndroidPlatformConnector extends PlatformConnector {
                 alert.setCustomTitle(myMsg);
 
 
-                final EditText input = new EditText(AndroidPlatformConnector.this.context);
+                Context activity = AndroidPlatformConnector.this.context;
+                final EditText input = new EditText(activity);
                 input.setHint(hint);
                 input.setText(text);
-                input.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                input.setSingleLine(false);
-                input.setLines(5);
-                input.setMaxLines(8);
+                if (inputType == 0)
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+                else
+                    input.setInputType(inputType);
+                input.setSingleLine(singleLine);
+                if (singleLine) {
+                    input.setLines(1);
+                    input.setMaxLines(1);
+                }
+                else {
+                    input.setLines(5);
+                    input.setMaxLines(8);
+                }
                 input.setGravity(Gravity.LEFT | Gravity.TOP);
                 alert.setView(input);
                 alert.setPositiveButton(AndroidPlatformConnector.this.context.getString(17039370), new DialogInterface.OnClickListener() {
@@ -262,6 +343,13 @@ public class AndroidPlatformConnector extends PlatformConnector {
 //                    }
 //                });
                 alert.show();
+                InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                input.postDelayed(() -> {
+                    input.requestFocus();
+                    input.setSelection(input.getText().length());
+                    manager.showSoftInput(input, 0);
+                }, 100);
+
             }
         });
     }

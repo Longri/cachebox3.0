@@ -28,6 +28,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by Longri on 16.10.2017.
  */
 public abstract class AbstractCache extends Coordinate implements Comparable<AbstractCache> {
+
+    protected boolean infoRead;
+    protected boolean textRead;
+
+    public AbstractCache(AbstractCache abstractCache) {
+        super(abstractCache);
+    }
+
     public AbstractCache(double latitude, double longitude) {
         super(latitude, longitude);
     }
@@ -117,21 +125,14 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
      *
      * @return
      */
-    public abstract boolean HasStartWaypoint();
+    public abstract boolean hasStartWaypoint();
 
     /**
      * search the start Waypoint for a multi or mystery
      *
      * @return
      */
-    public abstract AbstractWaypoint GetStartWaypoint();
-
-    /**
-     * Returns true has the Cache Spoilers else returns false
-     *
-     * @return Boolean
-     */
-    public abstract boolean hasSpoiler();
+    public abstract AbstractWaypoint getStartWaypoint();
 
     protected abstract AbstractWaypoint findWaypointByGc(String gc);
 
@@ -299,6 +300,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setWaypoints(Array<AbstractWaypoint> waypoints);
 
+    public abstract AbstractWaypoint getCorrectedFinal();
 
     /**
      * Id des Caches in der Datenbank von geocaching.com
@@ -308,11 +310,18 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract void setId(long id);
 
     /**
-     * Durchschnittliche Bewertung des Caches von GcVote
+     * average of cache votes at GcVote (any value between 0 and 5; presented by 0 bis 5 stars with half stars)
      */
     public abstract float getRating();
 
-    public abstract void setRating(short rating);
+    public abstract void setRating(float rating);
+
+    /**
+     * own vote at GcVote (values 0, 0.5, 1, 1.5, .., 5; presented by 0 bis 5 stars with half stars)
+     */
+    public abstract float getVote();
+
+    public abstract void setVote(float vote);
 
     /**
      * Groesse des Caches. Bei Wikipediaeintraegen enthaelt dieses Feld den Radius in m
@@ -352,7 +361,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setAttributes(GdxSqliteCursor cursor);
 
-    public abstract void updateBooleanStore(Database database);
+    public abstract void updateBooleanStore();
 
     public abstract void setShowOriginalHtmlColor(boolean value);
 

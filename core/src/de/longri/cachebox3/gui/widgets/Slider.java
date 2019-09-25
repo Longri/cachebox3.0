@@ -88,20 +88,11 @@ public class Slider extends Catch_WidgetGroup {
 
     private void fillContent() {
 
-//        logTextField = LibgdxLogger.getLogScrollPane(VisUI.getSkin().getFont("normal_font"), Color.WHITE);
-//        content.addActor(logTextField);
     }
-
-    String lastMemoryString;
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        if (!CB.viewmanager.getMain().getMemory().equals(lastMemoryString)) {
-            lastMemoryString = CB.viewmanager.getMain().getMemory();
-            //  nameWidget.setCacheName(lastMemoryString);
-            //   Gdx.graphics.requestRendering();
-        }
     }
 
 

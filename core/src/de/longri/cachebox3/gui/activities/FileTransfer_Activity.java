@@ -23,7 +23,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.*;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.socket.filebrowser.FileBrowserServer;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class FileTransfer_Activity extends ActivityBase {
 
     private final Logger log = LoggerFactory.getLogger(FileTransfer_Activity.class);
 
-    private final CharSequenceButton closeButton;
+    private final CB_Button closeButton;
     private final FileBrowserServer server;
     private final VisLabel msgLabel;
 
@@ -53,7 +53,7 @@ public class FileTransfer_Activity extends ActivityBase {
     public FileTransfer_Activity() {
         super("FileTransfer");
 
-        closeButton = new CharSequenceButton(Translation.get("close"));
+        closeButton = new CB_Button(Translation.get("close"));
         closeButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 CharSequence msg = Translation.get("closeFileTransfer?");

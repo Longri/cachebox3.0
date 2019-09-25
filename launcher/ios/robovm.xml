@@ -42,6 +42,9 @@
         <lib>z</lib>
         <lib>build/native/libvtm-jni.a</lib>  <!--vtm native -->
         <lib>libs/libLibPP.a</lib>  <!--libPP native -->
+        <lib>build/native/META-INF/robovm/ios/libs/libgdx.a</lib>  <!--LibGdx native -->
+        <lib>build/native/META-INF/robovm/ios/libs/libObjectAl.a</lib>  <!--LibGdx native -->
+        <lib>build/native/META-INF/robovm/ios/libs/libgdx-freetype.a</lib>  <!--LibGdx Freetype native -->
         <lib>build/native/META-INF/robovm/ios/libs/libGdxSqlite.a</lib>  <!--GdxSqlite native -->
         <lib>build/native/META-INF/robovm/ios/libs/libsqlitecustom.a</lib>  <!--GdxSqlite native -->
     </libs>

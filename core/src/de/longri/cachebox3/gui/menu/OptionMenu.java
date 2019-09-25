@@ -30,9 +30,4 @@ public class OptionMenu extends Menu {
         super(name, style);
         hideWithItemClick = false;
     }
-
-    public OptionMenu(String name, String styleName) {
-        super(name, styleName);
-        hideWithItemClick = false;
-    }
 }

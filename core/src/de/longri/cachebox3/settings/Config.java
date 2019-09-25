@@ -18,7 +18,6 @@ package de.longri.cachebox3.settings;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -27,7 +26,6 @@ import de.longri.gdx.sqlite.GdxSqlitePreparedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -144,23 +142,6 @@ public class Config extends Settings {
                     e.printStackTrace();
                 }
             }
-            if (isAPI) {
-                log.debug("ApiKey changed, reset ApiCheck and set new expired time");
-                CB.postOnGlThread(new NamedRunnable("Config") {
-                    @Override
-                    public void run() {
-                        //reset ApiKey validation
-                        GroundspeakLiveAPI.resetApiIsChecked();
-
-                        //set config stored MemberChipType as expired
-                        Calendar cal = Calendar.getInstance();
-
-                        Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
-                        Config.AcceptChanges();
-                    }
-                });
-
-            }
         } catch (Exception e) {
             log.error("Error on store Config", e);
         } finally {
@@ -168,6 +149,7 @@ public class Config extends Settings {
             inWrite.set(false);
         }
         return false;
+
     }
 
     private static void writeToDB(Database db, Array<SettingBase<?>> settingsList, AtomicBoolean wait) {

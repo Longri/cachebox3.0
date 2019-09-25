@@ -15,8 +15,6 @@
  */
 package de.longri.cachebox3.platform_test;
 
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
-
 /**
  * Created by Longri on 03.04.2019.
  */
@@ -24,5 +22,4 @@ public class EXCLUDE_FROM_TRAVIS {
     public static final String DUMMY_API_KEY = "+DummyKEY";
     public static final boolean VALUE = true; // on platform this is always true
 
-    public static String GcAPI(){return GroundspeakLiveAPI.getAccessToken();}
 }

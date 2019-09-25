@@ -16,7 +16,12 @@
 package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Cluster;
+import com.badlogic.gdx.scenes.scene2d.ui.ClusteredList;
+import com.badlogic.gdx.scenes.scene2d.ui.GetName;
+import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
+import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
+import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -355,9 +360,9 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
             return "mapFound";
         else if ((abstractCache.getType() == CacheTypes.Mystery) && abstractCache.hasCorrectedCoordinates())
             return "mapSolved";
-        else if ((abstractCache.getType() == CacheTypes.Multi) && abstractCache.HasStartWaypoint())
+        else if ((abstractCache.getType() == CacheTypes.Multi) && abstractCache.hasStartWaypoint())
             return "mapMultiStartP"; // Multi with start point
-        else if ((abstractCache.getType() == CacheTypes.Mystery) && abstractCache.HasStartWaypoint())
+        else if ((abstractCache.getType() == CacheTypes.Mystery) && abstractCache.hasStartWaypoint())
             return "mapMysteryStartP"; // Mystery without Final but with start point
         else
             return "map" + abstractCache.getType().name();

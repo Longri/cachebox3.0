@@ -19,7 +19,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -29,7 +28,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
@@ -89,10 +87,6 @@ public class Menu extends Window {
         hideWithItemClick = true;
     }
 
-    public Menu(CharSequence name, String styleName) {
-        this(name, VisUI.getSkin().get(styleName, MenuStyle.class));
-    }
-
     public void setCompoundMenu(Menu compoundMenu) {
         this.compoundMenu = compoundMenu;
     }
@@ -101,47 +95,56 @@ public class Menu extends Window {
         this.hideWithItemClick = heideWithItemClick;
     }
 
-    public MenuItem addItem(int ID, CharSequence StringId, Drawable icon) {
-        MenuItem item = addItem(ID, StringId);
+    public MenuItem addMenuItem(CharSequence titleTranlationId, String addUnTranslatedPart, Drawable icon, ClickListener clickListener) {
+        MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
+        // String titleTranslation = (titleTranlationId.length() == 0 ? "" : Translation.get(titleTranlationId.toString()).toString());
+        item.setTitle((titleTranlationId.length() == 0 ? "" : Translation.get(titleTranlationId.toString()).toString()) + addUnTranslatedPart);
         if (icon != null)
             item.setIcon(icon);
+        if (clickListener != null)
+            item.addListener(clickListener);
+        mItems.add(item);
         return item;
     }
 
-    private MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, boolean withoutTranslation, Drawable icon, Runnable runnable) {
-        MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
-        if (titleTranlationId.length() == 0) withoutTranslation = true;
-        item.setTitle((withoutTranslation ? titleTranlationId : Translation.get(titleTranlationId.toString())) + titleExtension);
-        if (icon != null)
-            item.setIcon(icon);
-        item.addListener(new ClickListener() {
+    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, boolean checked, ClickListener clickListener) {
+        MenuItem item = addMenuItem(titleTranlationId, titleExtension, icon, clickListener);
+        item.setCheckable(true);
+        item.setChecked(checked);
+        return item;
+    }
+
+    public MenuItem addMoreMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Menu moreMenu) {
+        MenuItem mi = addMenuItem(titleTranlationId, titleExtension, icon, (Runnable) null);
+        mi.setMoreMenu(moreMenu);
+        return mi;
+    }
+
+    public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Runnable runnable) {
+        return addMenuItem(titleTranlationId, titleExtension, icon, new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (mustHandle(event)) {
                     runnable.run();
                 }
             }
         });
-        mItems.add(item);
-        return item;
-    }
-
-    public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Runnable runnable) {
-        return addMenuItem(titleTranlationId, titleExtension, false, icon, runnable);
     }
 
     public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, Runnable runnable) {
-        return addMenuItem(titleTranlationId, "", false, icon, runnable);
+        return addMenuItem(titleTranlationId, "", icon, runnable);
     }
 
-    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, boolean checked, boolean withoutTranslation, Runnable runnable) {
-        MenuItem item = addMenuItem(titleTranlationId, "", withoutTranslation, null, runnable);
+    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, boolean checked, Runnable runnable) {
+        MenuItem item = addMenuItem(titleTranlationId, titleExtension, null, runnable);
         item.setCheckable(true);
         item.setChecked(checked);
         return item;
     }
+
     public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, boolean checked, Runnable runnable) {
-        return addCheckableMenuItem(titleTranlationId, checked, false, runnable);
+        return addCheckableMenuItem(titleTranlationId, "", null, checked, runnable);
     }
+
 
     public void addItem(final MenuItem menuItem) {
 
@@ -171,7 +174,7 @@ public class Menu extends Window {
             }
 
             @Override
-            public boolean longClicked(Actor actor, float x, float y) {
+            public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
                 return false;
             }
         });
@@ -179,37 +182,12 @@ public class Menu extends Window {
         mItems.add(menuItem);
     }
 
-    public MenuItem addItem(int ID, CharSequence StringId) {
-        return addItem(ID, StringId, "", false);
-    }
-
     public MenuItem addItem(int ID, CharSequence StringId, boolean withoutTranslation) {
         return addItem(ID, StringId, "", withoutTranslation);
     }
 
-    public MenuItem addItem(int ID, CharSequence StringId, String appendix, Sprite icon) {
-        MenuItem item = addItem(ID, StringId, appendix);
-        if (icon != null)
-            item.setIcon(new SpriteDrawable(icon));
-        return item;
-    }
-
-    public MenuItem addItem(int ID, CharSequence StringId, String appendix, Drawable icon) {
-        MenuItem item = addItem(ID, StringId, appendix);
-        if (icon != null)
-            item.setIcon(icon);
-        return item;
-    }
-
     public MenuItem addItem(int ID, CharSequence StringId, String appendix) {
         return addItem(ID, StringId, appendix, false);
-    }
-
-    public MenuItem addItem(int index, String text, Drawable drawable, boolean withoutTranslation) {
-        MenuItem item = addItem(index, text, "", withoutTranslation);
-        if (drawable != null)
-            item.setIcon(drawable);
-        return item;
     }
 
     public MenuItem addItem(int ID, CharSequence StringId, String appendix, boolean withoutTranslation) {
@@ -227,17 +205,6 @@ public class Menu extends Window {
         item.setTitle(trans);
         addItem(item);
 
-        return item;
-    }
-
-    public MenuItem addCheckableItem(int ID, CharSequence StringId, boolean checked) {
-        return addCheckableItem(ID, StringId, checked, false);
-    }
-
-    public MenuItem addCheckableItem(int ID, CharSequence StringId, boolean checked, boolean withoutTranslation) {
-        MenuItem item = addItem(ID, StringId, "", withoutTranslation);
-        item.setCheckable(true);
-        item.setChecked(checked);
         return item;
     }
 
@@ -344,11 +311,10 @@ public class Menu extends Window {
         String title = getName(); // !!! name is here(local access) and in actor(public getter/setter)
         if (title.length() > 0) {
             if (title.startsWith("-"))
-                title=title.substring(1);
+                title = title.substring(1);
             else
-                title=Translation.get(title).toString();
-        }
-        else title = " ";
+                title = Translation.get(title).toString();
+        } else title = " ";
         titleLabel = new VisLabel(title, "menu_title_act");
 
         if (parentMenu != null) {

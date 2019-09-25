@@ -1,63 +1,10 @@
-apply plugin: 'java'
-
-configurations { natives }
-
-
-repositories {
-    flatDir {
-        dirs "./libs"
-    }
-
-    maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-    natives ":libPP-platform-0.9.0-SNAPSHOT-natives-desktop:"
-}
-
-
-dependencies {
-    implementation project(':core')
-    implementation project(':gps-simulator')
-    implementation project(':cb3-file-transfer')
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    implementation 'com.kitfox.svg:svg-salamander:1.0'
-    implementation 'commons-cli:commons-cli:1.3.1'
-    implementation "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
-    implementation "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
-    implementation "org.slf4j:slf4j-api:$slf4jVersion"
-    implementation "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
-    
-
-    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
-    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-    implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    
-    
-    //vtm
-    implementation "org.mapsforge:vtm-gdx:$vtmVersion"
-    implementation("org.mapsforge:vtm-desktop:$vtmVersion") {
-        exclude group: 'com.metsci.ext.com.kitfox.svg'
-    }
-
-    implementation("org.mapsforge:vtm-desktop-lwjgl:$vtmVersion")
-
-    
-    
-    implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
-    implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
-    implementation "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
-}
-
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.resources.srcDirs = ["./workingDir"]
 
-project.ext.mainClassName = "de.longri.cachebox3.desktop.touch.TouchLauncher"
-project.ext.assetsDir = new File("workingDir")
+project.ext.mainClassName = "com.badlogic.gdx.backends.lwjgl3.TouchLwjgl3Launcher"
+project.ext.assetsDir = new File("./workingDir")
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -67,23 +14,32 @@ task run(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
 }
 
+task debug(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+    debug = true
+}
 
-task launcherJar(type: Jar, dependsOn: classes) {
-    classifier = 'launcher'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    exclude 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.SF'
+task dist(type: Jar) {
     manifest {
-        attributes('Main-Class': 'de.longri.cachebox3.desktop.touch.TouchLauncher')
+        attributes 'Main-Class': project.mainClassName
+    }
+    from {
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     with jar
 }
+
+
+dist.dependsOn classes
+
 
 task copyAssets(type: Copy) {
     from("../android/assets")
     into("./workingDir")
 }
 
-
-tasks.withType(JavaCompile) {
-    compileTask -> compileTask.dependsOn copyAssets
-}
+copyAssets.dependsOn classes

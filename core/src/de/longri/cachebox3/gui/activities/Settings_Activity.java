@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -40,6 +39,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
@@ -47,7 +47,7 @@ import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.ApiButton;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
+import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.FloatControl;
 import de.longri.cachebox3.gui.widgets.SelectBox;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
@@ -57,7 +57,6 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.CharSequenceUtil;
-import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SoundCache;
 import org.slf4j.Logger;
@@ -67,6 +66,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
+import static de.longri.cachebox3.settings.Settings.GcLogin;
 
 /**
  * Created by Longri on 24.08.2016.
@@ -82,8 +82,8 @@ public class Settings_Activity extends ActivityBase {
             finish();
         }
     };
-    Label.LabelStyle nameStyle, descStyle, defaultValuStyle, valueStyle;
-    private CharSequenceButton btnOk, btnCancel, btnMenu;
+    private Label.LabelStyle nameStyle, descStyle, defaultValueStyle, valueStyle;
+    private CB_Button btnOk, btnCancel, btnMenu;
     private float itemWidth;
     private Array<WidgetGroup> listViews = new Array<>();
     private Array<CharSequence> listViewsNames = new Array<>();
@@ -125,9 +125,9 @@ public class Settings_Activity extends ActivityBase {
 
     private void createButtons() {
 
-        btnOk = new CharSequenceButton(Translation.get("save"));
-        btnMenu = new CharSequenceButton("...");
-        btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        btnOk = new CB_Button(Translation.get("save"));
+        btnMenu = new CB_Button("...");
+        btnCancel = new CB_Button(Translation.get("cancel"));
 
         this.addActor(btnOk);
         this.addActor(btnMenu);
@@ -159,6 +159,7 @@ public class Settings_Activity extends ActivityBase {
 
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+// todo implement  QuickButton config setting
 
 //                String ActionsString = "";
 //                int counter = 0;
@@ -192,9 +193,9 @@ public class Settings_Activity extends ActivityBase {
         descStyle.font = style.descFont;
         descStyle.fontColor = style.descFontColor;
 
-        defaultValuStyle = new Label.LabelStyle();
-        defaultValuStyle.font = style.defaultValueFont;
-        defaultValuStyle.fontColor = style.defaultValueFontColor;
+        defaultValueStyle = new Label.LabelStyle();
+        defaultValueStyle.font = style.defaultValueFont;
+        defaultValueStyle.fontColor = style.defaultValueFontColor;
 
         valueStyle = new Label.LabelStyle();
         valueStyle.font = style.valueFont;
@@ -202,10 +203,8 @@ public class Settings_Activity extends ActivityBase {
 
 
         final Array<SettingCategory> settingCategories = new Array<>();
-        SettingCategory[] tmp = SettingCategory.values();
-        for (SettingCategory item : tmp) {
+        for (SettingCategory item : SettingCategory.values()) {
             if (item != SettingCategory.Button) {
-
                 //add only non empty
                 if (getSettingsOfCategory(item).size > 0)
                     settingCategories.add(item);
@@ -234,12 +233,9 @@ public class Settings_Activity extends ActivityBase {
 
         final ListView lv = new ListView(VERTICAL);
         lv.setSelectable(NONE);
-        CB.postOnNextGlThread(new Runnable() {
-            @Override
-            public void run() {
-                lv.setAdapter(listViewAdapter);
-                showListView(lv, Translation.get("SettingsTitle"), true);
-            }
+        CB.postOnNextGlThread(() -> {
+            lv.setAdapter(listViewAdapter);
+            showListView(lv, Translation.get("SettingsTitle"), true);
         });
     }
 
@@ -413,7 +409,7 @@ public class Settings_Activity extends ActivityBase {
 
 
         if (category == SettingCategory.Login) {
-            SettingsListGetApiButton<?> lgIn = new SettingsListGetApiButton<Object>(category.name(), SettingCategory.Button, SettingMode.Normal, SettingStoreType.Global, SettingUsage.ACB);
+            SettingsListGetApiButton<?> lgIn = new SettingsListGetApiButton<>(category.name(), SettingCategory.Button, SettingMode.Normal, SettingStoreType.Global, SettingUsage.ACB);
             categorySettingsList.add(lgIn);
         }
 
@@ -450,13 +446,10 @@ public class Settings_Activity extends ActivityBase {
 
         final ListView newListView = new ListView(VERTICAL);
         newListView.setSelectable(NONE);
-        CB.postOnNextGlThread(new Runnable() {
-            @Override
-            public void run() {
-                newListView.setAdapter(listViewAdapter);
-                newListView.setUserObject(category);
-                showListView(newListView, Translation.get(category.name()), animate);
-            }
+        CB.postOnNextGlThread(() -> {
+            newListView.setAdapter(listViewAdapter);
+            newListView.setUserObject(category);
+            showListView(newListView, Translation.get(category.name()), animate);
         });
 
 
@@ -464,7 +457,7 @@ public class Settings_Activity extends ActivityBase {
 
     private Array<SettingBase<?>> getSettingsOfCategory(SettingCategory category) {
         //get all settings items of this category if the category mode correct
-        final Array<SettingBase<?>> categorySettingsList = new Array<SettingBase<?>>();
+        final Array<SettingBase<?>> categorySettingsList = new Array<>();
         boolean expert = Config.SettingsShowAll.getValue() || Config.SettingsShowExpert.getValue();
         boolean developer = Config.SettingsShowAll.getValue();
 
@@ -481,9 +474,6 @@ public class Settings_Activity extends ActivityBase {
                         break;
                     case Expert:
                         show = expert;
-                        break;
-                    case Never:
-                        show = false;
                         break;
                 }
 
@@ -547,13 +537,25 @@ public class Settings_Activity extends ActivityBase {
         final ApiButton apiButton = new ApiButton();
         table.add(apiButton).width(new Value.Fixed(buttonWidth)).center();
 
-
-        // add clickListener
+        // alternative you can set the ClickListener of apiButton
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
-                    apiButton.generateKey();
+                    PlatformConnector.getApiKey(accessToken -> {
+                        // store the encrypted AccessToken in the Config file
+                        if (Config.UseTestUrl.getValue()) {
+                            Config.AccessTokenForTest.setEncryptedValue(accessToken);
+                        } else {
+                            Config.AccessToken.setEncryptedValue(accessToken);
+                        }
+                        GroundspeakAPI.getInstance().setAuthorization();
+                        String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
+                        GcLogin.setValue(userNameOfAuthorization);
+                        // do not Config.AcceptChanges(); if you do the settings will be restored
+                        // refresh settings view
+                        showCategory(SettingCategory.Login, true);
+                    });
                     event.cancel();
                     event.handle();
                 }
@@ -585,27 +587,22 @@ public class Settings_Activity extends ActivityBase {
         label.setAlignment(Align.left);
         nameSliderTable.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
         nameSliderTable.row();
-        final FloatControl floatControl = new FloatControl(0f, 1f, 0.001f, true, new FloatControl.ValueChangeListener() {
-            @Override
-            public void valueChanged(float value, boolean dragged) {
-                if (!dragged) {
-
-                    //TODO set value as property with change to setting.dirty
-                    Audio newAudio = new Audio(setting.getValue());
-                    newAudio.Volume = value;
-                    setting.setValue(newAudio);
-
-                    if (audioName.equalsIgnoreCase("GlobalVolume"))
-                        SoundCache.play(SoundCache.Sounds.Global, true);
-                    if (audioName.equalsIgnoreCase("Approach"))
-                        SoundCache.play(SoundCache.Sounds.Approach, true);
-                    if (audioName.equalsIgnoreCase("GPS_lose"))
-                        SoundCache.play(SoundCache.Sounds.GPS_lose, true);
-                    if (audioName.equalsIgnoreCase("GPS_fix"))
-                        SoundCache.play(SoundCache.Sounds.GPS_fix, true);
-                    if (audioName.equalsIgnoreCase("AutoResortSound"))
-                        SoundCache.play(SoundCache.Sounds.AutoResortSound, true);
-                }
+        final FloatControl floatControl = new FloatControl(0f, 1f, 0.001f, true, (value, dragged) -> {
+            if (!dragged) {
+                //TODO set value as property with change to setting.dirty
+                Audio newAudio = new Audio(setting.getValue());
+                newAudio.Volume = value;
+                setting.setValue(newAudio);
+                if (audioName.equalsIgnoreCase("GlobalVolume"))
+                    SoundCache.play(SoundCache.Sounds.Global, true);
+                if (audioName.equalsIgnoreCase("Approach"))
+                    SoundCache.play(SoundCache.Sounds.Approach, true);
+                if (audioName.equalsIgnoreCase("GPS_lose"))
+                    SoundCache.play(SoundCache.Sounds.GPS_lose, true);
+                if (audioName.equalsIgnoreCase("GPS_fix"))
+                    SoundCache.play(SoundCache.Sounds.GPS_fix, true);
+                if (audioName.equalsIgnoreCase("AutoResortSound"))
+                    SoundCache.play(SoundCache.Sounds.AutoResortSound, true);
             }
         });
         nameSliderTable.add(floatControl).expandX().fillX();
@@ -671,8 +668,8 @@ public class Settings_Activity extends ActivityBase {
         // add defaultValue line
 
         table.row();
-        VisLabel desclabel = new VisLabel("default: " + String.valueOf(((int) (setting.getDefaultValue().Volume) * 100))
-                + "%", defaultValuStyle);
+        VisLabel desclabel = new VisLabel("default: " + (int) (setting.getDefaultValue().Volume) * 100
+                + "%", defaultValueStyle);
         desclabel.setWrap(true);
         desclabel.setAlignment(Align.left);
         table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -714,7 +711,7 @@ public class Settings_Activity extends ActivityBase {
         // add defaultValue line
 
         table.row();
-        VisLabel desclabel = new VisLabel("default: " + String.valueOf(setting.getDefaultValue()), defaultValuStyle);
+        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
         desclabel.setWrap(true);
         desclabel.setAlignment(Align.left);
         table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -737,7 +734,7 @@ public class Settings_Activity extends ActivityBase {
                         public void canceled() {
 
                         }
-                    }, Translation.get(setting.getName()).toString(), setting.getValue(), "");
+                    }, 0, Translation.get(setting.getName()).toString(), setting.getValue(), "");
                     event.cancel();
                     event.handle();
                 }
@@ -862,7 +859,7 @@ public class Settings_Activity extends ActivityBase {
         // add value line
 
         table.row();
-        final VisLabel valuelabel = new VisLabel("Value: " + String.valueOf(setting.getValue()), valueStyle);
+        final VisLabel valuelabel = new VisLabel("Value: " + setting.getValue(), valueStyle);
         valuelabel.setWrap(true);
         valuelabel.setAlignment(Align.left);
         table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -874,7 +871,7 @@ public class Settings_Activity extends ActivityBase {
 
         // add defaultValue line
         table.row();
-        VisLabel desclabel = new VisLabel("default: " + String.valueOf(setting.getDefaultValue()), defaultValuStyle);
+        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
         desclabel.setWrap(true);
         desclabel.setAlignment(Align.left);
         table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -887,22 +884,19 @@ public class Settings_Activity extends ActivityBase {
                     selectClearMenu.addMenuItem("select_folder", null, () -> {
                         FileChooser folderChooser = new FileChooser(Translation.get("selectFolder"),
                                 FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
-                        folderChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
-                            @Override
-                            public void selected(FileHandle fileHandle) {
-                                if (fileHandle == null) return;
-                                // check WriteProtection
-                                String path = fileHandle.file().getAbsolutePath();
-                                if (setting.needWritePermission() && !Utils.checkWritePermission(path)) {
-                                    CharSequence WriteProtectionMsg = Translation.get("NoWriteAcces");
-                                    CB.viewmanager.toast(WriteProtectionMsg, ViewManager.ToastLength.EXTRA_LONG);
-                                } else {
-                                    setting.setValue(path);
-                                    valuelabel.setText("Value: " + String.valueOf(setting.getValue()));
-                                }
+                        folderChooser.setSelectionReturnListener(fileHandle -> {
+                            if (fileHandle == null) return;
+                            // check WriteProtection
+                            String path = fileHandle.file().getAbsolutePath();
+                            if (setting.needWritePermission() && !Utils.checkWritePermission(path)) {
+                                CharSequence WriteProtectionMsg = Translation.get("NoWriteAcces");
+                                CB.viewmanager.toast(WriteProtectionMsg, ViewManager.ToastLength.EXTRA_LONG);
+                            } else {
+                                setting.setValue(path);
+                                valuelabel.setText("Value: " + String.valueOf(setting.getValue()));
                             }
                         });
-                        folderChooser.setDirectory(Gdx.files.absolute(setting.getValue()));
+                        folderChooser.setDirectory(CB.WorkPathFileHandle, true);
                         folderChooser.show();
                     });
                     selectClearMenu.addMenuItem("ClearPath", null, () -> {
@@ -949,13 +943,7 @@ public class Settings_Activity extends ActivityBase {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
                                     listView.layout();
-                                    Gdx.app.postRunnable(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            listView.setScrollPos(scrollPos);
-                                        }
-                                    });
-
+                                    Gdx.app.postRunnable(() -> listView.setScrollPos(scrollPos));
                                 }
                             }
                         }
@@ -985,13 +973,7 @@ public class Settings_Activity extends ActivityBase {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
                                     listView.layout();
-                                    Gdx.app.postRunnable(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            listView.setScrollPos(scrollPos);
-                                        }
-                                    });
-
+                                    Gdx.app.postRunnable(() -> listView.setScrollPos(scrollPos));
                                 }
                             }
                         }
@@ -1021,12 +1003,7 @@ public class Settings_Activity extends ActivityBase {
                                     final ListView listView = (ListView) actor;
                                     final float scrollPos = listView.getScrollPos();
                                     listView.layout();
-                                    Gdx.app.postRunnable(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            listView.setScrollPos(scrollPos);
-                                        }
-                                    });
+                                    Gdx.app.postRunnable(() -> listView.setScrollPos(scrollPos));
 
                                 }
                             }
@@ -1117,7 +1094,7 @@ public class Settings_Activity extends ActivityBase {
         // add defaultValue line
 
         table.row();
-        VisLabel desclabel = new VisLabel("default: " + String.valueOf(setting.getDefaultValue()), defaultValuStyle);
+        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
         desclabel.setWrap(true);
         desclabel.setAlignment(Align.left);
         table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -1139,12 +1116,7 @@ public class Settings_Activity extends ActivityBase {
 
     private ListViewItem getNumericItemTable(int listIndex, final VisLabel valueLabel, final SettingBase<?> setting) {
 
-        setting.addChangedEventListener(new IChanged() {
-            @Override
-            public void isChanged() {
-                valueLabel.setText(setting.getValue().toString());
-            }
-        });
+        setting.addChangedEventListener(() -> valueLabel.setText(setting.getValue().toString()));
 
 
         ListViewItem table = new ListViewItem(listIndex) {
@@ -1176,7 +1148,7 @@ public class Settings_Activity extends ActivityBase {
         // add defaultValue line
 
         table.row();
-        VisLabel desclabel = new VisLabel("default: " + String.valueOf(setting.getDefaultValue()), defaultValuStyle);
+        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
         desclabel.setWrap(true);
         desclabel.setAlignment(Align.left);
         table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();

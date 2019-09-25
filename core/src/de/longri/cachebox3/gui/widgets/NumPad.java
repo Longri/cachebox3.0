@@ -66,7 +66,7 @@ public class NumPad extends Catch_Table implements TextField.OnscreenKeyboard, D
 
     private final boolean hasOk, hasCancel, hasDot, hasDelBack;
     private final VisTextButton btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDel, btnBack, btnDot, btnLeft, btnRight;
-    private final CharSequenceButton btnOk, btnCancel;
+    private final CB_Button btnOk, btnCancel;
     private float targetWidth;
 
 
@@ -117,8 +117,8 @@ public class NumPad extends Catch_Table implements TextField.OnscreenKeyboard, D
         btn9 = new VisTextButton("9");
         btnBack = new VisTextButton("Back");
         btnDel = new VisTextButton("Del");
-        btnOk = new CharSequenceButton(Translation.get("ok"));
-        btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        btnOk = new CB_Button(Translation.get("ok"));
+        btnCancel = new CB_Button(Translation.get("cancel"));
         btnDot = new VisTextButton(".");
         btnLeft = new VisTextButton("<");
         btnRight = new VisTextButton(">");

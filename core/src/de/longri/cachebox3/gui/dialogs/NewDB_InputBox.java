@@ -16,79 +16,54 @@
 package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisTextField;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
+import de.longri.cachebox3.gui.widgets.CB_CheckBox;
+import de.longri.cachebox3.gui.widgets.CB_Label;
+import de.longri.cachebox3.gui.widgets.EditTextField;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.translation.Translation;
 
 /**
  * Created by Longri on 03.09.16.
  */
-public class NewDB_InputBox extends ButtonDialog {
+public class NewDB_InputBox {
+    private ButtonDialog dialog;
+    private Catch_Table contentBox;
+    private CB_Label lblDBName;
+    private EditTextField edtDBName;
+    private CB_CheckBox checkBox;
+    private OnMsgBoxClickListener listener;
+
     public NewDB_InputBox(OnMsgBoxClickListener listener) {
-        super("NewDB", createContentBox(), Translation.get("NewDB"), MessageBoxButtons.OKCancel, listener);
-    }
-
-    private static Table createContentBox() {
-        Table contentBox = new Table();
-
-        VisTextField textField = new VisTextField();
-        textField.setMessageText(Translation.get("InsNewDBName").toString());//TODO change to CharSequence
-
-        CharSequenceCheckBox checkBox = new CharSequenceCheckBox(Translation.get("UseDefaultRep"));
-
-        float pad = CB.scaledSizes.MARGIN;
-        contentBox.add(textField).pad(pad).left().fillX();
-        contentBox.row();
-        contentBox.add(checkBox).pad(pad).left().fillX();
+        lblDBName = new CB_Label(Translation.get("InsNewDBName"));
+        edtDBName = new EditTextField("");
+        checkBox = new CB_CheckBox(Translation.get("UseDefaultRep"));
+        contentBox = new Catch_Table(true);
+        contentBox.addLast(lblDBName);
+        contentBox.addLast(edtDBName);
+        contentBox.addLast(checkBox);
         contentBox.pack();
         contentBox.layout();
-        return contentBox;
+        this.listener = listener;
+        dialog = new ButtonDialog("NewDB", contentBox, Translation.get("NewDB"), MessageBoxButtons.OKCancel, listener);
     }
 
-
-    protected void result(Object which) {
-        if (msgBoxClickListener != null) {
-
-            //get TextFiled and Checkbox from input
-            VisTextField textField = null;
-            VisCheckBox checkBox = null;
-            for (Actor actor : this.contentBox.getChildren()) {
-                if (actor instanceof VisCheckBox) checkBox = (VisCheckBox) actor;
-                else if (actor instanceof VisTextField) textField = (VisTextField) actor;
-            }
-
-            String newDbName = textField.getText();
-            boolean okClicked = ((Integer) which) == BUTTON_POSITIVE;
-            if (okClicked && (newDbName == null || newDbName.isEmpty())) {
-                CB.viewmanager.toast(Translation.get("MustEnterName"));//TODO Missing translation
-                return;
-            }
-
-            Object[] objects = new Object[2];
-            objects[0] = new Boolean(checkBox.isChecked());
-            objects[1] = newDbName;
-
-            msgBoxClickListener.onClick((Integer) which, objects);
-            this.hide();
-        }
-    }
-
-
-    @Override
     public void show() {
-        super.show();
+        dialog.show();
         // enable continues rendering for cursor blink
         Gdx.graphics.setContinuousRendering(true);
     }
 
-    @Override
     public void hide() {
-        super.hide();
+        dialog.hide();
         // disable continues rendering
         Gdx.graphics.setContinuousRendering(false);
+    }
+
+    public String getNewDB_Name() {
+        return edtDBName.getText();
+    }
+
+    public boolean ownRepository() {
+        return !checkBox.isChecked();
     }
 }

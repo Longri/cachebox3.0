@@ -15,21 +15,14 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.apis.groundspeak_api.ApiResultState;
-import de.longri.cachebox3.apis.groundspeak_api.GroundspeakLiveAPI;
-import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.skin.styles.ApiButtonStyle;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Calendar;
 
 /**
  * Created by Longri on 11.04.2017.
@@ -42,7 +35,6 @@ public class ApiButton extends IconButton {
     public ApiButton() {
         super("");
         this.getLabel().setText(Translation.get("getApiKey"));
-        this.addListener(clickListener);
         this.style = VisUI.getSkin().get("ApiButton", ApiButtonStyle.class);
         TextButtonStyle btnStyle = new VisTextButtonStyle();
         btnStyle.up = style.up;
@@ -58,9 +50,11 @@ public class ApiButton extends IconButton {
     public void layout() {
         this.getLabel().setHeight(this.getHeight());
         this.getCell(this.getLabel()).spaceLeft(CB.scaledSizes.MARGINx2);
-        image.setBounds(this.getWidth() - (style.unchecked.getMinHeight() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN, style.unchecked.getMinHeight(), style.unchecked.getMinHeight());
+        if (image != null && style != null && style.unchecked != null)
+            image.setBounds(this.getWidth() - (style.unchecked.getMinHeight() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN, style.unchecked.getMinHeight(), style.unchecked.getMinHeight());
         super.layout();
     }
+
 
     protected void setIcon() {
         boolean Entry = false;
@@ -73,86 +67,20 @@ public class ApiButton extends IconButton {
         }
 
         if (Entry) {
-            ApiResultState state = GroundspeakLiveAPI.chkMembership(true);
-
-            switch (state) {
-                case API_ERROR:
-                case MEMBERSHIP_TYPE_INVALID:
-                    image.setDrawable(style.invalid);
-                    break;
-                case EXPIRED_API_KEY:
-                    image.setDrawable(style.expired);
-                    break;
-                case MEMBERSHIP_TYPE_GUEST:
-                case MEMBERSHIP_TYPE_BASIC:
-                case MEMBERSHIP_TYPE_PREMIUM:
-                    image.setDrawable(style.check);
-                    break;
-
-                default:
-                    image.setDrawable(style.unchecked);
-                    break;
-            }
-
-
-        } else {
-            image.setDrawable(style.unchecked);
-        }
-
-        //TODO set icon for invalid and expired
-
-    }
-
-    private final ClickListener clickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            generateKey();
-        }
-    };
-
-    public void generateKey() {
-        log.debug("Create Api Key clicked");
-        PlatformConnector.getApiKey(new GenericCallBack<String>() {
-            @Override
-            public void callBack(String accessToken) {
-                log.debug("return create ApiKey :{}", accessToken);
-
-                GroundspeakLiveAPI.CacheStatusValid = false;
-                GroundspeakLiveAPI.CacheStatusLiteValid = false;
-
-                // store the encrypted AccessToken in the Config file
-                if (Config.UseTestUrl.getValue()) {
-                    Config.AccessTokenForTest.setEncryptedValue(accessToken);
+            if (GroundspeakAPI.getInstance().isAccessTokenInvalid()) {
+                setIcon(style.invalid);
+                // setIcon(style.expired);
+                // setIcon(style.check);
+            } else {
+                if (GroundspeakAPI.getInstance().isPremiumMember()) {
+                    setIcon(style.unchecked);
                 } else {
-                    Config.AccessToken.setEncryptedValue(accessToken);
-                }
-
-                //reset ApiKey validation
-                GroundspeakLiveAPI.resetApiIsChecked();
-
-                //set config stored MemberChipType as expired
-                Calendar cal = Calendar.getInstance();
-                Config.memberChipType.setExpiredTime(cal.getTimeInMillis());
-
-
-                Config.AcceptChanges();
-                String act = GroundspeakLiveAPI.getAccessToken();
-                if (act.length() > 0) {
-                    GroundspeakLiveAPI.getMembershipType(new GenericCallBack<ApiResultState>() {
-                        @Override
-                        public void callBack(ApiResultState status) {
-                            if (!status.isErrorState()) {
-                                log.debug("Read User name/State {}/{}", GroundspeakLiveAPI.memberName, status);
-                                Config.GcLogin.setValue(GroundspeakLiveAPI.memberName);
-                                Config.AcceptChanges();
-                                CB.viewmanager.toast("Welcome : " + GroundspeakLiveAPI.memberName);
-                            } else {
-                                CB.viewmanager.toast("Welcome : " + GroundspeakLiveAPI.memberName);
-                                log.debug("Can't read UserName State: {}", GroundspeakLiveAPI.memberName, status);
-                            }
-                        }
-                    });
+                    setIcon(style.unchecked);
                 }
             }
-        });
+        } else {
+            setIcon(style.unchecked);
+        }
+
     }
 }

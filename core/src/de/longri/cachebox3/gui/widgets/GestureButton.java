@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.actions.AbstractAction;
@@ -69,9 +68,8 @@ public class GestureButton extends Button {
         this.hasContextMenu = hasContextMenu;
     }
 
-
-    public GestureButton(String styleName, ViewManager viewManager) {
-        style = VisUI.getSkin().get(styleName, GestureButtonStyle.class);
+    public GestureButton(GestureButtonStyle style, ViewManager viewManager) {
+        this.style = style;
         style.checked = style.select;
 
         filterStyle = new GestureButtonStyle();
@@ -262,7 +260,7 @@ public class GestureButton extends Button {
         }
 
         @Override
-        public boolean longClicked(Actor actor, float x, float y) {
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
             log.debug("onLongClick");
             // GL_MsgBox.show("Button " + Me.getName() + " recivet a LongClick Event");
             // Wenn diesem Button mehrere Actions zugeordnet sind dann wird nach einem Lang-Click ein Menü angezeigt aus dem eine dieser
@@ -357,9 +355,9 @@ public class GestureButton extends Button {
 
         for (ActionButton ba : buttonActions) {
             AbstractAction action = ba.getAction();
-            if (action == null || !action.getEnabled())
-                continue;
-            MenuItem mi = longClickMenu.addItem(action.getId(), action.getName(), action.getNameExtention());
+            // if (action == null || !action.getEnabled())
+            //    continue;
+            MenuItem mi = longClickMenu.addItem(action.getId(), action.getName(), action.getNameExtension());
             mi.setEnabled(action.getEnabled());
             mi.setCheckable(action.getIsCheckable());
             mi.setChecked(action.getIsChecked());
@@ -374,13 +372,13 @@ public class GestureButton extends Button {
     public void draw(Batch batch, float parentAlpha) {
 
         //check if filter changed
-        if (viewManager.isFilters() != isLastFiltered) {
-            if (viewManager.isFilters() && style.upFiltered != null) {
+        if (viewManager.isFiltered() != isLastFiltered) {
+            if (viewManager.isFiltered() && style.upFiltered != null) {
                 this.setStyle(filterStyle);
             } else {
                 this.setStyle(style);
             }
-            isLastFiltered = viewManager.isFilters();
+            isLastFiltered = viewManager.isFiltered();
         }
 
         super.draw(batch, parentAlpha);
@@ -390,7 +388,7 @@ public class GestureButton extends Button {
             Vector2 stagePos = new Vector2();
             this.localToStageCoordinates(stagePos);
 
-            boolean isFiltered = viewManager.isFilters();
+            boolean isFiltered = viewManager.isFiltered();
 
             if (!isFiltered && style.hasMenu != null) {
                 style.hasMenu.draw(batch, stagePos.x, stagePos.y, this.getWidth(), this.getHeight());

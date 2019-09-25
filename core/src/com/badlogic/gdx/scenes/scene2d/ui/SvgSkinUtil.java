@@ -32,15 +32,18 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.drawables.*;
 import de.longri.cachebox3.gui.skin.styles.*;
+import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SkinColor;
 import de.longri.libPP.PixmapPacker;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
+import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -60,6 +63,10 @@ public class SvgSkinUtil {
 
     public static TextureAtlas createTextureAtlasFromImages(boolean forceNew, String skinName, ArrayList<ScaledSvg> scaledSvgList,
                                                             FileHandle skinFile) {
+
+        log.debug("Used memory before create Atlas: {}", CB.getMemoryUsage());
+
+
         FileHandle cachedTexturatlasFileHandle = null;
         if (!forceNew) {
             cachedTexturatlasFileHandle = Gdx.files.absolute(CB.WorkPath + TMP_UI_ATLAS_PATH + skinName + TMP_UI_ATLAS);
@@ -85,6 +92,7 @@ public class SvgSkinUtil {
                             }
                         }
                     }, true);
+                    log.debug("Used memory after load Atlas: {}", CB.getMemoryUsage());
                     return atlas[0];
                 }
             }
@@ -96,28 +104,39 @@ public class SvgSkinUtil {
             @Override
             public void run() {
                 boolean forcePot = CanvasAdapter.platform == Platform.IOS;
-                packer[0] = new PixmapPacker(forcePot, PixmapPacker.getDeviceMaxGlTextureSize(), padding);
+                packer[0] = new PixmapPacker(forcePot, BuildInfo.getRevision().equals("JUnitTest") ? 4096 : PixmapPacker.getDeviceMaxGlTextureSize(), padding);
             }
         }, true);
 
         EventHandler.fire(new IncrementProgressEvent(0, "load Skin | Create new TextureAtlas", scaledSvgList.size()));
 
-
+        FileHandle fileHandle;
         for (ScaledSvg scaledSvg : scaledSvgList) {
 
             Pixmap pixmap = null;
             String name = null;
-            FileHandle fileHandle = skinFile.parent().child(scaledSvg.path);
+            fileHandle = skinFile.parent().child(scaledSvg.path);
 
             if (!fileHandle.exists()) continue;
             EventHandler.fire(new IncrementProgressEvent(1, "load Skin | Create new TextureAtlas \npack:" + scaledSvg.path));
-
+            InputStream stream = null;
             try {
                 name = scaledSvg.getRegisterName();
-                pixmap = Utils.getPixmapFromBitmap(PlatformConnector.getSvg(name, fileHandle.read(), PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale));
-
+                stream = fileHandle.read();
+                Bitmap svgBitmap = PlatformConnector.getSvg(name, stream, PlatformConnector.SvgScaleType.DPI_SCALED, scaledSvg.scale);
+                pixmap = Utils.getPixmapFromBitmap(svgBitmap);
+                svgBitmap.recycle();
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                if (stream != null) {
+                    try {
+                        stream.close();
+                        stream = null;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             log.debug("Pack Svg: " + name + " Size:" + pixmap.getWidth() + "/" + pixmap.getHeight());
@@ -126,16 +145,18 @@ public class SvgSkinUtil {
                 packer[0].pack(name, pixmap);
             }
         }
+        fileHandle = null;
+        System.gc();
 
         // add one pixel color for colorDrawable
         Pixmap pixmap = new Pixmap(2, 2, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
         packer[0].pack("color", pixmap);
-
         EventHandler.fire(new IncrementProgressEvent(20, "load Skin | Create new TextureAtlas \nGenerate Texture Atlas"));
 
         final TextureAtlas[] atlas = new TextureAtlas[1];
+        System.gc();
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
@@ -149,6 +170,7 @@ public class SvgSkinUtil {
             }
         }, true);
 
+        System.gc();
         int resultHashCode = HashAtlasWriter.getResultHashCode(scaledSvgList, skinFile);
 
         if (cachedTexturatlasFileHandle != null) {
@@ -173,6 +195,15 @@ public class SvgSkinUtil {
 
         packer[0].dispose();
         packer[0] = null;
+
+        System.gc();
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.debug("Used memory after create Atlas: {}", CB.getMemoryUsage());
+
         return atlas[0];
     }
 

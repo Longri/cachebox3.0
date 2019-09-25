@@ -18,96 +18,133 @@ package de.longri.cachebox3.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.Enumeration;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 /**
  * @author Longri from => http://stackoverflow.com/questions/981578/how-to-unzip-files-recursively-in-java
  */
 public class UnZip {
 
-    private final Logger log= LoggerFactory.getLogger(UnZip.class);
+    private final Logger log = LoggerFactory.getLogger(UnZip.class);
+
+    private final FileHandle targetFolder;
+
+    public UnZip() {
+        targetFolder = null;
+    }
+
+    public UnZip(FileHandle targetFolder) {
+        this.targetFolder = targetFolder;
+    }
 
     /**
      * Extract the given ZIP-File
      *
      * @param zipFile file to extract
-     * @return Extracted Folder Path as String
+     * @return Extracted Folder Path as String (Absolute)
+     * @throws IOException with IO error
+     */
+    public FileHandle extractFolder(String zipFile) throws IOException {
+        return extractFolder(Gdx.files.absolute(zipFile), null);
+    }
+
+    /**
+     * Extract the given ZIP-File
+     *
+     * @param zipFile file to extract
+     * @return Extracted Folder Path as FileHandle
      * @throws IOException with IO error
      */
     public FileHandle extractFolder(FileHandle zipFile) throws IOException {
-        String path = zipFile.file().getAbsolutePath();
-        String resultPath = extractFolder(path);
+        return extractFolder(zipFile, null);
+    }
+
+    /**
+     * Extract the given ZIP-File
+     *
+     * @param zipFile file to extract
+     * @return Extracted Folder Path as FileHandle
+     * @throws IOException with IO error
+     */
+    public FileHandle extractFolder(FileHandle zipFile, GenericCallBack<Double> progressCallBack) throws IOException {
+        String resultPath = extractFolder(zipFile, progressCallBack, new AtomicBoolean(false));
         return Gdx.files.absolute(resultPath);
     }
 
 
-    /**
-     * Extract the given ZIP-File
-     *
-     * @param zipFile file to extract
-     * @return Extracted Folder Path as String
-     * @throws IOException with IO error
+    /*
+    https://stackoverflow.com/questions/40050270/java-unzip-and-progress-bar
      */
-    public String extractFolder(String zipFile) throws IOException {
-        log.debug("extract => " + zipFile);
-        int BUFFER = 2048;
-        File file = new File(zipFile);
+    public String extractFolder(FileHandle fileHandle, GenericCallBack<Double> progressCallBack, AtomicBoolean cancel) throws IOException {
 
-        ZipFile zip = new ZipFile(file.getAbsolutePath());
-        String newPath = zipFile.substring(0, zipFile.length() - 4);
 
-        new File(newPath).mkdir();
-        Enumeration<?> zipFileEntries = zip.entries();
-
-        // Process each entry
-        while (zipFileEntries.hasMoreElements()) {
-            // grab a zip file entry
-            ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
-            String currentEntry = entry.getName();
-            File destFile = new File(newPath, currentEntry);
-            // destFile = FileFactory.createFile(newPath, destFile.getName());
-            File destinationParent = destFile.getParentFile();
-
-            // create the parent directory structure if needed
-            destinationParent.mkdirs();
-
-            destinationParent.setLastModified(entry.getTime()); // set original Datetime to be able to import ordered oldest first
-
-            if (!entry.isDirectory()) {
-                BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
-                int currentByte;
-                // establish buffer for writing file
-                byte data[] = new byte[BUFFER];
-
-                // write the current file to disk
-                FileOutputStream fos = new FileOutputStream(destFile);
-                BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER);
-
-                // read and write until last byte is encountered
-                while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
-                    dest.write(data, 0, currentByte);
-                }
-                dest.flush();
-                dest.close();
-                is.close();
-            }
-
-            destFile.setLastModified(entry.getTime()); // set original Datetime to be able to import ordered oldest first
-
-            if (currentEntry.endsWith(".zip")) {
-                // found a zip file, try to open
-                extractFolder(destFile.getAbsolutePath());
-            }
+        File folder;
+        if (this.targetFolder != null) {
+            String file = fileHandle.file().getCanonicalPath();
+            String newPath = file.substring(0, file.length() - 4);
+            folder = new File(newPath);
+        } else {
+            folder = fileHandle.parent().file();
         }
-        zip.close();
+        File zipfile = fileHandle.file();
 
-        return newPath;
+        FileInputStream is = new FileInputStream(zipfile.getCanonicalFile());
+        final AtomicInteger compleadReadedBytes = new AtomicInteger(0);
+        double zipFileLength = zipfile.length();
+        BufferedInputStream bis = new BufferedInputStream(is) {
+            public int read(byte b[], int off, int len) throws IOException {
+                int ret = super.read(b, off, len);
+                compleadReadedBytes.addAndGet(ret);
+                return ret;
+            }
+        };
+        ZipInputStream zis = new ZipInputStream(bis);
+        ZipEntry ze = null;
+        try {
+            while ((ze = zis.getNextEntry()) != null && !cancel.get()) {
+                File f = new File(folder.getCanonicalPath(), ze.getName());
+                if (ze.isDirectory()) {
+                    f.mkdirs();
+                    continue;
+                }
+                f.getParentFile().mkdirs();
+                OutputStream fos = new BufferedOutputStream(new FileOutputStream(f));
+                try {
+                    try {
+                        final byte[] buf = new byte[1024];
+                        int bytesRead;
+                        long nread = 0L;
+
+
+                        while (-1 != (bytesRead = zis.read(buf)) && !cancel.get()) {
+                            fos.write(buf, 0, bytesRead);
+                            nread += bytesRead;
+                            if (progressCallBack != null) {
+                                progressCallBack.callBack(((double) compleadReadedBytes.get() / zipFileLength) * 100.0);
+                            }
+                        }
+                    } finally {
+                        fos.close();
+                    }
+                } catch (final IOException ioe) {
+                    f.delete();
+                    throw ioe;
+                }
+            }
+        } finally {
+            zis.close();
+        }
+        if (progressCallBack != null) {
+            progressCallBack.callBack(100.0);
+        }
+        return folder.getCanonicalPath();
     }
 }

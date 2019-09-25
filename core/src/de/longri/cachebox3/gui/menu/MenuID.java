@@ -63,7 +63,7 @@ public class MenuID {
     public static final int AID_SHOW_SELECT_DB_DIALOG = 134;
     public static final int AID_SHOW_TRACK_MENU = 135;
     public static final int AID_SHOW_QUIT = 136;
-    public static final int AID_QUICK_FIELDNOTE = 137;
+    public static final int AID_QuickDraft = 137;
     public static final int AID_CHK_STATE = 138;
     public static final int AID_GENERATE_ROUTE = 139;
     public static final int AID_SHOW_PARKING_DIALOG = 140;
@@ -76,4 +76,6 @@ public class MenuID {
     public static final int AID_HELP = 209;
     public static final int AID_START_FILE_TRANSFER = 210;
     public static final int AID_GET_FRIENDS = 217;
+    public static final int AID_Download_FZK_Map = 218;
+    public static final int AID_FILE_X_PLORE = 219;
 }

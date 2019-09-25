@@ -20,7 +20,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.LatLong;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.backend.canvas.Color;
 import org.oscim.core.GeometryBuffer;
@@ -61,7 +61,7 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
     }
 
 
-    public void redrawLine(LatLong ownPosition) {
+    public void redrawLine(Coordinate ownPosition) {
         if (!this.isEnabled()) return;
 
         Coordinate selectedCoordinate = de.longri.cachebox3.events.EventHandler.getSelectedCoord();
@@ -156,7 +156,7 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
             this.invalidLine = true;
         }
 
-        public void setLine(LatLong selectedCoordinate, LatLong ownPosition) {
+        public void setLine(Coordinate selectedCoordinate, Coordinate ownPosition) {
             if (!layer.isEnabled()) return;
             doubles[3] = (ownPosition.getLongitude() + 180.0) / 360.0;
             doubles[7] = Math.sin(ownPosition.getLatitude() * (Math.PI / 180.0));

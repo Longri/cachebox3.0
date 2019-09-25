@@ -226,7 +226,7 @@ public enum QuickActions {
             case 17:
                 return Translation.get("DayNight");
             case 18:
-                return Translation.get("Fieldnotes");
+                return Translation.get("Drafts");
             case 19:
                 return Translation.get("QuickDraft");
             case 20:

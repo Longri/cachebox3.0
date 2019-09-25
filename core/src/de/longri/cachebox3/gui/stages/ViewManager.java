@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
@@ -37,6 +38,7 @@ import de.longri.cachebox3.gui.actions.Action_NavigateExt;
 import de.longri.cachebox3.gui.actions.Action_Toggle_Day_Night;
 import de.longri.cachebox3.gui.actions.show_activities.*;
 import de.longri.cachebox3.gui.actions.show_views.*;
+import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ActionButton;
@@ -84,10 +86,10 @@ public class ViewManager extends NamedStage
     private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
     private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
     private final Action_Quit action_quit = new Action_Quit();
-    private final Action_Show_DraftsView action_show_fieldNotesView = new Action_Show_DraftsView();
+    private final Action_Show_DraftsView action_show_DraftsView = new Action_Show_DraftsView();
 
     private FilterProperties actFilter = FilterInstances.ALL;
-    private final AtomicBoolean isFilters = new AtomicBoolean(false);
+    private final AtomicBoolean isFiltered = new AtomicBoolean(false);
     public final GlobalLocationReceiver locationReceiver;
 
     public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
@@ -118,11 +120,11 @@ public class ViewManager extends NamedStage
         if (Config.quickButtonLastShow.getValue())
             slider.setQuickButtonVisible();
 
-        db_button = new GestureButton("db", this);
-        cache_button = new GestureButton("cache", this);
-        navButton = new GestureButton("nav", this);
-        tool_button = new GestureButton("tool", this);
-        misc_button = new GestureButton("misc", this);
+        db_button = new GestureButton(VisUI.getSkin().get("db", GestureButtonStyle.class), this);
+        cache_button = new GestureButton(VisUI.getSkin().get("cache", GestureButtonStyle.class), this);
+        navButton = new GestureButton(VisUI.getSkin().get("nav", GestureButtonStyle.class), this);
+        tool_button = new GestureButton(VisUI.getSkin().get("tool", GestureButtonStyle.class), this);
+        misc_button = new GestureButton(VisUI.getSkin().get("misc", GestureButtonStyle.class), this);
 
         mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class));
         mainButtonBar.addButton(db_button);
@@ -163,7 +165,7 @@ public class ViewManager extends NamedStage
             log.debug("set New Filter: {}", filter.toString());
 
             actFilter = filter;
-            isFilters.set(!actFilter.equals(FilterInstances.ALL));
+            isFiltered.set(!actFilter.equals(FilterInstances.ALL));
 
             // store filter to config
             Config.FilterNew.setValue(actFilter.getJsonString());
@@ -181,8 +183,8 @@ public class ViewManager extends NamedStage
         }
     }
 
-    public boolean isFilters() {
-        return isFilters.get();
+    public boolean isFiltered() {
+        return isFiltered.get();
     }
 
     private String terrDiffToShortString(float value) {
@@ -202,7 +204,7 @@ public class ViewManager extends NamedStage
 
         if (actView != null) {
             final AbstractView dispView = actView;
-            log.debug("remove and dispose actView" + dispView.getName());
+            log.debug("remove and dispose actView: " + dispView.getName());
             this.getRoot().removeActor(dispView);
             CB.postAsync(new NamedRunnable("Dispose last View") {
                 @Override
@@ -263,7 +265,7 @@ public class ViewManager extends NamedStage
         // assign the actions to the buttons
 
         db_button.addAction(new ActionButton(action_show_cacheList, true, GestureDirection.Up));
-        db_button.addAction(new ActionButton(new Action_ParkingDialog(),false));
+        db_button.addAction(new ActionButton(new Action_ParkingDialog(), false));
         db_button.addAction(new ActionButton(action_show_trackableListView, false, GestureDirection.Right));
 
         cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
@@ -279,12 +281,12 @@ public class ViewManager extends NamedStage
         navButton.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
         // navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left)); not implemented, obsolete?! ACB2 removed
         navButton.addAction(new ActionButton(action_show_trackListView, false, GestureDirection.Left));
-        // navButton.addAction(new ActionButton(); // "MapDownload",null,()->{}); //todo ISSUE (#113 Add Map download) MapDownload.INSTANCE.show();
-
+        navButton.addAction(new ActionButton(new Action_MapDownload(), false));
 
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
-        tool_button.addAction(new ActionButton(action_show_fieldNotesView, true));
+        tool_button.addAction(new ActionButton(action_show_DraftsView, true));
+        tool_button.addAction(new ActionButton(new Action_Explore(), false));
         tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecTrack, false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVoice, false));
@@ -295,7 +297,6 @@ public class ViewManager extends NamedStage
         if (CB.isTestVersion()) {
             tool_button.addAction(new ActionButton(new Action_Show_TestView(), false));
             tool_button.addAction(new ActionButton(new Action_Show_PlatformTestView(), false));
-
         }
 
         misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
@@ -303,7 +304,7 @@ public class ViewManager extends NamedStage
         misc_button.addAction(new ActionButton(new Action_Settings_Activity(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Help(), false));
-        misc_button.addAction(new ActionButton(new Action_GetFriends(),false));
+        misc_button.addAction(new ActionButton(new Action_GetFriends(), false));
         misc_button.addAction(new ActionButton(action_quit, false, GestureDirection.Down));
 
 //        actionShowAboutView.execute();
@@ -422,7 +423,7 @@ public class ViewManager extends NamedStage
 
         // add Parking Cache
         if (Config.ParkingLatitude.getValue() != 0) {
-            abstractCache = new MutableCache(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
+            abstractCache = new MutableCache(Database.Data, Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
             Database.Data.cacheList.insert(0, abstractCache);
         }
 
@@ -433,7 +434,7 @@ public class ViewManager extends NamedStage
             AbstractCache selectedInQuery = Database.Data.cacheList.GetCacheById(selectedCache.getId());
             if (selectedInQuery == null) {
                 //reset
-                EventHandler.setSelectedWaypoint(null, null);
+                EventHandler.fireSelectedWaypointChanged(null, null);
             }
         }
     }

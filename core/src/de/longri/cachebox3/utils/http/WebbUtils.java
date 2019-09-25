@@ -1,16 +1,13 @@
 package de.longri.cachebox3.utils.http;
 
+import com.badlogic.gdx.utils.ObjectMap;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
@@ -25,24 +22,24 @@ public class WebbUtils {
      *               String by calling its <code>toString()</code> method.
      * @return e.g. "key1=value&amp;key2=&amp;email=max%40example.com"
      */
-    public static String queryString(Map<String, Object> values) {
+    public static String queryString(ObjectMap<String, Object> values) {
         StringBuilder sbuf = new StringBuilder();
         String separator = "";
 
-        for (Map.Entry<String, Object> entry : values.entrySet()) {
-            Object entryValue = entry.getValue();
+        for (ObjectMap.Entry<String, Object> entry : values.entries()) {
+            Object entryValue = entry.value;
             if (entryValue instanceof Object[]) {
                 for (Object value : (Object[]) entryValue) {
-                    appendParam(sbuf, separator, entry.getKey(), value);
+                    appendParam(sbuf, separator, entry.key, value);
                     separator = "&";
                 }
             } else if (entryValue instanceof Iterable) {
                 for (Object multiValue : (Iterable) entryValue) {
-                    appendParam(sbuf, separator, entry.getKey(), multiValue);
+                    appendParam(sbuf, separator, entry.key, multiValue);
                     separator = "&";
                 }
             } else {
-                appendParam(sbuf, separator, entry.getKey(), entryValue);
+                appendParam(sbuf, separator, entry.key, entryValue);
                 separator = "&";
             }
         }

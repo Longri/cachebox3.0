@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.stages.initial_tasks;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
@@ -26,9 +27,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
-import de.longri.cachebox3.gui.map.NamedExternalRenderTheme;
 import de.longri.cachebox3.gui.skin.styles.AttributesStyle;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.types.Attributes;
 import de.longri.cachebox3.utils.DevicesSizes;
@@ -37,8 +36,6 @@ import de.longri.cachebox3.utils.SizeF;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.Tile;
-import org.oscim.theme.ThemeLoader;
-import org.oscim.theme.VtmThemes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +54,22 @@ public final class SkinLoaderTask extends AbstractInitTask {
 
     @Override
     public void runnable() {
+
+        if (Gdx.app.getType() == Application.ApplicationType.iOS) {
+            // if exist a "reset.tmp" file on iTunes shared folder
+            // delete tmp skin files
+            String sharedFilerPath = Settings.MapPackFolder.getDefaultValue();
+            FileHandle sharedFolderResetTmp = new FileHandle(sharedFilerPath).child("reset.tmp");
+            if (sharedFolderResetTmp.exists() && !sharedFolderResetTmp.isDirectory()) {
+                log.debug("found \"reset.tmp\" file, delete temp skinFolder");
+                sharedFolderResetTmp.delete();
+                FileHandle tempFolder = new FileHandle(CB.WorkPath).child("user/temp");
+                if (!tempFolder.deleteDirectory()) {
+                    log.warn("can't delete temp folder");
+                }
+            }
+        }
+
 
         //initial sizes
         DevicesSizes ui = new DevicesSizes();
@@ -159,38 +172,21 @@ public final class SkinLoaderTask extends AbstractInitTask {
             storeAttributePng(skin, style, attFileHandle, value);
         }
 
+        // "init CanvasAdapter.dpi .textScale + Tile.SIZE"
+        float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
+        CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
+        CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
+        Tile.SIZE = Tile.calculateTileSize();
+        CB.setScaleChangedListener();
 
-        //preload Map Theme on async task
-        CB.postAsync(new NamedRunnable("preload Map Theme") {
+        // preload Map Theme
+        CB.postAsync(new NamedRunnable("") {
             @Override
             public void run() {
-
-                //calculate CanvasAdapter.dpi
-                float scaleFactor = CB.getScaledFloat(Settings.MapViewDPIFaktor.getValue());
-                CanvasAdapter.dpi = CanvasAdapter.DEFAULT_DPI * scaleFactor;
-                CanvasAdapter.textScale = Settings.MapViewTextFaktor.getValue();
-                Tile.SIZE = Tile.calculateTileSize();
-
-                String path;
-                if (!Config.nightMode.getValue()) {
-                    path = Config.MapsforgeDayTheme.getValue();
-                } else {
-                    path = Config.MapsforgeNightTheme.getValue();
-                }
-                if (path.startsWith("VTM:")) {
-                    String name = path.replace("VTM:", "");
-                    VtmThemes themeFile = VtmThemes.valueOf(name);
-                    CB.loadThemeFile(themeFile);
-                } else {
-                    FileHandle fileHandle = Gdx.files.absolute(path);
-                    if (fileHandle.exists()) {
-                        NamedExternalRenderTheme themeFile = new NamedExternalRenderTheme(fileHandle.nameWithoutExtension(),
-                                fileHandle.file().getAbsolutePath());
-                        CB.loadThemeFile(themeFile);
-                    }
-                }
+                CB.setCurrentTheme(CB.ThemeUsage.day, CB.createTheme(CB.getConfigsThemePath(CB.ThemeUsage.day), CB.getConfigsMapStyle(CB.ThemeUsage.day)));
             }
         });
+
     }
 
     @Override

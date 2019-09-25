@@ -23,7 +23,9 @@ import de.longri.serializable.BitStore;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Longri on 30.10.2017.
@@ -44,7 +46,7 @@ class ServerFileTest {
     void getDirectory() {
         ServerFile root = ServerFile.getDirectory(workpath);
         assertThat("Root must be a Directory", root.isDirectory());
-        assertRecursiveDir(workpath, root, Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath());
+        assertRecursiveDir(workpath, root, (Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath()).replace("\\", "/"));
     }
 
     @Test
@@ -60,7 +62,7 @@ class ServerFileTest {
         deserializeServerFile.deserialize(new BitStore(writer.getArray()));
 
 
-        String rootPath = Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath();
+        String rootPath = (Gdx.files.absolute(workpath.file().getAbsolutePath()).parent().file().getAbsolutePath()).replace("\\", "/");
 
         assertRecursiveDir(workpath, root, rootPath);
         assertRecursiveDir(workpath, deserializeServerFile, rootPath);
@@ -80,8 +82,7 @@ class ServerFileTest {
 
             handleAbsolut = handleAbsolut.replace(rootPath, "");
 
-            assertThat("FileAbsolute must Equals", handleAbsolut.equals(serverAbsolute));
-
+            assertEquals( handleAbsolut, serverAbsolute,"FileAbsolute must Equals");
 
             return;
         }

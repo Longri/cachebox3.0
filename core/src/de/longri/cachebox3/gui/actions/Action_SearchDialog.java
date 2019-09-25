@@ -17,31 +17,22 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.activities.SearchDialog;
 import de.longri.cachebox3.gui.menu.MenuID;
 
 /**
  * Created by Longri on 14.09.2016.
  */
 public class Action_SearchDialog extends AbstractAction {
+    private static final String title = "Search";
 
     public Action_SearchDialog() {
-        super(NOT_IMPLEMENTED, "search", MenuID.AID_SEARCH);
+        super(IMPLEMENTED, title, MenuID.AID_SEARCH);
     }
 
     @Override
     public void execute() {
-        CB.viewmanager.toast("Show Search not implemented");
-
-
-//        if (TabMainView.cacheListView == null || !TabMainView.cacheListView.isVisible()) {
-//            TabMainView.actionShowCacheList.Execute();
-//        }
-//
-//        if (SearchDialog.that == null) {
-//            new SearchDialog();
-//        }
-//
-//        SearchDialog.that.showNotCloseAutomaticly();
+        SearchDialog.getInstance(title, CB.getSkin().getMenuIcon.searchIcon).show();
     }
 
     @Override

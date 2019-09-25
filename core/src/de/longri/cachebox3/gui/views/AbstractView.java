@@ -16,9 +16,9 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.CB_View_Base;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
 import de.longri.cachebox3.utils.SkinColor;
@@ -30,7 +30,7 @@ import de.longri.serializable.BitStore;
 public abstract class AbstractView extends CB_View_Base {
 
     ColorWidget colorWidget;
-    VisLabel nameLabel;
+    CB_Label nameLabel;
 
     public AbstractView(BitStore reader) {
         super(reader.readString());
@@ -44,7 +44,7 @@ public abstract class AbstractView extends CB_View_Base {
 
     protected void create() {
         // create a Label with name for default
-        nameLabel = new VisLabel(this.NAME);
+        nameLabel = new CB_Label(this.NAME);
         nameLabel.setAlignment(Align.center);
         nameLabel.setPosition(10, 10);
 

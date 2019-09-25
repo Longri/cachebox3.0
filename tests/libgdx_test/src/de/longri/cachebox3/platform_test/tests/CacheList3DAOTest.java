@@ -25,7 +25,14 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.*;
+import de.longri.cachebox3.types.AbstractCache;
+import de.longri.cachebox3.types.AbstractWaypoint;
+import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.types.CacheList;
+import de.longri.cachebox3.types.CacheSizes;
+import de.longri.cachebox3.types.CacheTypes;
+import de.longri.cachebox3.types.MutableCache;
+import de.longri.cachebox3.types.MutableWaypoint;
 import de.longri.gdx.sqlite.SQLiteGdxException;
 import de.longri.cachebox3.platform_test.AfterAll;
 import de.longri.cachebox3.platform_test.BeforeAll;
@@ -175,7 +182,7 @@ public class CacheList3DAOTest {
 
     @Test
     public void writeToDatabase() throws PlatformAssertionError {
-        AbstractCache cache = new MutableCache(should_latitude, should_longitude);
+        AbstractCache cache = new MutableCache(cb3Database, should_latitude, should_longitude);
 
         cache.setLatLon(should_latitude, should_longitude);
         cache.setDateHidden(should_DateHidden);

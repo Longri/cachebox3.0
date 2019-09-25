@@ -32,13 +32,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class WordStoreTest {
 
     @BeforeAll
-    static void setUp() throws SQLiteGdxException {
+    public static void setUp() throws SQLiteGdxException {
         TestUtils.initialGdx();
     }
 
 
     @Test
-    void add() {
+    public void add() {
 
         String t1 = "Test storage with double used words like Test or storage";
         String t2 = "Test storage that contains non double words";
@@ -63,7 +63,7 @@ class WordStoreTest {
 
 
     @Test
-    void addTranslationFile() throws FileNotFoundException {
+    public void addTranslationFile() throws FileNotFoundException {
 
         WordStore.count = 0;
         FileHandle fileHandle = TestUtils.getResourceFileHandle("testsResources/strings.ini", true);

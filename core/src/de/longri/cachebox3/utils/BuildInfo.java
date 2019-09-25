@@ -55,7 +55,7 @@ public class BuildInfo {
      *
      * @param testBuildInfo
      */
-    public static void setTestBuildInfo(String testBuildInfo) {
+    public static void setBuildInfo(String testBuildInfo) {
         rev = testBuildInfo;
     }
 

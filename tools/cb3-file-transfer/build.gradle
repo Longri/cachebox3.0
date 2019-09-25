@@ -19,22 +19,4 @@ sourceSets.main.resources.srcDirs = ["resources/"]
 
 project.ext.mainClassName = "de.longri.cachebox3.file_transfer.MainWindow"
 
-task run(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    ignoreExitValue = true
-}
 
-task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from { configurations.compile.collect { zipTree(it) } }
-
-    manifest {
-        attributes 'Main-Class': project.mainClassName
-    }
-}
-
-
-dist.dependsOn classes

@@ -30,13 +30,14 @@ import com.kotcrab.vis.ui.widget.VisTextField;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.widgets.CharSequenceButton;
-import de.longri.cachebox3.gui.widgets.CharSequenceCheckBox;
+import de.longri.cachebox3.gui.widgets.CB_Button;
+import de.longri.cachebox3.gui.widgets.CB_CheckBox;
 import de.longri.cachebox3.gui.widgets.CoordinateButton;
 import de.longri.cachebox3.gui.widgets.NumPad;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.utils.GeoUtils;
 
 /**
  * Created by Longri on 14.11.2017.
@@ -106,7 +107,7 @@ public class ProjectionCoordinate extends ActivityBase {
 
         Table invertLine = new VisTable();
         invertLine.defaults().pad(CB.scaledSizes.MARGIN);
-        invertCheckBox = new CharSequenceCheckBox(Translation.get("Invert"));
+        invertCheckBox = new CB_CheckBox(Translation.get("Invert"));
         invertLine.add(invertCheckBox).left();
         invertLine.add((Actor) null).expandX().fillX();
 
@@ -160,7 +161,7 @@ public class ProjectionCoordinate extends ActivityBase {
                         callBack(null);
                     }
                     if (invertCheckBox.isChecked()) direction -= 180;
-                    Coordinate project = Coordinate.Project(cordButton.getCoordinate(), direction, distance);
+                    Coordinate project = GeoUtils.project(cordButton.getCoordinate(), direction, distance);
                     callBack(project);
                 }
             });
@@ -168,7 +169,7 @@ public class ProjectionCoordinate extends ActivityBase {
     };
 
     private void createInputFields() {
-        addEditLine(Translation.get("Bearing"), textFieldBearing, "°");
+        addEditLine(Translation.get("bearing"), textFieldBearing, "°");
         addEditLine(Translation.get("Distance"), textFieldDistance,
                 Config.ImperialUnits.getValue() ? "yd" : "m");
 
@@ -214,8 +215,8 @@ public class ProjectionCoordinate extends ActivityBase {
         this.row();
         Table cancelOkTable = new Table();
 
-        CharSequenceButton btnOk = new CharSequenceButton(Translation.get("ok"));
-        CharSequenceButton btnCancel = new CharSequenceButton(Translation.get("cancel"));
+        CB_Button btnOk = new CB_Button(Translation.get("ok"));
+        CB_Button btnCancel = new CB_Button(Translation.get("cancel"));
 
         btnOk.addListener(okListener);
         btnCancel.addListener(cancelListener);

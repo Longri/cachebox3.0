@@ -30,6 +30,9 @@ import java.io.InputStream;
  */
 public abstract class PlatformConnector {
 
+    public static final String REDIRECT_URL = "https://gc-oauth.longri.de/index.php?";
+    public static final String REDIRECT_STAGING_URL = "https://staging.gc-oauth.longri.de/index.php?";
+
     static PlatformConnector platformConnector;
 
     public static void init(PlatformConnector connector) {
@@ -39,6 +42,12 @@ public abstract class PlatformConnector {
     public static boolean isTorchAvailable() {
         return platformConnector._isTorchAvailable();
     }
+
+    public static String createThumb(String path, int scaledWidth, String thumbPrefix) {
+        return platformConnector._createThumb(path, scaledWidth, thumbPrefix);
+    }
+
+    protected abstract String _createThumb(String path, int scaledWidth, String thumbPrefix);
 
     protected abstract boolean _isTorchAvailable();
 
@@ -121,7 +130,6 @@ public abstract class PlatformConnector {
                                             SvgScaleType scaleType, float scaleValue) throws IOException;
 
 
-
     public static FileHandle getSandboxFileHandle(String fileName) {
         return platformConnector._getSandBoxFileHandle(fileName);
     }
@@ -140,13 +148,14 @@ public abstract class PlatformConnector {
 
 
     //Text Input
-    public static void getSinglelineTextInput(Input.TextInputListener listener, CharSequence title, CharSequence text, CharSequence hint) {
-        Gdx.input.getTextInput(listener, title.toString(), text.toString(), hint.toString());
+    public static void getSinglelineTextInput(Input.TextInputListener listener, int inputType, CharSequence title, CharSequence text, CharSequence hint) {
+        // Gdx.input.getTextInput(listener, title.toString(), text.toString(), hint.toString()); // doesn't work on desktop launcher
+        platformConnector._getTextInput(true, listener, inputType, title.toString(), text.toString(), hint.toString());
     }
 
-    public abstract void _getMultilineTextInput(Input.TextInputListener listener, String title, String text, String hint);
+    public abstract void _getTextInput(boolean singleLine, Input.TextInputListener listener, int inputType, String title, String text, String hint);
 
-    public static void getMultilineTextInput(Input.TextInputListener listener, String title, String text, String hint) {
-        platformConnector._getMultilineTextInput(listener, title, text, hint);
+    public static void getMultilineTextInput(Input.TextInputListener listener, int inputType, CharSequence title, CharSequence text, CharSequence hint) {
+        platformConnector._getTextInput(false, listener, inputType, title.toString(), text.toString(), hint.toString());
     }
 }

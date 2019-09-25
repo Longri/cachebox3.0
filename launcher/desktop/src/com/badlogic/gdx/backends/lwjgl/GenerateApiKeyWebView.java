@@ -16,7 +16,10 @@
 package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.apis.cachebox_api.CB_Api;
+import com.badlogic.gdx.backends.lwjgl3.CB_Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.apis.CB_Api;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.settings.Config;
 import javafx.application.Platform;
@@ -27,7 +30,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.lwjgl.opengl.Display;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +45,8 @@ import static javafx.concurrent.Worker.State.FAILED;
 
 public class GenerateApiKeyWebView extends Window {
 
+    private static final Logger log = LoggerFactory.getLogger(GenerateApiKeyWebView.class);
+
     static {
         //apply -Dprism.order=j2d (set VM options)
         Properties props = System.getProperties();
@@ -49,14 +54,13 @@ public class GenerateApiKeyWebView extends Window {
 //TODO that dosn't work
     }
 
-    private static final Logger log = LoggerFactory.getLogger(GenerateApiKeyWebView.class);
-
-
     //    private final UIWebView webView;
     private final GenericCallBack<String> callBack;
     private final JFXPanel jfxPanel;
     private WebEngine engine;
-//    private final UIViewController mainViewController;
+    //    private final UIViewController mainViewController;
+    private boolean cancelBounds = false;
+    private boolean secondLoad = false;
 
     public GenerateApiKeyWebView(GenericCallBack<String> callBack) {
 
@@ -75,13 +79,7 @@ public class GenerateApiKeyWebView extends Window {
 
 
         if (Config.OverrideUrl.getValue().equals("")) {
-            CB_Api.getGcAuthUrl(new GenericCallBack<String>() {
-                @Override
-                public void callBack(final String value) {
-                    log.debug("show web site at {}", value);
-
-                }
-            });
+            log.debug("show web site at {}", CB_Api.getGcAuthUrl());
         } else {
             String GC_AuthUrl = Config.OverrideUrl.getValue();
             log.debug("show override web site at {}", GC_AuthUrl);
@@ -96,14 +94,24 @@ public class GenerateApiKeyWebView extends Window {
 
     }
 
-    private boolean cancelBounds = false;
+    private static String toURL(String str) {
+        try {
+            return new URL(str).toExternalForm();
+        } catch (MalformedURLException exception) {
+            return null;
+        }
+    }
 
     private void loopBounds() {
         if (cancelBounds) return;
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                GenerateApiKeyWebView.this.setBounds(Display.getX(), Display.getY() + 22, Display.getWidth(), Display.getHeight());
+                Lwjgl3Window window = ((CB_Lwjgl3Application) Gdx.app).currentWindow;
+                int width[] = new int[1];
+                int height[] = new int[1];
+                GLFW.glfwGetWindowSize(window.getWindowHandle(), width, height);
+                GenerateApiKeyWebView.this.setBounds(window.getPositionX(), window.getPositionY() + 22, width[0], height[0]);
                 GenerateApiKeyWebView.this.setAlwaysOnTop(true);
                 GenerateApiKeyWebView.this.setFocusable(true);
 //                log.debug("loop");
@@ -117,8 +125,6 @@ public class GenerateApiKeyWebView extends Window {
         this.callBack.callBack(key);
         this.setVisible(false);
     }
-
-    private boolean secondLoad = false;
 
     private void iniitialWebView() {
         Platform.runLater(new Runnable() {
@@ -148,8 +154,8 @@ public class GenerateApiKeyWebView extends Window {
                                         String loadedUrl = engine.getLocation();
                                         log.debug("DidFinishHtmlLoad {}", loadedUrl);
 
-                                        if (loadedUrl.startsWith("http://oauth.team-cachebox.de/")
-                                                || loadedUrl.startsWith("http://staging.oauth.team-cachebox.de/")) {
+                                        if (loadedUrl.startsWith(PlatformConnector.REDIRECT_URL)
+                                                || loadedUrl.startsWith(PlatformConnector.REDIRECT_STAGING_URL)) {
 
                                             if (!secondLoad) {
                                                 secondLoad = true;
@@ -195,13 +201,7 @@ public class GenerateApiKeyWebView extends Window {
                         });
                 // show web site
                 if (Config.OverrideUrl.getValue().equals("")) {
-                    CB_Api.getGcAuthUrl(new GenericCallBack<String>() {
-                        @Override
-                        public void callBack(final String value) {
-                            log.debug("show web site at {}", value);
-                            loadURL(value);
-                        }
-                    });
+                    loadURL(CB_Api.getGcAuthUrl());
                 } else {
                     String GC_AuthUrl = Config.OverrideUrl.getValue();
                     log.debug("show override web site at {}", GC_AuthUrl);
@@ -234,14 +234,6 @@ public class GenerateApiKeyWebView extends Window {
             }
         });
 
-    }
-
-    private static String toURL(String str) {
-        try {
-            return new URL(str).toExternalForm();
-        } catch (MalformedURLException exception) {
-            return null;
-        }
     }
 
 }

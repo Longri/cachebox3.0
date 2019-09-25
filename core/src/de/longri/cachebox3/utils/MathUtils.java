@@ -105,6 +105,10 @@ public class MathUtils {
         else if (mBox[offset] > maxValue) mBox[offset] = maxValue;
     }
 
+    public static float hypo(float b, float c) {
+        return (float) Math.sqrt((b * b) + (c * c));
+    }
+
     public enum CalculationType {
         FAST, ACCURATE
     }

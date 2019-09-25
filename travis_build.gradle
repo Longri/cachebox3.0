@@ -1,0 +1,317 @@
+buildscript {
+
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+        classpath 'org.wisepersist:gwt-gradle-plugin:1.0.9'
+        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.7'
+    }
+}
+
+allprojects {
+
+    version = '3.0'
+    ext {
+        appName = "Cachebox 3.0"
+//        gdxVersion = '1.9.10-SNAPSHOT'
+        gdxVersion = '1.9.10'
+        roboVMVersion = '2.3.8-SNAPSHOT'
+        box2DLightsVersion = '1.4'
+        ashleyVersion = '1.7.0'
+        aiVersion = '1.8.0'
+        visUiVersion = '1.4.2-SNAPSHOT'
+        mapsforgeVersion = '0.11.0'
+        vtmVersion = 'master-SNAPSHOT'
+//        vtmVersion = '0.9.0'
+        slf4jLibgdxVersion = '1.9.9-SNAPSHOT'
+        gdxSqliteVersion = '0.6.7-SNAPSHOT'
+        slf4jVersion = '1.7.26'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+project(":core") {
+    apply plugin: "java-library"
+
+
+    dependencies {
+        // libgdx
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        api "com.kotcrab.vis:vis-ui:$visUiVersion"
+
+        //vtm
+        api "org.mapsforge:vtm:$vtmVersion"
+        api "org.mapsforge:vtm-gdx:$vtmVersion"
+        api "org.mapsforge:vtm-themes:$vtmVersion"
+
+        api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+        api "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+        api fileTree(include: ['*.jar'], dir: 'libs')
+
+        api "commons-codec:commons-codec:1.10"
+
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java-library"
+
+
+    dependencies {
+        // own modules
+        implementation project(":core")
+        implementation project(':gps-simulator')
+        implementation project(':cb3-file-transfer')
+
+        //LibGdx
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+        // VTM
+        api("org.mapsforge:vtm-desktop:$vtmVersion") {
+            exclude group: 'com.metsci.ext.com.kitfox.svg'
+        }
+        api("org.mapsforge:vtm-desktop-lwjgl3:$vtmVersion")
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
+
+        //commandline
+        api 'commons-cli:commons-cli:1.4'
+
+        api "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+        api "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
+        api "org.slf4j:slf4j-api:$slf4jVersion"
+        api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+
+    }
+}
+
+project(":desktop_lwjgl") {
+    apply plugin: "java-library"
+
+
+    dependencies {
+        // own modules
+        implementation project(":core")
+        implementation project(':gps-simulator')
+        implementation project(':cb3-file-transfer')
+
+        //LibGdx
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+        // VTM
+        api("org.mapsforge:vtm-desktop:$vtmVersion") {
+            exclude group: 'com.metsci.ext.com.kitfox.svg'
+        }
+        api("org.mapsforge:vtm-desktop-lwjgl:$vtmVersion")
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
+
+        //commandline
+        api 'commons-cli:commons-cli:1.4'
+
+        api "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+        api "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
+        api "org.slf4j:slf4j-api:$slf4jVersion"
+        api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+
+    }
+}
+
+//project(":android") {
+//    apply plugin: "android"
+//
+//    configurations { natives }
+//
+//    dependencies {
+//        implementation project(":core")
+//        api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+//        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
+//        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+//        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+//        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+//        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+//        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+//        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi"
+//        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
+//        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
+//        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
+//        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
+//
+//    }
+//}
+
+project(":ios") {
+    apply plugin: "java-library"
+    apply plugin: "robovm"
+
+    configurations { natives }
+
+    dependencies {
+        implementation project(":core")
+        api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
+        api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
+        api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+
+
+        api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+        natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-ios"
+
+        //include libs
+        api fileTree(dir: 'libs', include: ['*.jar'])
+
+        //vtm disabled, use own classes
+//    api("org.mapsforge:vtm-ios:$vtmVersion") {
+//        exclude group: 'org.slf4j', module: 'slf4j-simple'
+//    }
+        implementation project(":vtm-ios")
+
+        natives "org.mapsforge:vtm-ios:$vtmVersion:natives"
+
+        api fileTree(dir: 'libs', include: ['*.jar'])
+    }
+
+}
+
+project(":vtm-ios") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api "org.mapsforge:vtm-gdx:$vtmVersion"
+        api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+        api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
+        api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
+    }
+
+}
+
+project(":junit_test") {
+    apply plugin: 'java-library'
+    apply plugin: 'org.junit.platform.gradle.plugin'
+
+    dependencies {
+        implementation project(":core")
+        implementation project(":desktop")
+
+        testRuntime(
+                'org.junit.jupiter:junit-jupiter-engine:5.0.1'
+        )
+
+        api group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.1'
+        api group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.0.1'
+        api group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.0.1'
+        api group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.0.1'
+
+        api fileTree(dir: 'libs', include: ['*.jar'])
+
+        api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+        api "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+        api "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
+
+        // libgdx
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+        api "com.kotcrab.vis:vis-ui:$visUiVersion"
+        api group: 'commons-codec', name: 'commons-codec', version: '1.10'
+        api group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
+
+        //vtm
+        api "org.mapsforge:vtm:$vtmVersion"
+        api "org.mapsforge:vtm-gdx:$vtmVersion"
+        api "org.mapsforge:vtm-themes:$vtmVersion"
+
+    }
+}
+
+project(":libgdx_test") {
+    apply plugin: "java-library"
+
+    dependencies {
+        // own modules
+        implementation project(":core")
+
+        //LibGdx
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+        // VTM
+        api("org.mapsforge:vtm-desktop:$vtmVersion") {
+            exclude group: 'com.metsci.ext.com.kitfox.svg'
+        }
+        api("org.mapsforge:vtm-desktop-lwjgl:$vtmVersion")
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
+
+
+        api "de.longri.gdx-sqlite:gdx-sqlite:$gdxSqliteVersion"
+        api "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-desktop"
+        api "org.slf4j:slf4j-api:$slf4jVersion"
+        api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+
+    }
+}
+
+project(":skin-editor-src-proj") {
+    apply plugin: "java-library"
+
+
+    dependencies {
+        implementation project(":core")
+        implementation project(":desktop")
+        implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+
+        api group: 'commons-cli', name: 'commons-cli', version: '1.4'
+        api 'com.kitfox.svg:svg-salamander:1.0'
+
+        api "com.kotcrab.vis:vis-ui:$visUiVersion"
+        api group: 'commons-codec', name: 'commons-codec', version: '1.9'
+        api group: 'org.json', name: 'json', version: '20180813'
+
+        //vtm
+        api "org.mapsforge:vtm-gdx:$vtmVersion"
+        api "org.mapsforge:vtm-desktop:$vtmVersion"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-linux"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-osx"
+        api "org.mapsforge:vtm-desktop:$vtmVersion:natives-windows"
+
+        api "de.longri.slf4j-libgdx:slf4j-libgdx:$slf4jLibgdxVersion"
+
+    }
+}

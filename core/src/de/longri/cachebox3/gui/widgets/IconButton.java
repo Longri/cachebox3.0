@@ -18,40 +18,67 @@ package de.longri.cachebox3.gui.widgets;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButton;
-import de.longri.cachebox3.utils.HSV_Color;
 
 /**
  * Created by Longri on 15.05.2017.
  */
 public class IconButton extends Catch_VisTextButton {
-    protected final com.badlogic.gdx.scenes.scene2d.ui.Image image;
-    protected float preferredHeight, preferredWidth;
+    protected com.badlogic.gdx.scenes.scene2d.ui.Image image;
+    protected float preferredHeight;
+    protected float preferredWidth;
 
-    public IconButton(String text) {
-        super(text);
-        setStyle(getVisTextButtonStyle());
-        image = new com.badlogic.gdx.scenes.scene2d.ui.Image(new ColorDrawable(new HSV_Color(0)));
-        this.getLabel().setAlignment(Align.center | Align.left);
-        this.addActor(image);
+    public IconButton(CharSequence text) {
+        super(EMPTY);
+        getLabel().setText(text);
+        preferredHeight = super.getPrefHeight();
+        preferredWidth = super.getPrefWidth();
+        setSize(preferredWidth, preferredHeight);
     }
 
-    private VisTextButtonStyle getVisTextButtonStyle() {
-        return VisUI.getSkin().get(VisTextButtonStyle.class);
+    public IconButton(CharSequence text, String styleName) {
+        super(EMPTY, styleName);
+        getLabel().setText(text);
+        preferredHeight = super.getPrefHeight();
+        preferredWidth = super.getPrefWidth();
+        setSize(preferredWidth, preferredHeight);
+    }
+
+    public IconButton(CharSequence text, VisTextButtonStyle buttonStyle) {
+        super(EMPTY, buttonStyle);
+        getLabel().setText(text);
+        preferredHeight = super.getPrefHeight();
+        preferredWidth = super.getPrefWidth();
+        setSize(preferredWidth, preferredHeight);
+    }
+
+    public IconButton(CharSequence text, Drawable icon) {
+        super(EMPTY);
+        getLabel().setText(text);
+        setIcon(icon);
+        setSize(preferredWidth, preferredHeight);
+    }
+
+    public IconButton(Drawable icon) {
+        super(EMPTY);
+        this.setIcon(icon);
+        setSize(preferredWidth, preferredHeight);
     }
 
     @Override
     public void layout() {
-        this.getLabel().setHeight(this.getHeight());
-        this.getCell(this.getLabel()).spaceLeft(CB.scaledSizes.MARGINx2);
-        Drawable imageDrawable = image.getDrawable();
-        if (imageDrawable != null)
-            image.setBounds(this.getWidth() - (imageDrawable.getMinHeight() + CB.scaledSizes.MARGIN),
-                    (this.getHeight() - imageDrawable.getMinHeight()) / 2,
-                    imageDrawable.getMinWidth(),
-                    imageDrawable.getMinHeight());
+        if (image != null) {
+            this.getLabel().setHeight(this.getHeight());
+            this.getCell(this.getLabel()).spaceLeft(CB.scaledSizes.MARGINx2);
+            Drawable imageDrawable = image.getDrawable();
+            if (imageDrawable != null)
+                image.setBounds(this.getWidth() - (imageDrawable.getMinHeight() + CB.scaledSizes.MARGIN),
+                        (this.getHeight() - imageDrawable.getMinHeight()) / 2,
+                        imageDrawable.getMinWidth(),
+                        imageDrawable.getMinHeight());
+        }
         super.layout();
     }
 
@@ -66,13 +93,18 @@ public class IconButton extends Catch_VisTextButton {
     }
 
     protected void setIcon(Drawable drawableIcon) {
+        if (image == null) {
+            image = new com.badlogic.gdx.scenes.scene2d.ui.Image(drawableIcon);
+            this.getLabel().setAlignment(Align.center | Align.left);
+            this.addActor(image);
+        }
         image.setDrawable(drawableIcon);
         if (drawableIcon != null) {
-            this.preferredHeight = drawableIcon.getMinHeight() + CB.scaledSizes.MARGINx2;
-            this.preferredWidth = super.getPrefWidth() + this.preferredHeight;
+            this.preferredHeight = Math.max(super.getPrefHeight(), drawableIcon.getMinHeight() + CB.scaledSizes.MARGINx2);
+            this.preferredWidth = super.getPrefWidth() + drawableIcon.getMinWidth() + CB.scaledSizes.MARGINx2;
         } else {
-            this.preferredHeight = 0;
-            this.preferredWidth = 0;
+            this.preferredHeight = super.getPrefHeight();
+            this.preferredWidth = super.getPrefWidth();
         }
     }
 

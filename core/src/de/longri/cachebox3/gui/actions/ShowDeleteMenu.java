@@ -48,12 +48,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ShowDeleteMenu extends Menu {
     private final Logger log = LoggerFactory.getLogger(ShowDeleteMenu.class);
+    private BlockUiProgress_Activity blockUi;
 
     public ShowDeleteMenu() {
         super("DeleteMenuTitle");
-        addMenuItem("DelActFilter", CB.getSkin().getMenuIcon.deleteFilter,()-> askAndExecute(CB.viewmanager.getActFilter(),"DelActFilter"));
-        addMenuItem("DelArchived", CB.getSkin().getMenuIcon.deleteArchieved,()-> askAndExecute(FilterInstances.ARCHIEVED,"DelArchived"));
-        addMenuItem("DelFound", CB.getSkin().getMenuIcon.deleteFounds,()-> askAndExecute(FilterInstances.MYFOUNDS,"DelFound"));
+        addMenuItem("DelActFilter", CB.getSkin().getMenuIcon.deleteFilter, () -> askAndExecute(CB.viewmanager.getActFilter(), "DelActFilter"));
+        addMenuItem("DelArchived", CB.getSkin().getMenuIcon.deleteArchieved, () -> askAndExecute(FilterInstances.ARCHIEVED, "DelArchived"));
+        addMenuItem("DelFound", CB.getSkin().getMenuIcon.deleteFounds, () -> askAndExecute(FilterInstances.MYFOUNDS, "DelFound"));
     }
 
     private void askAndExecute(final FilterProperties filter, String msg) {
@@ -69,8 +70,6 @@ public class ShowDeleteMenu extends Menu {
         });
     }
 
-    private BlockUiProgress_Activity blockUi;
-
     private void deleteCaches(FilterProperties filter) {
         AtomicBoolean waitForBlockUIStarted = new AtomicBoolean(true);
         blockUi = null;
@@ -82,7 +81,7 @@ public class ShowDeleteMenu extends Menu {
                 blockUi.show();
             }
         });
-       CB.wait(waitForBlockUIStarted);
+        CB.wait(waitForBlockUIStarted);
 
         //check if Filter set to delete whole Database
         int wholeCount = Database.Data.getCacheCountOnThisDB();

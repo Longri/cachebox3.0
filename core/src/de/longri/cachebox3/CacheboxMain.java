@@ -30,17 +30,14 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import de.longri.cachebox3.events.CacheListChangedEvent;
-import de.longri.cachebox3.events.CacheListChangedListener;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
+import de.longri.cachebox3.gui.stages.NamedStage;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.DescriptionView;
-import de.longri.cachebox3.platform_test.gui.PlatformTestView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -49,17 +46,16 @@ import de.longri.serializable.BitStore;
 import org.oscim.backend.GL;
 import org.oscim.renderer.GLState;
 import org.oscim.renderer.MapRenderer;
+import org.oscim.theme.XmlThemeBuilder;
 import org.oscim.utils.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.NumberFormat;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
-import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -71,10 +67,10 @@ public class CacheboxMain extends ApplicationAdapter {
         EventHandler.INIT();
 
 //        INCLUDE_LIST.add(CB.class.getName());
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
-        INCLUDE_LIST.add(DescriptionView.class.getName());
-//        INCLUDE_LIST.add(ViewManager.class.getName());
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.StageManager");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
+//        INCLUDE_LIST.add(DescriptionView.class.getName());
+//        INCLUDE_LIST.add(SvgSkinUtil.class.getName());
+//        INCLUDE_LIST.add(SkinLoaderTask.class.getName());
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
@@ -84,13 +80,16 @@ public class CacheboxMain extends ApplicationAdapter {
 
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
         EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-//        EXCLUDE_LIST.add(StageManager.class.getName());
+        EXCLUDE_LIST.add(StageManager.class.getName());
+        EXCLUDE_LIST.add(NamedStage.class.getName());
+        EXCLUDE_LIST.add(CB.class.getName());
+        EXCLUDE_LIST.add(XmlThemeBuilder.class.getName());
 //
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
-        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
-        EXCLUDE_LIST.add("EMPTY");
-        EXCLUDE_LIST.add("DB:cachebox");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.android.AndroidDatabase");
+//        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.robovm.RobovmDatabase");
+//        EXCLUDE_LIST.add("EMPTY");
+//        EXCLUDE_LIST.add("DB:cachebox");
 //        EXCLUDE_LIST.add(LocationAccuracyLayer.class.getName());
 //        EXCLUDE_LIST.add(LocationTextureRenderer.class.getName());
 //        EXCLUDE_LIST.add(DoubleAnimator.class.getName());
@@ -100,19 +99,26 @@ public class CacheboxMain extends ApplicationAdapter {
         EXCLUDE_LIST.add(AbstractGpxStreamImporter.class.getName());
 
 
+        // iOS Platform debug includes
+//        INCLUDE_LIST.add("org.oscim.ios.backend.IOS_RealSvgBitmap");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
+//        INCLUDE_LIST.add("de.longri.cachebox3.GenerateApiKeyWebViewController");
+
     }
 
-    static Logger log = LoggerFactory.getLogger(CacheboxMain.class);
-    static final String SAVE_INSTANCE_KEY = "SaveInstanceState";
 
-    Runtime runtime = Runtime.getRuntime();
-    NumberFormat format = NumberFormat.getInstance();
-    private String memoryUsage;
+    static private final Logger log = LoggerFactory.getLogger(CacheboxMain.class);
+    static private final String SAVE_INSTANCE_KEY = "SaveInstanceState";
+
     private ViewManager viewManager;
+    private int mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight;
 
 
-    Batch batch;
-    protected int FpsInfoPos = 0;
+    private Batch batch;
+    private int FpsInfoPos = 0;
 
     protected Sprite FpsInfoSprite;
     public static AtomicBoolean drawMap = new AtomicBoolean(false);
@@ -151,21 +157,18 @@ public class CacheboxMain extends ApplicationAdapter {
 
             // Splash is ready with initialisation
             // now switch Stage to ViewManager
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    log.debug("switch Stage to ViewManager");
+            Gdx.app.postRunnable(() -> {
+                log.debug("switch Stage to ViewManager");
 
-                    viewManager = new ViewManager(
-                            CacheboxMain.this, CB.stageManager.viewport, CB.stageManager.batch);
+                viewManager = new ViewManager(
+                        CacheboxMain.this, CB.stageManager.viewport, CB.stageManager.batch);
 
-                    CB.stageManager.setMainStage(viewManager);
-                    batch.dispose();
+                CB.stageManager.setMainStage(viewManager);
+                batch.dispose();
 
-                    FpsInfoSprite = null;
-                    Gdx.graphics.setContinuousRendering(true);
-                    restoreInstanceState(instanceStateReader);
-                }
+                FpsInfoSprite = null;
+                Gdx.graphics.setContinuousRendering(true);
+                restoreInstanceState(instanceStateReader);
             });
         }, viewport, batch, instanceStateReader);
 
@@ -175,10 +178,6 @@ public class CacheboxMain extends ApplicationAdapter {
         CB.initThreadCheck();
         log.debug("create end");
     }
-
-
-    int mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight;
-
 
     public void setMapPosAndSize(int x, int y, int width, int height) {
         mapDrawX = x;
@@ -191,19 +190,6 @@ public class CacheboxMain extends ApplicationAdapter {
 
     @Override
     public void render() {
-
-        {// calculate Memory Usage
-            long maxMemory = runtime.maxMemory();
-            long allocatedMemory = runtime.totalMemory();
-            long freeMemory = runtime.freeMemory();
-            StringBuilder memoryStringBuilder = new StringBuilder();
-            memoryStringBuilder.append("f: " + format.format(freeMemory / 1048576));
-            memoryStringBuilder.append("  a: " + format.format(allocatedMemory / 1048576));
-            memoryStringBuilder.append("  m: " + format.format(maxMemory / 1048576));
-            memoryStringBuilder.append("  tf: " + format.format((freeMemory + (maxMemory - allocatedMemory)) / 1048576));
-            memoryUsage = memoryStringBuilder.toString();
-        }
-
         if (CB.isBackground) return;
 
         CB.stateTime += Gdx.graphics.getDeltaTime();
@@ -297,10 +283,10 @@ public class CacheboxMain extends ApplicationAdapter {
             } else {
                 log.debug("save instance state");
                 BitStore saveInstanceStateWriter = new BitStore();
-                saveInstanceStateWriter.write(false); // nothing to restore
+                saveInstanceStateWriter.write(false);
 
                 //store DB name
-                saveInstanceStateWriter.write(Config.DatabaseName.getValue());
+                saveInstanceStateWriter.write(Config.DatabaseName.getValue().replace(CB.WorkPath, "?"));
                 saveInstanceState(saveInstanceStateWriter);
 
                 Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
@@ -308,7 +294,6 @@ public class CacheboxMain extends ApplicationAdapter {
                 prefs.flush();
             }
         }
-        checkLogger();
 
         if (EventHandler.getSelectedCache() != null) {
             //save selected Cache
@@ -339,7 +324,6 @@ public class CacheboxMain extends ApplicationAdapter {
             @Override
             public void run() {
                 if (viewManager != null) viewManager.resume();
-                checkLogger();
                 log.debug("App on resume reopen databases");
                 if (Database.Data != null) Database.Data.open();
                 if (Database.Settings != null) Database.Settings.open();
@@ -351,16 +335,6 @@ public class CacheboxMain extends ApplicationAdapter {
                 CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
             }
         });
-    }
-
-    public String getMemory() {
-        return memoryUsage;
-    }
-
-    private static void checkLogger() {
-        if (log == null) {
-            log = LoggerFactory.getLogger(CacheboxMain.class);
-        }
     }
 
     private void saveInstanceState(BitStore writer) {

@@ -30,6 +30,8 @@ import de.longri.gdx.sqlite.SQLiteGdxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class Action_SelectDB_Dialog extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_SelectDB_Dialog.class);
 
@@ -51,21 +53,11 @@ public class Action_SelectDB_Dialog extends AbstractAction {
 
     @Override
     public void execute() {
-
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                final SelectDB_Activity selectDBDialog = new SelectDB_Activity(new SelectDB_Activity.IReturnListener() {
-                    @Override
-                    public void back() {
-                        returnFromSelectDB();
-                    }
-                }, Action_SelectDB_Dialog.this.viewMode == ViewMode.FORCE_SHOW);
-                selectDBDialog.show();
-            }
+        Gdx.app.postRunnable(() -> {
+            final SelectDB_Activity selectDBDialog = new SelectDB_Activity(this::returnFromSelectDB, Action_SelectDB_Dialog.this.viewMode == ViewMode.FORCE_SHOW);
+            selectDBDialog.show();
         });
     }
-
 
     private void returnFromSelectDB() {
         log.debug("\r\nSwitch DB");
@@ -84,6 +76,15 @@ public class Action_SelectDB_Dialog extends AbstractAction {
         }
 
         FileHandle fileHandle = Gdx.files.absolute(CB.WorkPath + "/" + Config.DatabaseName.getValue());
+        if (!fileHandle.exists() || fileHandle.isDirectory()) {
+            try {
+                log.debug("can't open Database! File not exist : \n{}", fileHandle.file().getCanonicalPath());
+            } catch (IOException e) {
+                log.warn("can't open Database! File not exist : \n{}", fileHandle.file().getAbsolutePath());
+            }
+            return;
+        }
+
 
         try {
             Database.Data.startUp(fileHandle);

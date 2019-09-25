@@ -42,8 +42,7 @@ public class Action_Show_DraftsView extends Abstract_Action_ShowView {
     @Override
     public void execute() {
         if (isActVisible()) return;
-        DraftsView view = new DraftsView();
-        CB.viewmanager.showView(view);
+        CB.viewmanager.showView(DraftsView.getInstance());
     }
 
     @Override

@@ -16,6 +16,8 @@
 package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl3.CB_Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import javafx.application.Platform;
@@ -27,7 +29,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.lwjgl.opengl.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,8 +74,10 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
 
                 int yPos = (int) (Gdx.graphics.getHeight() - height);
 
-                DesktopDescriptionView.this.setBounds((int) (Display.getX() + x)
-                        , (int) (Display.getY() + yPos - (y - 20))
+                Lwjgl3Window window = ((CB_Lwjgl3Application) Gdx.app).currentWindow;
+
+                DesktopDescriptionView.this.setBounds((int) (window.getPositionX() + x)
+                        , (int) (window.getPositionY() + yPos - (y - 20))
                         , (int) width, (int) height);
                 DesktopDescriptionView.this.setAlwaysOnTop(true);
                 DesktopDescriptionView.this.setFocusable(true);
@@ -118,7 +121,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
                 engine.locationProperty().addListener(new ChangeListener<String>() {
                     public void changed(ObservableValue<? extends String> observable, String oldValue, String location) {
                         if (!location.isEmpty()) {
-                            if(shouldOverrideUrlLoadingCallBack.callBack(location)){
+                            if (shouldOverrideUrlLoadingCallBack.callBack(location)) {
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         engine.getLoadWorker().cancel();

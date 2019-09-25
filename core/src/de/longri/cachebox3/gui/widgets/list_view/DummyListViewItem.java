@@ -136,4 +136,9 @@ public class DummyListViewItem extends Catch_Actor implements ListViewItemInterf
     public float getFinalHeight() {
         return this.finalHeight;
     }
+
+    @Override
+    public void setX(float value) {
+        super.setX(value);
+    }
 }

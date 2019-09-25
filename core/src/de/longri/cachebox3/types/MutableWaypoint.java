@@ -103,23 +103,6 @@ public class MutableWaypoint extends AbstractWaypoint {
         this.clue = new CharSequenceArray(cursor.getString(2));
     }
 
-    @Override
-    public double getLatitude() {
-        return this.latitude;
-    }
-
-    @Override
-    public double getLongitude() {
-        return this.longitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
 
 
     @Override
@@ -228,14 +211,8 @@ public class MutableWaypoint extends AbstractWaypoint {
     }
 
     @Override
-    public void setLatLon(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-
     public void reset() {
-        latitude = 0;
-        longitude = 0;
+        super.reset();
         cacheId = 0L;
         gcCode = "";
         title = "";
@@ -253,5 +230,10 @@ public class MutableWaypoint extends AbstractWaypoint {
         type = null;
         description = null;
         clue = null;
+    }
+
+    @Override
+    public boolean isCorrectedFinal() {
+        return getType() == CacheTypes.Final && isUserWaypoint() && isValid();
     }
 }

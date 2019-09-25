@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Created by Longri on 18.04.2017.
@@ -309,8 +310,6 @@ class JsonStreamParserTest {
 
 
         String Exclude = "[Geocaches, GeocacheLogs]";
-//        String Exclude = "";
-
 
         Array<String> exEmpty = new Array<>();
 
@@ -324,11 +323,9 @@ class JsonStreamParserTest {
         multiExclude.add("[Geocaches, Attributes]");
         multiExclude.add("[Geocaches, GeocacheLogs]");
 
-        Array<String>[] excludeList = new Array[]{exEmpty, exLogs, exAttribute, multiExclude};
+        Array[] excludeList = new Array[]{exEmpty, exLogs, exAttribute, multiExclude};
 
-//
-
-        for (Array<String> exclude : excludeList) {
+        for (Array exclude : excludeList) {
             for (String path : testFiles) {
                 if (path == null || path.isEmpty()) continue;
 
@@ -336,6 +333,11 @@ class JsonStreamParserTest {
                 StringBuilder sb2 = new StringBuilder();
                 StringBuilder sb = new StringBuilder();
                 parse(exclude, path, sb, sb2);
+
+                //use this for debugging if sb content to large for display on terminal
+//                if (!sb.toString().contentEquals(sb2)) {
+//                    assertTrue(false, "Exclude{"+exclude+"} Path:{" + path + "} is wrong!");
+//                }
                 assertEquals(sb.toString(), sb2.toString());
                 log.debug(" --------------------------- ");
             }

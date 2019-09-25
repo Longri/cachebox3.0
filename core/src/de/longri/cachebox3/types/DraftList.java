@@ -24,9 +24,7 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
@@ -65,7 +63,7 @@ public class DraftList extends Array<DraftEntry> {
                 this.clear();
             }
 
-            String sql = "select CacheId, GcCode, Name, CacheType, Timestamp, Type, FoundNumber, Comment, Id, Url, Uploaded, gc_Vote, TbFieldNote, TbName, TbIconUrl, TravelBugCode, TrackingNumber, directLog from FieldNotes";
+            String sql = "select CacheId, GcCode, Name, CacheType, Timestamp, Type, FoundNumber, Comment, Id, Url, Uploaded, gc_Vote, TbFieldNote, TbName, TbIconUrl, TravelBugCode, TrackingNumber, directLog, GcId from FieldNotes";
             if (!where.equals("")) {
                 sql += " where " + where;
             }

@@ -88,7 +88,7 @@ public class BackgroundTask implements Runnable {
                             public void newGpsPos(double latitude, double longitude, float accuracy) {
                                 lastBackgroundLocation = new Coordinate(latitude, longitude);
                                 if (testDistance.get()) {
-                                    float distance = target.distance(new LatLong(latitude, longitude), MathUtils.CalculationType.FAST);
+                                    float distance = target.distance(new Coordinate(latitude, longitude), MathUtils.CalculationType.FAST);
                                     log.debug("New Background location! distance: {}", distance);
                                     if (distance <= approachDistance) {
                                         playSound.set(true);
@@ -121,7 +121,7 @@ public class BackgroundTask implements Runnable {
 
                             @Override
                             public void newBearing(float bearing, boolean gps) {
-//                                log.debug("New Background Bearing!");
+//                                log.debug("New Background bearing!");
                             }
 
                             @Override

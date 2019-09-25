@@ -299,7 +299,7 @@ public class Database {
                 //reset version
                 shemaVersion.set(-1);
 
-                log.debug("startUp Database: " + Utils.GetFileName(path));
+                log.debug("startUp Database: " + Utils.getFileName(path));
                 if (myDB != null) {
                     log.debug("Database is open ");
                     if (databasePath.file().getAbsolutePath().equals(path.file().getAbsolutePath())) {
@@ -312,14 +312,14 @@ public class Database {
                         // is open
                         io.set(true);
                     }
-                    log.debug("Database is changed! close " + Utils.GetFileName(databasePath));
+                    log.debug("Database is changed! close " + Utils.getFileName(databasePath));
                     if (myDB != null && myDB.isOpen()) myDB.closeDatabase();
                     myDB = null;
                 }
 
 
                 databasePath = path;
-                log.debug("Initial database: " + Utils.GetFileName(databasePath));
+                log.debug("Initial database: " + Utils.getFileName(databasePath));
                 initialize();
 
 //

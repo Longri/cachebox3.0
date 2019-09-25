@@ -25,6 +25,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
+import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.types.CacheSizes;
@@ -41,10 +42,6 @@ public class CacheItem extends VisTable implements Disposable {
     private final CacheTypes type;
     private final CharSequence cacheName;
     private final Drawable rightTopIcon;
-    private boolean needsLayout = true;
-    Image arrowImage;
-    VisLabel distanceLabel;
-    boolean distanceOrBearingChanged = true;
     private final int difficulty;
     private final int terrain;
     private final int vote;
@@ -54,6 +51,10 @@ public class CacheItem extends VisTable implements Disposable {
     private final boolean isAvailable;
     private final int favPoints;
     private final int tbCount;
+    Image arrowImage;
+    CB_Label distanceLabel;
+    boolean distanceOrBearingChanged = true;
+    private boolean needsLayout = true;
 
 
     public CacheItem(CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
@@ -117,7 +118,7 @@ public class CacheItem extends VisTable implements Disposable {
         Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
         distanceLabelStyle.font = this.style.distanceFont;
         distanceLabelStyle.fontColor = this.style.distanceFontColor;
-        distanceLabel = new VisLabel(arrowImage != null ? "---- --" : "   ", distanceLabelStyle);
+        distanceLabel = new CB_Label(arrowImage != null ? "---- --" : "   ", distanceLabelStyle);
         arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
 
         this.add(arrowTable).right();
