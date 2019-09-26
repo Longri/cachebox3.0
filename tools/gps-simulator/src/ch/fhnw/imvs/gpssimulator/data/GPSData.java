@@ -12,13 +12,8 @@
 package ch.fhnw.imvs.gpssimulator.data;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.StringBuilder;
-import de.longri.cachebox3.CB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Vector;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class GPSData {
 

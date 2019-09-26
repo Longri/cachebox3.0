@@ -21,10 +21,7 @@ import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
-import org.robovm.apple.foundation.NSError;
-import org.robovm.apple.foundation.NSURLAuthenticationChallenge;
-import org.robovm.apple.foundation.NSURLCredential;
-import org.robovm.apple.foundation.NSURLSessionAuthChallengeDisposition;
+import org.robovm.apple.foundation.*;
 import org.robovm.apple.uikit.UIViewController;
 import org.robovm.apple.webkit.*;
 import org.robovm.objc.block.VoidBlock1;
@@ -196,5 +193,21 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     public void webContentProcessDidTerminate(WKWebView wkWebView) {
         log.debug("webContentProcessDidTerminate");
         wkWebView.getBounds();
+    }
+
+    @Override
+    public void loadUrl(String urlString) {
+        NSURL url = new NSURL(urlString);
+        NSURLRequest request = new NSURLRequest(url);
+        webView.loadRequest(request);
+    }
+
+    @Override
+    public String getContentAsString() {
+        final String[] content = new String[1];
+        webView.evaluateJavaScript("document.body.textContent", (nsObject, nsError) -> {
+            content[0] = nsObject.toString();
+        });
+        return content[0];
     }
 }

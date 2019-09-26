@@ -60,6 +60,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     boolean cancelThread = false;
     private ScrollBar vScrollbar, hScrollbar;
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
+    private GenericHandleCallBack<String> finishLoadingCallBack;
 
     public DesktopDescriptionView() {
         super(null); // creates a window with no Frame as owner
@@ -103,7 +104,9 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
                             public void changed(
                                     ObservableValue<? extends State> ov,
                                     State oldState, State newState) {
-
+                                if (finishLoadingCallBack != null) {
+                                    finishLoadingCallBack.callBack(engine.getLocation());
+                                }
                             }
                         });
                 engine.getLoadWorker().exceptionProperty()
@@ -186,13 +189,14 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
 
     @Override
     public void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack) {
-        //todo call this CallBack if Html is finish loaded
+        this.finishLoadingCallBack = finishLoadingCallBack;
     }
 
     @Override
     public boolean isPageVisible() {
         return true;
     }
+
 
     @Override
     public void setBounding(final float x, final float y, final float width, final float height, final int screenHeight) {
@@ -273,25 +277,20 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
 
     }
 
-//    /**
-//     * Returns the vertical scrollbar of the webview.
-//     *
-//     * @param webView webview
-//     * @return vertical scrollbar of the webview or {@code null} if no vertical
-//     * scrollbar exists
-//     */
-//    private ScrollBar getVScrollBar(WebView webView, Orientation orientation) {
-//
-//        Set<Node> scrolls = webView.lookupAll(".scroll");
-//        for (Node scrollNode : scrolls) {
-//
-//            if (ScrollBar.class.isInstance(scrollNode)) {
-//                ScrollBar scroll = (ScrollBar) scrollNode;
-//                if (scroll.getOrientation() == orientation) {
-//                    return scroll;
-//                }
-//            }
-//        }
-//        return null;
-//    }
+    @Override
+    public void loadUrl(String urlString) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                engine.load(urlString);
+            }
+        });
+    }
+
+    @Override
+    public String getContentAsString() {
+        String content = (String) engine.executeScript("document.documentElement.outerHTML");
+        return content;
+    }
+
 }

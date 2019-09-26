@@ -45,4 +45,9 @@ public interface PlatformDescriptionView {
     void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack);
 
     boolean isPageVisible();
+
+    void loadUrl(String urlString);
+
+    String getContentAsString();
+
 }

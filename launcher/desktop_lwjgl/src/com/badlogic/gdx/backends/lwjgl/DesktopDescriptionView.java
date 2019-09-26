@@ -191,6 +191,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
         return true;
     }
 
+
     @Override
     public void setBounding(final float x, final float y, final float width, final float height, final int screenHeight) {
         Gdx.app.postRunnable(new Runnable() {
@@ -270,25 +271,21 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
 
     }
 
-//    /**
-//     * Returns the vertical scrollbar of the webview.
-//     *
-//     * @param webView webview
-//     * @return vertical scrollbar of the webview or {@code null} if no vertical
-//     * scrollbar exists
-//     */
-//    private ScrollBar getVScrollBar(WebView webView, Orientation orientation) {
-//
-//        Set<Node> scrolls = webView.lookupAll(".scroll");
-//        for (Node scrollNode : scrolls) {
-//
-//            if (ScrollBar.class.isInstance(scrollNode)) {
-//                ScrollBar scroll = (ScrollBar) scrollNode;
-//                if (scroll.getOrientation() == orientation) {
-//                    return scroll;
-//                }
-//            }
-//        }
-//        return null;
-//    }
+
+    @Override
+    public void loadUrl(String urlString) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                engine.load(urlString);
+            }
+        });
+    }
+
+    @Override
+    public String getContentAsString() {
+        String content = (String) engine.executeScript("document.documentElement.outerHTML");
+        return content;
+    }
+
 }
