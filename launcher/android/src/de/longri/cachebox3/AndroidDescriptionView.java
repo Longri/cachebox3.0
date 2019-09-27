@@ -185,6 +185,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
         return pageVisible.get();
     }
 
+
     @Override
     protected void onScrollChanged(int x, int y, int oldl, int oldt) {
         try {
@@ -196,5 +197,10 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
         }
     }
 
+
+    @Override
+    public String getContentAsString() {
+        return null;
+    }
 
 }
