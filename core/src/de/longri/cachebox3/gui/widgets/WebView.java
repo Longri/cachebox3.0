@@ -15,8 +15,15 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.utils.Layout;
+import de.longri.cachebox3.CB;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 27.09.2019.
@@ -25,16 +32,33 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  */
 public class WebView extends Actor {
 
+    Logger log = LoggerFactory.getLogger(WebView.class);
 
     private boolean DEBUG = true;
     private float lastWidth, lastHeight, lastX, lastY;
 
+    public WebView() {
+    }
 
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         if (DEBUG) {//draw red filled rec
             this.setDebug(true);
         }
+    }
+
+
+    /**
+     * Draws this actor's debug lines if {@link #getDebug()} is true and, regardless of {@link #getDebug()}, calls
+     * {@link Actor#drawDebug(ShapeRenderer)} on each child.
+     */
+    public void drawDebug(ShapeRenderer shapes) {
+        shapes.set(ShapeRenderer.ShapeType.Filled);
+        shapes.setColor(Color.CYAN);
+        shapes.rect(this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(), this.getHeight(), this.getScaleX(), this.getScaleY(), this.getRotation());
+
+        super.drawDebug(shapes);
+
     }
 
 }

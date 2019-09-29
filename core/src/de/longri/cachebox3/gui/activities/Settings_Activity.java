@@ -558,7 +558,7 @@ public class Settings_Activity extends ActivityBase {
 //                    });
 
 
-                    GetApiKey_Activity activity = new GetApiKey_Activity("get Api Key", null) {
+                    GetApiKey_Activity activity = new GetApiKey_Activity() {
 
                     };
 

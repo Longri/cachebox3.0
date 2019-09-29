@@ -18,8 +18,8 @@ public abstract class Activity extends ActivityBase {
     protected static Activity activity;
     protected Catch_Table mainContent;
     protected CB_Button btnOK, btnCancel;
-    private CB_Label lblTitle;
-    private Image imgTitle;
+    protected CB_Label lblTitle;
+    protected Image imgTitle;
     private boolean needLayout = true;
     private ClickListener cancelClickListener;
 
@@ -45,12 +45,12 @@ public abstract class Activity extends ActivityBase {
         for (Actor actor : actors)
             removeActor(actor);
         setFillParent(true);
-        addNext(imgTitle, -1.2f);
-        addLast(lblTitle, -0.8f);
+        addNext(imgTitle, -1.2f).padBottom(0);
+        addLast(lblTitle, -0.8f).padBottom(0);
         createMainContent();
-        addLast(new ScrollPane(mainContent));
-        addNext(btnOK);
-        addLast(btnCancel);
+        addLast(new ScrollPane(mainContent)).pad(0);
+        addNext(btnOK).padTop(0);
+        addLast(btnCancel).padTop(0);
 
         super.layout();
         needLayout = false;
