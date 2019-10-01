@@ -100,7 +100,7 @@ public class CB {
     public final static SensorIO sensoerIO = new SensorIO();
     static final Logger log = LoggerFactory.getLogger(CB.class);
     static final Logger errorLog = LoggerFactory.getLogger("CB.errorLog");
-    
+
     final static float PPI_DEFAULT = 163;
     final static AtomicInteger executeCount = new AtomicInteger(0);
     final static Array<String> runningRunnables = new Array<>();
@@ -607,6 +607,11 @@ public class CB {
     }
 
     public static IRenderTheme getCurrentTheme() {
+        // in case of IllegalArgumentException: Theme cannot be null.
+        // we create a new default one!
+        if (actTheme == null) {
+            actTheme = ThemeLoader.load(VtmThemes.DEFAULT);
+        }
         return actTheme;
     }
 
