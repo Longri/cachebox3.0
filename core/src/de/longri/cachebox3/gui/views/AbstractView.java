@@ -61,6 +61,11 @@ public abstract class AbstractView extends CB_View_Base {
         boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
+    @Override
+    protected void positionChanged() {
+        super.positionChanged();
+        boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    }
 
     protected void boundsChanged(float x, float y, float width, float height) {
         if (colorWidget != null) colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());

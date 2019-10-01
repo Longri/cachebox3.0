@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.CB_Button;
@@ -74,6 +75,16 @@ public abstract class Activity extends ActivityBase {
     public void dispose() {
         CB.stageManager.unRegisterForBackKey(cancelClickListener);
         activity = null;
+
+        //dispose all actors
+        SnapshotArray<Actor> cildren = getChildren();
+
+        for (Actor child:cildren){
+            if(child instanceof Disposable){
+//                ((Disposable) child).dispose(); rekursive!
+            }
+        }
+
         super.dispose();
     }
 

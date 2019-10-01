@@ -15,29 +15,61 @@
  */
 package de.longri.cachebox3.gui.widgets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
+import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.PlatformDescriptionView;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Longri on 27.09.2019.
  * <p>
  * WebView is an Actor that displays a platform depended WebView
  */
-public class WebView extends Actor {
+public class WebView extends Actor implements Disposable {
 
     Logger log = LoggerFactory.getLogger(WebView.class);
 
     private boolean DEBUG = true;
+    private PlatformDescriptionView view;
     private float lastWidth, lastHeight, lastX, lastY;
 
     public WebView() {
+        showPlatformWebView();
+    }
+
+    private void showPlatformWebView() {
+        final AtomicBoolean WAIT = new AtomicBoolean(false);
+        if (view == null) {
+            WAIT.set(true);
+            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformDescriptionView>() {
+                @Override
+                public void callBack(PlatformDescriptionView descriptionView) {
+                    view = descriptionView;
+//                    view.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
+                    boundsChanged(WebView.this.getX(), WebView.this.getY(), WebView.this.getWidth(), WebView.this.getHeight());
+                    WAIT.set(false);
+                }
+            });
+        }
+        CB.wait(WAIT);
+        view.display();
+    }
+
+    @Override
+    public void dispose() {
+        view.close();
     }
 
     public void draw(Batch batch, float parentAlpha) {
@@ -45,6 +77,23 @@ public class WebView extends Actor {
         if (DEBUG) {//draw red filled rec
             this.setDebug(true);
         }
+    }
+
+    @Override
+    public void positionChanged() {
+        super.positionChanged();
+        boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    }
+
+    @Override
+    public void sizeChanged() {
+        super.sizeChanged();
+        boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    }
+
+
+    protected void boundsChanged(float x, float y, float width, float height) {
+        if (view != null) view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
     }
 
 
@@ -55,10 +104,9 @@ public class WebView extends Actor {
     public void drawDebug(ShapeRenderer shapes) {
         shapes.set(ShapeRenderer.ShapeType.Filled);
         shapes.setColor(Color.CYAN);
-        shapes.rect(this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(), this.getHeight(), this.getScaleX(), this.getScaleY(), this.getRotation());
-
+        shapes.rect(this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(), this.getHeight(),
+                this.getScaleX(), this.getScaleY(), this.getRotation());
         super.drawDebug(shapes);
-
     }
 
 }
