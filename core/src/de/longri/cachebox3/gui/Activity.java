@@ -78,13 +78,12 @@ public abstract class Activity extends ActivityBase {
 
         //dispose all actors
         SnapshotArray<Actor> cildren = getChildren();
-
-        for (Actor child:cildren){
-            if(child instanceof Disposable){
-//                ((Disposable) child).dispose(); rekursive!
+        for (Actor child : cildren) {
+            if (child instanceof Disposable) {
+                ((Disposable) child).dispose();
             }
+            this.removeActor(child);
         }
-
         super.dispose();
     }
 

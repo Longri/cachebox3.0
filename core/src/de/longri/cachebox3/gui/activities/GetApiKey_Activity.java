@@ -1,6 +1,5 @@
 package de.longri.cachebox3.gui.activities;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.VisUI;
@@ -22,7 +21,6 @@ public class GetApiKey_Activity extends Activity {
 
     @Override
     protected void createMainContent() {
-
         CB.postOnNextGlThread(new Runnable() {
             @Override
             public void run() {
@@ -30,7 +28,6 @@ public class GetApiKey_Activity extends Activity {
                 mainContent.layout();
             }
         });
-
         mainContent.add(webView);
         mainContent.setDebug(true, true);
     }
@@ -63,6 +60,26 @@ public class GetApiKey_Activity extends Activity {
         btnOK.setDisabled(true);
 //        callBack(edtResult.getText());
         finish();
+    }
+
+    @Override
+    public void onShow() {
+        super.onShow();
+        if (webView != null) {
+            webView.show();
+        }
+    }
+
+    @Override
+    public void onHide() {
+        super.onHide();
+        webView.hide();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        webView.dispose();
     }
 
 //    @Override

@@ -96,7 +96,6 @@ public class WebView extends Actor implements Disposable {
 
     protected void boundsChanged(float x, float y, float width, float height) {
         if (view != null) {
-            // get global screen position
             view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
         }
     }
@@ -114,4 +113,13 @@ public class WebView extends Actor implements Disposable {
         super.drawDebug(shapes);
     }
 
+    public void show() {
+        view.display();
+        Vector2 vector = WebView.this.localToStageCoordinates(new Vector2(0, 0));
+        boundsChanged(vector.x, vector.y, this.getWidth(), this.getHeight());
+    }
+
+    public void hide() {
+        view.close();
+    }
 }
