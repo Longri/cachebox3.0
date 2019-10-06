@@ -19,9 +19,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -58,7 +57,8 @@ public class WebView extends Actor implements Disposable {
                 public void callBack(PlatformDescriptionView descriptionView) {
                     view = descriptionView;
 //                    view.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
-                    boundsChanged(WebView.this.getX(), WebView.this.getY(), WebView.this.getWidth(), WebView.this.getHeight());
+                    Vector2 vector = WebView.this.localToStageCoordinates(new Vector2(0, 0));
+                    boundsChanged(vector.x, vector.y, WebView.this.getWidth(), WebView.this.getHeight());
                     WAIT.set(false);
                 }
             });
@@ -82,18 +82,23 @@ public class WebView extends Actor implements Disposable {
     @Override
     public void positionChanged() {
         super.positionChanged();
-        boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        Vector2 vector = WebView.this.localToStageCoordinates(new Vector2(0, 0));
+        boundsChanged(vector.x, vector.y, this.getWidth(), this.getHeight());
     }
 
     @Override
     public void sizeChanged() {
         super.sizeChanged();
-        boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        Vector2 vector = WebView.this.localToStageCoordinates(new Vector2(0, 0));
+        boundsChanged(vector.x, vector.y, this.getWidth(), this.getHeight());
     }
 
 
     protected void boundsChanged(float x, float y, float width, float height) {
-        if (view != null) view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
+        if (view != null) {
+            // get global screen position
+            view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
+        }
     }
 
 
