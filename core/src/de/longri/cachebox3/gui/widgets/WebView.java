@@ -26,6 +26,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformDescriptionView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
+import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,20 +107,39 @@ public class WebView extends Actor implements Disposable {
      * {@link Actor#drawDebug(ShapeRenderer)} on each child.
      */
     public void drawDebug(ShapeRenderer shapes) {
-        shapes.set(ShapeRenderer.ShapeType.Filled);
-        shapes.setColor(Color.CYAN);
-        shapes.rect(this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(), this.getHeight(),
-                this.getScaleX(), this.getScaleY(), this.getRotation());
+//        shapes.set(ShapeRenderer.ShapeType.Filled);
+//        shapes.setColor(Color.CYAN);
+//        shapes.rect(this.getX(), this.getY(), this.getOriginX(), this.getOriginY(), this.getWidth(), this.getHeight(),
+//                this.getScaleX(), this.getScaleY(), this.getRotation());
         super.drawDebug(shapes);
     }
 
     public void show() {
+        log.debug("show");
         view.display();
         Vector2 vector = WebView.this.localToStageCoordinates(new Vector2(0, 0));
         boundsChanged(vector.x, vector.y, this.getWidth(), this.getHeight());
     }
 
     public void hide() {
+        log.debug("hide");
         view.close();
+    }
+
+    public void loadUrl(String url) {
+        log.debug("load url: " + url);
+        view.loadUrl(url);
+    }
+
+    public void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> callback) {
+        view.setShouldOverrideUrlLoadingCallBack(callback);
+    }
+
+    public void setFinishLoadingCallBack(GenericHandleCallBack<String> callback) {
+        view.setFinishLoadingCallBack(callback);
+    }
+
+    public String getContentAsString() {
+        return view.getContentAsString();
     }
 }

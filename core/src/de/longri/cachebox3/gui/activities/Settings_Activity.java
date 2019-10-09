@@ -542,27 +542,27 @@ public class Settings_Activity extends ActivityBase {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
-//                    PlatformConnector.getApiKey(accessToken -> {
-//                        // store the encrypted AccessToken in the Config file
-//                        if (Config.UseTestUrl.getValue()) {
-//                            Config.AccessTokenForTest.setEncryptedValue(accessToken);
-//                        } else {
-//                            Config.AccessToken.setEncryptedValue(accessToken);
-//                        }
-//                        GroundspeakAPI.getInstance().setAuthorization();
-//                        String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
-//                        GcLogin.setValue(userNameOfAuthorization);
-//                        // do not Config.AcceptChanges(); if you do the settings will be restored
-//                        // refresh settings view
-//                        showCategory(SettingCategory.Login, true);
-//                    });
+                    PlatformConnector.getApiKey(accessToken -> {
+                        // store the encrypted AccessToken in the Config file
+                        if (Config.UseTestUrl.getValue()) {
+                            Config.AccessTokenForTest.setEncryptedValue(accessToken);
+                        } else {
+                            Config.AccessToken.setEncryptedValue(accessToken);
+                        }
+                        GroundspeakAPI.getInstance().setAuthorization();
+                        String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
+                        GcLogin.setValue(userNameOfAuthorization);
+                        // do not Config.AcceptChanges(); if you do the settings will be restored
+                        // refresh settings view
+                        showCategory(SettingCategory.Login, true);
+                    });
 
 
-                    GetApiKey_Activity activity = new GetApiKey_Activity() {
-
-                    };
-
-                    activity.show();
+//                    GetApiKey_Activity activity = new GetApiKey_Activity() {
+//
+//                    };
+//
+//                    activity.show();
 
                     event.cancel();
                     event.handle();

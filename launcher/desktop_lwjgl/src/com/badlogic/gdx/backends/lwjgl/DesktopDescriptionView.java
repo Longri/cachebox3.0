@@ -78,7 +78,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
                         , (int) width, (int) height);
                 DesktopDescriptionView.this.setAlwaysOnTop(true);
                 DesktopDescriptionView.this.setFocusable(true);
-                if (!cancelThread) loopBounds();
+//                if (!cancelThread) loopBounds();
             }
         });
     }
@@ -93,6 +93,9 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
             @Override
             public void run() {
                 webView = new WebView();
+
+                webView.setFocusTraversable(true);
+
                 engine = webView.getEngine();
                 engine.getLoadWorker().stateProperty()
                         .addListener(new ChangeListener<State>() {
@@ -118,7 +121,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
                 engine.locationProperty().addListener(new ChangeListener<String>() {
                     public void changed(ObservableValue<? extends String> observable, String oldValue, String location) {
                         if (!location.isEmpty()) {
-                            if(shouldOverrideUrlLoadingCallBack.callBack(location)){
+                            if (shouldOverrideUrlLoadingCallBack.callBack(location)) {
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         engine.getLoadWorker().cancel();
