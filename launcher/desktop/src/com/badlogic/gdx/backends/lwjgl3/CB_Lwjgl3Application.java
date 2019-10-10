@@ -16,6 +16,7 @@ package com.badlogic.gdx.backends.lwjgl3;
  ******************************************************************************/
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.backends.lwjgl.GenerateApiKeyWebView;
 import com.badlogic.gdx.backends.lwjgl3.audio.OpenALAudio;
 import com.badlogic.gdx.backends.lwjgl3.audio.mock.MockAudio;
 import com.badlogic.gdx.graphics.glutils.GLVersion;
@@ -110,6 +111,15 @@ public class CB_Lwjgl3Application implements Application {
             // FIXME put it on a separate thread
             if (audio instanceof OpenALAudio) {
                 ((OpenALAudio) audio).update();
+            }
+
+            if(GenerateApiKeyWebView.SHOW){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                continue;
             }
 
             boolean haveWindowsRendered = false;

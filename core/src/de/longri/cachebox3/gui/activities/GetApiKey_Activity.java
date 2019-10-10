@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.CB_Api;
+import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.skin.styles.ApiButtonStyle;
@@ -19,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import static de.longri.cachebox3.settings.Settings.GcLogin;
 
 public class GetApiKey_Activity extends Activity {
 
@@ -37,6 +40,7 @@ public class GetApiKey_Activity extends Activity {
 
 
 //        this.setDebug(true, true);
+        log.debug("constructor call ready");
     }
 
     @Override
@@ -77,17 +81,32 @@ public class GetApiKey_Activity extends Activity {
 
     @Override
     protected void runAtOk() {
+        log.debug("runAtOk()");
         // save api key and close
         log.debug("save ApiKey: {}", accessToken.get());
+
+        // store the encrypted AccessToken in the Config file
+        if (Config.UseTestUrl.getValue()) {
+            Config.AccessTokenForTest.setEncryptedValue(accessToken.get());
+        } else {
+            Config.AccessToken.setEncryptedValue(accessToken.get());
+        }
+        GroundspeakAPI.getInstance().setAuthorization();
+        String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
+        GcLogin.setValue(userNameOfAuthorization);
+        Config.AcceptChanges();
+        finish();
     }
 
     @Override
     protected void runAtCancel() {
+        log.debug("runAtCancel()");
         super.runAtCancel();
     }
 
     @Override
     public void onShow() {
+        log.debug("onShow()");
         super.onShow();
         if (webView != null) {
             webView.show();
@@ -104,6 +123,7 @@ public class GetApiKey_Activity extends Activity {
                 public boolean callBack(String url) {
                     if (url.toLowerCase().contains("oauth_verifier=") && (url.toLowerCase().contains("oauth_token="))) {
                         String html = webView.getContentAsString();
+                        if (html == null || html.isEmpty()) return false;
                         String search = "Access token: ";
                         int pos = html.indexOf(search);
                         if (pos < 0)
@@ -115,47 +135,46 @@ public class GetApiKey_Activity extends Activity {
                         accessToken.set(html.substring(pos + search.length(), pos2));
                         log.debug("found API Key: {} Enable save button! ", accessToken.get());
                         btnOK.setDisabled(false);
+                        CB.requestRendering();
                         return true;
                     }
                     return false;
                 }
             });
 
-
-            //browse to GS site to generate API Key
-            if (Config.OverrideUrl.getValue().equals("")) {
-                webView.loadUrl(CB_Api.getGcAuthUrl());
-            } else {
-                CB.postOnMainThread(new NamedRunnable("load gc url") {
-                    @Override
-                    public void run() {
-                        String GC_AuthUrl = Config.OverrideUrl.getValue();
-                        if (GC_AuthUrl.equals("")) {
-                            finish();
-                        }
-                        webView.loadUrl(GC_AuthUrl);
+            CB.postOnMainThread(new NamedRunnable("browse to GS site to generate API Key,on main thread") {
+                @Override
+                public void run() {
+                    if (Config.OverrideUrl.getValue().equals("")) {
+                        webView.loadUrl(CB_Api.getGcAuthUrl());
+                    } else {
+                        CB.postOnMainThread(new NamedRunnable("load gc url") {
+                            @Override
+                            public void run() {
+                                String GC_AuthUrl = Config.OverrideUrl.getValue();
+                                if (GC_AuthUrl.equals("")) {
+                                    finish();
+                                }
+                                webView.loadUrl(GC_AuthUrl);
+                            }
+                        });
                     }
-                });
-            }
-            Gdx.app.getApplicationListener().pause();
+                }
+            });
         }
     }
 
     @Override
     public void onHide() {
+        log.debug("hide()");
         super.onHide();
         webView.hide();
     }
 
     @Override
     public void dispose() {
+        log.debug("dispose()");
         super.dispose();
         webView.dispose();
     }
-
-
-//
-//    public void callBack(String result) {
-//    }
-
 }

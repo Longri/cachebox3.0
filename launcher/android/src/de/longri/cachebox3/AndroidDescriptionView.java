@@ -18,15 +18,19 @@ package de.longri.cachebox3;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
+import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static de.longri.cachebox3.AndroidLauncher.androidLauncher;
 
@@ -45,6 +49,8 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     private GenericHandleCallBack<String> finishLoadingCallBack;
     private Point scrollPos = new Point(0, 0);
     private float scale = 4;
+    private final AtomicReference<String> HTML_STRING;
+    private final MyJavaScriptInterface javaScriptInterface;
     WebViewClient clint = new WebViewClient() {
 
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -69,7 +75,12 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
         public void onPageFinished(WebView view, String url) {
             log.debug("onPageFinished URL: {}", url);
             if (AndroidDescriptionView.this.finishLoadingCallBack != null) {
-                AndroidDescriptionView.this.finishLoadingCallBack.callBack(url);
+                CB.postAsyncDelayd(100, new NamedRunnable("finishLoadingCallBack") {
+                    @Override
+                    public void run() {
+                        AndroidDescriptionView.this.finishLoadingCallBack.callBack(url);
+                    }
+                });
             }
         }
 
@@ -91,14 +102,17 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
     public AndroidDescriptionView(Context context) {
         super(AndroidLauncher.androidLauncher, null, android.R.attr.webViewStyle);
-        this.setDrawingCacheEnabled(false);
         this.getSettings().setLoadWithOverviewMode(true);
         this.getSettings().setSupportZoom(true);
         this.getSettings().setBuiltInZoomControls(true);
         this.getSettings().setJavaScriptEnabled(true);
         this.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-
         this.setWebViewClient(clint);
+        HTML_STRING = new AtomicReference<>();
+        WebSettings settings = this.getSettings();
+        settings.setJavaScriptEnabled(true);
+        javaScriptInterface = new MyJavaScriptInterface(HTML_STRING);
+        this.addJavascriptInterface(javaScriptInterface, "HTMLOUT");
     }
 
     private boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -200,7 +214,40 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
     @Override
     public String getContentAsString() {
-        return null;
+        javaScriptInterface.WAIT_FOR_GET_HTML.set(true);
+        CB.postAsync(new NamedRunnable("call get html") {
+            @Override
+            public void run() {
+                CB.postOnMainThread(new NamedRunnable("") {
+                    @Override
+                    public void run() {
+                        AndroidDescriptionView.this.loadUrl("javascript:window.HTMLOUT.showHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                    }
+                });
+            }
+        });
+
+        CB.wait(javaScriptInterface.WAIT_FOR_GET_HTML);
+
+        return HTML_STRING.get();
+    }
+
+
+    private class MyJavaScriptInterface {
+
+        private final AtomicReference<String> ATOMIC_HTML_STRING;
+        public final AtomicBoolean WAIT_FOR_GET_HTML = new AtomicBoolean(false);
+
+        private MyJavaScriptInterface(AtomicReference<String> atomic_html_string) {
+            ATOMIC_HTML_STRING = atomic_html_string;
+        }
+
+
+        @JavascriptInterface
+        public void showHTML(String html) {
+            ATOMIC_HTML_STRING.set(html);
+            WAIT_FOR_GET_HTML.set(false);
+        }
     }
 
 }
