@@ -177,17 +177,6 @@ public class TouchLauncher {
                 graphics.lastTime = System.nanoTime();
                 boolean wasPaused = false;
                 while (running) {
-
-                    if(GenerateApiKeyWebView.SHOW){
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        continue;
-                    }
-
-
                     Display.processMessages();
                     if (Display.isCloseRequested()) exit();
 

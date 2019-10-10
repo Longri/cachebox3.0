@@ -19,7 +19,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.backends.lwjgl.DesktopDescriptionView;
-import com.badlogic.gdx.backends.lwjgl.GenerateApiKeyWebView;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
@@ -136,11 +135,6 @@ public class DesktopPlatformConnector extends PlatformConnector {
         return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
     }
 
-    @Override
-    protected void generateApiKey(GenericCallBack<String> callBack) {
-        GenerateApiKeyWebView webView = new GenerateApiKeyWebView(callBack);
-    }
-
     private DesktopDescriptionView descriptionView;
 
     @Override
@@ -216,7 +210,7 @@ public class DesktopPlatformConnector extends PlatformConnector {
 
     @Override
     public void _getTextInput(boolean singleLine, final Input.TextInputListener listener, int inputType, final String title,
-                                       final String text, final String hint) {
+                              final String text, final String hint) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

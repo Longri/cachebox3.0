@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.dialogs;
 import com.badlogic.gdx.Gdx;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.apis.GroundspeakAPI;
+import de.longri.cachebox3.gui.activities.GetApiKey_Activity;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 
@@ -27,7 +28,6 @@ import static de.longri.cachebox3.settings.Settings.GcLogin;
  * Created by longri on 11.06.17.
  */
 public class GetApiKeyQuestionDialog extends ButtonDialog {
-
 
     public GetApiKeyQuestionDialog() {
         this(Translation.get("wantApi"));
@@ -46,18 +46,7 @@ public class GetApiKeyQuestionDialog extends ButtonDialog {
                 MessageBoxButtons.YesNo, icon,
                 (which, data) -> {
                     if (which == BUTTON_POSITIVE) {
-                        Gdx.app.postRunnable(() -> PlatformConnector.getApiKey(accessToken -> {
-                            // store the encrypted AccessToken in the Config file
-                            if (Config.UseTestUrl.getValue()) {
-                                Config.AccessTokenForTest.setEncryptedValue(accessToken);
-                            } else {
-                                Config.AccessToken.setEncryptedValue(accessToken);
-                            }
-                            GroundspeakAPI.getInstance().setAuthorization();
-                            String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
-                            GcLogin.setValue(userNameOfAuthorization);
-                            Config.AcceptChanges();
-                        }));
+                        new GetApiKey_Activity().show();
                     }
                     return true;
                 });
