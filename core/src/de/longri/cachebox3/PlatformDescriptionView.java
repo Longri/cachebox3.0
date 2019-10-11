@@ -42,6 +42,8 @@ public interface PlatformDescriptionView {
 
     void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack);
 
+    void setStartLoadingCallBack(GenericHandleCallBack<String> startLoadingCallBack);
+
     void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack);
 
     boolean isPageVisible();

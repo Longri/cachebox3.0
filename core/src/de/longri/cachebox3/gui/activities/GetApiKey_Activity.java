@@ -27,6 +27,7 @@ public class GetApiKey_Activity extends Activity {
 
     private final static Logger log = LoggerFactory.getLogger(GetApiKey_Activity.class);
 
+    private final BlockUiProgress_Activity BLOCK_UI = new BlockUiProgress_Activity("Loading....");
     private final WebView webView = new WebView();
     private final AtomicReference<String> accessToken = new AtomicReference<>();
 
@@ -115,12 +116,24 @@ public class GetApiKey_Activity extends Activity {
             webView.setShouldOverrideUrlLoadingCallBack(new GenericHandleCallBack<String>() {
                 @Override
                 public boolean callBack(String value) {
+                    // show progress dialog for block UI
+                    // until site is loaded
+                    BLOCK_UI.show();
+                    webView.hide();
                     return false;
+                }
+            });
+            webView.setStartLoadingCallBack(new GenericHandleCallBack<String>() {
+                @Override
+                public boolean callBack(String url) {
+                    return true;
                 }
             });
             webView.setFinishLoadingCallBack(new GenericHandleCallBack<String>() {
                 @Override
                 public boolean callBack(String url) {
+                    BLOCK_UI.finish();
+                    webView.show();
                     if (url.toLowerCase().contains("oauth_verifier=") && (url.toLowerCase().contains("oauth_token="))) {
                         String html = webView.getContentAsString();
                         if (html == null || html.isEmpty()) return false;

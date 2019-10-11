@@ -61,6 +61,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     private ScrollBar vScrollbar, hScrollbar;
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
     private GenericHandleCallBack<String> finishLoadingCallBack;
+    private GenericHandleCallBack<String> startLoadingCallBack;
 
     public DesktopDescriptionView() {
         super(null); // creates a window with no Frame as owner
@@ -111,7 +112,6 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
                         });
                 engine.getLoadWorker().exceptionProperty()
                         .addListener(new ChangeListener<Throwable>() {
-
                             public void changed(
                                     ObservableValue<? extends Throwable> o,
                                     Throwable old, final Throwable value) {
@@ -185,6 +185,11 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     @Override
     public void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
+    }
+
+    @Override
+    public void setStartLoadingCallBack(GenericHandleCallBack<String> startLoadingCallBack) {
+        this.startLoadingCallBack = startLoadingCallBack;
     }
 
     @Override

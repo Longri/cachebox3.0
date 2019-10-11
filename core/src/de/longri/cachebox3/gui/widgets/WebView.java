@@ -135,6 +135,10 @@ public class WebView extends Actor implements Disposable {
         view.setShouldOverrideUrlLoadingCallBack(callback);
     }
 
+    public void setStartLoadingCallBack(GenericHandleCallBack<String> callback) {
+        view.setStartLoadingCallBack(callback);
+    }
+
     public void setFinishLoadingCallBack(GenericHandleCallBack<String> callback) {
         view.setFinishLoadingCallBack(callback);
     }

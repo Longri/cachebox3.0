@@ -40,6 +40,7 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     private final UIViewController mainViewController;
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
     private GenericHandleCallBack<String> finishLoadingCallBack;
+    private GenericHandleCallBack<String> startLoadingCallBack; //TODO must implement
 
     public IOS_DescriptionView(UIViewController mainViewController) {
         webView = new WKWebView(getView().getFrame());
@@ -117,6 +118,11 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     @Override
     public void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack) {
         this.shouldOverrideUrlLoadingCallBack = shouldOverrideUrlLoadingCallBack;
+    }
+
+    @Override
+    public void setStartLoadingCallBack(GenericHandleCallBack<String> startLoadingCallBack) {
+        this.startLoadingCallBack = startLoadingCallBack;
     }
 
     @Override

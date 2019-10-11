@@ -20,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -46,6 +45,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     final String encoding = "utf-8";
     private final AtomicBoolean pageVisible = new AtomicBoolean(false);
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
+    private GenericHandleCallBack<String> startLoadingCallBack;
     private GenericHandleCallBack<String> finishLoadingCallBack;
     private Point scrollPos = new Point(0, 0);
     private float scale = 4;
@@ -70,6 +70,14 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             log.debug("onPageStarted");
+            if (AndroidDescriptionView.this.startLoadingCallBack != null) {
+                CB.postAsyncDelayd(10, new NamedRunnable("finishLoadingCallBack") {
+                    @Override
+                    public void run() {
+                        AndroidDescriptionView.this.startLoadingCallBack.callBack(url);
+                    }
+                });
+            }
         }
 
         public void onPageFinished(WebView view, String url) {
@@ -109,8 +117,6 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
         this.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         this.setWebViewClient(clint);
         HTML_STRING = new AtomicReference<>();
-        WebSettings settings = this.getSettings();
-        settings.setJavaScriptEnabled(true);
         javaScriptInterface = new MyJavaScriptInterface(HTML_STRING);
         this.addJavascriptInterface(javaScriptInterface, "HTMLOUT");
     }
@@ -190,6 +196,11 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     }
 
     @Override
+    public void setStartLoadingCallBack(GenericHandleCallBack<String> startLoadingCallBack) {
+        this.startLoadingCallBack = startLoadingCallBack;
+    }
+
+    @Override
     public void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack) {
         this.finishLoadingCallBack = finishLoadingCallBack;
     }
@@ -198,7 +209,6 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     public boolean isPageVisible() {
         return pageVisible.get();
     }
-
 
     @Override
     protected void onScrollChanged(int x, int y, int oldl, int oldt) {
@@ -210,7 +220,6 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
             e.printStackTrace();
         }
     }
-
 
     @Override
     public String getContentAsString() {
