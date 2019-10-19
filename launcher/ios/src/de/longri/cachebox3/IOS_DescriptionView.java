@@ -54,13 +54,18 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
 
         log.debug("SetBounds x,y width,height /screenHeight {},{} {},{} / {}", x, y, width, height, screenHeight);
 
-        CGRect rect = new CGRect(x, y, width / 2.0f, height / 2);
+        CGRect rect = new CGRect(0, 0, width / 2, height / 2);
         webView.setBounds(rect);
+//
+//        CGPoint point = new CGPoint(width / 2.0f, height / 2.0f);
+//        webView.setCenter(point);
 
-        float offset = ((screenHeight - height) / 2.0f) - y;
+        float offsetY = ((screenHeight - height) / 2.0f) - y;
 
-        CGPoint point = new CGPoint(width / 4.0f, ((float) screenHeight / 4) + (offset / 2.0f));
+        CGPoint point = new CGPoint((width / 4.0f) + (x / 2.0f), ((float) screenHeight / 4) + (offsetY / 2.0f));
         webView.setCenter(point);
+
+
     }
 
     @Override

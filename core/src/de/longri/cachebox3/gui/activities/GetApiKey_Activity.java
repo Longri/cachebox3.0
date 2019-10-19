@@ -92,8 +92,11 @@ public class GetApiKey_Activity extends Activity {
         } else {
             Config.AccessToken.setEncryptedValue(accessToken.get());
         }
+        Config.AcceptChanges();
+
         GroundspeakAPI.getInstance().setAuthorization();
         String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
+        log.debug("fetched user name: {}", userNameOfAuthorization);
         GcLogin.setValue(userNameOfAuthorization);
         Config.AcceptChanges();
         finish();

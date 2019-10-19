@@ -96,8 +96,12 @@ public class WebView extends Actor implements Disposable {
 
 
     protected void boundsChanged(float x, float y, float width, float height) {
+        //TODO set only if changed
         if (view != null) {
             view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
+            log.debug("set bounds {},{}/{},{}", x, y, width, height);
+        } else {
+            log.warn("can't set bounds, view are NULL");
         }
     }
 
