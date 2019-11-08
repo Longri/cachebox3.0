@@ -29,6 +29,8 @@ import org.robovm.objc.block.VoidBlock2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Created by longri on 27.04.17.
  */
@@ -184,8 +186,9 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
 
     @Override
     public void didFinishNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
-        log.debug("didFinishNavigation: " + wkNavigation.description());
-        if (this.finishLoadingCallBack != null) this.finishLoadingCallBack.callBack(wkNavigation.description());
+        log.debug("didFinishNavigation: " + wkWebView.getURL().getAbsoluteString());
+        if (this.finishLoadingCallBack != null)
+            this.finishLoadingCallBack.callBack(wkWebView.getURL().getAbsoluteString());
     }
 
     @Override
@@ -216,9 +219,15 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     @Override
     public String getContentAsString() {
         final String[] content = new String[1];
-        webView.evaluateJavaScript("document.body.textContent", (nsObject, nsError) -> {
-            content[0] = nsObject.toString();
+        log.debug("get content as String");
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+        webView.evaluateJavaScript("document.getElementsByTagName('html')[0].innerHTML", (innerHTML, nsError) -> {
+            content[0] = innerHTML.toString();
+            log.debug("set content as String return: {} ", content[0] == null ? "NULL" : "a String");
+            WAIT.set(false);
         });
+        CB.wait(WAIT);
+        log.debug("get content as String return: {} ", content[0] == null ? "NULL" : "a String");
         return content[0];
     }
 }

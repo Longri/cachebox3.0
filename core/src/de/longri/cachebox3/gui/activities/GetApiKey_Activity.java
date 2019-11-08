@@ -14,6 +14,7 @@ import de.longri.cachebox3.gui.widgets.WebView;
 import de.longri.cachebox3.locator.AtomicMutableCoordinate;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.slf4j.Logger;
@@ -86,6 +87,19 @@ public class GetApiKey_Activity extends Activity {
         // save api key and close
         log.debug("save ApiKey: {}", accessToken.get());
 
+        if (Config.AccessToken == null) {
+            log.warn("Config.AccessToken are NULL!");
+
+            //try to initial
+            log.debug("try to initial: {}", Settings.AccessToken == null ? "are null" : "is initial");
+        }
+
+
+        if (Config.AccessToken == null) {
+            log.error("Config.AccessToken are NULL again! Can't store API key");
+            return;
+        }
+
         // store the encrypted AccessToken in the Config file
         if (Config.UseTestUrl.getValue()) {
             Config.AccessTokenForTest.setEncryptedValue(accessToken.get());
@@ -94,12 +108,38 @@ public class GetApiKey_Activity extends Activity {
         }
         Config.AcceptChanges();
 
-        GroundspeakAPI.getInstance().setAuthorization();
-        String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
-        log.debug("fetched user name: {}", userNameOfAuthorization);
-        GcLogin.setValue(userNameOfAuthorization);
-        Config.AcceptChanges();
-        finish();
+
+        //Config is storing values.
+        // wait for finishing
+        CB.postAsyncDelayd(200, new NamedRunnable("wait for Store API Key") {
+            @Override
+            public void run() {
+                boolean cancelWait = false;
+                int waitCount = 0;
+                log.debug("wait for store API key");
+                while (!Config.ifInWrite() && !cancelWait) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (waitCount++ > 100) cancelWait = true;
+                }
+
+                String userNameOfAuthorization = null;
+                try {
+                    log.debug("set Authorisation and get UserName");
+                    GroundspeakAPI.getInstance().setAuthorization();
+                    userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
+                    log.debug("fetched user name: {}", userNameOfAuthorization);
+                } catch (Exception e) {
+                    log.error("Set Authorisation", e);
+                }
+                GcLogin.setValue(userNameOfAuthorization);
+                Config.AcceptChanges();
+                finish();
+            }
+        });
     }
 
     @Override
@@ -136,22 +176,45 @@ public class GetApiKey_Activity extends Activity {
                 @Override
                 public boolean callBack(String url) {
                     BLOCK_UI.finish();
+                    log.debug("FinishLoadingCallBack on URL: {}", url);
                     webView.show();
                     if (url.toLowerCase().contains("oauth_verifier=") && (url.toLowerCase().contains("oauth_token="))) {
-                        String html = webView.getContentAsString();
-                        if (html == null || html.isEmpty()) return false;
-                        String search = "Access token: ";
-                        int pos = html.indexOf(search);
-                        if (pos < 0)
-                            return false;
-                        int pos2 = html.indexOf("</span>", pos);
-                        if (pos2 < pos)
-                            return false;
-                        // zwischen pos und pos2 sollte ein gültiges AccessToken sein!!!
-                        accessToken.set(html.substring(pos + search.length(), pos2));
-                        log.debug("found API Key: {} Enable save button! ", accessToken.get());
-                        btnOK.setDisabled(false);
-                        CB.requestRendering();
+                        CB.postAsync(new NamedRunnable("get HTML content") {
+                            @Override
+                            public void run() {
+                                String html = webView.getContentAsString();
+                                if (html == null || html.isEmpty()) {
+                                    log.warn("Html string are NULL or empty. Can't extract key");
+                                    return;
+                                }
+                                String search = "Access token: ";
+                                int pos = html.indexOf(search);
+                                if (pos < 0) {
+                                    log.warn("can't found 'Access token: ' on HTML string;=>");
+                                    log.warn(html);
+                                    return;
+                                }
+
+                                int pos2 = html.indexOf("</span>", pos);
+                                if (pos2 < pos) {
+                                    log.warn("can't found '</span>' on HTML string;=>");
+                                    log.warn(html);
+                                    return;
+                                }
+                                // between pos and pos2 must a valid AccessToken!!!
+                                String fondApiKey = html.substring(pos + search.length(), pos2);
+                                accessToken.set(fondApiKey);
+                                log.debug("found API Key: {} Enable save button! ({})", accessToken.get(), fondApiKey);
+                                btnOK.setDisabled(false);
+                                CB.requestRendering();
+                                CB.postOnNextGlThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        CB.requestRendering();
+                                    }
+                                });
+                            }
+                        });
                         return true;
                     }
                     return false;
