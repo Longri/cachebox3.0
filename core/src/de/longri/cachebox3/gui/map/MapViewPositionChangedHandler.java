@@ -24,17 +24,16 @@ import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.animations.map.MapAnimator;
 import de.longri.cachebox3.gui.animations.map.MyPositionAnimator;
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
+import de.longri.cachebox3.gui.map.layer.LocationTextureLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.utils.IChanged;
 import org.oscim.core.MercatorProjection;
-import org.oscim.layers.LocationTextureLayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,7 +140,7 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                     //use saved pos
                     if (myPos == null) {
 
-                        if(CB.lastMapState.isEmpty()){
+                        if (CB.lastMapState.isEmpty()) {
                             //restore MapState
                             CB.lastMapState.deserialize(Config.lastMapState.getValue());
                             CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());

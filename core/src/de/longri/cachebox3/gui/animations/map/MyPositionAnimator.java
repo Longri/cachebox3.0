@@ -16,8 +16,8 @@
 package de.longri.cachebox3.gui.animations.map;
 
 import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
+import de.longri.cachebox3.gui.map.layer.LocationTextureLayer;
 import de.longri.cachebox3.locator.Coordinate;
-import org.oscim.layers.LocationTextureLayer;
 
 import static de.longri.cachebox3.gui.animations.map.DoubleAnimator.DEFAULT_DURATION;
 
