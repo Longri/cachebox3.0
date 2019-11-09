@@ -607,11 +607,11 @@ public class CB {
     }
 
     public static IRenderTheme getCurrentTheme() {
-        // if actTheme NULL set to default
+        // in case of IllegalArgumentException: Theme cannot be null.
+        // we create a new default one!
         if (actTheme == null) {
             actTheme = ThemeLoader.load(VtmThemes.DEFAULT);
         }
-
         return actTheme;
     }
 
