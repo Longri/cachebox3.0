@@ -106,7 +106,7 @@ public class CB {
     final static Array<String> runningRunnables = new Array<>();
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
     public static LocationHandler locationHandler;
-    public static Categories Categories;
+    private static Categories Categories;
     public static float stateTime;
     public static int androidStatusbarHeight;
     public static ViewManager viewmanager;
@@ -471,6 +471,12 @@ public class CB {
         }
     }
 
+    public static Categories getCategories() {
+        Categories = new Categories();
+        return Categories;
+    }
+
+
     public static void loadFilteredCacheList(FilterProperties filter) {
 
         Gdx.app.postRunnable(new Runnable() {
@@ -483,7 +489,6 @@ public class CB {
         log.debug("load filtered Cache list on Thread[{}]", Thread.currentThread().getName());
 
         Config.readFromDB(true);
-        CB.Categories = new Categories();
 
         String sqlWhere = "";
         if (CB.viewmanager != null) {

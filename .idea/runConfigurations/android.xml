@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="android" type="AndroidRunConfigurationType">
+  <configuration default="false" name="android" type="AndroidRunConfigurationType" activateToolWindowBeforeRun="false">
     <module name="android" />
     <option name="DEPLOY" value="true" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
