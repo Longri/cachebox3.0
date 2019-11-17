@@ -33,11 +33,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
+import de.longri.cachebox3.gui.activities.GetApiKey_Activity;
 import de.longri.cachebox3.gui.stages.NamedStage;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.views.DescriptionView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -56,6 +58,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
+import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -71,7 +74,7 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add(DescriptionView.class.getName());
 //        INCLUDE_LIST.add(SvgSkinUtil.class.getName());
 //        INCLUDE_LIST.add(SkinLoaderTask.class.getName());
-//        INCLUDE_LIST.add("de.longri.cachebox3.gui.stages.ViewManager");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
 //        INCLUDE_LIST.add(BlockUiProgress_Activity.class.getName());
@@ -80,9 +83,9 @@ public class CacheboxMain extends ApplicationAdapter {
 
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
         EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-        EXCLUDE_LIST.add(StageManager.class.getName());
+//        EXCLUDE_LIST.add(StageManager.class.getName());
         EXCLUDE_LIST.add(NamedStage.class.getName());
-        EXCLUDE_LIST.add(CB.class.getName());
+//        EXCLUDE_LIST.add(CB.class.getName());
         EXCLUDE_LIST.add(XmlThemeBuilder.class.getName());
 //
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
@@ -106,6 +109,8 @@ public class CacheboxMain extends ApplicationAdapter {
 //        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher");
 //        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
 //        INCLUDE_LIST.add("de.longri.cachebox3.GenerateApiKeyWebViewController");
+//        INCLUDE_LIST.add(GetApiKey_Activity.class.getName());
+//        INCLUDE_LIST.add(Config.class.getName());
 
     }
 

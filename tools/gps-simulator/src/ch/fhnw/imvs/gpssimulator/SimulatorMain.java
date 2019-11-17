@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2007 by the University of Applied Sciences Northwestern Switzerland (FHNW)
- * 
+ *
  * This program can be redistributed or modified under the terms of the
  * GNU General Public License as published by the Free Software Foundation.
  * This program is distributed without any warranty or implied warranty
@@ -11,44 +11,26 @@
 
 package ch.fhnw.imvs.gpssimulator;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
+import ch.fhnw.imvs.gpssimulator.components.CoursePanel;
+import ch.fhnw.imvs.gpssimulator.components.LocationPanel;
+import ch.fhnw.imvs.gpssimulator.components.TiltPanel;
+import ch.fhnw.imvs.gpssimulator.components.XMLPanel;
+import ch.fhnw.imvs.gpssimulator.data.GPSData;
+import ch.fhnw.imvs.gpssimulator.nmea.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import org.mapsforge.map.swing.view.MapPanel;
+import org.slf4j.impl.LoggerInit;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
-
-
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-
-import ch.fhnw.imvs.gpssimulator.components.TiltPanel;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.events.location.LocationEvents;
-import org.mapsforge.map.swing.view.MapPanel;
-
-import ch.fhnw.imvs.gpssimulator.components.CoursePanel;
-import ch.fhnw.imvs.gpssimulator.components.LocationPanel;
-import ch.fhnw.imvs.gpssimulator.components.XMLPanel;
-import ch.fhnw.imvs.gpssimulator.data.GPSData;
-import ch.fhnw.imvs.gpssimulator.nmea.GGA;
-import ch.fhnw.imvs.gpssimulator.nmea.GLL;
-import ch.fhnw.imvs.gpssimulator.nmea.GSA;
-import ch.fhnw.imvs.gpssimulator.nmea.NMEASentence;
-import ch.fhnw.imvs.gpssimulator.nmea.RMC;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.impl.LibgdxLogger;
-import org.slf4j.impl.LoggerInit;
 
 import static com.badlogic.gdx.Application.LOG_DEBUG;
 
@@ -126,7 +108,7 @@ public class SimulatorMain {
             }
         });
         Gdx.net = Gdx.app.getNet();
-        Gdx.files =  Gdx.app.getFiles();
+        Gdx.files = Gdx.app.getFiles();
 
         Gdx.app.setLogLevel(LOG_DEBUG);
         LoggerInit.initlogger();

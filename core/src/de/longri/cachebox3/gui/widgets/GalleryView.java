@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.PlatformDescriptionView;
+import de.longri.cachebox3.PlatformWebView;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.skin.styles.GalleryViewStyle;
@@ -69,7 +69,7 @@ public class GalleryView extends Catch_Table {
     private final DefaultListViewAdapter overViewAdapter = new DefaultListViewAdapter();
     private final DefaultListViewAdapter galleryAdapter = new DefaultListViewAdapter();
 
-    private PlatformDescriptionView webView;
+    private PlatformWebView webView;
     VisTextButton btnCloseZoomView;
     private boolean webViewVisible = false;
 
@@ -156,9 +156,9 @@ public class GalleryView extends Catch_Table {
         setLayout(true);
         if (webView == null) {
             WAIT.set(true);
-            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformDescriptionView>() {
+            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformWebView>() {
                 @Override
-                public void callBack(PlatformDescriptionView descriptionView) {
+                public void callBack(PlatformWebView descriptionView) {
                     webView = descriptionView;
                     WAIT.set(false);
                 }

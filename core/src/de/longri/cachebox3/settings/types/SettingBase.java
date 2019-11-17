@@ -213,6 +213,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
 
     public boolean isDefault() {
         if (value == null && defaultValue == null) return true;
+        if (value == null || defaultValue == null) return false;
         return value.equals(defaultValue);
     }
 

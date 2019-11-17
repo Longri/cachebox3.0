@@ -64,6 +64,11 @@ public class LoadDbTask extends AbstractInitTask {
                 }
             }
 
+
+            if (dbName == null) {// set to default
+                dbName = "cachebox.db3";
+            }
+
             final String finalDbName = dbName;
 
             if (finalDbName == null && (fileList.size > 1) && Config.MultiDBAsk.getValue()) {

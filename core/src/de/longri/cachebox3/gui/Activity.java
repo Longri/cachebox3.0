@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.CB_Button;
@@ -18,8 +19,8 @@ public abstract class Activity extends ActivityBase {
     protected static Activity activity;
     protected Catch_Table mainContent;
     protected CB_Button btnOK, btnCancel;
-    private CB_Label lblTitle;
-    private Image imgTitle;
+    protected CB_Label lblTitle;
+    protected Image imgTitle;
     private boolean needLayout = true;
     private ClickListener cancelClickListener;
 
@@ -45,12 +46,12 @@ public abstract class Activity extends ActivityBase {
         for (Actor actor : actors)
             removeActor(actor);
         setFillParent(true);
-        addNext(imgTitle, -1.2f);
-        addLast(lblTitle, -0.8f);
+        addNext(imgTitle, -1.2f).padBottom(0);
+        addLast(lblTitle, -0.8f).padBottom(0);
         createMainContent();
-        addLast(new ScrollPane(mainContent));
-        addNext(btnOK);
-        addLast(btnCancel);
+        addLast(new ScrollPane(mainContent)).pad(0);
+        addNext(btnOK).padTop(0);
+        addLast(btnCancel).padTop(0);
 
         super.layout();
         needLayout = false;
@@ -74,6 +75,15 @@ public abstract class Activity extends ActivityBase {
     public void dispose() {
         CB.stageManager.unRegisterForBackKey(cancelClickListener);
         activity = null;
+
+        //dispose all actors
+        SnapshotArray<Actor> cildren = getChildren();
+        for (Actor child : cildren) {
+            if (child instanceof Disposable) {
+                ((Disposable) child).dispose();
+            }
+            this.removeActor(child);
+        }
         super.dispose();
     }
 

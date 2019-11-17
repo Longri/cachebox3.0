@@ -19,12 +19,12 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.sqlite.dao.*;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.Waypoint3DAO;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.MutableWaypoint;

@@ -16,7 +16,9 @@
 package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.PlatformDescriptionView;
+import com.badlogic.gdx.backends.lwjgl3.CB_Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
+import de.longri.cachebox3.PlatformWebView;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -27,7 +29,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.lwjgl.opengl.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static javafx.concurrent.Worker.State.FAILED;
 
 
-public class DesktopDescriptionView extends Window implements PlatformDescriptionView {
+public class DesktopWebView extends Window implements PlatformWebView {
 
     static {
         //apply -Dprism.order=j2d (set VM options)
@@ -48,7 +49,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
 //TODO that dosn't work
     }
 
-    private static final Logger log = LoggerFactory.getLogger(DesktopDescriptionView.class);
+    private static final Logger log = LoggerFactory.getLogger(DesktopWebView.class);
 
 
     private final JFXPanel jfxPanel;
@@ -59,8 +60,10 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     boolean cancelThread = false;
     private ScrollBar vScrollbar, hScrollbar;
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
+    private GenericHandleCallBack<String> finishLoadingCallBack;
+    private GenericHandleCallBack<String> startLoadingCallBack;
 
-    public DesktopDescriptionView() {
+    public DesktopWebView() {
         super(null); // creates a window with no Frame as owner
         jfxPanel = new JFXPanel();
     }
@@ -73,11 +76,13 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
 
                 int yPos = (int) (Gdx.graphics.getHeight() - height);
 
-                DesktopDescriptionView.this.setBounds((int) (Display.getX() + x)
-                        , (int) (Display.getY() + yPos - (y - 20))
+                Lwjgl3Window window = ((CB_Lwjgl3Application) Gdx.app).currentWindow;
+
+                DesktopWebView.this.setBounds((int) (window.getPositionX() + x)
+                        , (int) (window.getPositionY() + yPos - (y - 20))
                         , (int) width, (int) height);
-                DesktopDescriptionView.this.setAlwaysOnTop(true);
-                DesktopDescriptionView.this.setFocusable(true);
+                DesktopWebView.this.setAlwaysOnTop(true);
+                DesktopWebView.this.setFocusable(true);
                 if (!cancelThread) loopBounds();
             }
         });
@@ -100,12 +105,13 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
                             public void changed(
                                     ObservableValue<? extends State> ov,
                                     State oldState, State newState) {
-
+                                if (finishLoadingCallBack != null) {
+                                    finishLoadingCallBack.callBack(engine.getLocation());
+                                }
                             }
                         });
                 engine.getLoadWorker().exceptionProperty()
                         .addListener(new ChangeListener<Throwable>() {
-
                             public void changed(
                                     ObservableValue<? extends Throwable> o,
                                     Throwable old, final Throwable value) {
@@ -118,7 +124,7 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
                 engine.locationProperty().addListener(new ChangeListener<String>() {
                     public void changed(ObservableValue<? extends String> observable, String oldValue, String location) {
                         if (!location.isEmpty()) {
-                            if(shouldOverrideUrlLoadingCallBack.callBack(location)){
+                            if (shouldOverrideUrlLoadingCallBack.callBack(location)) {
                                 Platform.runLater(new Runnable() {
                                     public void run() {
                                         engine.getLoadWorker().cancel();
@@ -182,8 +188,13 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
     }
 
     @Override
+    public void setStartLoadingCallBack(GenericHandleCallBack<String> startLoadingCallBack) {
+        this.startLoadingCallBack = startLoadingCallBack;
+    }
+
+    @Override
     public void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack) {
-        //todo call this CallBack if Html is finish loaded
+        this.finishLoadingCallBack = finishLoadingCallBack;
     }
 
     @Override
@@ -191,15 +202,16 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
         return true;
     }
 
+
     @Override
     public void setBounding(final float x, final float y, final float width, final float height, final int screenHeight) {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                DesktopDescriptionView.this.x = x;
-                DesktopDescriptionView.this.y = y;
-                DesktopDescriptionView.this.width = width;
-                DesktopDescriptionView.this.height = height;
+                DesktopWebView.this.x = x;
+                DesktopWebView.this.y = y;
+                DesktopWebView.this.width = width;
+                DesktopWebView.this.height = height;
             }
         });
 
@@ -270,25 +282,20 @@ public class DesktopDescriptionView extends Window implements PlatformDescriptio
 
     }
 
-//    /**
-//     * Returns the vertical scrollbar of the webview.
-//     *
-//     * @param webView webview
-//     * @return vertical scrollbar of the webview or {@code null} if no vertical
-//     * scrollbar exists
-//     */
-//    private ScrollBar getVScrollBar(WebView webView, Orientation orientation) {
-//
-//        Set<Node> scrolls = webView.lookupAll(".scroll");
-//        for (Node scrollNode : scrolls) {
-//
-//            if (ScrollBar.class.isInstance(scrollNode)) {
-//                ScrollBar scroll = (ScrollBar) scrollNode;
-//                if (scroll.getOrientation() == orientation) {
-//                    return scroll;
-//                }
-//            }
-//        }
-//        return null;
-//    }
+    @Override
+    public void loadUrl(String urlString) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                engine.load(urlString);
+            }
+        });
+    }
+
+    @Override
+    public String getContentAsString() {
+        String content = (String) engine.executeScript("document.documentElement.outerHTML");
+        return content;
+    }
+
 }

@@ -36,6 +36,11 @@ public class Config extends Settings {
     static final Logger log = LoggerFactory.getLogger(Config.class);
     static final AtomicBoolean inWrite = new AtomicBoolean(false);
 
+    public static boolean ifInWrite() {
+        return inWrite.get();
+    }
+
+
     public static void AcceptChanges() {
         if (settingsList.dirtyList.size > 0)
             writeToDB();

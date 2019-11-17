@@ -103,14 +103,14 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
         finish();
     }
 
-    public void show(AndroidDescriptionView descriptionView) {
+    public void show(AndroidWebView descriptionView) {
         ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(200, 200);
         if (descriptionView.getParent() != null)
             removeView(descriptionView);
         fragment.getActivity().addContentView(descriptionView, params);
     }
 
-    public void removeView(AndroidDescriptionView descriptionView) {
+    public void removeView(AndroidWebView descriptionView) {
         fragment.removeView(descriptionView);
     }
 }
