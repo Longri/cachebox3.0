@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -24,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.PlatformDescriptionView;
+import de.longri.cachebox3.PlatformWebView;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import org.slf4j.Logger;
@@ -42,7 +41,7 @@ public class WebView extends Actor implements Disposable {
     Logger log = LoggerFactory.getLogger(WebView.class);
 
     private boolean DEBUG = true;
-    private PlatformDescriptionView view;
+    private PlatformWebView view;
     private float lastWidth, lastHeight, lastX, lastY;
 
     public WebView() {
@@ -53,9 +52,9 @@ public class WebView extends Actor implements Disposable {
         final AtomicBoolean WAIT = new AtomicBoolean(false);
         if (view == null) {
             WAIT.set(true);
-            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformDescriptionView>() {
+            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformWebView>() {
                 @Override
-                public void callBack(PlatformDescriptionView descriptionView) {
+                public void callBack(PlatformWebView descriptionView) {
                     view = descriptionView;
 //                    view.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
                     Vector2 vector = WebView.this.localToStageCoordinates(new Vector2(0, 0));

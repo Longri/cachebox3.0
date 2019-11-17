@@ -18,11 +18,11 @@ package de.longri.cachebox3.desktop;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.backends.lwjgl.DesktopDescriptionView;
+import com.badlogic.gdx.backends.lwjgl.DesktopWebView;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.PlatformDescriptionView;
+import de.longri.cachebox3.PlatformWebView;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -135,11 +135,11 @@ public class DesktopPlatformConnector extends PlatformConnector {
         return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
     }
 
-    private DesktopDescriptionView descriptionView;
+    private DesktopWebView descriptionView;
 
     @Override
-    protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
-        if (descriptionView == null) descriptionView = new DesktopDescriptionView();
+    protected void getPlatformDescriptionView(final GenericCallBack<PlatformWebView> callBack) {
+        if (descriptionView == null) descriptionView = new DesktopWebView();
         callBack.callBack(descriptionView);
     }
 

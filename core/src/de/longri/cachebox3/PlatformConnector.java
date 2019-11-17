@@ -63,7 +63,7 @@ public abstract class PlatformConnector {
 
     protected abstract void _switchTorch();
 
-    public static void getDescriptionView(GenericCallBack<PlatformDescriptionView> callBack) {
+    public static void getDescriptionView(GenericCallBack<PlatformWebView> callBack) {
         platformConnector.getPlatformDescriptionView(callBack);
     }
 
@@ -138,7 +138,7 @@ public abstract class PlatformConnector {
 
     protected abstract String _getWorkPath();
 
-    protected abstract void getPlatformDescriptionView(GenericCallBack<PlatformDescriptionView> callBack);
+    protected abstract void getPlatformDescriptionView(GenericCallBack<PlatformWebView> callBack);
 
     //Text Input
     public static void getSinglelineTextInput(Input.TextInputListener listener, int inputType, CharSequence title, CharSequence text, CharSequence hint) {

@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by longri on 27.04.17.
  */
-public class IOS_DescriptionView extends UIViewController implements PlatformDescriptionView, WKNavigationDelegate {
+public class IOS_DescriptionView extends UIViewController implements PlatformWebView, WKNavigationDelegate {
 
     private static final Logger log = LoggerFactory.getLogger(IOS_DescriptionView.class);
 

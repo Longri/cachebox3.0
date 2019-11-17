@@ -20,7 +20,7 @@ import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 /**
  * Created by Longri on 26.04.2017.
  */
-public interface PlatformDescriptionView {
+public interface PlatformWebView {
 
     void setBounding(float x, float y, float width, float height, int screenHeight);
 
