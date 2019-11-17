@@ -31,6 +31,7 @@ public class GetApiKey_Activity extends Activity {
     private final BlockUiProgress_Activity BLOCK_UI = new BlockUiProgress_Activity("Loading....");
     private final WebView webView = new WebView();
     private final AtomicReference<String> accessToken = new AtomicReference<>();
+    private final String lastAccessToken;
 
     public GetApiKey_Activity() {
         //TODO replace icon with own style for GetApiKey_Activity
@@ -43,6 +44,7 @@ public class GetApiKey_Activity extends Activity {
 
 //        this.setDebug(true, true);
         log.debug("constructor call ready");
+        lastAccessToken = Config.AccessToken.getValue();
     }
 
     @Override
@@ -182,29 +184,38 @@ public class GetApiKey_Activity extends Activity {
                         CB.postAsync(new NamedRunnable("get HTML content") {
                             @Override
                             public void run() {
+                                log.debug("AccessToken found!");
                                 String html = webView.getContentAsString();
                                 if (html == null || html.isEmpty()) {
-                                    log.warn("Html string are NULL or empty. Can't extract key");
+                                    log.debug("Html string are NULL or empty. Can't extract key");
                                     return;
                                 }
+
+                                log.debug("Html as String:");
+                                log.debug(html);
                                 String search = "Access token: ";
                                 int pos = html.indexOf(search);
                                 if (pos < 0) {
-                                    log.warn("can't found 'Access token: ' on HTML string;=>");
-                                    log.warn(html);
+                                    log.debug("can't found 'Access token: ' on HTML string;=>");
+                                    log.debug(html);
                                     return;
                                 }
 
                                 int pos2 = html.indexOf("</span>", pos);
                                 if (pos2 < pos) {
-                                    log.warn("can't found '</span>' on HTML string;=>");
-                                    log.warn(html);
+                                    log.debug("can't found '</span>' on HTML string;=>");
+                                    log.debug(html);
                                     return;
                                 }
+                                log.debug("found pos:{} and pos2:{}", pos, pos2);
                                 // between pos and pos2 must a valid AccessToken!!!
                                 String fondApiKey = html.substring(pos + search.length(), pos2);
-                                accessToken.set(fondApiKey);
                                 log.debug("found API Key: {} Enable save button! ({})", accessToken.get(), fondApiKey);
+                                try {
+                                    accessToken.set(fondApiKey);
+                                } catch (Exception e) {
+                                    log.error("error with set access token", e);
+                                }
                                 btnOK.setDisabled(false);
                                 CB.requestRendering();
                                 CB.postOnNextGlThread(new Runnable() {
@@ -216,6 +227,8 @@ public class GetApiKey_Activity extends Activity {
                             }
                         });
                         return true;
+                    } else {
+                        log.debug("FinishLoadingCallBack without oauth_verifier! ");
                     }
                     return false;
                 }

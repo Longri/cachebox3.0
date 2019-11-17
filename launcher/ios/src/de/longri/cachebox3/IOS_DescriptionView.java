@@ -219,12 +219,19 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     @Override
     public String getContentAsString() {
         final String[] content = new String[1];
-        log.debug("get content as String");
+        log.debug("get content as String from \"document.body.innerHTML\"");
         final AtomicBoolean WAIT = new AtomicBoolean(true);
-        webView.evaluateJavaScript("document.getElementsByTagName('html')[0].innerHTML", (innerHTML, nsError) -> {
-            content[0] = innerHTML.toString();
-            log.debug("set content as String return: {} ", content[0] == null ? "NULL" : "a String");
-            WAIT.set(false);
+
+        CB.postOnMainThread(new NamedRunnable("evaluateJavaScript") {
+            @Override
+            public void run() {
+                log.debug("evaluateJavaScript");
+                webView.evaluateJavaScript("document.body.innerHTML", (innerHTML, nsError) -> {
+                    content[0] = innerHTML.toString();
+                    log.debug("set content as String return: {} ", content[0] == null ? "NULL" : "a String");
+                    WAIT.set(false);
+                });
+            }
         });
         CB.wait(WAIT);
         log.debug("get content as String return: {} ", content[0] == null ? "NULL" : "a String");
