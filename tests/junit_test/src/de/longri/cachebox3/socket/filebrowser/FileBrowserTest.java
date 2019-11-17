@@ -40,7 +40,8 @@ class FileBrowserTest {
     // https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/net/PingPongSocketExample.java
 
 
-    static String SERVER_ADRESS = "0.0.0.0";
+//    static String SERVER_ADRESS = "0.0.0.0";
+    static String SERVER_ADRESS = "localhost";
     static int PORT = 6011;
 
     static FileHandle workpath;
