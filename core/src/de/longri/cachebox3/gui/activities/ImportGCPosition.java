@@ -318,7 +318,7 @@ public class ImportGCPosition extends Activity {
         }
         final Date publishDate = tmpDate;
 
-        Category category = CB.Categories.getCategory(Database.Data, "API-Import");
+        Category category = CB.getCategories().getCategory(Database.Data, "API-Import");
         if (category != null) { // should not happen!!!
             GpxFilename gpxFilename = category.addGpxFilename("API-Import");
             if (gpxFilename != null) {

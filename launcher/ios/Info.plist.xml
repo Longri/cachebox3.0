@@ -57,6 +57,10 @@
     <string>This will be used to obtain or track your location.</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>This will be used to obtain or track your location.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This will be used to obtain or track your location.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This will be used to obtain or track your location.</string>
     <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSAllowsArbitraryLoads</key>

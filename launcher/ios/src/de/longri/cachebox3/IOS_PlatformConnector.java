@@ -194,20 +194,6 @@ public class IOS_PlatformConnector extends PlatformConnector {
         return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
     }
 
-
-    @Override
-    protected void generateApiKey(GenericCallBack<String> callBack) {
-        log.debug("show WebView for get API key");
-        try {
-            UIViewController mainViewController = ((IOSApplication) Gdx.app).getUIWindow().getRootViewController();
-            GenerateApiKeyWebViewController controller = new GenerateApiKeyWebViewController(callBack, mainViewController);
-            ((IOSApplication) Gdx.app).getUIWindow().setRootViewController(controller);
-            ((IOSApplication) Gdx.app).getUIWindow().makeKeyAndVisible();
-        } catch (Exception e) {
-            log.error("show web view", e);
-        }
-    }
-
     IOS_DescriptionView descriptionView;
 
     @Override

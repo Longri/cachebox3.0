@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2007 by the University of Applied Sciences Northwestern Switzerland (FHNW)
- * 
+ *
  * This program can be redistributed or modified under the terms of the
  * GNU General Public License as published by the Free Software Foundation.
  * This program is distributed without any warranty or implied warranty
@@ -11,6 +11,14 @@
 
 package ch.fhnw.imvs.gpssimulator.tools;
 
+import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,15 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 
 public class XMLParser extends DefaultHandler {
 
@@ -84,7 +83,7 @@ public class XMLParser extends DefaultHandler {
             double altitude = Double.parseDouble(atts.getValue("altitude"));
             double dCource = Double.parseDouble(atts.getValue("course"));
             time = time + timeDiff;
-            xmlData.add(new XMLData(time, latitude, longitude, altitude, (int) dCource,0));
+            xmlData.add(new XMLData(time, latitude, longitude, altitude, (int) dCource, 0));
 
         }
 
@@ -95,7 +94,6 @@ public class XMLParser extends DefaultHandler {
 
 
     }
-
 
 
     @Override
@@ -133,7 +131,7 @@ public class XMLParser extends DefaultHandler {
 
         if (qName.equals("course")) {
             double dCource = Double.parseDouble(LastValue);
-            lastCourse =  dCource;
+            lastCourse = dCource;
         }
 
         if (qName.equals("speed")) {

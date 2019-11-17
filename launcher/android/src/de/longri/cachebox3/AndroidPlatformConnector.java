@@ -56,7 +56,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     private final Context context;
     private final AndroidFlashLight flashLight;
     public GenericCallBack<String> callBack;
-    private AndroidDescriptionView descriptionView;
+    private AndroidWebView descriptionView;
 
     public AndroidPlatformConnector(AndroidLauncherfragment app) {
         this.application = app;
@@ -190,23 +190,11 @@ public class AndroidPlatformConnector extends PlatformConnector {
     }
 
     @Override
-    protected void generateApiKey(GenericCallBack<String> callBack) {
-        this.callBack = callBack;
-        Intent intent = new Intent().setClass(application.getContext(), GenerateApiKeyWebView.class);
-        if (intent.resolveActivity(application.getContext().getPackageManager()) != null) {
-            application.startActivityForResult(intent, REQUEST_CODE_GET_API_KEY);
-        } else {
-            log.error(intent.getAction() + " not installed.");
-        }
-
-    }
-
-    @Override
-    protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
+    protected void getPlatformDescriptionView(final GenericCallBack<PlatformWebView> callBack) {
 
         this.application.runOnUiThread(() -> {
             if (descriptionView == null)
-                descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
+                descriptionView = new AndroidWebView(AndroidPlatformConnector.this.application.getContext());
             callBack.callBack(descriptionView);
 
         });
@@ -333,15 +321,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
                         });
                     }
                 });
-//                alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                    public void onCancel(DialogInterface arg0) {
-//                        Gdx.app.postRunnable(new Runnable() {
-//                            public void run() {
-//                                listener.canceled();
-//                            }
-//                        });
-//                    }
-//                });
+
                 alert.show();
                 InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 input.postDelayed(() -> {

@@ -17,7 +17,6 @@ package de.longri.cachebox3;
 
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +63,7 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication implemen
         return view;
     }
 
-    public void show(AndroidDescriptionView descriptionView) {
+    public void show(AndroidWebView descriptionView) {
         ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2);
         descriptionView.setX(0);
         descriptionView.setY(Gdx.graphics.getHeight() / 4);
@@ -72,7 +71,7 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication implemen
         log.debug("add description view to application window");
     }
 
-    public void removeView(final AndroidDescriptionView descriptionView) {
+    public void removeView(final AndroidWebView descriptionView) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {

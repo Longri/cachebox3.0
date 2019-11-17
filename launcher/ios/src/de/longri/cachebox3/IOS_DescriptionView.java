@@ -21,10 +21,7 @@ import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.robovm.apple.coregraphics.CGPoint;
 import org.robovm.apple.coregraphics.CGRect;
-import org.robovm.apple.foundation.NSError;
-import org.robovm.apple.foundation.NSURLAuthenticationChallenge;
-import org.robovm.apple.foundation.NSURLCredential;
-import org.robovm.apple.foundation.NSURLSessionAuthChallengeDisposition;
+import org.robovm.apple.foundation.*;
 import org.robovm.apple.uikit.UIViewController;
 import org.robovm.apple.webkit.*;
 import org.robovm.objc.block.VoidBlock1;
@@ -32,10 +29,12 @@ import org.robovm.objc.block.VoidBlock2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Created by longri on 27.04.17.
  */
-public class IOS_DescriptionView extends UIViewController implements PlatformDescriptionView, WKNavigationDelegate {
+public class IOS_DescriptionView extends UIViewController implements PlatformWebView, WKNavigationDelegate {
 
     private static final Logger log = LoggerFactory.getLogger(IOS_DescriptionView.class);
 
@@ -43,6 +42,7 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     private final UIViewController mainViewController;
     private GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack;
     private GenericHandleCallBack<String> finishLoadingCallBack;
+    private GenericHandleCallBack<String> startLoadingCallBack; //TODO must implement
 
     public IOS_DescriptionView(UIViewController mainViewController) {
         webView = new WKWebView(getView().getFrame());
@@ -56,13 +56,18 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
 
         log.debug("SetBounds x,y width,height /screenHeight {},{} {},{} / {}", x, y, width, height, screenHeight);
 
-        CGRect rect = new CGRect(x, y, width / 2.0f, height / 2);
+        CGRect rect = new CGRect(0, 0, width / 2, height / 2);
         webView.setBounds(rect);
+//
+//        CGPoint point = new CGPoint(width / 2.0f, height / 2.0f);
+//        webView.setCenter(point);
 
-        float offset = ((screenHeight - height) / 2.0f) - y;
+        float offsetY = ((screenHeight - height) / 2.0f) - y;
 
-        CGPoint point = new CGPoint(width / 4.0f, ((float) screenHeight / 4) + (offset / 2.0f));
+        CGPoint point = new CGPoint((width / 4.0f) + (x / 2.0f), ((float) screenHeight / 4) + (offsetY / 2.0f));
         webView.setCenter(point);
+
+
     }
 
     @Override
@@ -123,6 +128,11 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     }
 
     @Override
+    public void setStartLoadingCallBack(GenericHandleCallBack<String> startLoadingCallBack) {
+        this.startLoadingCallBack = startLoadingCallBack;
+    }
+
+    @Override
     public void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack) {
         this.finishLoadingCallBack = finishLoadingCallBack;
     }
@@ -176,8 +186,9 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
 
     @Override
     public void didFinishNavigation(WKWebView wkWebView, WKNavigation wkNavigation) {
-        log.debug("didFinishNavigation: " + wkNavigation.description());
-        if (this.finishLoadingCallBack != null) this.finishLoadingCallBack.callBack(wkNavigation.description());
+        log.debug("didFinishNavigation: " + wkWebView.getURL().getAbsoluteString());
+        if (this.finishLoadingCallBack != null)
+            this.finishLoadingCallBack.callBack(wkWebView.getURL().getAbsoluteString());
     }
 
     @Override
@@ -196,5 +207,34 @@ public class IOS_DescriptionView extends UIViewController implements PlatformDes
     public void webContentProcessDidTerminate(WKWebView wkWebView) {
         log.debug("webContentProcessDidTerminate");
         wkWebView.getBounds();
+    }
+
+    @Override
+    public void loadUrl(String urlString) {
+        NSURL url = new NSURL(urlString);
+        NSURLRequest request = new NSURLRequest(url);
+        webView.loadRequest(request);
+    }
+
+    @Override
+    public String getContentAsString() {
+        final String[] content = new String[1];
+        log.debug("get content as String from \"document.body.innerHTML\"");
+        final AtomicBoolean WAIT = new AtomicBoolean(true);
+
+        CB.postOnMainThread(new NamedRunnable("evaluateJavaScript") {
+            @Override
+            public void run() {
+                log.debug("evaluateJavaScript");
+                webView.evaluateJavaScript("document.body.innerHTML", (innerHTML, nsError) -> {
+                    content[0] = innerHTML.toString();
+                    log.debug("set content as String return: {} ", content[0] == null ? "NULL" : "a String");
+                    WAIT.set(false);
+                });
+            }
+        });
+        CB.wait(WAIT);
+        log.debug("get content as String return: {} ", content[0] == null ? "NULL" : "a String");
+        return content[0];
     }
 }

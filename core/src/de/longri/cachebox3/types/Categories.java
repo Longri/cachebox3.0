@@ -72,11 +72,13 @@ public class Categories extends MoveableList<Category> {
         long Category_ID = 0;
 
         GdxSqliteCursor reader = database.rawQuery("Select max(ID) from Category", (String[]) null);
-        reader.moveToFirst();
-        if (!reader.isAfterLast()) {
-            Category_ID = reader.getLong(0);
+        if (reader != null) {
+            reader.moveToFirst();
+            if (!reader.isAfterLast()) {
+                Category_ID = reader.getLong(0);
+            }
+            reader.close();
         }
-        reader.close();
         result.Id = Category_ID;
         result.GpxFilename = filename;
         result.Checked = true;

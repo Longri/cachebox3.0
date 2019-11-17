@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.PlatformDescriptionView;
+import de.longri.cachebox3.PlatformWebView;
 import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
@@ -68,7 +68,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     private final Array<String> nonLocalImages = new Array<String>();
     private final Array<String> nonLocalImagesUrl = new Array<String>();
     private final AtomicBoolean FIRST = new AtomicBoolean(true);
-    private PlatformDescriptionView view;
+    private PlatformWebView view;
     private final GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack = new GenericHandleCallBack<String>() {
         @Override
         public boolean callBack(String url) {
@@ -214,9 +214,9 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
         if (view == null) {
             WAIT.set(true);
-            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformDescriptionView>() {
+            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformWebView>() {
                 @Override
-                public void callBack(PlatformDescriptionView descriptionView) {
+                public void callBack(PlatformWebView descriptionView) {
                     view = descriptionView;
                     view.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
                     WAIT.set(false);

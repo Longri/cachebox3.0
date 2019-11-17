@@ -20,7 +20,7 @@ import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 /**
  * Created by Longri on 26.04.2017.
  */
-public interface PlatformDescriptionView {
+public interface PlatformWebView {
 
     void setBounding(float x, float y, float width, float height, int screenHeight);
 
@@ -40,9 +40,19 @@ public interface PlatformDescriptionView {
 
     void close();
 
+    // Give the host application a chance to take control when a URL is about to be loaded in the current WebView
     void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack);
 
+    // Notify the host application that a page has started loading.
+    void setStartLoadingCallBack(GenericHandleCallBack<String> startLoadingCallBack);
+
+    // Notify the host application that a page has finished loading.
     void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack);
 
     boolean isPageVisible();
+
+    void loadUrl(String urlString);
+
+    String getContentAsString();
+
 }

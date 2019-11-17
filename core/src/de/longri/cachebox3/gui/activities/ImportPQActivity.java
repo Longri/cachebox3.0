@@ -236,14 +236,16 @@ public class ImportPQActivity extends BlockGpsActivityBase {
                 pqList.sort();
                 for (GroundspeakAPI.PQ pq : pqList) {
                     //Check last import
-                    GdxSqliteCursor cursor = ImportPQActivity.this.database.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
-                    if (cursor != null) {
-                        cursor.moveToFirst();
-                        String dateTimeString = cursor.getString(2);
-                        try {
-                            pq.lastImported = Database.cbDbFormat.parse(dateTimeString);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                    if (ImportPQActivity.this.database.myDB!=null) {
+                        GdxSqliteCursor cursor = ImportPQActivity.this.database.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
+                        if (cursor != null) {
+                            cursor.moveToFirst();
+                            String dateTimeString = cursor.getString(2);
+                            try {
+                                pq.lastImported = Database.cbDbFormat.parse(dateTimeString);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 

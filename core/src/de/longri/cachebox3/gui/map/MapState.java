@@ -53,6 +53,7 @@ public class MapState {
 
     public void deserialize(byte[] bytes) {
         if (bytes == null) return;
+        if (bytes.length == 0) return;
         BitStore store = new BitStore(bytes);
 
         value = store.readInt();

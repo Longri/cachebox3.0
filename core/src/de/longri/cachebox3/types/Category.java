@@ -61,11 +61,13 @@ public class Category extends ArrayList<GpxFilename> implements Comparable<Categ
         long GPXFilename_ID = 0;
 
         GdxSqliteCursor reader = this.database.rawQuery("Select max(ID) from GpxFilenames", (String[]) null);
-        reader.moveToFirst();
-        if (!reader.isAfterLast()) {
-            GPXFilename_ID = reader.getLong(0);
+        if (reader != null) {
+            reader.moveToFirst();
+            if (!reader.isAfterLast()) {
+                GPXFilename_ID = reader.getLong(0);
+            }
+            reader.close();
         }
-        reader.close();
         GpxFilename result = new GpxFilename(GPXFilename_ID, filename, this.Id);
         this.add(result);
         return result;
