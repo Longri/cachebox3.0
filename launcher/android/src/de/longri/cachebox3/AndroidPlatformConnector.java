@@ -56,7 +56,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     private final Context context;
     private final AndroidFlashLight flashLight;
     public GenericCallBack<String> callBack;
-    private AndroidDescriptionView descriptionView;
+    private AndroidWebView descriptionView;
 
     public AndroidPlatformConnector(AndroidLauncherfragment app) {
         this.application = app;
@@ -190,11 +190,11 @@ public class AndroidPlatformConnector extends PlatformConnector {
     }
 
     @Override
-    protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
+    protected void getPlatformDescriptionView(final GenericCallBack<PlatformWebView> callBack) {
 
         this.application.runOnUiThread(() -> {
             if (descriptionView == null)
-                descriptionView = new AndroidDescriptionView(AndroidPlatformConnector.this.application.getContext());
+                descriptionView = new AndroidWebView(AndroidPlatformConnector.this.application.getContext());
             callBack.callBack(descriptionView);
 
         });

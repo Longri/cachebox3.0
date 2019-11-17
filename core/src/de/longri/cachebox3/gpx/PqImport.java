@@ -95,6 +95,8 @@ public class PqImport {
 
         if (correctedLabel != null) correctedLabel.setText(Translation.get("correctedCoords", "0", "0"));
 
+        //TODO check if Transaction active
+        //maybe it is active with canceled import
 
         final int TRANSACTION_ID = 290272;
         database.beginTransactionExclusive(TRANSACTION_ID);

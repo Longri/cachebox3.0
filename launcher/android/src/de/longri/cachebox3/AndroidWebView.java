@@ -36,9 +36,9 @@ import static de.longri.cachebox3.AndroidLauncher.androidLauncher;
 /**
  * Created by Longri on 26.04.2017.
  */
-public class AndroidDescriptionView extends WebView implements PlatformDescriptionView {
+public class AndroidWebView extends WebView implements PlatformWebView {
 
-    private final static Logger log = LoggerFactory.getLogger(AndroidDescriptionView.class);
+    private final static Logger log = LoggerFactory.getLogger(AndroidWebView.class);
 
 
     final String mimeType = "text/html";
@@ -57,24 +57,24 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
             // this method is not called on my device (sdk_int = 22)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 String url = request.getUrl().getPath();
-                return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
+                return AndroidWebView.this.shouldOverrideUrlLoading(view, url);
             } else {
                 // what todo
-                return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, "fake://fake.de?GetAttInfo Kann Attribut nicht bestimmen.");
+                return AndroidWebView.this.shouldOverrideUrlLoading(view, "fake://fake.de?GetAttInfo Kann Attribut nicht bestimmen.");
             }
         }
 
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return AndroidDescriptionView.this.shouldOverrideUrlLoading(view, url);
+            return AndroidWebView.this.shouldOverrideUrlLoading(view, url);
         }
 
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             log.debug("onPageStarted");
-            if (AndroidDescriptionView.this.startLoadingCallBack != null) {
+            if (AndroidWebView.this.startLoadingCallBack != null) {
                 CB.postAsyncDelayd(10, new NamedRunnable("finishLoadingCallBack") {
                     @Override
                     public void run() {
-                        AndroidDescriptionView.this.startLoadingCallBack.callBack(url);
+                        AndroidWebView.this.startLoadingCallBack.callBack(url);
                     }
                 });
             }
@@ -82,11 +82,11 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
 
         public void onPageFinished(WebView view, String url) {
             log.debug("onPageFinished URL: {}", url);
-            if (AndroidDescriptionView.this.finishLoadingCallBack != null) {
+            if (AndroidWebView.this.finishLoadingCallBack != null) {
                 CB.postAsyncDelayd(100, new NamedRunnable("finishLoadingCallBack") {
                     @Override
                     public void run() {
-                        AndroidDescriptionView.this.finishLoadingCallBack.callBack(url);
+                        AndroidWebView.this.finishLoadingCallBack.callBack(url);
                     }
                 });
             }
@@ -108,7 +108,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
         }
     };
 
-    public AndroidDescriptionView(Context context) {
+    public AndroidWebView(Context context) {
         super(AndroidLauncher.androidLauncher, null, android.R.attr.webViewStyle);
         this.getSettings().setLoadWithOverviewMode(true);
         this.getSettings().setSupportZoom(true);
@@ -128,13 +128,13 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     @Override
     public void setBounding(final float x, final float y, final float width, final float height, final int screenHeight) {
         androidLauncher.runOnUiThread(() -> {
-            FrameLayout.LayoutParams paramsLeft = (FrameLayout.LayoutParams) AndroidDescriptionView.this.getLayoutParams();
+            FrameLayout.LayoutParams paramsLeft = (FrameLayout.LayoutParams) AndroidWebView.this.getLayoutParams();
             if (paramsLeft != null) {
                 paramsLeft.width = (int) width;
                 paramsLeft.height = (int) height;
-                AndroidDescriptionView.this.setLayoutParams(paramsLeft);
-                AndroidDescriptionView.this.setX(x);
-                AndroidDescriptionView.this.setY(screenHeight - height - y);
+                AndroidWebView.this.setLayoutParams(paramsLeft);
+                AndroidWebView.this.setX(x);
+                AndroidWebView.this.setY(screenHeight - height - y);
             }
         });
     }
@@ -181,13 +181,13 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
     @Override
     public void display() {
         log.debug("display webView");
-        androidLauncher.runOnUiThread(() -> androidLauncher.show(AndroidDescriptionView.this));
+        androidLauncher.runOnUiThread(() -> androidLauncher.show(AndroidWebView.this));
     }
 
     @Override
     public void close() {
         log.debug("close webView");
-        androidLauncher.runOnUiThread(() -> androidLauncher.removeView(AndroidDescriptionView.this));
+        androidLauncher.runOnUiThread(() -> androidLauncher.removeView(AndroidWebView.this));
     }
 
     @Override
@@ -230,7 +230,7 @@ public class AndroidDescriptionView extends WebView implements PlatformDescripti
                 CB.postOnMainThread(new NamedRunnable("") {
                     @Override
                     public void run() {
-                        AndroidDescriptionView.this.loadUrl("javascript:window.HTMLOUT.showHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                        AndroidWebView.this.loadUrl("javascript:window.HTMLOUT.showHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
                     }
                 });
             }

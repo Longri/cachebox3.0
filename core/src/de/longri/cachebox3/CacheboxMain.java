@@ -71,10 +71,10 @@ public class CacheboxMain extends ApplicationAdapter {
 
 //        INCLUDE_LIST.add(CB.class.getName());
 //        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
-        INCLUDE_LIST.add(DescriptionView.class.getName());
+//        INCLUDE_LIST.add(DescriptionView.class.getName());
 //        INCLUDE_LIST.add(SvgSkinUtil.class.getName());
 //        INCLUDE_LIST.add(SkinLoaderTask.class.getName());
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
 
 //        INCLUDE_LIST.add("de.longri.cachebox3.gui.widgets.filter_settings.FilterSetListView");
 //        INCLUDE_LIST.add(BlockUiProgress_Activity.class.getName());
@@ -83,9 +83,9 @@ public class CacheboxMain extends ApplicationAdapter {
 
         EXCLUDE_LIST.add("de.longri.cachebox3.gui.animations.map.MapAnimator");
         EXCLUDE_LIST.add("de.longri.cachebox3.events.GpsEventHelper");
-        EXCLUDE_LIST.add(StageManager.class.getName());
+//        EXCLUDE_LIST.add(StageManager.class.getName());
         EXCLUDE_LIST.add(NamedStage.class.getName());
-        EXCLUDE_LIST.add(CB.class.getName());
+//        EXCLUDE_LIST.add(CB.class.getName());
         EXCLUDE_LIST.add(XmlThemeBuilder.class.getName());
 //
 //        EXCLUDE_LIST.add("com.badlogic.gdx.sqlite.desktop.DesktopDatabase");
@@ -103,14 +103,14 @@ public class CacheboxMain extends ApplicationAdapter {
 
 
         // iOS Platform debug includes
-        INCLUDE_LIST.add("org.oscim.ios.backend.IOS_RealSvgBitmap");
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher");
-        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
-        INCLUDE_LIST.add("de.longri.cachebox3.GenerateApiKeyWebViewController");
-        INCLUDE_LIST.add(GetApiKey_Activity.class.getName());
-        INCLUDE_LIST.add(Config.class.getName());
+//        INCLUDE_LIST.add("org.oscim.ios.backend.IOS_RealSvgBitmap");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_PlatformConnector");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_Launcher");
+//        INCLUDE_LIST.add("de.longri.cachebox3.IOS_DescriptionView");
+//        INCLUDE_LIST.add("de.longri.cachebox3.GenerateApiKeyWebViewController");
+//        INCLUDE_LIST.add(GetApiKey_Activity.class.getName());
+//        INCLUDE_LIST.add(Config.class.getName());
 
     }
 

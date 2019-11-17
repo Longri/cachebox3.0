@@ -82,7 +82,9 @@ public class Action_SelectDB_Dialog extends AbstractAction {
             } catch (IOException e) {
                 log.warn("can't open Database! File not exist : \n{}", fileHandle.file().getAbsolutePath());
             }
-            return;
+
+            // try to create
+
         }
 
 
