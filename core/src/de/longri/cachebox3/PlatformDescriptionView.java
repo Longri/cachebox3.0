@@ -40,10 +40,13 @@ public interface PlatformDescriptionView {
 
     void close();
 
+    // Give the host application a chance to take control when a URL is about to be loaded in the current WebView
     void setShouldOverrideUrlLoadingCallBack(GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack);
 
+    // Notify the host application that a page has started loading.
     void setStartLoadingCallBack(GenericHandleCallBack<String> startLoadingCallBack);
 
+    // Notify the host application that a page has finished loading.
     void setFinishLoadingCallBack(GenericHandleCallBack<String> finishLoadingCallBack);
 
     boolean isPageVisible();
