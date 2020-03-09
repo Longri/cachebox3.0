@@ -194,10 +194,11 @@ public class IOS_PlatformConnector extends PlatformConnector {
         return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
     }
 
+
     IOS_DescriptionView descriptionView;
 
     @Override
-    protected void getPlatformDescriptionView(final GenericCallBack<PlatformDescriptionView> callBack) {
+    protected void getPlatformDescriptionView(final GenericCallBack<PlatformWebView> callBack) {
         log.debug("show WebView as descriptionView");
         try {
             if (descriptionView == null) {
