@@ -218,6 +218,10 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(abstractCache));
     }
 
+    public static boolean isSetSelectedCache() {
+        return (INSTANCE.selectedCache != null);
+    }
+
     public static AbstractWaypoint getSelectedWaypoint() {
         return INSTANCE.selectedWayPoint;
     }

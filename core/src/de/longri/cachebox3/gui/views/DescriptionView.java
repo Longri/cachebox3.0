@@ -28,6 +28,7 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
+import de.longri.cachebox3.gui.actions.ListsAtGroundSpeak;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
@@ -394,7 +395,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public Menu getContextMenu() {
-        Menu cm = new Menu("DescriptionViewTitle");
+        Menu cacheContextMenu = new Menu("DescriptionViewTitle");
 
         MenuItem mi;
         boolean isSelected = (EventHandler.getSelectedCache() != null);
@@ -402,13 +403,13 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         boolean selectedCacheIsNoGC = false;
         if (isSelected)
             selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
-        mi = cm.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> new ReloadCacheActivity().show());
+        mi = cacheContextMenu.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> new ReloadCacheActivity().show());
         if (!isSelected)
             mi.setEnabled(false);
         if (selectedCacheIsNoGC)
             mi.setEnabled(false);
 
-        mi = cm.addMenuItem("Favorite", CB.getSkin().getMenuIcon.favorit, () -> {
+        mi = cacheContextMenu.addMenuItem("Favorite", CB.getSkin().getMenuIcon.favorit, () -> {
             if (EventHandler.getSelectedCache() == null) {
                 new ButtonDialog("NoCacheSelect", Translation.get("NoCacheSelect"), Translation.get("Error"),
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Error, null).show();
@@ -436,23 +437,28 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             mi.setEnabled(false);
         }
 
-        cm.addMenuItem("AddToWatchList", CB.getSkin().getMenuIcon.todo, () -> {
+        cacheContextMenu.addMenuItem("AddToWatchList", CB.getSkin().getMenuIcon.todo, () -> {
         }).setEnabled(false);
-        cm.addMenuItem("RemoveFromWatchList", CB.getSkin().getMenuIcon.todo, () -> {
+        cacheContextMenu.addMenuItem("RemoveFromWatchList", CB.getSkin().getMenuIcon.todo, () -> {
         }).setEnabled(false);
-        cm.addMenuItem("Solver", CB.getSkin().getMenuIcon.todo, () -> {
+        cacheContextMenu.addMenuItem("Solver", CB.getSkin().getMenuIcon.todo, () -> {
             // replace icon with CB.getSkin().getMenuIcon.solverIcon
             SolverView view = new SolverView();
             CB.viewmanager.showView(view);
         }).setEnabled(false);
-        cm.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> {
+        cacheContextMenu.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> {
             EditCache.getInstance(Database.Data, "MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).edit(EventHandler.getSelectedCache());
         }); // todo create/change icon
+        if (!selectedCacheIsNoGC) {
+            // cm.addMenuItem("contactOwner", ContactOwner.getInstance().getIcon(), () -> ContactOwner.getInstance().execute());
+            cacheContextMenu.addMenuItem("GroundSpeakLists", null, () -> ListsAtGroundSpeak.getInstance().execute());
+        }
 
-        cm.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
+
+        cacheContextMenu.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
         }).setEnabled(false);
 
-        mi = cm.addMenuItem("ShowOriginalHtmlColor", CB.getSkin().getMenuIcon.showOriginalHtmlColor, () -> {
+        mi = cacheContextMenu.addMenuItem("ShowOriginalHtmlColor", CB.getSkin().getMenuIcon.showOriginalHtmlColor, () -> {
             AbstractCache actCache = EventHandler.getSelectedCache();
 
             actCache.setShowOriginalHtmlColor(!actCache.getShowOriginalHtmlColor());
@@ -478,6 +484,6 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         mi.setCheckable(true);
         mi.setChecked(EventHandler.getSelectedCache().getShowOriginalHtmlColor());
 
-        return cm;
+        return cacheContextMenu;
     }
 }

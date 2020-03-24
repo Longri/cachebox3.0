@@ -52,11 +52,11 @@ public class ButtonDialog extends Window {
     private final MessageBoxButtons buttons;
     private final boolean extendedHeight;
     OnMsgBoxClickListener msgBoxClickListener;
+    Catch_Table contentBox;
+    Catch_Table buttonTable;
     private CB_Button btnPositive, btnNeutral, btnNegative;
     private boolean autoHide;
     private Catch_Table titleTable;
-    Catch_Table contentBox;
-    Catch_Table buttonTable;
     private ButtonDialogStyle style;
     private boolean mHasTitle = false;
     private ObjectMap<Actor, Integer> values;
@@ -81,7 +81,7 @@ public class ButtonDialog extends Window {
         }
         this.extendedHeight = ext;
 
-        Skin skin =  VisUI.getSkin();
+        Skin skin = VisUI.getSkin();
         if (style == null)
             style = skin.get("default", ButtonDialogStyle.class);
         this.style = style;
@@ -220,7 +220,7 @@ public class ButtonDialog extends Window {
             case Information:
                 return style.Information;
             //case None:
-                //return null;
+            //return null;
             case Question:
                 return style.Question;
             case Stop:
@@ -345,9 +345,19 @@ public class ButtonDialog extends Window {
         button.setText(text);
     }
 
+    public void setButtonText(String left, String middle, String right) {
+        if (left != null)
+            btnPositive.setText(Translation.get(left));
+        if (middle != null)
+            btnNeutral.setText(Translation.get(middle));
+        if (right != null)
+            btnNegative.setText(Translation.get(right));
+    }
+
     void setButtonClickedListener(OnMsgBoxClickListener listener) {
         msgBoxClickListener = listener;
     }
+
     protected void result(Object object) {
         if (msgBoxClickListener != null) {
             msgBoxClickListener.onClick((Integer) object, null);

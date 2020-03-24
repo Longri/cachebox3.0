@@ -450,7 +450,7 @@ public class CacheList extends Array<AbstractCache> {
         }
     }
 
-    public Iterator<AbstractCache> iterator() {
+    public ArrayIterator<AbstractCache> iterator() {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             return super.iterator();
         }

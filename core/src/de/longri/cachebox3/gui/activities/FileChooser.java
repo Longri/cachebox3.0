@@ -179,9 +179,9 @@ public class FileChooser extends ActivityBase {
         String[] folder = absolutPath.split(split);
 
         String path = "";
-        for (int i = 0, n = folder.length; i < n; i++) {
-            if (folder[i] == null || folder[i].equals(".")) continue;
-            path += folder[i] + "/";
+        for (String s : folder) {
+            if (s == null || s.equals(".")) continue;
+            path += s + "/";
         }
         setInternDirectory(Gdx.files.absolute(path), isRoot);
     }

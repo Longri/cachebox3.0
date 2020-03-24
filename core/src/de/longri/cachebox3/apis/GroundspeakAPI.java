@@ -42,6 +42,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TreeMap;
 
 import static de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber.Segmentize;
 import static de.longri.cachebox3.types.MutableCache.IS_FULL;
@@ -62,7 +63,7 @@ public class GroundspeakAPI {
     private long lastTimeLimitFetched;
     private int nrOfApiCalls;
     private int retryCount;
-    private boolean active = false;
+    private static boolean active = false;
     private Database database;
 
     private GroundspeakAPI() {
@@ -113,7 +114,7 @@ public class GroundspeakAPI {
         // Alternate: implement own RetryManager for 429
         if (ex instanceof WebbException) {
             WebbException we = (WebbException) ex;
-            Response re = we.getResponse();
+            Response<?> re = we.getResponse();
             if (re != null) {
                 JSONObject ej;
                 APIError = re.getStatusCode();
@@ -144,13 +145,9 @@ public class GroundspeakAPI {
                     // 404 = Not Found
                     try {
                         ej = new JSONObject(new JSONTokener((String) re.getErrorBody()));
-                        if (ej != null) {
-                            LastAPIError = ej.optString("errorMessage", "" + APIError);
-                        } else {
-                            LastAPIError = ex.getLocalizedMessage();
-                        }
+                        LastAPIError = ej.optString("errorMessage", "" + APIError);
                     } catch (Exception exc) {
-                        LastAPIError = ex.getLocalizedMessage();
+                        LastAPIError = APIError + ":" + ex.getLocalizedMessage();
                         log.error(APIError + ":" + LastAPIError);
                     }
                 }
@@ -200,7 +197,7 @@ public class GroundspeakAPI {
                         if (query.maxToFetch < skip + take)
                             take = query.maxToFetch - skip;
                         if (query.infoBox != null)
-                            query.infoBox.setProgress(100 * skip / query.maxToFetch, skip + "/" + query.maxToFetch + " (max) ");
+                            query.infoBox.setProgress(100f * skip / query.maxToFetch, skip + "/" + query.maxToFetch + " (max) ");
                         //  query.infoBox.setProgress(100 * skip / query.maxToFetch, getUrl(1, "geocaches/search"));
                         Response<JSONArray> r = query.putQuery(getNetz()
                                 .get(getUrl(1, "geocaches/search"))
@@ -366,7 +363,6 @@ public class GroundspeakAPI {
                             if (APIError == 404) {
                                 // one bad GCCode (not starting with GC) causes Error 404: will hopefully be changed in an update after 11.26.2018
                                 // a not existing GCCode seems to be ignored, what is ok
-                                doRetry = false;
                                 log.error("searchGeoCaches - skipped block cause: " + LastAPIError);
                             } else {
                                 fetchMyCacheLimits();
@@ -402,7 +398,7 @@ public class GroundspeakAPI {
             if (cache != null) {
                 Array<LogEntry> logs = createLogs(cache, fetchedCache.optJSONArray("geocacheLogs"));
                 Array<ImageEntry> images = createImageList(fetchedCache.optJSONArray("images"), cache.getGcCode().toString(), false);
-                images = addDescriptionImageList(images, cache);
+                addDescriptionImageList(images, cache);
                 fetchResults.add(new GeoCacheRelated(cache, logs, images));
             }
         }
@@ -528,7 +524,7 @@ public class GroundspeakAPI {
                     return "";
                 }
                 log.debug("is Log");
-                ObjectMap<String, Object> params = new ObjectMap<String, Object>();
+                ObjectMap<String, Object> params = new ObjectMap<>();
                 params.put("fields", "owner.username,loggedDate,text,type,referenceCode");
                 JSONObject geocacheLog = getNetz()
                         .post(getUrl(1, "geocachelogs") + "?" + WebbUtils.queryString(params))
@@ -684,7 +680,7 @@ public class GroundspeakAPI {
         int take = 50;
 
         try {
-            boolean ready = false;
+            boolean ready;
             do {
                 JSONArray jTrackables = getNetz()
                         .get(getUrl(1, "trackables"))
@@ -697,8 +693,10 @@ public class GroundspeakAPI {
                     JSONObject jTrackable = (JSONObject) jTrackables.get(ii);
                     if (!jTrackable.optBoolean("inHolderCollection", false)) {
                         Trackable tb = createTrackable(jTrackable);
-                        log.debug("downloadUsersTrackables: add " + tb.getName());
-                        tbList.add(tb);
+                        if (tb != null) {
+                            log.debug("downloadUsersTrackables: add " + tb.getName());
+                            tbList.add(tb);
+                        }
                     } else {
                         log.debug("downloadUsersTrackables: not in HolderCollection" + jTrackable.optString("name", ""));
                     }
@@ -731,9 +729,11 @@ public class GroundspeakAPI {
                     .getBody()
             );
 
-            if (!tb.getTBCode().toLowerCase().equals(TBCode.toLowerCase())) {
-                // fetched by TrackingCode, the result for trackingcode is always empty, except for owner
-                tb.setTrackingCode(TBCode);
+            if (tb != null) {
+                if (!tb.getTBCode().toLowerCase().equals(TBCode.toLowerCase())) {
+                    // fetched by TrackingCode, the result for trackingcode is always empty, except for owner
+                    tb.setTrackingCode(TBCode);
+                }
             }
             return tb;
         } catch (Exception ex) {
@@ -791,10 +791,71 @@ public class GroundspeakAPI {
         }
     }
 
-    public int AddToWatchList(String gcCode) {
+    public TreeMap<String, String> fetchBookmarkLists() {
+
+        TreeMap<String, String> bmList = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
+        try {
+
+            int skip = 0;
+            int take = 50;
+            String fields = "referenceCode,name";
+
+            do {
+                boolean doRetry;
+                do {
+                    doRetry = false;
+                    try {
+                        Response<JSONArray> r = getNetz()
+                                .get(getUrl(1, "users/me/lists"))
+                                .param("types", "bm")
+                                .param("fields", fields)
+                                .param("skip", skip)
+                                .param("take", take)
+                                .ensureSuccess()
+                                .asJsonArray();
+
+                        retryCount = 0;
+                        skip = skip + take;
+
+                        JSONArray response = r.getBody();
+
+                        for (int ii = 0; ii < response.length(); ii++) {
+                            JSONObject jPQ = (JSONObject) response.get(ii);
+                            String bmReferenceCode = jPQ.optString("referenceCode", "");
+                            if (bmReferenceCode.length() > 0) {
+                                String bmName = jPQ.optString("name", "");
+                                bmList.put(bmName, bmReferenceCode);
+                            }
+                        }
+
+                        if (response.length() < take) {
+                            APIError = OK;
+                            return bmList;
+                        }
+                    } catch (Exception ex) {
+                        doRetry = retry(ex);
+                        if (!doRetry) {
+                            // APIError from retry
+                            return bmList;
+                        }
+                    }
+                }
+                while (doRetry);
+            } while (true);
+
+        } catch (Exception ex) {
+            APIError = ERROR;
+            LastAPIError = ex.toString();
+            log.error("fetchBookmarkList", ex);
+            return bmList;
+        }
+    }
+
+    public int addToList(String listCode, String gcCode) {
         if (!isAccessTokenInvalid()) {
             try {
-                getNetz().post(getUrl(1, "lists/" + fetchWatchListCode() + "/geocaches"))
+                getNetz().post(getUrl(1, "lists/" + listCode + "/geocaches"))
                         .body(new JSONObject().put("referenceCode", gcCode))
                         .ensureSuccess()
                         .asVoid()
@@ -808,10 +869,10 @@ public class GroundspeakAPI {
         return ERROR;
     }
 
-    public int RemoveFromWatchList(String gcCode) {
+    public int removeFromList(String listCode, String gcCode) {
         if (!isAccessTokenInvalid()) {
             try {
-                getNetz().delete(getUrl(1, "lists/" + fetchWatchListCode() + "/geocaches/" + gcCode)).ensureSuccess().asVoid();
+                getNetz().delete(getUrl(1, "lists/" + listCode + "/geocaches/" + gcCode)).ensureSuccess().asVoid();
             } catch (Exception ex) {
                 retry(ex);
                 return ERROR;
@@ -819,15 +880,6 @@ public class GroundspeakAPI {
             return OK;
         }
         return ERROR;
-    }
-
-    private String fetchWatchListCode() {
-        JSONArray wl = getNetz()
-                .get(getUrl(1, "users/me/lists?types=wl&fields=referenceCode"))
-                .ensureSuccess()
-                .asJsonArray()
-                .getBody();
-        return ((JSONObject) wl.get(0)).optString("referenceCode", "");
     }
 
     public String fetchFriends() {
@@ -1083,7 +1135,7 @@ public class GroundspeakAPI {
             tb.setCurrentOwnerName(getStringValue(API1Trackable, "holder", "username"));
             String releasedDate = API1Trackable.optString("releasedDate", "");
             try {
-                tb.setDateCreated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(releasedDate));
+                tb.setDateCreated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).parse(releasedDate));
             } catch (Exception e) {
                 tb.setDateCreated(new Date());
             }
@@ -1173,19 +1225,21 @@ public class GroundspeakAPI {
                         break;
                     case "status":
                         String status = API1Cache.optString(switchValue, "");
-                        if (status.equals("Archived")) {
-                            cache.setArchived(true);
-                            cache.setAvailable(false);
-                        } else if (status.equals("Disabled")) {
-                            cache.setArchived(false);
-                            cache.setAvailable(false);
-                        } else if (status.equals("Unpublished")) {
-                            cache.setArchived(false);
-                            cache.setAvailable(false);
-                        } else {
-                            // Active, Locked
-                            cache.setArchived(false);
-                            cache.setAvailable(true);
+                        switch (status) {
+                            case "Archived":
+                                cache.setArchived(true);
+                                cache.setAvailable(false);
+                                break;
+                            case "Disabled":
+                            case "Unpublished":
+                                cache.setArchived(false);
+                                cache.setAvailable(false);
+                                break;
+                            default:
+                                // Active, Locked
+                                cache.setArchived(false);
+                                cache.setAvailable(true);
+                                break;
                         }
                         break;
                     case "owner":
@@ -1202,7 +1256,9 @@ public class GroundspeakAPI {
                         // switch subValue
                         if (userData != null) {
                             // foundDate
-                            cache.setFound(userData.optString("foundDate", "").length() != 0);
+                            String sFound = userData.optString("foundDate", "");
+                            boolean didFind = sFound.length() != 0 && !sFound.contains("null");
+                            cache.setFound(didFind);
                             // correctedCoordinates
                             JSONObject correctedCoordinates = userData.optJSONObject("correctedCoordinates");
                             if (correctedCoordinates != null) {
@@ -1368,7 +1424,7 @@ public class GroundspeakAPI {
         logEntry.Finder = getStringValue(geocacheLog, "owner", "username");
         String dateCreated = geocacheLog.optString("loggedDate", "");
         try {
-            logEntry.Timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(dateCreated);
+            logEntry.Timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).parse(dateCreated);
         } catch (Exception e) {
             logEntry.Timestamp = new Date();
         }
@@ -1442,7 +1498,7 @@ public class GroundspeakAPI {
         return imageEntries;
     }
 
-    private Array<ImageEntry> addDescriptionImageList(Array<ImageEntry> imageList, AbstractCache cache) {
+    private void addDescriptionImageList(Array<ImageEntry> imageList, AbstractCache cache) {
 
         Array<String> DescriptionImages = getDescriptionsImages(cache);
         for (String url : DescriptionImages) {
@@ -1466,7 +1522,6 @@ public class GroundspeakAPI {
                 imageList.add(imageEntry);
             }
         }
-        return imageList;
     }
 
     private Array<String> getDescriptionsImages(AbstractCache cache) {
@@ -1483,7 +1538,7 @@ public class GroundspeakAPI {
         if (baseUri == null) {
             cache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + cache.getGcCode());
             try {
-                baseUri = URI.create(cache.getUrl().toString());
+                URI.create(cache.getUrl().toString());
             } catch (Exception exc) {
                 return images;
             }
@@ -1506,10 +1561,8 @@ public class GroundspeakAPI {
                 String src = img.text.substring(srcStart + 1, srcEnd);
                 try {
                     URI imgUri = URI.create(src);
-
                     images.add(imgUri.toString());
-
-                } catch (Exception exc) {
+                } catch (Exception ignored) {
                 }
             }
         }
@@ -1575,8 +1628,6 @@ public class GroundspeakAPI {
 
     private CacheSizes CacheSizeFromID(int id) {
         switch (id) {
-            case 1:
-                return CacheSizes.other; // not chosen
             case 2:
                 return CacheSizes.micro;
             case 8:
@@ -1585,10 +1636,6 @@ public class GroundspeakAPI {
                 return CacheSizes.regular; //	Medium
             case 4:
                 return CacheSizes.large;
-            case 5:
-                return CacheSizes.other; //	Virtual
-            case 6:
-                return CacheSizes.other;
             default:
                 return CacheSizes.other;
         }
@@ -1599,7 +1646,7 @@ public class GroundspeakAPI {
         if (d.endsWith("Z"))
             ps = ps + "'Z'";
         try {
-            return new SimpleDateFormat(ps).parse(d);
+            return new SimpleDateFormat(ps, Locale.US).parse(d);
         } catch (Exception e) {
             log.error("DateFromString", e);
             return new Date();
@@ -1607,13 +1654,13 @@ public class GroundspeakAPI {
     }
 
     private String getDate(Date date) {
-        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(date);
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).format(date);
     }
 
-    private String getStringValue(JSONObject jObject, String from, String KeyName) {
+    private String getStringValue(JSONObject jObject, String from, String keyName) {
         JSONObject fromObject = jObject.optJSONObject(from);
         if (fromObject != null) {
-            return fromObject.optString(KeyName, "");
+            return fromObject.optString(keyName, "");
         } else {
             return "";
         }
@@ -1625,7 +1672,7 @@ public class GroundspeakAPI {
 
     private enum MemberShipTypes {Unknown, Basic, Charter, Premium}
 
-    public class PQ implements Serializable, Comparable {
+    public static class PQ implements Serializable, Comparable {
         private final long serialVersionUID = 8308386638170255124L;
         public String name;
         public int cacheCount;
@@ -1640,7 +1687,7 @@ public class GroundspeakAPI {
         }
     }
 
-    public class UserInfos {
+    public static class UserInfos {
         public String username;
         public MemberShipTypes memberShipType;
         public int findCount;
@@ -1661,7 +1708,7 @@ public class GroundspeakAPI {
         }
     }
 
-    public class GeoCacheRelated {
+    public static class GeoCacheRelated {
         public AbstractCache cache;
         public Array<LogEntry> logs;
         public Array<ImageEntry> images;
@@ -1677,7 +1724,6 @@ public class GroundspeakAPI {
     public static class Query {
         private final String LiteFields = "referenceCode,favoritePoints,userData,name,difficulty,terrain,placedDate,geocacheType.id,geocacheSize.id,location,postedCoordinates,status,owner.username,ownerAlias";
         private final String NotLiteFields = "hints,attributes,longDescription,shortDescription,additionalWaypoints,userWaypoints";
-        private final String StatusFields = "referenceCode,favoritePoints,status,trackableCount";
         public InfoBox infoBox;
         private StringBuilder qString;
         private StringBuilder fieldsString;
@@ -1781,7 +1827,8 @@ public class GroundspeakAPI {
         }
 
         public Query resultForStatusFields() {
-            addResultField(StatusFields);
+            String statusFields = "referenceCode,favoritePoints,status,trackableCount";
+            addResultField(statusFields);
             return this;
         }
 
@@ -1852,7 +1899,7 @@ public class GroundspeakAPI {
         }
     }
 
-    public class Descriptor {
+    public static class Descriptor {
         //todo is dummy for Descriptor for livemap
     }
 }

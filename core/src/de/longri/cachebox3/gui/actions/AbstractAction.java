@@ -44,6 +44,10 @@ public abstract class AbstractAction {
         this(IMPLEMENTED, name, "", id);
     }
 
+    public AbstractAction(String name) {
+        this(IMPLEMENTED, name, "", -1);
+    }
+
     public AbstractAction(boolean disabled, String name, int id) {
         this(disabled, name, "", id);
     }

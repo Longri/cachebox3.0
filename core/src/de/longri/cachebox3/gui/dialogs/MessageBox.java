@@ -34,16 +34,12 @@ public class MessageBox {
 
     public static void show(final CharSequence message, final CharSequence title, final MessageBoxButtons buttons, final MessageBoxIcon icon,
                             final OnMsgBoxClickListener clickListener) {
-
         CB.postOnGlThread(new NamedRunnable("MessageBox") {
             @Override
             public void run() {
                 new ButtonDialog(NAME, message, title, buttons, icon, clickListener).show();
             }
         });
-
-
     }
-
 
 }

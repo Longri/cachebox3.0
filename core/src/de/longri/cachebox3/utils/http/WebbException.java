@@ -2,13 +2,13 @@ package de.longri.cachebox3.utils.http;
 
 public class WebbException extends RuntimeException {
 
-    private Response response;
+    private Response<?> response;
 
     public WebbException(String message) {
         super(message);
     }
 
-    public WebbException(String message, Response response) {
+    public WebbException(String message, Response<?> response) {
         super(message);
         this.response = response;
     }
@@ -27,7 +27,7 @@ public class WebbException extends RuntimeException {
      *
      * @return the <code>Response</code> object filled with error information like statusCode and errorBody.
      */
-    public Response getResponse() {
+    public Response<?> getResponse() {
         return response;
     }
 }
