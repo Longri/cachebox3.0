@@ -58,7 +58,7 @@ public class FileTransfer_Activity extends ActivityBase {
             public void clicked(InputEvent event, float x, float y) {
                 CharSequence msg = Translation.get("closeFileTransfer?");
                 CharSequence title = Translation.get("closeFileTransfer");
-                MessageBox.show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk,
+                MessageBox.show(msg, title, MessageBoxButton.YesNo, MessageBoxIcon.Asterisk,
                         new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {

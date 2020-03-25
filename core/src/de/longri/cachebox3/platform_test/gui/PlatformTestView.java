@@ -32,7 +32,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -229,7 +229,7 @@ public class PlatformTestView extends AbstractView {
                             buttonDialogStyle.titleFont = CB.getSkin().getFont("AboutInfo");
                             ButtonDialog dialog = new ButtonDialog("PlatformTestMassageDialog",
                                     ButtonDialog.getMsgContentTable(msg, null, buttonDialogStyle), null,
-                                    MessageBoxButtons.OK, null, buttonDialogStyle);
+                                    MessageBoxButton.OK, null, buttonDialogStyle);
                             dialog.show();
                         }
                     }

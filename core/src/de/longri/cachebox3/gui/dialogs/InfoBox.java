@@ -20,13 +20,13 @@ public class InfoBox {
     private boolean isRunning, isCanceled;
     private String title;
     private String info;
-    private MessageBoxButtons buttons;
+    private MessageBoxButton buttons;
 
     public InfoBox(Infotype infoType, String title) {
         this.infoType = infoType;
         this.title = title;
         info = "";
-        buttons = MessageBoxButtons.Cancel;
+        buttons = MessageBoxButton.Cancel;
         listener = (which, data) -> {
             // which can only be cancel (ButtonDialog.BUTTON_NEGATIVE)
             isCanceled = true;
@@ -133,7 +133,7 @@ public class InfoBox {
         return this;
     }
 
-    public InfoBox setButtons(MessageBoxButtons buttons) {
+    public InfoBox setButtons(MessageBoxButton buttons) {
         this.buttons = buttons;
         return this;
     }

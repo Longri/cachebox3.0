@@ -22,7 +22,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -177,7 +177,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
         // todo animation while waiting
         Array<LogEntry> logList = GroundspeakAPI.getInstance().fetchGeoCacheLogs(EventHandler.getSelectedCache(), loadAllLogs, null);
         if (GroundspeakAPI.getInstance().APIError != OK) {
-            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("errorAPI"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("errorAPI"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
         } else {
             if (logList.size > 0) {
 

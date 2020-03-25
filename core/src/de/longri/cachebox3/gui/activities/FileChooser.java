@@ -36,7 +36,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
@@ -265,7 +265,7 @@ public class FileChooser extends ActivityBase {
             } else {
                 msg = Translation.get("delFile");
             }
-            MessageBox.show(msg, null, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, (which, data) -> {
+            MessageBox.show(msg, null, MessageBoxButton.YesNo, MessageBoxIcon.Warning, (which, data) -> {
                 if (which == ButtonDialog.BUTTON_POSITIVE)
                     CB.postAsync(new NamedRunnable("delete files") {
                         @Override

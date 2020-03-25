@@ -23,7 +23,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.dialogs.InfoBox;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.MapView;
@@ -376,7 +376,7 @@ public class ImportGCPosition extends Activity {
 
                 Array<GroundspeakAPI.GeoCacheRelated> fetchedCaches = GroundspeakAPI.getInstance().searchGeoCaches(q);
                 if (GroundspeakAPI.getInstance().APIError != OK) {
-                    MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("importCachesOverPosition"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                    MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("importCachesOverPosition"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
                 } else {
                     if (!infoBox.isCanceled()) {
                         // WriteIntoDB.CachesAndLogsAndImagesIntoDB(geoCacheRelateds, gpxFilename);

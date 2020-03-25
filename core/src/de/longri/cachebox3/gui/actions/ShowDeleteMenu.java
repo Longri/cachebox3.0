@@ -25,7 +25,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.settings.Config;
@@ -58,7 +58,7 @@ public class ShowDeleteMenu extends Menu {
     }
 
     private void askAndExecute(final FilterProperties filter, String msg) {
-        MessageBox.show(Translation.get(msg), null, MessageBoxButtons.YesNo, MessageBoxIcon.Question, (which, data) -> {
+        MessageBox.show(Translation.get(msg), null, MessageBoxButton.YesNo, MessageBoxIcon.Question, (which, data) -> {
             if (which == ButtonDialog.BUTTON_POSITIVE)
                 CB.postAsync(new NamedRunnable("Delete Caches") {
                     @Override

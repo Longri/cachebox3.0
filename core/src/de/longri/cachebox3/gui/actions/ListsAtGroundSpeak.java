@@ -5,7 +5,7 @@ import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.translation.Translation;
@@ -53,7 +53,7 @@ public class ListsAtGroundSpeak extends AbstractAction {
     }
 
     private void groundspeakList(Map.Entry<String, String> bookmarkList) {
-        ButtonDialog mb = new ButtonDialog("", Translation.get("BookmarklistMessage", bookmarkList.getKey()), bookmarkList.getKey(), MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Question,
+        ButtonDialog mb = new ButtonDialog("", Translation.get("BookmarklistMessage", bookmarkList.getKey()), bookmarkList.getKey(), MessageBoxButton.AbortRetryIgnore, MessageBoxIcon.Question,
                 (btnNumber, data) -> {
                     if (btnNumber == BUTTON_POSITIVE)
                         addToList(bookmarkList.getValue());
@@ -66,7 +66,7 @@ public class ListsAtGroundSpeak extends AbstractAction {
     }
 
     private void groundspeakList(String title) {
-        ButtonDialog mb = new ButtonDialog("", Translation.get(title + "Message"), Translation.get(title), MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Question,
+        ButtonDialog mb = new ButtonDialog("", Translation.get(title + "Message"), Translation.get(title), MessageBoxButton.AbortRetryIgnore, MessageBoxIcon.Question,
                 (btnNumber, data) -> {
                     if (btnNumber == BUTTON_POSITIVE)
                         addToList(title);
@@ -97,9 +97,9 @@ public class ListsAtGroundSpeak extends AbstractAction {
                     AddToTitle = "AddToBookmarklist";
             }
             if (GroundspeakAPI.getInstance().addToList(listCode, EventHandler.getSelectedCache().getGcCode().toString()) == OK) {
-                MessageBox.show(Translation.get("ok"), Translation.get(AddToTitle), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(Translation.get("ok"), Translation.get(AddToTitle), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else {
-                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get(AddToTitle), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get(AddToTitle), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             }
         }
     }
@@ -123,9 +123,9 @@ public class ListsAtGroundSpeak extends AbstractAction {
                     RemoveFromTitle = "RemoveFromBookmarklist";
             }
             if (GroundspeakAPI.getInstance().removeFromList(listCode, EventHandler.getSelectedCache().getGcCode().toString()) == OK) {
-                MessageBox.show(Translation.get("ok"), Translation.get(RemoveFromTitle), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(Translation.get("ok"), Translation.get(RemoveFromTitle), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else {
-                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get(RemoveFromTitle), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get(RemoveFromTitle), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             }
         }
     }

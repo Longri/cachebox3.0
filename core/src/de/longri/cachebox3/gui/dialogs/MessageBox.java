@@ -29,10 +29,10 @@ public class MessageBox {
 
 
     public static void show(CharSequence message) {
-        show(message, "", MessageBoxButtons.OK, null, null);
+        show(message, "", MessageBoxButton.OK, null, null);
     }
 
-    public static void show(final CharSequence message, final CharSequence title, final MessageBoxButtons buttons, final MessageBoxIcon icon,
+    public static void show(final CharSequence message, final CharSequence title, final MessageBoxButton buttons, final MessageBoxIcon icon,
                             final OnMsgBoxClickListener clickListener) {
         CB.postOnGlThread(new NamedRunnable("MessageBox") {
             @Override

@@ -27,7 +27,7 @@ import de.longri.cachebox3.gpx.ImportHandler;
 import de.longri.cachebox3.gui.activities.*;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -80,9 +80,9 @@ public class ShowImportMenu extends Menu {
             public void run() {
                 if (GroundspeakAPI.getInstance().isAccessTokenInvalid()) {
                     if (GroundspeakAPI.getInstance().APIError == 401) {
-                        MessageBox.show(Translation.get("apiKeyNeeded"), Translation.get("ImportMenuTitle"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                        MessageBox.show(Translation.get("apiKeyNeeded"), Translation.get("ImportMenuTitle"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
                     } else {
-                        MessageBox.show(Translation.get("getApiKey") + "\n" + GroundspeakAPI.getInstance().LastAPIError, Translation.get("ImportMenuTitle"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                        MessageBox.show(Translation.get("getApiKey") + "\n" + GroundspeakAPI.getInstance().LastAPIError, Translation.get("ImportMenuTitle"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
                     }
                 } else {
                     postOnGlThread(new NamedRunnable("ShowImportMenu") {

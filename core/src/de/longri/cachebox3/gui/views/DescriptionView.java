@@ -33,7 +33,7 @@ import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -97,7 +97,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
                         GroundspeakAPI.getInstance().fetchMyCacheLimits();
                         if (GroundspeakAPI.getInstance().APIError != OK) {
-                            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Friends"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
                             // onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(1));
                             return;
                         }
@@ -117,7 +117,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
                             //message = msg;
                             //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(2));
-                            MessageBox.show(msg, Translation.get("download"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                            MessageBox.show(msg, Translation.get("download"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
 
                             return;
                         }
@@ -412,7 +412,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         mi = cacheContextMenu.addMenuItem("Favorite", CB.getSkin().getMenuIcon.favorit, () -> {
             if (EventHandler.getSelectedCache() == null) {
                 new ButtonDialog("NoCacheSelect", Translation.get("NoCacheSelect"), Translation.get("Error"),
-                        MessageBoxButtons.OKCancel, MessageBoxIcon.Error, null).show();
+                        MessageBoxButton.OKCancel, MessageBoxIcon.Error, null).show();
             } else {
                 AbstractCache selectedCache = EventHandler.getSelectedCache();
 

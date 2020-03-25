@@ -37,7 +37,7 @@ public class CancelProgressDialog extends ButtonDialog {
     private FinishCallBack finishCallBack;
 
     public CancelProgressDialog(String name, CharSequence title, final ProgressCancelRunnable progressCancelRunnable) {
-        super(name, getProgressContentTable(), title, MessageBoxButtons.Cancel, null);
+        super(name, getProgressContentTable(), title, MessageBoxButton.Cancel, null);
         this.msgBoxClickListener = new OnMsgBoxClickListener() {
             @Override
             public boolean onClick(int which, Object data) {

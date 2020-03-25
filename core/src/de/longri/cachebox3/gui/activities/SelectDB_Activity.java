@@ -322,7 +322,7 @@ public class SelectDB_Activity extends ActivityBase {
                         CharSequence msg = Translation.get("DB_outdated_question");
                         CharSequence title = Translation.get("DB_outdated");
 
-                        MessageBox.show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Database, new OnMsgBoxClickListener() {
+                        MessageBox.show(msg, title, MessageBoxButton.YesNo, MessageBoxIcon.Database, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {
 
@@ -463,7 +463,7 @@ public class SelectDB_Activity extends ActivityBase {
             }
         };
         CharSequence message = Translation.get("confirmDatabaseDeletion", dbFile.getName());
-        MessageBox.show(message, Translation.get("deleteDatabase"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
+        MessageBox.show(message, Translation.get("deleteDatabase"), MessageBoxButton.YesNo, MessageBoxIcon.Question, dialogClickListener);
     }
 
 

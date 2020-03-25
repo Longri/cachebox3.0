@@ -11,7 +11,7 @@ import de.longri.cachebox3.callbacks.FinishCallBack;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -119,7 +119,7 @@ public class Action_MapDownload extends AbstractAction {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            MessageBox.show(ex.toString(), Translation.get("MapDownload"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+            MessageBox.show(ex.toString(), Translation.get("MapDownload"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
         }
     }
 

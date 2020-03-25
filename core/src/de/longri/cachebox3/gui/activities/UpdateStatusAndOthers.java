@@ -36,7 +36,7 @@ import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
@@ -248,7 +248,7 @@ public class UpdateStatusAndOthers extends ActivityBase {
                         CharSequence title = Translation.get("chkState");
                         CharSequence msg = new CompoundCharSequence(Translation.get("CachesUpdated")
                                 , " ", Integer.toString(completeCount), "/", Integer.toString(Database.Data.cacheList.size));
-                        ButtonDialog dialog = new ButtonDialog("chkState", msg, title, MessageBoxButtons.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
+                        ButtonDialog dialog = new ButtonDialog("chkState", msg, title, MessageBoxButton.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {
                                 if (which == ButtonDialog.BUTTON_POSITIVE) {

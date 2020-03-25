@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.dialogs;
 
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import de.longri.cachebox3.CB;
 import de.longri.cachebox3.translation.Translation;
 
 /**
@@ -27,7 +26,7 @@ public class ParkingDialog extends ButtonDialog {
     private ImageButton btSetGPS, btSelectWP, btDeleteP;
 
     public ParkingDialog() {
-        super("ParkingDialog", getMsgContentTable("Not implemented yet", MessageBoxIcon.Information), Translation.get("My_Parking_Area_Title"), MessageBoxButtons.Cancel, null);
+        super("ParkingDialog", getMsgContentTable("Not implemented yet", MessageBoxIcon.Information), Translation.get("My_Parking_Area_Title"), MessageBoxButton.Cancel, null);
 
         // btSetGPS = new ImageButton(CB.getSkin());
         /*

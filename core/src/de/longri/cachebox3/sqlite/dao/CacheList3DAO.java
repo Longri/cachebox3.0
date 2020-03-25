@@ -23,7 +23,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.sqlite.Database;
@@ -99,7 +99,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                 CB.scheduleOnGlThread(new NamedRunnable("CacheList3DAO") {
                     @Override
                     public void run() {
-                        MessageBox.show(Translation.get("ErrDbStartup"), Translation.get("corruptDB"), MessageBoxButtons.OK, MessageBoxIcon.Error, new OnMsgBoxClickListener() {
+                        MessageBox.show(Translation.get("ErrDbStartup"), Translation.get("corruptDB"), MessageBoxButton.OK, MessageBoxIcon.Error, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {
                                 //show select DB Dialog

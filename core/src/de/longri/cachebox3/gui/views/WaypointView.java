@@ -35,7 +35,7 @@ import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.activities.ProjectionCoordinate;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -310,7 +310,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         //name, msg, title, buttons, icon, OnMsgBoxClickListener
         ButtonDialog dialog = new ButtonDialog("delete Waypoint",
                 Translation.get("?DelWP") + "\n[" + actWaypoint.getTitle() + "]\n",
-                Translation.get("!DelWP"), MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                Translation.get("!DelWP"), MessageBoxButton.YesNo, MessageBoxIcon.Question,
                 (which, data) -> {
                     if (which == ButtonDialog.BUTTON_POSITIVE) {
                         log.debug("Delete Waypoint");
@@ -439,9 +439,9 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             else if (isCorrectedFinal())
                 GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
             if (GroundspeakAPI.getInstance().APIError == GroundspeakAPI.OK) {
-                MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else {
-                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             }
         });
         mi.setEnabled(actAbstractCache.hasCorrectedCoordinates() || isCorrectedFinal());

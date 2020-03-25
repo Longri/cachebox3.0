@@ -49,7 +49,7 @@ public class ButtonDialog extends Window {
     static public final int BUTTON_POSITIVE = 1;
     static public final int BUTTON_NEUTRAL = 2;
     static public final int BUTTON_NEGATIVE = 3;
-    private final MessageBoxButtons buttons;
+    private final MessageBoxButton buttons;
     private final boolean extendedHeight;
     OnMsgBoxClickListener msgBoxClickListener;
     Catch_Table contentBox;
@@ -61,15 +61,15 @@ public class ButtonDialog extends Window {
     private boolean mHasTitle = false;
     private ObjectMap<Actor, Integer> values;
 
-    public ButtonDialog(String name, CharSequence msg, CharSequence title, MessageBoxButtons buttons, MessageBoxIcon icon, OnMsgBoxClickListener listener) {
+    public ButtonDialog(String name, CharSequence msg, CharSequence title, MessageBoxButton buttons, MessageBoxIcon icon, OnMsgBoxClickListener listener) {
         this(name, getMsgContentTable(msg, icon), title, buttons, listener, VisUI.getSkin().get("default", ButtonDialogStyle.class));
     }
 
-    public ButtonDialog(String name, Catch_Table contentTable, CharSequence title, MessageBoxButtons buttons, OnMsgBoxClickListener listener) {
+    public ButtonDialog(String name, Catch_Table contentTable, CharSequence title, MessageBoxButton buttons, OnMsgBoxClickListener listener) {
         this(name, contentTable, title, buttons, listener, VisUI.getSkin().get("default", ButtonDialogStyle.class));
     }
 
-    public ButtonDialog(String name, Catch_Table contentTable, CharSequence title, MessageBoxButtons buttons, OnMsgBoxClickListener listener, ButtonDialogStyle style) {
+    public ButtonDialog(String name, Catch_Table contentTable, CharSequence title, MessageBoxButton buttons, OnMsgBoxClickListener listener, ButtonDialogStyle style) {
         super(name);
         this.contentBox = contentTable;
         boolean ext = false;
@@ -291,37 +291,37 @@ public class ButtonDialog extends Window {
 
         float maxWindowWidth = prfWidth - (8 * CB.scaledSizes.MARGIN);
 
-        if (buttons == MessageBoxButtons.YesNoRetry) {
+        if (buttons == MessageBoxButton.YesNoRetry) {
             buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
             this.button(Translation.get("yes"), buttonWidth, BUTTON_POSITIVE);
             this.button(Translation.get("no"), buttonWidth, BUTTON_NEGATIVE);
             this.button(Translation.get("retry"), buttonWidth, BUTTON_NEUTRAL);
-        } else if (buttons == MessageBoxButtons.AbortRetryIgnore) {
+        } else if (buttons == MessageBoxButton.AbortRetryIgnore) {
             buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
             this.button(Translation.get("abort"), buttonWidth, BUTTON_POSITIVE);
             this.button(Translation.get("retry"), buttonWidth, BUTTON_NEUTRAL);
             this.button(Translation.get("ignore"), buttonWidth, BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.OK) {
+        } else if (buttons == MessageBoxButton.OK) {
             buttonWidth = CB.scaledSizes.BUTTON_WIDTH_WIDE;
             this.button(Translation.get("ok"), buttonWidth, BUTTON_POSITIVE);
-        } else if (buttons == MessageBoxButtons.OKCancel) {
+        } else if (buttons == MessageBoxButton.OKCancel) {
             buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
             this.button(Translation.get("ok"), buttonWidth, BUTTON_POSITIVE);
             this.button(Translation.get("cancel"), buttonWidth, BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.RetryCancel) {
+        } else if (buttons == MessageBoxButton.RetryCancel) {
             buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
             this.button(Translation.get("retry"), buttonWidth, BUTTON_POSITIVE);
             this.button(Translation.get("cancel"), buttonWidth, BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.YesNo) {
+        } else if (buttons == MessageBoxButton.YesNo) {
             buttonWidth = (maxWindowWidth / 2) - (3 * CB.scaledSizes.MARGIN);
             this.button(Translation.get("yes"), buttonWidth, BUTTON_POSITIVE);
             this.button(Translation.get("no"), buttonWidth, BUTTON_NEGATIVE);
-        } else if (buttons == MessageBoxButtons.YesNoCancel) {
+        } else if (buttons == MessageBoxButton.YesNoCancel) {
             buttonWidth = (maxWindowWidth / 3) - (4 * CB.scaledSizes.MARGIN);
             this.button(Translation.get("yes"), buttonWidth, BUTTON_POSITIVE);
             this.button(Translation.get("no"), buttonWidth, BUTTON_NEGATIVE);
             this.button(Translation.get("cancel"), buttonWidth, BUTTON_NEUTRAL);
-        } else if (buttons == MessageBoxButtons.Cancel) {
+        } else if (buttons == MessageBoxButton.Cancel) {
             buttonWidth = CB.scaledSizes.BUTTON_WIDTH_WIDE;
             this.button(Translation.get("cancel"), buttonWidth, BUTTON_NEGATIVE);
         }

@@ -109,16 +109,16 @@ public class DraftsView extends AbstractView {
         AbstractCache abstractCache = EventHandler.getSelectedCache();
 
         if (abstractCache == null) {
-            MessageBox.show(Translation.get("NoCacheSelect"), Translation.get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+            MessageBox.show(Translation.get("NoCacheSelect"), Translation.get("thisNotWork"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
             return;
         }
 
         // chk car found?
         if (abstractCache.getGcCode().toString().equalsIgnoreCase("CBPark")) {
             if (type == LogTypes.found) {
-                MessageBox.show(Translation.get("My_Parking_Area_Found"), Translation.get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(Translation.get("My_Parking_Area_Found"), Translation.get("thisNotWork"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else if (type == LogTypes.didnt_find) {
-                MessageBox.show(Translation.get("My_Parking_Area_DNF"), Translation.get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                MessageBox.show(Translation.get("My_Parking_Area_DNF"), Translation.get("thisNotWork"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
             }
             return;
         }
@@ -507,7 +507,7 @@ public class DraftsView extends AbstractView {
                             CB.scheduleOnGlThread(new NamedRunnable("DraftsView") {
                                 @Override
                                 public void run() {
-                                    MessageBox.show(finalUploadMeldung, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                                    MessageBox.show(finalUploadMeldung, Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
                                     log.debug("Show MessageBox for ERROR on upload Draft");
                                 }
                             }, 300);
@@ -515,7 +515,7 @@ public class DraftsView extends AbstractView {
                             CB.scheduleOnGlThread(new NamedRunnable("DraftsView") {
                                 @Override
                                 public void run() {
-                                    MessageBox.show(Translation.get("uploadFinished"), Translation.get("uploadDrafts"), MessageBoxButtons.OK, MessageBoxIcon.GC_Live, null);
+                                    MessageBox.show(Translation.get("uploadFinished"), Translation.get("uploadDrafts"), MessageBoxButton.OK, MessageBoxIcon.GC_Live, null);
                                     log.debug("Show MessageBox for uploaded Draft");
                                 }
                             }, 300);
@@ -565,7 +565,7 @@ public class DraftsView extends AbstractView {
 
         };
         final CharSequence message = Translation.get("DelDrafts?");
-        Gdx.app.postRunnable(() -> MessageBox.show(message, Translation.get("DeleteAllDrafts"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, dialogClickListener));
+        Gdx.app.postRunnable(() -> MessageBox.show(message, Translation.get("DeleteAllDrafts"), MessageBoxButton.YesNo, MessageBoxIcon.Warning, dialogClickListener));
     }
 
     //################### Context menu implementation ####################################

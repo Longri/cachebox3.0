@@ -39,7 +39,7 @@ import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.actions.show_activities.Action_Add_WP;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.map.MapState;
@@ -778,7 +778,7 @@ public class MapView extends AbstractView {
 // if current layer is a Mapsforge map, it is posible to add the selected Mapsforge map
 // to the current layer. We ask the User!
 //                if (MapView.mapTileLoader.getCurrentLayer().isMapsForge() && layer.isMapsForge()) {
-//                    GL_MsgBox msgBox = GL_MsgBox.show("add or change", "Map selection", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
+//                    GL_MsgBox msgBox = GL_MsgBox.show("add or change", "Map selection", MessageBoxButton.YesNoCancel, MessageBoxIcon.Question, new OnMsgBoxClickListener() {
 //
 //                        @Override
 //                        public boolean onClick(int which, Object data) {
@@ -983,7 +983,7 @@ public class MapView extends AbstractView {
                                 try {
                                     new UnZip().extractFolder(target);
                                 } catch (Exception ex) {
-                                    MessageBox.show(ex.toString(), "Unzip", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
+                                    MessageBox.show(ex.toString(), "Unzip", MessageBoxButton.OK, MessageBoxIcon.Exclamation, null);
                                 }
                                 Gdx.files.absolute(target).delete();
                             }
@@ -1018,7 +1018,7 @@ public class MapView extends AbstractView {
                 try {
                     new UnZip().extractFolder(target);
                 } catch (Exception ex) {
-                    MessageBox.show(ex.toString(), "Unzip", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
+                    MessageBox.show(ex.toString(), "Unzip", MessageBoxButton.OK, MessageBoxIcon.Exclamation, null);
                 }
                 Gdx.files.absolute(target).delete();
             });

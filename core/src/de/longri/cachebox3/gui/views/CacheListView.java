@@ -38,7 +38,7 @@ import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -380,7 +380,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                         msgText = "askResetFavorites";
                     }
                     final boolean finalchecked = checked;
-                    MessageBox.show(Translation.get(msgText), Translation.get("Favorites"), MessageBoxButtons.OKCancel, MessageBoxIcon.Question, (which, data) -> {
+                    MessageBox.show(Translation.get(msgText), Translation.get("Favorites"), MessageBoxButton.OKCancel, MessageBoxIcon.Question, (which, data) -> {
                         if (which == ButtonDialog.BUTTON_POSITIVE) {
                             Database.Data.beginTransaction();
                             for (AbstractCache cache : Database.Data.cacheList) {
