@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.SharedLibraryLoader;
 import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.desktop.DesktopClipboard;
 import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.desktop.Desktop_LocationHandler;
 import de.longri.cachebox3.desktop.DesktopMain;
@@ -66,6 +67,7 @@ public class TouchLauncher {
 
         //initialize platform connector
         PlatformConnector.init(new DesktopPlatformConnector());
+        PlatformConnector.setClipboard(new DesktopClipboard());
 
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.resizable = false;

@@ -24,6 +24,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3FileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.desktop.DesktopClipboard;
 import de.longri.cachebox3.desktop.DesktopPlatformConnector;
 import de.longri.cachebox3.desktop.Desktop_LocationHandler;
 import de.longri.cachebox3.desktop.DesktopMain;
@@ -62,6 +63,7 @@ public class TouchLwjgl3Launcher {
 
         //initialize platform connector
         PlatformConnector.init(new DesktopPlatformConnector());
+        PlatformConnector.setClipboard(new DesktopClipboard());
 
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
