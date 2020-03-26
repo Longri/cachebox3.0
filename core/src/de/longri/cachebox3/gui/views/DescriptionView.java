@@ -452,7 +452,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         }); // todo create/change icon
         if (!selectedCacheIsNoGC) {
             cacheContextMenu.addMenuItem("contactOwner", ContactOwner.getInstance().getIcon(), () -> ContactOwner.getInstance().execute());
-            cacheContextMenu.addMenuItem("GroundSpeakLists", null, () -> ListsAtGroundSpeak.getInstance().execute());
+            cacheContextMenu.addMenuItem("GroundSpeakLists", ListsAtGroundSpeak.getInstance().getIcon(), () -> ListsAtGroundSpeak.getInstance().execute());
         }
 
 

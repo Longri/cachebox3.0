@@ -78,6 +78,17 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
                                            @NonNull int[] grantResults) {
         // permission changed, reinitialize PlatformConnector
         PlatformConnector.init(new AndroidPlatformConnector(fragment));
+        Object clipboardService = getSystemService(CLIPBOARD_SERVICE);
+        if (clipboardService != null) {
+            if (clipboardService instanceof android.content.ClipboardManager) {
+                PlatformConnector.setClipboard(new AndroidContentClipboard((android.content.ClipboardManager) clipboardService));
+                log.info("got AndroidContentClipboard");
+            } else if (clipboardService instanceof android.text.ClipboardManager) {
+                PlatformConnector.setClipboard(new AndroidTextClipboard((android.text.ClipboardManager) clipboardService));
+                log.info("got AndroidTextClipboard");
+            }
+        }
+
     }
 
     @Override

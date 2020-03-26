@@ -18,7 +18,7 @@ import java.net.URLEncoder;
 /**
  * Contacts the owner of a geocache by using the messagecenter or mail at geocaching.com
  *
- * todo create icon and implement set Clipboard class
+ * todo create icon and implement set Clipboard class for Desktop
  *
  */
 public class ContactOwner extends AbstractAction {
