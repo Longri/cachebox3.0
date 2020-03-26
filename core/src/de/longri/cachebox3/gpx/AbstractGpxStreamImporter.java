@@ -293,7 +293,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
         if (hasCorrectedCoord) {
             // create final WP with Corrected Coords
-            String newGcCode = Database.createFreeGcCode(database, cache.getGcCode().toString());
+            String newGcCode = Database.createFreeGcCode(database, cache.getGeoCacheCode().toString());
 
             // Check if "Final GSAK Corrected" exist
             Array<AbstractWaypoint> wplist = DaoFactory.WAYPOINT_DAO.getWaypointsFromCacheID(database, this.id, false);
@@ -433,8 +433,8 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                         cache.getType().ordinal(),
                                         (int) (cache.getRating() * 200),
                                         cache.getNumTravelbugs(),
-                                        cache.getGcCode(),
-                                        cache.getName(),
+                                        cache.getGeoCacheCode(),
+                                        cache.getGeoCacheName(),
                                         cache.getPlacedBy(),
                                         cache.getOwner(),
                                         cache.getGcId(),
@@ -445,7 +445,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             } catch (Exception e) {
                                 log.error("Can't write Cache " +
                                                 "GC-Code:{}\n",
-                                        cache.getGcCode()
+                                        cache.getGeoCacheCode()
                                 );
                             } finally {
                                 REPLACE_CACHE_CORE.reset();
@@ -471,7 +471,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             } catch (Exception e) {
                                 log.error("Can't write Cache Info" +
                                                 "GC-Code:{}\n",
-                                        cache.getGcCode()
+                                        cache.getGeoCacheCode()
                                 );
                             } finally {
                                 REPLACE_CACHE_INFO.reset();
@@ -490,7 +490,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             } catch (Exception e) {
                                 log.error("Can't write Cache Text" +
                                                 "GC-Code:{}\n",
-                                        cache.getGcCode()
+                                        cache.getGeoCacheCode()
                                 );
                             } finally {
                                 REPLACE_CACHE_TEXT.reset();
@@ -522,14 +522,14 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                             } catch (Exception e) {
                                 log.error("Can't write Cache Attribute" +
                                                 "GC-Code:{}\n",
-                                        cache.getGcCode()
+                                        cache.getGeoCacheCode()
                                 );
                             } finally {
                                 REPLACE_ATTRIBUTE.reset();
                             }
 
                             if (importHandler != null) {
-                                importHandler.incrementCaches(cache.getType() == CacheTypes.Mystery ? cache.getGcCode().toString() : null);
+                                importHandler.incrementCaches(cache.getType() == CacheTypes.Mystery ? cache.getGeoCacheCode().toString() : null);
                             }
 
                         }

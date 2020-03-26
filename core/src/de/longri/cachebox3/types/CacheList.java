@@ -38,7 +38,7 @@ public class CacheList extends Array<AbstractCache> {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime
             for (int i = 0, n = this.size; i < n; i++) {
                 AbstractCache cache = this.get(i);
-                if (cache.getGcCode().toString().equalsIgnoreCase(GcCode))
+                if (cache.getGeoCacheCode().toString().equalsIgnoreCase(GcCode))
                     return cache;
             }
             return null;
@@ -211,7 +211,7 @@ public class CacheList extends Array<AbstractCache> {
         synchronized ((Object) this.items) { //must cast to Object otherwise it gives a classcastexception at runtime  
             Array<String> list = new Array<>(this.size);
             for (int i = 0, n = this.size; i < n; i++) {
-                list.add(this.get(i).getGcCode().toString());
+                list.add(this.get(i).getGeoCacheCode().toString());
             }
             return list;
         }

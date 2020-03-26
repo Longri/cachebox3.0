@@ -73,7 +73,7 @@ public class MapBubble extends Catch_Table {
                 isAvailable = false;
             }
 
-            content = new CacheItem(null, cache.getName(),
+            content = new CacheItem(null, cache.getGeoCacheName(),
                     (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                     (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(),
                     cache.getSize().toShortString(), left, right, isAvailable, cache.isFavorite(),

@@ -187,7 +187,7 @@ public class DraftsViewItem extends ListViewItem {
         cm.addMenuItem("edit", CB.getSkin().getMenuIcon.edit, this::editDraft);
         if (entry.GcId.startsWith("GL")) {
             cm.addMenuItem("uploadLogImage", CB.getSkin().getMenuIcon.uploadDraft, this::uploadLogImage);
-            cm.addMenuItem("BrowseLog", null, () -> PlatformConnector._openUrlExtern("https://coord.info/" + entry.GcId));
+            cm.addMenuItem("BrowseLog", null, () -> PlatformConnector.callUrl("https://coord.info/" + entry.GcId));
         }
         cm.addMenuItem("uploadDrafts", CB.getSkin().getMenuIcon.uploadDraft, () -> logOnline(false));
         cm.addMenuItem("directLog", CB.getSkin().getMenuIcon.logViewIcon, () -> logOnline(true));

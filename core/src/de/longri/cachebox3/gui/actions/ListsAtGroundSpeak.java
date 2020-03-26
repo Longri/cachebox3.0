@@ -96,7 +96,7 @@ public class ListsAtGroundSpeak extends AbstractAction {
                     listCode = title;
                     AddToTitle = "AddToBookmarklist";
             }
-            if (GroundspeakAPI.getInstance().addToList(listCode, EventHandler.getSelectedCache().getGcCode().toString()) == OK) {
+            if (GroundspeakAPI.getInstance().addToList(listCode, EventHandler.getSelectedCache().getGeoCacheCode().toString()) == OK) {
                 MessageBox.show(Translation.get("ok"), Translation.get(AddToTitle), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else {
                 MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get(AddToTitle), MessageBoxButton.OK, MessageBoxIcon.Information, null);
@@ -122,7 +122,7 @@ public class ListsAtGroundSpeak extends AbstractAction {
                     listCode = title;
                     RemoveFromTitle = "RemoveFromBookmarklist";
             }
-            if (GroundspeakAPI.getInstance().removeFromList(listCode, EventHandler.getSelectedCache().getGcCode().toString()) == OK) {
+            if (GroundspeakAPI.getInstance().removeFromList(listCode, EventHandler.getSelectedCache().getGeoCacheCode().toString()) == OK) {
                 MessageBox.show(Translation.get("ok"), Translation.get(RemoveFromTitle), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else {
                 MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get(RemoveFromTitle), MessageBoxButton.OK, MessageBoxIcon.Information, null);

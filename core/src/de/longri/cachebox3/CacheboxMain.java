@@ -33,13 +33,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.GpsEventHelper;
 import de.longri.cachebox3.gpx.AbstractGpxStreamImporter;
-import de.longri.cachebox3.gui.activities.GetApiKey_Activity;
 import de.longri.cachebox3.gui.stages.NamedStage;
 import de.longri.cachebox3.gui.stages.Splash;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.DescriptionView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -58,7 +56,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.oscim.backend.GLAdapter.gl;
 import static org.oscim.renderer.MapRenderer.COORD_SCALE;
 import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
-import static org.slf4j.impl.LibgdxLoggerFactory.INCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
@@ -302,8 +299,8 @@ public class CacheboxMain extends ApplicationAdapter {
 
         if (EventHandler.getSelectedCache() != null) {
             //save selected Cache
-            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGcCode().toString());
-            log.debug("Store LastSelectedCache = " + EventHandler.getSelectedCache().getGcCode());
+            Config.LastSelectedCache.setValue(EventHandler.getSelectedCache().getGeoCacheCode().toString());
+            log.debug("Store LastSelectedCache = " + EventHandler.getSelectedCache().getGeoCacheCode());
         }
 
         //store MapState

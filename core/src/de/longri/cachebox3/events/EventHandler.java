@@ -184,7 +184,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         FileFilter filter = pathname -> {
             String filename = pathname.getName();
             filename = filename.toLowerCase(Locale.getDefault());
-            if (filename.contains(cache.getGcCode().toString().toLowerCase(Locale.getDefault()))) {
+            if (filename.contains(cache.getGeoCacheCode().toString().toLowerCase(Locale.getDefault()))) {
                 if (filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".bmp") || filename.endsWith(".png") || filename.endsWith(".gif")) {
                     // don't load Thumbs
                     return !filename.startsWith(Utils.THUMB) && !filename.startsWith(Utils.THUMB_OVERVIEW + Utils.THUMB);
@@ -263,7 +263,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         spoilerResources.clear();
 
         String directory;
-        String gcCode = actCache.getGcCode().toString();
+        String gcCode = actCache.getGeoCacheCode().toString();
         if (gcCode.length() < 4)
             return; // don't load spoiler
 

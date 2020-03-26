@@ -76,8 +76,8 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("Type", abstractCache.getType().ordinal());
         args.put("Rating", (int) (abstractCache.getRating() * 200));
         args.put("NumTravelbugs", abstractCache.getNumTravelbugs());
-        args.put("GcCode", abstractCache.getGcCode());
-        args.put("Name", abstractCache.getName());
+        args.put("GcCode", abstractCache.getGeoCacheCode());
+        args.put("Name", abstractCache.getGeoCacheName());
         args.put("PlacedBy", abstractCache.getPlacedBy());
         args.put("Owner", abstractCache.getOwner());
         args.put("GcId", abstractCache.getGcId());

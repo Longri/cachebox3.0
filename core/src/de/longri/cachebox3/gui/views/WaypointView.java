@@ -335,7 +335,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     private void addWp(Coordinate coordinate, boolean showCoords) {
         String newGcCode;
         try {
-            newGcCode = Database.createFreeGcCode(Database.Data, EventHandler.getSelectedCache().getGcCode().toString());
+            newGcCode = Database.createFreeGcCode(Database.Data, EventHandler.getSelectedCache().getGeoCacheCode().toString());
         } catch (Exception e) {
             log.error("can't generate GcCode! can't show EditWaypoint Activity");
             return;
@@ -435,9 +435,9 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         // todo icon for UploadCorrectedCoordinates
         MenuItem mi = cm.addMenuItem("UploadCorrectedCoordinates", null, () -> {
             if (actAbstractCache.hasCorrectedCoordinates())
-                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
+                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGeoCacheCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
             else if (isCorrectedFinal())
-                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
+                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGeoCacheCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
             if (GroundspeakAPI.getInstance().APIError == GroundspeakAPI.OK) {
                 MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else {

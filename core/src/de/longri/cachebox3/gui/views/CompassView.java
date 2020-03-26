@@ -199,7 +199,7 @@ public class CompassView extends AbstractView implements
 
             if (showName) {
                 nameLabel = new Label("", infoStyle);
-                nameLabel.setText(actWaypoint == null ? actAbstractCache.getName() : actWaypoint.getTitle());
+                nameLabel.setText(actWaypoint == null ? actAbstractCache.getGeoCacheName() : actWaypoint.getTitle());
             }
             lineTable.add(icon);
             lineTable.add(nameLabel);
@@ -218,7 +218,7 @@ public class CompassView extends AbstractView implements
                 }
             }
             if (showGcCode) {
-                lineTable.add(new Label(actAbstractCache.getGcCode(), infoStyle));
+                lineTable.add(new Label(actAbstractCache.getGeoCacheCode(), infoStyle));
             }
             topTable.add(lineTable).left();
             topTable.row();

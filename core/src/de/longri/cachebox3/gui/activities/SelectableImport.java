@@ -110,7 +110,7 @@ public class SelectableImport extends Activity {
             for (int skip = 0; skip < Database.Data.cacheList.size; skip = skip + take) {
                 int limit = Math.min(skip + take, Database.Data.cacheList.size);
                 for (int i = skip; i < limit; i++) {
-                    waypoints.put(Database.Data.cacheList.get(i).getGcCode().toString(), Database.Data.cacheList.get(i));
+                    waypoints.put(Database.Data.cacheList.get(i).getGeoCacheCode().toString(), Database.Data.cacheList.get(i));
                 }
                 infoBox.setProgress(100 * skip / Database.Data.cacheList.size, Translation.get("GCVoteRatings").toString());
                 gcVote.getVotes(waypoints);

@@ -114,7 +114,7 @@ public class DraftsView extends AbstractView {
         }
 
         // chk car found?
-        if (abstractCache.getGcCode().toString().equalsIgnoreCase("CBPark")) {
+        if (abstractCache.getGeoCacheCode().toString().equalsIgnoreCase("CBPark")) {
             if (type == LogTypes.found) {
                 MessageBox.show(Translation.get("My_Parking_Area_Found"), Translation.get("thisNotWork"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else if (type == LogTypes.didnt_find) {
@@ -124,7 +124,7 @@ public class DraftsView extends AbstractView {
         }
 
         // kein GC Cache
-        if (!abstractCache.getGcCode().toString().toLowerCase().startsWith("gc")) {
+        if (!abstractCache.getGeoCacheCode().toString().toLowerCase().startsWith("gc")) {
 
             if (type == LogTypes.found || type == LogTypes.attended || type == LogTypes.webcam_photo_taken) {
                 // Found it! -> fremden Cache als gefunden markieren
@@ -177,8 +177,8 @@ public class DraftsView extends AbstractView {
 
         if (newDraft == null) {
             newDraft = new DraftEntry(type);
-            newDraft.CacheName = abstractCache.getName();
-            newDraft.gcCode = abstractCache.getGcCode().toString();
+            newDraft.CacheName = abstractCache.getGeoCacheName();
+            newDraft.gcCode = abstractCache.getGeoCacheCode().toString();
             newDraft.foundNumber = Config.FoundOffset.getValue();
             newDraft.timestamp = new Date();
             newDraft.CacheId = abstractCache.getId();
@@ -606,7 +606,7 @@ public class DraftsView extends AbstractView {
         }
 
         // Aktueller Cache ist von geocaching.com
-        if (abstractCache != null && abstractCache.getGcCode().toString().toLowerCase().startsWith("gc")) {
+        if (abstractCache != null && abstractCache.getGeoCacheCode().toString().toLowerCase().startsWith("gc")) {
             cm.addMenuItem("maintenance", draftListItemStyle.logTypesStyle.needs_maintenance, () -> addNewDraft(LogTypes.needs_maintenance));
             cm.addMenuItem("writenote", draftListItemStyle.logTypesStyle.note, () -> addNewDraft(LogTypes.note));
         }

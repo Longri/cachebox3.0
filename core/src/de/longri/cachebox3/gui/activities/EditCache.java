@@ -147,13 +147,13 @@ public class EditCache extends Activity {
     }
 
     private void setValues() {
-        cacheCode.setText(cache.getGcCode());
+        cacheCode.setText(cache.getGeoCacheCode());
         cacheTyp.select(cache.getType());
         cacheSize.select(cache.getSize());
         cacheDifficulty.setValue((int) (cache.getDifficulty() * 2));
         cacheTerrain.setValue((int) (cache.getTerrain() * 2));
         cacheCoords.setCoordinate(new Coordinate(cache.getLatitude(), cache.getLongitude()));
-        cacheTitle.setText(cache.getName());
+        cacheTitle.setText(cache.getGeoCacheName());
         cacheOwner.setText(cache.getOwner());
         cacheState.setText(cache.getState());
         cacheCountry.setText(cache.getCountry());

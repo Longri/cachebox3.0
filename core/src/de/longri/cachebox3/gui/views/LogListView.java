@@ -101,7 +101,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             @Override
             public void run() {
                 AbstractCache selectedCache = EventHandler.getSelectedCache();
-                String selectedGcCode = selectedCache == null ? "" : selectedCache.getGcCode().toString();
+                String selectedGcCode = selectedCache == null ? "" : selectedCache.getGeoCacheCode().toString();
                 if (actGcCode == null || !actGcCode.equals(selectedGcCode)) {
                     if (selectedCache != null) {
                         actGcCode = selectedGcCode;
@@ -147,7 +147,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
         MenuItem mi;
         boolean isSelected = (EventHandler.getSelectedCache() != null);
         if (isSelected) {
-            boolean selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
+            boolean selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGeoCacheCode().toString().startsWith("GC");
             // menu only for GC caches
             if (selectedCacheIsNoGC) return cm;
         } else {

@@ -70,7 +70,7 @@ public class EditWaypoint extends ActivityBase {
 
         btnOk = new CB_Button(Translation.get("save"));
         btnCancel = new CB_Button(Translation.get("cancel"));
-        cacheTitelLabel = new CB_Label(Database.Data.cacheList.GetCacheById(waypoint.getCacheId()).getName());
+        cacheTitelLabel = new CB_Label(Database.Data.cacheList.GetCacheById(waypoint.getCacheId()).getGeoCacheName());
         typeLabel = new CB_Label(Translation.get("type"));
         titleLabel = new CB_Label(Translation.get("Title"));
         descriptionLabel = new CB_Label(Translation.get("Description"));

@@ -36,9 +36,8 @@ public class Action_Help extends AbstractAction {
 
     @Override
     public void execute() {
-        PlatformConnector._openUrlExtern("http://www.team-cachebox.de/index.php/de/kurzanleitung");
+        PlatformConnector.callUrl("http://www.team-cachebox.de/index.php/de/kurzanleitung");
     }
-
 
     @Override
     public Drawable getIcon() {

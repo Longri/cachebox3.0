@@ -346,7 +346,7 @@ public class ViewManager extends NamedStage
                 CharSequence text = abstractCache.getType().toShortString()
                         + terrDiffToShortString(abstractCache.getDifficulty()) + "/"
                         + terrDiffToShortString(abstractCache.getTerrain()) + abstractCache.getSize().toShortString()
-                        + " " + abstractCache.getName();
+                        + " " + abstractCache.getGeoCacheName();
                 slider.setCacheName(text);
                 lastAbstractCache = abstractCache;
             }

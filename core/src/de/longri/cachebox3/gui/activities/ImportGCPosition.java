@@ -386,7 +386,7 @@ public class ImportGCPosition extends Activity {
                         infoBox.setTitle("Import to database");
                         for (GroundspeakAPI.GeoCacheRelated cacheEntry : fetchedCaches) {
                             count++;
-                            infoBox.setProgress(100 * count / fetchedCaches.size, cacheEntry.cache.getGcCode());
+                            infoBox.setProgress(100 * count / fetchedCaches.size, cacheEntry.cache.getGeoCacheCode());
                             // this sleep is simply for demonstration
                             try {
                                 Thread.sleep(50);

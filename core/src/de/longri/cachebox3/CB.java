@@ -526,9 +526,9 @@ public class CB {
             for (int i = 0, n = Database.Data.cacheList.size; i < n; i++) {
                 AbstractCache c = Database.Data.cacheList.get(i);
 
-                if (c.getGcCode().toString().equalsIgnoreCase(sGc)) {
+                if (c.getGeoCacheCode().toString().equalsIgnoreCase(sGc)) {
                     try {
-                        log.debug("returnFromSelectDB:Set selectedCache to " + c.getGcCode() + " from lastSaved.");
+                        log.debug("returnFromSelectDB:Set selectedCache to " + c.getGeoCacheCode() + " from lastSaved.");
                         EventHandler.fire(new SelectedCacheChangedEvent(c));
                         lastSelectedAbstractCache = c;
                     } catch (Exception e) {
@@ -540,7 +540,7 @@ public class CB {
         }
         // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
         if ((lastSelectedAbstractCache == null) && (Database.Data.cacheList.size > 0)) {
-            log.debug("Set selectedCache to " + Database.Data.cacheList.get(0).getGcCode() + " from firstInDB");
+            log.debug("Set selectedCache to " + Database.Data.cacheList.get(0).getGeoCacheCode() + " from firstInDB");
             EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.cacheList.get(0)));
         }
 

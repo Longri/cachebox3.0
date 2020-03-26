@@ -50,7 +50,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
             isAvailable = false;
         }
 
-        CacheListItem cacheListItem = new CacheListItem(listIndex, abstractCache.getId(), abstractCache.getType(), abstractCache.getName(),
+        CacheListItem cacheListItem = new CacheListItem(listIndex, abstractCache.getId(), abstractCache.getType(), abstractCache.getGeoCacheName(),
                 (int) (abstractCache.getDifficulty() * 2), (int) (abstractCache.getTerrain() * 2),
                 (int) Math.min(abstractCache.getRating() * 2, 5 * 2), abstractCache.getSize(),
                 abstractCache.getSize().toShortString(), left, right, isAvailable, abstractCache.isFavorite(),

@@ -28,6 +28,7 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
+import de.longri.cachebox3.gui.actions.ContactOwner;
 import de.longri.cachebox3.gui.actions.ListsAtGroundSpeak;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
@@ -141,7 +142,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             } else if (url.startsWith("http://") || url.startsWith("https://")) {
                 // Load Url in ext Browser
                 log.debug("Link clicked, don't load URL! show on ext browser");
-                PlatformConnector._openUrlExtern(url);
+                PlatformConnector.callUrl(url);
                 return true;
             } else if (url.equals("about:blank")) {
                 // Load description
@@ -402,7 +403,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
         boolean selectedCacheIsNoGC = false;
         if (isSelected)
-            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
+            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGeoCacheCode().toString().startsWith("GC");
         mi = cacheContextMenu.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> new ReloadCacheActivity().show());
         if (!isSelected)
             mi.setEnabled(false);
@@ -450,7 +451,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             EditCache.getInstance(Database.Data, "MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).edit(EventHandler.getSelectedCache());
         }); // todo create/change icon
         if (!selectedCacheIsNoGC) {
-            // cm.addMenuItem("contactOwner", ContactOwner.getInstance().getIcon(), () -> ContactOwner.getInstance().execute());
+            cacheContextMenu.addMenuItem("contactOwner", ContactOwner.getInstance().getIcon(), () -> ContactOwner.getInstance().execute());
             cacheContextMenu.addMenuItem("GroundSpeakLists", null, () -> ListsAtGroundSpeak.getInstance().execute());
         }
 

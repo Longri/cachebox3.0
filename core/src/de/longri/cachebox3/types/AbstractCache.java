@@ -17,7 +17,6 @@ package de.longri.cachebox3.types;
 
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.utils.MathUtils;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 
@@ -87,7 +86,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     }
 
     public String toString() {
-        return getGcCode().toString();
+        return getGeoCacheCode().toString();
     }
 
     /**
@@ -136,11 +135,11 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     protected abstract AbstractWaypoint findWaypointByGc(String gc);
 
-    public abstract CharSequence getGcCode();
+    public abstract CharSequence getGeoCacheCode();
 
     public abstract void setGcCode(String gcCode);
 
-    public abstract CharSequence getName();
+    public abstract CharSequence getGeoCacheName();
 
     public abstract void setName(String name);
 
@@ -301,6 +300,10 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     public abstract void setWaypoints(Array<AbstractWaypoint> waypoints);
 
     public abstract AbstractWaypoint getCorrectedFinal();
+
+    public boolean hasCorrectedCoordinatesOrHasCorrectedFinal() {
+        return hasCorrectedCoordinates() || getCorrectedFinal() != null;
+    }
 
     /**
      * Id des Caches in der Datenbank von geocaching.com

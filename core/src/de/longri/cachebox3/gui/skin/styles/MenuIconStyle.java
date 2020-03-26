@@ -100,6 +100,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable downloadLogImages;
     public Drawable showOriginalHtmlColor;
     public Drawable todo;
+    public Drawable letterbox;
 
     @Override
     public int getPrefWidth() {

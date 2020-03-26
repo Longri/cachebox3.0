@@ -101,7 +101,7 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
 
         teamLinkLabel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                PlatformConnector._openUrlExtern(teamLink);
+                PlatformConnector.callUrl(teamLink);
             }
         });
 

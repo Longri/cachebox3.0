@@ -27,7 +27,6 @@ public class MessageBox {
 
     private final static String NAME = "MessageBox";
 
-
     public static void show(CharSequence message) {
         show(message, "", MessageBoxButton.OK, null, null);
     }
