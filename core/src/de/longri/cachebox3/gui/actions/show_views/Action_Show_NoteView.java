@@ -26,7 +26,7 @@ import de.longri.cachebox3.gui.views.NotesView;
  */
 public class Action_Show_NoteView extends Abstract_Action_ShowView {
     public Action_Show_NoteView() {
-        super(NotesView.class, NOT_IMPLEMENTED, "Notes", MenuID.AID_SHOW_NOTES);
+        super(NotesView.class, IMPLEMENTED, "Notes", MenuID.AID_SHOW_NOTES);
     }
 
     @Override

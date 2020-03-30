@@ -724,20 +724,22 @@ public class Database {
     public static String getNote(long cacheId) {
         String resultString = "";
         GdxSqliteCursor cursor = Database.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            resultString = cursor.getString(0);
-            break;
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                resultString = cursor.getString(0);
+                break;
+            }
+            cursor.close();
         }
-        cursor.close();
         return resultString;
     }
 
     /**
      * geänderte Note nur in die DB schreiben
      *
-     * @param cacheId
-     * @param value
+     * @param cacheId ?
+     * @param value ?
      */
     public static void setNote(long cacheId, String value) {
         Parameters args = new Parameters();
@@ -931,7 +933,7 @@ public class Database {
         try {
             return myDB.rawQuery(sql);
         } catch (SQLiteGdxException e) {
-            log.error("rawQuerry:" + sql, e);
+            log.error("rawQuery:" + sql, e);
         }
         return null;
     }
@@ -947,7 +949,7 @@ public class Database {
             }
             return myDB.rawQuery(sql);
         } catch (SQLiteGdxException e) {
-            log.error("rawQuerry:" + sql, e);
+            log.error("rawQuery:" + sql, e);
         }
         return null;
     }

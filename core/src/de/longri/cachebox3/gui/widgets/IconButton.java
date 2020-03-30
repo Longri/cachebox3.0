@@ -27,8 +27,8 @@ import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButt
  */
 public class IconButton extends Catch_VisTextButton {
     protected com.badlogic.gdx.scenes.scene2d.ui.Image image;
-    protected float preferredHeight;
-    protected float preferredWidth;
+    private float preferredHeight;
+    private float preferredWidth;
 
     public IconButton(CharSequence text) {
         super(EMPTY);
@@ -108,4 +108,19 @@ public class IconButton extends Catch_VisTextButton {
         }
     }
 
+    public float getPreferredHeight() {
+        return preferredHeight;
+    }
+
+    public void setPreferredHeight(float preferredHeight) {
+        this.preferredHeight = preferredHeight;
+    }
+
+    public float getPreferredWidth() {
+        return preferredWidth;
+    }
+
+    public void setPreferredWidth(float preferredWidth) {
+        this.preferredWidth = preferredWidth;
+    }
 }

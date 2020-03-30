@@ -343,7 +343,7 @@ public class CacheboxMain extends ApplicationAdapter {
         // save last actView
         AbstractView abstractView = viewManager.getActView();
         writer.write(abstractView.getClass().getName());
-        writer.write(abstractView.NAME);
+        writer.write(abstractView.name);
         abstractView.saveInstanceState(writer);
     }
 

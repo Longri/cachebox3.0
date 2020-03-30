@@ -101,11 +101,9 @@ public class SkinEditorGame extends Game {
         // add VisUi Texture pack
         skin.addRegions(new TextureAtlas(Gdx.files.internal("skin-editor-src-proj/assets/resources/visuiskin.atlas")));
 
-
         skin.load(Gdx.files.internal("skin-editor-src-proj/assets/resources/visuiskin.json"));
 
         VisUI.load(skin);
-
 
         screenMain = new MainScreen(this);
         screenWelcome = new WelcomeScreen(this);

@@ -27,32 +27,32 @@ import de.longri.cachebox3.utils.Showable;
  */
 public abstract class CB_View_Base extends Catch_WidgetGroup implements Disposable, Showable {
 
-    public final String NAME;
+    public final String name;
 
     public CB_View_Base() {
-        this.NAME = "CB_View_Base";
+        name = "CB_View_Base";
     }
 
-    public CB_View_Base(String name) {
-        this.NAME = name;
+    public CB_View_Base(String _name) {
+        name = _name;
     }
 
     public abstract void dispose();
 
     public void addChild(Actor actor) {
-        this.addActor(actor);
+        addActor(actor);
     }
 
     public void removeChild(Actor actor) {
-        this.removeActor(actor, true);
+        removeActor(actor, true);
     }
 
     public void setRec(CB_RectF rec) {
-        this.setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
+        setBounds(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
     }
 
     public void onShow() {
-        SnapshotArray<Actor> childs = this.getChildren();
+        SnapshotArray<Actor> childs = getChildren();
         if (childs != null && childs.size > 0) {
             try {
                 for (int i = 0, n = childs.size; i < n; i++) {
@@ -72,7 +72,7 @@ public abstract class CB_View_Base extends Catch_WidgetGroup implements Disposab
     }
 
     public void onHide() {
-        SnapshotArray<Actor> childs = this.getChildren();
+        SnapshotArray<Actor> childs = getChildren();
         if (childs != null && childs.size > 0) {
             try {
                 for (int i = 0, n = childs.size; i < n; i++) {

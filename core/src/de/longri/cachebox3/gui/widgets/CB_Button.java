@@ -44,7 +44,11 @@ public class CB_Button extends IconButton {
 
     public void setText(CharSequence text) {
         getLabel().setText(text);
-        setSize(preferredWidth, preferredHeight);
+    }
+
+    public void setTextAndSize(CharSequence text) {
+        getLabel().setText(text);
+        setSize(getPreferredWidth(), getPreferredHeight());
     }
 
     public void setState(int i) {
@@ -52,5 +56,7 @@ public class CB_Button extends IconButton {
     }
 
     public void enable() { setDisabled(false);}
+
+    public void disable() { setDisabled(true);}
 
 }

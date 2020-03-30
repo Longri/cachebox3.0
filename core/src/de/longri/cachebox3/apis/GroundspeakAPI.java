@@ -507,7 +507,7 @@ public class GroundspeakAPI {
         }
     }
 
-    public String UploadDraftOrLog(String gcCode, int wptLogTypeId, Date dateLogged, String note, boolean directLog) {
+    public String UploadDraftOrLog(String gcCode, int wptLogTypeId, Date dateLogged, String logText, boolean directLog) {
         log.info("UploadDraftOrLog");
 
         if (isAccessTokenInvalid()) {
@@ -519,7 +519,7 @@ public class GroundspeakAPI {
         try {
             String logReferenceCode = "";
             if (directLog) {
-                if (note.length() == 0) {
+                if (logText.length() == 0) {
                     LastAPIError = Translation.get("emptyLog").toString();
                     return "";
                 }
@@ -532,7 +532,7 @@ public class GroundspeakAPI {
                                 .put("geocacheCode", gcCode)
                                 .put("type", wptLogTypeId)
                                 .put("loggedDate", getDate(dateLogged))
-                                .put("text", prepareNote(note))
+                                .put("text", prepareNote(logText))
                         )
                         .ensureSuccess()
                         .asJsonObject()
@@ -551,7 +551,7 @@ public class GroundspeakAPI {
                                 .put("geocacheCode", gcCode)
                                 .put("logType", wptLogTypeId)
                                 .put("loggedDate", getDate(dateLogged))
-                                .put("note", prepareNote(note))
+                                .put("note", prepareNote(logText))
                         )
                         .ensureSuccess()
                         .asVoid();

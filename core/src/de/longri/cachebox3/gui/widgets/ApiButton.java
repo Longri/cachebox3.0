@@ -42,7 +42,7 @@ public class ApiButton extends IconButton {
         btnStyle.font = style.font;
         btnStyle.fontColor = style.fontColor;
         this.setStyle(btnStyle);
-        preferredHeight = style.unchecked.getMinHeight() + CB.scaledSizes.MARGINx2;
+        setPreferredHeight(style.unchecked.getMinHeight() + CB.scaledSizes.MARGINx2);
         setIcon();
     }
 

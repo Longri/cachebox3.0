@@ -16,11 +16,9 @@
 package de.longri.cachebox3.develop.tools.skin_editor.actors;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
@@ -37,8 +35,8 @@ import de.longri.cachebox3.utils.SkinColor;
  */
 public class WidgetsBar extends Table {
 
-    private SkinEditorGame game;
     public String selectedStyle;
+    private SkinEditorGame game;
 
     /**
      *
