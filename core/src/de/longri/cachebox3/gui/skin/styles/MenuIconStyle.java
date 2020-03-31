@@ -103,7 +103,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable letterbox;
     public Drawable contactOwner;
     public Drawable e_mailToOwner;
-    public Drawable massageToOwner;
+    public Drawable messageToOwner;
 
     @Override
     public int getPrefWidth() {

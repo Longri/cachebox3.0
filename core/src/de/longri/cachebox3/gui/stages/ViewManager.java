@@ -66,14 +66,9 @@ public class ViewManager extends NamedStage
 
     final static Logger log = LoggerFactory.getLogger(ViewManager.class);
     final static CharSequence EMPTY = "";
-
-    private AbstractView actView;
+    public final GlobalLocationReceiver locationReceiver;
     private final float width, height;
     private final ButtonBar mainButtonBar;
-    private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
-    private VisLabel toastLabel;
-    private Slider slider;
-    private float sliderPos = 0;
     private final CacheboxMain main;
     private final Action_Show_DescriptionView action_show_descriptionView = new Action_Show_DescriptionView();
     private final Action_Show_WaypointView action_show_waypointView = new Action_Show_WaypointView();
@@ -87,10 +82,14 @@ public class ViewManager extends NamedStage
     private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
     private final Action_Quit action_quit = new Action_Quit();
     private final Action_Show_DraftsView action_show_DraftsView = new Action_Show_DraftsView();
-
-    private FilterProperties actFilter = FilterInstances.ALL;
     private final AtomicBoolean isFiltered = new AtomicBoolean(false);
-    public final GlobalLocationReceiver locationReceiver;
+    AbstractCache lastAbstractCache = null;
+    private AbstractView actView;
+    private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
+    private VisLabel toastLabel;
+    private Slider slider;
+    private float sliderPos = 0;
+    private FilterProperties actFilter = FilterInstances.ALL;
 
     public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
         super("ViewManager", viewport, batch);
@@ -144,7 +143,7 @@ public class ViewManager extends NamedStage
         EventHandler.add(this);
 
         //set selected Cache to slider
-        selectedCacheChanged(new de.longri.cachebox3.events.SelectedCacheChangedEvent(de.longri.cachebox3.events.EventHandler.getSelectedCache()));
+        selectedCacheChanged(new SelectedCacheChangedEvent(EventHandler.getSelectedCache()));
 
         //initial global location receiver
         locationReceiver = new GlobalLocationReceiver();
@@ -326,7 +325,7 @@ public class ViewManager extends NamedStage
     }
 
     @Override
-    public void selectedCacheChanged(de.longri.cachebox3.events.SelectedCacheChangedEvent event) {
+    public void selectedCacheChanged(SelectedCacheChangedEvent event) {
         setCacheName(event.cache);
     }
 
@@ -334,8 +333,6 @@ public class ViewManager extends NamedStage
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
         if (event.wayPoint != null) setCacheName(Database.Data.cacheList.GetCacheById(event.wayPoint.getCacheId()));
     }
-
-    AbstractCache lastAbstractCache = null;
 
     private void setCacheName(AbstractCache abstractCache) {
         // set Cache name to Slider
@@ -439,41 +436,6 @@ public class ViewManager extends NamedStage
         }
     }
 
-
-    // Toast pop up
-    public enum ToastLength {
-        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f), WAIT(true);
-
-        public final float value;
-        public final boolean wait;
-        private CloseListener closeListener;
-
-        public interface CloseListener {
-            void close();
-        }
-
-        ToastLength(float value) {
-            this.value = value;
-            wait = false;
-        }
-
-        ToastLength(boolean wait) {
-            this.value = 0;
-            this.wait = wait;
-        }
-
-        private void setCloseListener(CloseListener listener) {
-            this.closeListener = listener;
-        }
-
-        public void close() {
-            if (this.closeListener != null) {
-                this.closeListener.close();
-                this.closeListener = null;
-            }
-        }
-    }
-
     public void toast(CharSequence massage) {
         toast(massage, ToastLength.NORMAL);
     }
@@ -532,7 +494,6 @@ public class ViewManager extends NamedStage
         CB.requestRendering();
     }
 
-
     public void resume() {
         locationReceiver.resume();
         if (actView != null) actView.onShow();
@@ -547,6 +508,40 @@ public class ViewManager extends NamedStage
     public void draw() {
         if (CB.DRAW_EXCEPTION_INDICATOR) this.getRoot().setDebug(true, false);
         super.draw();
+    }
+
+    // Toast pop up
+    public enum ToastLength {
+        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f), WAIT(true);
+
+        public final float value;
+        public final boolean wait;
+        private CloseListener closeListener;
+
+        ToastLength(float value) {
+            this.value = value;
+            wait = false;
+        }
+
+        ToastLength(boolean wait) {
+            this.value = 0;
+            this.wait = wait;
+        }
+
+        private void setCloseListener(CloseListener listener) {
+            this.closeListener = listener;
+        }
+
+        public void close() {
+            if (this.closeListener != null) {
+                this.closeListener.close();
+                this.closeListener = null;
+            }
+        }
+
+        public interface CloseListener {
+            void close();
+        }
     }
 
 }
