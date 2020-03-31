@@ -723,12 +723,12 @@ public class Database {
 
     public static String getNote(long cacheId) {
         String resultString = "";
-        GdxSqliteCursor cursor = Database.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
+        GdxSqliteCursor cursor = Database.Data.rawQuery("select Notes from CacheText where Id=?", new String[]{String.valueOf(cacheId)});
         if (cursor != null) {
             cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
+            if (!cursor.isAfterLast()) {
                 resultString = cursor.getString(0);
-                break;
+                // break;
             }
             cursor.close();
         }
@@ -738,15 +738,18 @@ public class Database {
     /**
      * geänderte Note nur in die DB schreiben
      *
-     * @param cacheId ?
+     * @param geoCache ?
      * @param value ?
      */
-    public static void setNote(long cacheId, String value) {
+    public static void setNote(AbstractCache geoCache, String value) {
+        long cacheId = geoCache.getId();
         Parameters args = new Parameters();
         args.put("Notes", value);
-        args.put("HasUserData", true);
-
-        Database.Data.update("Caches", args, "id=" + cacheId, null);
+        Database.Data.update("CacheText", args, "id=" + cacheId, null);
+        geoCache.setHasUserData(true);
+        args.clear();
+        args.put("BooleanStore", geoCache.getBooleanStore());
+        Database.Data.update("CacheText", args, "id=" + cacheId, null);
     }
 
     public static void setFound(long cacheId, boolean value) {

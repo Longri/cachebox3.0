@@ -132,7 +132,7 @@ public class NotesView extends AbstractTableView implements SelectedCacheChanged
         if (text != null)
             if (text.length() > 0) {
                 try {
-                    Database.setNote(currentCache.getId(), text);
+                    Database.setNote(currentCache, text);
                 } catch (Exception e) {
                     log.error("Write note to database", e);
                 }

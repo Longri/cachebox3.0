@@ -44,52 +44,50 @@ public class ContactOwner extends AbstractAction {
             } catch (Exception ignored) {
             }
         });
-        menu.addMenuItem("MessageToOwner", CB.getSkin().getMenuIcon.messageToOwner, () -> {
-            CB.postAsync(new NamedRunnable("MessageToOwner") {
-                @Override
-                public void run() {
-                    try {
-                        AbstractCache geoCache = EventHandler.getSelectedCache();
-                        String mGCCode = geoCache.getGeoCacheCode().toString();
-                        // fill clipboard
-                        if (PlatformConnector.getClipboard() != null) {
-                            String text = mGCCode + " - " + geoCache.getGeoCacheName() + ("\n" + "https://coord.info/" + mGCCode);
-                            if (geoCache.hasCorrectedCoordinatesOrHasCorrectedFinal()) {
-                                text = text + ("\n\n" + "Location (corrected)");
-                                if (geoCache.hasCorrectedCoordinates()) {
-                                    text = text + ("\n" + geoCache.formatCoordinate());
-                                } else {
-                                    text = text + ("\n" + geoCache.getCorrectedFinal().formatCoordinate());
-                                }
-                            } else {
-                                text = text + ("\n\n" + "Location");
+        menu.addMenuItem("MessageToOwner", CB.getSkin().getMenuIcon.messageToOwner, () -> CB.postAsync(new NamedRunnable("MessageToOwner") {
+            @Override
+            public void run() {
+                try {
+                    AbstractCache geoCache = EventHandler.getSelectedCache();
+                    String mGCCode = geoCache.getGeoCacheCode().toString();
+                    // fill clipboard
+                    if (PlatformConnector.getClipboard() != null) {
+                        String text = mGCCode + " - " + geoCache.getGeoCacheName() + ("\n" + "https://coord.info/" + mGCCode);
+                        if (geoCache.hasCorrectedCoordinatesOrHasCorrectedFinal()) {
+                            text = text + ("\n\n" + "Location (corrected)");
+                            if (geoCache.hasCorrectedCoordinates()) {
                                 text = text + ("\n" + geoCache.formatCoordinate());
-                            }
-                            PlatformConnector.getClipboard().setContents(text);
-                        }
-                        try {
-                            String page = Webb.create()
-                                    .get("https://coord.info/" + mGCCode)
-                                    .ensureSuccess()
-                                    .asString()
-                                    .getBody();
-                            String toSearch = "recipientId=";
-                            int pos = page.indexOf(toSearch);
-                            if (pos > -1) {
-                                int start = pos + toSearch.length();
-                                int stop = page.indexOf("&amp;", start);
-                                String guid = page.substring(start, stop);
-                                PlatformConnector.callUrl("https://www.geocaching.com/account/messagecenter?recipientId=" + guid + "&gcCode=" + mGCCode);
                             } else {
-                                MessageBox.show(Translation.get("noRecipient"), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
+                                text = text + ("\n" + geoCache.getCorrectedFinal().formatCoordinate());
                             }
-                        } catch (Exception ignored) {
+                        } else {
+                            text = text + ("\n\n" + "Location");
+                            text = text + ("\n" + geoCache.formatCoordinate());
+                        }
+                        PlatformConnector.getClipboard().setContents(text);
+                    }
+                    try {
+                        String page = Webb.create()
+                                .get("https://coord.info/" + mGCCode)
+                                .ensureSuccess()
+                                .asString()
+                                .getBody();
+                        String toSearch = "recipientId=";
+                        int pos = page.indexOf(toSearch);
+                        if (pos > -1) {
+                            int start = pos + toSearch.length();
+                            int stop = page.indexOf("&amp;", start);
+                            String guid = page.substring(start, stop);
+                            PlatformConnector.callUrl("https://www.geocaching.com/account/messagecenter?recipientId=" + guid + "&gcCode=" + mGCCode);
+                        } else {
+                            MessageBox.show(Translation.get("noRecipient"), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
                         }
                     } catch (Exception ignored) {
                     }
+                } catch (Exception ignored) {
                 }
-            });
-        });
+            }
+        }));
         menu.show();
     }
 

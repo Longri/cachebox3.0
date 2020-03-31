@@ -2931,11 +2931,7 @@
       "downloadLogs": "downloadLogs",
       "downloadFriendsLogs": "downloadFriendsLogs",
       "downloadLogImages": "downloadLogImages",
-      "todo": "todo",
-      "letterbox": "letterbox",
-      "contactOwner": "letterbox",
-      "e_mailToOwner": "letterbox",
-      "massageToOwner": "letterbox"
+      "todo": "todo"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {

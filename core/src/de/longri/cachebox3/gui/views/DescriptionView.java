@@ -28,6 +28,7 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.actions.ContactOwner;
+import de.longri.cachebox3.gui.actions.DeleteCaches;
 import de.longri.cachebox3.gui.actions.ListsAtGroundSpeak;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
@@ -419,8 +420,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 cacheContextMenu.addCheckableMenuItem("rememberGeoCache", "", null,
                         Config.rememberedGeoCache.getValue().equals(geoCache.getGeoCacheCode().toString()), this::rememberGeoCache);
             }
-            cacheContextMenu.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
-            }).setEnabled(false);
+            cacheContextMenu.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.deleteCaches, this::deleteGeoCache);
         }
         cacheContextMenu.addDivider(1);
         cacheContextMenu.addMenuItem("Solver", CB.getSkin().getMenuIcon.todo, () -> {
@@ -492,5 +492,42 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 showPlatformWebView();
             }
         });
+    }
+
+    private void deleteGeoCache() {
+        ButtonDialog mb = new ButtonDialog("", Translation.get("sure"), Translation.get("question"), MessageBoxButton.OKCancel, MessageBoxIcon.Question,
+                (which, data) -> {
+                    if (which == BUTTON_POSITIVE) {
+                        new DeleteCaches().deleteCaches("SELECT * FROM CacheCoreInfo core WHERE Id = " + EventHandler.getSelectedCache().getId());
+
+                        /*
+                        ArrayList<String> GcCodeList = new ArrayList<>();
+                        GcCodeList.add(EventHandler.getSelectedCache().getGeoCacheCode().toString());
+
+                        CacheList3DAO dao = new CacheList3DAO();
+                        dao.delCacheImages(GcCodeList, Config.SpoilerFolder.getValue(), Config.SpoilerFolderLocal.getValue(), Config.DescriptionImageFolder.getValue(), Config.DescriptionImageFolderLocal.getValue());
+
+                        for (int i = 0, n = EventHandler.getSelectedCache().getWaypoints().size; i < n; i++) {
+                            AbstractWaypoint wp = EventHandler.getSelectedCache().getWaypoints().get(i);
+                            Database.deleteFromDatabase(wp);
+                        }
+
+                        Database.Data.delete("Caches", "GcCode='" + EventHandler.getSelectedCache().getGeoCacheCode() + "'");
+
+                        LogDAO logdao = new LogDAO();
+                        //logdao.ClearOrphanedLogs(); // doit when you have more time
+                        logdao.deleteLogs(EventHandler.getSelectedCache().getId());
+                        EditFilterSettings.applyFilter(FilterInstances.getLastFilter());
+
+                         */
+
+                        // todo selectfirst or next or previous cache
+                        EventHandler.fireSelectedWaypointChanged(null, null);
+
+                        // EventHandler.cacheListChanged();
+                    }
+                    return true;
+                });
+        mb.show();
     }
 }
