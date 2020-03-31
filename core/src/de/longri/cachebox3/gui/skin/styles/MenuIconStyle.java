@@ -100,7 +100,6 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable downloadLogImages;
     public Drawable showOriginalHtmlColor;
     public Drawable todo;
-    public Drawable letterbox;
     public Drawable contactOwner;
     public Drawable e_mailToOwner;
     public Drawable messageToOwner;
