@@ -233,9 +233,9 @@ public class CacheList3DAOTest {
     private void assertCache(String msg, AbstractCache cache) throws PlatformAssertionError {
         assertThat(msg + " Latitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(cache.getLatitude()) == should_latitude);
         assertThat(msg + " Longitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(cache.getLongitude()) == should_longitude);
-        assertThat(msg + " Name must charSequenceEquals", cache.getName().equals(should_name));
+        assertThat(msg + " Name must charSequenceEquals", cache.getGeoCacheName().equals(should_name));
         assertThat(msg + " Attributes must charSequenceEquals", cache.getAttributes().equals(should_attributes));
-        assertThat(msg + " GcCode must charSequenceEquals", cache.getGcCode().equals(should_gcCode));
+        assertThat(msg + " GcCode must charSequenceEquals", cache.getGeoCacheCode().equals(should_gcCode));
         assertThat(msg + " PlacedBy must charSequenceEquals", cache.getPlacedBy().equals(should_placedBy));
         assertThat(msg + " Owner must charSequenceEquals", cache.getOwner().equals(should_owner));
         assertThat(msg + " GcID must charSequenceEquals", cache.getGcId().equals(should_gcId));
