@@ -106,7 +106,6 @@ public class CB {
     final static Array<String> runningRunnables = new Array<>();
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
     public static LocationHandler locationHandler;
-    private static Categories Categories;
     public static float stateTime;
     public static int androidStatusbarHeight;
     public static ViewManager viewmanager;
@@ -472,8 +471,8 @@ public class CB {
     }
 
     public static Categories getCategories() {
-        Categories = new Categories();
-        return Categories;
+        de.longri.cachebox3.types.Categories categories = new Categories();
+        return categories;
     }
 
 

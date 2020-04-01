@@ -59,10 +59,6 @@ public class EditTextField extends Catch_WidgetGroup {
         this(false, text);
     }
 
-    public EditTextField(CharSequence text) {
-        this(false, text.toString());
-    }
-
     public EditTextField(boolean multiLine) {
         this(multiLine, "");
     }
@@ -144,10 +140,8 @@ public class EditTextField extends Catch_WidgetGroup {
 
     @Override
     public float getMinHeight() {
-        float min = (textLabel.getStyle().font.getLineHeight() * minLineCount) + style.background.getMinHeight();
-        float max = (textLabel.getStyle().font.getLineHeight() * maxLineCount) + style.background.getMinHeight();
-        if (min > max) return min;
-        return min;
+        // float max = (textLabel.getStyle().font.getLineHeight() * maxLineCount) + style.background.getMinHeight();
+        return (textLabel.getStyle().font.getLineHeight() * minLineCount) + style.background.getMinHeight();
     }
 
     @Override

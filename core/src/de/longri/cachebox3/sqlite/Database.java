@@ -749,7 +749,7 @@ public class Database {
         geoCache.setHasUserData(true);
         args.clear();
         args.put("BooleanStore", geoCache.getBooleanStore());
-        Database.Data.update("CacheText", args, "id=" + cacheId, null);
+        Database.Data.update("CacheCoreInfo", args, "id=" + cacheId, null);
     }
 
     public static void setFound(long cacheId, boolean value) {

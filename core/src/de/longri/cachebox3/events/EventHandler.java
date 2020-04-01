@@ -47,12 +47,12 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     private static final Logger log = LoggerFactory.getLogger(EventHandler.class);
 
-    static final private Class[] allListener = new Class[]{de.longri.cachebox3.events.location.PositionChangedListener.class,
+    static final private Class[] allListener = new Class[]{
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
             DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class,
             SelectedCoordChangedListener.class, ImportProgressChangedListener.class, ApiCallLimitListener.class,
             IncrementProgressListener.class, AccuracyChangedListener.class, CacheListChangedListener.class};
-    static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
+    static final private ArrayMap<Class, Array<Object>> listeners = new ArrayMap<>();
 
     private static final EventHandler INSTANCE = new EventHandler();
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(20);
@@ -77,14 +77,14 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static void add(Object listener) {
-        synchronized (listenerMap) {
+        synchronized (listeners) {
             for (Type type : listener.getClass().getGenericInterfaces()) {
                 for (Class clazz : allListener) {
                     if (type == clazz) {
-                        Array<Object> list = listenerMap.get(clazz);
+                        Array<Object> list = listeners.get(clazz);
                         if (list == null) {
                             list = new Array<>();
-                            listenerMap.put(clazz, list);
+                            listeners.put(clazz, list);
                         }
                         if (!list.contains(listener, true)) {
                             log.debug("Add {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
@@ -97,11 +97,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static void remove(Object listener) {
-        synchronized (listenerMap) {
+        synchronized (listeners) {
             for (Type type : listener.getClass().getGenericInterfaces()) {
                 for (Class clazz : allListener) {
                     if (type == clazz) {
-                        Array<Object> list = listenerMap.get(clazz);
+                        Array<Object> list = listeners.get(clazz);
                         if (list != null) {
                             log.debug("Remove {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
                             list.removeValue(listener, true);
@@ -117,8 +117,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         //ignore events if we are on background
         if (CB.isBackground) return;
 
-        synchronized (listenerMap) {
-            final Array<Object> list = listenerMap.get(event.getListenerClass());
+        synchronized (listeners) {
+            final Array<Object> list = listeners.get(event.getListenerClass());
             if (list != null) {
 
                 //call this EventHandler first

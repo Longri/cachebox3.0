@@ -499,32 +499,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 (which, data) -> {
                     if (which == BUTTON_POSITIVE) {
                         new DeleteCaches().deleteCaches("SELECT * FROM CacheCoreInfo core WHERE Id = " + EventHandler.getSelectedCache().getId());
-
-                        /*
-                        ArrayList<String> GcCodeList = new ArrayList<>();
-                        GcCodeList.add(EventHandler.getSelectedCache().getGeoCacheCode().toString());
-
-                        CacheList3DAO dao = new CacheList3DAO();
-                        dao.delCacheImages(GcCodeList, Config.SpoilerFolder.getValue(), Config.SpoilerFolderLocal.getValue(), Config.DescriptionImageFolder.getValue(), Config.DescriptionImageFolderLocal.getValue());
-
-                        for (int i = 0, n = EventHandler.getSelectedCache().getWaypoints().size; i < n; i++) {
-                            AbstractWaypoint wp = EventHandler.getSelectedCache().getWaypoints().get(i);
-                            Database.deleteFromDatabase(wp);
-                        }
-
-                        Database.Data.delete("Caches", "GcCode='" + EventHandler.getSelectedCache().getGeoCacheCode() + "'");
-
-                        LogDAO logdao = new LogDAO();
-                        //logdao.ClearOrphanedLogs(); // doit when you have more time
-                        logdao.deleteLogs(EventHandler.getSelectedCache().getId());
-                        EditFilterSettings.applyFilter(FilterInstances.getLastFilter());
-
-                         */
-
-                        // todo selectfirst or next or previous cache
-                        EventHandler.fireSelectedWaypointChanged(null, null);
-
-                        // EventHandler.cacheListChanged();
+                        EventHandler.fire(new CacheListChangedEvent());
+                        EventHandler.fireSelectedWaypointChanged(Database.Data.cacheList.first(), null);
                     }
                     return true;
                 });

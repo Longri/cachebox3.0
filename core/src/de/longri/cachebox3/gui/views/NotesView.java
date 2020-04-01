@@ -27,7 +27,6 @@ import de.longri.cachebox3.gui.widgets.EditTextField;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,9 +41,11 @@ public class NotesView extends AbstractTableView implements SelectedCacheChanged
     private CB_Button btnUpload;
     private AbstractCache currentCache;
 
+    /*
     public NotesView(BitStore reader) {
         super(reader);
     }
+     */
 
     public NotesView() {
         super("NotesView");
@@ -96,6 +97,8 @@ public class NotesView extends AbstractTableView implements SelectedCacheChanged
         });
 
         notes = new EditTextField(true);
+        notes.setMinLineCount(5);
+        notes.setMaxLineCount(25);
         notes.setTextChangedCallBack(value -> {
             btnUpload.setText(Translation.get("Upload"));
             btnUpload.enable();
@@ -115,7 +118,6 @@ public class NotesView extends AbstractTableView implements SelectedCacheChanged
             if (text == null)
                 text = "";
             notes.setText(text);
-            // notes.showFromLineNo(0);
             mustLoadNotes = false;
             if (text.length() > 0) {
                 btnUpload.setText(Translation.get("Upload"));
