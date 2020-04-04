@@ -57,7 +57,7 @@ public class Validate_UnusedSvgFiles extends ValidationTask {
         }
 
         for (String test : neadedList) {
-            svgList.removeValue(test, true);
+            svgList.removeValue(test, false);
         }
 
         StringBuilder warnMassageBuilder = new StringBuilder();
