@@ -34,10 +34,11 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.actions.Action_NavigateExt;
-import de.longri.cachebox3.gui.actions.Action_Toggle_Day_Night;
-import de.longri.cachebox3.gui.actions.show_activities.*;
-import de.longri.cachebox3.gui.actions.show_views.*;
+import de.longri.cachebox3.gui.actions.AbstractShowAction;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_NavigateExt;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Toggle_Day_Night;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
+import de.longri.cachebox3.gui.actions.extendsAbstractShowAction.*;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -70,18 +71,18 @@ public class ViewManager extends NamedStage
     private final float width, height;
     private final ButtonBar mainButtonBar;
     private final CacheboxMain main;
-    private final Action_Show_DescriptionView action_show_descriptionView = new Action_Show_DescriptionView();
-    private final Action_Show_WaypointView action_show_waypointView = new Action_Show_WaypointView();
-    private final Action_Show_LogView action_show_logView = new Action_Show_LogView();
-    private final Action_Show_MapView action_show_mapView = new Action_Show_MapView();
-    private final Action_Show_CompassView action_show_compassView = new Action_Show_CompassView();
-    private final Action_Show_CacheList action_show_cacheList = new Action_Show_CacheList();
-    private final Action_Show_TrackListView action_show_trackListView = new Action_Show_TrackListView();
-    private final Action_Show_SpoilerView action_show_spoilerView = new Action_Show_SpoilerView();
-    private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
-    private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
+    private final Show_DescriptionAction action_show_descriptionView = new Show_DescriptionAction();
+    private final Show_WaypointAction action_show_waypointView = new Show_WaypointAction();
+    private final Show_LogAction action_show_logView = new Show_LogAction();
+    private final Show_MapAction action_show_mapView = new Show_MapAction();
+    private final Show_CompassAction action_show_compassView = new Show_CompassAction();
+    private final Show_CacheList action_show_cacheList = new Show_CacheList();
+    private final Show_TrackListAction action_show_trackListView = new Show_TrackListAction();
+    private final Show_SpoilerAction action_show_spoilerView = new Show_SpoilerAction();
+    private final Show_TrackableListAction action_show_trackableListView = new Show_TrackableListAction();
+    private final Show_NoteAction action_show_noteView = new Show_NoteAction();
     private final Action_Quit action_quit = new Action_Quit();
-    private final Action_Show_DraftsView action_show_DraftsView = new Action_Show_DraftsView();
+    private final Show_DraftsAction action_show_DraftsView = new Show_DraftsAction();
     private final AtomicBoolean isFiltered = new AtomicBoolean(false);
     AbstractCache lastAbstractCache = null;
     private AbstractView actView;
@@ -244,8 +245,8 @@ public class ViewManager extends NamedStage
             gestureButton.aktActionView = null;
             if (!buttonFound) {
                 for (ActionButton actionButton : gestureButton.getButtonActions()) {
-                    if (actionButton.getAction() instanceof Abstract_Action_ShowView) {
-                        Abstract_Action_ShowView viewAction = (Abstract_Action_ShowView) actionButton.getAction();
+                    if (actionButton.getAction() instanceof AbstractShowAction) {
+                        AbstractShowAction viewAction = (AbstractShowAction) actionButton.getAction();
                         if (viewAction.viewTypeEquals(actView)) {
                             gestureButton.setChecked(true);
                             gestureButton.setHasContextMenu(viewAction.hasContextMenu());
@@ -293,12 +294,12 @@ public class ViewManager extends NamedStage
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
         if (CB.isTestVersion()) {
-            tool_button.addAction(new ActionButton(new Action_Show_TestView(), false));
-            tool_button.addAction(new ActionButton(new Action_Show_PlatformTestView(), false));
+            tool_button.addAction(new ActionButton(new Show_TestAction(), false));
+            tool_button.addAction(new ActionButton(new Show_PlatformTestAction(), false));
         }
 
-        misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
-        misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
+        misc_button.addAction(new ActionButton(new Show_AboutAction(), true, GestureDirection.Up));
+        misc_button.addAction(new ActionButton(new Show_Credits(), false));
         misc_button.addAction(new ActionButton(new Action_Settings_Activity(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Help(), false));

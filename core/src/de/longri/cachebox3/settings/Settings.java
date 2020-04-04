@@ -153,7 +153,7 @@ public class Settings extends Settings_Skin {
     public static final SettingInt HardwareCompassLevel = (SettingInt) settingsList.addSetting(new SettingInt("HardwareCompassLevel", Gps, NORMAL, 5, Global, ACB));
     public static final SettingBool HardwareCompassOnly = (SettingBool) settingsList.addSetting(new SettingBool("HardwareCompassOnly", Gps, NORMAL, true, Global, ACB));
     public static final SettingString rememberedGeoCache = (SettingString) settingsList.addSetting(new SettingString("rememberedGeoCache", Misc, NEVER, "", Global, ACB));
-
+    public static final SettingBool CacheContextMenuShortClickToggle = (SettingBool) settingsList.addSetting(new SettingBool("CacheCMShortClickToggle", Misc, NEVER, true, Global, ACB));
 
     //        public static final SettingEnum<Live_Cache_Time> LiveCacheTime = new SettingEnum<Live_Cache_Time>("LiveCacheTime", LiveMap, NORMAL, Live_Cache_Time.h_6, SettingStoreType.Global, ACB, Live_Cache_Time.h_6);
 //    public static final SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius> LiveRadius = new SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius>("LiveRadius", LiveMap, NORMAL, CB_Core.Api.LiveMapQue.Live_Radius.Zoom_14,

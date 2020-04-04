@@ -24,9 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.actions.show_views.Abstract_Action_ShowView;
+import de.longri.cachebox3.gui.actions.AbstractShowAction;
 import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -54,7 +53,7 @@ public class GestureButton extends Button {
     private final GestureButtonStyle style, filterStyle;
     private final ArrayList<ActionButton> buttonActions;
     private final int ID;
-    public Abstract_Action_ShowView aktActionView;
+    public AbstractShowAction aktActionView;
     private boolean hasContextMenu;
     private GestureHelp gestureHelper;
     private Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
@@ -233,9 +232,9 @@ public class GestureButton extends Button {
                 if (ba.isDefaultAction()) {
                     AbstractAction action = ba.getAction();
 
-                    if (action instanceof Abstract_Action_ShowView) {
+                    if (action instanceof AbstractShowAction) {
                         //check if target view not actView
-                        Class clazz = ((Abstract_Action_ShowView) action).getViewClass();
+                        Class clazz = ((AbstractShowAction) action).getViewClass();
                         if (clazz.isAssignableFrom(CB.viewmanager.getActView().getClass())) {
                             actionExecuted = false;
                             break;
@@ -244,8 +243,8 @@ public class GestureButton extends Button {
 
                     if (action != null) {
                         action.execute();
-                        if (action instanceof Abstract_Action_ShowView)
-                            aktActionView = (Abstract_Action_ShowView) action;
+                        if (action instanceof AbstractShowAction)
+                            aktActionView = (AbstractShowAction) action;
                         actionExecuted = true;
                         break;
                     }
@@ -274,8 +273,8 @@ public class GestureButton extends Button {
                 AbstractAction action = ba.getAction();
                 if (action != null) {
                     action.execute();
-                    if (action instanceof Abstract_Action_ShowView)
-                        aktActionView = (Abstract_Action_ShowView) action;
+                    if (action instanceof AbstractShowAction)
+                        aktActionView = (AbstractShowAction) action;
                 }
             }
             return true;
@@ -334,8 +333,8 @@ public class GestureButton extends Button {
                                 public void windowClosed() {
                                     gestureHelper.clearWindowCloseListener();
                                     action.execute();
-                                    if (action instanceof Abstract_Action_ShowView)
-                                        aktActionView = (Abstract_Action_ShowView) action;
+                                    if (action instanceof AbstractShowAction)
+                                        aktActionView = (AbstractShowAction) action;
                                 }
                             });
                             gestureHelper.show(ba.getGestureDirection());
@@ -343,8 +342,8 @@ public class GestureButton extends Button {
                         } else {
                             // no gesture, call direct
                             action.execute();
-                            if (action instanceof Abstract_Action_ShowView)
-                                aktActionView = (Abstract_Action_ShowView) action;
+                            if (action instanceof AbstractShowAction)
+                                aktActionView = (AbstractShowAction) action;
                             return true;
                         }
                     }

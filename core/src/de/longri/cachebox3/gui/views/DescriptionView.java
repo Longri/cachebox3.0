@@ -27,9 +27,9 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
-import de.longri.cachebox3.gui.actions.ContactOwner;
-import de.longri.cachebox3.gui.actions.DeleteCaches;
-import de.longri.cachebox3.gui.actions.ListsAtGroundSpeak;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.ContactOwner;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.ListsAtGroundSpeak;
+import de.longri.cachebox3.gui.activities.DeleteCaches;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
@@ -394,15 +394,27 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public Menu getContextMenu() {
+        return getContextMenu(true);
+    }
+
+    public Menu getContextMenu(boolean forDescription) {
         Menu cacheContextMenu = new Menu("DescriptionViewTitle");
         AbstractCache geoCache = EventHandler.getSelectedCache();
         boolean selectedCacheIsSet = (geoCache != null);
 
         if (selectedCacheIsSet) {
             boolean selectedCacheIsGC = geoCache.getGeoCacheCode().toString().startsWith("GC");
-            cacheContextMenu.addCheckableMenuItem("ShowOriginalHtmlColor", "", CB.getSkin().getMenuIcon.showOriginalHtmlColor,
-                    geoCache.getShowOriginalHtmlColor(), this::showOriginalHtmlColor);
-            cacheContextMenu.addDivider(0);
+            if (forDescription) {
+                cacheContextMenu.addCheckableMenuItem("ShowOriginalHtmlColor", "", CB.getSkin().getMenuIcon.showOriginalHtmlColor,
+                        geoCache.getShowOriginalHtmlColor(), this::showOriginalHtmlColor);
+                cacheContextMenu.addDivider(0);
+            }
+            if (!forDescription) {
+                cacheContextMenu.addCheckableMenuItem("CacheContextMenuShortClickToggle", Config.CacheContextMenuShortClickToggle.getValue(), this::toggleShortClick);
+                /*
+                cacheContextMenu.addMoreMenu(ShowDrafts.getInstance().getContextMenu(), Translation.get("DraftsContextMenuTitle"), Translation.get("DraftsContextMenuTitle"));
+                 */
+            }
             if (selectedCacheIsGC) {
                 cacheContextMenu.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> new ReloadCacheActivity().show());
             }
@@ -422,6 +434,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             }
             cacheContextMenu.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.deleteCaches, this::deleteGeoCache);
         }
+
         cacheContextMenu.addDivider(1);
         cacheContextMenu.addMenuItem("Solver", CB.getSkin().getMenuIcon.todo, () -> {
             // replace icon with CB.getSkin().getMenuIcon.solverIcon
@@ -506,4 +519,19 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 });
         mb.show();
     }
+
+
+    private void toggleShortClick() {
+        ButtonDialog mb = new ButtonDialog("", Translation.get("CacheContextMenuShortClickToggleQuestion"), Translation.get("CacheContextMenuShortClickToggleTitle"), MessageBoxButton.YesNo, MessageBoxIcon.Question,
+                (btnNumber, data) -> {
+                    if (btnNumber == BUTTON_POSITIVE)
+                        Config.CacheContextMenuShortClickToggle.setValue(false);
+                    else
+                        Config.CacheContextMenuShortClickToggle.setValue(true);
+                    Config.AcceptChanges();
+                    return true;
+                });
+        mb.show();
+    }
+
 }

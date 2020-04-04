@@ -18,7 +18,8 @@ package de.longri.cachebox3.gui.actions;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.actions.show_activities.*;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.*;
 import de.longri.cachebox3.gui.widgets.QuickButtonItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
@@ -69,12 +70,12 @@ public enum QuickActions {
     /**
      * Gibt eine ArrayList von Actions zurück aus einem übergebenen String Array
      *
-     * @param configList
-     * @param button
+     * @param configList ?
+     * @param button ?
      * @return ArrayList <Actions>
      */
-    public static MoveableList<QuickButtonItem> getListFromConfig(String[] configList, float height, Drawable button) {
-        MoveableList<QuickButtonItem> retList = new MoveableList<QuickButtonItem>();
+    public static MoveableList<QuickButtonItem> getListFromConfig(String[] configList, Drawable button) {
+        MoveableList<QuickButtonItem> retList = new MoveableList<>();
         if (configList == null || configList.length == 0) {
             return retList;
         }
@@ -89,8 +90,8 @@ public enum QuickActions {
                 if (EnumId > -1) {
 
                     QuickActions type = QuickActions.values()[EnumId];
-                    if (QuickActions.getActionEnumById(EnumId) != null) {
-                        QuickButtonItem tmp = new QuickButtonItem(index++, button, QuickActions.getActionEnumById(EnumId), QuickActions.getName(EnumId), type);
+                    if (type != null) {
+                        QuickButtonItem tmp = new QuickButtonItem(index++, button, type.getAction(), type.getName(), type);
                         retList.add(tmp);
                     } else
                         invalidEnumId = true;
@@ -102,146 +103,134 @@ public enum QuickActions {
         if (invalidEnumId) {
             //	    write valid id's back
 
-            String ActionsString = "";
+            StringBuilder actionsString = new StringBuilder();
             int counter = 0;
             for (int i = 0, n = retList.size; i < n; i++) {
                 QuickButtonItem tmp = retList.get(i);
-                ActionsString += String.valueOf(tmp.getAction().ordinal());
+                actionsString.append(tmp.getAction().ordinal());
                 if (counter < retList.size - 1) {
-                    ActionsString += ",";
+                    actionsString.append(",");
                 }
                 counter++;
             }
-            Config.quickButtonList.setValue(ActionsString);
+            Config.quickButtonList.setValue(actionsString.toString());
             Config.AcceptChanges();
         }
         return retList;
     }
 
-    /**
-     * Gibt die ID des übergebenen Enums zurück
-     *
-     * @param attrib
-     * @return long
-     */
-    public static int GetIndex(QuickActions attrib) {
-        return attrib.ordinal();
-    }
-
-    public static AbstractAction getActionEnumById(int id) {
-        switch (id) {
-            case 0:
+    public AbstractAction getAction() {
+        switch (this) {
+            case DescriptionView:
                 return CB.viewmanager.getAction_Show_DescriptionView();
-            case 1:
+            case WaypointView:
                 return CB.viewmanager.getAction_Show_WaypointView();
-            case 2:
+            case LogView:
                 return CB.viewmanager.getAction_Show_LogView();
-            case 3:
+            case MapView:
                 return CB.viewmanager.getAction_Show_MapView();
-            case 4:
+            case CompassView:
                 return CB.viewmanager.getAction_Show_CompassView();
-            case 5:
+            case CacheListView:
                 return CB.viewmanager.getAction_Show_CacheList();
-            case 6:
+            case TrackListView:
                 return CB.viewmanager.getAction_Show_TrackListView();
-            case 7:
+            case TakePhoto:
                 return new Action_TakePhoto();
-            case 8:
+            case TakeVideo:
                 return new Action_RecVideo();
-            case 9:
+            case VoiceRecord:
                 return new Action_RecVoice();
-            case 10:
+            case LiveSearch:
                 return new Action_SearchDialog();
-            case 11:
+            case Filter:
                 return new Action_EditFilterSettings();
-            case 12:
+            case AutoResort:
                 return new Action_Switch_Autoresort();
-            case 13:
+            case Solver:
                 return CB.viewmanager.getAction_Show_SolverView();
-            case 14:
+            case Spoiler:
                 return CB.viewmanager.getAction_Show_SpoilerView();
-            case 15:
+            case Hint:
                 return new Action_HintDialog();
-            case 16:
+            case Parking:
                 return new Action_ParkingDialog();
-            case 17:
+            case Day_Night:
                 return new Action_Toggle_Day_Night();
-            case 18:
+            case Drafts:
                 return CB.viewmanager.getAction_Show_DraftsView();
-            case 19:
+            case QuickDrafts:
                 return new Action_QuickDraft();
-            case 20:
+            case TrackableListView:
                 return CB.viewmanager.getAction_Show_TrackableListView();
-            case 21:
+            case addWP:
                 return new Action_Add_WP();
-            case 22:
+            case Solver2:
                 return CB.viewmanager.getAction_Show_SolverView2();
-            case 23:
+            case Notesview:
                 return CB.viewmanager.getAction_Show_NoteView();
-            case 24:
+            case uploadDraft:
                 return new Action_Upload_Drafts();
-            case 25:
+            case torch:
                 return new Action_Switch_Torch();
-
         }
-        return null;
+        return null; // empty
     }
 
-    public static CharSequence getName(int id) {
-        switch (id) {
-            case 0:
+    public CharSequence getName() {
+        switch (this) {
+            case DescriptionView:
                 return Translation.get("Description");
-            case 1:
+            case WaypointView:
                 return Translation.get("Waypoints");
-            case 2:
+            case LogView:
                 return Translation.get("ShowLogs");
-            case 3:
+            case MapView:
                 return Translation.get("Map");
-            case 4:
+            case CompassView:
                 return Translation.get("Compass");
-            case 5:
+            case CacheListView:
                 return Translation.get("cacheList");
-            case 6:
+            case TrackListView:
                 return Translation.get("Tracks");
-            case 7:
+            case TakePhoto:
                 return Translation.get("TakePhoto");
-            case 8:
+            case TakeVideo:
                 return Translation.get("RecVideo");
-            case 9:
+            case VoiceRecord:
                 return Translation.get("VoiceRec");
-            case 10:
+            case LiveSearch:
                 return Translation.get("Search");
-            case 11:
+            case Filter:
                 return Translation.get("filter");
-            case 12:
+            case AutoResort:
                 return Translation.get("AutoResort");
-            case 13:
+            case Solver:
                 return Translation.get("Solver");
-            case 14:
+            case Spoiler:
                 return Translation.get("spoiler");
-            case 15:
+            case Hint:
                 return Translation.get("hint");
-            case 16:
+            case Parking:
                 return Translation.get("MyParking");
-            case 17:
+            case Day_Night:
                 return Translation.get("DayNight");
-            case 18:
+            case Drafts:
                 return Translation.get("Drafts");
-            case 19:
+            case QuickDrafts:
                 return Translation.get("QuickDraft");
-            case 20:
+            case TrackableListView:
                 return Translation.get("TBList");
-            case 21:
+            case addWP:
                 return Translation.get("AddWaypoint");
-            case 22:
+            case Solver2:
                 return Translation.get("Solver") + " 2";
-            case 23:
+            case Notesview:
                 return Translation.get("Notes");
-            case 24:
+            case uploadDraft:
                 return Translation.get("uploadDrafts");
-            case 25:
+            case torch:
                 return Translation.get("torch");
-
         }
         return "empty";
     }

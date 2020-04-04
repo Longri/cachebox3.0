@@ -156,7 +156,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             @Override
             public ListViewItem getView(int index) {
                 if (index == 0) {
-                    return CacheListItem.getListItem(index, actAbstractCache, getWidth());
+                    return new CacheListItem(index, actAbstractCache, getWidth());
                 } else {
                     final WayPointListItem item;
                     try {

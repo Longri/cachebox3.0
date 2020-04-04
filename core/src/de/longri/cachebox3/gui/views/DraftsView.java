@@ -420,11 +420,11 @@ public class DraftsView extends AbstractView {
         CB.postOnNextGlThread(() -> listView.setAdapter(listViewAdapter));
     }
 
-    private void uploadDraft() {
+    public void uploadDraft() {
         upload(false);
     }
 
-    private void uploadLog() {
+    public void uploadLog() {
         upload(true);
     }
 

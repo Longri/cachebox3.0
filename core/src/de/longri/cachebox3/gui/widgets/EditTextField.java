@@ -186,7 +186,8 @@ public class EditTextField extends Catch_WidgetGroup {
 
     public void updateText(CharSequence newText) {
         setText(newText);
-        textChangedCallBack.callBack(true);
+        if (textChangedCallBack != null)
+            textChangedCallBack.callBack(true);
     }
 
     public void setWrap(boolean wrap) {

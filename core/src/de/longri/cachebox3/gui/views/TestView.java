@@ -279,7 +279,7 @@ public class TestView extends AbstractView {
             cache.setFavoritePoints(1345); //TODO debug!
             cache.setFavorite(true);
             cache.setNumTravelbugs((short) 12);
-            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache, contentWidth * 1.2f);
+            CacheListItem cacheListItem = new CacheListItem(0, cache, contentWidth * 1.2f);
 
             ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
 

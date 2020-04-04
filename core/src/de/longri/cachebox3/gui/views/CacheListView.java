@@ -30,11 +30,11 @@ import de.longri.cachebox3.events.location.OrientationChangedEvent;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
-import de.longri.cachebox3.gui.actions.Action_SearchDialog;
-import de.longri.cachebox3.gui.actions.ShowDeleteMenu;
-import de.longri.cachebox3.gui.actions.ShowImportMenu;
-import de.longri.cachebox3.gui.actions.show_activities.Action_EditFilterSettings;
-import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SearchDialog;
+import de.longri.cachebox3.gui.activities.ShowDeleteMenu;
+import de.longri.cachebox3.gui.activities.ShowImportMenu;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_EditFilterSettings;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
@@ -117,7 +117,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                     createdItems[index] = null;
                     return null;
                 }
-                ListViewItem item = CacheListItem.getListItem(index, Database.Data.cacheList.get(index), getWidth());
+                ListViewItem item = new CacheListItem(index, Database.Data.cacheList.get(index), getWidth());
                 createdItems[index] = item;
                 return item;
             }
@@ -183,7 +183,6 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
             public void selectionChanged() {
                 CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
                 int selectedItemListIndex = selectedItem.getListIndex();
-
                 AbstractCache cache = Database.Data.cacheList.get(selectedItemListIndex);
                 log.debug("Cache selection changed to: " + cache.toString());
                 //set selected Cache global
