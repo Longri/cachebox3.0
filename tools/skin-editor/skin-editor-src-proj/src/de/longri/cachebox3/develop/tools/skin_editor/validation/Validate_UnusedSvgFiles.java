@@ -44,26 +44,26 @@ public class Validate_UnusedSvgFiles extends ValidationTask {
         FileHandle svgFolder = validationSkin.skinFolder.child("svg");
         FileHandle[] files = svgFolder.list();
 
-        ObjectMap<java.lang.String, ScaledSvg> registed = validationSkin.getAll(ScaledSvg.class);
+        ObjectMap<java.lang.String, ScaledSvg> needed = validationSkin.getAll(ScaledSvg.class);
 
-        Array<String> neadedList = new Array<String>();
-        for (ScaledSvg scaledSvg : registed.values()) {
-            neadedList.add(scaledSvg.path);
+        Array<String> neededSVGs = new Array<>();
+        for (ScaledSvg scaledSvg : needed.values()) {
+            neededSVGs.add(scaledSvg.path);
         }
 
-        Array<String> svgList = new Array<String>();
+        Array<String> svgFileList = new Array<>();
         for (FileHandle file : files) {
-            svgList.add("svg/" + file.name());
+            svgFileList.add("svg/" + file.name());
         }
 
-        for (String test : neadedList) {
-            svgList.removeValue(test, false);
+        for (String test : neededSVGs) {
+            svgFileList.removeValue(test, false);
         }
 
         StringBuilder warnMassageBuilder = new StringBuilder();
-        if (svgList.size > 0) {
+        if (svgFileList.size > 0) {
             warnMassageBuilder.append("Unused *.svg files : \n\n");
-            for (String unusedFile : svgList) {
+            for (String unusedFile : svgFileList) {
                 warnMassageBuilder.append(unusedFile);
                 warnMassageBuilder.append("\n");
             }
