@@ -115,7 +115,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-
 /**
  * The MapView has transparent background. The Map render runs at CacheboxMain.
  * This View has only the controls for the Map!
@@ -155,22 +154,18 @@ public class MapView extends AbstractView {
     private CB.ThemeUsage whichUsage;
     private MapBubble infoBubble;
     private ClickListener bubbleClickListener = new ClickListener() {
-
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             super.touchDown(event, x, y, pointer, button);
             if (infoBubble != null) {
                 //click detection
-                if (infoBubble.getX() <= x && infoBubble.getX() + infoBubble.getWidth() >= x &&
-                        infoBubble.getY() <= y && infoBubble.getY() + infoBubble.getHeight() >= y) {
-                    return true;
-                }
+                return infoBubble.getX() <= x && infoBubble.getX() + infoBubble.getWidth() >= x &&
+                        infoBubble.getY() <= y && infoBubble.getY() + infoBubble.getHeight() >= y;
             }
             return false;
         }
 
         public void clicked(InputEvent event, float x, float y) {
             if (infoBubble != null) {
-
                 //click detection
                 if (infoBubble.getX() <= x && infoBubble.getX() + infoBubble.getWidth() >= x &&
                         infoBubble.getY() <= y && infoBubble.getY() + infoBubble.getHeight() >= y) {
@@ -339,19 +334,16 @@ public class MapView extends AbstractView {
         this.addActor(mapStateButton);
         this.setTouchable(Touchable.enabled);
 
-        this.zoomButton = new ZoomButton(new ZoomButton.ValueChangeListener() {
-            @Override
-            public void valueChanged(int changeValue) {
-                MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
-                double value = mapPosition.getScale();
-                if (changeValue > 0)
-                    value = value * 2;
-                else
-                    value = value * 0.5;
+        this.zoomButton = new ZoomButton(changeValue -> {
+            MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
+            double value = mapPosition.getScale();
+            if (changeValue > 0)
+                value = value * 2;
+            else
+                value = value * 0.5;
 
-                positionChangedHandler.scale(value);
-                CB.lastMapState.setZoom(FastMath.log2((int) value));
-            }
+            positionChangedHandler.scale(value);
+            CB.lastMapState.setZoom(FastMath.log2((int) value));
         });
         this.zoomButton.pack();
         this.addActor(zoomButton);
@@ -414,8 +406,8 @@ public class MapView extends AbstractView {
 
         if (CB.isMocked()) return;
 
-        log.debug("Tile.SIZE:" + Integer.toString(Tile.SIZE));
-        log.debug("Canvas.dpi:" + Float.toString(CanvasAdapter.dpi));
+        log.debug("Tile.SIZE:" + Tile.SIZE);
+        log.debug("Canvas.dpi:" + CanvasAdapter.dpi);
 
 
         CacheboxMain.drawMap.set(true);
@@ -463,7 +455,6 @@ public class MapView extends AbstractView {
         //add position changed handler
         positionChangedHandler = new MapViewPositionChangedHandler(cacheboxMapAdapter, directLineLayer, myLocationLayer, infoPanel);
 
-        return;
     }
 
     @Override
@@ -505,6 +496,11 @@ public class MapView extends AbstractView {
 
     @Override
     public void dispose() {
+        Config.lastZoomLevel.setValue(wayPointLayer.getLastZoomLevel());
+        MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
+        Config.mapInitLatitude.setValue(mapPosition.getLatitude());
+        Config.mapInitLongitude.setValue(mapPosition.getLongitude());
+        Config.AcceptChanges();
         log.debug("Dispose MapView");
         CacheboxMain.drawMap.set(false);
 
@@ -611,6 +607,11 @@ public class MapView extends AbstractView {
         directLineLayer = new DirectLineLayer(cacheboxMapAdapter);
         mapScaleBarLayer = new MapScaleBarLayer(cacheboxMapAdapter, mapScaleBar);
         wayPointLayer = new WaypointLayer(this, cacheboxMapAdapter, CB.textureRegionMap);
+        wayPointLayer.setLastZoomLevel(Config.lastZoomLevel.getValue());
+        MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
+        mapPosition.setPosition(Config.mapInitLatitude.getValue(), Config.mapInitLongitude.getValue());
+        cacheboxMapAdapter.setMapPosition(mapPosition);
+
         MapArrowStyle style = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
         String bmpName = ((GetName) style.myLocation).getName();
         TextureRegion textureRegion = CB.textureRegionMap.get(bmpName);
@@ -636,14 +637,11 @@ public class MapView extends AbstractView {
         layerGroup.layers.add(mapScaleBarLayer);
         layerGroup.layers.add(ccl);
 
-        Config.ShowDirektLine.addChangedEventListener(new IChanged() {
-            @Override
-            public void isChanged() {
-                if (cacheboxMapAdapter == null) return;
-                log.debug("change direct line visibility to {}", Config.ShowDirektLine.getValue() ? "visible" : "invisible");
-                directLineLayer.setEnabled(Config.ShowDirektLine.getValue());
-                cacheboxMapAdapter.updateMap(true);
-            }
+        Config.ShowDirektLine.addChangedEventListener(() -> {
+            if (cacheboxMapAdapter == null) return;
+            log.debug("change direct line visibility to {}", Config.ShowDirektLine.getValue() ? "visible" : "invisible");
+            directLineLayer.setEnabled(Config.ShowDirektLine.getValue());
+            cacheboxMapAdapter.updateMap(true);
         });
 
 

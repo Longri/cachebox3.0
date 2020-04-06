@@ -408,6 +408,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         cacheListChanged(null);
     }
 
+    public int getLastZoomLevel() {
+        return mClusterRenderer.getLastZoomLevel();
+    }
+
+    public void setLastZoomLevel(int _lastZoomLevel) {
+        mClusterRenderer.setLastZoomLevel(_lastZoomLevel);
+    }
+
     public interface ActiveItem {
         boolean run(MapWayPointItem aIndex);
     }

@@ -57,7 +57,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
     private final Point mMapPoint = new Point();
     private final Box mapVisibleBoundingBox = new Box();
 
-    private int lastZoomLevel = -1;
+    private int lastZoomLevel;
     private double lastMapPosX = Double.MIN_VALUE;
     private double lastMapPosY = Double.MIN_VALUE;
     private float lastMapBearing = Float.MIN_VALUE;
@@ -73,6 +73,14 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
     public void dispose() {
         Arrays.fill(mItems, null);
         mItems = null;
+    }
+
+    public void setLastZoomLevel(int _lastZoomLevel) {
+        lastZoomLevel = _lastZoomLevel;
+    }
+
+    public int getLastZoomLevel() {
+        return lastZoomLevel;
     }
 
     public static class InternalItem {
@@ -93,6 +101,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         mSymbolLayer = new SymbolBucket();
         mWaypointLayer = waypointLayer;
         mDefaultBitmap = defaultSymbol;
+        lastZoomLevel = -1;
     }
 
 
