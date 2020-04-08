@@ -49,16 +49,16 @@ public abstract class PlatformConnector {
         return platformConnector._createThumb(path, scaledWidth, thumbPrefix);
     }
 
-    public void setClipboard(Clipboard _clipBoard) {
-       clipBoard = _clipBoard;
-    }
-
     public static Clipboard getClipboard() {
         if (clipBoard == null) {
             return null;
         } else {
             return clipBoard;
         }
+    }
+
+    public void setClipboard(Clipboard _clipBoard) {
+        clipBoard = _clipBoard;
     }
 
     public static boolean isTorchOn() {
@@ -132,6 +132,10 @@ public abstract class PlatformConnector {
         platformConnector._takePhoto();
     }
 
+    public static void recVideo() {
+        platformConnector._recVideo();
+    }
+
     protected abstract String _createThumb(String path, int scaledWidth, String thumbPrefix);
 
     protected abstract boolean _isTorchAvailable();
@@ -164,6 +168,8 @@ public abstract class PlatformConnector {
     public abstract void _getTextInput(boolean singleLine, Input.TextInputListener listener, int inputType, String title, String text, String hint);
 
     public abstract void _takePhoto();
+
+    public abstract void _recVideo();
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {

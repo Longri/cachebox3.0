@@ -18,9 +18,11 @@ package de.longri.cachebox3;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -53,17 +55,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import static android.os.Build.VERSION_CODES.N;
 
 /**
  * Created by Longri on 17.07.16.
+ * todo NavigateTo(); recVoice(); shareInfos();
  */
 public class AndroidPlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
     private static final int REQUEST_CODE_GET_API_KEY = 987;
-    private static final int REQUEST_CAPTURE_IMAGE = 1025;
-    private static final int REQUEST_CAPTURE_VIDEO = 1026;
+    private static final int REQUEST_CAPTURE_IMAGE = 6516;
+    private static final int REQUEST_CAPTURE_VIDEO = 6517;
     private static AndroidPlatformConnector androidPlatformConnector;
     private final AndroidLauncherfragment application;
     private final Handler handle;
@@ -73,25 +77,37 @@ public class AndroidPlatformConnector extends PlatformConnector {
     private AndroidWebView descriptionView;
     private String mediaFileNameWithoutExtension;
     private String tempMediaPath;
-    AndroidEventListener handlingTakePhoto = (requestCode, resultCode, data) -> {
-        // application.removeAndroidEventListener(handlingTakePhoto);
-        // Intent Result Take Photo
-        if (requestCode == REQUEST_CAPTURE_IMAGE) {
-            if (resultCode == Activity.RESULT_OK) {
-                log.info("Photo taken");
-                try {
-                    // move the photo from temp to UserImageFolder
-                    String sourceName = tempMediaPath + mediaFileNameWithoutExtension + ".jpg";
-                    String destinationName = Config.UserImageFolder.getValue() + "/" + mediaFileNameWithoutExtension + ".jpg";
-                    if (!sourceName.equals(destinationName)) {
-                        FileHandle source = new FileHandle(sourceName);
-                        FileHandle destination = new FileHandle(destinationName);
-                        if (!source.file().renameTo(destination.file())) {
-                            log.error("move from " + sourceName + " to " + destinationName + " failed");
+    private Uri videoUri;
+    private String recordingStartTime;
+    private AndroidEventListener handlingTakePhoto, handlingRecordedVideo;
+
+    public AndroidPlatformConnector(AndroidLauncherfragment app) {
+        this.application = app;
+        this.context = app.getContext();
+        this.handle = new Handler();
+        this.flashLight = new AndroidFlashLight(this.context);
+        platformConnector = this;
+        androidPlatformConnector = this;
+        handlingTakePhoto = (requestCode, resultCode, data) -> {
+            // application.removeAndroidEventListener(handlingTakePhoto);
+            // Intent Result Take Photo
+            if (requestCode == REQUEST_CAPTURE_IMAGE) {
+                if (resultCode == Activity.RESULT_OK) {
+                    log.info("Photo taken");
+                    try {
+                        // move the photo from temp to UserImageFolder
+                        String sourceName = tempMediaPath + mediaFileNameWithoutExtension + ".jpg";
+                        String destinationName = Config.UserImageFolder.getValue() + "/" + mediaFileNameWithoutExtension + ".jpg";
+                        if (!sourceName.equals(destinationName)) {
+                            FileHandle source = new FileHandle(sourceName);
+                            FileHandle destination = new FileHandle(destinationName);
+                            if (!source.file().renameTo(destination.file())) {
+                                log.error("move from " + sourceName + " to " + destinationName + " failed");
+                            }
                         }
-                    }
 
                                         /*
+                                        todo
                                         // for the photo to show within spoilers
                                         if (EventHandler.isSetSelectedCache()) {
                                             EventHandler.getSelectedCache().loadSpoilerRessources();
@@ -118,22 +134,65 @@ public class AndroidPlatformConnector extends PlatformConnector {
                                                 lastLocation,
                                                 Global.GetTrackDateTimeString());
                                          */
-                } catch (Exception e) {
-                    log.error(e.getLocalizedMessage());
+                    } catch (Exception e) {
+                        log.error(e.getLocalizedMessage());
+                    }
+                } else {
+                    log.error("Intent Take Photo resultCode: " + resultCode);
                 }
-            } else {
-                log.error("Intent Take Photo resultCode: " + resultCode);
             }
-        }
-    };
+        };
+        handlingRecordedVideo = (requestCode, resultCode, data) -> {
+            // application.removeAndroidEventListener(handlingRecordedVideo);
+            // Intent Result Record Video
+            if (requestCode == REQUEST_CAPTURE_VIDEO) {
+                if (resultCode == Activity.RESULT_OK) {
+                    log.info("Video recorded.");
+                    String ext;
+                    try {
+                        // move Video from temp (recordedVideoFilePath) in UserImageFolder and rename
+                        String recordedVideoFilePath = "";
+                        // first get the tempfile pathAndName (recordedVideoFilePath)
+                        String[] proj = {MediaStore.Images.Media.DATA}; // want to get Path to the file on disk.
 
-    public AndroidPlatformConnector(AndroidLauncherfragment app) {
-        this.application = app;
-        this.context = app.getContext();
-        this.handle = new Handler();
-        this.flashLight = new AndroidFlashLight(this.context);
-        platformConnector = this;
-        androidPlatformConnector = this;
+                        Cursor cursor = application.getActivity().getContentResolver().query(videoUri, proj, null, null, null); // result set
+                        if (cursor != null && cursor.getCount() != 0) {
+                            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA); // my meaning: if only one element index is 0
+                            cursor.moveToFirst(); // first row ( here we should have only one row )
+                            recordedVideoFilePath = cursor.getString(columnIndex);
+                        }
+                        if (cursor != null) {
+                            cursor.close();
+                        }
+
+                        if (recordedVideoFilePath.length() > 0) {
+                            ext = Utils.getFileExtension(recordedVideoFilePath);
+                            FileHandle source = new FileHandle(recordedVideoFilePath);
+                            String destinationName = Config.UserImageFolder.getValue() + "/" + mediaFileNameWithoutExtension + "." + ext;
+                            FileHandle destination = new FileHandle(destinationName);
+                            if (!source.file().renameTo(destination.file())) {
+                                log.error("move from " + recordedVideoFilePath + " to " + destinationName + " failed");
+                            } else {
+                                log.info("Video saved at " + destinationName);
+                                /*
+                                // track annotation
+                                String TrackFolder = Config.TrackFolder.getValue();
+                                String relativPath = Utils.getRelativePath(Config.UserImageFolder.getValue(), TrackFolder, "/");
+                                TrackRecorder.AnnotateMedia(mediaFileNameWithoutExtension + "." + ext,
+                                        relativPath + "/" + mediaFileNameWithoutExtension + "." + ext,
+                                        recordingStartCoordinate, recordingStartTime);
+
+                                 */
+                            }
+                        }
+                    } catch (Exception e) {
+                        log.error(e.getLocalizedMessage());
+                    }
+                } else {
+                    log.error("Intent Record Video resultCode: " + resultCode);
+                }
+            }
+        };
     }
 
     public static AndroidPlatformConnector getInstance(AndroidLauncherfragment app) {
@@ -459,7 +518,62 @@ public class AndroidPlatformConnector extends PlatformConnector {
         }
     }
 
+    public void _recVideo() {
+        try {
+            log.info("recVideo start " + EventHandler.getSelectedCache());
+            // define the file-name to save video taken by Camera activity
+            String directory = Config.UserImageFolder.getValue();
+            if (!Utils.createDirectory(directory)) {
+                log.error("can't create " + directory);
+                return;
+            }
+            mediaFileNameWithoutExtension = new SimpleDateFormat("yyyy-MM-dd HHmmss", Locale.US).format(new Date());
+            String cacheName;
+            if (EventHandler.isSetSelectedCache()) {
+                String validName = Utils.removeInvalidFatChars(EventHandler.getSelectedCache().getGeoCacheCode() + "-" + EventHandler.getSelectedCache().getGeoCacheName());
+                cacheName = validName.substring(0, Math.min(validName.length(), 32));
+            } else {
+                cacheName = "Video";
+            }
+            mediaFileNameWithoutExtension = mediaFileNameWithoutExtension + " " + cacheName;
+
+            // Da ein Video keine Momentaufnahme ist, muss die Zeit und die Koordinaten beim Start der Aufnahme verwendet werden.
+            recordingStartTime = getTrackDateTimeString();
+            /*
+            todo
+            private static Location recordingStartCoordinate;
+            recordingStartCoordinate = Locator.getInstance().getLocation(Location.ProviderType.GPS);
+             */
+
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Video.Media.TITLE, "");
+            videoUri = application.getActivity().getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+            // log.info(uri.toString());
+            final Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
+            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+            // intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, MAXIMUM_VIDEO_SIZE);
+            if (intent.resolveActivity(application.getActivity().getPackageManager()) != null) {
+                // androidApplication.addAndroidEventListener(handlingRecordedVideo);
+                application.getActivity().startActivityForResult(intent, REQUEST_CAPTURE_VIDEO);
+            } else {
+                log.error(MediaStore.ACTION_VIDEO_CAPTURE + " not installed.");
+            }
+        } catch (Exception e) {
+            log.error(e.toString());
+        }
+    }
+
+    private String getTrackDateTimeString() {
+        Date timestamp = new Date();
+        SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        datFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return datFormat.format(timestamp).replace(" ", "T") + "Z";
+    }
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAPTURE_IMAGE) handlingTakePhoto.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CAPTURE_VIDEO) handlingRecordedVideo.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -20,19 +20,20 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.MenuID;
 
+import static de.longri.cachebox3.PlatformConnector.recVideo;
+
 /**
  * Created by Longri on 14.09.2016.
  */
 public class Action_RecVideo extends AbstractAction {
 
     public Action_RecVideo() {
-        super(NOT_IMPLEMENTED, "recVideos", MenuID.AID_VIDEO_REC);
+        super(IMPLEMENTED, "RecVideo", MenuID.AID_VIDEO_REC);
     }
 
     @Override
     public void execute() {
-        CB.viewmanager.toast("Rec Video not implemented");
-
+        recVideo();
     }
 
     @Override
