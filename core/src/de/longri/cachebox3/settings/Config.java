@@ -51,7 +51,7 @@ public class Config extends Settings {
     /**
      * Return true, if setting changes need restart
      *
-     * @return
+     * @return ?
      */
     private static synchronized boolean writeToDB() {
         if (inWrite.get()) {

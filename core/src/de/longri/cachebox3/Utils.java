@@ -399,13 +399,22 @@ public class Utils {
     /**
      * Return TRUE if both Date are equals on Year, Day, Month, Hour, Minute and Second
      *
-     * @param timestamp
-     * @param timestamp1
-     * @return
+     * @param timestamp ?
+     * @param timestamp1 ?
+     * @return ?
      */
     public static boolean equalsDate(Date timestamp, Date timestamp1) {
+        return timestamp.equals(timestamp);
+        /*
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         return df.format(timestamp).equals(df.format(timestamp1));
+         */
+    }
+
+    public static String removeInvalidFatChars(String str) {
+        String[] invalidChars = new String[]{":", "\\", "/", "<", ">", "?", "*", "|", "\"", ";", "#"};
+        for (String invalidChar : invalidChars) str = str.replace(invalidChar, "");
+        return str;
     }
 
 }

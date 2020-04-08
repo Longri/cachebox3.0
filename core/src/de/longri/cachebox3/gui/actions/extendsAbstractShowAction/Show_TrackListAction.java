@@ -44,7 +44,7 @@ public class Show_TrackListAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof TrackListView;
+        return CB.viewmanager.getCurrentView() instanceof TrackListView;
     }
 
     @Override

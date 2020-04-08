@@ -46,7 +46,7 @@ public class Show_MapAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof MapView;
+        return CB.viewmanager.getCurrentView() instanceof MapView;
     }
 
     @Override

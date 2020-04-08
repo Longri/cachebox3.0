@@ -49,7 +49,7 @@ public class Show_Credits extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof CreditsView;
+        return CB.viewmanager.getCurrentView() instanceof CreditsView;
     }
 
     @Override

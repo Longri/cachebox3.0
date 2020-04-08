@@ -45,7 +45,7 @@ public class Show_TrackableListAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof TrackableListView;
+        return CB.viewmanager.getCurrentView() instanceof TrackableListView;
     }
 
     @Override

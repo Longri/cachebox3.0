@@ -33,7 +33,7 @@ public class Show_SpoilerAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof SpoilerView;
+        return CB.viewmanager.getCurrentView() instanceof SpoilerView;
     }
 
     @Override

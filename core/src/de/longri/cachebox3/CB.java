@@ -546,8 +546,8 @@ public class CB {
         CB.setAutoResort(Config.StartWithAutoSelect.getValue());
         EventHandler.fire(new CacheListChangedEvent());
 
-        if (CB.viewmanager != null && CB.viewmanager.getActView() instanceof CacheListView) {
-            CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();
+        if (CB.viewmanager != null && CB.viewmanager.getCurrentView() instanceof CacheListView) {
+            CacheListView cacheListView = (CacheListView) CB.viewmanager.getCurrentView();
             cacheListView.setWaitToastLength(ViewManager.ToastLength.WAIT);
         } else {
             Gdx.app.postRunnable(new NamedRunnable("CB:Toast") {

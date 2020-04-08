@@ -341,7 +341,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     private void saveInstanceState(BitStore writer) {
         // save last actView
-        AbstractView abstractView = viewManager.getActView();
+        AbstractView abstractView = viewManager.getCurrentView();
         writer.write(abstractView.getClass().getName());
         writer.write(abstractView.name);
         abstractView.saveInstanceState(writer);

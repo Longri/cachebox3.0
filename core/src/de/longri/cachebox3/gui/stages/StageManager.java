@@ -160,17 +160,17 @@ public class StageManager {
             } else {
                 if (mainStage instanceof ViewManager) {
                     ViewManager viewManager = (ViewManager) mainStage;
-                    if (viewManager.getActView() instanceof MapView) {
+                    if (viewManager.getCurrentView() instanceof MapView) {
                         // handle MapView on ViewManagerStage
-                        MapView mapView = (MapView) viewManager.getActView();
+                        MapView mapView = (MapView) viewManager.getCurrentView();
                         mapView.setInputListener(false);
                         log.debug("remove input listener from MapView");
-                    } else if (viewManager.getActView() instanceof DescriptionView) {
+                    } else if (viewManager.getCurrentView() instanceof DescriptionView) {
                         // handle DescriptionView on ViewManagerStage
-                        DescriptionView descriptionView = (DescriptionView) viewManager.getActView();
+                        DescriptionView descriptionView = (DescriptionView) viewManager.getCurrentView();
                         log.debug("Call DescriptionView.onHide() for showing overlay stage");
                     }
-                    viewManager.getActView().onHide();
+                    viewManager.getCurrentView().onHide();
                 }
             }
 
@@ -237,21 +237,21 @@ public class StageManager {
                 addNonDoubleInputProzessor(mainStage);
                 {
                     final ViewManager viewManager = (ViewManager) mainStage;
-                    if (viewManager.getActView() instanceof MapView) {
+                    if (viewManager.getCurrentView() instanceof MapView) {
                         // handle MapView on ViewManagerStage
-                        MapView mapView = (MapView) viewManager.getActView();
+                        MapView mapView = (MapView) viewManager.getCurrentView();
                         mapView.setInputListener(true);
                         log.debug("Enable input listener for MapView");
-                    } else if (viewManager.getActView() instanceof DescriptionView) {
+                    } else if (viewManager.getCurrentView() instanceof DescriptionView) {
                         // handle DescriptionView on ViewManagerStage
-                        DescriptionView descriptionView = (DescriptionView) viewManager.getActView();
+                        DescriptionView descriptionView = (DescriptionView) viewManager.getCurrentView();
                         descriptionView.onShow();
                         log.debug("Call DescriptionView.onShow() for restore view");
                     }
                     CB.postOnGlThread(new NamedRunnable("Call act View.onShow()") {
                         @Override
                         public void run() {
-                            viewManager.getActView().onShow();
+                            viewManager.getCurrentView().onShow();
                         }
                     });
                     ;

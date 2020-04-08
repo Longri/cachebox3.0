@@ -20,19 +20,20 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.MenuID;
 
+import static de.longri.cachebox3.PlatformConnector.takePhoto;
+
 /**
  * Created by Longri on 14.09.2016.
  */
 public class Action_TakePhoto extends AbstractAction {
 
     public Action_TakePhoto() {
-        super(NOT_IMPLEMENTED, "takePhoto", MenuID.AID_TAKE_PHOTO);
+        super(IMPLEMENTED, "TakePhoto", MenuID.AID_TAKE_PHOTO);
     }
 
     @Override
     public void execute() {
-        CB.viewmanager.toast("Take Photo not implemented");
-
+        takePhoto();
     }
 
     @Override

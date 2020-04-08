@@ -38,14 +38,11 @@ public class Action_Explore extends AbstractAction {
 
     @Override
     public void execute() {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                final FileChooser fileChooser = new FileChooser(Translation.get("Xplore"),
-                        FileChooser.Mode.BROWSE, FileChooser.SelectionMode.ALL);
-                fileChooser.setDirectory(CB.WorkPathFileHandle, true);
-                fileChooser.show();
-            }
+        Gdx.app.postRunnable(() -> {
+            final FileChooser fileChooser = new FileChooser(Translation.get("Xplore"),
+                    FileChooser.Mode.BROWSE, FileChooser.SelectionMode.ALL);
+            fileChooser.setDirectory(CB.WorkPathFileHandle, true);
+            fileChooser.show();
         });
     }
 

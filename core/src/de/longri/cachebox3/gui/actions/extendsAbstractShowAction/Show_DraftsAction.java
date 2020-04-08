@@ -32,7 +32,7 @@ public class Show_DraftsAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof DraftsView;
+        return CB.viewmanager.getCurrentView() instanceof DraftsView;
     }
 
     @Override

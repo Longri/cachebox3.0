@@ -189,7 +189,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
                             // we set True only if View== Compass or Map
                             // and if MapView then not on CarMode
                             if (CB.viewmanager == null) return false;
-                            AbstractView actView = CB.viewmanager.getActView();
+                            AbstractView actView = CB.viewmanager.getCurrentView();
                             if (actView == null) return false;
                             if (actView instanceof MapView) {
                                 return !MapView.isCarMode();

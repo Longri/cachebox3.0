@@ -257,7 +257,7 @@ public class GroundspeakAPI {
         Writer writer = null;
         try {
             String Path = descriptor.getLocalCachePath(LiveMapQue.LIVE_CACHE_NAME) + LiveMapQue.LIVE_CACHE_EXTENSION;
-            if (FileIO.createDirectory(Path)) {
+            if (Utils.createDirectory(Path)) {
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(Path), "utf-8"));
                 writer.write(fetchedCaches.toString());
             }

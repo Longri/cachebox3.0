@@ -51,7 +51,7 @@ public class Show_PlatformTestAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof PlatformTestView;
+        return CB.viewmanager.getCurrentView() instanceof PlatformTestView;
     }
 
     @Override

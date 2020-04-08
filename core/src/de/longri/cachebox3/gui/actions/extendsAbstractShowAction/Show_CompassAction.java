@@ -45,7 +45,7 @@ public class Show_CompassAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof CompassView;
+        return CB.viewmanager.getCurrentView() instanceof CompassView;
     }
 
     @Override

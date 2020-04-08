@@ -43,7 +43,7 @@ public class Show_TestAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof TestView;
+        return CB.viewmanager.getCurrentView() instanceof TestView;
     }
 
     @Override

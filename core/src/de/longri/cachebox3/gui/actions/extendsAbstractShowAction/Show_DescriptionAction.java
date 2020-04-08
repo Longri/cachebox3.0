@@ -32,7 +32,7 @@ public class Show_DescriptionAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof DescriptionView;
+        return CB.viewmanager.getCurrentView() instanceof DescriptionView;
     }
 
     @Override

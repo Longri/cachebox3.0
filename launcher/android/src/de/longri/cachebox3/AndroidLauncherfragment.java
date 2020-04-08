@@ -58,7 +58,7 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication implemen
         View view = initializeForView(new CacheboxMain(), config);
 
         //initialize platform connector
-        PlatformConnector.init(new AndroidPlatformConnector(this));
+        new AndroidPlatformConnector(this);
 
         return view;
     }

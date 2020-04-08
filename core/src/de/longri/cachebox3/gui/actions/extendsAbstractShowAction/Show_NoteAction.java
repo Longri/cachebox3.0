@@ -32,7 +32,7 @@ public class Show_NoteAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof NotesView;
+        return CB.viewmanager.getCurrentView() instanceof NotesView;
     }
 
     @Override

@@ -291,8 +291,8 @@ public class DesktopPlatformConnector extends PlatformConnector {
 
                 Object selectedValue = pane.getValue();
 
-                if (selectedValue != null && (selectedValue instanceof Integer)
-                        && ((Integer) selectedValue).intValue() == JOptionPane.OK_OPTION) {
+                if ((selectedValue instanceof Integer)
+                        && (Integer) selectedValue == JOptionPane.OK_OPTION) {
                     listener.input(textField.getText());
                 } else {
                     listener.canceled();
@@ -300,5 +300,10 @@ public class DesktopPlatformConnector extends PlatformConnector {
 
             }
         });
+    }
+
+    @Override
+    public void _takePhoto() {
+        // todo implement
     }
 }

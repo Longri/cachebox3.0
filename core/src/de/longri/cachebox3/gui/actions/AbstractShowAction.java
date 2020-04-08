@@ -37,7 +37,7 @@ public abstract class AbstractShowAction<T extends AbstractView> extends Abstrac
     }
 
     public final boolean hasContextMenu() {
-        AbstractView actView = CB.viewmanager.getActView();
+        AbstractView actView = CB.viewmanager.getCurrentView();
         if (this.viewClass.isAssignableFrom(actView.getClass())) {
             return actView.hasContextMenu();
         }
@@ -45,7 +45,7 @@ public abstract class AbstractShowAction<T extends AbstractView> extends Abstrac
     }
 
     public final Menu getContextMenu() {
-        AbstractView actView = CB.viewmanager.getActView();
+        AbstractView actView = CB.viewmanager.getCurrentView();
         if (this.viewClass.isAssignableFrom(actView.getClass())) {
             return actView.getContextMenu();
         }

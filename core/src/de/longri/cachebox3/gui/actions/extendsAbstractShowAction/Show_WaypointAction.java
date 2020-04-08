@@ -32,7 +32,7 @@ public class Show_WaypointAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof WaypointView;
+        return CB.viewmanager.getCurrentView() instanceof WaypointView;
     }
 
     @Override

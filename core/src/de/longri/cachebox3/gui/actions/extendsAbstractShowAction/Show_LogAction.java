@@ -32,7 +32,7 @@ public class Show_LogAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof LogListView;
+        return CB.viewmanager.getCurrentView() instanceof LogListView;
     }
 
     @Override

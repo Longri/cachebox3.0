@@ -36,6 +36,7 @@ import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.AbstractShowAction;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_NavigateExt;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_TakePhoto;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Toggle_Day_Night;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
 import de.longri.cachebox3.gui.actions.extendsAbstractShowAction.*;
@@ -85,7 +86,7 @@ public class ViewManager extends NamedStage
     private final Show_DraftsAction action_show_DraftsView = new Show_DraftsAction();
     private final AtomicBoolean isFiltered = new AtomicBoolean(false);
     AbstractCache lastAbstractCache = null;
-    private AbstractView actView;
+    private AbstractView currentView;
     private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
     private VisLabel toastLabel;
     private Slider slider;
@@ -112,7 +113,7 @@ public class ViewManager extends NamedStage
             @Override
             public void viewHeightChanged(float newPos) {
                 sliderPos = height - newPos;
-                setActViewBounds();
+                setCurrentViewBounds();
             }
         };
         slider.setBounds(0, 0, width, height);
@@ -202,8 +203,8 @@ public class ViewManager extends NamedStage
 
         log.debug("show view:" + view.getName());
 
-        if (actView != null) {
-            final AbstractView dispView = actView;
+        if (currentView != null) {
+            final AbstractView dispView = currentView;
             log.debug("remove and dispose actView: " + dispView.getName());
             getRoot().removeActor(dispView);
             CB.postAsync(new NamedRunnable("Dispose last View") {
@@ -224,11 +225,11 @@ public class ViewManager extends NamedStage
             });
         }
 
-        actView = view;
+        currentView = view;
         addActor(view);
-        setActViewBounds();
+        setCurrentViewBounds();
         log.debug("reload view state:" + view.getName());
-        actView.onShow();
+        currentView.onShow();
 
 
         //bring ButtonBar to Front
@@ -242,15 +243,15 @@ public class ViewManager extends NamedStage
         for (Button button : mainButtonBar.getButtons()) {
             GestureButton gestureButton = (GestureButton) button;
             gestureButton.setChecked(false);
-            gestureButton.aktActionView = null;
+            gestureButton.currentActionView = null;
             if (!buttonFound) {
                 for (ActionButton actionButton : gestureButton.getButtonActions()) {
                     if (actionButton.getAction() instanceof AbstractShowAction) {
                         AbstractShowAction viewAction = (AbstractShowAction) actionButton.getAction();
-                        if (viewAction.viewTypeEquals(actView)) {
+                        if (viewAction.viewTypeEquals(currentView)) {
                             gestureButton.setChecked(true);
                             gestureButton.setHasContextMenu(viewAction.hasContextMenu());
-                            gestureButton.aktActionView = viewAction;
+                            gestureButton.currentActionView = viewAction;
                             buttonFound = true;
                             break;
                         }
@@ -285,6 +286,7 @@ public class ViewManager extends NamedStage
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
         tool_button.addAction(new ActionButton(action_show_DraftsView, true));
+        tool_button.addAction(new ActionButton(new Action_TakePhoto(), false, GestureDirection.Down));
         tool_button.addAction(new ActionButton(new Action_Explore(), false));
         tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecTrack, false));
@@ -309,15 +311,15 @@ public class ViewManager extends NamedStage
 //        actionShowAboutView.execute();
     }
 
-    private void setActViewBounds() {
-        if (actView != null) {
-            actView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
+    private void setCurrentViewBounds() {
+        if (currentView != null) {
+            currentView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
         }
 
     }
 
-    public AbstractView getActView() {
-        return actView;
+    public AbstractView getCurrentView() {
+        return currentView;
     }
 
     public CacheboxMain getMain() {
@@ -497,12 +499,12 @@ public class ViewManager extends NamedStage
 
     public void resume() {
         locationReceiver.resume();
-        if (actView != null) actView.onShow();
+        if (currentView != null) currentView.onShow();
     }
 
     public void pause() {
         locationReceiver.pause();
-        if (actView != null) actView.onHide();
+        if (currentView != null) currentView.onHide();
     }
 
     @Override

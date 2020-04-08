@@ -66,7 +66,7 @@ public class Show_CacheList extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof CacheListView;
+        return CB.viewmanager.getCurrentView() instanceof CacheListView;
     }
 
     @Override

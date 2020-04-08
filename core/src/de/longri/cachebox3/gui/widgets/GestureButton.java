@@ -53,7 +53,7 @@ public class GestureButton extends Button {
     private final GestureButtonStyle style, filterStyle;
     private final ArrayList<ActionButton> buttonActions;
     private final int ID;
-    public AbstractShowAction aktActionView;
+    public AbstractShowAction currentActionView;
     private boolean hasContextMenu;
     private GestureHelp gestureHelper;
     private Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
@@ -155,15 +155,15 @@ public class GestureButton extends Button {
 
 
             // Einfacher Click -> alle Actions durchsuchen, ob die aktActionView darin enthalten ist und diese sichtbar ist
-            if ((aktActionView != null) && (aktActionView.hasContextMenu())) {
+            if ((currentActionView != null) && (currentActionView.hasContextMenu())) {
                 for (ActionButton ba : buttonActions) {
-                    if (ba.getAction() == aktActionView) {
-                        if (aktActionView.isActVisible()) {
+                    if (ba.getAction() == currentActionView) {
+                        if (currentActionView.isActVisible()) {
                             // Dieses View ist aktuell das Sichtbare
                             // -> ein Click auf den Menü-Button zeigt das Contextmenü
                             // if (aktActionView.ShowContextMenu()) return true;
 
-                            if (aktActionView.hasContextMenu()) {
+                            if (currentActionView.hasContextMenu()) {
                                 // das View Context Menü mit dem LongKlick Menü zusammen führen!
 
                                 // Menu zusammen stellen!
@@ -190,7 +190,7 @@ public class GestureButton extends Button {
                                 };
 
 
-                                final Menu viewContextMenu = aktActionView.getContextMenu();
+                                final Menu viewContextMenu = currentActionView.getContextMenu();
                                 if (viewContextMenu != null) {
                                     compoundMenu.setName(viewContextMenu.getName()); // for title translation
                                     viewContextMenu.setCompoundMenu(compoundMenu);
@@ -235,7 +235,7 @@ public class GestureButton extends Button {
                     if (action instanceof AbstractShowAction) {
                         //check if target view not actView
                         Class clazz = ((AbstractShowAction) action).getViewClass();
-                        if (clazz.isAssignableFrom(CB.viewmanager.getActView().getClass())) {
+                        if (clazz.isAssignableFrom(CB.viewmanager.getCurrentView().getClass())) {
                             actionExecuted = false;
                             break;
                         }
@@ -244,7 +244,7 @@ public class GestureButton extends Button {
                     if (action != null) {
                         action.execute();
                         if (action instanceof AbstractShowAction)
-                            aktActionView = (AbstractShowAction) action;
+                            currentActionView = (AbstractShowAction) action;
                         actionExecuted = true;
                         break;
                     }
@@ -274,7 +274,7 @@ public class GestureButton extends Button {
                 if (action != null) {
                     action.execute();
                     if (action instanceof AbstractShowAction)
-                        aktActionView = (AbstractShowAction) action;
+                        currentActionView = (AbstractShowAction) action;
                 }
             }
             return true;
@@ -334,7 +334,7 @@ public class GestureButton extends Button {
                                     gestureHelper.clearWindowCloseListener();
                                     action.execute();
                                     if (action instanceof AbstractShowAction)
-                                        aktActionView = (AbstractShowAction) action;
+                                        currentActionView = (AbstractShowAction) action;
                                 }
                             });
                             gestureHelper.show(ba.getGestureDirection());
@@ -343,7 +343,7 @@ public class GestureButton extends Button {
                             // no gesture, call direct
                             action.execute();
                             if (action instanceof AbstractShowAction)
-                                aktActionView = (AbstractShowAction) action;
+                                currentActionView = (AbstractShowAction) action;
                             return true;
                         }
                     }

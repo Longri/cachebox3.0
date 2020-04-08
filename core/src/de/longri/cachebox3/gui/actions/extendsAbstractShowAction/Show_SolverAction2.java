@@ -32,7 +32,7 @@ public class Show_SolverAction2 extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof SolverView2;
+        return CB.viewmanager.getCurrentView() instanceof SolverView2;
     }
 
     @Override

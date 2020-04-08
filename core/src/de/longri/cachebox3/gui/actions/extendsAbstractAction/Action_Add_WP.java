@@ -46,17 +46,17 @@ public class Action_Add_WP extends AbstractAction {
 
     @Override
     public void execute() {
-        if (CB.viewmanager.getActView() instanceof WaypointView) {
+        if (CB.viewmanager.getCurrentView() instanceof WaypointView) {
             // if wayPointView visible, create new waypoint with waypointViewFunction
-            WaypointView wpv = (WaypointView) CB.viewmanager.getActView();
+            WaypointView wpv = (WaypointView) CB.viewmanager.getCurrentView();
             wpv.addWp();
             return;
         }
 
         Coordinate coord = null;
-        if (CB.viewmanager.getActView() instanceof MapView) {
+        if (CB.viewmanager.getCurrentView() instanceof MapView) {
             // if map view visible, create new waypoint at center of map
-            MapView mv = (MapView) CB.viewmanager.getActView();
+            MapView mv = (MapView) CB.viewmanager.getCurrentView();
             coord = mv.getMapCenter();
         }
 

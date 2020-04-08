@@ -62,8 +62,9 @@ public class TouchLwjgl3Launcher {
         AwtGraphics.init();
 
         //initialize platform connector
-        PlatformConnector.init(new DesktopPlatformConnector());
-        PlatformConnector.setClipboard(new DesktopClipboard());
+        DesktopPlatformConnector platformConnector = new DesktopPlatformConnector();
+        PlatformConnector.init(platformConnector);
+        platformConnector.setClipboard(new DesktopClipboard());
 
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 

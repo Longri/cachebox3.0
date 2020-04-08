@@ -41,7 +41,7 @@ public class Show_AboutAction extends AbstractShowAction {
 
     @Override
     public boolean isActVisible() {
-        return CB.viewmanager.getActView() instanceof AboutView;
+        return CB.viewmanager.getCurrentView() instanceof AboutView;
     }
 
     @Override
