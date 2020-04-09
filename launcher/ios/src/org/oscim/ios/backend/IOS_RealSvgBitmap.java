@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.StoreSvg;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.utils.NamedRunnable;
-import org.robovm.apple.coregraphics.*;
+import org.robovm.apple.coregraphics.CGRect;
+import org.robovm.apple.coregraphics.CGSize;
 import org.robovm.apple.foundation.NSData;
 import org.robovm.apple.uikit.UIImage;
 import svg.SVGRenderer;

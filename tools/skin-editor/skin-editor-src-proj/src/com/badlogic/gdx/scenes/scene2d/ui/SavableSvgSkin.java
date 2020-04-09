@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,7 @@
 package com.badlogic.gdx.scenes.scene2d.ui;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.develop.tools.skin_editor.StyleTypes;
-import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
-import de.longri.cachebox3.gui.skin.styles.*;
 
 /**
  * Created by Longri on 12.01.2017.

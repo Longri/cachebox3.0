@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 package de.longri.cachebox3.gui.utils;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.CharArray;
 
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * Created by Longri on 17.10.2017.

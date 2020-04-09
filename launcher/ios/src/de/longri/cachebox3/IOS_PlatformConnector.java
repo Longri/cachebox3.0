@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -308,6 +308,31 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
 
         // buildUIAlertView(listener, title, text, hint);
+    }
+
+    @Override
+    public void _takePhoto() {
+
+    }
+
+    @Override
+    public void _recVideo() {
+
+    }
+
+    @Override
+    public void _recVoice() {
+
+    }
+
+    @Override
+    public void _shareInfos() {
+
+    }
+
+    @Override
+    public void _navigate(Navigation navigation) {
+
     }
 
     private void disposeInputView() {

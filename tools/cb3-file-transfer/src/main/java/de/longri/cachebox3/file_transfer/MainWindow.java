@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@ package de.longri.cachebox3.file_transfer;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
-import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
-import com.badlogic.gdx.backends.lwjgl.LwjglNet;
 import de.longri.cachebox3.utils.BuildInfo;
 import javafx.application.Application;
 import javafx.scene.Scene;

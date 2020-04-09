@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 team-cachebox.de
+ * Copyright (C) 2014-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FilterProperties {
     final static Logger log = LoggerFactory.getLogger(FilterProperties.class);

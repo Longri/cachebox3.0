@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 team-cachebox.de
+ * Copyright (C) 2014-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 package de.longri.cachebox3.settings;
 
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.settings.types.*;
+import de.longri.cachebox3.settings.types.SettingBool;
+import de.longri.cachebox3.settings.types.SettingFolder;
+import de.longri.cachebox3.settings.types.SettingString;
 
-import static de.longri.cachebox3.settings.types.SettingCategory.*;
+import static de.longri.cachebox3.settings.types.SettingCategory.Skin;
 import static de.longri.cachebox3.settings.types.SettingStoreType.Global;
 import static de.longri.cachebox3.settings.types.SettingUsage.ACB;
 

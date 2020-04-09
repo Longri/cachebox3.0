@@ -3,7 +3,7 @@
 //  Don't modify this file, it's created by tool 'extract_libgdx_test
 
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,15 @@ import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.gui.map.baseMap.BaseMapManager;
-import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.utils.CreateCbDirectoryStructure;
 import de.longri.cachebox3.platform_test.AfterAll;
 import de.longri.cachebox3.platform_test.BeforeAll;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.CreateCbDirectoryStructure;
 
-import static de.longri.cachebox3.platform_test.Assert.assertThat;
 import static de.longri.cachebox3.platform_test.Assert.assertEquals;
+import static de.longri.cachebox3.platform_test.Assert.assertThat;
 
 /**
  * Created by Longri on 10.11.2017.

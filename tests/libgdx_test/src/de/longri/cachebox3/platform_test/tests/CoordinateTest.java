@@ -3,7 +3,7 @@
 //  Don't modify this file, it's created by tool 'extract_libgdx_test
 
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,15 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.locator.*;
-
-import de.longri.cachebox3.utils.GeoUtils;
-import de.longri.cachebox3.utils.MathUtils;
+import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
+import de.longri.cachebox3.utils.GeoUtils;
+import de.longri.cachebox3.utils.MathUtils;
 
 import java.util.Date;
 
-import static de.longri.cachebox3.platform_test.Assert.assertEquals;
-import static de.longri.cachebox3.platform_test.Assert.assertTrue;
-import static de.longri.cachebox3.platform_test.Assert.assertFalse;
-import static de.longri.cachebox3.platform_test.Assert.assertNotEquals;
+import static de.longri.cachebox3.platform_test.Assert.*;
 
 
 

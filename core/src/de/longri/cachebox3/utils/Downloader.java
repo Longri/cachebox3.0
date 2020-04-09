@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 team-cachebox.de
+ * Copyright (C) 2013-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -36,22 +36,19 @@ package de.longri.cachebox3.utils;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.Net.HttpRequest;
+import com.badlogic.gdx.files.FileHandle;
+import de.longri.cachebox3.utils.exceptions.CancelException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
-import com.badlogic.gdx.Net.HttpRequest;
-import com.badlogic.gdx.files.FileHandle;
-import de.longri.cachebox3.CB;
-import de.longri.cachebox3.utils.exceptions.CancelException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**

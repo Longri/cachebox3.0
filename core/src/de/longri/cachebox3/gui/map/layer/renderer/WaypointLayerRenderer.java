@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cluster;
 import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
 import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.utils.MathUtils;

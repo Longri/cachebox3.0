@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,8 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
-import de.longri.cachebox3.gui.drawables.*;
+import de.longri.cachebox3.gui.drawables.FrameAnimationDrawable;
+import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
 import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.utils.BuildInfo;
 import de.longri.cachebox3.utils.NamedRunnable;
