@@ -65,6 +65,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     private float heading;
     private boolean spoilerLoaded = false;
     private float lastDistance;
+
     private EventHandler() {
         add(this);
     }
@@ -222,7 +223,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         return (INSTANCE.selectedCache != null);
     }
 
-    public static AbstractWaypoint getSelectedWaypoint() {
+    public static AbstractWaypoint getSelectedWayPoint() {
         return INSTANCE.selectedWayPoint;
     }
 
@@ -247,7 +248,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     public static void fireSelectedWaypointChanged(AbstractCache cache, AbstractWaypoint wp) {
         if (cache == null || !cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
-        if (wp == null || !wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
+        if (wp == null || !wp.equals(getSelectedWayPoint())) fire(new SelectedWayPointChangedEvent(wp));
     }
 
     public static void updateSelectedCache(AbstractCache selectedCache) {

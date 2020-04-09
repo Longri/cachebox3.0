@@ -254,7 +254,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         });
 
         CB.postOnNextGlThread(() -> {
-            AbstractWaypoint wp = EventHandler.getSelectedWaypoint();
+            AbstractWaypoint wp = EventHandler.getSelectedWayPoint();
             if (wp == null) {
                 //select Cache
                 listView.setSelection(0);

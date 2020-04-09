@@ -103,7 +103,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
             if (playSounds.get() && !approachSoundCompleted.get()) {
 
                 AbstractCache selectedCache = EventHandler.getSelectedCache();
-                AbstractWaypoint selectedWaypoint = EventHandler.getSelectedWaypoint();
+                AbstractWaypoint selectedWaypoint = EventHandler.getSelectedWayPoint();
 
                 if (selectedCache != null) {
                     Coordinate pos = pendingCoordinate.get();
@@ -149,7 +149,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
 
         // set approach sound if the distance low
         AbstractCache selectedCache = EventHandler.getSelectedCache();
-        AbstractWaypoint selectedWaypoint = EventHandler.getSelectedWaypoint();
+        AbstractWaypoint selectedWaypoint = EventHandler.getSelectedWayPoint();
         Coordinate pos = EventHandler.getMyPosition();
         if (selectedCache != null && pos != null) {
             float distance = selectedCache.distance(pos, MathUtils.CalculationType.FAST);

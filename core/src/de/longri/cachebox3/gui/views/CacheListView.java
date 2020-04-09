@@ -30,12 +30,12 @@ import de.longri.cachebox3.events.location.OrientationChangedEvent;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
-import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SearchDialog;
-import de.longri.cachebox3.gui.activities.ShowDeleteMenu;
-import de.longri.cachebox3.gui.activities.ShowImportMenu;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_EditFilterSettings;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SearchDialog;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.activities.EditCache;
+import de.longri.cachebox3.gui.activities.ShowDeleteMenu;
+import de.longri.cachebox3.gui.activities.ShowImportMenu;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
@@ -343,7 +343,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
 
     private void resort() {
         log.debug("resort cacheList");
-        Database.Data.cacheList.resort(EventHandler.getSelectedCoord(), new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWaypoint()));
+        Database.Data.cacheList.resort(EventHandler.getSelectedCoord(), new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWayPoint()));
         log.debug("Finish resort cacheList");
     }
 
@@ -416,7 +416,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         CB.setAutoResort(!CB.getAutoResort());
         if (CB.getAutoResort()) {
             synchronized (Database.Data.cacheList) {
-                Database.Data.cacheList.resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWaypoint()));
+                Database.Data.cacheList.resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWayPoint()));
             }
         }
          */

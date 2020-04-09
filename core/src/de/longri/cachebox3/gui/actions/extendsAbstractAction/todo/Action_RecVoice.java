@@ -25,7 +25,7 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 public class Action_RecVoice extends AbstractAction {
 
     public Action_RecVoice() {
-        super(NOT_ENABLED, "recVoice");
+        super(NOT_ENABLED, "VoiceRec");
     }
 
     @Override

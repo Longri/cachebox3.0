@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -60,6 +59,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
+import static android.content.Intent.ACTION_VIEW;
 import static android.os.Build.VERSION_CODES.N;
 
 /**
@@ -72,6 +72,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     private static final int REQUEST_CAPTURE_IMAGE = 6516;
     private static final int REQUEST_CAPTURE_VIDEO = 6517;
     private static AndroidPlatformConnector androidPlatformConnector;
+    private static boolean isVoiceRecordingStarted = false;
     private final AndroidLauncherfragment application;
     private final Handler handle;
     private final Context context;
@@ -83,7 +84,6 @@ public class AndroidPlatformConnector extends PlatformConnector {
     private Uri videoUri;
     private String recordingStartTime;
     private AndroidEventListener handlingTakePhoto, handlingRecordedVideo;
-    private static boolean isVoiceRecordingStarted = false;
     private ExtAudioRecorder extAudioRecorder;
 
     public AndroidPlatformConnector(AndroidLauncherfragment app) {
@@ -643,7 +643,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     public void _shareInfos() {
         String smiley = ((char) new BigInteger("1F604", 16).intValue()) + " ";
 
-        // PackageManager pm = mainActivity.getPackageManager();
+        // PackageManager pm = application.getActivity().getPackageManager();
         try {
 
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -667,7 +667,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
                 }
             } else {
                 text = text + ("\n\n" + "Location");
-                text = text + ("\n" +  cache.formatCoordinate());
+                text = text + ("\n" + cache.formatCoordinate());
             }
             if (getClipboard() != null)
                 text = text + ("\n" + getClipboard().getContents());
@@ -675,13 +675,108 @@ public class AndroidPlatformConnector extends PlatformConnector {
             shareIntent.putExtra(Intent.EXTRA_TEXT, text);
             application.getActivity().startActivity(Intent.createChooser(shareIntent, Translation.get("ShareWith")));
             //} catch (PackageManager.NameNotFoundException e) {
-            //    toast.makeText(mainActivity, "WhatsApp not Installed", toast.LENGTH_SHORT).show();
+            //    toast.makeText(application.getActivity(), "WhatsApp not Installed", toast.LENGTH_SHORT).show();
         } catch (Exception ex) {
             Toast.makeText(application.getActivity(), "Share App not installed", Toast.LENGTH_SHORT).show();
         }
 
     }
 
+    @Override
+    public void _navigate(Navigation selectedNavi) {
+        if (EventHandler.isSetSelectedCache()) {
+            double lat;
+            double lon;
+            String targetName;
+
+            if (EventHandler.getSelectedWayPoint() == null) {
+                lat = EventHandler.getSelectedCache().getLatitude();
+                lon = EventHandler.getSelectedCache().getLongitude();
+                targetName = EventHandler.getSelectedCache().getGeoCacheCode().toString();
+            } else {
+                lat = EventHandler.getSelectedWayPoint().getLatitude();
+                lon = EventHandler.getSelectedWayPoint().getLongitude();
+                targetName = EventHandler.getSelectedWayPoint().getGcCode().toString();
+            }
+
+            Intent intent = null;
+            switch (selectedNavi) {
+                case Navigon:
+                    intent = getNavigationIntent("android.intent.action.navigon.START_PUBLIC", "");
+                    if (intent == null) {
+                        intent = getNavigationIntent("", "com.navigon.navigator"); // get the launch-intent from package
+                    }
+                    if (intent != null) {
+                        intent.putExtra("latitude", (float) lat);
+                        intent.putExtra("longitude", (float) lon);
+                    }
+                    break;
+                case Orux:
+                    intent = getNavigationIntent("com.oruxmaps.VIEW_MAP_ONLINE", "");
+                    // from http://www.oruxmaps.com/oruxmapsmanual_en.pdf
+                    if (intent != null) {
+                        double[] targetLat = {lat};
+                        double[] targetLon = {lon};
+                        String[] targetNames = {targetName};
+                        intent.putExtra("targetLat", targetLat);
+                        intent.putExtra("targetLon", targetLon);
+                        intent.putExtra("targetName", targetNames);
+                        intent.putExtra("navigatetoindex", 1);
+                    }
+                    break;
+                case OsmAnd:
+                    intent = getNavigationIntent(ACTION_VIEW, "geo:" + lat + "," + lon);
+                    break;
+                case OsmAnd2:
+                    intent = getNavigationIntent(ACTION_VIEW, "http://download.osmand.net/go?lat=" + lat + "&lon=" + lon + "&z=14");
+                    break;
+                case Waze:
+                    intent = getNavigationIntent(ACTION_VIEW, "waze://?ll=" + lat + "," + lon);
+                    break;
+                case Sygic:
+                    intent = getNavigationIntent(ACTION_VIEW, "com.sygic.aura://coordinate|" + lon + "|" + lat + "|drive");
+                    break;
+            }
+            if (intent == null) {
+                // "default" or "no longer existing selection" or "fallback" to google
+                intent = getNavigationIntent(ACTION_VIEW, "http://maps.google.com/maps?daddr=" + lat + "," + lon);
+            }
+            try {
+                if (intent != null)
+                    application.getActivity().startActivity(intent);
+            } catch (Exception e) {
+                log.error("Error Start " + selectedNavi, e);
+            }
+        }
+    }
+
+    private Intent getNavigationIntent(String action, String data) {
+        Intent intent;
+        try {
+            if (action.length() > 0) {
+                if (data.length() > 0) {
+                    intent = new Intent(action, Uri.parse(data));
+                } else {
+                    intent = new Intent(action);
+                }
+            } else {
+                intent = application.getActivity().getPackageManager().getLaunchIntentForPackage(data);
+            }
+            if (intent != null) {
+                // check if there is an activity that can handle the desired intent
+                if (intent.resolveActivity(application.getActivity().getPackageManager()) == null) {
+                    intent = null;
+                }
+            }
+            if (intent == null) {
+                log.error("No intent for " + action + " , " + data);
+            }
+        } catch (Exception e) {
+            intent = null;
+            log.error("Exception: No intent for " + action + " , " + data, e);
+        }
+        return intent;
+    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAPTURE_IMAGE) handlingTakePhoto.onActivityResult(requestCode, resultCode, data);

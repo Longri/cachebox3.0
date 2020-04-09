@@ -158,6 +158,7 @@ public class Settings extends Settings_Skin {
     public static final SettingInt lastZoomLevel = (SettingInt) settingsList.addSetting(new SettingInt("lastZoomLevel", Map, NEVER, 14, Global, ACB));
     public static final SettingDouble mapInitLatitude = (SettingDouble) settingsList.addSetting(new SettingDouble("MapInitLatitude", Positions, NEVER, 0, Global, ACB));
     public static final SettingDouble mapInitLongitude = (SettingDouble) settingsList.addSetting(new SettingDouble("MapInitLongitude", Positions, NEVER, 0, Global, ACB));
+    //public static final SettingStringArray Navis = (SettingStringArray) settingsList.addSetting(new SettingStringArray("Navis", Misc, NORMAL, "Google", SettingStoreType.Global, SettingUsage.ACB, navis));
 
     //        public static final SettingEnum<Live_Cache_Time> LiveCacheTime = new SettingEnum<Live_Cache_Time>("LiveCacheTime", LiveMap, NORMAL, Live_Cache_Time.h_6, SettingStoreType.Global, ACB, Live_Cache_Time.h_6);
 //    public static final SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius> LiveRadius = new SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius>("LiveRadius", LiveMap, NORMAL, CB_Core.Api.LiveMapQue.Live_Radius.Zoom_14,
@@ -189,7 +190,6 @@ public class Settings extends Settings_Skin {
 //    public static final SettingString NavigationProvider = (SettingString) settingsList.addSetting(new SettingString("NavigationProvider", Internal, DEVELOPER, "http://openls.geog.uni-heidelberg.de/testing2015/route?", SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingString SpoilersDescriptionTags = (SettingString) settingsList.addSetting(new SettingString("SpoilersDescriptionTags", Internal, DEVELOPER, "", SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingString GcJoker = (SettingString) settingsList.addSetting(new SettingString("GcJoker", Login, NORMAL, "", SettingStoreType.Global, SettingUsage.ALL));
-//    public static final SettingStringArray Navis = (SettingStringArray) settingsList.addSetting(new SettingStringArray("Navis", Misc, NORMAL, "Google", SettingStoreType.Global, SettingUsage.ACB, navis));
 //    public static final SettingBool ShowFieldnotesCMwithFirstShow = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesCMwithFirstShow", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool ShowFieldnotesAsDefaultView = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesAsDefaultView", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool LiveMapEnabeld = (SettingBool) settingsList.addSetting(new SettingBool("LiveMapEnabeld", LiveMap, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));

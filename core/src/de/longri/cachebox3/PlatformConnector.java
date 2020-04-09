@@ -144,6 +144,10 @@ public abstract class PlatformConnector {
         platformConnector._shareInfos();
     }
 
+    public static void navigate(Navigation navigation) {
+        platformConnector._navigate(navigation);
+    }
+
     protected abstract String _createThumb(String path, int scaledWidth, String thumbPrefix);
 
     protected abstract boolean _isTorchAvailable();
@@ -182,6 +186,10 @@ public abstract class PlatformConnector {
     public abstract void _recVoice();
 
     public abstract void _shareInfos();
+
+    public abstract void _navigate(Navigation navigation);
+
+    public enum Navigation {Google, OsmAnd, OsmAnd2, Waze, Orux, Sygic, Navigon};
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {

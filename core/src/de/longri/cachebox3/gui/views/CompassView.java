@@ -177,10 +177,10 @@ public class CompassView extends AbstractView implements
         AbstractCache actAbstractCache = null;
         AbstractWaypoint actWaypoint = null;
 
-        if (EventHandler.getSelectedWaypoint() == null) {
+        if (EventHandler.getSelectedWayPoint() == null) {
             actAbstractCache = EventHandler.getSelectedCache();
         } else {
-            actWaypoint = EventHandler.getSelectedWaypoint();
+            actWaypoint = EventHandler.getSelectedWayPoint();
         }
 
         boolean actCacheNotNull = actAbstractCache != null;
