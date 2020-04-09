@@ -22,7 +22,6 @@ import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedWayPointChangedEvent;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.EditWaypoint;
-import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.gui.views.WaypointView;
 import de.longri.cachebox3.locator.Coordinate;
@@ -31,12 +30,14 @@ import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.MutableWaypoint;
 
+import static de.longri.cachebox3.gui.menu.MenuID.AID_ADD_WP;
+
 /**
  * Created by Longri on 14.09.2016.
  */
 public class Action_Add_WP extends AbstractAction {
     public Action_Add_WP() {
-        super(IMPLEMENTED, "addWP", MenuID.AID_ADD_WP);
+        super("addWP", AID_ADD_WP);
     }
 
     @Override

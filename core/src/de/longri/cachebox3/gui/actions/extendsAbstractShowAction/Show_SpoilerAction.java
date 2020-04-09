@@ -28,7 +28,7 @@ import de.longri.cachebox3.gui.views.SpoilerView;
 public class Show_SpoilerAction extends AbstractShowAction {
 
     public Show_SpoilerAction() {
-        super(SpoilerView.class, IMPLEMENTED, "ShowSpoiler", MenuID.AID_SHOW_SPOILER);
+        super(SpoilerView.class, ENABLED, "ShowSpoiler", MenuID.AID_SHOW_SPOILER);
     }
 
     @Override

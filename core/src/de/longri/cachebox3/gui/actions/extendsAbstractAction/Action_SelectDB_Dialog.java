@@ -34,15 +34,10 @@ import java.io.IOException;
 
 public class Action_SelectDB_Dialog extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_SelectDB_Dialog.class);
-
-    public enum ViewMode {
-        FORCE_SHOW, ASK
-    }
-
     private final ViewMode viewMode;
 
     public Action_SelectDB_Dialog(ViewMode viewMode) {
-        super(IMPLEMENTED, "manageDB", MenuID.AID_SHOW_SELECT_DB_DIALOG);
+        super("manageDB", MenuID.AID_SHOW_SELECT_DB_DIALOG);
         this.viewMode = viewMode;
     }
 
@@ -106,6 +101,10 @@ public class Action_SelectDB_Dialog extends AbstractAction {
 
         //restore MapState
         Config.readFromDB(true);
+    }
+
+    public enum ViewMode {
+        FORCE_SHOW, ASK
     }
 
 }

@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.actions.extendsAbstractAction.todo;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.menu.MenuID;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -26,13 +25,12 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_RecVoice extends AbstractAction {
 
     public Action_RecVoice() {
-        super(NOT_IMPLEMENTED, "recVoice", MenuID.AID_VOICE_REC);
+        super(NOT_ENABLED, "recVoice");
     }
 
     @Override
     public void execute() {
         CB.viewmanager.toast("Rec Voice not implemented");
-
     }
 
     @Override

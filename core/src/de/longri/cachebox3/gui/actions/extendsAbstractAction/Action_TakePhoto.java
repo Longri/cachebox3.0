@@ -28,7 +28,7 @@ import static de.longri.cachebox3.PlatformConnector.takePhoto;
 public class Action_TakePhoto extends AbstractAction {
 
     public Action_TakePhoto() {
-        super(IMPLEMENTED, "TakePhoto", MenuID.AID_TAKE_PHOTO);
+        super("TakePhoto", MenuID.AID_TAKE_PHOTO);
     }
 
     @Override

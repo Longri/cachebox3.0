@@ -30,7 +30,7 @@ public class Show_MapAction extends AbstractShowAction {
     private MapView mapViewInstance;
 
     public Show_MapAction() {
-        super(MapView.class, IMPLEMENTED, "Map", MenuID.AID_SHOW_MAP);
+        super(MapView.class, ENABLED, "Map", MenuID.AID_SHOW_MAP);
     }
 
     @Override

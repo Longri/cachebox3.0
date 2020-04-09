@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.views.TrackableListView;
  */
 public class Show_TrackableListAction extends AbstractShowAction {
     public Show_TrackableListAction() {
-        super(TrackableListView.class, NOT_IMPLEMENTED, "TBList", MenuID.AID_SHOW_TRACKABLELIST);
+        super(TrackableListView.class, NOT_ENABLED, "TBList", MenuID.AID_SHOW_TRACKABLELIST);
     }
 
     @Override

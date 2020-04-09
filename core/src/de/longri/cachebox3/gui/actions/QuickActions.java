@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2011-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -19,7 +19,9 @@ package de.longri.cachebox3.gui.actions;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
-import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.*;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_RecVoice;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Switch_Autoresort;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Toggle_Day_Night;
 import de.longri.cachebox3.gui.widgets.QuickButtonItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
@@ -62,7 +64,8 @@ public enum QuickActions {
 
     // ScreenLock, // 21
 
-    empty,;
+    empty,
+    ;
 
 
     final static Logger log = LoggerFactory.getLogger(QuickActions.class);
@@ -71,7 +74,7 @@ public enum QuickActions {
      * Gibt eine ArrayList von Actions zurück aus einem übergebenen String Array
      *
      * @param configList ?
-     * @param button ?
+     * @param button     ?
      * @return ArrayList <Actions>
      */
     public static MoveableList<QuickButtonItem> getListFromConfig(String[] configList, Drawable button) {

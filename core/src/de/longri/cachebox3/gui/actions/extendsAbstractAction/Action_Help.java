@@ -31,7 +31,7 @@ public class Action_Help extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_Help.class);
 
     public Action_Help() {
-        super(IMPLEMENTED, "Help Online", MenuID.AID_HELP);
+        super("Help Online", MenuID.AID_HELP);
     }
 
     @Override

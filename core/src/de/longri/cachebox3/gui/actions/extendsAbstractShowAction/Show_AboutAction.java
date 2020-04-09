@@ -28,7 +28,7 @@ import de.longri.cachebox3.gui.views.AbstractView;
 public class Show_AboutAction extends AbstractShowAction {
 
     public Show_AboutAction() {
-        super(AboutView.class, IMPLEMENTED, "about", MenuID.AID_SHOW_CACHELIST);
+        super(AboutView.class, ENABLED, "about", MenuID.AID_SHOW_CACHELIST);
     }
 
 

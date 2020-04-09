@@ -14,6 +14,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
@@ -30,14 +31,84 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static de.longri.cachebox3.gui.menu.MenuID.AID_Download_FZK_Map;
-
 public class Action_MapDownload extends AbstractAction {
     private static Logger log = LoggerFactory.getLogger(Action_MapDownload.class);
     private Menu icm;
 
     public Action_MapDownload() {
-        super("MapDownload", AID_Download_FZK_Map);
+        super("MapDownload", MenuID.AID_Download_FZK_Map);
+    }
+
+    public static Array<MapRepositoryInfo> getMapInfoList(InputStream stream) {
+        final Action_MapDownload.MapRepositoryInfo[] info = {new Action_MapDownload.MapRepositoryInfo()};
+        final Array<Action_MapDownload.MapRepositoryInfo> list = new Array<>();
+
+        final XmlStreamParser parser = new XmlStreamParser();
+
+
+        parser.registerDataHandler("/Freizeitkarte/Map/Name", new XmlStreamParser.DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                info[0].Name = new String(data, offset, length).trim();
+            }
+        });
+
+        if (Config.localisation.getEnumValue() == Language.de) {
+            parser.registerDataHandler("/Freizeitkarte/Map/DescriptionGerman", new XmlStreamParser.DataHandler() {
+                @Override
+                protected void handleData(char[] data, int offset, int length) {
+                    info[0].Description = new String(data, offset, length).trim();
+                }
+            });
+        } else {
+            parser.registerDataHandler("/Freizeitkarte/Map/DescriptionEnglish", new XmlStreamParser.DataHandler() {
+                @Override
+                protected void handleData(char[] data, int offset, int length) {
+                    info[0].Description = new String(data, offset, length).trim();
+                }
+            });
+        }
+
+        parser.registerDataHandler("/Freizeitkarte/Map/Url", new XmlStreamParser.DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                info[0].Url = new String(data, offset, length).trim();
+            }
+        });
+
+        parser.registerDataHandler("/Freizeitkarte/Map/Size", new XmlStreamParser.DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                info[0].Size = CharSequenceUtil.parseInteger(data, offset, length);
+            }
+        });
+
+        parser.registerDataHandler("/Freizeitkarte/Map/Checksum", new XmlStreamParser.DataHandler() {
+            @Override
+            protected void handleData(char[] data, int offset, int length) {
+                info[0].MD5 = new String(data, offset, length).trim();
+            }
+        });
+
+        parser.registerEndTagHandler("/Freizeitkarte/Map", new XmlStreamParser.EndTagHandler() {
+            @Override
+            protected void handleEndTag() {
+                list.add(info[0]);
+                info[0] = new Action_MapDownload.MapRepositoryInfo();
+            }
+        });
+
+        try {
+            parser.parse(stream);
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        info[0] = null;
+        return list;
     }
 
     @Override
@@ -126,79 +197,6 @@ public class Action_MapDownload extends AbstractAction {
     @Override
     public Drawable getIcon() {
         return CB.getSkin().getMenuIcon.baseMapFreizeitkarte;
-    }
-
-
-    public static Array<MapRepositoryInfo> getMapInfoList(InputStream stream) {
-        final Action_MapDownload.MapRepositoryInfo[] info = {new Action_MapDownload.MapRepositoryInfo()};
-        final Array<Action_MapDownload.MapRepositoryInfo> list = new Array<>();
-
-        final XmlStreamParser parser = new XmlStreamParser();
-
-
-        parser.registerDataHandler("/Freizeitkarte/Map/Name", new XmlStreamParser.DataHandler() {
-            @Override
-            protected void handleData(char[] data, int offset, int length) {
-                info[0].Name = new String(data, offset, length).trim();
-            }
-        });
-
-        if (Config.localisation.getEnumValue() == Language.de) {
-            parser.registerDataHandler("/Freizeitkarte/Map/DescriptionGerman", new XmlStreamParser.DataHandler() {
-                @Override
-                protected void handleData(char[] data, int offset, int length) {
-                    info[0].Description = new String(data, offset, length).trim();
-                }
-            });
-        } else {
-            parser.registerDataHandler("/Freizeitkarte/Map/DescriptionEnglish", new XmlStreamParser.DataHandler() {
-                @Override
-                protected void handleData(char[] data, int offset, int length) {
-                    info[0].Description = new String(data, offset, length).trim();
-                }
-            });
-        }
-
-        parser.registerDataHandler("/Freizeitkarte/Map/Url", new XmlStreamParser.DataHandler() {
-            @Override
-            protected void handleData(char[] data, int offset, int length) {
-                info[0].Url = new String(data, offset, length).trim();
-            }
-        });
-
-        parser.registerDataHandler("/Freizeitkarte/Map/Size", new XmlStreamParser.DataHandler() {
-            @Override
-            protected void handleData(char[] data, int offset, int length) {
-                info[0].Size = CharSequenceUtil.parseInteger(data, offset, length);
-            }
-        });
-
-        parser.registerDataHandler("/Freizeitkarte/Map/Checksum", new XmlStreamParser.DataHandler() {
-            @Override
-            protected void handleData(char[] data, int offset, int length) {
-                info[0].MD5 = new String(data, offset, length).trim();
-            }
-        });
-
-        parser.registerEndTagHandler("/Freizeitkarte/Map", new XmlStreamParser.EndTagHandler() {
-            @Override
-            protected void handleEndTag() {
-                list.add(info[0]);
-                info[0] = new Action_MapDownload.MapRepositoryInfo();
-            }
-        });
-
-        try {
-            parser.parse(stream);
-        } finally {
-            try {
-                stream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        info[0] = null;
-        return list;
     }
 
     public static class MapRepositoryInfo {

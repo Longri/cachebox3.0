@@ -136,6 +136,14 @@ public abstract class PlatformConnector {
         platformConnector._recVideo();
     }
 
+    public static void recVoice() {
+        platformConnector._recVoice();
+    }
+
+    public static void shareInfos() {
+        platformConnector._shareInfos();
+    }
+
     protected abstract String _createThumb(String path, int scaledWidth, String thumbPrefix);
 
     protected abstract boolean _isTorchAvailable();
@@ -170,6 +178,10 @@ public abstract class PlatformConnector {
     public abstract void _takePhoto();
 
     public abstract void _recVideo();
+
+    public abstract void _recVoice();
+
+    public abstract void _shareInfos();
 
     // SVG implementations #############################################################################################
     public enum SvgScaleType {

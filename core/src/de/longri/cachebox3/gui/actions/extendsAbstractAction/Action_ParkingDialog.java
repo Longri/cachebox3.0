@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
  */
 public class Action_ParkingDialog extends AbstractAction {
     public Action_ParkingDialog() {
-        super("MyParking", MenuID.AID_SHOW_PARKING_DIALOG);
+        super("MyParking", MenuID.AID_PARKING);
     }
 
     @Override

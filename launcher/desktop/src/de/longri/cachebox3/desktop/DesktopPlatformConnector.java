@@ -306,4 +306,19 @@ public class DesktopPlatformConnector extends PlatformConnector {
     public void _takePhoto() {
         // todo implement
     }
+
+    @Override
+    public void _recVideo() {
+        // todo implement
+    }
+
+    @Override
+    public void _recVoice() {
+        // todo implement
+    }
+
+    @Override
+    public void _shareInfos() {
+        // todo implement
+    }
 }

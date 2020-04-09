@@ -28,7 +28,7 @@ public class Action_SearchDialog extends AbstractAction {
     private static final String title = "Search";
 
     public Action_SearchDialog() {
-        super(IMPLEMENTED, title, MenuID.AID_SEARCH);
+        super(title, MenuID.AID_SEARCH);
     }
 
     @Override

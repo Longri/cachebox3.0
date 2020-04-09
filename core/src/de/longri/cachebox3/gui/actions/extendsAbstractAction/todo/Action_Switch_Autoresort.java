@@ -18,7 +18,6 @@ package de.longri.cachebox3.gui.actions.extendsAbstractAction.todo;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.menu.MenuID;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -26,7 +25,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_Switch_Autoresort extends AbstractAction {
 
     public Action_Switch_Autoresort() {
-        super(NOT_IMPLEMENTED, "AutoResort", MenuID.AID_AUTO_RESORT);
+        super(NOT_ENABLED, "AutoResort");
     }
 
     @Override

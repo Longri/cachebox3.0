@@ -19,14 +19,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.EditFilterSettings;
-import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.NamedRunnable;
+
+import static de.longri.cachebox3.gui.menu.MenuID.AID_SHOW_FILTER_DIALOG;
 
 public class Action_EditFilterSettings extends AbstractAction {
 
     public Action_EditFilterSettings() {
-        super(IMPLEMENTED, "filter", MenuID.AID_SHOW_FILTER_DIALOG);
+        super("filter", AID_SHOW_FILTER_DIALOG);
     }
 
     @Override

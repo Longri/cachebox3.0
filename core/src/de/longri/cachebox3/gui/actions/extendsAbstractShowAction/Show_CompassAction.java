@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.views.CompassView;
  */
 public class Show_CompassAction extends AbstractShowAction {
     public Show_CompassAction() {
-        super(CompassView.class, IMPLEMENTED, "Compass", MenuID.AID_SHOW_COMPASS);
+        super(CompassView.class, ENABLED, "Compass", MenuID.AID_SHOW_COMPASS);
     }
 
     @Override

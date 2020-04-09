@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -31,7 +31,7 @@ public class Action_Settings_Activity extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_Settings_Activity.class);
 
     public Action_Settings_Activity() {
-        super(IMPLEMENTED, "settings", MenuID.AID_SHOW_SETTINGS);
+        super("settings", MenuID.AID_SHOW_SETTINGS);
     }
 
     @Override

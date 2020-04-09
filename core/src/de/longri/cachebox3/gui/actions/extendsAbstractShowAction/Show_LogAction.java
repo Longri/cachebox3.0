@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.views.LogListView;
  */
 public class Show_LogAction extends AbstractShowAction {
     public Show_LogAction() {
-        super(LogListView.class, IMPLEMENTED, "ShowLogs", MenuID.AID_SHOW_LOGS);
+        super(LogListView.class, ENABLED, "ShowLogs", MenuID.AID_SHOW_LOGS);
     }
 
     @Override

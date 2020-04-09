@@ -28,18 +28,13 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_Start_FileTransfer extends AbstractAction {
 
     public Action_Start_FileTransfer() {
-        super(false, "StartFileTransfer", MenuID.AID_START_FILE_TRANSFER);
+        super("StartFileTransfer", MenuID.AID_START_FILE_TRANSFER);
     }
 
 
     @Override
     public void execute() {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                new FileTransfer_Activity().show();
-            }
-        });
+        Gdx.app.postRunnable(() -> new FileTransfer_Activity().show());
     }
 
     @Override

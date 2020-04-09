@@ -57,7 +57,7 @@ public class QuickButtonItem extends ListViewItem {
         try {
             spriteDrawable = action.getIcon();
         } catch (Exception e) {
-            throw new IllegalStateException(action.getName() + " Action has no Icon");
+            throw new IllegalStateException(action.getTitleTranslationId() + " Action has no Icon");
         }
 
         mButtonIcon = new Image(spriteDrawable, Scaling.none, Align.center);

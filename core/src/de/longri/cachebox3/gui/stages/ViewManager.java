@@ -37,7 +37,8 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.AbstractShowAction;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_NavigateExt;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_TakePhoto;
-import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_RecVideo;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_RecVideo;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_RecVoice;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Toggle_Day_Night;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
 import de.longri.cachebox3.gui.actions.extendsAbstractShowAction.*;
@@ -268,6 +269,7 @@ public class ViewManager extends NamedStage
         db_button.addAction(new ActionButton(action_show_cacheList, true, GestureDirection.Up));
         db_button.addAction(new ActionButton(new Action_ParkingDialog(), false));
         db_button.addAction(new ActionButton(action_show_trackableListView, false, GestureDirection.Right));
+        db_button.addAction(new ActionButton(new Action_Share(), false, GestureDirection.Right));
 
         cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
         cache_button.addAction(new ActionButton(action_show_waypointView, false, GestureDirection.Right));
@@ -286,16 +288,14 @@ public class ViewManager extends NamedStage
 
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
-        tool_button.addAction(new ActionButton(action_show_DraftsView, true));
-        tool_button.addAction(new ActionButton(new Action_TakePhoto(), false, GestureDirection.Down));
-        tool_button.addAction(new ActionButton(new Action_RecVideo(), false, GestureDirection.Down));
-        tool_button.addAction(new ActionButton(new Action_Explore(), false));
-        tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecTrack, false));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVoice, false));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVideo, false));
+        tool_button.addAction(new ActionButton(action_show_DraftsView, true, GestureDirection.Up));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
+        tool_button.addAction(new ActionButton(new Action_TakePhoto(), false, GestureDirection.Down));
+        tool_button.addAction(new ActionButton(new Action_RecVideo(), false));
+        tool_button.addAction(new ActionButton(new Action_RecVoice(), false));
+        tool_button.addAction(new ActionButton(new Action_Explore(), false));
+        tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
         if (CB.isTestVersion()) {
             tool_button.addAction(new ActionButton(new Show_TestAction(), false));
             tool_button.addAction(new ActionButton(new Show_PlatformTestAction(), false));

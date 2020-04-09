@@ -30,11 +30,11 @@ import de.longri.cachebox3.sqlite.Database;
 public class Show_CacheList extends AbstractShowAction {
 
 
-    public Show_CacheList() {
-        super(CacheListView.class, IMPLEMENTED, "cacheList", null, MenuID.AID_SHOW_CACHELIST);
-    }
-
     private final StringBuilder sb = new StringBuilder();
+
+    public Show_CacheList() {
+        super(CacheListView.class, ENABLED, "cacheList", null, MenuID.AID_SHOW_CACHELIST);
+    }
 
     public String getNameExtension() {
 

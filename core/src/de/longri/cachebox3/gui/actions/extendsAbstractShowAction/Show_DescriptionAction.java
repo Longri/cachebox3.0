@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.views.DescriptionView;
  */
 public class Show_DescriptionAction extends AbstractShowAction {
     public Show_DescriptionAction() {
-        super(DescriptionView.class, IMPLEMENTED, "Description", MenuID.AID_SHOW_DESCRIPTION);
+        super(DescriptionView.class, ENABLED, "Description", MenuID.AID_SHOW_DESCRIPTION);
     }
 
     @Override

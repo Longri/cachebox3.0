@@ -33,7 +33,7 @@ public class Action_Explore extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_Explore.class);
 
     public Action_Explore() {
-        super(IMPLEMENTED, "FileXplore", MenuID.AID_FILE_X_PLORE);
+        super("FileXplore", MenuID.AID_FILE_X_PLORE);
     }
 
     @Override

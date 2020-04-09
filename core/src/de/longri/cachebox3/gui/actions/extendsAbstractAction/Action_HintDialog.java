@@ -28,7 +28,7 @@ import de.longri.cachebox3.gui.menu.MenuID;
 public class Action_HintDialog extends AbstractAction {
 
     public Action_HintDialog() {
-        super(IMPLEMENTED, "hint", MenuID.AID_SHOW_HINT);
+        super("hint", MenuID.AID_SHOW_HINT);
     }
 
     @Override

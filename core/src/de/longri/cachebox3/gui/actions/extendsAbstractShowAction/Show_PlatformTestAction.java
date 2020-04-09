@@ -29,16 +29,14 @@ import de.longri.cachebox3.platform_test.gui.PlatformTestView;
  */
 public class Show_PlatformTestAction extends AbstractShowAction {
 
-    static boolean isImplemented() {
-        FileHandle jsnFile = Gdx.files.internal("platform_test/tests.json");
-        return !jsnFile.exists();
-    }
-
-
     public Show_PlatformTestAction() {
         super(PlatformTestView.class, isImplemented(), "PlatformTestView", MenuID.AID_TEST_Platform_View);
     }
 
+    static boolean isImplemented() {
+        FileHandle jsnFile = Gdx.files.internal("platform_test/tests.json");
+        return !jsnFile.exists();
+    }
 
     @Override
     public void execute() {

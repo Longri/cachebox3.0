@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -32,7 +32,7 @@ public class Show_Credits extends AbstractShowAction {
     final static Logger log = LoggerFactory.getLogger(Show_Credits.class);
 
     public Show_Credits() {
-        super(CreditsView.class, NOT_IMPLEMENTED, "Credits", MenuID.AID_SHOW_CREDITS);
+        super(CreditsView.class, NOT_ENABLED, "Credits", MenuID.AID_SHOW_CREDITS);
     }
 
     @Override

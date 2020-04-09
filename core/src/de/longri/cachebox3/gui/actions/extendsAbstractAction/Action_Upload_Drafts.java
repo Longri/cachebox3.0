@@ -29,7 +29,7 @@ import de.longri.cachebox3.gui.views.DraftsView;
 public class Action_Upload_Drafts extends AbstractAction {
 
     public Action_Upload_Drafts() {
-        super(IMPLEMENTED, "uploadDrafts", MenuID.AID_UPLOAD_FIELD_NOTE);
+        super("uploadDrafts", MenuID.AID_UPLOAD_FIELD_NOTE);
     }
 
     @Override

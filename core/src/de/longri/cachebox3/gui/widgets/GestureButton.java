@@ -356,7 +356,7 @@ public class GestureButton extends Button {
             AbstractAction action = ba.getAction();
             // if (action == null || !action.getEnabled())
             //    continue;
-            MenuItem mi = longClickMenu.addItem(action.getId(), action.getName(), action.getNameExtension());
+            MenuItem mi = longClickMenu.addItem(action.getId(), action.getTitleTranslationId(), action.getNameExtension());
             mi.setEnabled(action.getEnabled());
             mi.setCheckable(action.getIsCheckable());
             mi.setChecked(action.getIsChecked());

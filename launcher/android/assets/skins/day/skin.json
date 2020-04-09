@@ -1832,6 +1832,10 @@
       "path": "svg/settings_icon.svg",
       "scale": 0.18
     },
+    "shareInfos": {
+      "path": "svg/shareInfos.svg",
+      "scale": 1.4737
+    },
     "showOriginalHtmlColor": {
       "path": "svg/showOriginalHtmlColor.svg",
       "scale": 1.4737
@@ -2986,7 +2990,8 @@
       "todo": "todo",
       "contactOwner": "contactOwner",
       "e_mailToOwner": "e_mailToOwner",
-      "messageToOwner": "messageToOwner"
+      "messageToOwner": "messageToOwner",
+      "shareInfos": "shareInfos"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {

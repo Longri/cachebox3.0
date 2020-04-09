@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2014-2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -33,7 +33,7 @@ public class Action_Quit extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_Quit.class);
 
     public Action_Quit() {
-        super(IMPLEMENTED, "quit", MenuID.AID_SHOW_QUIT);
+        super("quit", MenuID.AID_QUIT);
     }
 
     @Override

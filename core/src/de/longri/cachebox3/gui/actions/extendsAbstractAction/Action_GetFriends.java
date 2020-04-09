@@ -7,16 +7,16 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
-import static de.longri.cachebox3.gui.menu.MenuID.AID_GET_FRIENDS;
 
 public class Action_GetFriends extends AbstractAction {
 
     public Action_GetFriends() {
-        super(IMPLEMENTED, "Friends", AID_GET_FRIENDS);
+        super("Friends", MenuID.AID_GET_FRIENDS);
     }
 
     @Override

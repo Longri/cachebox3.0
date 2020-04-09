@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.views.DraftsView;
  */
 public class Show_DraftsAction extends AbstractShowAction {
     public Show_DraftsAction() {
-        super(DraftsView.class, IMPLEMENTED, "ManageDrafts", MenuID.AID_SHOW_FIELDNOTES);
+        super(DraftsView.class, ENABLED, "ManageDrafts", MenuID.AID_SHOW_FIELDNOTES);
     }
 
     @Override

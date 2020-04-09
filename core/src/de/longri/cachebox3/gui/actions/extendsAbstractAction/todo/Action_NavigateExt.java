@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 - 2017 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -19,7 +19,6 @@ package de.longri.cachebox3.gui.actions.extendsAbstractAction.todo;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.menu.MenuID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,7 @@ public class Action_NavigateExt extends AbstractAction {
     final static Logger log = LoggerFactory.getLogger(Action_NavigateExt.class);
 
     public Action_NavigateExt() {
-        super(NOT_IMPLEMENTED, "NavigateTo", MenuID.AID_NAVIGATE_TO);
+        super(NOT_ENABLED, "NavigateTo");
     }
 
     @Override

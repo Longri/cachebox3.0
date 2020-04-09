@@ -26,7 +26,6 @@ import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.views.DraftsView;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.DraftList;
 import de.longri.cachebox3.types.LogTypes;
@@ -37,7 +36,7 @@ import de.longri.cachebox3.types.LogTypes;
 public class Action_QuickDraft extends AbstractAction {
 
     public Action_QuickDraft() {
-        super(IMPLEMENTED, "QuickDraft", MenuID.AID_QuickDraft);
+        super("QuickDraft", MenuID.AID_QuickDraft);
     }
 
     @Override
@@ -90,7 +89,7 @@ public class Action_QuickDraft extends AbstractAction {
         // todo check if following is perhaps necessary
         // DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, cache);
 
-        Config.FoundOffset.setValue(Config.FoundOffset.getValue() + (cache.isFound() ? 1 : - 1));
+        Config.FoundOffset.setValue(Config.FoundOffset.getValue() + (cache.isFound() ? 1 : -1));
         Config.AcceptChanges();
 
         EventHandler.fire(new CacheListChangedEvent());

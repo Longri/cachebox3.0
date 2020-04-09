@@ -35,6 +35,7 @@ import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -44,6 +45,7 @@ import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.android.canvas.AndroidRealSvgBitmap;
 import org.oscim.backend.canvas.Bitmap;
@@ -51,6 +53,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -80,12 +83,14 @@ public class AndroidPlatformConnector extends PlatformConnector {
     private Uri videoUri;
     private String recordingStartTime;
     private AndroidEventListener handlingTakePhoto, handlingRecordedVideo;
+    private static boolean isVoiceRecordingStarted = false;
+    private ExtAudioRecorder extAudioRecorder;
 
     public AndroidPlatformConnector(AndroidLauncherfragment app) {
-        this.application = app;
-        this.context = app.getContext();
-        this.handle = new Handler();
-        this.flashLight = new AndroidFlashLight(this.context);
+        application = app;
+        context = app.getContext();
+        handle = new Handler();
+        flashLight = new AndroidFlashLight(context);
         platformConnector = this;
         androidPlatformConnector = this;
         handlingTakePhoto = (requestCode, resultCode, data) -> {
@@ -435,24 +440,10 @@ public class AndroidPlatformConnector extends PlatformConnector {
             }
             input.setGravity(Gravity.LEFT | Gravity.TOP);
             alert.setView(input);
-            alert.setPositiveButton(AndroidPlatformConnector.this.context.getString(17039370), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    Gdx.app.postRunnable(new Runnable() {
-                        public void run() {
-                            listener.input(input.getText().toString());
-                        }
-                    });
-                }
-            });
-            alert.setNegativeButton(AndroidPlatformConnector.this.context.getString(17039360), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    Gdx.app.postRunnable(new Runnable() {
-                        public void run() {
-                            listener.canceled();
-                        }
-                    });
-                }
-            });
+            alert.setPositiveButton(context.getString(17039370),
+                    (dialog, whichButton) -> Gdx.app.postRunnable(() -> listener.input(input.getText().toString())));
+            alert.setNegativeButton(context.getString(17039360),
+                    (dialog, whichButton) -> Gdx.app.postRunnable(() -> listener.canceled()));
 
             alert.show();
             InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -569,6 +560,126 @@ public class AndroidPlatformConnector extends PlatformConnector {
         SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         datFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         return datFormat.format(timestamp).replace(" ", "T") + "Z";
+    }
+
+    public void _recVoice() {
+        // for still todo:         microphoneView = application.getActivity().findViewById(R.id.microphone);
+    }
+    /*
+    public void _recVoice() {
+        try {
+            if (!isVoiceRecordingStarted) // Voice Recorder starten
+            {
+                // define the file-name to save voice taken by activity
+                String directory = Config.UserImageFolder.getValue();
+                if (!Utils.createDirectory(directory)) {
+                    log.error("can't create " + directory);
+                    return;
+                }
+
+                mediaFileNameWithoutExtension = new SimpleDateFormat("yyyy-MM-dd HHmmss", Locale.US).format(new Date());
+
+                String cacheName;
+                if (EventHandler.isSetSelectedCache()) {
+                    String validName = Utils.removeInvalidFatChars(EventHandler.getSelectedCache().getGeoCacheCode() + "-" + EventHandler.getSelectedCache().getGeoCacheName());
+                    cacheName = validName.substring(0, Math.min(validName.length(), 32));
+                } else {
+                    cacheName = "Voice";
+                }
+
+                mediaFileNameWithoutExtension = mediaFileNameWithoutExtension + " " + cacheName;
+                extAudioRecorder = ExtAudioRecorder.getInstance(false);
+                extAudioRecorder.setOutputFile(directory + "/" + mediaFileNameWithoutExtension + ".wav");
+                extAudioRecorder.prepare();
+                extAudioRecorder.start();
+
+                String MediaFolder = Config.UserImageFolder.getValue();
+                String TrackFolder = Config.TrackFolder.getValue();
+                String relativPath = Utils.getRelativePath(MediaFolder, TrackFolder, "/");
+                // Da eine Voice keine Momentaufnahme ist, muss die Zeit und die Koordinaten beim Start der Aufnahme verwendet werden.
+                TrackRecorder.AnnotateMedia(mediaFileNameWithoutExtension + ".wav", relativPath + "/" + mediaFileNameWithoutExtension + ".wav", Locator.getInstance().getLocation(Location.ProviderType.GPS), getTrackDateTimeString());
+                Toast.makeText(application.getActivity(), "Start Voice Recorder", Toast.LENGTH_SHORT).show();
+
+                recordVoice(true);
+
+            } else { // Voice Recorder stoppen
+                recordVoice(false);
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    private boolean isVoiceRecordingStarted() {
+        return isVoiceRecordingStarted;
+    }
+
+    private void recordVoice(boolean value) {
+        isVoiceRecordingStarted = value;
+        if (isVoiceRecordingStarted) {
+            microphoneView.SetOn();
+        } else { // Aufnahme stoppen
+            microphoneView.SetOff();
+            if (extAudioRecorder != null) {
+                extAudioRecorder.stop();
+                extAudioRecorder.release();
+                extAudioRecorder = null;
+                Toast.makeText(application.getActivity(), "Stop Voice Recorder", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void initalizeMicrophone() {
+        microphoneView = application.getActivity().findViewById(R.id.microphone);
+        if (microphoneView != null) {
+            microphoneView.SetOff();
+            microphoneView.setOnClickListener(v -> {
+                // Stoppe Aufnahme durch klick auf Mikrofon-Icon
+                recordVoice(false);
+            });
+        }
+    }
+     */
+
+    public void _shareInfos() {
+        String smiley = ((char) new BigInteger("1F604", 16).intValue()) + " ";
+
+        // PackageManager pm = mainActivity.getPackageManager();
+        try {
+
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+
+            /*
+            // PackageInfo info =
+            pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+            //Check if package exists or not. If not then code in catch block will be called
+            waIntent.setPackage("com.whatsapp");
+             */
+
+            AbstractCache cache = EventHandler.getSelectedCache();
+            String text = cache.getGeoCacheCode() + " - " + cache.getGeoCacheName() + ("\n" + "https://coord.info/" + cache.getGeoCacheCode());
+            if (cache.hasCorrectedCoordinatesOrHasCorrectedFinal()) {
+                text = text + ("\n\n" + "Location (corrected)");
+                if (cache.hasCorrectedCoordinates()) {
+                    text = text + ("\n" + cache.formatCoordinate());
+                } else {
+                    text = text + ("\n" + cache.getCorrectedFinal().formatCoordinate());
+                }
+            } else {
+                text = text + ("\n\n" + "Location");
+                text = text + ("\n" +  cache.formatCoordinate());
+            }
+            if (getClipboard() != null)
+                text = text + ("\n" + getClipboard().getContents());
+            text = text + ("\n" + smiley + "AndroidCacheBox");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+            application.getActivity().startActivity(Intent.createChooser(shareIntent, Translation.get("ShareWith")));
+            //} catch (PackageManager.NameNotFoundException e) {
+            //    toast.makeText(mainActivity, "WhatsApp not Installed", toast.LENGTH_SHORT).show();
+        } catch (Exception ex) {
+            Toast.makeText(application.getActivity(), "Share App not installed", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
