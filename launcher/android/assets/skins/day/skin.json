@@ -1722,7 +1722,7 @@
     },
     "navigate": {
       "path": "svg/navigate.svg",
-      "scale": 1.647
+      "scale": 1.4736
     },
     "needs_archived": {
       "path": "svg/needs_archived.svg",
@@ -2406,7 +2406,8 @@
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
     "default": {
       "up": "drawable_default_button",
-      "down": "drawable_default_button_pressed"
+      "down": "drawable_default_button_pressed",
+      "disabled": "default_button_disabled_9_Patch"
     },
     "floatControl": {
       "up": "drawable_default_button",
@@ -2555,13 +2556,13 @@
       "vScrollKnob": "sliderKnob"
     },
     "spoilerGallery": {
-      "firstItem": "NULL_DRAWABLE",
-      "secondItem": "NULL_DRAWABLE",
-      "selectedItem": "NULL_DRAWABLE",
+      "firstItem": "listrec_first_drawable",
+      "secondItem": "listrec_second_drawable",
+      "selectedItem": "listrec_selected_drawable",
       "pad": 1,
       "emptyFont": "coordinateValueFont",
       "emptyFontColor": "settings_default_value_font_color",
-      "background": "NULL_DRAWABLE"
+      "background": "list_background_drawable"
     },
     "spoilerOverview": {
       "firstItem": "listrec_first_drawable",
@@ -2570,7 +2571,7 @@
       "pad": 1,
       "emptyFont": "coordinateValueFont",
       "emptyFontColor": "settings_default_value_font_color",
-      "background": "NULL_DRAWABLE"
+      "background": "list_background_drawable"
     }
   },
   "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {

@@ -101,7 +101,10 @@ public class NotesView extends AbstractTableView implements SelectedCacheChanged
         notes.setMaxLineCount(25);
         notes.setTextChangedCallBack(value -> {
             btnUpload.setText(Translation.get("Upload"));
-            btnUpload.enable();
+            if (notes.getText().trim().length() == 0)
+                btnUpload.disable();
+            else
+                btnUpload.enable();
         });
 
         mustLoadNotes = true;
@@ -123,6 +126,9 @@ public class NotesView extends AbstractTableView implements SelectedCacheChanged
                 btnUpload.setText(Translation.get("Upload"));
                 btnUpload.enable();
             }
+        }
+        if (notes.getText().trim().length() == 0) {
+            btnUpload.disable();
         }
         create();
     }
