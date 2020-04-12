@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2020 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
-import de.longri.cachebox3.gui.actions.show_activities.Action_SelectDB_Dialog;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.sqlite.Database;
@@ -99,7 +99,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                 CB.scheduleOnGlThread(new NamedRunnable("CacheList3DAO") {
                     @Override
                     public void run() {
-                        MessageBox.show(Translation.get("ErrDbStartup"), Translation.get("corruptDB"), MessageBoxButtons.OK, MessageBoxIcon.Error, new OnMsgBoxClickListener() {
+                        MessageBox.show(Translation.get("ErrDbStartup"), Translation.get("corruptDB"), MessageBoxButton.OK, MessageBoxIcon.Error, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {
                                 //show select DB Dialog
@@ -271,8 +271,8 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                         ca.getType().ordinal(),
                         ((int) (ca.getRating() * 200)),
                         ca.getNumTravelbugs(),
-                        ca.getGcCode(),
-                        ca.getName(),
+                        ca.getGeoCacheCode(),
+                        ca.getGeoCacheName(),
                         ca.getPlacedBy(),
                         ca.getOwner(),
                         ca.getGcId(),

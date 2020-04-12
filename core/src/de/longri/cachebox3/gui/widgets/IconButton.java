@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButton;
 
@@ -27,8 +25,8 @@ import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_VisTextButt
  */
 public class IconButton extends Catch_VisTextButton {
     protected com.badlogic.gdx.scenes.scene2d.ui.Image image;
-    protected float preferredHeight;
-    protected float preferredWidth;
+    private float preferredHeight;
+    private float preferredWidth;
 
     public IconButton(CharSequence text) {
         super(EMPTY);
@@ -108,4 +106,19 @@ public class IconButton extends Catch_VisTextButton {
         }
     }
 
+    public float getPreferredHeight() {
+        return preferredHeight;
+    }
+
+    public void setPreferredHeight(float preferredHeight) {
+        this.preferredHeight = preferredHeight;
+    }
+
+    public float getPreferredWidth() {
+        return preferredWidth;
+    }
+
+    public void setPreferredWidth(float preferredWidth) {
+        this.preferredWidth = preferredWidth;
+    }
 }

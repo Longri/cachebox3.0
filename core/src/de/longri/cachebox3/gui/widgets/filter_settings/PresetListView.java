@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2020 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -219,7 +219,7 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
                         }
 
                         MessageBox.show(Translation.get("?DelUserPreset", "\n'" + name + "'"),
-                                Translation.get("DelUserPreset"), MessageBoxButtons.YesNo,
+                                Translation.get("DelUserPreset"), MessageBoxButton.YesNo,
                                 MessageBoxIcon.Warning, new OnMsgBoxClickListener() {
                                     @Override
                                     public boolean onClick(int which, Object data) {
@@ -319,7 +319,7 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
 
         if (exist) {
             CharSequence msg = Translation.get("PresetExist", "\n\n", existName.toString());
-            MessageBox.show(msg, null, MessageBoxButtons.OK, MessageBoxIcon.Warning, new OnMsgBoxClickListener() {
+            MessageBox.show(msg, null, MessageBoxButton.OK, MessageBoxIcon.Warning, new OnMsgBoxClickListener() {
                 @Override
                 public boolean onClick(int which, Object data) {
                     return true;

@@ -36,6 +36,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * Created by Longri on 18.07.16.
@@ -191,9 +192,8 @@ public class Utils {
         int dotposition = filename.lastIndexOf(".");
         String ext = "";
         if (dotposition > -1) {
-            ext = filename.substring(dotposition + 1, filename.length());
+            ext = filename.substring(dotposition + 1);
         }
-
         return ext;
     }
 
@@ -399,13 +399,64 @@ public class Utils {
     /**
      * Return TRUE if both Date are equals on Year, Day, Month, Hour, Minute and Second
      *
-     * @param timestamp
-     * @param timestamp1
-     * @return
+     * @param timestamp ?
+     * @param timestamp1 ?
+     * @return ?
      */
     public static boolean equalsDate(Date timestamp, Date timestamp1) {
+        return timestamp.equals(timestamp);
+        /*
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         return df.format(timestamp).equals(df.format(timestamp1));
+         */
+    }
+
+    public static String removeInvalidFatChars(String str) {
+        String[] invalidChars = new String[]{":", "\\", "/", "<", ">", "?", "*", "|", "\"", ";", "#"};
+        for (String invalidChar : invalidChars) str = str.replace(invalidChar, "");
+        return str;
+    }
+
+    public static String getRelativePath(String targetPath, String basePath, String pathSeparator) { // We need the -1 argument to split to make sure we get a trailing
+        // "" token if the base ends in the path separator and is therefore
+        // a directory. We require directory paths to end in the path
+        // separator -- otherwise they are indistinguishable from files.
+        String[] base = basePath.split(Pattern.quote(pathSeparator), -1);
+        String[] target = targetPath.split(Pattern.quote(pathSeparator), 0);
+        // First get all the common elements. Store them as a string,
+        // and also count how many of them there are.
+        String common = "";
+        int commonIndex = 0;
+        for (int i = 0; i < target.length && i < base.length; i++) {
+            if (target[i].equals(base[i])) {
+                common += target[i] + pathSeparator;
+                commonIndex++;
+            } else
+                break;
+        }
+
+        if (commonIndex == 0) { // Whoops -- not even a single common path element. This most
+            // likely indicates differing drive letters, like C: and D:.
+            // These paths cannot be relativized. Return the target path.
+            return targetPath;
+            // This should never happen when all absolute paths
+            // begin with / as in *nix.
+        }
+        String relative = "";
+        if (base.length == commonIndex) {
+            // Comment this out if you prefer that a relative path not start with ./
+            // relative = "." + pathSeparator;
+        } else {
+            int numDirsUp = base.length - commonIndex;
+            // The number of directories we have to backtrack is the length of
+            // the base path MINUS the number of common path elements, minus
+            // one because the last element in the path isn't a directory.
+            for (int i = 1; i <= (numDirsUp); i++) {
+                relative += ".." + pathSeparator;
+            }
+        }
+        relative += targetPath.substring(common.length());
+        return relative;
     }
 
 }

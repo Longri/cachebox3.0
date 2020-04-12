@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class HintDialog extends ButtonDialog {
     private boolean encoded = false;
 
     public HintDialog() {
-        super("Hint", createContentBox(), Translation.get("hint"), MessageBoxButtons.RetryCancel, null);
+        super("Hint", createContentBox(), Translation.get("hint"), MessageBoxButton.RetryCancel, null);
         hintFromDB = EventHandler.getSelectedCache() == null ? ""
                 : UnitFormatter.rot13(EventHandler.getSelectedCache().getHint());
 

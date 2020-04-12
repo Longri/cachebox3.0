@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package de.longri.cachebox3.gui.map;
 
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.serializable.BitStore;
 import org.slf4j.Logger;

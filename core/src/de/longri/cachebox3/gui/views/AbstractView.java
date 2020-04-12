@@ -44,46 +44,49 @@ public abstract class AbstractView extends CB_View_Base {
 
     protected void create() {
         // create a Label with name for default
-        nameLabel = new CB_Label(this.NAME);
+        nameLabel = new CB_Label(name);
         nameLabel.setAlignment(Align.center);
         nameLabel.setPosition(10, 10);
 
         colorWidget = new ColorWidget(CB.getSkin().get("abstract_background", SkinColor.class));
-        colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
+        colorWidget.setBounds(0, 0, getWidth(), getHeight());
 
-        this.addActor(colorWidget);
-        this.addActor(nameLabel);
+        addActor(colorWidget);
+        addActor(nameLabel);
     }
 
     @Override
     protected void sizeChanged() {
         super.sizeChanged();
-        boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        boundsChanged(getX(), getY(), getWidth(), getHeight());
     }
 
     @Override
     protected void positionChanged() {
         super.positionChanged();
-        boundsChanged(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        boundsChanged(getX(), getY(), getWidth(), getHeight());
     }
 
     protected void boundsChanged(float x, float y, float width, float height) {
-        if (colorWidget != null) colorWidget.setBounds(0, 0, this.getWidth(), this.getHeight());
-        if (nameLabel != null) nameLabel.setBounds(0, 0, this.getWidth(), this.getHeight());
+        if (colorWidget != null) colorWidget.setBounds(0, 0, getWidth(), getHeight());
+        if (nameLabel != null) nameLabel.setBounds(0, 0, getWidth(), getHeight());
     }
 
     public String getName() {
-        return this.NAME;
+        return name;
     }
 
+    /**
+     * if returning false no longclick menu is shown (this is possibly not wanted)
+     */
     public abstract boolean hasContextMenu();
 
     public abstract Menu getContextMenu();
 
     public final BitStore saveInstanceState() {
         BitStore store = new BitStore();
-        store.write(this.getClass().getName());
-        store.write(this.NAME);
+        store.write(getClass().getName());
+        store.write(name);
         saveInstanceState(store);
         return store;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 team-cachebox.de
+ * Copyright (C) 2020-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
@@ -102,7 +102,7 @@ public class EditDrafts extends ActivityBase {
                     Date timestamp = dateFormatter.parse(date + "." + time + ".00");
                     actDraft.timestamp = timestamp;
                 } catch (ParseException e) {
-                    MessageBox.show(Translation.get("wrongDate"), Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                    MessageBox.show(Translation.get("wrongDate"), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
                     return;
                 }
 

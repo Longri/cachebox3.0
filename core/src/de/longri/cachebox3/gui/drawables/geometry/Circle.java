@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2014 - 2017 team-cachebox.de
+ * Copyright (C) 2014 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package de.longri.cachebox3.gui.drawables.geometry;
 
 import com.badlogic.gdx.math.MathUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

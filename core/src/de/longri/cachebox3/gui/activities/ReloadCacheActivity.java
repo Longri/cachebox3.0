@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018  team-cachebox.de
+ * Copyright (C) 2020 - 2018  team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.ImportProgressChangedListener;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.widgets.CB_Button;
@@ -166,7 +166,7 @@ public class ReloadCacheActivity extends ActivityBase {
         if (aktCache != null) {
             Array<GroundspeakAPI.GeoCacheRelated> updatedCaches = GroundspeakAPI.getInstance().updateGeoCache(aktCache);
             if (GroundspeakAPI.getInstance().APIError != GroundspeakAPI.OK) {
-                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("ReloadCacheAPI"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("ReloadCacheAPI"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else {
                 for (GroundspeakAPI.GeoCacheRelated updatedCache : updatedCaches) {
                     Cache3DAO dao = new Cache3DAO();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2020 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -44,11 +44,19 @@ public class CB_Button extends IconButton {
 
     public void setText(CharSequence text) {
         getLabel().setText(text);
-        setSize(preferredWidth, preferredHeight);
+    }
+
+    public void setTextAndSize(CharSequence text) {
+        getLabel().setText(text);
+        setSize(getPreferredWidth(), getPreferredHeight());
     }
 
     public void setState(int i) {
         setChecked(i == 0 ? false : true);
     }
+
+    public void enable() { setDisabled(false);}
+
+    public void disable() { setDisabled(true);}
 
 }

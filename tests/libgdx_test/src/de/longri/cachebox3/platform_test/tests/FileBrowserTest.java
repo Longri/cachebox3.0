@@ -3,7 +3,7 @@
 //  Don't modify this file, it's created by tool 'extract_libgdx_test
 
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2020 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,14 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.socket.filebrowser.*;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.ByteArray;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.interfaces.ProgressHandler;
-import de.longri.cachebox3.platform_test.AfterAll;
-import de.longri.cachebox3.platform_test.BeforeAll;
-import de.longri.cachebox3.platform_test.PlatformAssertionError;
-import de.longri.cachebox3.platform_test.Test;
-import de.longri.cachebox3.platform_test.EXCLUDE_FROM_TRAVIS;
+import de.longri.cachebox3.platform_test.*;
+import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
+import de.longri.cachebox3.socket.filebrowser.FileBrowserServer;
+import de.longri.cachebox3.socket.filebrowser.ServerFile;
 
 import java.io.File;
 import java.io.IOException;

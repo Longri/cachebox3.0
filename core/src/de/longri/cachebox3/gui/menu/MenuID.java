@@ -78,4 +78,5 @@ public class MenuID {
     public static final int AID_GET_FRIENDS = 217;
     public static final int AID_Download_FZK_Map = 218;
     public static final int AID_FILE_X_PLORE = 219;
+    public static final int SHARE_INFOS = 220;
 }

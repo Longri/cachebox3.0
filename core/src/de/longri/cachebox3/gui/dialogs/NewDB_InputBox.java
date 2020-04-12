@@ -44,7 +44,7 @@ public class NewDB_InputBox {
         contentBox.pack();
         contentBox.layout();
         this.listener = listener;
-        dialog = new ButtonDialog("NewDB", contentBox, Translation.get("NewDB"), MessageBoxButtons.OKCancel, listener);
+        dialog = new ButtonDialog("NewDB", contentBox, Translation.get("NewDB"), MessageBoxButton.OKCancel, listener);
     }
 
     public void show() {

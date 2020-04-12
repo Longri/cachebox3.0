@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2019 team-cachebox.de
+ * Copyright (C) 2020 - 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -47,12 +47,12 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     private static final Logger log = LoggerFactory.getLogger(EventHandler.class);
 
-    static final private Class[] allListener = new Class[]{de.longri.cachebox3.events.location.PositionChangedListener.class,
+    static final private Class[] allListener = new Class[]{
             SelectedCacheChangedListener.class, SelectedWayPointChangedListener.class, PositionChangedListener.class,
             DistanceChangedListener.class, SpeedChangedListener.class, OrientationChangedListener.class,
             SelectedCoordChangedListener.class, ImportProgressChangedListener.class, ApiCallLimitListener.class,
             IncrementProgressListener.class, AccuracyChangedListener.class, CacheListChangedListener.class};
-    static final private ArrayMap<Class, Array<Object>> listenerMap = new ArrayMap<>();
+    static final private ArrayMap<Class, Array<Object>> listeners = new ArrayMap<>();
 
     private static final EventHandler INSTANCE = new EventHandler();
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(20);
@@ -65,6 +65,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     private float heading;
     private boolean spoilerLoaded = false;
     private float lastDistance;
+
     private EventHandler() {
         add(this);
     }
@@ -77,14 +78,14 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static void add(Object listener) {
-        synchronized (listenerMap) {
+        synchronized (listeners) {
             for (Type type : listener.getClass().getGenericInterfaces()) {
                 for (Class clazz : allListener) {
                     if (type == clazz) {
-                        Array<Object> list = listenerMap.get(clazz);
+                        Array<Object> list = listeners.get(clazz);
                         if (list == null) {
                             list = new Array<>();
-                            listenerMap.put(clazz, list);
+                            listeners.put(clazz, list);
                         }
                         if (!list.contains(listener, true)) {
                             log.debug("Add {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
@@ -97,11 +98,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     }
 
     public static void remove(Object listener) {
-        synchronized (listenerMap) {
+        synchronized (listeners) {
             for (Type type : listener.getClass().getGenericInterfaces()) {
                 for (Class clazz : allListener) {
                     if (type == clazz) {
-                        Array<Object> list = listenerMap.get(clazz);
+                        Array<Object> list = listeners.get(clazz);
                         if (list != null) {
                             log.debug("Remove {} Event listener: {}", clazz.getSimpleName(), listener.getClass().getSimpleName());
                             list.removeValue(listener, true);
@@ -117,8 +118,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         //ignore events if we are on background
         if (CB.isBackground) return;
 
-        synchronized (listenerMap) {
-            final Array<Object> list = listenerMap.get(event.getListenerClass());
+        synchronized (listeners) {
+            final Array<Object> list = listeners.get(event.getListenerClass());
             if (list != null) {
 
                 //call this EventHandler first
@@ -184,7 +185,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         FileFilter filter = pathname -> {
             String filename = pathname.getName();
             filename = filename.toLowerCase(Locale.getDefault());
-            if (filename.contains(cache.getGcCode().toString().toLowerCase(Locale.getDefault()))) {
+            if (filename.contains(cache.getGeoCacheCode().toString().toLowerCase(Locale.getDefault()))) {
                 if (filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".bmp") || filename.endsWith(".png") || filename.endsWith(".gif")) {
                     // don't load Thumbs
                     return !filename.startsWith(Utils.THUMB) && !filename.startsWith(Utils.THUMB_OVERVIEW + Utils.THUMB);
@@ -218,7 +219,11 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         return (INSTANCE.selectedCache != null && INSTANCE.selectedCache.equals(abstractCache));
     }
 
-    public static AbstractWaypoint getSelectedWaypoint() {
+    public static boolean isSetSelectedCache() {
+        return (INSTANCE.selectedCache != null);
+    }
+
+    public static AbstractWaypoint getSelectedWayPoint() {
         return INSTANCE.selectedWayPoint;
     }
 
@@ -243,7 +248,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
 
     public static void fireSelectedWaypointChanged(AbstractCache cache, AbstractWaypoint wp) {
         if (cache == null || !cache.equals(getSelectedCache())) fire(new SelectedCacheChangedEvent(cache));
-        if (wp == null || !wp.equals(getSelectedWaypoint())) fire(new SelectedWayPointChangedEvent(wp));
+        if (wp == null || !wp.equals(getSelectedWayPoint())) fire(new SelectedWayPointChangedEvent(wp));
     }
 
     public static void updateSelectedCache(AbstractCache selectedCache) {
@@ -259,7 +264,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         spoilerResources.clear();
 
         String directory;
-        String gcCode = actCache.getGcCode().toString();
+        String gcCode = actCache.getGeoCacheCode().toString();
         if (gcCode.length() < 4)
             return; // don't load spoiler
 

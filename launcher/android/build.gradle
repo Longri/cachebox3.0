@@ -69,7 +69,7 @@ dependencies {
     natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-arm64-v8a"
     natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-x86"
     natives "de.longri.gdx-sqlite:gdx-sqlite-platform:$gdxSqliteVersion:natives-x86_64"
-    implementation 'com.caverock:androidsvg:1.3'
+    implementation 'com.caverock:androidsvg:1.4'
 
     //vtm
     implementation "org.mapsforge:vtm-android:$vtmVersion@aar"

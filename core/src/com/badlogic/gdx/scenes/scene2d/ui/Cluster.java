@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.badlogic.gdx.scenes.scene2d.ui;
 
 import de.longri.cachebox3.locator.Coordinate;
-import org.oscim.renderer.atlas.TextureRegion;
 
 /**
  * Created by Longri on 31.12.16.

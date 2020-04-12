@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ import java.io.InputStream;
 public class DesktopPlatformConnector extends PlatformConnector {
 
     private final static Logger log = LoggerFactory.getLogger(DesktopPlatformConnector.class);
+    private DesktopWebView descriptionView;
 
     @Override
     protected boolean _isTorchAvailable() {
@@ -124,7 +125,6 @@ public class DesktopPlatformConnector extends PlatformConnector {
         return bmp;
     }
 
-
     @Override
     public FileHandle _getSandBoxFileHandle(String fileName) {
         return Gdx.files.local(fileName);
@@ -134,8 +134,6 @@ public class DesktopPlatformConnector extends PlatformConnector {
     protected String _getWorkPath() {
         return _getSandBoxFileHandle("Cachebox3").file().getAbsolutePath();
     }
-
-    private DesktopWebView descriptionView;
 
     @Override
     protected void getPlatformDescriptionView(final GenericCallBack<PlatformWebView> callBack) {
@@ -291,8 +289,8 @@ public class DesktopPlatformConnector extends PlatformConnector {
 
                 Object selectedValue = pane.getValue();
 
-                if (selectedValue != null && (selectedValue instanceof Integer)
-                        && ((Integer) selectedValue).intValue() == JOptionPane.OK_OPTION) {
+                if ((selectedValue instanceof Integer)
+                        && (Integer) selectedValue == JOptionPane.OK_OPTION) {
                     listener.input(textField.getText());
                 } else {
                     listener.canceled();
@@ -300,5 +298,30 @@ public class DesktopPlatformConnector extends PlatformConnector {
 
             }
         });
+    }
+
+    @Override
+    public void _takePhoto() {
+        // todo implement
+    }
+
+    @Override
+    public void _recVideo() {
+        // todo implement
+    }
+
+    @Override
+    public void _recVoice() {
+        // todo implement
+    }
+
+    @Override
+    public void _shareInfos() {
+        // todo implement
+    }
+
+    @Override
+    public void _navigate(Navigation navigation) {
+        // todo implement
     }
 }

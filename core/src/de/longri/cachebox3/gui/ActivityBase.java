@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.Window;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.Showable;
 

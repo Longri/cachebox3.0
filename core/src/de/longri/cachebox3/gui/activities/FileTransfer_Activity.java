@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2020 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class FileTransfer_Activity extends ActivityBase {
             public void clicked(InputEvent event, float x, float y) {
                 CharSequence msg = Translation.get("closeFileTransfer?");
                 CharSequence title = Translation.get("closeFileTransfer");
-                MessageBox.show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk,
+                MessageBox.show(msg, title, MessageBoxButton.YesNo, MessageBoxIcon.Asterisk,
                         new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {

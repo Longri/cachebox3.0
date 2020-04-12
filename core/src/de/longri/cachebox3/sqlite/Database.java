@@ -723,28 +723,33 @@ public class Database {
 
     public static String getNote(long cacheId) {
         String resultString = "";
-        GdxSqliteCursor cursor = Database.Data.rawQuery("select Notes from Caches where Id=?", new String[]{String.valueOf(cacheId)});
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            resultString = cursor.getString(0);
-            break;
+        GdxSqliteCursor cursor = Database.Data.rawQuery("select Notes from CacheText where Id=?", new String[]{String.valueOf(cacheId)});
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast()) {
+                resultString = cursor.getString(0);
+                // break;
+            }
+            cursor.close();
         }
-        cursor.close();
         return resultString;
     }
 
     /**
      * geänderte Note nur in die DB schreiben
      *
-     * @param cacheId
-     * @param value
+     * @param geoCache ?
+     * @param value ?
      */
-    public static void setNote(long cacheId, String value) {
+    public static void setNote(AbstractCache geoCache, String value) {
+        long cacheId = geoCache.getId();
         Parameters args = new Parameters();
         args.put("Notes", value);
-        args.put("HasUserData", true);
-
-        Database.Data.update("Caches", args, "id=" + cacheId, null);
+        Database.Data.update("CacheText", args, "id=" + cacheId, null);
+        geoCache.setHasUserData(true);
+        args.clear();
+        args.put("BooleanStore", geoCache.getBooleanStore());
+        Database.Data.update("CacheCoreInfo", args, "id=" + cacheId, null);
     }
 
     public static void setFound(long cacheId, boolean value) {
@@ -931,7 +936,7 @@ public class Database {
         try {
             return myDB.rawQuery(sql);
         } catch (SQLiteGdxException e) {
-            log.error("rawQuerry:" + sql, e);
+            log.error("rawQuery:" + sql, e);
         }
         return null;
     }
@@ -947,7 +952,7 @@ public class Database {
             }
             return myDB.rawQuery(sql);
         } catch (SQLiteGdxException e) {
-            log.error("rawQuerry:" + sql, e);
+            log.error("rawQuery:" + sql, e);
         }
         return null;
     }

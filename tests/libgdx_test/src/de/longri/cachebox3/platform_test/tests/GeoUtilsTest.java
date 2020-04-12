@@ -3,7 +3,7 @@
 //  Don't modify this file, it's created by tool 'extract_libgdx_test
 
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.

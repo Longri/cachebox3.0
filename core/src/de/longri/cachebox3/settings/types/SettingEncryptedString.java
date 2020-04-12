@@ -1,5 +1,5 @@
-/* 
- * Copyright (C) 2011-2017 team-cachebox.de
+/*
+ * Copyright (C) 2011-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,8 @@ public class SettingEncryptedString extends SettingLongString {
         if ((this.value != null) && (this.value.equals(value)))
             return;
         this.value = value;
-        setDirty();
+        if (this.dirtyList != null)
+            setDirty();
     }
 
 }

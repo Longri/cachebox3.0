@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2017 team-cachebox.de
+ * Copyright (C) 2011-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,9 @@
 package de.longri.cachebox3.settings.types;
 
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.sqlite.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Member;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 

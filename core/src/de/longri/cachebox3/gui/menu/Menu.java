@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.Window;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.gui.widgets.Window;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
@@ -95,10 +95,10 @@ public class Menu extends Window {
         this.hideWithItemClick = heideWithItemClick;
     }
 
-    public MenuItem addMenuItem(CharSequence titleTranlationId, String addUnTranslatedPart, Drawable icon, ClickListener clickListener) {
-        MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranlationId.toString() + "[" + "" + "]", this);
-        // String titleTranslation = (titleTranlationId.length() == 0 ? "" : Translation.get(titleTranlationId.toString()).toString());
-        item.setTitle((titleTranlationId.length() == 0 ? "" : Translation.get(titleTranlationId.toString()).toString()) + addUnTranslatedPart);
+    public MenuItem addMenuItem(CharSequence titleTranslationId, String addUnTranslatedPart, Drawable icon, ClickListener clickListener) {
+        MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranslationId.toString() + "[" + "" + "]", this);
+        // String titleTranslation = (titleTranslationId.length() == 0 ? "" : Translation.get(titleTranslationId.toString()).toString());
+        item.setTitle((titleTranslationId.length() == 0 ? "" : Translation.get(titleTranslationId.toString()).toString()) + addUnTranslatedPart);
         if (icon != null)
             item.setIcon(icon);
         if (clickListener != null)
@@ -107,21 +107,21 @@ public class Menu extends Window {
         return item;
     }
 
-    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, boolean checked, ClickListener clickListener) {
-        MenuItem item = addMenuItem(titleTranlationId, titleExtension, icon, clickListener);
+    public MenuItem addCheckableMenuItem(CharSequence titleTranslationId, String titleExtension, Drawable icon, boolean checked, ClickListener clickListener) {
+        MenuItem item = addMenuItem(titleTranslationId, titleExtension, icon, clickListener);
         item.setCheckable(true);
         item.setChecked(checked);
         return item;
     }
 
-    public MenuItem addMoreMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Menu moreMenu) {
-        MenuItem mi = addMenuItem(titleTranlationId, titleExtension, icon, (Runnable) null);
+    public MenuItem addMoreMenuItem(CharSequence titleTranslationId, String titleExtension, Drawable icon, Menu moreMenu) {
+        MenuItem mi = addMenuItem(titleTranslationId, titleExtension, icon, (Runnable) null);
         mi.setMoreMenu(moreMenu);
         return mi;
     }
 
-    public MenuItem addMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, Runnable runnable) {
-        return addMenuItem(titleTranlationId, titleExtension, icon, new ClickListener() {
+    public MenuItem addMenuItem(CharSequence titleTranslationId, String titleExtension, Drawable icon, Runnable runnable) {
+        return addMenuItem(titleTranslationId, titleExtension, icon, new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (mustHandle(event)) {
                     runnable.run();
@@ -130,19 +130,19 @@ public class Menu extends Window {
         });
     }
 
-    public MenuItem addMenuItem(CharSequence titleTranlationId, Drawable icon, Runnable runnable) {
-        return addMenuItem(titleTranlationId, "", icon, runnable);
+    public MenuItem addMenuItem(CharSequence titleTranslationId, Drawable icon, Runnable runnable) {
+        return addMenuItem(titleTranslationId, "", icon, runnable);
     }
 
-    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, String titleExtension, Drawable icon, boolean checked, Runnable runnable) {
-        MenuItem item = addMenuItem(titleTranlationId, titleExtension, null, runnable);
+    public MenuItem addCheckableMenuItem(CharSequence titleTranslationId, String titleExtension, Drawable icon, boolean checked, Runnable runnable) {
+        MenuItem item = addMenuItem(titleTranslationId, titleExtension, icon, runnable);
         item.setCheckable(true);
         item.setChecked(checked);
         return item;
     }
 
-    public MenuItem addCheckableMenuItem(CharSequence titleTranlationId, boolean checked, Runnable runnable) {
-        return addCheckableMenuItem(titleTranlationId, "", null, checked, runnable);
+    public MenuItem addCheckableMenuItem(CharSequence titleTranslationId, boolean checked, Runnable runnable) {
+        return addCheckableMenuItem(titleTranslationId, "", null, checked, runnable);
     }
 
 

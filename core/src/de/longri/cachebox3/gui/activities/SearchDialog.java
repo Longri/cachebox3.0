@@ -6,7 +6,7 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_Label;
@@ -86,11 +86,11 @@ public class SearchDialog extends Activity {
             if (beginnSearchIndex < 0) beginnSearchIndex = 0;
             for (int i = beginnSearchIndex; i < Database.Data.cacheList.size; i++) {
                 tmp = Database.Data.cacheList.get(i);
-                if ((mTitle.length() > 0 && tmp.getName().toString().toLowerCase().contains(mTitle))
-                        || (mGCCode.length() > 0 && tmp.getGcCode().toString().toLowerCase().contains(mGCCode))
+                if ((mTitle.length() > 0 && tmp.getGeoCacheName().toString().toLowerCase().contains(mTitle))
+                        || (mGCCode.length() > 0 && tmp.getGeoCacheCode().toString().toLowerCase().contains(mGCCode))
                         || (mOwner.length() > 0 && tmp.getOwner().toString().toLowerCase().contains(mOwner))) {
-                    edtCachetitle.setText(tmp.getName());
-                    edtGcCode.setText(tmp.getGcCode());
+                    edtCachetitle.setText(tmp.getGeoCacheName());
+                    edtGcCode.setText(tmp.getGeoCacheCode());
                     edtOwner.setText(tmp.getOwner());
                     criterionMatches = true;
                     beginnSearchIndex = i + 1;
@@ -116,7 +116,7 @@ public class SearchDialog extends Activity {
                 edtCachetitle.setText(mTitle);
                 edtGcCode.setText(mGCCode);
                 edtOwner.setText(mOwner);
-                MessageBox.show(Translation.get("NoCacheFound"), Translation.get("Search"), MessageBoxButtons.OK, MessageBoxIcon.Asterisk, null);
+                MessageBox.show(Translation.get("NoCacheFound"), Translation.get("Search"), MessageBoxButton.OK, MessageBoxIcon.Asterisk, null);
             }
         }
     }

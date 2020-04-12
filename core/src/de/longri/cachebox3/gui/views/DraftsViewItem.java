@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 team-cachebox.de
+ * Copyright (C) 2020-2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.activities.InputString;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
@@ -187,7 +187,7 @@ public class DraftsViewItem extends ListViewItem {
         cm.addMenuItem("edit", CB.getSkin().getMenuIcon.edit, this::editDraft);
         if (entry.GcId.startsWith("GL")) {
             cm.addMenuItem("uploadLogImage", CB.getSkin().getMenuIcon.uploadDraft, this::uploadLogImage);
-            cm.addMenuItem("BrowseLog", null, () -> PlatformConnector._openUrlExtern("https://coord.info/" + entry.GcId));
+            cm.addMenuItem("BrowseLog", null, () -> PlatformConnector.callUrl("https://coord.info/" + entry.GcId));
         }
         cm.addMenuItem("uploadDrafts", CB.getSkin().getMenuIcon.uploadDraft, () -> logOnline(false));
         cm.addMenuItem("directLog", CB.getSkin().getMenuIcon.logViewIcon, () -> logOnline(true));
@@ -209,7 +209,7 @@ public class DraftsViewItem extends ListViewItem {
         if (cache == null) {
             String message = Translation.get("cacheOtherDb", entry.CacheName.toString()).toString();
             message += "\n" + Translation.get("DraftNoSelect");
-            MessageBox.show(message, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+            MessageBox.show(message, Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
             return;
         }
 
@@ -252,12 +252,12 @@ public class DraftsViewItem extends ListViewItem {
                                     String image = Base64.encodeBytes(fileHandle.readBytes());
                                     GroundspeakAPI.getInstance().uploadLogImage(entry.GcId, image, description);
                                     if (GroundspeakAPI.getInstance().APIError == OK) {
-                                        MessageBox.show(Translation.get("ok") + ":\n", Translation.get("uploadLogImage"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                                        MessageBox.show(Translation.get("ok") + ":\n", Translation.get("uploadLogImage"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
                                     } else {
-                                        MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("uploadLogImage"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                                        MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("uploadLogImage"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
                                     }
                                 } catch (Exception ex) {
-                                    MessageBox.show(ex.toString(), Translation.get("uploadLogImage"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                                    MessageBox.show(ex.toString(), Translation.get("uploadLogImage"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
                                 }
                             }
                         });
@@ -305,7 +305,7 @@ public class DraftsViewItem extends ListViewItem {
             DraftsView.addOrChangeDraft(entry, false);
         } else {
             // Error handling
-            MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButtons.YesNoRetry, MessageBoxIcon.Question, (which, data) -> {
+            MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButton.YesNoRetry, MessageBoxIcon.Question, (which, data) -> {
                 switch (which) {
                     case ButtonDialog.BUTTON_NEGATIVE:
                         logOnline(true);// try again create log at gc
@@ -319,7 +319,7 @@ public class DraftsViewItem extends ListViewItem {
             });
         }
         if (GroundspeakAPI.getInstance().LastAPIError.length() > 0) {
-            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
         }
 
     }
@@ -342,7 +342,7 @@ public class DraftsViewItem extends ListViewItem {
             CharSequence message = new CompoundCharSequence(Translation.get("cacheOtherDb", entry.CacheName.toString())
                     , "\n", Translation.get("draftNoDelete"));
 
-            MessageBox.show(message, null, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, null);
+            MessageBox.show(message, null, MessageBoxButton.OK, MessageBoxIcon.Exclamation, null);
             return;
         }
 
@@ -353,7 +353,7 @@ public class DraftsViewItem extends ListViewItem {
             message = Translation.get("confirmDraftDeletion", entry.typeString, entry.CacheName.toString());
         }
 
-        MessageBox.show(message, Translation.get("deleteDraft"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, (which, data) -> {
+        MessageBox.show(message, Translation.get("deleteDraft"), MessageBoxButton.YesNo, MessageBoxIcon.Question, (which, data) -> {
             switch (which) {
                 case ButtonDialog.BUTTON_POSITIVE:
                     // Yes button clicked

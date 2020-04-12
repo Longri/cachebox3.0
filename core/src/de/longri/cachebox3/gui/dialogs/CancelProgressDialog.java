@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2020 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class CancelProgressDialog extends ButtonDialog {
     private FinishCallBack finishCallBack;
 
     public CancelProgressDialog(String name, CharSequence title, final ProgressCancelRunnable progressCancelRunnable) {
-        super(name, getProgressContentTable(), title, MessageBoxButtons.Cancel, null);
+        super(name, getProgressContentTable(), title, MessageBoxButton.Cancel, null);
         this.msgBoxClickListener = new OnMsgBoxClickListener() {
             @Override
             public boolean onClick(int which, Object data) {

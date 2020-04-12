@@ -158,7 +158,7 @@ public class DescriptionImageGrabber {
         }
 
         if (baseUri == null) {
-            Cache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + Cache.getGcCode());
+            Cache.setUrl("http://www.geocaching.com/seek/cache_details.aspx?wp=" + Cache.getGeoCacheCode());
             try {
                 baseUri = URI.create(Cache.getUrl().toString());
             } catch (Exception exc) {
@@ -186,7 +186,7 @@ public class DescriptionImageGrabber {
                 String src = img.text.substring(srcStart + 1, srcEnd);
                 try {
                     URI imgUri = URI.create(/* baseUri, */src);
-                    String localFile = BuildDescriptionImageFilename(Cache.getGcCode().toString(), imgUri);
+                    String localFile = BuildDescriptionImageFilename(Cache.getGeoCacheCode().toString(), imgUri);
 
                     if (Utils.fileExistsNotEmpty(localFile)) {
                         int idx = 0;

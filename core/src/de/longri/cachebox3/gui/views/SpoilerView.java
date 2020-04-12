@@ -82,7 +82,7 @@ public class SpoilerView extends AbstractView {
         galleryView.clearGallery();
         if (EventHandler.actCacheHasSpoiler()) {
             ImageDAO imageDAO = new ImageDAO();
-            Array<ImageEntry> dbImages = imageDAO.getImagesForCache(actCache.getGcCode());
+            Array<ImageEntry> dbImages = imageDAO.getImagesForCache(actCache.getGeoCacheCode());
 
             for (int i = 0, n = spoilerResources.size; i < n; i++) {
                 ImageEntry imageEntry = spoilerResources.get(i);
@@ -196,7 +196,7 @@ public class SpoilerView extends AbstractView {
 
         //add downloader objects
         GrabImagesSelectedByCache(Database.Data, downloader, true, false,
-                EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGcCode().toString(),
+                EventHandler.getSelectedCache().getId(), EventHandler.getSelectedCache().getGeoCacheCode().toString(),
                 "", "", withLogs);
 
 

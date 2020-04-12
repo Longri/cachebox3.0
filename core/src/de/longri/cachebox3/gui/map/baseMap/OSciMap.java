@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import org.oscim.layers.tile.vector.OsmTileLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.map.Map;
 import org.oscim.tiling.TileSource;
-import org.oscim.tiling.source.mapfile.MapFileTileSource;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
 /**

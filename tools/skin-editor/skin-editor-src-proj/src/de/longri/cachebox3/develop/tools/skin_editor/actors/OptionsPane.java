@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
@@ -1079,8 +1080,8 @@ public class OptionsPane extends Table {
      * @param field
      */
     public void showDrawableDialog(final Field field, boolean disableNinePatch, int arrayIndex) {
-
-        DrawablePickerDialog dlg = new DrawablePickerDialog(game, field, arrayIndex, disableNinePatch, getStage());
+        Stage stage = getStage();
+        DrawablePickerDialog dlg = new DrawablePickerDialog(game, field, arrayIndex, disableNinePatch, stage);
         dlg.show(getStage());
     }
 

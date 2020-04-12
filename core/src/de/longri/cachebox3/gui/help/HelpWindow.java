@@ -29,7 +29,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.gui.Window;
+import de.longri.cachebox3.gui.widgets.Window;
 import de.longri.cachebox3.utils.CB_RectF;
 
 import java.io.ByteArrayInputStream;

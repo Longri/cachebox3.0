@@ -40,11 +40,8 @@ import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.activities.BlockUiProgress_Activity;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.CancelProgressDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.*;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.menu.OnItemClickListener;
@@ -282,7 +279,7 @@ public class TestView extends AbstractView {
             cache.setFavoritePoints(1345); //TODO debug!
             cache.setFavorite(true);
             cache.setNumTravelbugs((short) 12);
-            CacheListItem cacheListItem = (CacheListItem) CacheListItem.getListItem(0, cache, contentWidth * 1.2f);
+            CacheListItem cacheListItem = new CacheListItem(0, cache, contentWidth * 1.2f);
 
             ListViewStyle style = VisUI.getSkin().get(ListViewStyle.class);
 
@@ -517,7 +514,7 @@ public class TestView extends AbstractView {
                 public void changed(ChangeEvent event, Actor actor) {
                     MessageBoxIcon icon = selectBox.getSelected();
                     if (icon != MessageBoxIcon.None) {
-                        MessageBox.show("MessageBox with \n" + icon.getName(), "MessageBoxTitle", MessageBoxButtons.OK, icon, null);
+                        MessageBox.show("MessageBox with \n" + icon.getName(), "MessageBoxTitle", MessageBoxButton.OK, icon, null);
                         selectBox.select(MessageBoxIcon.None);
                     }
                 }
@@ -771,7 +768,7 @@ public class TestView extends AbstractView {
         {
             CharSequence Msg = Translation.get("QuitReally");
             CharSequence Title = Translation.get("Quit?");
-            ButtonDialog dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButtons.YesNo, MessageBoxIcon.Stop, null);
+            ButtonDialog dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButton.YesNo, MessageBoxIcon.Stop, null);
 
             dialog.setStageBackground(null);
 
@@ -846,7 +843,7 @@ public class TestView extends AbstractView {
                     case 10000:
                         String title = "Fehler";
                         String msg = "Der Cache [2 Advent: der Wherigo (wo ist der Weihnachtsmann)] ist nicht in der aktuellen DB.\\nDiese Draft kann nicht gewählt werden!";
-                        MessageBoxButtons btn = MessageBoxButtons.OK;
+                        MessageBoxButton btn = MessageBoxButton.OK;
                         MessageBoxIcon icn = MessageBoxIcon.Error;
 
                         MessageBox.show(msg, title, btn, icn, null);

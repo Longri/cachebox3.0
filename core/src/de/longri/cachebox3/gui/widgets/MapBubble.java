@@ -73,18 +73,18 @@ public class MapBubble extends Catch_Table {
                 isAvailable = false;
             }
 
-            content = new CacheItem(null, cache.getName(),
+            content = new CacheItem(null, cache.getGeoCacheName(),
                     (int) (cache.getDifficulty() * 2), (int) (cache.getTerrain() * 2),
                     (int) Math.min(cache.getRating() * 2, 5 * 2), cache.getSize(),
                     cache.getSize().toShortString(), left, right, isAvailable, cache.isFavorite(),
                     cache.getFavoritePoints(), cache.getNumTravelbugs(), style.cacheListItemStyle);
-            isSelected = (EventHandler.getSelectedWaypoint() == null && cache == EventHandler.getSelectedCache());
+            isSelected = (EventHandler.getSelectedWayPoint() == null && cache == EventHandler.getSelectedCache());
         } else if (waypoint != null) {
 
             content = new WayPointItem(null,
                     waypoint.getGcCode(), waypoint.getTitle(),
                     waypoint.getDescription(), waypoint.formatCoordinate(), style.wayPointListItemStyle);
-            isSelected = waypoint == EventHandler.getSelectedWaypoint();
+            isSelected = waypoint == EventHandler.getSelectedWayPoint();
 
         } else {
             content = null;

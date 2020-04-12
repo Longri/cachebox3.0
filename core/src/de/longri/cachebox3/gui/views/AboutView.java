@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import de.longri.cachebox3.utils.BuildInfo;
 public class AboutView extends AbstractTableView implements PositionChangedListener, de.longri.cachebox3.events.DistanceChangedListener {
 
 
-    public static final String aboutMsg1 = "Team Cachebox (2011-2017)";
+    public static final String aboutMsg1 = "Team Cachebox (2011-2020)";
     public static final String teamLink = "www.team-cachebox.de";
     public static final String aboutMsg2 = "Cache Icons Copyright 2009,\nGroundspeak Inc. Used with permission";
 
@@ -101,7 +101,7 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
 
         teamLinkLabel.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                PlatformConnector._openUrlExtern(teamLink);
+                PlatformConnector.callUrl(teamLink);
             }
         });
 

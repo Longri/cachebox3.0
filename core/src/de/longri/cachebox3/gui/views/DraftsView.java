@@ -109,22 +109,22 @@ public class DraftsView extends AbstractView {
         AbstractCache abstractCache = EventHandler.getSelectedCache();
 
         if (abstractCache == null) {
-            MessageBox.show(Translation.get("NoCacheSelect"), Translation.get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+            MessageBox.show(Translation.get("NoCacheSelect"), Translation.get("thisNotWork"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
             return;
         }
 
         // chk car found?
-        if (abstractCache.getGcCode().toString().equalsIgnoreCase("CBPark")) {
+        if (abstractCache.getGeoCacheCode().toString().equalsIgnoreCase("CBPark")) {
             if (type == LogTypes.found) {
-                MessageBox.show(Translation.get("My_Parking_Area_Found"), Translation.get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(Translation.get("My_Parking_Area_Found"), Translation.get("thisNotWork"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else if (type == LogTypes.didnt_find) {
-                MessageBox.show(Translation.get("My_Parking_Area_DNF"), Translation.get("thisNotWork"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                MessageBox.show(Translation.get("My_Parking_Area_DNF"), Translation.get("thisNotWork"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
             }
             return;
         }
 
         // kein GC Cache
-        if (!abstractCache.getGcCode().toString().toLowerCase().startsWith("gc")) {
+        if (!abstractCache.getGeoCacheCode().toString().toLowerCase().startsWith("gc")) {
 
             if (type == LogTypes.found || type == LogTypes.attended || type == LogTypes.webcam_photo_taken) {
                 // Found it! -> fremden Cache als gefunden markieren
@@ -177,8 +177,8 @@ public class DraftsView extends AbstractView {
 
         if (newDraft == null) {
             newDraft = new DraftEntry(type);
-            newDraft.CacheName = abstractCache.getName();
-            newDraft.gcCode = abstractCache.getGcCode().toString();
+            newDraft.CacheName = abstractCache.getGeoCacheName();
+            newDraft.gcCode = abstractCache.getGeoCacheCode().toString();
             newDraft.foundNumber = Config.FoundOffset.getValue();
             newDraft.timestamp = new Date();
             newDraft.CacheId = abstractCache.getId();
@@ -420,11 +420,11 @@ public class DraftsView extends AbstractView {
         CB.postOnNextGlThread(() -> listView.setAdapter(listViewAdapter));
     }
 
-    private void uploadDraft() {
+    public void uploadDraft() {
         upload(false);
     }
 
-    private void uploadLog() {
+    public void uploadLog() {
         upload(true);
     }
 
@@ -507,7 +507,7 @@ public class DraftsView extends AbstractView {
                             CB.scheduleOnGlThread(new NamedRunnable("DraftsView") {
                                 @Override
                                 public void run() {
-                                    MessageBox.show(finalUploadMeldung, Translation.get("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error, null);
+                                    MessageBox.show(finalUploadMeldung, Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
                                     log.debug("Show MessageBox for ERROR on upload Draft");
                                 }
                             }, 300);
@@ -515,7 +515,7 @@ public class DraftsView extends AbstractView {
                             CB.scheduleOnGlThread(new NamedRunnable("DraftsView") {
                                 @Override
                                 public void run() {
-                                    MessageBox.show(Translation.get("uploadFinished"), Translation.get("uploadDrafts"), MessageBoxButtons.OK, MessageBoxIcon.GC_Live, null);
+                                    MessageBox.show(Translation.get("uploadFinished"), Translation.get("uploadDrafts"), MessageBoxButton.OK, MessageBoxIcon.GC_Live, null);
                                     log.debug("Show MessageBox for uploaded Draft");
                                 }
                             }, 300);
@@ -565,7 +565,7 @@ public class DraftsView extends AbstractView {
 
         };
         final CharSequence message = Translation.get("DelDrafts?");
-        Gdx.app.postRunnable(() -> MessageBox.show(message, Translation.get("DeleteAllDrafts"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning, dialogClickListener));
+        Gdx.app.postRunnable(() -> MessageBox.show(message, Translation.get("DeleteAllDrafts"), MessageBoxButton.YesNo, MessageBoxIcon.Warning, dialogClickListener));
     }
 
     //################### Context menu implementation ####################################
@@ -606,7 +606,7 @@ public class DraftsView extends AbstractView {
         }
 
         // Aktueller Cache ist von geocaching.com
-        if (abstractCache != null && abstractCache.getGcCode().toString().toLowerCase().startsWith("gc")) {
+        if (abstractCache != null && abstractCache.getGeoCacheCode().toString().toLowerCase().startsWith("gc")) {
             cm.addMenuItem("maintenance", draftListItemStyle.logTypesStyle.needs_maintenance, () -> addNewDraft(LogTypes.needs_maintenance));
             cm.addMenuItem("writenote", draftListItemStyle.logTypesStyle.note, () -> addNewDraft(LogTypes.note));
         }

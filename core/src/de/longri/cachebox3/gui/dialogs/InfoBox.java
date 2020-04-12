@@ -11,7 +11,6 @@ public class InfoBox {
     private OnMsgBoxClickListener listener;
     private Infotype infoType;
     private ButtonDialog infoBox;
-    private Catch_Table contentBox;
 
     private EditTextField edtInfo;
     private int maxVisibleLines;
@@ -21,13 +20,13 @@ public class InfoBox {
     private boolean isRunning, isCanceled;
     private String title;
     private String info;
-    private MessageBoxButtons buttons;
+    private MessageBoxButton buttons;
 
     public InfoBox(Infotype infoType, String title) {
         this.infoType = infoType;
         this.title = title;
         info = "";
-        buttons = MessageBoxButtons.Cancel;
+        buttons = MessageBoxButton.Cancel;
         listener = (which, data) -> {
             // which can only be cancel (ButtonDialog.BUTTON_NEGATIVE)
             isCanceled = true;
@@ -41,7 +40,7 @@ public class InfoBox {
     }
 
     private void create() {
-        contentBox = new Catch_Table(true);
+        Catch_Table contentBox = new Catch_Table(true);
         switch (infoType) {
             case DISPLAY:
                 maxVisibleLines = 10;
@@ -51,12 +50,14 @@ public class InfoBox {
                 edtInfo.setWrap(true);
                 contentBox.addLast(edtInfo);
                 break;
+                /*
             case INPUT:
                 // not implemented yet
                 break;
             case CHECKBOX:
                 // not implemented yet
                 break;
+                 */
             case PROGRESS:
                 progressBar = new CB_ProgressBar(0, 100, 1, false, "default");
                 contentBox.addLast(progressBar);
@@ -112,12 +113,12 @@ public class InfoBox {
             String[] old = this.info.split("\n");
             this.info += "\n" + info;
             int lineCount = old.length;
-            String out = "";
+            StringBuilder out = new StringBuilder();
             if (lineCount > maxVisibleLines - 1) {
                 for (int i = lineCount - maxVisibleLines + 1; i < lineCount; i++) {
-                    out = out + old[i] + "\n";
+                    out.append(old[i]).append("\n");
                 }
-                edtInfo.setText(out + info);
+                edtInfo.setText(out.toString() + info);
             } else {
                 edtInfo.setText(this.info);
             }
@@ -132,7 +133,7 @@ public class InfoBox {
         return this;
     }
 
-    public InfoBox setButtons(MessageBoxButtons buttons) {
+    public InfoBox setButtons(MessageBoxButton buttons) {
         this.buttons = buttons;
         return this;
     }

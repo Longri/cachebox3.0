@@ -34,10 +34,11 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.CacheboxMain;
 import de.longri.cachebox3.events.*;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.actions.Action_NavigateExt;
-import de.longri.cachebox3.gui.actions.Action_Toggle_Day_Night;
-import de.longri.cachebox3.gui.actions.show_activities.*;
-import de.longri.cachebox3.gui.actions.show_views.*;
+import de.longri.cachebox3.gui.actions.AbstractShowAction;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_RecVoice;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Toggle_Day_Night;
+import de.longri.cachebox3.gui.actions.extendsAbstractShowAction.*;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
@@ -66,41 +67,40 @@ public class ViewManager extends NamedStage
 
     final static Logger log = LoggerFactory.getLogger(ViewManager.class);
     final static CharSequence EMPTY = "";
-
-    private AbstractView actView;
+    public final GlobalLocationReceiver locationReceiver;
     private final float width, height;
     private final ButtonBar mainButtonBar;
+    private final CacheboxMain main;
+    private final Show_DescriptionAction action_show_descriptionView = new Show_DescriptionAction();
+    private final Show_WaypointAction action_show_waypointView = new Show_WaypointAction();
+    private final Show_LogAction action_show_logView = new Show_LogAction();
+    private final Show_MapAction action_show_mapView = new Show_MapAction();
+    private final Show_CompassAction action_show_compassView = new Show_CompassAction();
+    private final Show_CacheList action_show_cacheList = new Show_CacheList();
+    private final Show_TrackListAction action_show_trackListView = new Show_TrackListAction();
+    private final Show_SpoilerAction action_show_spoilerView = new Show_SpoilerAction();
+    private final Show_TrackableListAction action_show_trackableListView = new Show_TrackableListAction();
+    private final Show_NoteAction action_show_noteView = new Show_NoteAction();
+    private final Action_Quit action_quit = new Action_Quit();
+    private final Show_DraftsAction action_show_DraftsView = new Show_DraftsAction();
+    private final AtomicBoolean isFiltered = new AtomicBoolean(false);
+    AbstractCache lastAbstractCache = null;
+    private AbstractView currentView;
     private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
     private VisLabel toastLabel;
     private Slider slider;
     private float sliderPos = 0;
-    private final CacheboxMain main;
-    private final Action_Show_DescriptionView action_show_descriptionView = new Action_Show_DescriptionView();
-    private final Action_Show_WaypointView action_show_waypointView = new Action_Show_WaypointView();
-    private final Action_Show_LogView action_show_logView = new Action_Show_LogView();
-    private final Action_Show_MapView action_show_mapView = new Action_Show_MapView();
-    private final Action_Show_CompassView action_show_compassView = new Action_Show_CompassView();
-    private final Action_Show_CacheList action_show_cacheList = new Action_Show_CacheList();
-    private final Action_Show_TrackListView action_show_trackListView = new Action_Show_TrackListView();
-    private final Action_Show_SpoilerView action_show_spoilerView = new Action_Show_SpoilerView();
-    private final Action_Show_TrackableListView action_show_trackableListView = new Action_Show_TrackableListView();
-    private final Action_Show_NoteView action_show_noteView = new Action_Show_NoteView();
-    private final Action_Quit action_quit = new Action_Quit();
-    private final Action_Show_DraftsView action_show_DraftsView = new Action_Show_DraftsView();
-
     private FilterProperties actFilter = FilterInstances.ALL;
-    private final AtomicBoolean isFiltered = new AtomicBoolean(false);
-    public final GlobalLocationReceiver locationReceiver;
 
-    public ViewManager(final CacheboxMain main, Viewport viewport, Batch batch) {
+    public ViewManager(final CacheboxMain cacheboxMain, Viewport viewport, Batch batch) {
         super("ViewManager", viewport, batch);
 
-        log.info("ScaleFactor:" + Float.toString(CB.getScaledFloat(1)));
+        log.info("ScaleFactor:" + CB.getScaledFloat(1));
         log.info("Width:" + Float.toString(Gdx.graphics.getWidth()));
         log.info("Height:" + Float.toString(Gdx.graphics.getHeight()));
-        log.info("PPI:" + Float.toString(Gdx.graphics.getPpiX()));
+        log.info("PPI:" + Gdx.graphics.getPpiX());
 
-        this.main = main;
+        main = cacheboxMain;
 
         //set this to static CB for global access
         CB.viewmanager = this;
@@ -112,11 +112,11 @@ public class ViewManager extends NamedStage
             @Override
             public void viewHeightChanged(float newPos) {
                 sliderPos = height - newPos;
-                setActViewBounds();
+                setCurrentViewBounds();
             }
         };
         slider.setBounds(0, 0, width, height);
-        this.addActor(slider);
+        addActor(slider);
         if (Config.quickButtonLastShow.getValue())
             slider.setQuickButtonVisible();
 
@@ -133,7 +133,7 @@ public class ViewManager extends NamedStage
         mainButtonBar.addButton(tool_button);
         mainButtonBar.addButton(misc_button);
         mainButtonBar.setBounds(0, 0, width, mainButtonBar.getPrefHeight());
-        this.addActor(mainButtonBar);
+        addActor(mainButtonBar);
         mainButtonBar.layout();
 
         initialActionButtons();
@@ -144,7 +144,7 @@ public class ViewManager extends NamedStage
         EventHandler.add(this);
 
         //set selected Cache to slider
-        selectedCacheChanged(new de.longri.cachebox3.events.SelectedCacheChangedEvent(de.longri.cachebox3.events.EventHandler.getSelectedCache()));
+        selectedCacheChanged(new SelectedCacheChangedEvent(EventHandler.getSelectedCache()));
 
         //initial global location receiver
         locationReceiver = new GlobalLocationReceiver();
@@ -156,7 +156,7 @@ public class ViewManager extends NamedStage
     }
 
     public void setNewFilter(FilterProperties filter) {
-        this.setNewFilter(filter, false);
+        setNewFilter(filter, false);
     }
 
     public void setNewFilter(final FilterProperties filter, boolean dontLoad) {
@@ -202,10 +202,10 @@ public class ViewManager extends NamedStage
 
         log.debug("show view:" + view.getName());
 
-        if (actView != null) {
-            final AbstractView dispView = actView;
+        if (currentView != null) {
+            final AbstractView dispView = currentView;
             log.debug("remove and dispose actView: " + dispView.getName());
-            this.getRoot().removeActor(dispView);
+            getRoot().removeActor(dispView);
             CB.postAsync(new NamedRunnable("Dispose last View") {
                 @Override
                 public void run() {
@@ -216,8 +216,7 @@ public class ViewManager extends NamedStage
                     for (int i = 0, n = childs.size - 1; i < n; i++) {
                         try {
                             dispView.removeChild(childs.get(i));
-                        } catch (Exception e) {
-
+                        } catch (Exception ignored) {
                         }
                     }
                     childs.clear();
@@ -225,11 +224,11 @@ public class ViewManager extends NamedStage
             });
         }
 
-        this.actView = view;
-        this.addActor(view);
-        setActViewBounds();
+        currentView = view;
+        addActor(view);
+        setCurrentViewBounds();
         log.debug("reload view state:" + view.getName());
-        this.actView.onShow();
+        currentView.onShow();
 
 
         //bring ButtonBar to Front
@@ -243,15 +242,15 @@ public class ViewManager extends NamedStage
         for (Button button : mainButtonBar.getButtons()) {
             GestureButton gestureButton = (GestureButton) button;
             gestureButton.setChecked(false);
-            gestureButton.aktActionView = null;
+            gestureButton.currentActionView = null;
             if (!buttonFound) {
                 for (ActionButton actionButton : gestureButton.getButtonActions()) {
-                    if (actionButton.getAction() instanceof Abstract_Action_ShowView) {
-                        Abstract_Action_ShowView viewAction = (Abstract_Action_ShowView) actionButton.getAction();
-                        if (viewAction.viewTypeEquals(this.actView)) {
+                    if (actionButton.getAction() instanceof AbstractShowAction) {
+                        AbstractShowAction viewAction = (AbstractShowAction) actionButton.getAction();
+                        if (viewAction.viewTypeEquals(currentView)) {
                             gestureButton.setChecked(true);
                             gestureButton.setHasContextMenu(viewAction.hasContextMenu());
-                            gestureButton.aktActionView = viewAction;
+                            gestureButton.currentActionView = viewAction;
                             buttonFound = true;
                             break;
                         }
@@ -267,6 +266,7 @@ public class ViewManager extends NamedStage
         db_button.addAction(new ActionButton(action_show_cacheList, true, GestureDirection.Up));
         db_button.addAction(new ActionButton(new Action_ParkingDialog(), false));
         db_button.addAction(new ActionButton(action_show_trackableListView, false, GestureDirection.Right));
+        db_button.addAction(new ActionButton(new Action_Share(), false, GestureDirection.Right));
 
         cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
         cache_button.addAction(new ActionButton(action_show_waypointView, false, GestureDirection.Right));
@@ -285,22 +285,21 @@ public class ViewManager extends NamedStage
 
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
-        tool_button.addAction(new ActionButton(action_show_DraftsView, true));
-        tool_button.addAction(new ActionButton(new Action_Explore(), false));
-        tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecTrack, false));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVoice, false));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecPicture, false, GestureDirection.Down));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionRecVideo, false));
+        tool_button.addAction(new ActionButton(action_show_DraftsView, true, GestureDirection.Up));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
+        tool_button.addAction(new ActionButton(new Action_TakePhoto(), false, GestureDirection.Down));
+        tool_button.addAction(new ActionButton(new Action_RecVideo(), false));
+        tool_button.addAction(new ActionButton(new Action_RecVoice(), false));
+        tool_button.addAction(new ActionButton(new Action_Explore(), false));
+        tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
         if (CB.isTestVersion()) {
-            tool_button.addAction(new ActionButton(new Action_Show_TestView(), false));
-            tool_button.addAction(new ActionButton(new Action_Show_PlatformTestView(), false));
+            tool_button.addAction(new ActionButton(new Show_TestAction(), false));
+            tool_button.addAction(new ActionButton(new Show_PlatformTestAction(), false));
         }
 
-        misc_button.addAction(new ActionButton(new Action_Show_AboutView(), true, GestureDirection.Up));
-        misc_button.addAction(new ActionButton(new Action_Show_Credits(), false));
+        misc_button.addAction(new ActionButton(new Show_AboutAction(), true, GestureDirection.Up));
+        misc_button.addAction(new ActionButton(new Show_Credits(), false));
         misc_button.addAction(new ActionButton(new Action_Settings_Activity(), false, GestureDirection.Left));
         misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
         misc_button.addAction(new ActionButton(new Action_Help(), false));
@@ -310,23 +309,23 @@ public class ViewManager extends NamedStage
 //        actionShowAboutView.execute();
     }
 
-    private void setActViewBounds() {
-        if (this.actView != null) {
-            actView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
+    private void setCurrentViewBounds() {
+        if (currentView != null) {
+            currentView.setBounds(0, mainButtonBar.getHeight(), width, height - (mainButtonBar.getHeight() + sliderPos));
         }
 
     }
 
-    public AbstractView getActView() {
-        return actView;
+    public AbstractView getCurrentView() {
+        return currentView;
     }
 
     public CacheboxMain getMain() {
-        return this.main;
+        return main;
     }
 
     @Override
-    public void selectedCacheChanged(de.longri.cachebox3.events.SelectedCacheChangedEvent event) {
+    public void selectedCacheChanged(SelectedCacheChangedEvent event) {
         setCacheName(event.cache);
     }
 
@@ -334,8 +333,6 @@ public class ViewManager extends NamedStage
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
         if (event.wayPoint != null) setCacheName(Database.Data.cacheList.GetCacheById(event.wayPoint.getCacheId()));
     }
-
-    AbstractCache lastAbstractCache = null;
 
     private void setCacheName(AbstractCache abstractCache) {
         // set Cache name to Slider
@@ -346,7 +343,7 @@ public class ViewManager extends NamedStage
                 CharSequence text = abstractCache.getType().toShortString()
                         + terrDiffToShortString(abstractCache.getDifficulty()) + "/"
                         + terrDiffToShortString(abstractCache.getTerrain()) + abstractCache.getSize().toShortString()
-                        + " " + abstractCache.getName();
+                        + " " + abstractCache.getGeoCacheName();
                 slider.setCacheName(text);
                 lastAbstractCache = abstractCache;
             }
@@ -415,7 +412,11 @@ public class ViewManager extends NamedStage
 
     @Override
     public void cacheListChanged(CacheListChangedEvent event) {
-        if (Database.Data == null | Database.Data.cacheList == null) return;
+        if (Database.Data == null) {
+            return;
+        } else {
+            if (Database.Data.cacheList == null) return;
+        }
         AbstractCache abstractCache = Database.Data.cacheList.GetCacheByGcCode("CBPark");
 
         if (abstractCache != null)
@@ -435,41 +436,6 @@ public class ViewManager extends NamedStage
             if (selectedInQuery == null) {
                 //reset
                 EventHandler.fireSelectedWaypointChanged(null, null);
-            }
-        }
-    }
-
-
-    // Toast pop up
-    public enum ToastLength {
-        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f), WAIT(true);
-
-        public final float value;
-        public final boolean wait;
-        private CloseListener closeListener;
-
-        public interface CloseListener {
-            void close();
-        }
-
-        ToastLength(float value) {
-            this.value = value;
-            wait = false;
-        }
-
-        ToastLength(boolean wait) {
-            this.value = 0;
-            this.wait = wait;
-        }
-
-        private void setCloseListener(CloseListener listener) {
-            this.closeListener = listener;
-        }
-
-        public void close() {
-            if (this.closeListener != null) {
-                this.closeListener.close();
-                this.closeListener = null;
             }
         }
     }
@@ -502,7 +468,7 @@ public class ViewManager extends NamedStage
 
                 toastLabel.setWidth(bounds.width + border);
                 toastLabel.setHeight(bounds.height + border);
-                toastLabel.setPosition((Gdx.graphics.getWidth() / 2) - (toastLabel.getWidth() / 2), mainButtonBar.getTop() + CB.scaledSizes.MARGINx2);
+                toastLabel.setPosition((Gdx.graphics.getWidth() / 2f) - (toastLabel.getWidth() / 2), mainButtonBar.getTop() + CB.scaledSizes.MARGINx2);
                 toast(toastLabel, length);
             }
         });
@@ -513,12 +479,9 @@ public class ViewManager extends NamedStage
         actor.addAction(sequence(Actions.alpha(0), Actions.fadeIn(CB.WINDOW_FADE_TIME, Interpolation.fade)));
 
         if (length.wait) {
-            length.setCloseListener(new ToastLength.CloseListener() {
-                @Override
-                public void close() {
-                    log.debug("Close Toast from wait");
-                    actor.addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
-                }
+            length.setCloseListener(() -> {
+                log.debug("Close Toast from wait");
+                actor.addAction(sequence(Actions.fadeOut(CB.WINDOW_FADE_TIME, Interpolation.fade), Actions.removeActor()));
             });
         } else {
             new com.badlogic.gdx.utils.Timer().scheduleTask(new com.badlogic.gdx.utils.Timer.Task() {
@@ -532,21 +495,54 @@ public class ViewManager extends NamedStage
         CB.requestRendering();
     }
 
-
     public void resume() {
         locationReceiver.resume();
-        if (actView != null) actView.onShow();
+        if (currentView != null) currentView.onShow();
     }
 
     public void pause() {
         locationReceiver.pause();
-        if (actView != null) actView.onHide();
+        if (currentView != null) currentView.onHide();
     }
 
     @Override
     public void draw() {
-        if (CB.DRAW_EXCEPTION_INDICATOR) this.getRoot().setDebug(true, false);
+        if (CB.DRAW_EXCEPTION_INDICATOR) getRoot().setDebug(true, false);
         super.draw();
+    }
+
+    // Toast pop up
+    public enum ToastLength {
+        SHORT(1.0f), NORMAL(1.5f), LONG(3.5f), EXTRA_LONG(6.0f), WAIT(true);
+
+        public final float value;
+        public final boolean wait;
+        private CloseListener closeListener;
+
+        ToastLength(float newValue) {
+            value = newValue;
+            wait = false;
+        }
+
+        ToastLength(boolean doWait) {
+            value = 0;
+            wait = doWait;
+        }
+
+        private void setCloseListener(CloseListener listener) {
+            closeListener = listener;
+        }
+
+        public void close() {
+            if (closeListener != null) {
+                closeListener.close();
+                closeListener = null;
+            }
+        }
+
+        public interface CloseListener {
+            void close();
+        }
     }
 
 }

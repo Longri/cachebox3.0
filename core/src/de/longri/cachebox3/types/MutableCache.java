@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2019 team-cachebox.de
+ * Copyright (C) 2020 - 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -92,8 +92,8 @@ public class MutableCache extends AbstractCache {
         this.attributes = null;
         this.attributesPositive = cache.getAttributesPositive();
         this.attributesNegative = cache.getAttributesNegative();
-        if (cache.getName() != null) this.name = cache.getName().toString();
-        if (cache.getGcCode() != null) this.gcCode = cache.getGcCode().toString();
+        if (cache.getGeoCacheName() != null) this.name = cache.getGeoCacheName().toString();
+        if (cache.getGeoCacheCode() != null) this.gcCode = cache.getGeoCacheCode().toString();
         if (cache.getPlacedBy() != null) this.placedBy = cache.getPlacedBy().toString();
         if (cache.getOwner() != null) this.owner = cache.getOwner().toString();
         if (cache.getGcId() != null) this.gcId = cache.getGcId().toString();
@@ -385,7 +385,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public CharSequence getGcCode() {
+    public CharSequence getGeoCacheCode() {
         return gcCode;
     }
 
@@ -395,7 +395,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public CharSequence getName() {
+    public CharSequence getGeoCacheName() {
         return name;
     }
 

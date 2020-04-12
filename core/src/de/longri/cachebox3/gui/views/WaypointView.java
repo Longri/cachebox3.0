@@ -35,7 +35,7 @@ import de.longri.cachebox3.gui.activities.EditWaypoint;
 import de.longri.cachebox3.gui.activities.ProjectionCoordinate;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
@@ -156,7 +156,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             @Override
             public ListViewItem getView(int index) {
                 if (index == 0) {
-                    return CacheListItem.getListItem(index, actAbstractCache, getWidth());
+                    return new CacheListItem(index, actAbstractCache, getWidth());
                 } else {
                     final WayPointListItem item;
                     try {
@@ -254,7 +254,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         });
 
         CB.postOnNextGlThread(() -> {
-            AbstractWaypoint wp = EventHandler.getSelectedWaypoint();
+            AbstractWaypoint wp = EventHandler.getSelectedWayPoint();
             if (wp == null) {
                 //select Cache
                 listView.setSelection(0);
@@ -310,7 +310,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         //name, msg, title, buttons, icon, OnMsgBoxClickListener
         ButtonDialog dialog = new ButtonDialog("delete Waypoint",
                 Translation.get("?DelWP") + "\n[" + actWaypoint.getTitle() + "]\n",
-                Translation.get("!DelWP"), MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                Translation.get("!DelWP"), MessageBoxButton.YesNo, MessageBoxIcon.Question,
                 (which, data) -> {
                     if (which == ButtonDialog.BUTTON_POSITIVE) {
                         log.debug("Delete Waypoint");
@@ -335,7 +335,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     private void addWp(Coordinate coordinate, boolean showCoords) {
         String newGcCode;
         try {
-            newGcCode = Database.createFreeGcCode(Database.Data, EventHandler.getSelectedCache().getGcCode().toString());
+            newGcCode = Database.createFreeGcCode(Database.Data, EventHandler.getSelectedCache().getGeoCacheCode().toString());
         } catch (Exception e) {
             log.error("can't generate GcCode! can't show EditWaypoint Activity");
             return;
@@ -435,13 +435,13 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         // todo icon for UploadCorrectedCoordinates
         MenuItem mi = cm.addMenuItem("UploadCorrectedCoordinates", null, () -> {
             if (actAbstractCache.hasCorrectedCoordinates())
-                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
+                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGeoCacheCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
             else if (isCorrectedFinal())
-                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGcCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
+                GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGeoCacheCode().toString(), actWaypoint.getLatitude(), actWaypoint.getLongitude());
             if (GroundspeakAPI.getInstance().APIError == GroundspeakAPI.OK) {
-                MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(Translation.get("ok"), Translation.get("UploadCorrectedCoordinates"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             } else {
-                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
+                MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("UploadCorrectedCoordinates"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
             }
         });
         mi.setEnabled(actAbstractCache.hasCorrectedCoordinates() || isCorrectedFinal());

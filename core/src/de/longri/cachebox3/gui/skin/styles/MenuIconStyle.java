@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2019 team-cachebox.de
+ * Copyright (C) 2020 - 2019 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -100,6 +100,10 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable downloadLogImages;
     public Drawable showOriginalHtmlColor;
     public Drawable todo;
+    public Drawable contactOwner;
+    public Drawable e_mailToOwner;
+    public Drawable messageToOwner;
+    public Drawable shareInfos;
 
     @Override
     public int getPrefWidth() {

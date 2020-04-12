@@ -27,8 +27,8 @@ import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.QuickActions;
-import de.longri.cachebox3.gui.actions.show_activities.Action_HintDialog;
-import de.longri.cachebox3.gui.actions.show_activities.Action_Switch_Torch;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_HintDialog;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_Switch_Torch;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 
 /**
@@ -57,7 +57,7 @@ public class QuickButtonItem extends ListViewItem {
         try {
             spriteDrawable = action.getIcon();
         } catch (Exception e) {
-            throw new IllegalStateException(action.getName() + " Action has no Icon");
+            throw new IllegalStateException(action.getTitleTranslationId() + " Action has no Icon");
         }
 
         mButtonIcon = new Image(spriteDrawable, Scaling.none, Align.center);

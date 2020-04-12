@@ -103,7 +103,7 @@ public abstract class AbstractTestCache {
         assertTrue(latitude == other.getLatitude(), "Latitude must be " + latitude + " but was :" + other.getLatitude());
         assertTrue(longitude == other.getLongitude(), "Longitude must be " + longitude + " but was :" + other.getLongitude());
         assertTrue(cacheType == other.getType(), "Cache type must be " + cacheType + " but was :" + other.getType());
-        assertTrue(CharSequenceUtil.equals(gcCode, other.getGcCode()), "GcCode must be " + gcCode + " but was :" + other.getGcCode());
+        assertTrue(CharSequenceUtil.equals(gcCode, other.getGeoCacheCode()), "GcCode must be " + gcCode + " but was :" + other.getGeoCacheCode());
         assertTrue(id == other.getId(), "Cache id must be " + id + " but was :" + other.getId());
         assertTrue(available == other.isAvailable(), "Cache available must be " + available + " but was :" + other.isAvailable());
         assertTrue(archived == other.isArchived(), "Cache archived must be " + archived + " but was :" + other.isArchived());
@@ -125,7 +125,7 @@ public abstract class AbstractTestCache {
         assertTrue(favoritePoints == other.getFavoritePoints(), "Cache FavoritePoints count must be " + favoritePoints + " but was :" + other.getFavoritePoints());
         assertEquals(note, other.getTmpNote() != null ? other.getTmpNote().toString().replaceAll("\r\n", "\n") : null, "Cache note should be charSequenceEquals");
         assertEquals(solver, other.getTmpSolver() != null ? other.getTmpSolver().toString().replaceAll("\r\n", "\n") : null, "Cache solver should be charSequenceEquals");
-        assertEquals(name, other.getName().toString(), "Cache name should be charSequenceEquals");
+        assertEquals(name, other.getGeoCacheName().toString(), "Cache name should be charSequenceEquals");
 
         String expectedDate = DATE_PATTERN.format(this.dateHidden);
         String actualDate = DATE_PATTERN.format(other.getDateHidden());

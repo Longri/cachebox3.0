@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2020 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -76,8 +76,8 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("Type", abstractCache.getType().ordinal());
         args.put("Rating", (int) (abstractCache.getRating() * 200));
         args.put("NumTravelbugs", abstractCache.getNumTravelbugs());
-        args.put("GcCode", abstractCache.getGcCode());
-        args.put("Name", abstractCache.getName());
+        args.put("GcCode", abstractCache.getGeoCacheCode());
+        args.put("Name", abstractCache.getGeoCacheName());
         args.put("PlacedBy", abstractCache.getPlacedBy());
         args.put("Owner", abstractCache.getOwner());
         args.put("GcId", abstractCache.getGcId());

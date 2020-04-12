@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class AndroidLauncherfragment extends AndroidFragmentApplication implemen
         View view = initializeForView(new CacheboxMain(), config);
 
         //initialize platform connector
-        PlatformConnector.init(new AndroidPlatformConnector(this));
+        new AndroidPlatformConnector(this);
 
         return view;
     }

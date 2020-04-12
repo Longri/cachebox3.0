@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="257" height="257" viewBox="0 0 257.00 257.00" enable-background="new 0 0 257.00 257.00" xml:space="preserve">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full" width="257" height="257"
+     viewBox="0 0 257.00 257.00" enable-background="new 0 0 257.00 257.00" xml:space="preserve">
 	<g>
 		<path fill="#FFFFFF" fill-opacity="1" stroke-width="5" stroke-linejoin="round" stroke="#333232" stroke-opacity="1" d="M 50.4167,17.0896L 203.765,17.0896C 208.349,17.0896 212.045,20.7642 212.045,25.343L 212.045,240.347C 212.045,244.931 208.349,248.626 203.765,248.626L 50.4167,248.626C 45.8328,248.626 42.1426,244.931 42.1426,240.347L 42.1426,25.343C 42.1426,20.7642 45.8328,17.0896 50.4167,17.0896 Z "/>
 		<path fill="none" stroke-width="5" stroke-linejoin="round" stroke="#333232" stroke-opacity="1" d="M 132.786,34.165C 132.786,37.3176 130.239,39.8604 127.112,39.8604C 123.985,39.8604 121.437,37.3176 121.437,34.165C 121.437,31.0176 123.985,28.4541 127.112,28.4541C 130.239,28.4541 132.786,31.0176 132.786,34.165 Z "/>

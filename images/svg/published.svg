@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="210" height="210" viewBox="0 0 210.00 210.00" enable-background="new 0 0 210.00 210.00" xml:space="preserve">
-	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.823092" y1="0.739077" x2="1.32309" y2="0.739077" gradientTransform="rotate(253.000229 0.823092 0.739077)">
-		<stop offset="0" stop-color="#12E00C" stop-opacity="1"/>
-		<stop offset="1" stop-color="#1E851A" stop-opacity="1"/>
-	</linearGradient>
-	<ellipse fill="url(#SVGID_Fill1_)" stroke-width="5" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" cx="104.997" cy="105.003" rx="100" ry="100"/>
-</svg>

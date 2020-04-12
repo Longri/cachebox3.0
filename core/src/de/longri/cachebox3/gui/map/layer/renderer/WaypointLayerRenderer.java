@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cluster;
 import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
 import com.badlogic.gdx.utils.Disposable;
 import de.longri.cachebox3.gui.map.layer.WaypointLayer;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import de.longri.cachebox3.utils.MathUtils;
@@ -57,7 +56,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
     private final Point mMapPoint = new Point();
     private final Box mapVisibleBoundingBox = new Box();
 
-    private int lastZoomLevel = -1;
+    private int lastZoomLevel;
     private double lastMapPosX = Double.MIN_VALUE;
     private double lastMapPosY = Double.MIN_VALUE;
     private float lastMapBearing = Float.MIN_VALUE;
@@ -73,6 +72,14 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
     public void dispose() {
         Arrays.fill(mItems, null);
         mItems = null;
+    }
+
+    public void setLastZoomLevel(int _lastZoomLevel) {
+        lastZoomLevel = _lastZoomLevel;
+    }
+
+    public int getLastZoomLevel() {
+        return lastZoomLevel;
     }
 
     public static class InternalItem {
@@ -93,6 +100,7 @@ public class WaypointLayerRenderer extends BucketRenderer implements Disposable 
         mSymbolLayer = new SymbolBucket();
         mWaypointLayer = waypointLayer;
         mDefaultBitmap = defaultSymbol;
+        lastZoomLevel = -1;
     }
 
 

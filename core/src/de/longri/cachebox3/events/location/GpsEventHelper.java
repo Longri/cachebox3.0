@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -130,7 +130,7 @@ public class GpsEventHelper implements LocationEvents {
         // is called only from GPSSimulator on Desktop
         if (CB.isBackground) return;
 
-        AbstractView actView = CB.viewmanager.getActView();
+        AbstractView actView = CB.viewmanager.getCurrentView();
         if (actView instanceof MapView) {
             ((MapView) actView).setTilt(tilt);
         }

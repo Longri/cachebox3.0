@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 - 2018 team-cachebox.de
+ * Copyright (C) 2020 - 2018 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.skin.styles.EditTextStyle;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_WidgetGroup;
 import de.longri.cachebox3.utils.NamedRunnable;
@@ -37,6 +38,7 @@ import de.longri.cachebox3.utils.NamedRunnable;
  */
 public class EditTextField extends Catch_WidgetGroup {
 
+    private GenericCallBack<Boolean> textChangedCallBack;
     private boolean singleLine;
     private int minLineCount;
     private int maxLineCount;
@@ -57,10 +59,6 @@ public class EditTextField extends Catch_WidgetGroup {
         this(false, text);
     }
 
-    public EditTextField(CharSequence text) {
-        this(false, text.toString());
-    }
-
     public EditTextField(boolean multiLine) {
         this(multiLine, "");
     }
@@ -73,17 +71,16 @@ public class EditTextField extends Catch_WidgetGroup {
         this.addActor(scrollPane);
         this.addActor(editButton);
         this.setStyle(VisUI.getSkin().get("default", EditTextStyle.class));
-        this.setText(text);
+        setText(text);
         clickListener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-
                 Input.TextInputListener listener = new Input.TextInputListener() {
                     @Override
-                    public void input(final String text) {
+                    public void input(final String changedText) {
                         CB.postOnGlThread(new NamedRunnable("postOnGlThread") {
                             @Override
                             public void run() {
-                                setText(text);
+                                updateText(changedText);
                                 invalidate();
                             }
                         });
@@ -104,7 +101,7 @@ public class EditTextField extends Catch_WidgetGroup {
         };
 
         editButton.addListener(clickListener);
-        this.addListener(clickListener);
+        addListener(clickListener);
         minLineCount = 1;
         maxLineCount = 5;
         maxWidth = 0;
@@ -143,10 +140,8 @@ public class EditTextField extends Catch_WidgetGroup {
 
     @Override
     public float getMinHeight() {
-        float min = (textLabel.getStyle().font.getLineHeight() * minLineCount) + style.background.getMinHeight();
-        float max = (textLabel.getStyle().font.getLineHeight() * maxLineCount) + style.background.getMinHeight();
-        if (min > max) return min;
-        return min;
+        // float max = (textLabel.getStyle().font.getLineHeight() * maxLineCount) + style.background.getMinHeight();
+        return (textLabel.getStyle().font.getLineHeight() * minLineCount) + style.background.getMinHeight();
     }
 
     @Override
@@ -178,15 +173,21 @@ public class EditTextField extends Catch_WidgetGroup {
     }
 
     public String getText() {
-        return this.text.toString();
+        return text.toString();
     }
 
-    public void setText(CharSequence text) {
-        if (text == null)
-            this.text = "";
+    public void setText(CharSequence newText) {
+        if (newText == null)
+            text = "";
         else
-            this.text = text;
-        textLabel.setText(text);
+            text = newText;
+        textLabel.setText(newText);
+    }
+
+    public void updateText(CharSequence newText) {
+        setText(newText);
+        if (textChangedCallBack != null)
+            textChangedCallBack.callBack(true);
     }
 
     public void setWrap(boolean wrap) {
@@ -198,8 +199,7 @@ public class EditTextField extends Catch_WidgetGroup {
             editButton.removeListener(clickListener);
             removeListener(clickListener);
             editButton.setVisible(false);
-        }
-        else {
+        } else {
             editButton.addListener(clickListener);
             this.addListener(clickListener);
             editButton.setVisible(true);
@@ -225,5 +225,9 @@ public class EditTextField extends Catch_WidgetGroup {
         bs.up = style.editIcon;
         bs.down = style.editIcon;
         editButton.setStyle(bs);
+    }
+
+    public void setTextChangedCallBack(GenericCallBack<Boolean> textChangedCallBack) {
+        this.textChangedCallBack = textChangedCallBack;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,8 @@
  */
 package de.longri.cachebox3.gui.dialogs;
 
-import com.badlogic.gdx.Gdx;
-import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.activities.GetApiKey_Activity;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
-
-import static de.longri.cachebox3.settings.Settings.GcLogin;
 
 /**
  * Created by longri on 11.06.17.
@@ -43,7 +37,7 @@ public class GetApiKeyQuestionDialog extends ButtonDialog {
 
     public GetApiKeyQuestionDialog(CharSequence msg, CharSequence title, MessageBoxIcon icon) {
         super("GetApiKeyQuestionDialog", msg, title,
-                MessageBoxButtons.YesNo, icon,
+                MessageBoxButton.YesNo, icon,
                 (which, data) -> {
                     if (which == BUTTON_POSITIVE) {
                         new GetApiKey_Activity().show();

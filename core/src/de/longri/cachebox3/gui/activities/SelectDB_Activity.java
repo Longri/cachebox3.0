@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.ActivityBase;
-import de.longri.cachebox3.gui.actions.show_activities.Action_Quit;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_Quit;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.stages.ViewManager;
@@ -322,7 +322,7 @@ public class SelectDB_Activity extends ActivityBase {
                         CharSequence msg = Translation.get("DB_outdated_question");
                         CharSequence title = Translation.get("DB_outdated");
 
-                        MessageBox.show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Database, new OnMsgBoxClickListener() {
+                        MessageBox.show(msg, title, MessageBoxButton.YesNo, MessageBoxIcon.Database, new OnMsgBoxClickListener() {
                             @Override
                             public boolean onClick(int which, Object data) {
 
@@ -463,7 +463,7 @@ public class SelectDB_Activity extends ActivityBase {
             }
         };
         CharSequence message = Translation.get("confirmDatabaseDeletion", dbFile.getName());
-        MessageBox.show(message, Translation.get("deleteDatabase"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, dialogClickListener);
+        MessageBox.show(message, Translation.get("deleteDatabase"), MessageBoxButton.YesNo, MessageBoxIcon.Question, dialogClickListener);
     }
 
 

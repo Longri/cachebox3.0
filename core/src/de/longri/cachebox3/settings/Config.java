@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 team-cachebox.de
+ * Copyright (C) 2014-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public class Config extends Settings {
     /**
      * Return true, if setting changes need restart
      *
-     * @return
+     * @return ?
      */
     private static synchronized boolean writeToDB() {
         if (inWrite.get()) {

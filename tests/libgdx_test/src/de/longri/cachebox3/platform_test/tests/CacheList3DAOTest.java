@@ -3,7 +3,7 @@
 //  Don't modify this file, it's created by tool 'extract_libgdx_test
 
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -19,25 +19,19 @@
  */
 package de.longri.cachebox3.platform_test.tests;
 
-import de.longri.cachebox3.sqlite.dao.*;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
-import de.longri.cachebox3.sqlite.Database;
-import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.Attributes;
-import de.longri.cachebox3.types.CacheList;
-import de.longri.cachebox3.types.CacheSizes;
-import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.MutableCache;
-import de.longri.cachebox3.types.MutableWaypoint;
-import de.longri.gdx.sqlite.SQLiteGdxException;
 import de.longri.cachebox3.platform_test.AfterAll;
 import de.longri.cachebox3.platform_test.BeforeAll;
 import de.longri.cachebox3.platform_test.PlatformAssertionError;
 import de.longri.cachebox3.platform_test.Test;
+import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.AbstractCacheListDAO;
+import de.longri.cachebox3.sqlite.dao.Cache3DAO;
+import de.longri.cachebox3.sqlite.dao.CacheList3DAO;
+import de.longri.cachebox3.types.*;
+import de.longri.gdx.sqlite.SQLiteGdxException;
 
 import java.util.Date;
 
@@ -233,9 +227,9 @@ public class CacheList3DAOTest {
     private void assertCache(String msg, AbstractCache cache) throws PlatformAssertionError {
         assertThat(msg + " Latitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(cache.getLatitude()) == should_latitude);
         assertThat(msg + " Longitude must charSequenceEquals", TestUtils.roundDoubleCoordinate(cache.getLongitude()) == should_longitude);
-        assertThat(msg + " Name must charSequenceEquals", cache.getName().equals(should_name));
+        assertThat(msg + " Name must charSequenceEquals", cache.getGeoCacheName().equals(should_name));
         assertThat(msg + " Attributes must charSequenceEquals", cache.getAttributes().equals(should_attributes));
-        assertThat(msg + " GcCode must charSequenceEquals", cache.getGcCode().equals(should_gcCode));
+        assertThat(msg + " GcCode must charSequenceEquals", cache.getGeoCacheCode().equals(should_gcCode));
         assertThat(msg + " PlacedBy must charSequenceEquals", cache.getPlacedBy().equals(should_placedBy));
         assertThat(msg + " Owner must charSequenceEquals", cache.getOwner().equals(should_owner));
         assertThat(msg + " GcID must charSequenceEquals", cache.getGcId().equals(should_gcId));

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,10 @@ package de.longri.cachebox3.gui.stages.initial_tasks;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.ImportProgressChangedEvent;
 import de.longri.cachebox3.events.IncrementProgressEvent;
 import de.longri.cachebox3.gui.stages.NamedStage;
-import de.longri.cachebox3.gui.stages.StageManager;
-import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.utils.IChanged;
 import org.slf4j.Logger;

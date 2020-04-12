@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="32" height="32" overflow="hidden" viewBox="0, 0, 437.5, 437.5" preserveAspectRatio="xMidYMid" font-size="0" id="svg" xml:space="default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <defs id="def1" xml:space="default">
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient618" xml:space="default">
+      <stop offset="0%" stop-color="#8CC57A" stop-opacity="1" id="stop619" xml:space="default" />
+      <stop offset="100%" stop-color="#FFFF00" stop-opacity="1" id="stop620" xml:space="default" />
+    </linearGradient>
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient607" xml:space="default">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5843" id="stop608" xml:space="default" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" id="stop609" xml:space="default" />
+    </linearGradient>
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient602" xml:space="default">
+      <stop offset="0%" stop-color="#000000" stop-opacity="1" id="stop603" xml:space="default" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" id="stop604" xml:space="default" />
+    </linearGradient>
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient610" xml:space="default">
+      <stop offset="0%" stop-color="#D9BD00" stop-opacity="1" id="stop611" xml:space="default" />
+      <stop offset="100%" stop-color="#5F2F00" stop-opacity="1" id="stop612" xml:space="default" />
+    </linearGradient>
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient587" xml:space="default">
+      <stop offset="0%" stop-color="#00FF00" stop-opacity="1" id="stop588" xml:space="default" />
+      <stop offset="100%" stop-color="#FFFF00" stop-opacity="1" id="stop589" xml:space="default" />
+    </linearGradient>
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient581" xml:space="default">
+      <stop offset="0%" stop-color="#003D00" stop-opacity="0.3843" id="stop582" xml:space="default" />
+      <stop offset="100%" stop-color="#250000" stop-opacity="1" id="stop583" xml:space="default" />
+    </linearGradient>
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient578" xml:space="default">
+      <stop offset="0%" stop-color="#0000FF" stop-opacity="1" id="stop579" xml:space="default" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" id="stop580" xml:space="default" />
+    </linearGradient>
+    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient59" xml:space="default">
+      <stop offset="0%" stop-color="#6B5A00" stop-opacity="1" id="stop60" xml:space="default" />
+      <stop offset="100%" stop-color="#FFEF9F" stop-opacity="1" id="stop61" xml:space="default" />
+    </linearGradient>
+    <linearGradient x1="0.857143" y1="0.695313" x2="0.285714" y2="0.671875" gradientUnits="objectBoundingBox" xlink:href="#linearGradient59" id="linearGradient62" xml:space="default" />
+    <linearGradient x1="0.3372777" y1="0.7031243" x2="0.8224848" y2="0.4999999" gradientUnits="objectBoundingBox" xlink:href="#linearGradient587" id="linearGradient66" xml:space="default" />
+    <linearGradient x1="0.333344" y1="0.875005" x2="0.372093" y2="0.4375" gradientUnits="objectBoundingBox" xlink:href="#linearGradient581" id="linearGradient71" xml:space="default" />
+    <linearGradient x1="0.562962" y1="0.101562" x2="0.651852" y2="0.570313" gradientUnits="objectBoundingBox" xlink:href="#linearGradient610" id="linearGradient75" xml:space="default" />
+    <linearGradient x1="0.604651" y1="0.734375" x2="0.395349" y2="0.296875" gradientUnits="objectBoundingBox" xlink:href="#linearGradient618" id="linearGradient79" xml:space="default" />
+    <linearGradient x1="0.369697" y1="0.148438" x2="1.024242" y2="1" gradientUnits="objectBoundingBox" xlink:href="#linearGradient607" id="linearGradient73" xml:space="default" />
+    <linearGradient x1="0.269327" y1="0.24" x2="0.580597" y2="0.491429" gradientUnits="objectBoundingBox" id="linearGradient495" xml:space="default" />
+    <linearGradient x1="0.638177" y1="0.365714" x2="0.464779" y2="0.457143" gradientUnits="objectBoundingBox" id="linearGradient505" xml:space="default" />
+    <linearGradient x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox" id="linearGradient509" xml:space="default" />
+    <radialGradient cx="0.488746" cy="0.460003" r="0.432929" fx="0.488746" fy="0.460003" gradientUnits="objectBoundingBox" xlink:href="#linearGradient602" id="radialGradient595" xml:space="default" />
+    <radialGradient cx="0.588576" cy="0.49219" r="0.93491" fx="0.588576" fy="0.49219" gradientUnits="objectBoundingBox" xlink:href="#linearGradient607" id="radialGradient597" xml:space="default" />
+    <radialGradient cx="0.440559" cy="0.507813" r="0.833257" fx="0.440559" fy="0.507813" gradientUnits="objectBoundingBox" xlink:href="#linearGradient607" id="radialGradient603" xml:space="default" />
+    <radialGradient cx="0.540373" cy="0.375" r="0.565443" fx="0.540373" fy="0.375" gradientUnits="objectBoundingBox" xlink:href="#linearGradient618" id="radialGradient604" xml:space="default" />
+  </defs>
+  <path d="M143.8693 113.1854 C98.78942 115.4756 72.66796 126.7044 43.26932 144.4753 C40.9239 181.0916 34.53276 282.4202 33.70463 337.0745 C55.29232 355.5717 83.8914 356.5629 108.6314 355.8216 C158.6044 354.6165 363.0795 353.7758 373.8051 353.5587 C391.9692 317.4858 401.5598 166.5071 391.4535 137.3451 C370.781 122.2831 323.813 109.5437 298.9189 110.0475 C293.6422 101.4098 287.1536 91.63799 279.173 81.34617 C254.0467 81.80607 188.7298 82.65804 168.3637 83.67229 C161.3326 91.47396 152.1589 103.4056 143.8693 113.1854 z" stroke="#129700" fill-rule="evenOdd" stroke-width="12.0769" stroke-linejoin="bevel" font-size="12" id="path601" xml:space="default" style="fill:url(#linearGradient66);" />
+  <path d="M36.33186 169.5115 C57.74689 170.228 141.1884 197.125 162.0169 201.3968 C162.8146 232.7791 162.8341 321.1024 158.4763 351.1594 C148.6459 363.5094 39.74684 358.0299 32.85815 350.7079 C24.84458 339.7122 34.12375 188.0934 36.33186 169.5115 z" stroke="#00C200" fill-rule="evenOdd" stroke-width="6.425159" stroke-linejoin="bevel" font-size="12" id="path599" xml:space="default" style="fill:url(#linearGradient62);" />
+  <path d="M293.3386 290.4685 C264.7857 333.9928 205.8288 345.784 161.655 316.8049 C117.4811 287.8257 104.8178 229.05 133.3708 185.5258 C161.9237 142.0016 220.8806 130.2104 265.0545 159.1895 C309.2283 188.1686 321.8915 246.9443 293.3386 290.4685 z" fill-rule="evenOdd" font-size="12" id="path612" xml:space="default" style="fill:url(#linearGradient79);" />
+  <path d="M282.7522 283.5238 C257.6086 321.8512 206.1551 332.5387 167.8278 307.3951 C129.5005 282.2514 118.813 230.7979 143.9566 192.4706 C169.1003 154.1433 220.5538 143.4558 258.8811 168.5994 C297.2084 193.7431 307.8958 245.1965 282.7522 283.5238 z" fill-rule="evenOdd" font-size="12" id="path614" xml:space="default" style="fill:url(#linearGradient75);" />
+  <path d="M247.484 262.9109 C234.486 282.7241 207.6239 288.0763 187.4858 274.8653 C167.3477 261.6542 161.5595 234.8826 174.5575 215.0693 C187.5555 195.2561 214.4177 189.9039 234.5558 203.1149 C254.6938 216.326 260.482 243.0976 247.484 262.9109 z" fill-rule="evenOdd" font-size="12" id="path617" xml:space="default" style="fill:url(#linearGradient71);" />
+  <path d="M179.9875 94.52396 L158.6522 123.8897 L283.2808 122.7451 L261.7714 92.86873 L179.9875 94.52396 z" stroke="#647893" fill-rule="evenOdd" stroke-width="3.75" font-size="12" id="path604" xml:space="default" style="fill:url(#radialGradient604);" />
+  <path d="M260.9848 240.9818 C261.1058 264.825 239.3375 283.547 212.3637 282.798 C185.3904 282.0495 163.4257 262.1137 163.3045 238.2704 C163.1836 214.4272 184.9521 195.7053 211.9256 196.4541 C238.8992 197.2028 260.8636 217.1385 260.9848 240.9818 z" fill-rule="evenOdd" font-size="12" id="path607" xml:space="default" style="fill:url(#radialGradient603);" />
+  <path d="M373.7023 183.356 C374.5892 161.9432 378.6769 153.7021 375.3499 142.3756 C372.8194 133.7608 337.0443 141.3576 331.3579 155.577 C323.2699 175.8017 340.3828 320.0459 350.5702 326.3311 C359.3057 321.3971 373.0665 198.7073 373.7023 183.356 z" fill-rule="evenOdd" fill-opacity="0.7449" font-size="12" id="path609" xml:space="default" style="fill:#EFFFFF;" />
+</svg>

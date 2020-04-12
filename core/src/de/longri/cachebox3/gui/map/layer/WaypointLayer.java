@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 team-cachebox.de
+ * Copyright (C) 2016-2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,7 @@
 package de.longri.cachebox3.gui.map.layer;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.Cluster;
-import com.badlogic.gdx.scenes.scene2d.ui.ClusteredList;
-import com.badlogic.gdx.scenes.scene2d.ui.GetName;
-import com.badlogic.gdx.scenes.scene2d.ui.MapWayPointItem;
-import com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg;
-import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.StringBuilder;
@@ -168,7 +163,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
                         //add WayPoint items
 
                         CB_List<String> missingIconList = new CB_List<>();
-                        boolean hasSelectedWP = EventHandler.getSelectedWaypoint() != null;
+                        boolean hasSelectedWP = EventHandler.getSelectedWayPoint() != null;
 
                         //set selected Cache at front
                         for (AbstractCache cache : Database.Data.cacheList) {
@@ -225,7 +220,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         AbstractWaypoint selWp = null;
         if (abstractCache.getWaypoints() != null) {
             if (Settings.ShowAllWaypoints.getValue() || sel) {
-                selWp = selectedWaypoint = EventHandler.getSelectedWaypoint();
+                selWp = selectedWaypoint = EventHandler.getSelectedWayPoint();
                 for (AbstractWaypoint waypoint : abstractCache.getWaypoints()) {
                     try {
                         MapWayPointItem waypointCluster = getMapWayPointItem(waypoint, dis, selectedWaypoint != null && selectedWaypoint.equals(waypoint));
@@ -406,6 +401,14 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
         selectedAbstractCache = de.longri.cachebox3.events.EventHandler.getSelectedCache();
         selectedWaypoint = event.wayPoint;
         cacheListChanged(null);
+    }
+
+    public int getLastZoomLevel() {
+        return mClusterRenderer.getLastZoomLevel();
+    }
+
+    public void setLastZoomLevel(int _lastZoomLevel) {
+        mClusterRenderer.setLastZoomLevel(_lastZoomLevel);
     }
 
     public interface ActiveItem {

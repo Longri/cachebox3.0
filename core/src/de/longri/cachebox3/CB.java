@@ -106,7 +106,6 @@ public class CB {
     final static Array<String> runningRunnables = new Array<>();
     private static final AsyncExecutor asyncExecutor = new AsyncExecutor(50);
     public static LocationHandler locationHandler;
-    private static Categories Categories;
     public static float stateTime;
     public static int androidStatusbarHeight;
     public static ViewManager viewmanager;
@@ -472,8 +471,8 @@ public class CB {
     }
 
     public static Categories getCategories() {
-        Categories = new Categories();
-        return Categories;
+        de.longri.cachebox3.types.Categories categories = new Categories();
+        return categories;
     }
 
 
@@ -526,9 +525,9 @@ public class CB {
             for (int i = 0, n = Database.Data.cacheList.size; i < n; i++) {
                 AbstractCache c = Database.Data.cacheList.get(i);
 
-                if (c.getGcCode().toString().equalsIgnoreCase(sGc)) {
+                if (c.getGeoCacheCode().toString().equalsIgnoreCase(sGc)) {
                     try {
-                        log.debug("returnFromSelectDB:Set selectedCache to " + c.getGcCode() + " from lastSaved.");
+                        log.debug("returnFromSelectDB:Set selectedCache to " + c.getGeoCacheCode() + " from lastSaved.");
                         EventHandler.fire(new SelectedCacheChangedEvent(c));
                         lastSelectedAbstractCache = c;
                     } catch (Exception e) {
@@ -540,15 +539,15 @@ public class CB {
         }
         // Wenn noch kein Cache Selected ist dann einfach den ersten der Liste aktivieren
         if ((lastSelectedAbstractCache == null) && (Database.Data.cacheList.size > 0)) {
-            log.debug("Set selectedCache to " + Database.Data.cacheList.get(0).getGcCode() + " from firstInDB");
+            log.debug("Set selectedCache to " + Database.Data.cacheList.get(0).getGeoCacheCode() + " from firstInDB");
             EventHandler.fire(new SelectedCacheChangedEvent(Database.Data.cacheList.get(0)));
         }
 
         CB.setAutoResort(Config.StartWithAutoSelect.getValue());
         EventHandler.fire(new CacheListChangedEvent());
 
-        if (CB.viewmanager != null && CB.viewmanager.getActView() instanceof CacheListView) {
-            CacheListView cacheListView = (CacheListView) CB.viewmanager.getActView();
+        if (CB.viewmanager != null && CB.viewmanager.getCurrentView() instanceof CacheListView) {
+            CacheListView cacheListView = (CacheListView) CB.viewmanager.getCurrentView();
             cacheListView.setWaitToastLength(ViewManager.ToastLength.WAIT);
         } else {
             Gdx.app.postRunnable(new NamedRunnable("CB:Toast") {

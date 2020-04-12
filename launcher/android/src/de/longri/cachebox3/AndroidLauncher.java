@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -77,7 +78,17 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         // permission changed, reinitialize PlatformConnector
-        PlatformConnector.init(new AndroidPlatformConnector(fragment));
+        AndroidPlatformConnector platformConnector = new AndroidPlatformConnector(fragment);
+        Object clipboardService = getSystemService(CLIPBOARD_SERVICE);
+        if (clipboardService != null) {
+            if (clipboardService instanceof android.content.ClipboardManager) {
+                platformConnector.setClipboard(new AndroidContentClipboard((android.content.ClipboardManager) clipboardService));
+                log.info("got AndroidContentClipboard");
+            } else if (clipboardService instanceof android.text.ClipboardManager) {
+                platformConnector.setClipboard(new AndroidTextClipboard((android.text.ClipboardManager) clipboardService));
+                log.info("got AndroidTextClipboard");
+            }
+        }
     }
 
     @Override
@@ -112,5 +123,11 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
 
     public void removeView(AndroidWebView descriptionView) {
         fragment.removeView(descriptionView);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        AndroidPlatformConnector.getInstance(fragment).onActivityResult(requestCode, resultCode, data);
     }
 }

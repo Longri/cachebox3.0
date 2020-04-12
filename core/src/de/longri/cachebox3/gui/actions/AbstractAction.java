@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -24,32 +24,40 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractAction {
 
-    protected final static boolean NOT_IMPLEMENTED = true;
-    protected final static boolean IMPLEMENTED = false;
+    protected final static boolean NOT_ENABLED = true;
+    protected final static boolean ENABLED = false;
 
     protected final static Logger log = LoggerFactory.getLogger(AbstractAction.class);
 
     protected final boolean functionDisabled;
-    protected final String name;
+    protected final String titleTranslationId;
     protected final int id;
     protected String nameExtension = "";
 
     /**
      * Constructor
      *
-     * @param name = Translation ID
-     * @param id   = AbstractAction ID ( AID_xxxx )
+     * @param titleTranslationId = Translation ID
+     * @param id                 = AbstractAction ID ( AID_xxxx )
      */
-    public AbstractAction(String name, int id) {
-        this(IMPLEMENTED, name, "", id);
+    public AbstractAction(String titleTranslationId, int id) {
+        this(ENABLED, titleTranslationId, "", id);
     }
 
-    public AbstractAction(boolean disabled, String name, int id) {
-        this(disabled, name, "", id);
+    public AbstractAction(boolean disabled, String titleTranslationId) {
+        this(disabled, titleTranslationId, "", -1);
     }
 
-    public AbstractAction(boolean disabled, String name, String nameExtension, int id) {
-        this.name = name;
+    public AbstractAction(String titleTranslationId) {
+        this(ENABLED, titleTranslationId, "", -1);
+    }
+
+    public AbstractAction(boolean disabled, String titleTranslationId, int id) {
+        this(disabled, titleTranslationId, "", id);
+    }
+
+    public AbstractAction(boolean disabled, String titleTranslationId, String nameExtension, int id) {
+        this.titleTranslationId = titleTranslationId;
         this.id = id;
         this.nameExtension = nameExtension;
         this.functionDisabled = disabled;
@@ -58,8 +66,8 @@ public abstract class AbstractAction {
 
     public abstract void execute();
 
-    public String getName() {
-        return name;
+    public String getTitleTranslationId() {
+        return titleTranslationId;
     }
 
     public String getNameExtension() {

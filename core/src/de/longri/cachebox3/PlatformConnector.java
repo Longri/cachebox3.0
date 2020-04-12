@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 - 2017 team-cachebox.de
+ * Copyright (C) 2016 - 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package de.longri.cachebox3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Clipboard;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.utils.NamedRunnable;
 import org.oscim.backend.canvas.Bitmap;
@@ -34,6 +35,7 @@ public abstract class PlatformConnector {
     public static final String REDIRECT_STAGING_URL = "https://staging.gc-oauth.longri.de/index.php?";
 
     static PlatformConnector platformConnector;
+    private static Clipboard clipBoard;
 
     public static void init(PlatformConnector connector) {
         platformConnector = connector;
@@ -47,21 +49,25 @@ public abstract class PlatformConnector {
         return platformConnector._createThumb(path, scaledWidth, thumbPrefix);
     }
 
-    protected abstract String _createThumb(String path, int scaledWidth, String thumbPrefix);
+    public static Clipboard getClipboard() {
+        if (clipBoard == null) {
+            return null;
+        } else {
+            return clipBoard;
+        }
+    }
 
-    protected abstract boolean _isTorchAvailable();
+    public void setClipboard(Clipboard _clipBoard) {
+        clipBoard = _clipBoard;
+    }
 
     public static boolean isTorchOn() {
         return platformConnector._isTorchOn();
     }
 
-    protected abstract boolean _isTorchOn();
-
     public static void switchTorch() {
         platformConnector._switchTorch();
     }
-
-    protected abstract void _switchTorch();
 
     public static void getDescriptionView(GenericCallBack<PlatformWebView> callBack) {
         platformConnector.getPlatformDescriptionView(callBack);
@@ -71,9 +77,7 @@ public abstract class PlatformConnector {
         platformConnector.descriptionViewToNull();
     }
 
-    protected abstract void descriptionViewToNull();
-
-    public static void _openUrlExtern(final String link) {
+    public static void callUrl(final String link) {
         if (CB.isGlThread()) {
             platformConnector.openUrlExtern(link);
         } else {
@@ -86,15 +90,9 @@ public abstract class PlatformConnector {
         }
     }
 
-    public abstract void openUrlExtern(String link);
-
     public static void callQuit() {
         platformConnector._callQuit();
     }
-
-    protected abstract void _callQuit();
-
-    protected abstract void _postOnMainThread(NamedRunnable runnable);
 
     public static void postOnMainThread(NamedRunnable runnable) {
         platformConnector._postOnMainThread(runnable);
@@ -104,41 +102,21 @@ public abstract class PlatformConnector {
         platformConnector._runOnBackGround(backgroundTask);
     }
 
-    protected abstract void _runOnBackGround(Runnable backgroundTask);
-
     public static void playNotifySound(FileHandle soundFileHandle) {
         platformConnector._playNotifySound(soundFileHandle);
-    }
-
-    protected abstract void _playNotifySound(FileHandle soundFileHandle);
-
-    // SVG implementations #############################################################################################
-    public enum SvgScaleType {
-        SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE, SCALED_TO_WIDTH_OR_HEIGHT
     }
 
     public static Bitmap getSvg(String name, InputStream stream, SvgScaleType scaleType, float scaleValue) throws IOException {
         return platformConnector.getRealScaledSVG(name, stream, scaleType, scaleValue);
     }
 
-
-    public abstract Bitmap getRealScaledSVG(String name, InputStream stream,
-                                            SvgScaleType scaleType, float scaleValue) throws IOException;
-
-
     public static FileHandle getSandboxFileHandle(String fileName) {
         return platformConnector._getSandBoxFileHandle(fileName);
     }
 
-    public abstract FileHandle _getSandBoxFileHandle(String fileName);
-
     public static String getWorkPath() {
         return platformConnector._getWorkPath();
     }
-
-    protected abstract String _getWorkPath();
-
-    protected abstract void getPlatformDescriptionView(GenericCallBack<PlatformWebView> callBack);
 
     //Text Input
     public static void getSinglelineTextInput(Input.TextInputListener listener, int inputType, CharSequence title, CharSequence text, CharSequence hint) {
@@ -146,9 +124,75 @@ public abstract class PlatformConnector {
         platformConnector._getTextInput(true, listener, inputType, title.toString(), text.toString(), hint.toString());
     }
 
-    public abstract void _getTextInput(boolean singleLine, Input.TextInputListener listener, int inputType, String title, String text, String hint);
-
     public static void getMultilineTextInput(Input.TextInputListener listener, int inputType, CharSequence title, CharSequence text, CharSequence hint) {
         platformConnector._getTextInput(false, listener, inputType, title.toString(), text.toString(), hint.toString());
+    }
+
+    public static void takePhoto() {
+        platformConnector._takePhoto();
+    }
+
+    public static void recVideo() {
+        platformConnector._recVideo();
+    }
+
+    public static void recVoice() {
+        platformConnector._recVoice();
+    }
+
+    public static void shareInfos() {
+        platformConnector._shareInfos();
+    }
+
+    public static void navigate(Navigation navigation) {
+        platformConnector._navigate(navigation);
+    }
+
+    protected abstract String _createThumb(String path, int scaledWidth, String thumbPrefix);
+
+    protected abstract boolean _isTorchAvailable();
+
+    protected abstract boolean _isTorchOn();
+
+    protected abstract void _switchTorch();
+
+    protected abstract void descriptionViewToNull();
+
+    public abstract void openUrlExtern(String link);
+
+    protected abstract void _callQuit();
+
+    protected abstract void _postOnMainThread(NamedRunnable runnable);
+
+    protected abstract void _runOnBackGround(Runnable backgroundTask);
+
+    protected abstract void _playNotifySound(FileHandle soundFileHandle);
+
+    public abstract Bitmap getRealScaledSVG(String name, InputStream stream,
+                                            SvgScaleType scaleType, float scaleValue) throws IOException;
+
+    public abstract FileHandle _getSandBoxFileHandle(String fileName);
+
+    protected abstract String _getWorkPath();
+
+    protected abstract void getPlatformDescriptionView(GenericCallBack<PlatformWebView> callBack);
+
+    public abstract void _getTextInput(boolean singleLine, Input.TextInputListener listener, int inputType, String title, String text, String hint);
+
+    public abstract void _takePhoto();
+
+    public abstract void _recVideo();
+
+    public abstract void _recVoice();
+
+    public abstract void _shareInfos();
+
+    public abstract void _navigate(Navigation navigation);
+
+    public enum Navigation {Google, OsmAnd, OsmAnd2, Waze, Orux, Sygic, Navigon};
+
+    // SVG implementations #############################################################################################
+    public enum SvgScaleType {
+        SCALED_TO_WIDTH, SCALED_TO_HEIGHT, DPI_SCALED, NONE, SCALED_TO_WIDTH_OR_HEIGHT
     }
 }

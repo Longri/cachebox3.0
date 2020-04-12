@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 team-cachebox.de
+ * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 
 /**
  * Created by Longri on 11.05.2017.
  */
 public abstract class AbstractTableView extends AbstractView {
 
-    protected final VisTable contentTable = new VisTable();
+    protected final Catch_Table contentTable = new Catch_Table();
 
-    public AbstractTableView(de.longri.serializable.BitStore reader){
+    public AbstractTableView(de.longri.serializable.BitStore reader) {
         super(reader);
     }
 
@@ -36,7 +36,7 @@ public abstract class AbstractTableView extends AbstractView {
     }
 
     protected void create() {
-
+        super.create();
     }
 
     protected void boundsChanged(float x, float y, float width, float height) {

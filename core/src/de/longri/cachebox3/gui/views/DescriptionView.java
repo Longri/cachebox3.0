@@ -22,20 +22,21 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.PlatformWebView;
 import de.longri.cachebox3.apis.GroundspeakAPI;
-import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.ContactOwner;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.ListsAtGroundSpeak;
+import de.longri.cachebox3.gui.activities.DeleteCaches;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButtons;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.skin.styles.DescriptionViewStyle;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -55,6 +56,8 @@ import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
+import static de.longri.cachebox3.gui.dialogs.ButtonDialog.BUTTON_NEGATIVE;
+import static de.longri.cachebox3.gui.dialogs.ButtonDialog.BUTTON_POSITIVE;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -65,89 +68,83 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     private static long lastCacheId;
     private static float lastX, lastY, lastScale;
-    private final Array<String> nonLocalImages = new Array<String>();
-    private final Array<String> nonLocalImagesUrl = new Array<String>();
+    private final Array<String> nonLocalImages = new Array<>();
+    private final Array<String> nonLocalImagesUrl = new Array<>();
     private final AtomicBoolean FIRST = new AtomicBoolean(true);
     private PlatformWebView view;
-    private final GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack = new GenericHandleCallBack<String>() {
-        @Override
-        public boolean callBack(String url) {
-            log.debug("Load Url callback: {}", url);
-            if (FIRST.get()) {
-                FIRST.set(false);
-                boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
-            }
+    private final GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack = url -> {
+        log.debug("Load Url callback: {}", url);
+        if (FIRST.get()) {
+            FIRST.set(false);
+            boundsChanged(DescriptionView.this.getX(), DescriptionView.this.getY(), DescriptionView.this.getWidth(), DescriptionView.this.getHeight());
+        }
 
-            // contains fake://fake.de?GetAttInfo
-            if (url.contains("GetAttInfo")) {
-                // the url is missing the name=value on different devices (perhaps dependant from chromium), so we give that appended to the name and the blank
-                int pos = url.indexOf("+"); // the Blank is converted to + in url
-                // 25 is the length of "fake://fake.de?GetAttInfo"
-                if (pos > 0)
-                    // todo a nicer box
-                    MessageBox.show(Translation.get(url.substring(25, pos)));
-                // todo scale of Descriptionview changes sometime (bigger)after showing msgbox
-                return true;
-            } else if (url.contains("fake://fake.de/download")) {
-                // not yet tested
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
+        // contains fake://fake.de?GetAttInfo
+        if (url.contains("GetAttInfo")) {
+            // the url is missing the name=value on different devices (perhaps dependant from chromium), so we give that appended to the name and the blank
+            int pos = url.indexOf("+"); // the Blank is converted to + in url
+            // 25 is the length of "fake://fake.de?GetAttInfo"
+            if (pos > 0)
+                // todo a nicer box
+                MessageBox.show(Translation.get(url.substring(25, pos)));
+            // todo scale of Descriptionview changes sometime (bigger)after showing msgbox
+            return true;
+        } else if (url.contains("fake://fake.de/download")) {
+            // not yet tested
+            Thread thread = new Thread(() -> {
 
-                        GroundspeakAPI.getInstance().fetchMyCacheLimits();
-                        if (GroundspeakAPI.getInstance().APIError != OK) {
-                            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Friends"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
-                            // onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(1));
-                            return;
-                        }
-                        if (GroundspeakAPI.getInstance().isDownloadLimitExceeded()) {
-                            String msg;
-                            if (GroundspeakAPI.getInstance().isPremiumMember()) {
-                                msg = "You have left " + GroundspeakAPI.getInstance().fetchMyUserInfos().remaining + " full and " + GroundspeakAPI.getInstance().fetchMyUserInfos().remainingLite + " lite caches.";
-                                msg += "The time to wait is " + GroundspeakAPI.getInstance().fetchMyUserInfos().remainingTime + "/" + GroundspeakAPI.getInstance().fetchMyUserInfos().remainingLiteTime;
-                            } else {
-                                msg = "Upgrade to Geocaching.com Premium Membership today\n"
-                                        + "for as little at $2.50 per month\n"
-                                        + "to download the full details for up to 6000 caches per day,\n"
-                                        + "view all cache types in your area,\n"
-                                        + "and access many more benefits. \n"
-                                        + "Visit Geocaching.com to upgrade.";
-                            }
-
-                            //message = msg;
-                            //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(2));
-                            MessageBox.show(msg, Translation.get("download"), MessageBoxButtons.OK, MessageBoxIcon.Information, null);
-
-                            return;
-                        }
-
-                        if (!GroundspeakAPI.getInstance().isPremiumMember()) {
-                            String msg = "Download Details of this cache?\n";
-                            msg += "Full Downloads left: " + GroundspeakAPI.getInstance().fetchMyUserInfos().remaining + "\n";
-                            //message = msg;
-                            //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(3));
-                            return;
-                        } else {
-                            // call the download directly
-                            //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(4));
-                            return;
-                        }
+                GroundspeakAPI.getInstance().fetchMyCacheLimits();
+                if (GroundspeakAPI.getInstance().APIError != OK) {
+                    MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Friends"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
+                    // onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(1));
+                    return;
+                }
+                if (GroundspeakAPI.getInstance().isDownloadLimitExceeded()) {
+                    String msg;
+                    if (GroundspeakAPI.getInstance().isPremiumMember()) {
+                        msg = "You have left " + GroundspeakAPI.getInstance().fetchMyUserInfos().remaining + " full and " + GroundspeakAPI.getInstance().fetchMyUserInfos().remainingLite + " lite caches.";
+                        msg += "The time to wait is " + GroundspeakAPI.getInstance().fetchMyUserInfos().remainingTime + "/" + GroundspeakAPI.getInstance().fetchMyUserInfos().remainingLiteTime;
+                    } else {
+                        msg = "Upgrade to Geocaching.com Premium Membership today\n"
+                                + "for as little at $2.50 per month\n"
+                                + "to download the full details for up to 6000 caches per day,\n"
+                                + "view all cache types in your area,\n"
+                                + "and access many more benefits. \n"
+                                + "Visit Geocaching.com to upgrade.";
                     }
-                };
-                // pd = ProgressDialog.show(getContext(), "", "Download Description", true);
-                thread.start();
-                return true;
-            } else if (url.startsWith("http://") || url.startsWith("https://")) {
-                // Load Url in ext Browser
-                log.debug("Link clicked, don't load URL! show on ext browser");
-                PlatformConnector._openUrlExtern(url);
-                return true;
-            } else if (url.equals("about:blank")) {
-                // Load description
-                return false;
-            }
+
+                    //message = msg;
+                    //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(2));
+                    MessageBox.show(msg, Translation.get("download"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
+
+                    return;
+                }
+                /*
+                if (!GroundspeakAPI.getInstance().isPremiumMember()) {
+                    String msg = "Download Details of this cache?\n";
+                    msg = msg + ("Full Downloads left: " + GroundspeakAPI.getInstance().fetchMyUserInfos().remaining + "\n");
+                    message = msg;
+                    onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(3));
+                }
+                else {
+                    // call the download directly
+                    onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(4));
+                }
+                */
+            });
+            // pd = ProgressDialog.show(getContext(), "", "Download Description", true);
+            thread.start();
+            return true;
+        } else if (url.startsWith("http://") || url.startsWith("https://")) {
+            // Load Url in ext Browser
+            log.debug("Link clicked, don't load URL! show on ext browser");
+            PlatformConnector.callUrl(url);
+            return true;
+        } else if (url.equals("about:blank")) {
+            // Load description
             return false;
         }
+        return false;
     };
 
     public DescriptionView(BitStore reader) {
@@ -170,7 +167,11 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             for (Attributes attribute : abstractCache.getAttributes()) {
                 File result = new File(CB.WorkPath + "/data/Attributes/" + attribute.getImageName() + ".png");
                 // the url is missing the value, so we give that appended in the name and the blank
-                sb.append("<input name=\"GetAttInfo" + attribute.getImageName() + " \" height=\"40\" width=\"40\" type=\"image\" src=\"file://" + result.getAbsolutePath() + "\" value=\"1\">");
+                sb.append("<input name=\"GetAttInfo")
+                        .append(attribute.getImageName())
+                        .append(" \" height=\"40\" width=\"40\" type=\"image\" src=\"file://")
+                        .append(result.getAbsolutePath())
+                        .append("\" value=\"1\">");
             }
             if (sb.length > 0) {
                 return "<form action=\"Attr\">" + sb.toString() + "</form><br>";
@@ -214,13 +215,10 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
         if (view == null) {
             WAIT.set(true);
-            PlatformConnector.getDescriptionView(new GenericCallBack<PlatformWebView>() {
-                @Override
-                public void callBack(PlatformWebView descriptionView) {
-                    view = descriptionView;
-                    view.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
-                    WAIT.set(false);
-                }
+            PlatformConnector.getDescriptionView(descriptionView -> {
+                view = descriptionView;
+                view.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
+                WAIT.set(false);
             });
         }
 
@@ -299,8 +297,10 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                     });
                 }
             }
-            view.display();
-            view.setHtml(html);
+            if (view != null) {
+                view.display();
+                view.setHtml(html);
+            }
         }
 
 
@@ -394,90 +394,144 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public Menu getContextMenu() {
-        Menu cm = new Menu("DescriptionViewTitle");
+        return getContextMenu(true);
+    }
 
-        MenuItem mi;
-        boolean isSelected = (EventHandler.getSelectedCache() != null);
+    public Menu getContextMenu(boolean forDescription) {
+        Menu cacheContextMenu = new Menu("DescriptionViewTitle");
+        AbstractCache geoCache = EventHandler.getSelectedCache();
+        boolean selectedCacheIsSet = (geoCache != null);
 
-        boolean selectedCacheIsNoGC = false;
-        if (isSelected)
-            selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGcCode().toString().startsWith("GC");
-        mi = cm.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> new ReloadCacheActivity().show());
-        if (!isSelected)
-            mi.setEnabled(false);
-        if (selectedCacheIsNoGC)
-            mi.setEnabled(false);
-
-        mi = cm.addMenuItem("Favorite", CB.getSkin().getMenuIcon.favorit, () -> {
-            if (EventHandler.getSelectedCache() == null) {
-                new ButtonDialog("NoCacheSelect", Translation.get("NoCacheSelect"), Translation.get("Error"),
-                        MessageBoxButtons.OKCancel, MessageBoxIcon.Error, null).show();
-            } else {
-                AbstractCache selectedCache = EventHandler.getSelectedCache();
-
-                selectedCache.setFavorite(!selectedCache.isFavorite());
-                selectedCache.updateBooleanStore();
-
-                DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache, true);
-
-                // Update cacheList
-                Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
-                Database.Data.cacheList.add(selectedCache);
-
-                //update EventHandler
-                EventHandler.updateSelectedCache(selectedCache);
-                EventHandler.fire(new CacheListChangedEvent());
+        if (selectedCacheIsSet) {
+            boolean selectedCacheIsGC = geoCache.getGeoCacheCode().toString().startsWith("GC");
+            if (forDescription) {
+                cacheContextMenu.addCheckableMenuItem("ShowOriginalHtmlColor", "", CB.getSkin().getMenuIcon.showOriginalHtmlColor,
+                        geoCache.getShowOriginalHtmlColor(), this::showOriginalHtmlColor);
+                cacheContextMenu.addDivider(0);
             }
-        });
-        mi.setCheckable(true);
-        if (isSelected) {
-            mi.setChecked(EventHandler.getSelectedCache().isFavorite());
-        } else {
-            mi.setEnabled(false);
+            if (!forDescription) {
+                cacheContextMenu.addCheckableMenuItem("CacheContextMenuShortClickToggle", Config.CacheContextMenuShortClickToggle.getValue(), this::toggleShortClick);
+                /*
+                cacheContextMenu.addMoreMenu(ShowDrafts.getInstance().getContextMenu(), Translation.get("DraftsContextMenuTitle"), Translation.get("DraftsContextMenuTitle"));
+                 */
+            }
+            if (selectedCacheIsGC) {
+                cacheContextMenu.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> new ReloadCacheActivity().show());
+            }
+            cacheContextMenu.addMenuItem("Open_Cache_Link", CB.getSkin().getMenuIcon.gc_logo, () -> PlatformConnector.callUrl(geoCache.getUrl().toString()));
+            // CB.getSkin()."big" + geoCache.getType().name()),
+            // getType -> getGeoCacheType
+            cacheContextMenu.addCheckableMenuItem("Favorite", "", CB.getSkin().getMenuIcon.favorit, geoCache.isFavorite(), this::toggleAsFavorite);
+            cacheContextMenu.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon,
+                    () -> EditCache.getInstance(Database.Data, "MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).edit(geoCache));
+            if (selectedCacheIsGC) {
+                cacheContextMenu.addMenuItem("contactOwner", ContactOwner.getInstance().getIcon(), () -> ContactOwner.getInstance().execute());
+                cacheContextMenu.addMenuItem("GroundSpeakLists", ListsAtGroundSpeak.getInstance().getIcon(), () -> ListsAtGroundSpeak.getInstance().execute());
+            }
+            if (!Config.rememberedGeoCache.getValue().contentEquals(geoCache.getGeoCacheCode())) {
+                cacheContextMenu.addCheckableMenuItem("rememberGeoCache", "", null,
+                        Config.rememberedGeoCache.getValue().equals(geoCache.getGeoCacheCode().toString()), this::rememberGeoCache);
+            }
+            cacheContextMenu.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.deleteCaches, this::deleteGeoCache);
         }
 
-        cm.addMenuItem("AddToWatchList", CB.getSkin().getMenuIcon.todo, () -> {
-        }).setEnabled(false);
-        cm.addMenuItem("RemoveFromWatchList", CB.getSkin().getMenuIcon.todo, () -> {
-        }).setEnabled(false);
-        cm.addMenuItem("Solver", CB.getSkin().getMenuIcon.todo, () -> {
+        cacheContextMenu.addDivider(1);
+        cacheContextMenu.addMenuItem("Solver", CB.getSkin().getMenuIcon.todo, () -> {
             // replace icon with CB.getSkin().getMenuIcon.solverIcon
             SolverView view = new SolverView();
             CB.viewmanager.showView(view);
         }).setEnabled(false);
-        cm.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> {
-            EditCache.getInstance(Database.Data, "MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).edit(EventHandler.getSelectedCache());
-        }); // todo create/change icon
 
-        cm.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.todo, () -> {
-        }).setEnabled(false);
-
-        mi = cm.addMenuItem("ShowOriginalHtmlColor", CB.getSkin().getMenuIcon.showOriginalHtmlColor, () -> {
-            AbstractCache actCache = EventHandler.getSelectedCache();
-
-            actCache.setShowOriginalHtmlColor(!actCache.getShowOriginalHtmlColor());
-            actCache.updateBooleanStore();
-
-            DaoFactory.CACHE_DAO.updateDatabase(Database.Data, actCache, true);
-
-            // Update cacheList
-            Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
-            Database.Data.cacheList.add(actCache);
-
-            //update EventHandler
-            EventHandler.updateSelectedCache(actCache);
-
-            //reload html
-            CB.postOnGlThread(new NamedRunnable("reload DescriptionView") {
-                @Override
-                public void run() {
-                    showPlatformWebView();
-                }
-            });
-        });
-        mi.setCheckable(true);
-        mi.setChecked(EventHandler.getSelectedCache().getShowOriginalHtmlColor());
-
-        return cm;
+        return cacheContextMenu;
     }
+
+    private void toggleAsFavorite() {
+        AbstractCache selectedCache = EventHandler.getSelectedCache();
+
+        selectedCache.setFavorite(!selectedCache.isFavorite());
+        selectedCache.updateBooleanStore();
+
+        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, selectedCache, true);
+
+        // Update cacheList
+        Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
+        Database.Data.cacheList.add(selectedCache);
+
+        //update EventHandler
+        EventHandler.updateSelectedCache(selectedCache);
+        EventHandler.fire(new CacheListChangedEvent());
+    }
+
+    private void rememberGeoCache() {
+        ButtonDialog mb = new ButtonDialog("", Translation.get("rememberThisOrSelectRememberedGeoCache"), Translation.get("rememberGeoCacheTitle"),
+                MessageBoxButton.AbortRetryIgnore, MessageBoxIcon.Question, (which, data) -> {
+            if (which == BUTTON_POSITIVE) {
+                Config.rememberedGeoCache.setValue(EventHandler.getSelectedCache().getGeoCacheCode().toString());
+                Config.AcceptChanges();
+            } else if (which == BUTTON_NEGATIVE) {
+                Config.rememberedGeoCache.setValue("");
+                Config.AcceptChanges();
+            } else {
+                AbstractCache rememberedCache = Database.Data.cacheList.GetCacheByGcCode(Config.rememberedGeoCache.getValue());
+                if (rememberedCache != null) {
+                    EventHandler.fireSelectedWaypointChanged(rememberedCache, null);
+                }
+            }
+            return true;
+        });
+        mb.setButtonText("rememberGeoCache", "selectGeoCache", "forgetGeoCache");
+        mb.show();
+    }
+
+    private void showOriginalHtmlColor() {
+        AbstractCache actCache = EventHandler.getSelectedCache();
+
+        actCache.setShowOriginalHtmlColor(!actCache.getShowOriginalHtmlColor());
+        actCache.updateBooleanStore();
+
+        DaoFactory.CACHE_DAO.updateDatabase(Database.Data, actCache, true);
+
+        // Update cacheList
+        Database.Data.cacheList.removeValue(EventHandler.getSelectedCache(), true);
+        Database.Data.cacheList.add(actCache);
+
+        //update EventHandler
+        EventHandler.updateSelectedCache(actCache);
+
+        //reload html
+        CB.postOnGlThread(new NamedRunnable("reload DescriptionView") {
+            @Override
+            public void run() {
+                showPlatformWebView();
+            }
+        });
+    }
+
+    private void deleteGeoCache() {
+        ButtonDialog mb = new ButtonDialog("", Translation.get("sure"), Translation.get("question"), MessageBoxButton.OKCancel, MessageBoxIcon.Question,
+                (which, data) -> {
+                    if (which == BUTTON_POSITIVE) {
+                        new DeleteCaches().deleteCaches("SELECT * FROM CacheCoreInfo core WHERE Id = " + EventHandler.getSelectedCache().getId());
+                        EventHandler.fire(new CacheListChangedEvent());
+                        EventHandler.fireSelectedWaypointChanged(Database.Data.cacheList.first(), null);
+                    }
+                    return true;
+                });
+        mb.show();
+    }
+
+
+    private void toggleShortClick() {
+        ButtonDialog mb = new ButtonDialog("", Translation.get("CacheContextMenuShortClickToggleQuestion"), Translation.get("CacheContextMenuShortClickToggleTitle"), MessageBoxButton.YesNo, MessageBoxIcon.Question,
+                (btnNumber, data) -> {
+                    if (btnNumber == BUTTON_POSITIVE)
+                        Config.CacheContextMenuShortClickToggle.setValue(false);
+                    else
+                        Config.CacheContextMenuShortClickToggle.setValue(true);
+                    Config.AcceptChanges();
+                    return true;
+                });
+        mb.show();
+    }
+
 }
