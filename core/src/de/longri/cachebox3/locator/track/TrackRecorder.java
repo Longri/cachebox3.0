@@ -34,54 +34,58 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class TrackRecorder implements PositionChangedListener {
+    private static TrackRecorder trackRecorder;
     final static org.slf4j.Logger log = LoggerFactory.getLogger(TrackRecorder.class);
+    private final String gpxHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx version=\"1.0\" creator=\"cachebox track recorder\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.topografix.com/GPX/1/0\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n";
+    public boolean pauseRecording = false;
+    public boolean recording = false;
+    public double saveAltitude = 0;
+    public Coordinate lastRecordedPosition = null;
+    String mFriendlyName = "";
+    String mMediaPath = "";
+    Coordinate mMediaCoord = null;
+    String mTimestamp = "";
+    private FileHandle gpxfile = null;
+    private boolean writeAnnotateMedia = false;
 
-    public final static TrackRecorder INSTANCE = new TrackRecorder();
+    private int insertPos = 24;
 
+    private boolean mustWriteMedia = false;
+    private boolean mustRecPos = false;
+    private boolean writePos = false;
 
     private TrackRecorder() {
     }
 
-    private FileHandle gpxfile = null;
-    public boolean pauseRecording = false;
-    public boolean recording = false;
-    public double SaveAltitude = 0;
-
-
-    public Coordinate LastRecordedPosition = null;
+    public static TrackRecorder getInstance() {
+        if (trackRecorder == null) trackRecorder = new TrackRecorder();
+        return trackRecorder;
+    }
 
     public void startRecording() {
 
         EventHandler.add(this);
 
-        CB.actRoute = new Track(Translation.get("actualTrack"), Color.BLUE);
-        CB.actRoute.ShowRoute = true;
-        CB.actRoute.IsActualTrack = true;
-        CB.actRouteCount = 0;
-        CB.actRoute.TrackLength = 0;
-        CB.actRoute.AltitudeDifference = 0;
+        CB.currentRoute = new Track(Translation.get("actualTrack"));
+        CB.currentRoute.setColor(Color.BLUE);
+        CB.currentRoute.setVisible(true);
+        CB.currentRoute.setActualTrack(true);
+        CB.currentRouteCount = 0;
+        CB.currentRoute.setTrackLength(0);
+        CB.currentRoute.setAltitudeDifference(0);
 
         String directory = Settings.TrackFolder.getValue();
 
         if (gpxfile == null) {
             gpxfile = Gdx.files.absolute(directory + "/" + generateTrackFileName());
             gpxfile.parent().mkdirs();
-
-            writeAppend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            writeAppend(
-                    "<gpx version=\"1.0\" creator=\"cachebox track recorder\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.topografix.com/GPX/1/0\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n");
-            writeAppend("<time>" + getDateTimeString() + "</time>\n");
+            gpxfile.writeString(gpxHeader + "<time>" + getDateTimeString() + "</time>\n<trk><trkseg>\n</trkseg>\n</trk>\n</gpx>\n", true);
             // set real bounds or basecamp (mapsource) will not import this track
-            // writeAppend("<bounds minlat=\"-90\" minlon=\"-180\" maxlat=\"90\" maxlon=\"180\"/>\n");
-            writeAppend("<trk><trkseg>\n");
-
-            writeAppend("</trkseg>\n");
-            writeAppend("</trk>\n");
-
-            writeAppend("</gpx>\n");
+            // "<bounds minlat=\"-90\" minlon=\"-180\" maxlat=\"90\" maxlon=\"180\"/>\n";
 
         }
 
@@ -91,31 +95,16 @@ public class TrackRecorder implements PositionChangedListener {
         // updateRecorderButtonAccessibility();
     }
 
-    private void writeAppend(String txt) {
-        if (gpxfile == null) return;
-        gpxfile.writeString(txt, true);
-    }
-
     private String getDateTimeString() {
         Date timestamp = new Date();
-        SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         datFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         String sDate = datFormat.format(timestamp);
-        datFormat = new SimpleDateFormat("HH:mm:ss");
+        datFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
         datFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         sDate += "T" + datFormat.format(timestamp) + "Z";
         return sDate;
     }
-
-    private boolean writeAnnotateMedia = false;
-
-    private int insertPos = 24;
-
-    private boolean mustWriteMedia = false;
-    String mFriendlyName = "";
-    String mMediaPath = "";
-    Coordinate mMediaCoord = null;
-    String mTimestamp = "";
 
     public void annotateMedia(final String friendlyName, final String mediaPath, final Coordinate location, final String timestamp) {
         writeAnnotateMedia = true;
@@ -131,9 +120,9 @@ public class TrackRecorder implements PositionChangedListener {
         if (gpxfile == null)
             return;
 
-        String xml = "<wpt lat=\"" + String.valueOf(location.getLatitude()) + "\" lon=\"" + String.valueOf(location.getLongitude())
-                + "\">\n" + "   <ele>" + String.valueOf(location.getElevation()) + "</ele>\n" + "   <time>" + timestamp + "</time>\n"
-                + "   <name>" + friendlyName + "</name>\n" + "   <link href=\"" + mediaPath + "\" />\n" + "</wpt>\n";
+        String xml = "<wpt lat=\"" + location.getLatitude() + "\" lon=\"" + location.getLongitude()
+                + "\">\n   <ele>" + location.getElevation() + "</ele>\n   <time>" + timestamp + "</time>\n"
+                + "   <name>" + friendlyName + "</name>\n   <link href=\"" + mediaPath + "\" />\n</wpt>\n";
 
         RandomAccessFile rand;
         try {
@@ -172,18 +161,15 @@ public class TrackRecorder implements PositionChangedListener {
         positionChanged(new PositionChangedEvent(location, true));
     }
 
-    private boolean mustRecPos = false;
-    private boolean writePos = false;
-
     public void pauseRecording() {
         pauseRecording = !pauseRecording;
     }
 
     public void stopRecording() {
         EventHandler.remove(this);
-        if (CB.actRoute != null) {
-            CB.actRoute.IsActualTrack = false;
-            CB.actRoute.Name = Translation.get("recordetTrack");
+        if (CB.currentRoute != null) {
+            CB.currentRoute.setActualTrack(false);
+            CB.currentRoute.setName(Translation.get("recordetTrack"));
         }
         pauseRecording = false;
         recording = false;
@@ -196,7 +182,6 @@ public class TrackRecorder implements PositionChangedListener {
 
         return "Track_" + sDate + ".gpx";
     }
-
 
     @Override
     public void positionChanged(PositionChangedEvent event) {
@@ -211,20 +196,20 @@ public class TrackRecorder implements PositionChangedListener {
         //  TODO implement
         Coordinate newCoord = null;
 
-        if (LastRecordedPosition == null) { // Warte bis 2 gültige Koordinaten vorliegen
-            LastRecordedPosition = newCoord;
-            SaveAltitude = newCoord.getElevation();
+        if (lastRecordedPosition == null) { // Warte bis 2 gültige Koordinaten vorliegen
+            lastRecordedPosition = newCoord;
+            saveAltitude = newCoord.getElevation();
         } else {
             writePos = true;
             Coordinate newPoint;
-            double AltDiff = 0;
+            double altitudeDifference = 0;
 
             // wurden seit dem letzten aufgenommenen Wegpunkt mehr als x Meter
             // zurückgelegt? Wenn nicht, dann nicht aufzeichnen.
             float[] dist = new float[1];
 
-            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, LastRecordedPosition.getLatitude(),
-                    LastRecordedPosition.getLongitude(), event.pos.getLatitude(), event.pos.getLongitude(), dist);
+            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, lastRecordedPosition.getLatitude(),
+                    lastRecordedPosition.getLongitude(), event.pos.getLatitude(), event.pos.getLongitude(), dist);
             float cachedDistance = dist[0];
 
             if (cachedDistance > Config.TrackDistance.getValue()) {
@@ -267,7 +252,7 @@ public class TrackRecorder implements PositionChangedListener {
                 newPoint = new Coordinate(event.pos.getLatitude(), event.pos.getLongitude(), newCoord.getElevation(),
                         newCoord.getHeading(), new Date());
 
-                CB.actRoute.Points.add(newPoint);
+                CB.currentRoute.getTrackPoints().add(newPoint);
 
                 // notify TrackListView
                 //TODO notify TrackListView
@@ -275,13 +260,13 @@ public class TrackRecorder implements PositionChangedListener {
 //					TrackListView.that.notifyActTrackChanged();
 //
 //				RouteOverlay.RoutesChanged();
-                LastRecordedPosition = newCoord;
-                CB.actRoute.TrackLength += cachedDistance;
+                lastRecordedPosition = newCoord;
+                CB.currentRoute.setTrackLength(CB.currentRoute.getTrackLength() + cachedDistance);
 
-                AltDiff = Math.abs(SaveAltitude - newCoord.getElevation());
-                if (AltDiff >= 25) {
-                    CB.actRoute.AltitudeDifference += AltDiff;
-                    SaveAltitude = newCoord.getElevation();
+                altitudeDifference = Math.abs(saveAltitude - newCoord.getElevation());
+                if (altitudeDifference >= 25) {
+                    CB.currentRoute.setAltitudeDifference(CB.currentRoute.getAltitudeDifference() + altitudeDifference);
+                    saveAltitude = newCoord.getElevation();
                 }
                 writePos = false;
 

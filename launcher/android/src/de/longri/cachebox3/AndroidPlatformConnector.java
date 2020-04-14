@@ -42,6 +42,8 @@ import com.badlogic.gdx.backends.android.AndroidEventListener;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
@@ -56,7 +58,6 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.TimeZone;
 
 import static android.content.Intent.ACTION_VIEW;
@@ -64,7 +65,7 @@ import static android.os.Build.VERSION_CODES.N;
 
 /**
  * Created by Longri on 17.07.16.
- * todo NavigateTo(); recVoice(); shareInfos();
+ * todo recVoice(): create microphoneView;
  */
 public class AndroidPlatformConnector extends PlatformConnector {
     final static Logger log = LoggerFactory.getLogger(AndroidPlatformConnector.class);
@@ -83,6 +84,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
     private String tempMediaPath;
     private Uri videoUri;
     private String recordingStartTime;
+    private Coordinate recordingStartCoordinate;
     private AndroidEventListener handlingTakePhoto, handlingRecordedVideo;
     private ExtAudioRecorder extAudioRecorder;
 
@@ -111,8 +113,8 @@ public class AndroidPlatformConnector extends PlatformConnector {
                             }
                         }
 
-                                        /*
-                                        todo
+                        // todo
+                        /*
                                         // for the photo to show within spoilers
                                         if (EventHandler.isSetSelectedCache()) {
                                             EventHandler.getSelectedCache().loadSpoilerRessources();
@@ -121,26 +123,32 @@ public class AndroidPlatformConnector extends PlatformConnector {
 
                                         ViewManager.that.reloadSprites(false);
 
-                                        // track annotation
-                                        String TrackFolder = Config.TrackFolder.getValue();
-                                        String relativPath = FileIO.getRelativePath(Config.UserImageFolder.getValue(), TrackFolder, "/");
-                                        Location lastLocation = Locator.getInstance().getLastSavedFineLocation();
-                                        if (lastLocation == null) {
-                                            lastLocation = Locator.getInstance().getLocation(Location.ProviderType.any);
-                                            if (lastLocation == null) {
-                                                log.info("No (GPS)-Location for Trackrecording.");
-                                                return;
-                                            }
-                                        }
+                         */
 
-                                        // Da ein Foto eine Momentaufnahme ist, kann hier die Zeit und die Koordinaten nach der Aufnahme verwendet werden.
-                                        TrackRecorder.AnnotateMedia(mediaFileNameWithoutExtension + ".jpg",
-                                                relativPath + "/" + mediaFileNameWithoutExtension + ".jpg",
-                                                lastLocation,
-                                                Global.GetTrackDateTimeString());
-                                         */
+                        // track annotation
+                        String TrackFolder = Config.TrackFolder.getValue();
+                        String relativPath = Utils.getRelativePath(Config.UserImageFolder.getValue(), TrackFolder, "/");
+                        Coordinate lastLocation = EventHandler.getMyPosition(); // Locator.getInstance().getLastSavedFineLocation();
+                        if (lastLocation == null) {
+                            /*
+                            lastLocation = Locator.getInstance().Location(Location.ProviderType.any);
+                            if (lastLocation == null) {
+                                log.info("No (GPS)-r TrackrecordingLocation for.");
+                                return;
+                            }
+                             */
+                            log.info("No (GPS)-r Trackrecording Location for photo.");
+                            return;
+                        }
+
+                        // Da ein Foto eine Momentaufnahme ist, kann hier die Zeit und die Koordinaten nach der Aufnahme verwendet werden.
+                        TrackRecorder.getInstance().annotateMedia(mediaFileNameWithoutExtension + ".jpg",
+                                relativPath + "/" + mediaFileNameWithoutExtension + ".jpg",
+                                lastLocation,
+                                getTrackDateTimeString());
+
                     } catch (Exception e) {
-                        log.error(e.getLocalizedMessage());
+                        log.error(e.toString());
                     }
                 } else {
                     log.error("Intent Take Photo resultCode: " + resultCode);
@@ -179,15 +187,15 @@ public class AndroidPlatformConnector extends PlatformConnector {
                                 log.error("move from " + recordedVideoFilePath + " to " + destinationName + " failed");
                             } else {
                                 log.info("Video saved at " + destinationName);
-                                /*
+
                                 // track annotation
                                 String TrackFolder = Config.TrackFolder.getValue();
                                 String relativPath = Utils.getRelativePath(Config.UserImageFolder.getValue(), TrackFolder, "/");
-                                TrackRecorder.AnnotateMedia(mediaFileNameWithoutExtension + "." + ext,
+                                TrackRecorder.getInstance().annotateMedia(mediaFileNameWithoutExtension + "." + ext,
                                         relativPath + "/" + mediaFileNameWithoutExtension + "." + ext,
                                         recordingStartCoordinate, recordingStartTime);
 
-                                 */
+
                             }
                         }
                     } catch (Exception e) {
@@ -458,6 +466,14 @@ public class AndroidPlatformConnector extends PlatformConnector {
 
     public void _takePhoto() {
         log.info("takePhoto start " + EventHandler.getSelectedCache());
+        if (application.getActivity() == null) return;
+        File mediaDir = application.getActivity().getExternalFilesDir("User/Media");
+        if (mediaDir == null) return;
+        tempMediaPath = mediaDir.getAbsolutePath() + "/"; // oder Environment.DIRECTORY_PICTURES
+        if (!Utils.createDirectory(tempMediaPath)) {
+            log.error("can't create " + tempMediaPath);
+            return;
+        }
         try {
             // define the file-name to save photo taken by Camera activity
             String directory = Config.UserImageFolder.getValue();
@@ -473,17 +489,12 @@ public class AndroidPlatformConnector extends PlatformConnector {
                 cacheName = "Image";
             }
             mediaFileNameWithoutExtension = new SimpleDateFormat("yyyy-MM-dd HHmmss", Locale.US).format(new Date()) + " " + cacheName;
-            tempMediaPath = Objects.requireNonNull(application.getActivity().getExternalFilesDir("User/Media")).getAbsolutePath() + "/"; // oder Environment.DIRECTORY_PICTURES
-            if (!Utils.createDirectory(tempMediaPath)) {
-                log.error("can't create " + tempMediaPath);
-                return;
-            }
             String tempMediaPathAndName = tempMediaPath + mediaFileNameWithoutExtension + ".jpg";
             try {
                 FileHandle fh = new FileHandle(tempMediaPathAndName);
-                if (!fh.exists()) fh.file().createNewFile();
+                if (!fh.file().createNewFile()) log.error("file already exists: " + tempMediaPathAndName);
             } catch (Exception e) {
-                log.error("can't create " + tempMediaPathAndName + "\r" + e.getLocalizedMessage());
+                log.error("can't create " + tempMediaPathAndName + "\r" + e.toString());
                 return;
             }
 
@@ -530,11 +541,7 @@ public class AndroidPlatformConnector extends PlatformConnector {
 
             // Da ein Video keine Momentaufnahme ist, muss die Zeit und die Koordinaten beim Start der Aufnahme verwendet werden.
             recordingStartTime = getTrackDateTimeString();
-            /*
-            todo
-            private static Location recordingStartCoordinate;
-            recordingStartCoordinate = Locator.getInstance().getLocation(Location.ProviderType.GPS);
-             */
+            recordingStartCoordinate = EventHandler.getMyPosition(); // Locator.getInstance().getLocation(Location.ProviderType.GPS);
 
             ContentValues values = new ContentValues();
             values.put(MediaStore.Video.Media.TITLE, "");

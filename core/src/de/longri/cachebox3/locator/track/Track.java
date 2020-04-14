@@ -20,27 +20,85 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
 
 public class Track {
-    public Array<Coordinate> Points;
-    public CharSequence Name;
-    public String FileName;
-    public boolean ShowRoute = false;
-    public boolean IsActualTrack = false;
-    public Color mColor;
-    public double TrackLength;
-    public double AltitudeDifference;
+    private Array<Coordinate> trackPoints;
+    private CharSequence name;
+    private CharSequence fileName;
+    private Color color;
+    private boolean isVisible;
+    private boolean isActualTrack;
+    private double trackLength;
+    private double altitudeDifference;
 
-    public Track(CharSequence name, Color color) {
-        Points = new Array<>();
-        Name = name;
-        mColor = color;
+
+    public Track(CharSequence _name) {
+        trackPoints = new Array<>();
+        name = _name;
+        color = Color.MAGENTA; // or do config?
+        fileName = "";
+        trackLength = 0;
+        isVisible = false;
+        isActualTrack = false;
+        altitudeDifference = 0;
+    }
+
+    public String getName() {
+        return name.toString();
+    }
+
+    public void setName(CharSequence name) {
+        this.name = name;
     }
 
     public Color getColor() {
-        return mColor;
+        return color;
     }
 
-    public void setColor(Color color) {
-        mColor = color;
+    public void setColor(Color _color) {
+        color = _color;
+    }
+
+    public String getFileName() {
+        return fileName.toString();
+    }
+
+    public void setFileName(String _fileName) {
+        fileName = _fileName;
+    }
+
+    public Array<Coordinate> getTrackPoints() {
+        return trackPoints;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
+
+    public boolean isActualTrack() {
+        return isActualTrack;
+    }
+
+    public void setActualTrack(boolean actualTrack) {
+        isActualTrack = actualTrack;
+    }
+
+    public double getTrackLength() {
+        return trackLength;
+    }
+
+    public void setTrackLength(double trackLength) {
+        this.trackLength = trackLength;
+    }
+
+    public double getAltitudeDifference() {
+        return altitudeDifference;
+    }
+
+    public void setAltitudeDifference(double altitudeDifference) {
+        this.altitudeDifference = altitudeDifference;
     }
 
 }

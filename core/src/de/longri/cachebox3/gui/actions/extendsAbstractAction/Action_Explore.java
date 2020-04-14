@@ -23,14 +23,11 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.translation.Translation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 21.06.19.
  */
 public class Action_Explore extends AbstractAction {
-    final static Logger log = LoggerFactory.getLogger(Action_Explore.class);
 
     public Action_Explore() {
         super("FileXplore", MenuID.AID_FILE_X_PLORE);

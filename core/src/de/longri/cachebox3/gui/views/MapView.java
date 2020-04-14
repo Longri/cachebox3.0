@@ -1172,12 +1172,12 @@ public class MapView extends AbstractView {
     //todo ISSUE (#112 Record Track)
     private void showTrackRecordMenu() {
         Menu cm2 = new Menu("TrackRecordMenuTitle");
-        cm2.addMenuItem("start", null, () -> TrackRecorder.INSTANCE.startRecording()).setEnabled(!TrackRecorder.INSTANCE.recording);
-        if (TrackRecorder.INSTANCE.pauseRecording)
-            cm2.addMenuItem("continue", null, () -> TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
+        cm2.addMenuItem("start", null, () -> TrackRecorder.getInstance().startRecording()).setEnabled(!TrackRecorder.getInstance().recording);
+        if (TrackRecorder.getInstance().pauseRecording)
+            cm2.addMenuItem("continue", null, () -> TrackRecorder.getInstance().pauseRecording()).setEnabled(TrackRecorder.getInstance().recording);
         else
-            cm2.addMenuItem("pause", null, () -> TrackRecorder.INSTANCE.pauseRecording()).setEnabled(TrackRecorder.INSTANCE.recording);
-        cm2.addMenuItem("stop", null, () -> TrackRecorder.INSTANCE.stopRecording()).setEnabled(TrackRecorder.INSTANCE.recording | TrackRecorder.INSTANCE.pauseRecording);
+            cm2.addMenuItem("pause", null, () -> TrackRecorder.getInstance().pauseRecording()).setEnabled(TrackRecorder.getInstance().recording);
+        cm2.addMenuItem("stop", null, () -> TrackRecorder.getInstance().stopRecording()).setEnabled(TrackRecorder.getInstance().recording | TrackRecorder.getInstance().pauseRecording);
         cm2.show();
     }
 

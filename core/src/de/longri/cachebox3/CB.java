@@ -95,8 +95,6 @@ public class CB {
     public static final MapState lastMapStateBeforeCar = new MapState();
     public static final String br = System.getProperty("line.separator");
     public static final String fs = System.getProperty("file.separator");
-    public static final String AboutMsg = "Team Cachebox (2011-2016)" + br + "www.team-cachebox.de" + br + "Cache Icons Copyright 2009," + br + "Groundspeak Inc. Used with permission";
-    public static final String splashMsg = AboutMsg + br + br + "POWERED BY:";
     public final static SensorIO sensoerIO = new SensorIO();
     static final Logger log = LoggerFactory.getLogger(CB.class);
     static final Logger errorLog = LoggerFactory.getLogger("CB.errorLog");
@@ -125,13 +123,13 @@ public class CB {
     public static FileHandle WorkPathFileHandle;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
     public static ScaledSizes scaledSizes;
-    public static Track actRoute;
-    public static int actRouteCount;
+    public static Track currentRoute;
     public static LinkedHashMap<Object, TextureRegion> textureRegionMap;
     public static Image CB_Logo;
     public static Image backgroundImage;
     public static boolean isBackground = false;
     public static ThemeUsage currentThemeUsage = ThemeUsage.day;
+    public static int currentRouteCount = 0;
     static boolean mapScaleInitial = false;
     private static IRenderTheme actTheme;
     private static float globalScale = 1;

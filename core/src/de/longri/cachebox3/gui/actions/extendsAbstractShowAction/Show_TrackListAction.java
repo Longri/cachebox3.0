@@ -33,7 +33,6 @@ public class Show_TrackListAction extends AbstractShowAction {
     @Override
     public void execute() {
         if (isActVisible()) return;
-
         TrackListView view = new TrackListView();
         CB.viewmanager.showView(view);
     }
