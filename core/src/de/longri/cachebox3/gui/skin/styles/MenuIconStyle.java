@@ -90,7 +90,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable reloadCacheIcon;
     public Drawable deleteCaches;
     public Drawable deleteFilter;
-    public Drawable deleteArchieved;
+    public Drawable deleteArchived;
     public Drawable deleteFounds;
     public Drawable gpxFile;
     public Drawable friends;

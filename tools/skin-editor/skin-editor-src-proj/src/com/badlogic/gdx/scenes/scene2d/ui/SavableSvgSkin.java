@@ -31,7 +31,6 @@ public class SavableSvgSkin extends SvgSkin {
         super(forceCreateNewAtlas, name, storageType, skinFolder);
     }
 
-
     /**
      * Store all resources in the specified skin JSON file.
      */

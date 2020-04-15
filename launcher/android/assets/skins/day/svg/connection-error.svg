@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="513" height="513" viewBox="0 0 513.00 513.00" enable-background="new 0 0 513.00 513.00" xml:space="preserve">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full" width="513" height="513"
+     viewBox="0 0 513.00 513.00" enable-background="new 0 0 513.00 513.00" xml:space="preserve">
 	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.814661" y1="0.888576" x2="1.81466" y2="0.888576" gradientTransform="rotate(231.000031 0.814661 0.888576)">
 		<stop offset="0" stop-color="#425E7E" stop-opacity="1"/>
 		<stop offset="0.893501" stop-color="#70ACF1" stop-opacity="1"/>

@@ -656,6 +656,10 @@
       "path": "svg/attended.svg",
       "scale": 0.1
     },
+    "autosort": {
+      "path": "svg/autosort.svg",
+      "scale": 1.4736
+    },
     "baseMapFreizeitkarte": {
       "path": "svg/baseMapFreizeitkarte.svg",
       "scale": 0.18
@@ -840,6 +844,10 @@
       "path": "svg/compass_1_scale.svg",
       "scale": 0.85
     },
+    "contactOwner": {
+      "path": "svg/contactOwner.svg",
+      "scale": 1.4737
+    },
     "cursor": {
       "path": "svg/cursor.svg",
       "scale": 1
@@ -851,6 +859,10 @@
     "database": {
       "path": "svg/database.svg",
       "scale": 0.19
+    },
+    "dayNight": {
+      "path": "svg/dayNight.svg",
+      "scale": 1.4737
     },
     "db": {
       "path": "svg/db.svg",
@@ -904,8 +916,8 @@
       "path": "svg/deleteIcon.svg",
       "scale": 0.18
     },
-    "delete_Archieved": {
-      "path": "svg/delete_Archieved.svg",
+    "delete_Archived": {
+      "path": "svg/delete_Archived.svg",
       "scale": 0.18
     },
     "delete_Caches": {
@@ -983,6 +995,10 @@
     "downloadLogs": {
       "path": "svg/downloadLogs.svg",
       "scale": 0.18
+    },
+    "e_mailToOwner": {
+      "path": "svg/e_mailToOwner.svg",
+      "scale": 1.4737
     },
     "earth": {
       "path": "svg/earth.svg",
@@ -1143,6 +1159,10 @@
     "import": {
       "path": "svg/import.svg",
       "scale": 0.21
+    },
+    "import_PQ": {
+      "path": "svg/import_PQ.svg",
+      "scale": 1.55
     },
     "infoIcon": {
       "path": "svg/infoIcon.svg",
@@ -1648,6 +1668,10 @@
       "path": "svg/menu_for.svg",
       "scale": 0.3
     },
+    "messageToOwner": {
+      "path": "svg/messageToOwner.svg",
+      "scale": 0.8484
+    },
     "mesureWp": {
       "path": "svg/mesureWp.svg",
       "scale": 0.18
@@ -1700,6 +1724,10 @@
       "path": "svg/nav_selected.svg",
       "scale": 0.72
     },
+    "navigate": {
+      "path": "svg/navigate.svg",
+      "scale": 1.4736
+    },
     "needs_archived": {
       "path": "svg/needs_archived.svg",
       "scale": 0.12
@@ -1739,6 +1767,10 @@
     "other": {
       "path": "svg/other.svg",
       "scale": 0.25
+    },
+    "ownerLogTypes": {
+      "path": "svg/ownerLogTypes.svg",
+      "scale": 1.4
     },
     "owner_maintenance": {
       "path": "svg/owner_maintenance.svg",
@@ -1804,6 +1836,14 @@
       "path": "svg/settings_icon.svg",
       "scale": 0.18
     },
+    "shareInfos": {
+      "path": "svg/shareInfos.svg",
+      "scale": 1.4737
+    },
+    "showOriginalHtmlColor": {
+      "path": "svg/showOriginalHtmlColor.svg",
+      "scale": 1.4737
+    },
     "showWp": {
       "path": "svg/showWp.svg",
       "scale": 0.18
@@ -1851,6 +1891,10 @@
     "star_half": {
       "path": "svg/star_half.svg",
       "scale": 0.25
+    },
+    "takePhoto": {
+      "path": "svg/takePhoto.svg",
+      "scale": 1.4737
     },
     "target": {
       "path": "svg/target.svg",
@@ -1904,6 +1948,10 @@
       "path": "svg/traddi.svg",
       "scale": 0.21
     },
+    "videoIcon": {
+      "path": "svg/videoIcon.svg",
+      "scale": 1.4736
+    },
     "view": {
       "path": "svg/view.svg",
       "scale": 0.21
@@ -1915,6 +1963,10 @@
     "virtualSize": {
       "path": "svg/virtualSize.svg",
       "scale": 0.25
+    },
+    "voiceRecIcon": {
+      "path": "svg/voiceRecIcon.svg",
+      "scale": 1.4736
     },
     "warning": {
       "path": "svg/warning.svg",
@@ -2358,7 +2410,8 @@
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
     "default": {
       "up": "drawable_default_button",
-      "down": "drawable_default_button_pressed"
+      "down": "drawable_default_button_pressed",
+      "disabled": "default_button_disabled_9_Patch"
     },
     "floatControl": {
       "up": "drawable_default_button",
@@ -2507,13 +2560,13 @@
       "vScrollKnob": "sliderKnob"
     },
     "spoilerGallery": {
-      "firstItem": "NULL_DRAWABLE",
-      "secondItem": "NULL_DRAWABLE",
-      "selectedItem": "NULL_DRAWABLE",
+      "firstItem": "listrec_first_drawable",
+      "secondItem": "listrec_second_drawable",
+      "selectedItem": "listrec_selected_drawable",
       "pad": 1,
       "emptyFont": "coordinateValueFont",
       "emptyFontColor": "settings_default_value_font_color",
-      "background": "NULL_DRAWABLE"
+      "background": "list_background_drawable"
     },
     "spoilerOverview": {
       "firstItem": "listrec_first_drawable",
@@ -2522,7 +2575,7 @@
       "pad": 1,
       "emptyFont": "coordinateValueFont",
       "emptyFontColor": "settings_default_value_font_color",
-      "background": "NULL_DRAWABLE"
+      "background": "list_background_drawable"
     }
   },
   "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
@@ -2872,11 +2925,13 @@
       "target": "target",
       "mapLayer": "map-layer",
       "deleteAllDrafts": "deleteIcon",
+      "ownerLogTypes": "ownerLogTypes",
       "edit": "edit",
       "fileTransfer": "fileTransfer",
       "favPoint": "favpointFilter",
       "theme": "map_theme",
       "themeStyle": "map_theme_setting",
+      "import_PQ": "import_PQ",
       "favorit": "favIcon",
       "docIcon": "description",
       "addCacheIcon": "addCacheIcon",
@@ -2893,13 +2948,19 @@
       "showWp": "showWp",
       "editWp": "editWp",
       "mesureWp": "mesureWp",
+      "navigate": "navigate",
       "draft": "QuickDraft",
+      "videoIcon": "videoIcon",
+      "voiceRecIcon": "voiceRecIcon",
       "hintIconOn": "hintOn",
       "hintIconOff": "hintOff",
       "my_parking": "mapMyParking",
+      "autoSortOffIcon": "autosort",
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",
+      "takePhoto": "takePhoto",
+      "dayNight": "dayNight",
       "uploadDraft": "UPLOADFIELDNOTE",
       "manageDB": "database",
       "settingsIcon": "settings_icon",
@@ -2923,7 +2984,7 @@
       "reloadCacheIcon": "reload_cache",
       "deleteCaches": "delete_Caches",
       "deleteFilter": "delete_Filter",
-      "deleteArchieved": "delete_Archieved",
+      "deleteArchived": "delete_Archived",
       "deleteFounds": "delete_Founds",
       "gpxFile": "gpxFileIcon",
       "friends": "friends",
@@ -2931,7 +2992,12 @@
       "downloadLogs": "downloadLogs",
       "downloadFriendsLogs": "downloadFriendsLogs",
       "downloadLogImages": "downloadLogImages",
-      "todo": "todo"
+      "showOriginalHtmlColor": "showOriginalHtmlColor",
+      "todo": "todo",
+      "contactOwner": "contactOwner",
+      "e_mailToOwner": "e_mailToOwner",
+      "messageToOwner": "messageToOwner",
+      "shareInfos": "shareInfos"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {

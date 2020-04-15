@@ -54,14 +54,12 @@ public class TrackListView extends AbstractView {
     }
 
     private void selectTrackFileReadAndAddToTracks() {
-        FileChooser fc = new FileChooser(Translation.get("LoadTrack"), FileChooser.Mode.OPEN, FileChooser.SelectionMode.FILES, "gpx", "GPX");
+        FileChooser fc = new FileChooser(Translation.get("LoadTrack"), FileChooser.Mode.SAVE, FileChooser.SelectionMode.ALL, "gpx", "GPX");
         // button text Translation.get("load")
         fc.setDirectory(Config.TrackFolder.getValue(), false);
-        fc.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
-            @Override
-            public void selected(FileHandle fileHandle) {
+        fc.setSelectionReturnListener(fileHandle -> {
+            if (fileHandle != null)
                 readFromGpxFile(fileHandle);
-            }
         });
         fc.show();
     }
@@ -322,6 +320,7 @@ public class TrackListView extends AbstractView {
         //notifyDataSetChanged();
 
     }
+
     private Date parseDate(String dateString) {
         try {
             final int year = Integer.parseInt(dateString.substring(0, 4));

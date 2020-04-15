@@ -132,8 +132,8 @@ public class FilterInstances {
             "\"filtername\":\"\"" + //
             "}");
 
-    // prepare Archieved
-    public final static FilterProperties ARCHIEVED = new FilterProperties("ARCHIEVED", "{" + //
+    // prepare Archived
+    public final static FilterProperties ARCHIVED = new FilterProperties("ARCHIVED", "{" + //
             "\"gpxfilenameids\":\"\"," + //
             "\"caches\":\"0,0,1,0,0,0,0,0,0,1.0,5.0,1.0,5.0,0.0,6.0,0.0,5.0,-1,-1,0\"," + //
             "\"filtergc\":\"\"," + //

@@ -89,8 +89,8 @@ public class QuickButtonList extends Catch_Group {
     private void readQuickButtonItemsList() {
         if (quickButtonList == null) {
             String configActionList = Config.quickButtonList.getValue();
-//TODO make quick buttons configurable att SettingsView
-            configActionList = "10,19,11,5,0,1,21,3,2,4,15,25,24";
+//TODO make quick buttons configurable at SettingsView
+            configActionList = "10,19,11,12,5,0,1,21,3,2,4,15,25,24";
 
             String[] configList = configActionList.split(",");
             quickButtonList = QuickActions.getListFromConfig(configList, style.button);

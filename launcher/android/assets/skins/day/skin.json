@@ -656,6 +656,10 @@
       "path": "svg/attended.svg",
       "scale": 0.1
     },
+    "autosort": {
+      "path": "svg/autosort.svg",
+      "scale": 1.4736
+    },
     "baseMapFreizeitkarte": {
       "path": "svg/baseMapFreizeitkarte.svg",
       "scale": 0.18
@@ -912,8 +916,8 @@
       "path": "svg/deleteIcon.svg",
       "scale": 0.18
     },
-    "delete_Archieved": {
-      "path": "svg/delete_Archieved.svg",
+    "delete_Archived": {
+      "path": "svg/delete_Archived.svg",
       "scale": 0.18
     },
     "delete_Caches": {
@@ -2951,6 +2955,7 @@
       "hintIconOn": "hintOn",
       "hintIconOff": "hintOff",
       "my_parking": "mapMyParking",
+      "autoSortOffIcon": "autosort",
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",
@@ -2979,7 +2984,7 @@
       "reloadCacheIcon": "reload_cache",
       "deleteCaches": "delete_Caches",
       "deleteFilter": "delete_Filter",
-      "deleteArchieved": "delete_Archieved",
+      "deleteArchived": "delete_Archived",
       "deleteFounds": "delete_Founds",
       "gpxFile": "gpxFileIcon",
       "friends": "friends",

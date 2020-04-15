@@ -30,7 +30,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
     private final char[] ID = "id".toCharArray();
     private final char[] INC = "inc".toCharArray();
     private final char[] AVAILABLE = "available".toCharArray();
-    private final char[] ARCHIEVED = "archived".toCharArray();
+    private final char[] ARCHIVED = "archived".toCharArray();
     private final char[] GEO_CACHE = "Geocache".toCharArray();
     private final char[] CACHES_FOUND = "Geocache Found".toCharArray();
     private final char[] HREF = "href".toCharArray();
@@ -117,11 +117,11 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
                     protected void handleValue(char[] valueName, char[] data, int offset, int length) {
                         if (CharSequenceUtil.equals(AVAILABLE, valueName)) {
                             available = CharSequenceUtil.parseBoolean(data, offset, length);
-                        } else if (CharSequenceUtil.equals(ARCHIEVED, valueName)) {
+                        } else if (CharSequenceUtil.equals(ARCHIVED, valueName)) {
                             archived = CharSequenceUtil.parseBoolean(data, offset, length);
                         }
                     }
-                }, AVAILABLE, ARCHIEVED);
+                }, AVAILABLE, ARCHIVED);
         this.registerValueHandler("/gpx/wpt/groundspeak:cache/groundspeak:attributes/groundspeak:attribute",
                 new ValueHandler() {
                     int attId;
@@ -431,11 +431,11 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
                     protected void handleValue(char[] valueName, char[] data, int offset, int length) {
                         if (CharSequenceUtil.equals(AVAILABLE, valueName)) {
                             available = CharSequenceUtil.parseBoolean(data, offset, length);
-                        } else if (CharSequenceUtil.equals(ARCHIEVED, valueName)) {
+                        } else if (CharSequenceUtil.equals(ARCHIVED, valueName)) {
                             archived = CharSequenceUtil.parseBoolean(data, offset, length);
                         }
                     }
-                }, AVAILABLE, ARCHIEVED);
+                }, AVAILABLE, ARCHIVED);
         this.registerValueHandler("/gpx/wpt/extensions/groundspeak:cache/groundspeak:attributes/groundspeak:attribute",
                 new ValueHandler() {
                     int attId;

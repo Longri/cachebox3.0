@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="513" height="513" viewBox="0 0 513.00 513.00" enable-background="new 0 0 513.00 513.00" xml:space="preserve">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full" width="513" height="513"
+     viewBox="0 0 513.00 513.00" enable-background="new 0 0 513.00 513.00" xml:space="preserve">
 	<path fill="#0E0E0E" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 46.0464,35.8011L 309.38,35.8011C 319.873,35.8011 328.38,44.3077 328.38,54.8011L 328.38,316.801C 328.38,327.294 319.873,335.801 309.38,335.801L 46.0464,335.801C 35.553,335.801 27.0464,327.294 27.0464,316.801L 27.0464,54.8011C 27.0464,44.3077 35.553,35.8011 46.0464,35.8011 Z "/>
 	<radialGradient id="SVGID_Stroke1_" cx="143.306" cy="238.153" r="90.0819" gradientUnits="userSpaceOnUse">
 		<stop offset="0" stop-color="#F3F8F8" stop-opacity="1"/>

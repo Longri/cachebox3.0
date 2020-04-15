@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.activities;
 
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.activities.DeleteCaches;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
@@ -36,7 +35,7 @@ public class ShowDeleteMenu extends Menu {
     public ShowDeleteMenu() {
         super("DeleteMenuTitle");
         addMenuItem("DelActFilter", CB.getSkin().getMenuIcon.deleteFilter, () -> askAndExecute(CB.viewmanager.getActFilter(), "DelActFilter"));
-        addMenuItem("DelArchived", CB.getSkin().getMenuIcon.deleteArchieved, () -> askAndExecute(FilterInstances.ARCHIEVED, "DelArchived"));
+        addMenuItem("DelArchived", CB.getSkin().getMenuIcon.deleteArchived, () -> askAndExecute(FilterInstances.ARCHIVED, "DelArchived"));
         addMenuItem("DelFound", CB.getSkin().getMenuIcon.deleteFounds, () -> askAndExecute(FilterInstances.MYFOUNDS, "DelFound"));
     }
 

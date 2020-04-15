@@ -38,14 +38,14 @@ import de.longri.cachebox3.develop.tools.skin_editor.screens.WelcomeScreen;
  */
 public class SkinEditorGame extends Game {
 
-    static {
-        FileChooser.setDefaultPrefsName("SkinEditor");
-    }
-
     public final static String[] widgets = {"MapWayPointItem", "Sizes", "Icons", "MenuIcons", "Filter", "Label", "EditText", "Button",
             "GestureButton", "TextButton", "FileChooser", "Compass", "CacheTypes", "AttributeTypes", "LogTypes", "CheckBox", "TextField", "ListView",
             "SelectBox", "CB_ProgressBar", "Slider", "ScrollPane", "SplitPane", "Window", "Tree", "Animation", "Language"
             , "Setting", "CacheListItem", "StarStyle", "CacheSizeStyle"};
+
+    static {
+        FileChooser.setDefaultPrefsName("SkinEditor");
+    }
 
     public SpriteBatch batch;
     public SavableSvgSkin skin;
@@ -62,6 +62,62 @@ public class SkinEditorGame extends Game {
 
     // Optional check
     public OptionalChecker opt;
+
+    public static String resolveWidgetPackageName(String widget) {
+        switch (widget) {
+            case "MapWayPointItem":
+                return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
+            case "GestureButton":
+                return "de.longri.cachebox3.gui.skin.styles.GestureButtonStyle";
+            case "Sizes":
+                return "de.longri.cachebox3.gui.skin.styles.ScaledSize";
+            case "Icons":
+                return "de.longri.cachebox3.gui.skin.styles.IconsStyle";
+            case "MenuIcons":
+                return "de.longri.cachebox3.gui.skin.styles.MenuIconStyle";
+            case "TextButton":
+                return "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle";
+            case "ListView":
+                return "de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle";
+            case "FileChooser":
+                return "de.longri.cachebox3.gui.skin.styles.FileChooserStyle";
+            case "Compass":
+                return "de.longri.cachebox3.gui.skin.styles.CompassStyle";
+            case "CacheTypes":
+                return "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle";
+            case "Animation":
+                return "de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle";
+            case "SelectBox":
+                return "de.longri.cachebox3.gui.skin.styles.SelectBoxStyle";
+            case "EditText":
+                return "de.longri.cachebox3.gui.skin.styles.EditTextStyle";
+            case "AttributeTypes":
+                return "de.longri.cachebox3.gui.skin.styles.AttributesStyle";
+            case "Language":
+                return "de.longri.cachebox3.gui.skin.styles.LanguageStyle";
+            case "LogTypes":
+                return "de.longri.cachebox3.gui.skin.styles.LogTypesStyle";
+            case "Filter":
+                return "de.longri.cachebox3.gui.skin.styles.FilterStyle";
+            case "Setting":
+                return "de.longri.cachebox3.gui.activities.Settings_Activity$SettingsActivityStyle";
+            case "CacheListItem":
+                return "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle";
+            case "StarStyle":
+                return "de.longri.cachebox3.gui.skin.styles.StarsStyle";
+            case "CacheSizeStyle":
+                return "de.longri.cachebox3.gui.skin.styles.CacheSizeStyle";
+            default:
+                for (Class clazz : StyleTypes.items) {
+                    if (clazz.getSimpleName().equals(widget)) {
+                        return clazz.getName();
+                    }
+                }
+                return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
+        }
+
+
+    }
 
     @Override
     public void create() {
@@ -86,8 +142,7 @@ public class SkinEditorGame extends Game {
             settings.maxHeight = 2048;
             settings.maxWidth = 2048;
             settings.combineSubdirectories = true;
-            TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".",
-                    "skin-editor-src-proj/assets/resources/uiskin");
+            TexturePacker.process(settings, "skin-editor-src-proj/assets/resources/raw/", ".", "skin-editor-src-proj/assets/resources/uiskin");
         }
 
         batch = new SpriteBatch();
@@ -121,63 +176,6 @@ public class SkinEditorGame extends Game {
         if (tmp.exists()) {
             Gdx.app.log("FINISH", "Delete tmp folder");
             tmp.deleteDirectory();
-        }
-
-
-    }
-
-
-    public static String resolveWidgetPackageName(String widget) {
-        if (widget.equals("MapWayPointItem")) {
-            return "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle";
-        } else if (widget.equals("GestureButton")) {
-            return "de.longri.cachebox3.gui.skin.styles.GestureButtonStyle";
-        } else if (widget.equals("Sizes")) {
-            return "de.longri.cachebox3.gui.skin.styles.ScaledSize";
-        } else if (widget.equals("Icons")) {
-            return "de.longri.cachebox3.gui.skin.styles.IconsStyle";
-        } else if (widget.equals("MenuIcons")) {
-            return "de.longri.cachebox3.gui.skin.styles.MenuIconStyle";
-        } else if (widget.equals("TextButton")) {
-            return "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle";
-        } else if (widget.equals("ListView")) {
-            return "de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle";
-        } else if (widget.equals("FileChooser")) {
-            return "de.longri.cachebox3.gui.skin.styles.FileChooserStyle";
-        } else if (widget.equals("Compass")) {
-            return "de.longri.cachebox3.gui.skin.styles.CompassStyle";
-        } else if (widget.equals("CacheTypes")) {
-            return "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle";
-        } else if (widget.equals("Animation")) {
-            return "de.longri.cachebox3.gui.skin.styles.FrameAnimationStyle";
-        } else if (widget.equals("SelectBox")) {
-            return "de.longri.cachebox3.gui.skin.styles.SelectBoxStyle";
-        } else if (widget.equals("EditText")) {
-            return "de.longri.cachebox3.gui.skin.styles.EditTextStyle";
-        } else if (widget.equals("AttributeTypes")) {
-            return "de.longri.cachebox3.gui.skin.styles.AttributesStyle";
-        } else if (widget.equals("Language")) {
-            return "de.longri.cachebox3.gui.skin.styles.LanguageStyle";
-        } else if (widget.equals("LogTypes")) {
-            return "de.longri.cachebox3.gui.skin.styles.LogTypesStyle";
-        } else if (widget.equals("Filter")) {
-            return "de.longri.cachebox3.gui.skin.styles.FilterStyle";
-        } else if (widget.equals("Setting")) {
-            return "de.longri.cachebox3.gui.activities.Settings_Activity$SettingsActivityStyle";
-        } else if (widget.equals("CacheListItem")) {
-            return "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle";
-        } else if (widget.equals("StarStyle")) {
-            return "de.longri.cachebox3.gui.skin.styles.StarsStyle";
-        } else if (widget.equals("CacheSizeStyle")) {
-            return "de.longri.cachebox3.gui.skin.styles.CacheSizeStyle";
-        } else {
-
-            for (Class clazz : StyleTypes.items) {
-                if (clazz.getSimpleName().equals(widget)) {
-                    return clazz.getName();
-                }
-            }
-            return "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
         }
 
 
