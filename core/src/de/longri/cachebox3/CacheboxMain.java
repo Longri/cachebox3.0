@@ -59,6 +59,10 @@ import static org.slf4j.impl.LibgdxLoggerFactory.EXCLUDE_LIST;
 
 public class CacheboxMain extends ApplicationAdapter {
 
+    static private final Logger log = LoggerFactory.getLogger(CacheboxMain.class);
+    static private final String SAVE_INSTANCE_KEY = "SaveInstanceState";
+    public static AtomicBoolean drawMap = new AtomicBoolean(false);
+
     static {
         Parameters.MAP_EVENT_LAYER2 = true;
         Parameters.TEXTURE_ATLAS = true;
@@ -111,21 +115,11 @@ public class CacheboxMain extends ApplicationAdapter {
 
     }
 
-
-    static private final Logger log = LoggerFactory.getLogger(CacheboxMain.class);
-    static private final String SAVE_INSTANCE_KEY = "SaveInstanceState";
-
-    private ViewManager viewManager;
+    public MapRenderer mMapRenderer;
+    protected Sprite FpsInfoSprite;
     private int mapDrawX, mapDrawY, mapDrawWidth, mapDrawHeight;
-
-
     private Batch batch;
     private int FpsInfoPos = 0;
-
-    protected Sprite FpsInfoSprite;
-    public static AtomicBoolean drawMap = new AtomicBoolean(false);
-    public MapRenderer mMapRenderer;
-
     private BitStore instanceStateReader;
 
     @Override
@@ -162,10 +156,9 @@ public class CacheboxMain extends ApplicationAdapter {
             Gdx.app.postRunnable(() -> {
                 log.debug("switch Stage to ViewManager");
 
-                viewManager = new ViewManager(
-                        CacheboxMain.this, CB.stageManager.viewport, CB.stageManager.batch);
+                new ViewManager(CacheboxMain.this, CB.stageManager.viewport, CB.stageManager.batch);
 
-                CB.stageManager.setMainStage(viewManager);
+                CB.stageManager.setMainStage(CB.viewmanager);
                 batch.dispose();
 
                 FpsInfoSprite = null;
@@ -264,7 +257,7 @@ public class CacheboxMain extends ApplicationAdapter {
     @Override
     public void dispose() {
         log.debug("onDispose");
-        viewManager.dispose();
+        CB.viewmanager.dispose();
         batch.dispose();
     }
 
@@ -272,8 +265,8 @@ public class CacheboxMain extends ApplicationAdapter {
     public void pause() {
         log.debug("onPause");
         CB.isBackground = true;
-        if (viewManager != null) {
-            viewManager.pause();
+        if (CB.viewmanager != null) {
+            CB.viewmanager.pause();
 
             if (CB.isQuitCalled()) {
                 log.debug("save instance state quit called");
@@ -325,7 +318,7 @@ public class CacheboxMain extends ApplicationAdapter {
         CB.postOnGlThread(new NamedRunnable("onResume") {
             @Override
             public void run() {
-                if (viewManager != null) viewManager.resume();
+                if (CB.viewmanager != null) CB.viewmanager.resume();
                 log.debug("App on resume reopen databases");
                 if (Database.Data != null) Database.Data.open();
                 if (Database.Settings != null) Database.Settings.open();
@@ -341,7 +334,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
     private void saveInstanceState(BitStore writer) {
         // save last actView
-        AbstractView abstractView = viewManager.getCurrentView();
+        AbstractView abstractView = CB.viewmanager.getCurrentView();
         writer.write(abstractView.getClass().getName());
         writer.write(abstractView.name);
         abstractView.saveInstanceState(writer);
@@ -359,7 +352,7 @@ public class CacheboxMain extends ApplicationAdapter {
 
                     Object obj = constructor.newInstance(reader);
                     AbstractView newInstanceAbstractView = (AbstractView) obj;
-                    viewManager.showView(newInstanceAbstractView);
+                    CB.viewmanager.showView(newInstanceAbstractView);
 
                 } catch (Exception e) {
                     log.error("can't restore last view");

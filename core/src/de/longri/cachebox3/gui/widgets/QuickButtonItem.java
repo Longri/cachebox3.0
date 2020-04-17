@@ -27,8 +27,8 @@ import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.QuickActions;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_HintDialog;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_Switch_Torch;
-import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 
 /**

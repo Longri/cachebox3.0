@@ -19,7 +19,6 @@ package de.longri.cachebox3.gui.actions;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_RecVoice;
-import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Toggle_Day_Night;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;

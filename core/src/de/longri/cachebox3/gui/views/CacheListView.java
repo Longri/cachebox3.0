@@ -34,7 +34,7 @@ import de.longri.cachebox3.gui.actions.QuickActions;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_EditFilterSettings;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SearchDialog;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SelectDB_Dialog;
-import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Switch_Autoresort;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ShowDeleteMenu;
 import de.longri.cachebox3.gui.activities.ShowImportMenu;

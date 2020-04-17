@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.extendsAbstractAction.todo;
+package de.longri.cachebox3.gui.actions.extendsAbstractAction;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
