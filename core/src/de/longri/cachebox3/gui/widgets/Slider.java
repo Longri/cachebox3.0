@@ -192,6 +192,10 @@ public class Slider extends Catch_WidgetGroup {
         nameWidget.setPosition(0, getHeight() - nameWidgetHeight - quickButtonHeight);
     }
 
+    public QuickButtonList getQuickButtonList() {
+        return quickButtonList;
+    }
+
 
     /**
      * the touchable slider with self scrolling selected CacheName if the name to long

@@ -79,7 +79,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
             @Override
             public void handleData(char[] data, int offset, int length) {
                 gcCode = new String(data, offset, length);
-                id = AbstractCache.GenerateCacheId(gcCode);
+                id = AbstractCache.generateCacheId(gcCode);
             }
         });
 

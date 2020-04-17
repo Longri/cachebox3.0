@@ -41,7 +41,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public AtomicBoolean isChanged = new AtomicBoolean(false);
 
-    public static long GenerateCacheId(String GcCode) {
+    public static long generateCacheId(String GcCode) {
         long result = 0;
         char[] dummy = GcCode.toCharArray();
         byte[] byteDummy = new byte[8];
@@ -69,7 +69,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
         AbstractWaypoint waypoint = null;
         if (useFinal)
-            waypoint = this.GetFinalWaypoint();
+            waypoint = this.getFinalWaypoint();
         // If a mystery has a final waypoint, the distance will be calculated to
         // the final not the the cache coordinates
         Coordinate toPos = this;
@@ -107,7 +107,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract Array<Attributes> getAttributes();
 
-    public abstract boolean ImTheOwner();
+    public abstract boolean iAmTheOwner();
 
     /**
      * true, if a this mystery cache has a final waypoint
@@ -117,7 +117,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     /**
      * search the final waypoint for a mystery cache
      */
-    public abstract AbstractWaypoint GetFinalWaypoint();
+    public abstract AbstractWaypoint getFinalWaypoint();
 
     /**
      * true if this is a mystery of multi with a Stage Waypoint defined as StartPoint

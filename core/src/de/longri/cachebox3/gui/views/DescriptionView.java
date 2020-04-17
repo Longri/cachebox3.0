@@ -472,7 +472,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 Config.rememberedGeoCache.setValue("");
                 Config.AcceptChanges();
             } else {
-                AbstractCache rememberedCache = Database.Data.cacheList.GetCacheByGcCode(Config.rememberedGeoCache.getValue());
+                AbstractCache rememberedCache = Database.Data.cacheList.getCacheByGcCode(Config.rememberedGeoCache.getValue());
                 if (rememberedCache != null) {
                     EventHandler.fireSelectedWaypointChanged(rememberedCache, null);
                 }

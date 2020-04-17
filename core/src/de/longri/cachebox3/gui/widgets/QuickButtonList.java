@@ -47,7 +47,7 @@ public class QuickButtonList extends Catch_Group {
     final QuickButtonListStyle style;
     final ScrollPane scrollPane;
     final Group scrollPaneContent = new Group();
-    MoveableList<QuickButtonItem> quickButtonList;
+    private MoveableList<QuickButtonItem> quickButtonList;
 
     final CB_RectF tempClickRec = new CB_RectF();
 
@@ -88,12 +88,48 @@ public class QuickButtonList extends Catch_Group {
 
     private void readQuickButtonItemsList() {
         if (quickButtonList == null) {
+            //TODO make quick buttons configurable at SettingsView
             String configActionList = Config.quickButtonList.getValue();
-//TODO make quick buttons configurable at SettingsView
             configActionList = "10,19,11,12,5,0,1,21,3,2,4,15,25,24";
-
             String[] configList = configActionList.split(",");
-            quickButtonList = QuickActions.getListFromConfig(configList, style.button);
+            quickButtonList = new MoveableList<>();
+            if (configList.length != 0) {
+                boolean invalidEnumId = false;
+                try {
+                    int index = 0;
+
+                    for (String s : configList) {
+                        s = s.replace(",", "");
+                        int EnumId = Integer.parseInt(s);
+                        if (EnumId > -1) {
+
+                            QuickActions type = QuickActions.values()[EnumId];
+                            if (type != null) {
+                                QuickButtonItem tmp = new QuickButtonItem(index++, style.button, type.getAction(), type.getName(), type);
+                                quickButtonList.add(tmp);
+                            } else
+                                invalidEnumId = true;
+                        }
+                    }
+                } catch (Exception e) {// wenn ein Fehler auftritt, gib die bis dorthin gelesenen Items zurück
+                    log.error("getListFromConfig", e);
+                }
+                if (invalidEnumId) {
+                    //	    write valid id's back
+                    StringBuilder actionsString = new StringBuilder();
+                    int counter = 0;
+                    for (int i = 0, n = quickButtonList.size; i < n; i++) {
+                        QuickButtonItem tmp = quickButtonList.get(i);
+                        actionsString.append(tmp.getAction().ordinal());
+                        if (counter < quickButtonList.size - 1) {
+                            actionsString.append(",");
+                        }
+                        counter++;
+                    }
+                    Config.quickButtonList.setValue(actionsString.toString());
+                    Config.AcceptChanges();
+                }
+            }
         }
 
         scrollPaneContent.clear();
@@ -139,6 +175,10 @@ public class QuickButtonList extends Catch_Group {
                 ((TextureRegionDrawable) style.background).getRegion().getRegionWidth() : getWidth();
         float drawX = ((getWidth() - drawableWidth) / 2) + x;
         style.background.draw(batch, drawX, y, drawableWidth, getHeight());
+    }
+
+    public MoveableList<QuickButtonItem> getQuickButtonList() {
+        return quickButtonList;
     }
 
 

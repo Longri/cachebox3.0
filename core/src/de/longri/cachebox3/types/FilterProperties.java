@@ -555,7 +555,7 @@ public class FilterProperties {
     public boolean passed(AbstractCache abstractCache) {
         if (chkFilterBoolean(this.Finds, abstractCache.isFound()))
             return false;
-        if (chkFilterBoolean(this.Own, abstractCache.ImTheOwner()))
+        if (chkFilterBoolean(this.Own, abstractCache.iAmTheOwner()))
             return false;
         if (chkFilterBoolean(this.NotAvailable, !abstractCache.isAvailable()))
             return false;

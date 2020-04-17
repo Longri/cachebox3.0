@@ -324,9 +324,9 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         long cacheId;
 
         if (gsakParent != null) {
-            cacheId = AbstractCache.GenerateCacheId(gsakParent);
+            cacheId = AbstractCache.generateCacheId(gsakParent);
         } else {
-            cacheId = AbstractCache.GenerateCacheId("GC" + this.gcCode.substring(2, this.gcCode.length()));
+            cacheId = AbstractCache.generateCacheId("GC" + this.gcCode.substring(2, this.gcCode.length()));
         }
 
         AbstractWaypoint waypoint = new MutableWaypoint(this.latitude, this.longitude, cacheId);

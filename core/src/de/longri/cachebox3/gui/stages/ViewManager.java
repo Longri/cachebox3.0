@@ -331,7 +331,7 @@ public class ViewManager extends NamedStage
 
     @Override
     public void selectedWayPointChanged(de.longri.cachebox3.events.SelectedWayPointChangedEvent event) {
-        if (event.wayPoint != null) setCacheName(Database.Data.cacheList.GetCacheById(event.wayPoint.getCacheId()));
+        if (event.wayPoint != null) setCacheName(Database.Data.cacheList.getCacheById(event.wayPoint.getCacheId()));
     }
 
     private void setCacheName(AbstractCache abstractCache) {
@@ -417,7 +417,7 @@ public class ViewManager extends NamedStage
         } else {
             if (Database.Data.cacheList == null) return;
         }
-        AbstractCache abstractCache = Database.Data.cacheList.GetCacheByGcCode("CBPark");
+        AbstractCache abstractCache = Database.Data.cacheList.getCacheByGcCode("CBPark");
 
         if (abstractCache != null)
             Database.Data.cacheList.removeValue(abstractCache, false);
@@ -432,7 +432,7 @@ public class ViewManager extends NamedStage
         //if selected Cache not into cacheList, reset selected Cache
         AbstractCache selectedCache = EventHandler.getSelectedCache();
         if (selectedCache != null) {
-            AbstractCache selectedInQuery = Database.Data.cacheList.GetCacheById(selectedCache.getId());
+            AbstractCache selectedInQuery = Database.Data.cacheList.getCacheById(selectedCache.getId());
             if (selectedInQuery == null) {
                 //reset
                 EventHandler.fireSelectedWaypointChanged(null, null);
@@ -509,6 +509,10 @@ public class ViewManager extends NamedStage
     public void draw() {
         if (CB.DRAW_EXCEPTION_INDICATOR) getRoot().setDebug(true, false);
         super.draw();
+    }
+
+    public Slider getSlider() {
+        return slider;
     }
 
     // Toast pop up

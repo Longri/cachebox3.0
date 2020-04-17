@@ -30,9 +30,11 @@ import de.longri.cachebox3.events.location.OrientationChangedEvent;
 import de.longri.cachebox3.events.location.OrientationChangedListener;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
+import de.longri.cachebox3.gui.actions.QuickActions;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_EditFilterSettings;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SearchDialog;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_SelectDB_Dialog;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ShowDeleteMenu;
 import de.longri.cachebox3.gui.activities.ShowImportMenu;
@@ -43,6 +45,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuItem;
 import de.longri.cachebox3.gui.stages.ViewManager;
+import de.longri.cachebox3.gui.widgets.QuickButtonItem;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
@@ -148,7 +151,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 float heading = EventHandler.getHeading();
 
                 // get coordinate from Cache or from Final Waypoint
-                AbstractWaypoint finalWp = abstractCache.GetFinalWaypoint();
+                AbstractWaypoint finalWp = abstractCache.getFinalWaypoint();
                 Coordinate finalCoord = finalWp != null ? finalWp : abstractCache;
 
                 //calculate distance and bearing
@@ -335,7 +338,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         cm.addMoreMenuItem("importExport", "", CB.getSkin().getMenuIcon.importIcon, new ShowImportMenu());
         cm.addCheckableMenuItem("setOrResetFavorites", "", CB.getSkin().getMenuIcon.favorit, true, setOrResetFavorites(cm));
         cm.addMenuItem("manage", getSelectDBTitleExtension(), CB.getSkin().getMenuIcon.manageDB, this::selectDbDialog);
-        cm.addCheckableMenuItem("AutoResort", "", null, CB.getAutoResort(), this::setAutoResort).setEnabled(false); // todo ISSUE (#116 addAutoResort)   icon: CB.getSkin().getMenuIcon.MI_AUTO_RESORT
+        cm.addMenuItem("AutoResort", CB.getAutoResort() ? CB.getSkin().getMenuIcon.autoSortOnIcon : CB.getSkin().getMenuIcon.autoSortOffIcon, this::setAutoResort);
         cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon, () -> createCache());
         cm.addMoreMenuItem("DeleteCaches", "", CB.getSkin().getMenuIcon.deleteCaches, new ShowDeleteMenu());
         return cm;
@@ -344,6 +347,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
     private void resort() {
         log.debug("resort cacheList");
         Database.Data.cacheList.resort(EventHandler.getSelectedCoord(), new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWayPoint()));
+        // Database.Data.cacheList.resort(null, null);
         log.debug("Finish resort cacheList");
     }
 
@@ -410,20 +414,19 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
                 });
     }
 
-    private void setAutoResort() {
-        //CB.viewmanager.toast("NOT IMPLEMENTED");
-        /*
-        CB.setAutoResort(!CB.getAutoResort());
-        if (CB.getAutoResort()) {
-            synchronized (Database.Data.cacheList) {
-                Database.Data.cacheList.resort(CB.getSelectedCoord(), new CacheWithWP(CB.getSelectedCache(), CB.getSelectedWayPoint()));
-            }
-        }
-         */
-    }
-
     private void createCache() {
         EditCache.getInstance(Database.Data, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon).create();
     }
 
+    private void setAutoResort() {
+        boolean isNotInQuickButtonList = true;
+        for (QuickButtonItem qbi : CB.viewmanager.getSlider().getQuickButtonList().getQuickButtonList()) {
+            if (qbi.getAction() == QuickActions.AutoResort) {
+                qbi.clicked();
+                isNotInQuickButtonList = false;
+                break;
+            }
+        }
+        if (isNotInQuickButtonList) new Action_Switch_Autoresort().execute();
+    }
 }

@@ -17,7 +17,9 @@ package de.longri.cachebox3.gui.actions.extendsAbstractAction.todo;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.sqlite.Database;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -25,30 +27,29 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 public class Action_Switch_Autoresort extends AbstractAction {
 
     public Action_Switch_Autoresort() {
-        super(NOT_ENABLED, "AutoResort");
+        super(ENABLED, "AutoResort");
     }
 
     @Override
     public void execute() {
-
-        CB.viewmanager.toast("Switch Autoresort not implemented");
-
-//        GlobalCore.setAutoResort(!(GlobalCore.getAutoResort()));
-//        if (GlobalCore.getAutoResort()) {
-//            synchronized (Database.Data.cacheList) {
-//                if (GlobalCore.isSetSelectedCache()) {
-//                    CacheWithWP ret = Database.Data.cacheList.Resort(GlobalCore.getSelectedCoord(), new CacheWithWP(GlobalCore.getSelectedCache(), GlobalCore.getSelectedWayPoint()));
-//                    GlobalCore.setSelectedWaypoint(ret.getCache(), ret.getWaypoint(), false);
-//                    GlobalCore.setNearestCache(ret.getCache());
-//                    ret.dispose();
-//                }
-//            }
-//        }
+        if (Database.Data.cacheList == null) return;
+        CB.setAutoResort(!(CB.getAutoResort()));
+        if (CB.getAutoResort()) {
+            synchronized (Database.Data.cacheList) {
+                if (EventHandler.isSetSelectedCache()) {
+                    Database.Data.cacheList.resort(null, null);
+                }
+            }
+            EventHandler.add(Database.Data.cacheList);
+        }
+        else {
+            EventHandler.remove(Database.Data.cacheList);
+        }
     }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.autoSortOffIcon;
+        return CB.getAutoResort() ? CB.getSkin().getMenuIcon.autoSortOnIcon : CB.getSkin().getMenuIcon.autoSortOffIcon;
     }
 
 }

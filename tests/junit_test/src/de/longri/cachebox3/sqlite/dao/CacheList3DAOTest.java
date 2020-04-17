@@ -133,19 +133,19 @@ class CacheList3DAOTest {
 
 
         {// check conversion of CacheSizes
-            AbstractCache cache1 = caches.GetCacheByGcCode("GC1Z18H");
+            AbstractCache cache1 = caches.getCacheByGcCode("GC1Z18H");
             assertThat("CacheSize must be 'Other', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.other);
 
-            cache1 = caches.GetCacheByGcCode("GC2DCGK");
+            cache1 = caches.getCacheByGcCode("GC2DCGK");
             assertThat("CacheSize must be 'Micro', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.micro);
 
-            cache1 = caches.GetCacheByGcCode("GC5Q51E");
+            cache1 = caches.getCacheByGcCode("GC5Q51E");
             assertThat("CacheSize must be 'Small', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.small);
 
-            cache1 = caches.GetCacheByGcCode("GC3CTWZ");
+            cache1 = caches.getCacheByGcCode("GC3CTWZ");
             assertThat("CacheSize must be 'Regular', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.regular);
 
-            cache1 = caches.GetCacheByGcCode("GC58TMQ");
+            cache1 = caches.getCacheByGcCode("GC58TMQ");
             assertThat("CacheSize must be 'Large', but was: " + cache1.getSize().toString(), cache1.getSize() == CacheSizes.large);
         }
 

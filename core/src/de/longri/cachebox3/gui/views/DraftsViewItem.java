@@ -214,18 +214,18 @@ public class DraftsViewItem extends ListViewItem {
         }
 
         synchronized (Database.Data.cacheList) {
-            cache = Database.Data.cacheList.GetCacheByGcCode(entry.gcCode);
+            cache = Database.Data.cacheList.getCacheByGcCode(entry.gcCode);
         }
 
         if (cache == null) {
             Database.Data.cacheList.add(tmpCache);
-            cache = Database.Data.cacheList.GetCacheByGcCode(entry.gcCode);
+            cache = Database.Data.cacheList.getCacheByGcCode(entry.gcCode);
         }
 
         AbstractWaypoint finalWp = null;
         if (cache != null) {
             if (cache.HasFinalWaypoint())
-                finalWp = cache.GetFinalWaypoint();
+                finalWp = cache.getFinalWaypoint();
             else if (cache.hasStartWaypoint())
                 finalWp = cache.getStartWaypoint();
             EventHandler.fireSelectedWaypointChanged(cache, finalWp);
@@ -368,7 +368,7 @@ public class DraftsViewItem extends ListViewItem {
                             // jetzt noch diesen Cache in der aktuellen CacheListe suchen und auch da den Found-Status zurücksetzen
                             // damit das Smiley Symbol aus der Map und der CacheList verschwindet
                             synchronized (Database.Data.cacheList) {
-                                AbstractCache tc = Database.Data.cacheList.GetCacheById(abstractCache.getId());
+                                AbstractCache tc = Database.Data.cacheList.getCacheById(abstractCache.getId());
                                 if (tc != null) {
                                     tc.setFound(false);
                                     tc.updateBooleanStore();

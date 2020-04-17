@@ -9,8 +9,8 @@ public class CacheWithWP {
 	private AbstractCache abstractCache;
 	private AbstractWaypoint waypoint;
 
-	public CacheWithWP(AbstractCache AbstractCache, AbstractWaypoint waypoint) {
-		this.abstractCache = AbstractCache;
+	public CacheWithWP(AbstractCache cache, AbstractWaypoint waypoint) {
+		this.abstractCache = cache;
 		this.waypoint = waypoint;
 	}
 

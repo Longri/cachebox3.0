@@ -349,7 +349,7 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
     }
 
     public static String getMapIconName(AbstractCache abstractCache) {
-        if (abstractCache.ImTheOwner())
+        if (abstractCache.iAmTheOwner())
             return "mapStar";
         else if (abstractCache.isFound())
             return "mapFound";

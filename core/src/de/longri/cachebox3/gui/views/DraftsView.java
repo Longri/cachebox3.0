@@ -528,7 +528,7 @@ public class DraftsView extends AbstractView {
 
     private Menu getSecondMenu() {
         Menu sm = new Menu("OwnerLogTypesTitle");
-        boolean IM_owner = EventHandler.getSelectedCache().ImTheOwner();
+        boolean IM_owner = EventHandler.getSelectedCache().iAmTheOwner();
         sm.addMenuItem("enabled", draftListItemStyle.logTypesStyle.enabled, () -> addNewDraft(LogTypes.enabled)).setEnabled(IM_owner);
         sm.addMenuItem("temporarilyDisabled", draftListItemStyle.logTypesStyle.temporarily_disabled, () -> addNewDraft(LogTypes.temporarily_disabled)).setEnabled(IM_owner);
         sm.addMenuItem("ownerMaintenance", draftListItemStyle.logTypesStyle.owner_maintenance, () -> addNewDraft(LogTypes.owner_maintenance)).setEnabled(IM_owner);
@@ -612,7 +612,7 @@ public class DraftsView extends AbstractView {
         }
 
         // Owner logs
-        if (abstractCache != null && !abstractCache.ImTheOwner()) {
+        if (abstractCache != null && !abstractCache.iAmTheOwner()) {
             cm.addMenuItem("ownerLogTypes", CB.getSkin().getMenuIcon.ownerLogTypes, () -> {
             }).setMoreMenu(getSecondMenu());
         }

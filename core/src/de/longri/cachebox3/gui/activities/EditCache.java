@@ -7,11 +7,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.views.MapView;
-import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
-import de.longri.cachebox3.gui.widgets.CB_Label;
-import de.longri.cachebox3.gui.widgets.CoordinateButton;
-import de.longri.cachebox3.gui.widgets.EditTextField;
-import de.longri.cachebox3.gui.widgets.SelectBox;
+import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.Cache3DAO;
@@ -119,7 +115,7 @@ public class EditCache extends Activity {
         do {
             count++;
             tmpGCCode = prefix + String.format("%04d", count);
-        } while (database.cacheList.GetCacheById(MutableCache.GenerateCacheId(tmpGCCode)) != null);
+        } while (database.cacheList.getCacheById(MutableCache.generateCacheId(tmpGCCode)) != null);
         Coordinate actSearchPos;
         Coordinate lastStoredPos = CB.lastMapState.getFreePosition();
         Coordinate mapCenterPos = MapView.getLastCenterPos();
@@ -167,9 +163,9 @@ public class EditCache extends Activity {
     protected void runAtOk() {
         boolean update = false;
         String gcc = cacheCode.getText().toUpperCase();
-        cache.setId(AbstractCache.GenerateCacheId(gcc));
+        cache.setId(AbstractCache.generateCacheId(gcc));
 
-        AbstractCache cl = database.cacheList.GetCacheById(cache.getId());
+        AbstractCache cl = database.cacheList.getCacheById(cache.getId());
 
         if (cl != null) {
             update = true;

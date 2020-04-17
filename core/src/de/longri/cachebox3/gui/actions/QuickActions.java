@@ -16,16 +16,12 @@
 package de.longri.cachebox3.gui.actions;
 
 
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_RecVoice;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Toggle_Day_Night;
-import de.longri.cachebox3.gui.widgets.QuickButtonItem;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.MoveableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,58 +65,6 @@ public enum QuickActions {
 
 
     final static Logger log = LoggerFactory.getLogger(QuickActions.class);
-
-    /**
-     * Gibt eine ArrayList von Actions zurück aus einem übergebenen String Array
-     *
-     * @param configList ?
-     * @param button     ?
-     * @return ArrayList <Actions>
-     */
-    public static MoveableList<QuickButtonItem> getListFromConfig(String[] configList, Drawable button) {
-        MoveableList<QuickButtonItem> retList = new MoveableList<>();
-        if (configList == null || configList.length == 0) {
-            return retList;
-        }
-
-        boolean invalidEnumId = false;
-        try {
-            int index = 0;
-
-            for (String s : configList) {
-                s = s.replace(",", "");
-                int EnumId = Integer.parseInt(s);
-                if (EnumId > -1) {
-
-                    QuickActions type = QuickActions.values()[EnumId];
-                    if (type != null) {
-                        QuickButtonItem tmp = new QuickButtonItem(index++, button, type.getAction(), type.getName(), type);
-                        retList.add(tmp);
-                    } else
-                        invalidEnumId = true;
-                }
-            }
-        } catch (Exception e) {// wenn ein Fehler auftritt, gib die bis dorthin gelesenen Items zurück
-            log.error("getListFromConfig", e);
-        }
-        if (invalidEnumId) {
-            //	    write valid id's back
-
-            StringBuilder actionsString = new StringBuilder();
-            int counter = 0;
-            for (int i = 0, n = retList.size; i < n; i++) {
-                QuickButtonItem tmp = retList.get(i);
-                actionsString.append(tmp.getAction().ordinal());
-                if (counter < retList.size - 1) {
-                    actionsString.append(",");
-                }
-                counter++;
-            }
-            Config.quickButtonList.setValue(actionsString.toString());
-            Config.AcceptChanges();
-        }
-        return retList;
-    }
 
     public AbstractAction getAction() {
         switch (this) {

@@ -656,8 +656,12 @@
       "path": "svg/attended.svg",
       "scale": 0.1
     },
-    "autosort": {
-      "path": "svg/autosort.svg",
+    "autosortOff": {
+      "path": "svg/autosortOff.svg",
+      "scale": 1.4736
+    },
+    "autosortOn": {
+      "path": "svg/autosortOn.svg",
       "scale": 1.4736
     },
     "baseMapFreizeitkarte": {
@@ -775,6 +779,10 @@
     "camera": {
       "path": "svg/camera.svg",
       "scale": 0.21
+    },
+    "car": {
+      "path": "svg/car.svg",
+      "scale": 1
     },
     "cb": {
       "path": "svg/cb.svg",
@@ -1779,6 +1787,10 @@
     "pane_slider_vertical": {
       "path": "svg/pane_slider_vertical.svg",
       "scale": 0.5
+    },
+    "pedestrian": {
+      "path": "svg/pedestrian.svg",
+      "scale": 1
     },
     "pencil": {
       "path": "svg/pencil.svg",
@@ -2955,7 +2967,8 @@
       "hintIconOn": "hintOn",
       "hintIconOff": "hintOff",
       "my_parking": "mapMyParking",
-      "autoSortOffIcon": "autosort",
+      "autoSortOnIcon": "autosortOn",
+      "autoSortOffIcon": "autosortOff",
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",

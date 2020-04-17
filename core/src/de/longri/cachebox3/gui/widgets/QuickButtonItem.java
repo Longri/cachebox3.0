@@ -23,12 +23,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.actions.QuickActions;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_HintDialog;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_Switch_Torch;
+import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 
 /**
@@ -64,21 +64,18 @@ public class QuickButtonItem extends ListViewItem {
         this.addActor(mButtonIcon);
 
         if (action instanceof Action_HintDialog) {
-            EventHandler.add(new SelectedCacheChangedListener() {
-                @Override
-                public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-                    spriteDrawable = action.getIcon();
-                    mButtonIcon.setDrawable(spriteDrawable);
-                    needsLayout = true;
-                    QuickButtonItem.this.invalidate();
-                }
+            EventHandler.add((SelectedCacheChangedListener) event -> {
+                spriteDrawable = action.getIcon();
+                mButtonIcon.setDrawable(spriteDrawable);
+                needsLayout = true;
+                QuickButtonItem.this.invalidate();
             });
         }
     }
 
     public void clicked() {
         mAction.execute();
-        if (mAction instanceof Action_Switch_Torch) {
+        if (mAction instanceof Action_Switch_Torch || mAction instanceof Action_Switch_Autoresort) {
             spriteDrawable = mAction.getIcon();
             mButtonIcon.setDrawable(spriteDrawable);
             needsLayout = true;

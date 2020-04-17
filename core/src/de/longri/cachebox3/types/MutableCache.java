@@ -350,7 +350,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public boolean ImTheOwner() {
+    public boolean iAmTheOwner() {
         return false;
     }
 
@@ -360,7 +360,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public AbstractWaypoint GetFinalWaypoint() {
+    public AbstractWaypoint getFinalWaypoint() {
         return null;
     }
 
