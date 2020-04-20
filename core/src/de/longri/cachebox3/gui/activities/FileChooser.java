@@ -609,7 +609,9 @@ public class FileChooser extends ActivityBase {
     }
 
     public enum Mode {
-        OPEN, SAVE, BROWSE
+        OPEN, //
+        SAVE, //
+        BROWSE // can only delete (Button = delete)
     }
 
     public enum SelectionMode {

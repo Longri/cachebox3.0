@@ -32,8 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -42,10 +40,10 @@ import java.util.regex.Pattern;
  * Created by Longri on 18.07.16.
  */
 public class Utils {
-    static final Logger log = LoggerFactory.getLogger(Utils.class);
-
     public static final String THUMB = "thumb_";
     public static final String THUMB_OVERVIEW = "overview";
+    static final Logger log = LoggerFactory.getLogger(Utils.class);
+    static final int[] Key = {128, 56, 20, 78, 33, 225};
 
     /**
      * Returns a @Pixmap from given Bitmap
@@ -89,8 +87,6 @@ public class Utils {
             }
         }
     }
-
-    static final int[] Key = {128, 56, 20, 78, 33, 225};
 
     public static String decrypt(String value) {
         int[] b = null;
@@ -399,7 +395,7 @@ public class Utils {
     /**
      * Return TRUE if both Date are equals on Year, Day, Month, Hour, Minute and Second
      *
-     * @param timestamp ?
+     * @param timestamp  ?
      * @param timestamp1 ?
      * @return ?
      */

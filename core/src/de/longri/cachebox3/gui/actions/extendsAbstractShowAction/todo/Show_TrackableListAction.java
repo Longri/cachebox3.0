@@ -13,42 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.actions.extendsAbstractShowAction;
+package de.longri.cachebox3.gui.actions.extendsAbstractShowAction.todo;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractShowAction;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.views.SolverView;
+import de.longri.cachebox3.gui.views.TrackableListView;
 
 /**
- * Created by Longri on 14.09.2016.
+ * Created by Longri on 24.07.16.
  */
-public class Show_SolverAction extends AbstractShowAction {
-    public Show_SolverAction() {
-        super(SolverView.class, NOT_ENABLED, "Solver", MenuID.AID_SHOW_SOLVER);
-    }
-
-    @Override
-    public boolean isActVisible() {
-        return CB.viewmanager.getCurrentView() instanceof SolverView;
-    }
-
-    @Override
-    public boolean viewTypeEquals(AbstractView actView) {
-        return actView.getClass().getName().equals(SolverView.class.getName());
+public class Show_TrackableListAction extends AbstractShowAction {
+    public Show_TrackableListAction() {
+        super(TrackableListView.class, NOT_ENABLED, "TBList", MenuID.AID_SHOW_TRACKABLELIST);
     }
 
     @Override
     public void execute() {
         if (isActVisible()) return;
-        SolverView view = new SolverView();
+
+        TrackableListView view = new TrackableListView();
         CB.viewmanager.showView(view);
+
+    }
+
+    public Drawable getIcon() {
+        return CB.getSkin().getMenuIcon.tbListIcon;
     }
 
     @Override
-    public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.solverIcon;
+    public boolean isActVisible() {
+        return CB.viewmanager.getCurrentView() instanceof TrackableListView;
+    }
+
+    @Override
+    public boolean viewTypeEquals(AbstractView actView) {
+        return actView.getClass().getName().equals(TrackableListView.class.getName());
     }
 }

@@ -38,8 +38,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class TrackRecorder implements PositionChangedListener {
-    private static TrackRecorder trackRecorder;
     final static org.slf4j.Logger log = LoggerFactory.getLogger(TrackRecorder.class);
+    private static TrackRecorder trackRecorder;
     private final String gpxHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx version=\"1.0\" creator=\"cachebox track recorder\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.topografix.com/GPX/1/0\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n";
     public boolean pauseRecording = false;
     public boolean recording = false;
@@ -192,11 +192,10 @@ public class TrackRecorder implements PositionChangedListener {
             mustRecPos = true;
         }
 
-//        Coordinate newCoord = CB.eventHelper.getLastGpsCoordinate();
-        //  TODO implement
-        Coordinate newCoord = null;
+        Coordinate newCoord = EventHandler.getMyPosition();
 
-        if (lastRecordedPosition == null) { // Warte bis 2 gültige Koordinaten vorliegen
+        if (lastRecordedPosition == null) {
+            // wait for 2 coords
             lastRecordedPosition = newCoord;
             saveAltitude = newCoord.getElevation();
         } else {
@@ -204,23 +203,20 @@ public class TrackRecorder implements PositionChangedListener {
             Coordinate newPoint;
             double altitudeDifference = 0;
 
-            // wurden seit dem letzten aufgenommenen Wegpunkt mehr als x Meter
-            // zurückgelegt? Wenn nicht, dann nicht aufzeichnen.
+            // wurden seit dem letzten aufgenommenen Wegpunkt mehr als x Meter zurückgelegt? Wenn nicht, dann nicht aufzeichnen.
             float[] dist = new float[1];
 
-            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, lastRecordedPosition.getLatitude(),
-                    lastRecordedPosition.getLongitude(), event.pos.getLatitude(), event.pos.getLongitude(), dist);
+            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, lastRecordedPosition.getLatitude(), lastRecordedPosition.getLongitude(), event.pos.getLatitude(), event.pos.getLongitude(), dist);
             float cachedDistance = dist[0];
 
             if (cachedDistance > Config.TrackDistance.getValue()) {
                 StringBuilder sb = new StringBuilder();
-
-                sb.append("<trkpt lat=\"" + String.valueOf(event.pos.getLatitude()) + "\" lon=\"" + String.valueOf(event.pos.getLongitude()) + "\">\n");
-                sb.append("   <ele>" + String.valueOf(newCoord.getElevation()) + "</ele>\n");
-                sb.append("   <time>" + getDateTimeString() + "</time>\n");
-                sb.append("   <course>" + String.valueOf(newCoord.getHeading()) + "</course>\n");
-                sb.append("   <speed>" + String.valueOf(newCoord.getSpeed()) + "</speed>\n");
-                sb.append("</trkpt>\n");
+                sb.append("<trkpt lat=\"").append(event.pos.getLatitude()).append("\" lon=\"").append(event.pos.getLongitude()).append("\">\n")
+                        .append("   <ele>").append(newCoord.getElevation()).append("</ele>\n")
+                        .append("   <time>").append(getDateTimeString()).append("</time>\n")
+                        .append("   <course>").append(newCoord.getHeading()).append("</course>\n")
+                        .append("   <speed>").append(newCoord.getSpeed()).append("</speed>\n")
+                        .append("</trkpt>\n");
 
                 RandomAccessFile rand;
                 try {

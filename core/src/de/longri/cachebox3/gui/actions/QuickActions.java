@@ -21,8 +21,6 @@ import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_RecVoice;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Toggle_Day_Night;
 import de.longri.cachebox3.translation.Translation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Enthält die Actions Möglichkeiten für die Quick Buttons
@@ -56,14 +54,8 @@ public enum QuickActions {
     Notesview, // 23
     uploadDraft, // 24
     torch, // 25
+    empty;
 
-    // ScreenLock, // 21
-
-    empty,
-    ;
-
-
-    final static Logger log = LoggerFactory.getLogger(QuickActions.class);
 
     public AbstractAction getAction() {
         switch (this) {

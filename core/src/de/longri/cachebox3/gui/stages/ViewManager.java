@@ -39,6 +39,8 @@ import de.longri.cachebox3.gui.actions.extendsAbstractAction.*;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_RecVoice;
 import de.longri.cachebox3.gui.actions.extendsAbstractAction.todo.Action_Toggle_Day_Night;
 import de.longri.cachebox3.gui.actions.extendsAbstractShowAction.*;
+import de.longri.cachebox3.gui.actions.extendsAbstractShowAction.todo.Show_Credits;
+import de.longri.cachebox3.gui.actions.extendsAbstractShowAction.todo.Show_TrackableListAction;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;

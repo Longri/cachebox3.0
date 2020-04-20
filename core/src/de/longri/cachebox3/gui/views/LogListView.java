@@ -49,13 +49,12 @@ import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 public class LogListView extends AbstractView implements SelectedCacheChangedListener {
     private static Logger log = LoggerFactory.getLogger(LogListView.class);
 
-    private final ListView listView = new ListView(VERTICAL);
+    private final ListView logListView = new ListView(VERTICAL);
     Array<LogEntry> logEntries;
 
-    private String actGcCode;
-    // todo possibly store in settings?
+    private String currentGcCode;
     private boolean logsOfFriendsAreShown;
-    private ListViewAdapter listViewAdapter = new ListViewAdapter() {
+    private final ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
         @Override
         public int getCount() {
@@ -80,8 +79,8 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     public LogListView() {
         super("LogListView");
-        listView.setEmptyString(Translation.get("EmptyLogList"));
-        this.addActor(listView);
+        logListView.setEmptyString(Translation.get("EmptyLogList"));
+        this.addActor(logListView);
         EventHandler.add(this);
         logsOfFriendsAreShown = false;
     }
@@ -102,24 +101,24 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             public void run() {
                 AbstractCache selectedCache = EventHandler.getSelectedCache();
                 String selectedGcCode = selectedCache == null ? "" : selectedCache.getGeoCacheCode().toString();
-                if (actGcCode == null || !actGcCode.equals(selectedGcCode)) {
+                if (currentGcCode == null || !currentGcCode.equals(selectedGcCode)) {
                     if (selectedCache != null) {
-                        actGcCode = selectedGcCode;
+                        currentGcCode = selectedGcCode;
                         logEntries = Database.Data.getLogs(selectedCache);
                         logEntries.sort((o1, o2) -> o1.Timestamp.compareTo(o2.Timestamp) * -1);
                     } else {
                         // todo or set actGcCode to null ?
-                        actGcCode = ""; // = selectedGcCode
+                        currentGcCode = ""; // = selectedGcCode
                     }
                 }
-                listView.setAdapter(listViewAdapter);
+                logListView.setAdapter(listViewAdapter);
             }
         }));
     }
 
     @Override
     public void sizeChanged() {
-        listView.setBounds(0, 0, this.getWidth(), this.getHeight());
+        logListView.setBounds(0, 0, this.getWidth(), this.getHeight());
     }
 
     @Override
@@ -130,7 +129,7 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        actGcCode = null;
+        currentGcCode = null;
         setListViewAdapter();
     }
 

@@ -3,6 +3,9 @@ package de.longri.cachebox3.gui.views;
 import com.badlogic.gdx.files.FileHandle;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.widgets.list_view.ListView;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
+import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.settings.Config;
@@ -20,11 +23,30 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
+
 /**
  * Created by Longri on 24.07.16.
  */
 public class TrackListView extends AbstractView {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(TrackListView.class);
+    private final ListView tracksView = new ListView(VERTICAL);
+    private final ListViewAdapter tracksViewAdapter = new ListViewAdapter() {
+        @Override
+        public int getCount() {
+            return 0;
+        }
+
+        @Override
+        public ListViewItem getView(int index) {
+            return null;
+        }
+
+        @Override
+        public void update(ListViewItem view) {
+
+        }
+    };
 
     public TrackListView(BitStore reader) {
         super(reader);
@@ -54,7 +76,7 @@ public class TrackListView extends AbstractView {
     }
 
     private void selectTrackFileReadAndAddToTracks() {
-        FileChooser fc = new FileChooser(Translation.get("LoadTrack"), FileChooser.Mode.SAVE, FileChooser.SelectionMode.ALL, "gpx", "GPX");
+        FileChooser fc = new FileChooser(Translation.get("LoadTrack"), FileChooser.Mode.OPEN, FileChooser.SelectionMode.FILES, "gpx", "GPX");
         // button text Translation.get("load")
         fc.setDirectory(Config.TrackFolder.getValue(), false);
         fc.setSelectionReturnListener(fileHandle -> {

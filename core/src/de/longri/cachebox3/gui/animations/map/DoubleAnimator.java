@@ -17,8 +17,6 @@ package de.longri.cachebox3.gui.animations.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 28.03.2017.
@@ -27,7 +25,7 @@ public class DoubleAnimator {
 
     public final static float DEFAULT_DURATION = 1.0f; // 1000 ms
 
-    private static Logger log = LoggerFactory.getLogger(DoubleAnimator.class);
+    // private static Logger log = LoggerFactory.getLogger(DoubleAnimator.class);
 
     private final Interpolation interpolation;
     private double start, end, act;
@@ -51,7 +49,7 @@ public class DoubleAnimator {
 
     public void start(float duration, double start, double end, double precision) {
         if (equals(start, end, precision)) return;
-        log.debug("{} animation", finish ? "start" : "restart");
+        // log.debug("{} animation", finish ? "start" : "restart");
         this.duration = duration;
         this.start = start;
         this.end = end;
@@ -68,7 +66,7 @@ public class DoubleAnimator {
         if (complete) {
             act = end;
             finish = true;
-            log.debug("finish animation");
+            //log.debug("finish animation");
             return true;
         } else {
             percent = time / duration;
