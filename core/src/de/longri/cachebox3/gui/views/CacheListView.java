@@ -49,7 +49,6 @@ import de.longri.cachebox3.gui.widgets.QuickButtonItem;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
-import de.longri.cachebox3.gui.widgets.list_view.SelectionChangedEvent;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
@@ -72,7 +71,7 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
  */
 public class CacheListView extends AbstractView implements CacheListChangedListener, PositionChangedListener, OrientationChangedListener {
     private final static Logger log = LoggerFactory.getLogger(CacheListView.class);
-    private final float result[] = new float[4];
+    private final float[] result = new float[4];
     private ListView listView;
     private ListViewItem[] createdItems;
 
@@ -181,43 +180,37 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         this.listView.setSelectable(SINGLE);
 
         // add selection changed event listener
-        this.listView.addSelectionChangedEventListner(new SelectionChangedEvent() {
-            @Override
-            public void selectionChanged() {
-                CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
-                int selectedItemListIndex = selectedItem.getListIndex();
-                AbstractCache cache = Database.Data.cacheList.get(selectedItemListIndex);
-                log.debug("Cache selection changed to: " + cache.toString());
-                //set selected Cache global
-                EventHandler.fire(new SelectedCacheChangedEvent(cache));
-            }
+        this.listView.addSelectionChangedEventListner(() -> {
+            CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
+            int selectedItemListIndex = selectedItem.getListIndex();
+            AbstractCache cache = Database.Data.cacheList.get(selectedItemListIndex);
+            log.debug("Cache selection changed to: " + cache.toString());
+            //set selected Cache global
+            EventHandler.fire(new SelectedCacheChangedEvent(cache));
         });
 
-        CB.postOnNextGlThread(new Runnable() {
-            @Override
-            public void run() {
-                int selectedIndex = 0;
-                for (AbstractCache abstractCache : Database.Data.cacheList) {
-                    if (abstractCache.equals(EventHandler.getSelectedCache())) {
-                        break;
-                    }
-                    selectedIndex++;
+        CB.postOnNextGlThread(() -> {
+            int selectedIndex = 0;
+            for (AbstractCache abstractCache : Database.Data.cacheList) {
+                if (abstractCache.equals(EventHandler.getSelectedCache())) {
+                    break;
                 }
-                try {
-                    if (selectedIndex >= Database.Data.cacheList.size)
-                        selectedIndex = 0;// select first item, if Cache not found
-                    if (Database.Data.cacheList.size > 0) {
-                        listView.setSelection(selectedIndex);
-                        listView.setSelectedItemVisible(false);
-                    }
-                } catch (Exception e) {
-                    log.error("setSelected index", e);
-                }
-                CB.requestRendering();
-                log.debug("Finish Thread add new listView");
-                if (WAIT_TOAST_LENGTH != null) WAIT_TOAST_LENGTH.close();
-                WAIT_TOAST_LENGTH = null;
+                selectedIndex++;
             }
+            try {
+                if (selectedIndex >= Database.Data.cacheList.size)
+                    selectedIndex = 0;// select first item, if Cache not found
+                if (Database.Data.cacheList.size > 0) {
+                    listView.setSelection(selectedIndex);
+                    listView.setSelectedItemVisible(false);
+                }
+            } catch (Exception e) {
+                log.error("setSelected index", e);
+            }
+            CB.requestRendering();
+            log.debug("Finish Thread add new listView");
+            if (WAIT_TOAST_LENGTH != null) WAIT_TOAST_LENGTH.close();
+            WAIT_TOAST_LENGTH = null;
         });
 
         CB.requestRendering();
@@ -339,7 +332,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         cm.addCheckableMenuItem("setOrResetFavorites", "", CB.getSkin().getMenuIcon.favorit, true, setOrResetFavorites(cm));
         cm.addMenuItem("manage", getSelectDBTitleExtension(), CB.getSkin().getMenuIcon.manageDB, this::selectDbDialog);
         cm.addMenuItem("AutoResort", CB.getAutoResort() ? CB.getSkin().getMenuIcon.autoSortOnIcon : CB.getSkin().getMenuIcon.autoSortOffIcon, this::setAutoResort);
-        cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon, () -> createCache());
+        cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCacheIcon, this::createCache);
         cm.addMoreMenuItem("DeleteCaches", "", CB.getSkin().getMenuIcon.deleteCaches, new ShowDeleteMenu());
         return cm;
     }

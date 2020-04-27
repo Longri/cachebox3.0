@@ -36,8 +36,8 @@ public class CB_Label extends VisLabel {
         super(text, style);
     }
 
-    public CB_Label(CharSequence name) {
-        super(name);
+    public CB_Label(CharSequence text) {
+        super(text);
     }
 
     public CB_Label setBackgroundColor(Color color) {

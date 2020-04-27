@@ -17,6 +17,7 @@ package de.longri.cachebox3.gui.views;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
+import de.longri.serializable.BitStore;
 
 /**
  * Created by Longri on 11.05.2017.
@@ -25,7 +26,7 @@ public abstract class AbstractTableView extends AbstractView {
 
     protected final Catch_Table contentTable = new Catch_Table();
 
-    public AbstractTableView(de.longri.serializable.BitStore reader) {
+    public AbstractTableView(BitStore reader) {
         super(reader);
     }
 

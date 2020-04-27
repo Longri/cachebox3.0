@@ -261,8 +261,7 @@ public class CB {
     }
 
     public static boolean isLogLevel(String logLevel) {
-        if (logLevelToInt(USED_LOG_LEVEL) >= logLevelToInt(logLevel)) return true;
-        return false;
+        return logLevelToInt(USED_LOG_LEVEL) >= logLevelToInt(logLevel);
     }
 
     private static int logLevelToInt(String logLevel) {
@@ -294,12 +293,7 @@ public class CB {
     public static void requestRendering() {
         if (Gdx.graphics == null) return;
         Gdx.graphics.requestRendering();
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                Gdx.graphics.requestRendering();
-            }
-        });
+        Gdx.app.postRunnable(() -> Gdx.graphics.requestRendering());
     }
 
     public static boolean getAutoResort() {
@@ -342,12 +336,7 @@ public class CB {
     }
 
     public static void initThreadCheck() {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                GL_THREAD = Thread.currentThread();
-            }
-        });
+        Gdx.app.postRunnable(() -> GL_THREAD = Thread.currentThread());
     }
 
     public static void scheduleOnGlThread(final NamedRunnable runnable, long delay) {
@@ -423,24 +412,21 @@ public class CB {
 
     public static void postAsync(final NamedRunnable runnable) {
         runningRunnables.add(runnable.name);
-        log.debug("Submit Async execute count {} runs: {}", executeCount.incrementAndGet(), runningRunnables.toString());
+        // log.debug("Submit Async execute count {} runs: {}", executeCount.incrementAndGet(), runningRunnables.toString());
 
-        asyncExecutor.submit(new AsyncTask<Void>() {
-            @Override
-            public Void call() throws Exception {
-                try {
-                    log.debug("Start runnable: {}", runnable.name);
-                    runnable.run();
-                    log.debug("Finish runnable: {}", runnable.name);
-                    runningRunnables.removeValue(runnable.name, false);
-                    log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
-                } catch (final Exception e) {
-                    errorLog.error("postAsync:" + runnable.name, e);
-                    CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
-                    executeCount.decrementAndGet();
-                }
-                return null;
+        asyncExecutor.submit((AsyncTask<Void>) () -> {
+            try {
+                // log.debug("Start runnable: {}", runnable.name);
+                runnable.run();
+                // log.debug("Finish runnable: {}", runnable.name);
+                runningRunnables.removeValue(runnable.name, false);
+                //log.debug("Ready Async executed runnable, count {} runs: {}", executeCount.decrementAndGet(), runningRunnables.toString());
+            } catch (final Exception e) {
+                errorLog.error("postAsync:" + runnable.name, e);
+                CB.stageManager.indicateException(EXCEPTION_COLOR_POST);
+                executeCount.decrementAndGet();
             }
+            return null;
         });
     }
 
@@ -469,8 +455,7 @@ public class CB {
     }
 
     public static Categories getCategories() {
-        de.longri.cachebox3.types.Categories categories = new Categories();
-        return categories;
+        return new Categories();
     }
 
 
@@ -663,9 +648,9 @@ public class CB {
         // store map, themeUsage -> last used theme to config : to read, when map is selected
         try {
             String[] currentLayer = CurrentMapLayer.getValue();
-            for (int j = 0, m = currentLayer.length; j < m; j++) {
+            for (String s : currentLayer) {
                 GdxSqlitePreparedStatement statement = Database.Settings.myDB.prepare("INSERT OR REPLACE into Config VALUES(?,?,?,?,?)");
-                statement.bind(currentLayer[j] + "|" + themeUsage, null, getConfigsThemePath(themeUsage), null, null);
+                statement.bind(s + "|" + themeUsage, null, getConfigsThemePath(themeUsage), null, null);
                 statement.commit();
                 statement.close();
             }
@@ -708,7 +693,7 @@ public class CB {
                 oldValue = Config.MapsforgeCarNightTheme.getValue();
                 Config.MapsforgeCarNightTheme.setValue(path);
         }
-        return oldValue != path;
+        return !oldValue.equals(path);
     }
 
     public static String getConfigsMapStyle(ThemeUsage themeUsage) {

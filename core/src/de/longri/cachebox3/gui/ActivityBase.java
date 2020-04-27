@@ -34,7 +34,7 @@ public class ActivityBase extends Window implements Showable {
 
 
     protected ActivityBaseStyle style;
-    protected boolean needsLayout = true;
+    protected boolean needLayout = true;
     private AtomicBoolean isDisposed = new AtomicBoolean(false);
 
     public ActivityBase() {

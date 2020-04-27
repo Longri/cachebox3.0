@@ -36,6 +36,13 @@ public class InputString extends Activity {
         finish();
     }
 
+    public void setText(CharSequence newText) {
+        if (newText == null)
+            edtResult.setText("");
+        else
+            edtResult.setText(newText);
+    }
+
     public void callBack(String result) {
     }
 

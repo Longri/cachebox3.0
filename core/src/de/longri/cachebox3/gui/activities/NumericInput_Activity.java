@@ -147,7 +147,7 @@ public class NumericInput_Activity<T extends Number> extends ActivityBase {
     @Override
     public void layout() {
         super.layout();
-        if (!needsLayout) return;
+        if (!needLayout) return;
         clear();
 
         this.addActor(numPad);
@@ -161,7 +161,7 @@ public class NumericInput_Activity<T extends Number> extends ActivityBase {
         textField.setCursorAtTextEnd();
 
 
-        needsLayout = false;
+        needLayout = false;
     }
 
     public void returnValue(T value) {

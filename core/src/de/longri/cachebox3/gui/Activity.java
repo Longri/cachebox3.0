@@ -21,7 +21,6 @@ public abstract class Activity extends ActivityBase {
     protected CB_Button btnOK, btnCancel;
     protected CB_Label lblTitle;
     protected Image imgTitle;
-    private boolean needLayout = true;
     private ClickListener cancelClickListener;
 
     public Activity(String title, Drawable icon) {

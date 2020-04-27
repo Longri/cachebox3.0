@@ -45,11 +45,11 @@ public abstract class AbstractAction {
     }
 
     public AbstractAction(boolean disabled, String titleTranslationId) {
-        this(disabled, titleTranslationId, "", -1);
+        this(disabled, titleTranslationId, "", -3);
     }
 
     public AbstractAction(String titleTranslationId) {
-        this(ENABLED, titleTranslationId, "", -1);
+        this(ENABLED, titleTranslationId, "", -3);
     }
 
     public AbstractAction(boolean disabled, String titleTranslationId, int id) {

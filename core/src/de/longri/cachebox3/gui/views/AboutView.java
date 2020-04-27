@@ -24,6 +24,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.menu.Menu;
@@ -119,13 +120,13 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
 
 
         //register as Location receiver
-        de.longri.cachebox3.events.EventHandler.add(this);
+        EventHandler.add(this);
     }
 
     @Override
     public void dispose() {
         //register as Location receiver
-        de.longri.cachebox3.events.EventHandler.remove(this);
+        EventHandler.remove(this);
     }
 
     Coordinate pos;
