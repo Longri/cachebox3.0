@@ -211,6 +211,7 @@ public class EditTextField extends Catch_WidgetGroup {
     }
 
     public void setStyle(EditTextStyle style) {
+        if (style == null) throw new IllegalArgumentException("Style can't be NULL!");
         this.style = style;
         ScrollPane.ScrollPaneStyle sps = new ScrollPane.ScrollPaneStyle();
         sps.background = style.background;
