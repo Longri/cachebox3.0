@@ -57,7 +57,7 @@ public abstract class PlatformConnector {
         }
     }
 
-    public void setClipboard(Clipboard _clipBoard) {
+    public static void setClipboard(Clipboard _clipBoard) {
         clipBoard = _clipBoard;
     }
 
