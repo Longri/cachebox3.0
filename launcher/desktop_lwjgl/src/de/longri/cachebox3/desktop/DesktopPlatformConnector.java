@@ -301,4 +301,29 @@ public class DesktopPlatformConnector extends PlatformConnector {
             }
         });
     }
+
+    @Override
+    public void _takePhoto() {
+//TODO
+    }
+
+    @Override
+    public void _recVideo() {
+//TODO
+    }
+
+    @Override
+    public void _recVoice() {
+//TODO
+    }
+
+    @Override
+    public void _shareInfos() {
+//TODO
+    }
+
+    @Override
+    public void _navigate(Navigation navigation) {
+//TODO
+    }
 }
