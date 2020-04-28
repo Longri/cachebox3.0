@@ -225,7 +225,7 @@ public class PlatformTestView extends AbstractView {
                         if (msg != null) {
 
                             //post msg with smaller font
-                            ButtonDialogStyle buttonDialogStyle = new ButtonDialogStyle(VisUI.getSkin().get("default", ButtonDialogStyle.class));
+                            ButtonDialogStyle buttonDialogStyle = new ButtonDialogStyle(VisUI.getSkin().get(ButtonDialogStyle.class));
                             buttonDialogStyle.titleFont = CB.getSkin().getFont("AboutInfo");
                             ButtonDialog dialog = new ButtonDialog("PlatformTestMassageDialog",
                                     ButtonDialog.getMsgContentTable(msg, null, buttonDialogStyle), null,

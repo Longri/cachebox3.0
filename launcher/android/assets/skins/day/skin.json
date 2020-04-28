@@ -870,7 +870,7 @@
     },
     "dayNight": {
       "path": "svg/dayNight.svg",
-      "scale": 1.7
+      "scale": 1.4737
     },
     "db": {
       "path": "svg/db.svg",
@@ -1734,7 +1734,7 @@
     },
     "navigate": {
       "path": "svg/navigate.svg",
-      "scale": 1.6
+      "scale": 1.4736
     },
     "needs_archived": {
       "path": "svg/needs_archived.svg",
@@ -1978,7 +1978,7 @@
     },
     "voiceRecIcon": {
       "path": "svg/voiceRecIcon.svg",
-      "scale": 1
+      "scale": 1.4736
     },
     "warning": {
       "path": "svg/warning.svg",

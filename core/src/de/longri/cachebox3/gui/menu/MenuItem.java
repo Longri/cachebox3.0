@@ -67,7 +67,7 @@ public class MenuItem extends ListViewItem {
     }
 
     private void setDefaultStyle() {
-        this.style = VisUI.getSkin().get("default", MenuItemStyle.class);
+        this.style = VisUI.getSkin().get(MenuItemStyle.class);
     }
 
     public int getMenuItemId() {

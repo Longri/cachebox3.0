@@ -73,7 +73,7 @@ public class Menu extends Window {
 
     public Menu(CharSequence name) {
         super(name.toString());
-        this.style = VisUI.getSkin().get("default", MenuStyle.class);
+        this.style = VisUI.getSkin().get(MenuStyle.class);
         this.name = name;
         this.setStageBackground(style.stageBackground);
         hideWithItemClick = true;

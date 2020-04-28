@@ -22,7 +22,6 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.translation.Translation;
 import org.slf4j.Logger;
@@ -43,15 +42,12 @@ public class Action_Quit extends AbstractAction {
         CharSequence Title = Translation.get("Quit?");
 
         //Name, msg, title, buttons, icon, OnMsgBoxClickListener
-        ButtonDialog dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButton.YesNo, MessageBoxIcon.Stop, new OnMsgBoxClickListener() {
-            @Override
-            public boolean onClick(int which, Object data) {
-                if (which == ButtonDialog.BUTTON_POSITIVE) {
-                    log.debug("\r\n Quit");
-                    CB.callQuit();
-                }
-                return true;
+        ButtonDialog dialog = new ButtonDialog("QuitDialog", Msg, Title, MessageBoxButton.YesNo, MessageBoxIcon.Stop, (which, data) -> {
+            if (which == ButtonDialog.BUTTON_POSITIVE) {
+                log.debug("\r\n Quit");
+                CB.callQuit();
             }
+            return true;
         });
         dialog.show();
     }

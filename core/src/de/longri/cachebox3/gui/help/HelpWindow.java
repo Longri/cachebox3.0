@@ -70,7 +70,7 @@ public class HelpWindow extends Window {
         if (this.getStageBackground() == null) {
 
             if (this.style == null)
-                this.style = VisUI.getSkin().get("default", HelpWindowStyle.class);
+                this.style = VisUI.getSkin().get(HelpWindowStyle.class);
 
             //create a background texture as stageBackground with a ellipsed hole
             //Use SVG-drawing for create => http://svg.tutorial.aptico.de/start3.php?knr=10&kname=Pfade&uknr=10.8&ukname=A%20und%20a%20-%20Bogenkurven

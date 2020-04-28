@@ -64,7 +64,7 @@ public class GestureHelp extends HelpWindow {
         this.gestureLeftIcon = gestureLeftIcon;
         this.gestureDownIcon = gestureDownIcon;
         this.buttonDrawable = buttonDrawable;
-        this.style = VisUI.getSkin().get("default", GestureHelpStyle.class);
+        this.style = VisUI.getSkin().get(GestureHelpStyle.class);
         super.setStyle(this.style);
     }
 

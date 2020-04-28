@@ -463,22 +463,26 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     }
 
     private void rememberGeoCache() {
-        ButtonDialog mb = new ButtonDialog("", Translation.get("rememberThisOrSelectRememberedGeoCache"), Translation.get("rememberGeoCacheTitle"),
-                MessageBoxButton.AbortRetryIgnore, MessageBoxIcon.Question, (which, data) -> {
-            if (which == BUTTON_POSITIVE) {
-                Config.rememberedGeoCache.setValue(EventHandler.getSelectedCache().getGeoCacheCode().toString());
-                Config.AcceptChanges();
-            } else if (which == BUTTON_NEGATIVE) {
-                Config.rememberedGeoCache.setValue("");
-                Config.AcceptChanges();
-            } else {
-                AbstractCache rememberedCache = Database.Data.cacheList.getCacheByGcCode(Config.rememberedGeoCache.getValue());
-                if (rememberedCache != null) {
-                    EventHandler.fireSelectedWaypointChanged(rememberedCache, null);
-                }
-            }
-            return true;
-        });
+        ButtonDialog mb = new ButtonDialog("rememberGeoCache",
+                Translation.get("rememberThisOrSelectRememberedGeoCache"),
+                Translation.get("rememberGeoCacheTitle"),
+                MessageBoxButton.AbortRetryIgnore,
+                MessageBoxIcon.Question,
+                (which, data) -> {
+                    if (which == BUTTON_POSITIVE) {
+                        Config.rememberedGeoCache.setValue(EventHandler.getSelectedCache().getGeoCacheCode().toString());
+                        Config.AcceptChanges();
+                    } else if (which == BUTTON_NEGATIVE) {
+                        Config.rememberedGeoCache.setValue("");
+                        Config.AcceptChanges();
+                    } else {
+                        AbstractCache rememberedCache = Database.Data.cacheList.getCacheByGcCode(Config.rememberedGeoCache.getValue());
+                        if (rememberedCache != null) {
+                            EventHandler.fireSelectedWaypointChanged(rememberedCache, null);
+                        }
+                    }
+                    return true;
+                });
         mb.setButtonText("rememberGeoCache", "selectGeoCache", "forgetGeoCache");
         mb.show();
     }

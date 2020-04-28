@@ -38,11 +38,11 @@ public class ActivityBase extends Window implements Showable {
     private AtomicBoolean isDisposed = new AtomicBoolean(false);
 
     public ActivityBase() {
-        this("nameless", VisUI.getSkin().get("default", ActivityBaseStyle.class));
+        this("nameless", VisUI.getSkin().get(ActivityBaseStyle.class));
     }
 
     public ActivityBase(String name) {
-        this(name, VisUI.getSkin().get("default", ActivityBaseStyle.class));
+        this(name, VisUI.getSkin().get(ActivityBaseStyle.class));
     }
 
     public ActivityBase(String name, ActivityBaseStyle style) {

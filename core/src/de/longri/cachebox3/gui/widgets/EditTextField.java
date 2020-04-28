@@ -70,7 +70,7 @@ public class EditTextField extends Catch_WidgetGroup {
         editButton = new Button();
         this.addActor(scrollPane);
         this.addActor(editButton);
-        this.setStyle(VisUI.getSkin().get("default", EditTextStyle.class));
+        this.setStyle(VisUI.getSkin().get(EditTextStyle.class));
         setText(text);
         clickListener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {

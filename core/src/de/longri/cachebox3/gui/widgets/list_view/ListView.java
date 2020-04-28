@@ -174,7 +174,7 @@ public class ListView extends Catch_WidgetGroup {
     private float lastScrollY = -1;
 
     public ListView(ListViewType type) {
-        this(type, VisUI.getSkin().get("default", ListViewStyle.class), true);
+        this(type, VisUI.getSkin().get(ListViewStyle.class), true);
     }
 
     public ListView(ListViewType type, ListViewStyle style) {
@@ -182,7 +182,7 @@ public class ListView extends Catch_WidgetGroup {
     }
 
     public ListView(ListViewType type, boolean canDisposeItems) {
-        this(type, VisUI.getSkin().get("default", ListViewStyle.class), canDisposeItems);
+        this(type, VisUI.getSkin().get(ListViewStyle.class), canDisposeItems);
     }
 
     public ListView(ListViewType type, ListViewStyle style, boolean canDisposeItems) {

@@ -168,7 +168,7 @@ public class FileChooser extends ActivityBase {
     }
 
     public FileChooser(CharSequence title, Mode _mode, SelectionMode selectMode, String... extensions) {
-        super("FileChooser", VisUI.getSkin().get("default", FileChooserStyle.class));
+        super("FileChooser", VisUI.getSkin().get(FileChooserStyle.class));
         mode = _mode;
         fileChooserStyle = (FileChooserStyle) style;
         setStageBackground(style.background);

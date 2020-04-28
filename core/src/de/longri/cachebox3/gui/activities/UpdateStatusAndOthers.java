@@ -38,7 +38,6 @@ import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.dialogs.OnMsgBoxClickListener;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
@@ -248,24 +247,22 @@ public class UpdateStatusAndOthers extends ActivityBase {
                         CharSequence title = Translation.get("chkState");
                         CharSequence msg = new CompoundCharSequence(Translation.get("CachesUpdated")
                                 , " ", Integer.toString(completeCount), "/", Integer.toString(Database.Data.cacheList.size));
-                        ButtonDialog dialog = new ButtonDialog("chkState", msg, title, MessageBoxButton.OK, MessageBoxIcon.None, new OnMsgBoxClickListener() {
-                            @Override
-                            public boolean onClick(int which, Object data) {
-                                if (which == ButtonDialog.BUTTON_POSITIVE) {
-                                    hide();
-                                    //Reload Cachelist if any changed
-                                    if (completeCount > 0) {
-                                        CB.postAsync(new NamedRunnable("UpdateStatusAndOthers:finish reload cachelist") {
-                                            @Override
-                                            public void run() {
-                                                CB.loadFilteredCacheList(null);
-                                            }
-                                        });
+                        ButtonDialog dialog = new ButtonDialog("chkState", msg, title, MessageBoxButton.OK, MessageBoxIcon.None,
+                                (which, data) -> {
+                                    if (which == ButtonDialog.BUTTON_POSITIVE) {
+                                        hide();
+                                        //Reload Cachelist if any changed
+                                        if (completeCount > 0) {
+                                            CB.postAsync(new NamedRunnable("UpdateStatusAndOthers:finish reload cachelist") {
+                                                @Override
+                                                public void run() {
+                                                    CB.loadFilteredCacheList(null);
+                                                }
+                                            });
+                                        }
                                     }
-                                }
-                                return true;
-                            }
-                        });
+                                    return true;
+                                });
                         dialog.show();
                     }
                 });

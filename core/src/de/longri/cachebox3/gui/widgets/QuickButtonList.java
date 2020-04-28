@@ -52,7 +52,7 @@ public class QuickButtonList extends Catch_Group {
     final CB_RectF tempClickRec = new CB_RectF();
 
     public QuickButtonList() {
-        style = VisUI.getSkin().get("default", QuickButtonListStyle.class);
+        style = VisUI.getSkin().get(QuickButtonListStyle.class);
         scrollPane = new ScrollPane(scrollPaneContent);
         scrollPane.setOverscroll(true, false);
         scrollPane.setFlickScroll(true);

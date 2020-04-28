@@ -48,7 +48,7 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
 
 
     public MapStateButton(StateChangedListener stateChangedListener) {
-        this.style = VisUI.getSkin().get("default", MapStateButtonStyle.class);
+        this.style = VisUI.getSkin().get(MapStateButtonStyle.class);
 
         this.stateChangedListener = stateChangedListener;
         if (style.stateCar == null || style.stateFree == null || style.stateLock == null

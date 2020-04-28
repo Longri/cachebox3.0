@@ -55,7 +55,7 @@ public class Slider extends Catch_WidgetGroup {
     private ScrollPane logTextField;
 
     public Slider() {
-        style = VisUI.getSkin().get("default", SliderStyle.class);
+        style = VisUI.getSkin().get(SliderStyle.class);
         quickButtonMaxHeight = CB.scaledSizes.BUTTON_HEIGHT;
         quickButtonList = new QuickButtonList();
         nameWidget = new NameWidget();

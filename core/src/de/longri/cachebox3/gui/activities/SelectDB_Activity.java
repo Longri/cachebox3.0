@@ -506,7 +506,7 @@ public class SelectDB_Activity extends ActivityBase {
         public ListViewItem getView(final int listIndex) {
 
             if (itemArray.size - 1 < listIndex) {
-                SelectDBItem item = new SelectDBItem(listIndex, files.get(listIndex), VisUI.getSkin().get("default", SelectDbStyle.class));
+                SelectDBItem item = new SelectDBItem(listIndex, files.get(listIndex), VisUI.getSkin().get(SelectDbStyle.class));
 
                 item.addListener(new ClickLongClickListener() {
                     @Override

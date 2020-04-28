@@ -66,7 +66,7 @@ public class ZoomButton extends Catch_Group {
 
     public ZoomButton(ValueChangeListener valueChangeListener) {
         this.valueChangeListener = valueChangeListener;
-        style = VisUI.getSkin().get("default", ZoomButtonStyle.class);
+        style = VisUI.getSkin().get(ZoomButtonStyle.class);
 
         Button.ButtonStyle btnStylePlus = new Button.ButtonStyle();
         btnStylePlus.up = style.plus;

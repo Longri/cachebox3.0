@@ -46,7 +46,7 @@ public class SelectBox<T extends SelectBoxItem> extends IconButton {
 
     public SelectBox() {
         super("");
-        setStyle(VisUI.getSkin().get("default", SelectBoxStyle.class));
+        setStyle(VisUI.getSkin().get(SelectBoxStyle.class));
         this.addActor(selectIcon);
         setSize(getPrefWidth(), getPrefHeight());
         this.addListener(new ClickListener() {

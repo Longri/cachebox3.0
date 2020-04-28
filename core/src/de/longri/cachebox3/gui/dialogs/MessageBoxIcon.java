@@ -40,7 +40,7 @@ public enum MessageBoxIcon implements SelectBoxItem {
     @Override
     public Drawable getDrawable() {
         // for select Box interface, use 'cacheList' style
-        if (iconStyle == null) iconStyle = VisUI.getSkin().get("default", IconsStyle.class);
+        if (iconStyle == null) iconStyle = VisUI.getSkin().get(IconsStyle.class);
         return getDrawable(iconStyle);
     }
 

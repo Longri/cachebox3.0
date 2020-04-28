@@ -39,7 +39,6 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
-import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
@@ -66,7 +65,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
-import static de.longri.cachebox3.settings.Settings.GcLogin;
 
 /**
  * Created by Longri on 24.08.2016.
@@ -91,7 +89,7 @@ public class Settings_Activity extends ActivityBase {
 
     public Settings_Activity() {
         super("Settings_Activity");
-        this.style = VisUI.getSkin().get("default", SettingsActivityStyle.class);
+        this.style = VisUI.getSkin().get(SettingsActivityStyle.class);
         this.setStageBackground(style.background);
         createButtons();
     }
@@ -776,7 +774,7 @@ public class Settings_Activity extends ActivityBase {
             index++;
         }
 
-        SelectBoxStyle style = VisUI.getSkin().get("default", SelectBoxStyle.class);
+        SelectBoxStyle style = VisUI.getSkin().get(SelectBoxStyle.class);
         style.up = null;
         style.down = null;
 
