@@ -93,17 +93,22 @@ public class TrackListView extends AbstractView {
 
     @Override
     public void onShow() {
+        super.onShow();
+        //TODO Create ListViewItems and add to ListView
     }
 
     @Override
     public void onHide() {
+        super.onHide();
     }
 
     protected void create() {
+        super.create();
     }
 
     @Override
     public void dispose() {
+        //TODO clear and destroy ListView and all ListViewItems
     }
 
     //################### Context menu implementation ####################################
@@ -524,7 +529,7 @@ public class TrackListView extends AbstractView {
             // draw Length
             if (trackLength == null) {
                 trackLength = new CB_Label();
-                trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getAltitudeDifference(),true));
+                trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getAltitudeDifference(), true));
                 add(trackLength);
             }
 
