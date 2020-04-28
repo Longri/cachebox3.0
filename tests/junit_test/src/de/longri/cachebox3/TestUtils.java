@@ -178,6 +178,7 @@ public class TestUtils {
 
         //de.longri.cachebox3.gui.skin.styles.EditTextStyle registered with name: default
         EditTextStyle editTextStyle = new EditTextStyle();
+        editTextStyle.font = new BitmapFont();
         VisUI.getSkin().add("default", editTextStyle, EditTextStyle.class);
 
         //de.longri.cachebox3.gui.skin.styles.CacheListItemStyle registered with name: cacheListItems
