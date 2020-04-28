@@ -21,7 +21,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
@@ -50,147 +49,14 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 public class ListView extends Catch_WidgetGroup {
 
     private final static Logger log = LoggerFactory.getLogger(ListView.class);
-
-    protected final ListViewType type;
-    private final boolean canDisposeItems;
-    final VisScrollPane scrollPane;
     public final ListViewStyle style;
+    protected final ListViewType type;
     protected final ListViewItemLinkedList itemList;
+    final VisScrollPane scrollPane;
+    final CB_RectF tempClickRec = new CB_RectF();
+    private final boolean canDisposeItems;
     private final Array<SelectionChangedEvent> changedEventListeners = new Array<>();
     private final Array<ListViewItemInterface> selectedItemList = new Array<>();
-    final CB_RectF tempClickRec = new CB_RectF();
-    private float maxScrollChange = 0;
-    private SelectableType selectionType;
-    private ListViewAdapter adapter;
-    private Drawable backgroundDrawable;
-    private float lastFiredScrollX = 0;
-    private float lastFiredScrollY = 0;
-    private long frameID = Long.MIN_VALUE;
-    private VisLabel emptyLabel;
-    CircularProgressWidget circPro;
-    private boolean block = false;
-
-
-    public ListView(ListViewType type) {
-        this(type, VisUI.getSkin().get("default", ListViewStyle.class), true);
-    }
-
-    public ListView(ListViewType type, ListViewStyle style) {
-        this(type, style, true);
-    }
-
-    public ListView(ListViewType type, boolean canDisposeItems) {
-        this(type, VisUI.getSkin().get("default", ListViewStyle.class), canDisposeItems);
-    }
-
-    public ListView(ListViewType type, ListViewStyle style, boolean canDisposeItems) {
-
-        if (style == null) throw new RuntimeException("style can't be NULL");
-
-        this.canDisposeItems = canDisposeItems;
-        this.type = type;
-        this.style = style;
-        this.itemList = new ListViewItemLinkedList(type, style,
-                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padLeft),
-                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padRight),
-                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padTop),
-                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom),
-                this.canDisposeItems) {
-            @Override
-            public void sizeChanged() {
-                CB.postOnNextGlThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setScrollPaneBounds();
-                    }
-                });
-            }
-
-        };
-        OnDrawListener onDrawListener = new OnDrawListener() {
-            @Override
-            public void onDraw(ListViewItem item) {
-
-                if (adapter != null && selectionType != NONE && !Gdx.input.isTouched()) {
-                    boolean isSelected;
-
-                    if (selectionType == SINGLE) {
-                        isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, true);
-                    } else {
-                        isSelected = selectedItemList.contains(item, true);
-                    }
-
-                    if (isSelected) {
-                        item.setBackground(ListView.this.style.selectedItem);
-                    } else {
-                        if (ListView.this.style.secondItem != null && item.getListIndex() % 2 == 1) {
-                            item.setBackground(ListView.this.style.secondItem);
-                        } else {
-                            item.setBackground(ListView.this.style.firstItem);
-                        }
-                    }
-
-                    //add ClickListener
-                    item.addListener(onListItemClickListener);
-                }
-                try {
-                    adapter.update(item);
-                } catch (Exception e) {
-                    log.error("Update:", e);
-                }
-            }
-        };
-        this.itemList.setOnDrawListener(onDrawListener);
-        scrollPane = new VisScrollPane(itemList, style) {
-
-
-            @Override
-            public Actor hit(float x, float y, boolean touchable) {
-                Actor actor = super.hit(x, y, touchable);
-                if (actor == scrollPane) {
-                    actor = itemList.hit(x, (itemList.getHeight() - (scrollPane.getScrollY() + scrollPane.getHeight())) + y, touchable);
-                }
-                return actor;
-            }
-
-
-            @Override
-            public void sizeChanged() {
-                super.sizeChanged();
-                if (ListView.this.type == VERTICAL) {
-                    float width = ListView.this.getWidth();
-                    if (ListView.this.backgroundDrawable != null) {
-                        width -= ListView.this.backgroundDrawable.getLeftWidth() + ListView.this.backgroundDrawable.getRightWidth();
-                    }
-                    itemList.setWidth(width);
-                } else {
-                    float height = ListView.this.getHeight();
-                    if (ListView.this.backgroundDrawable != null) {
-                        height -= ListView.this.backgroundDrawable.getTopHeight() + ListView.this.backgroundDrawable.getBottomHeight();
-                    }
-                    itemList.setHeight(height);
-                }
-            }
-
-            /** If currently scrolling by tracking a touch down, stop scrolling. */
-            public void cancel() {
-                super.cancel();
-                log.debug("ScrollPane.cancel()");
-            }
-        };
-        scrollPane.addCaptureListener(scrollpaneCaptureListener);
-        if (this.type == VERTICAL) {
-            scrollPane.setOverscroll(false, true);
-        } else {
-            scrollPane.setOverscroll(true, false);
-        }
-        scrollPane.setFlickScroll(true);
-        scrollPane.setVariableSizeKnobs(false);
-        scrollPane.setCancelTouchFocus(true);
-        scrollPane.setupFadeScrollBars(1f, 0.5f);
-
-    }
-
     private final ClickLongClickListener scrollpaneCaptureListener = new ClickLongClickListener() {
         @Override
         public boolean clicked(InputEvent event, float x, float y) {
@@ -252,10 +118,174 @@ public class ListView extends Catch_WidgetGroup {
             return false;
         }
     };
-
-
+    CircularProgressWidget circPro;
     Array<EventListener> originalCapturelistener = new Array<>();
     boolean isDisabled = false;
+    private float maxScrollChange = 0;
+    private SelectableType selectionType;
+    private ListViewAdapter adapter;
+    private Drawable backgroundDrawable;
+    private float lastFiredScrollX = 0;
+    private float lastFiredScrollY = 0;
+    private long frameID = Long.MIN_VALUE;
+    private VisLabel emptyLabel;
+    private final ClickLongClickListener onListItemClickListener = new ClickLongClickListener() {
+        public boolean clicked(InputEvent event, float x, float y) {
+            if (event.isCancelled()) return true;
+            if (event.getType() == InputEvent.Type.touchUp) {
+                if (selectionType != NONE) {
+                    ListViewItem item = ((ListViewItem) event.getListenerActor());
+
+                    if (selectionType == SINGLE) {
+                        if (!selectedItemList.contains(item, false)) {
+                            if (selectedItemList.size > 0) {
+                                ListViewItemInterface actSelected = selectedItemList.pop();
+                                actSelected.setSelected(false);
+                            }
+                            selectedItemList.add(item);
+                            item.setSelected(true);
+                        }
+                    } else {
+                        if (selectedItemList.contains(item, true)) {
+                            selectedItemList.removeValue(item, true);
+                            item.setSelected(false);
+                        } else {
+                            selectedItemList.add(item);
+                        }
+                    }
+                    CB.requestRendering();
+
+                    //call selection changed event
+                    for (int i = 0, n = changedEventListeners.size; i < n; i++) {
+                        changedEventListeners.get(i).selectionChanged();
+                    }
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
+            return false;
+        }
+    };
+    private ScrollChangedEvent scrollChangedEventListener;
+    private float lastScrollX = -1;
+    private float lastScrollY = -1;
+
+    public ListView(ListViewType type) {
+        this(type, VisUI.getSkin().get("default", ListViewStyle.class), true);
+    }
+
+    public ListView(ListViewType type, ListViewStyle style) {
+        this(type, style, true);
+    }
+
+    public ListView(ListViewType type, boolean canDisposeItems) {
+        this(type, VisUI.getSkin().get("default", ListViewStyle.class), canDisposeItems);
+    }
+
+    public ListView(ListViewType type, ListViewStyle style, boolean canDisposeItems) {
+
+        if (style == null) throw new RuntimeException("style can't be NULL");
+
+        this.canDisposeItems = canDisposeItems;
+        this.type = type;
+        this.style = style;
+        this.itemList = new ListViewItemLinkedList(type, style,
+                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padLeft),
+                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padRight),
+                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padTop),
+                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom),
+                this.canDisposeItems) {
+            @Override
+            public void sizeChanged() {
+                CB.postOnNextGlThread(() -> setScrollPaneBounds());
+            }
+
+        };
+        selectionType = SINGLE;
+        OnDrawListener onDrawListener = item -> {
+
+            if (adapter != null && selectionType != NONE && !Gdx.input.isTouched()) {
+                boolean isSelected;
+
+                if (selectionType == SINGLE) {
+                    isSelected = selectedItemList.size == 1 && selectedItemList.contains(item, true);
+                } else {
+                    isSelected = selectedItemList.contains(item, true);
+                }
+
+                if (isSelected) {
+                    item.setBackground(ListView.this.style.selectedItem);
+                } else {
+                    if (ListView.this.style.secondItem != null && item.getListIndex() % 2 == 1) {
+                        item.setBackground(ListView.this.style.secondItem);
+                    } else {
+                        item.setBackground(ListView.this.style.firstItem);
+                    }
+                }
+
+                //add ClickListener
+                item.addListener(onListItemClickListener);
+            }
+            try {
+                if (adapter != null)
+                    adapter.update(item);
+            } catch (Exception e) {
+                log.error("Update:", e);
+            }
+        };
+        this.itemList.setOnDrawListener(onDrawListener);
+        scrollPane = new VisScrollPane(itemList, style) {
+
+
+            @Override
+            public Actor hit(float x, float y, boolean touchable) {
+                Actor actor = super.hit(x, y, touchable);
+                if (actor == scrollPane) {
+                    actor = itemList.hit(x, (itemList.getHeight() - (scrollPane.getScrollY() + scrollPane.getHeight())) + y, touchable);
+                }
+                return actor;
+            }
+
+
+            @Override
+            public void sizeChanged() {
+                super.sizeChanged();
+                if (ListView.this.type == VERTICAL) {
+                    float width = ListView.this.getWidth();
+                    if (ListView.this.backgroundDrawable != null) {
+                        width -= ListView.this.backgroundDrawable.getLeftWidth() + ListView.this.backgroundDrawable.getRightWidth();
+                    }
+                    itemList.setWidth(width);
+                } else {
+                    float height = ListView.this.getHeight();
+                    if (ListView.this.backgroundDrawable != null) {
+                        height -= ListView.this.backgroundDrawable.getTopHeight() + ListView.this.backgroundDrawable.getBottomHeight();
+                    }
+                    itemList.setHeight(height);
+                }
+            }
+
+            /** If currently scrolling by tracking a touch down, stop scrolling. */
+            public void cancel() {
+                super.cancel();
+                log.debug("ScrollPane.cancel()");
+            }
+        };
+        scrollPane.addCaptureListener(scrollpaneCaptureListener);
+        if (this.type == VERTICAL) {
+            scrollPane.setOverscroll(false, true);
+        } else {
+            scrollPane.setOverscroll(true, false);
+        }
+        scrollPane.setFlickScroll(true);
+        scrollPane.setVariableSizeKnobs(false);
+        scrollPane.setCancelTouchFocus(true);
+        scrollPane.setupFadeScrollBars(1f, 0.5f);
+
+    }
 
     protected void setScrollingDisabled(boolean value, EventListener inputListener) {
         if (value) {
@@ -420,47 +450,6 @@ public class ListView extends Catch_WidgetGroup {
         this.selectionType = selectionType;
     }
 
-    private ClickLongClickListener onListItemClickListener = new ClickLongClickListener() {
-        public boolean clicked(InputEvent event, float x, float y) {
-            if (event.isCancelled()) return true;
-            if (event.getType() == InputEvent.Type.touchUp) {
-                if (selectionType != NONE) {
-                    ListViewItem item = ((ListViewItem) event.getListenerActor());
-
-                    if (selectionType == SINGLE) {
-                        if (!selectedItemList.contains(item, false)) {
-                            if (selectedItemList.size > 0) {
-                                ListViewItemInterface actSelected = selectedItemList.pop();
-                                actSelected.setSelected(false);
-                            }
-                            selectedItemList.add(item);
-                            item.setSelected(true);
-                        }
-                    } else {
-                        if (selectedItemList.contains(item, true)) {
-                            selectedItemList.removeValue(item, true);
-                            item.setSelected(false);
-                        } else {
-                            selectedItemList.add(item);
-                        }
-                    }
-                    CB.requestRendering();
-
-                    //call selection changed event
-                    for (int i = 0, n = changedEventListeners.size; i < n; i++) {
-                        changedEventListeners.get(i).selectionChanged();
-                    }
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
-            return false;
-        }
-    };
-
     public void setSelection(int index) {
 
         if (frameID == (Gdx.graphics == null ? frameID++ : Gdx.graphics.getFrameId())) {
@@ -520,10 +509,6 @@ public class ListView extends Catch_WidgetGroup {
         }
         if (getStage() != null) super.draw(batch, parentAlpha);
     }
-
-    private ScrollChangedEvent scrollChangedEventListener;
-    private float lastScrollX = -1;
-    private float lastScrollY = -1;
 
     public void setScrollChangedListener(ScrollChangedEvent listener) {
         this.scrollChangedEventListener = listener;
@@ -592,12 +577,7 @@ public class ListView extends Catch_WidgetGroup {
     }
 
     public void dataSetChanged() {
-        CB.postOnNextGlThread(new Runnable() {
-            @Override
-            public void run() {
-                setAdapter(ListView.this.adapter);
-            }
-        });
+        CB.postOnNextGlThread(() -> setAdapter(ListView.this.adapter));
     }
 
     public void showWorkAnimationUntilSetAdapter() {

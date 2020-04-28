@@ -1,8 +1,6 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.longri.cachebox3.CB;
@@ -12,6 +10,7 @@ import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.widgets.CB_CheckBox;
 import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
@@ -47,8 +46,7 @@ import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 public class TrackListView extends AbstractView {
     final static org.slf4j.Logger log = LoggerFactory.getLogger(TrackListView.class);
 
-    private static ListView tracksView;
-    private ListViewAdapter tracksViewAdapter;
+    private ListView tracksView;
     private TrackListViewItem currentRouteItem;
 
     public TrackListView(BitStore reader) {
@@ -58,7 +56,8 @@ public class TrackListView extends AbstractView {
     public TrackListView() {
         super("TrackListView");
         tracksView = new ListView(VERTICAL);
-        tracksViewAdapter = new ListViewAdapter() {
+        // viewPosition - 1, if tracking is activated
+        ListViewAdapter tracksViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
                 int size = TrackList.getTrackList().getNumberOfTracks();
@@ -73,12 +72,12 @@ public class TrackListView extends AbstractView {
                 int tracksIndex = viewPosition;
                 if (CB.currentRoute != null) {
                     if (viewPosition == 0) {
-                        currentRouteItem = new TrackListViewItem(viewPosition, CB.currentRoute);
+                        currentRouteItem = new TrackListViewItem(viewPosition, CB.currentRoute, tracksView);
                         return currentRouteItem;
                     }
                     tracksIndex--; // viewPosition - 1, if tracking is activated
                 }
-                return new TrackListViewItem(viewPosition, TrackList.getTrackList().getTrack(tracksIndex));
+                return new TrackListViewItem(viewPosition, TrackList.getTrackList().getTrack(tracksIndex), tracksView);
             }
 
             @Override
@@ -87,28 +86,20 @@ public class TrackListView extends AbstractView {
             }
         };
 
+        tracksView.setEmptyString(Translation.get("EmptyTrackList"));
         tracksView.setAdapter(tracksViewAdapter);
         addChild(tracksView);
+
     }
 
     @Override
     public void onShow() {
+        tracksView.setBounds(0, 0, this.getWidth(), this.getHeight());
         super.onShow();
-        //TODO Create ListViewItems and add to ListView
-    }
-
-    @Override
-    public void onHide() {
-        super.onHide();
-    }
-
-    protected void create() {
-        super.create();
     }
 
     @Override
     public void dispose() {
-        //TODO clear and destroy ListView and all ListViewItems
     }
 
     //################### Context menu implementation ####################################
@@ -420,74 +411,88 @@ public class TrackListView extends AbstractView {
 
     private static class TrackListViewItem extends ListViewItem {
         final org.slf4j.Logger log = LoggerFactory.getLogger(TrackListViewItem.class);
-        /*
-        private Sprite chkOff;
-        private Sprite chkOn;
-        private static CB_RectF colorIcon;
-        private static CB_RectF checkBoxIcon;
-        private static CB_RectF scaledCheckBoxIcon;
-         */
-        private Track track;
+        private final Track track;
         private CB_Label trackName;
         private CB_Label trackLength;
+        private CB_CheckBox showOnMap;
+        private CB_Label colorSelection;
+        private ListView tracksView;
+        private ClickListener showItemMenu;
 
-        public TrackListViewItem(int index, Track aTrack) {
+        public TrackListViewItem(int index, Track aTrack, ListView parent) {
             super(index);
             track = aTrack;
-            trackName = new CB_Label(aTrack.getName());
-            add(trackName);
-            addListener(new ClickListener() {
-                public void clicked(InputEvent event, float x, float y) {
-                    // tracksView.setSelection(index);
-                    setSelected(true);
-                    Vector2 clickedPosition = new Vector2(x, y);
-                /*
-                if (colorIcon.contains(clickedPosition)) {
-                    colorIconClicked();
-                } else if (checkBoxIcon.contains(clickedPosition)) {
-                    checkBoxIconClicked();
-                } else
-                 {
-                 */
-                    {
-                        Menu cm = new Menu("TrackRecordMenuTitle");
-                        cm.addMenuItem("ShowOnMap", null, () -> positionLatLon()); // CB.getSkin().getMenuIcon.
-                        cm.addMenuItem("rename", null, () -> setTrackName());
-                        cm.addMenuItem("save", null, () -> saveAsFile()); //CB.getSkin().getMenuIcon.
-                        cm.addMenuItem("unload", null, () -> unloadTrack());
+            tracksView = parent;
 
-                        // (rename, save,) delete darf nicht mit dem aktuellen Track gemacht werden....
-                        if (!track.isActualTrack()) {
-                            if (track.getFileName().length() > 0) {
-                                if (!track.isActualTrack()) {
-                                    FileHandle trackAbstractFile = new FileHandle(track.getFileName());
-                                    if (trackAbstractFile.exists()) {
-                                        cm.addMenuItem("delete", CB.getSkin().getMenuIcon.deleteIcon,
-                                                () -> {
-                                                    ButtonDialog bd = new ButtonDialog("", Translation.get("DeleteTrack"),
-                                                            Translation.get("DeleteTrack"),
-                                                            MessageBoxButton.YesNo,
-                                                            MessageBoxIcon.Question,
-                                                            (which, data) -> {
-                                                                if (which == BUTTON_POSITIVE) {
-                                                                    try {
-                                                                        trackAbstractFile.delete();
-                                                                        TrackList.getTrackList().removeTrack(track);
-                                                                        // TrackListView.getInstance().notifyDataSetChanged();
-                                                                    } catch (Exception ex) {
-                                                                        new ButtonDialog("", ex.toString(), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null).show();
-                                                                    }
+            showItemMenu = new ClickListener(){
+                public void clicked(InputEvent event, float x, float y) {
+                    setSelected(true);
+                    Menu cm = new Menu("TrackRecordMenuTitle");
+                    cm.addMenuItem("ShowOnMap", null, () -> positionLatLon()); // CB.getSkin().getMenuIcon.
+                    cm.addMenuItem("rename", null, () -> setTrackName());
+                    cm.addMenuItem("save", null, () -> saveAsFile()); //CB.getSkin().getMenuIcon.
+                    cm.addMenuItem("unload", null, () -> unloadTrack());
+
+                    // (rename, save,) delete darf nicht mit dem aktuellen Track gemacht werden....
+                    if (!track.isActualTrack()) {
+                        if (track.getFileName().length() > 0) {
+                            if (!track.isActualTrack()) {
+                                FileHandle trackAbstractFile = new FileHandle(track.getFileName());
+                                if (trackAbstractFile.exists()) {
+                                    cm.addMenuItem("delete", CB.getSkin().getMenuIcon.deleteIcon,
+                                            () -> {
+                                                ButtonDialog bd = new ButtonDialog("", Translation.get("DeleteTrack"),
+                                                        Translation.get("DeleteTrack"),
+                                                        MessageBoxButton.YesNo,
+                                                        MessageBoxIcon.Question,
+                                                        (which, data) -> {
+                                                            if (which == BUTTON_POSITIVE) {
+                                                                try {
+                                                                    trackAbstractFile.delete();
+                                                                    TrackList.getTrackList().removeTrack(track);
+                                                                    // TrackListView.getInstance().notifyDataSetChanged();
+                                                                } catch (Exception ex) {
+                                                                    new ButtonDialog("", ex.toString(), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null).show();
                                                                 }
-                                                                return true;
-                                                            });
-                                                    bd.show();
-                                                });
-                                    }
+                                                            }
+                                                            return true;
+                                                        });
+                                                bd.show();
+                                            });
                                 }
                             }
                         }
-                        cm.show();
                     }
+                    cm.show();
+                }
+            };
+
+            trackName = new CB_Label(track.getName());
+            trackName.addListener(showItemMenu);
+            addLast(trackName);
+
+            trackLength = new CB_Label();
+            trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getAltitudeDifference(), true));
+            trackLength.addListener(showItemMenu);
+            addLast(trackLength);
+
+            showOnMap = new CB_CheckBox(Translation.get("ShowOnMap"));
+            showOnMap.setChecked(track.isVisible());
+            showOnMap.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    track.setVisible(showOnMap.isChecked());
+                }
+            });
+            addLast(showOnMap);
+
+            colorSelection = new CB_Label("colorOnMap");
+            colorSelection.setBackgroundColor(track.getColor());
+            addLast(colorSelection);
+            // todo colorSelection
+
+            addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    setSelected(true);
                 }
             });
         }
@@ -504,90 +509,6 @@ public class TrackListView extends AbstractView {
             ShowMap.getInstance().normalMapView.setCenter(new Coordinate(latitude, longitude));
         }
          */
-        }
-
-        @Override
-        public void draw(Batch batch, float parentAlpha) {
-            super.draw(batch, parentAlpha);
-            /*
-            left = getPadLeft();
-            drawColorRec(batch);
-            if (trackName == null || trackLength == null) {
-                createLabel();
-            }
-            drawRightChkBox(batch);
-             */
-        }
-
-        private void createLabel() {
-            if (trackName == null) {
-                trackName = new CB_Label(track.getName());
-                trackName.setText(track.getName());
-                add(trackName);
-            }
-
-            // draw Length
-            if (trackLength == null) {
-                trackLength = new CB_Label();
-                trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getAltitudeDifference(), true));
-                add(trackLength);
-            }
-
-            invalidate();
-
-        }
-
-        private void drawColorRec(Batch batch) {
-        /*
-        if (track == null)
-            return;
-        if (colorIcon == null) {
-            colorIcon = new CB_RectF(0, 0, getHeight(), getHeight());
-            colorIcon = colorIcon.scaleCenter(0.95f);
-        }
-
-        if (colorReck == null) {
-            colorReck = Sprites.getSprite("text-field-back");
-            colorReck.setBounds(colorIcon.getX(), colorIcon.getY(), colorIcon.getWidth(), colorIcon.getHeight());
-            colorReck.setColor(track.getColor());
-        }
-
-        colorReck.draw(batch);
-
-        left += colorIcon.getWidth() + UiSizes.getInstance().getMargin();
-         */
-        }
-
-        private void drawRightChkBox(Batch batch) {
-        /*
-        if (checkBoxIcon == null || scaledCheckBoxIcon == null) {
-            checkBoxIcon = new CB_RectF(getWidth() - getHeight() - 10, 5, getHeight() - 10, getHeight() - 10);
-            scaledCheckBoxIcon = checkBoxIcon.scaleCenter(0.8f);
-        }
-
-        if (chkOff == null) {
-            chkOff = Sprites.getSprite("check-off");
-            chkOff.setBounds(scaledCheckBoxIcon.getX(), scaledCheckBoxIcon.getY(), scaledCheckBoxIcon.getWidth(), scaledCheckBoxIcon.getHeight());
-        }
-
-        if (chkOn == null) {
-            chkOn = Sprites.getSprite("check-on");
-            chkOn.setBounds(scaledCheckBoxIcon.getX(), scaledCheckBoxIcon.getY(), scaledCheckBoxIcon.getWidth(), scaledCheckBoxIcon.getHeight());
-        }
-
-        if (track.isVisible()) {
-            chkOn.draw(batch);
-        } else {
-            chkOff.draw(batch);
-        }
-         */
-
-        }
-
-        private void checkBoxIconClicked() {
-            track.setVisible(!track.isVisible());
-            TrackList.getTrackList().trackListChanged();
-            invalidate();
         }
 
         private void colorIconClicked() {
@@ -612,17 +533,6 @@ public class TrackListView extends AbstractView {
 
         public Track getTrack() {
             return track;
-        }
-
-        private void setTrackName() {
-            InputString is = new InputString(Translation.get("RenameTrack").toString(), null) {
-                public void callBack(String trackname) {
-                    track.setName(trackname);
-                    tracksView.dataSetChanged();
-                }
-            };
-            is.setText(track.getName());
-            is.show();
         }
 
         private void saveAsFile() {
@@ -715,10 +625,22 @@ public class TrackListView extends AbstractView {
             if (track.isActualTrack()) {
                 new ButtonDialog("", Translation.get("IsActualTrack"), null, MessageBoxButton.OK, MessageBoxIcon.Warning, null).show();
             } else {
-                TrackList.getTrackList().removeTrack(track); // index passt nicht mehr
-                // TrackListView.getInstance().notifyDataSetChanged();
-                dispose();
+                TrackList.getTrackList().removeTrack(track);
+                tracksView.dataSetChanged();
             }
+        }
+
+        private void setTrackName() {
+            InputString is = new InputString("RenameTrack", null) {
+                public void callBack(String trackname) {
+                    if (trackname.length() > 0) {
+                        track.setName(trackname);
+                        tracksView.dataSetChanged();
+                    }
+                }
+            };
+            is.setText(track.getName());
+            is.show();
         }
 
     }

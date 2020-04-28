@@ -10,9 +10,9 @@ public class InputString extends Activity {
     CB_Label lblResult;
     private EditTextField edtResult;
 
-    public InputString(String title, Drawable icon) {
-        super(title, icon);
-        lblResult = new CB_Label(Translation.get(title));
+    public InputString(String titleTranslationId, Drawable icon) {
+        super(titleTranslationId, icon);
+        lblResult = new CB_Label(Translation.get(titleTranslationId));
         edtResult = new EditTextField(true, "");
     }
 

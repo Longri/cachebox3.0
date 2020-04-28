@@ -18,6 +18,7 @@ package de.longri.cachebox3.gui.map.layer;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.MathUtils;
@@ -76,13 +77,13 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
             return;
         }
 
-        log.debug("Redraw direct line");
+        // log.debug("Redraw direct line");
         directLineRenderer.setLine(selectedCoordinate, ownPosition);
     }
 
     @Override
     public void dispose() {
-        de.longri.cachebox3.events.EventHandler.remove(this);
+        EventHandler.remove(this);
         this.directLineRenderer.dispose();
     }
 
