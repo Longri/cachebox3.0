@@ -41,7 +41,7 @@ public abstract class AbstractTestCache {
 
     protected AbstractTestCache() {
         setValues();
-        this.id = AbstractCache.GenerateCacheId(this.gcCode);
+        this.id = AbstractCache.generateCacheId(this.gcCode);
         testWaypoints = addWaypoints();
         boolean lt = false;
         try {
