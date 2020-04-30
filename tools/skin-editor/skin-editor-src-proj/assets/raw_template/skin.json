@@ -3522,7 +3522,8 @@
   "de.longri.cachebox3.gui.skin.styles.DescriptionViewStyle": {
     "default": {
       "backgroundColor": "background_color",
-      "foregroundColor": "font_color"
+      "foregroundColor": "font_color",
+      "linkColor": "LinColor"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.GalleryViewStyle": {

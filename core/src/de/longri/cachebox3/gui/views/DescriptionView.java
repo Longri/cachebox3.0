@@ -324,7 +324,6 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     private String setDescriptionViewColorStyle(String html) {
 
         DescriptionViewStyle style = null;
-        // style = CB.getSkin().get(DescriptionViewStyle.class);
         try {
             style = CB.getSkin().get(DescriptionViewStyle.class);
         } catch (Exception ignored) {

@@ -15,7 +15,6 @@
  */
 package de.longri.cachebox3.gui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.SvgSkin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -28,13 +27,9 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.gui.skin.styles.AbstractIconStyle;
-import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
-import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.platform_test.AfterAll;
 import de.longri.cachebox3.platform_test.StyleEntry;
-import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.utils.ReflectionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -91,10 +86,12 @@ public class SkinTest {
                 System.out.println("ignore AbstractIconStyle.class");
                 continue; // ignore abstract classes
             }
+            /*
             if (clazz.equals(EditWaypointStyle.class)) {
                 System.out.println("Must implement the missing EditWaypointStyle");
                 continue; // TODO implement EditWaypointStyle
             }
+             */
 
             ObjectMap<String, ?> allStyles = testSkin.getAll(clazz);
             assertNotNull(allStyles, "Style for class:" + clazz.toString() + " must not be Null");
@@ -116,7 +113,6 @@ public class SkinTest {
             assertNotNull(style, "No '" + styleEntry.clazz.toString() + "'style found for name '" + styleEntry.name + "'!");
         }
     }
-
 
 
     @Test
