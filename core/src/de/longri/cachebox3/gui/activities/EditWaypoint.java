@@ -28,7 +28,6 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.callbacks.GenericCallBack;
 import de.longri.cachebox3.gui.ActivityBase;
-import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
 import de.longri.cachebox3.gui.widgets.*;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.sqlite.Database;
@@ -46,7 +45,6 @@ import org.slf4j.LoggerFactory;
 public class EditWaypoint extends ActivityBase {
     private final static Logger log = LoggerFactory.getLogger(EditWaypoint.class);
 
-    private final EditWaypointStyle style;
     private final AbstractWaypoint waypoint;
     private final CB_Button btnOk, btnCancel;
     private final CB_Label cacheTitelLabel, titleLabel, typeLabel, descriptionLabel, clueLabel, startLabel;
@@ -59,6 +57,13 @@ public class EditWaypoint extends ActivityBase {
     private final boolean showCoordsOnShow;
     private final GenericCallBack<AbstractWaypoint> callBack;
     private final boolean onlyShow;//TODO implement see WaypointView context menu. See issue #252
+    private final ClickListener cancelClickListener = new ClickListener() {
+        public void clicked(InputEvent event, float x, float y) {
+            callBack.callBack(null);
+            finish();
+        }
+    };
+
 
     public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, boolean onlyShow, GenericCallBack<AbstractWaypoint> callBack) {
         super("EditWaypoint");
@@ -146,7 +151,6 @@ public class EditWaypoint extends ActivityBase {
         selectBox.select(waypoint.getType());
     }
 
-
     private void showCbStartPoint(boolean visible) {
         startCheckBox.setVisible(visible);
         startLabel.setVisible(visible);
@@ -159,7 +163,6 @@ public class EditWaypoint extends ActivityBase {
         }
         CB.stageManager.registerForBackKey(cancelClickListener);
     }
-
 
     private void create() {
         this.addActor(btnOk);
@@ -184,13 +187,6 @@ public class EditWaypoint extends ActivityBase {
         btnCancel.addListener(cancelClickListener);
 
     }
-
-    private final ClickListener cancelClickListener = new ClickListener() {
-        public void clicked(InputEvent event, float x, float y) {
-            callBack.callBack(null);
-            finish();
-        }
-    };
 
     @Override
     public void layout() {

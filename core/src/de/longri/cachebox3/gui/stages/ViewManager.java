@@ -507,6 +507,11 @@ public class ViewManager extends NamedStage
         if (currentView != null) currentView.onHide();
     }
 
+    public void quit() {
+        locationReceiver.stopForegroundUpdates();
+        if (currentView != null) currentView.onHide();
+    }
+
     @Override
     public void draw() {
         if (CB.DRAW_EXCEPTION_INDICATOR) getRoot().setDebug(true, false);

@@ -125,7 +125,6 @@ public class ImportGCPosition extends Activity {
         mainContent.addLast(edtDate);
         mainContent.addNext(lblCategory, -0.4f);
         mainContent.addLast(edtCategory);
-        mainContent.stopRow();
 
         mainContent.addLast(checkBoxOnlyAvailable);
         mainContent.addLast(checkBoxExcludeHides);

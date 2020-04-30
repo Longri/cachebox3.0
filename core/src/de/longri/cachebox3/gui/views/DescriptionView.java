@@ -32,10 +32,7 @@ import de.longri.cachebox3.gui.actions.extendsAbstractAction.ListsAtGroundSpeak;
 import de.longri.cachebox3.gui.activities.DeleteCaches;
 import de.longri.cachebox3.gui.activities.EditCache;
 import de.longri.cachebox3.gui.activities.ReloadCacheActivity;
-import de.longri.cachebox3.gui.dialogs.ButtonDialog;
-import de.longri.cachebox3.gui.dialogs.MessageBox;
-import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
-import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
+import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.skin.styles.DescriptionViewStyle;
 import de.longri.cachebox3.settings.Config;
@@ -326,7 +323,12 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     private String setDescriptionViewColorStyle(String html) {
 
-        DescriptionViewStyle style = CB.getSkin().get(DescriptionViewStyle.class);
+        DescriptionViewStyle style = null;
+        // style = CB.getSkin().get(DescriptionViewStyle.class);
+        try {
+            style = CB.getSkin().get(DescriptionViewStyle.class);
+        } catch (Exception ignored) {
+        }
         if (style == null) return html;
 
         //set HtmlBackground to #93B874 TODO set over style
@@ -463,7 +465,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     }
 
     private void rememberGeoCache() {
-        ButtonDialog mb = new ButtonDialog("rememberGeoCache",
+        DialogBox mb = new DialogBox("rememberGeoCache",
                 Translation.get("rememberThisOrSelectRememberedGeoCache"),
                 Translation.get("rememberGeoCacheTitle"),
                 MessageBoxButton.AbortRetryIgnore,
@@ -479,6 +481,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                         AbstractCache rememberedCache = Database.Data.cacheList.getCacheByGcCode(Config.rememberedGeoCache.getValue());
                         if (rememberedCache != null) {
                             EventHandler.fireSelectedWaypointChanged(rememberedCache, null);
+                            EventHandler.fire(new CacheListChangedEvent());
                         }
                     }
                     return true;

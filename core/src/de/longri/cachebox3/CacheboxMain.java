@@ -266,10 +266,9 @@ public class CacheboxMain extends ApplicationAdapter {
         log.debug("onPause");
         CB.isBackground = true;
         if (CB.viewmanager != null) {
-            CB.viewmanager.pause();
-
             if (CB.isQuitCalled()) {
                 log.debug("save instance state quit called");
+                CB.viewmanager.quit();
                 BitStore saveInstanceStateWriter = new BitStore();
                 saveInstanceStateWriter.write(true); // nothing to restore
                 Preferences prefs = Gdx.app.getPreferences(SAVE_INSTANCE_KEY);
@@ -277,6 +276,7 @@ public class CacheboxMain extends ApplicationAdapter {
                 prefs.flush();
             } else {
                 log.debug("save instance state");
+                CB.viewmanager.pause();
                 BitStore saveInstanceStateWriter = new BitStore();
                 saveInstanceStateWriter.write(false);
 

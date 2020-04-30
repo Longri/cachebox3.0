@@ -15,14 +15,11 @@
  */
 package de.longri.cachebox3.gui.dialogs;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.UnitFormatter;
@@ -30,10 +27,9 @@ import de.longri.cachebox3.utils.UnitFormatter;
 /**
  * Created by Longri on 01.06.17
  */
-public class HintDialog extends ButtonDialog {
+public class HintDialog extends DialogBox {
     private final CharSequence hintFromDB;
     private final VisLabel hintLabel;
-    private final CB_Button encodeButton;
     private boolean encoded = false;
 
     public HintDialog() {
@@ -41,15 +37,11 @@ public class HintDialog extends ButtonDialog {
         hintFromDB = EventHandler.getSelectedCache() == null ? ""
                 : UnitFormatter.rot13(EventHandler.getSelectedCache().getHint());
 
-
-        hintLabel = (VisLabel) ((ScrollPane) contentBox.getCells().get(0).getActor()).getActor();
+        hintLabel = (VisLabel) ((ScrollPane) center.getCells().get(0).getActor()).getActor();
 
         hintLabel.setWrap(true);
+        setButtonText("decode", null, "close");
 
-        SnapshotArray<Actor> childs = buttonTable.getChildren();
-        encodeButton = ((CB_Button) childs.get(0));
-        encodeButton.setText(Translation.get("decode"));
-        ((CB_Button) childs.get(1)).setText(Translation.get("close"));
         result(BUTTON_POSITIVE);
     }
 
@@ -70,11 +62,11 @@ public class HintDialog extends ButtonDialog {
             if (!encoded) {
                 encoded = true;
                 hintLabel.setText(UnitFormatter.rot13(hintFromDB));
-                encodeButton.setText(Translation.get("encode"));
+                setButtonText(Translation.get("encode"), BUTTON_POSITIVE);
             } else {
                 encoded = false;
                 hintLabel.setText(UnitFormatter.rot13(hintFromDB));
-                encodeButton.setText(Translation.get("decode"));
+                setButtonText(Translation.get("decode"), BUTTON_POSITIVE);
             }
             return;
         }

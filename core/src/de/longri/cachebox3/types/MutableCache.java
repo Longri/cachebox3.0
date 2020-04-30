@@ -51,6 +51,7 @@ public class MutableCache extends AbstractCache {
     private final static short MASK_CORECTED_COORDS = 1 << 1; //   2
     private final static short MASK_IS_LIVE = 1 << 6;         //  64
     private final static short MASK_SOLVER1CHANGED = 1 << 7;  // 128
+    private final Database database;
     private short booleanStore;
     private Array<Attributes> attributes;
     private CharSequence name, gcCode, placedBy, owner, gcId;
@@ -75,8 +76,6 @@ public class MutableCache extends AbstractCache {
     private CharSequence solver;
     private CharSequence tourName;
     private long gpxFilenameId;
-
-    private final Database database;
 
     public MutableCache(Database database, double latitude, double longitude) {
         super(latitude, longitude);
@@ -433,6 +432,7 @@ public class MutableCache extends AbstractCache {
     @Override
     public void setHint(CharSequence hint) {
         this.hint = hint;
+        setMaskValue(MASK_HAS_HINT, hint.length() > 0);
     }
 
     @Override

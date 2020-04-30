@@ -228,12 +228,7 @@ public class GlobalLocationReceiver implements PositionChangedListener, Selected
         final Coordinate lastBackgroundCoord = backgroundTask.getLastCoord();
         backgroundTask.cancel();
         backgroundTask = null;
-        CB.postOnNextGlThread(new Runnable() {
-            @Override
-            public void run() {
-                EventHandler.fire(new PositionChangedEvent(lastBackgroundCoord, true));
-            }
-        });
+        CB.postOnNextGlThread(() -> EventHandler.fire(new PositionChangedEvent(lastBackgroundCoord, true)));
     }
 
     public void pause() {

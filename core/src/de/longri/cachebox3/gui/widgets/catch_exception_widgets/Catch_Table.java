@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Create a subtable explicit with startRow or  implicit with addNext, addLast
  * <not_implemented>, addNextNL, addNL, addNLNext</not_implemented>
  * These commands add an actor just like the simple .add
- * To switch to the next line/row (subtable) explicit call stopRow or addLast
+ * To switch to the next line/row (subtable) explicit call finishRow or addLast
  * <sizing>With using 'sizing' as second parameter to addNext/addLast
  * <p>
  * the sizing factors the default cell with = whole width devided by number of cells.
@@ -78,7 +78,7 @@ public class Catch_Table extends VisTable {
 
     public Cell setTableAndCellDefaults() {
         top().left();
-        defaults().pad(CB.scaledSizes.MARGIN);
+        defaults().padTop(0).padBottom(0).padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN);
         return defaults().expandX().fill().colspan((int) sizingMax);
     }
 
@@ -140,7 +140,7 @@ public class Catch_Table extends VisTable {
         return cell;
     }
 
-    public void stopRow() {
+    public void finishRow() {
         if (currentRow != null) {
             currentRow.prepareLayout();
             currentRow = null;
