@@ -56,7 +56,6 @@ public class EditWaypoint extends ActivityBase {
     private final SelectBox<CacheTypes> selectBox;
     private final boolean showCoordsOnShow;
     private final GenericCallBack<AbstractWaypoint> callBack;
-    private final boolean onlyShow;//TODO implement see WaypointView context menu. See issue #252
     private final ClickListener cancelClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             callBack.callBack(null);
@@ -65,17 +64,16 @@ public class EditWaypoint extends ActivityBase {
     };
 
 
-    public EditWaypoint(final AbstractWaypoint waypoint, boolean showCoordsOnShow, boolean onlyShow, GenericCallBack<AbstractWaypoint> callBack) {
+    public EditWaypoint(final AbstractWaypoint _waypoint, boolean firstShowEditCoords, GenericCallBack<AbstractWaypoint> _callBack) {
         super("EditWaypoint");
         style = null;
-        this.waypoint = waypoint;
-        this.showCoordsOnShow = showCoordsOnShow;
-        this.callBack = callBack;
-        this.onlyShow = onlyShow;
+        waypoint = _waypoint;
+        showCoordsOnShow = firstShowEditCoords;
+        callBack = _callBack;
 
         btnOk = new CB_Button(Translation.get("save"));
         btnCancel = new CB_Button(Translation.get("cancel"));
-        cacheTitelLabel = new CB_Label(Database.Data.cacheList.getCacheById(waypoint.getCacheId()).getGeoCacheName());
+        cacheTitelLabel = new CB_Label(Database.Data.cacheList.getCacheById(_waypoint.getCacheId()).getGeoCacheName());
         typeLabel = new CB_Label(Translation.get("type"));
         titleLabel = new CB_Label(Translation.get("Title"));
         descriptionLabel = new CB_Label(Translation.get("Description"));
@@ -85,7 +83,7 @@ public class EditWaypoint extends ActivityBase {
         descriptionTextArea = new EditTextField(true);
         clueTextArea = new EditTextField(true);
         contentTable = new VisTable();
-        coordinateButton = new CoordinateButton(waypoint);
+        coordinateButton = new CoordinateButton(_waypoint);
         startCheckBox = new VisCheckBox("");
 
         scrollPane = new ScrollPane(contentTable);
@@ -103,7 +101,7 @@ public class EditWaypoint extends ActivityBase {
         selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                waypoint.setType(selectBox.getSelected());
+                _waypoint.setType(selectBox.getSelected());
                 showCbStartPoint(EditWaypoint.this.waypoint.getType() == CacheTypes.MultiStage);
             }
         });
@@ -145,10 +143,10 @@ public class EditWaypoint extends ActivityBase {
         int lineCount = (int) ((space / lineHeight) / 2);
         descriptionTextArea.setMaxLineCount(lineCount);
         clueTextArea.setMaxLineCount(lineCount);
-        titleTextArea.setText((waypoint.getTitle() == null) ? "" : waypoint.getTitle());
-        descriptionTextArea.setText(waypoint.getDescription() == null ? "" : waypoint.getDescription());
-        clueTextArea.setText(waypoint.getClue() == null ? "" : waypoint.getClue());
-        selectBox.select(waypoint.getType());
+        titleTextArea.setText((_waypoint.getTitle() == null) ? "" : _waypoint.getTitle());
+        descriptionTextArea.setText(_waypoint.getDescription() == null ? "" : _waypoint.getDescription());
+        clueTextArea.setText(_waypoint.getClue() == null ? "" : _waypoint.getClue());
+        selectBox.select(_waypoint.getType());
     }
 
     private void showCbStartPoint(boolean visible) {
@@ -158,16 +156,16 @@ public class EditWaypoint extends ActivityBase {
 
     @Override
     public void onShow() {
-        if (this.showCoordsOnShow) {
+        if (showCoordsOnShow) {
             Gdx.app.postRunnable(() -> Utils.triggerButtonClicked(coordinateButton));
         }
         CB.stageManager.registerForBackKey(cancelClickListener);
     }
 
     private void create() {
-        this.addActor(btnOk);
-        this.addActor(btnCancel);
-        this.addActor(scrollPane);
+        addActor(btnOk);
+        addActor(btnCancel);
+        addActor(scrollPane);
 
         btnOk.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {

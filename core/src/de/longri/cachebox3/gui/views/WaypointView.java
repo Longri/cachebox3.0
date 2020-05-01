@@ -158,9 +158,18 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                 if (index == 0) {
                     return new CacheListItem(index, actAbstractCache, getWidth());
                 } else {
-                    final WayPointListItem item;
+                    final WayPointListItem listViewItem;
                     try {
-                        item = WayPointListItem.getListItem(index, actAbstractCache.getWaypoints().get(index - 1), getWidth());
+                        AbstractWaypoint waypoint = actAbstractCache.getWaypoints().get(index - 1);
+                        listViewItem = new WayPointListItem(index,
+                                waypoint.getType(),
+                                waypoint.getGcCode().toString(),
+                                waypoint.getTitle().toString(),
+                                waypoint.getDescription(),
+                                waypoint.formatCoordinate());
+                        listViewItem.setWidth(getWidth());
+                        listViewItem.invalidate();
+                        listViewItem.pack();
                     } catch (Exception e) {
                         CB.postOnGlThread(new NamedRunnable("Waypoint list invalid") {
                             @Override
@@ -170,7 +179,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                         });
                         return new ListViewItem(index);
                     }
-                    return item;
+                    return listViewItem;
                 }
             }
 
@@ -324,15 +333,11 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         dialog.show();
     }
 
-    private void editWP(boolean onlyShow) {
-        showEditWpDialog(actWaypoint, true, onlyShow);
-    }
-
     public void addWp() {
         addWp(EventHandler.getSelectedCoord(), true);
     }
 
-    private void addWp(Coordinate coordinate, boolean showCoords) {
+    private void addWp(Coordinate coordinate, boolean firstShowEditCoords) {
         String newGcCode;
         try {
             newGcCode = Database.createFreeGcCode(Database.Data, EventHandler.getSelectedCache().getGeoCacheCode().toString());
@@ -347,14 +352,14 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         AbstractWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint, "",
                 coordinate.getLatitude(), coordinate.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
         newWP.setUserWaypoint(true);
-        showEditWpDialog(newWP, showCoords, false);
+        showEditWpDialog(newWP, firstShowEditCoords);
     }
 
-    private void showEditWpDialog(final AbstractWaypoint newWP, final boolean showCoords, final boolean onlyShow) {
+    private void showEditWpDialog(final AbstractWaypoint newWP, final boolean firstShowEditCoords) {
         CB.postOnGlThread(new NamedRunnable("WaypointView") {
             @Override
             public void run() {
-                EditWaypoint editWaypoint = new EditWaypoint(newWP, showCoords, onlyShow, value -> {
+                EditWaypoint editWaypoint = new EditWaypoint(newWP, firstShowEditCoords, value -> {
                     if (value != null) {
                         boolean update = false;
                         if (actAbstractCache.getWaypoints().contains(value, false)) {
@@ -424,8 +429,8 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         Menu cm = new Menu("WaypointViewContextMenuTitle");
 
         if (actWaypoint != null) {
-            cm.addMenuItem("show", CB.getSkin().getMenuIcon.showWp, () -> editWP(false));
-            cm.addMenuItem("edit", CB.getSkin().getMenuIcon.editWp, () -> editWP(true)).setEnabled(false); // todo implement and remove disabled. See issue #252
+            cm.addMenuItem("show", CB.getSkin().getMenuIcon.showWp, () -> showEditWpDialog(actWaypoint, false));
+            cm.addMenuItem("edit", CB.getSkin().getMenuIcon.editWp, () -> showEditWpDialog(actWaypoint, true));
         }
         cm.addMenuItem("AddWaypoint", CB.getSkin().getMenuIcon.addWp, this::addWp);
         if ((actWaypoint != null) && (actWaypoint.isUserWaypoint()))

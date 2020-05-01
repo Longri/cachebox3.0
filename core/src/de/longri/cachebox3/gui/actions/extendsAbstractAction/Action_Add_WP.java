@@ -79,7 +79,7 @@ public class Action_Add_WP extends AbstractAction {
 
         MutableWaypoint newWP = new MutableWaypoint(newGcCode, CacheTypes.ReferencePoint, "", coord.getLatitude(), coord.getLongitude(), EventHandler.getSelectedCache().getId(), "", newGcCode);
         newWP.setUserWaypoint(true);
-        EditWaypoint editWaypoint = new EditWaypoint(newWP, false, false, abstractWaypoint -> {
+        EditWaypoint editWaypoint = new EditWaypoint(newWP, false, abstractWaypoint -> {
             if (abstractWaypoint != null) {
                 if (abstractWaypoint.isStart()) {
                     //It must be ensured here that this waypoint is the only one of these Cache,

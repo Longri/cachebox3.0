@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
-import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.types.CacheTypes;
 
 /**
@@ -27,25 +26,14 @@ import de.longri.cachebox3.types.CacheTypes;
  */
 public class WayPointListItem extends ListViewItem implements Disposable {
 
-    public static WayPointListItem getListItem(int listIndex, final AbstractWaypoint waypoint, float targetWidth) {
-        WayPointListItem listViewItem = new WayPointListItem(listIndex, waypoint.getType(),
-                waypoint.getGcCode().toString(), waypoint.getTitle().toString(), waypoint.getDescription(), waypoint.formatCoordinate());
-        listViewItem.setWidth(targetWidth);
-        listViewItem.invalidate();
-        listViewItem.pack();
-        return listViewItem;
-    }
-
     private final WayPointItem wayPointItem;
 
-    private WayPointListItem(int listIndex, CacheTypes type, CharSequence wayPointGcCode, CharSequence wayPointTitle,
-                             CharSequence description, CharSequence coord) {
+    WayPointListItem(int listIndex, CacheTypes type, CharSequence wayPointGcCode, CharSequence wayPointTitle, CharSequence description, CharSequence coord) {
         super(listIndex);
         WayPointListItemStyle style = VisUI.getSkin().get("WayPointListItems", WayPointListItemStyle.class);
         this.wayPointItem = new WayPointItem(type, wayPointGcCode, wayPointTitle, description, coord, style);
         this.add(wayPointItem).expand().fill();
     }
-
 
     public boolean update(float bearing, CharSequence distance) {
         if (!this.wayPointItem.distanceOrBearingChanged) return false;
