@@ -26,7 +26,7 @@ import de.longri.cachebox3.gui.skin.styles.*;
  */
 public class StyleTypes {
 
-    public static final Array<Class> items = new Array<Class>();
+    public static final Array<Class> items = new Array<>();
 
     static {
         // Sort items
@@ -65,7 +65,7 @@ public class StyleTypes {
         items.add(de.longri.cachebox3.gui.widgets.ZoomButton.ZoomButtonStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.ScaledSize.class);
-        items.add(de.longri.cachebox3.gui.skin.styles.IconsStyle.class);
+        items.add(de.longri.cachebox3.gui.skin.styles.MessageBoxIconStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.MenuIconStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.MapArrowStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.FileChooserStyle.class);

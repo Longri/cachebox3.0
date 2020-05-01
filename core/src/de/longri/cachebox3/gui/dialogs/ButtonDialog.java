@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle;
-import de.longri.cachebox3.gui.skin.styles.IconsStyle;
+import de.longri.cachebox3.gui.skin.styles.MessageBoxIconStyle;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.Window;
@@ -208,7 +208,7 @@ public class ButtonDialog extends Window {
         if (msgIcon == null)
             return null;
 
-        IconsStyle style = VisUI.getSkin().get(IconsStyle.class);
+        MessageBoxIconStyle style = VisUI.getSkin().get(MessageBoxIconStyle.class);
 
         switch (msgIcon) {
             case Asterisk:
@@ -229,10 +229,6 @@ public class ButtonDialog extends Window {
                 return style.Stop;
             case Warning:
                 return style.Warning;
-            case Powerd_by_GC_Live:
-                return style.Powerd_by_GC_Live;
-            case GC_Live:
-                return style.GC_Live;
             case ExpiredApiKey:
                 return style.ExpiredApiKey;
             case Database:

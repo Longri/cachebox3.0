@@ -184,7 +184,7 @@ public class DraftsViewItem extends ListViewItem {
     private boolean onHeaderClicked() {
         Menu cm = new Menu("DraftItemMenuTitle");
         cm.addMenuItem("SelectCache", ":\n" + entry.CacheName, entry.cacheType.getDrawable(), this::selectCacheFromDraft);
-        cm.addMenuItem("edit", CB.getSkin().getMenuIcon.edit, this::editDraft);
+        cm.addMenuItem("edit", CB.getSkin().getMenuIcon.editDraft, this::editDraft);
         if (entry.GcId.startsWith("GL")) {
             cm.addMenuItem("uploadLogImage", CB.getSkin().getMenuIcon.uploadDraft, this::uploadLogImage);
             cm.addMenuItem("BrowseLog", null, () -> PlatformConnector.callUrl("https://coord.info/" + entry.GcId));

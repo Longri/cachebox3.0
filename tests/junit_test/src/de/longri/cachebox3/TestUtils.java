@@ -232,8 +232,8 @@ public class TestUtils {
         VisUI.getSkin().add("default", buttonDialogStyle, ButtonDialogStyle.class);
 
         //de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle registered with name: default
-        IconsStyle iconsStyle = new IconsStyle();
-        VisUI.getSkin().add("default", iconsStyle, IconsStyle.class);
+        MessageBoxIconStyle iconsStyle = new MessageBoxIconStyle();
+        VisUI.getSkin().add("default", iconsStyle, MessageBoxIconStyle.class);
 
         //de.longri.cachebox3.gui.skin.styles.GalleryViewStyle registered with name: default
         GalleryViewStyle galleryViewStyle = new GalleryViewStyle();

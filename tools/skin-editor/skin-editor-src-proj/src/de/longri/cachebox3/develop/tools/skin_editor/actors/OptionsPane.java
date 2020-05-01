@@ -48,6 +48,7 @@ import de.longri.cachebox3.gui.skin.styles.*;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -58,15 +59,15 @@ import java.util.Iterator;
  */
 public class OptionsPane extends Table {
 
-    private SkinEditorGame game;
-    public List<String> listStyles;
-    private Array<String> listItems = new Array<String>();
-    private Table tableFields;
-    public Object currentStyle;
-    private ObjectMap<String, Object> styles;
     final private PreviewPane previewPane;
     final private Cell styleLabelCell, styleCell, styleButtonCell;
     final private float styleButtonCellPrefHeight, styleLabelCellPrefHeight;
+    public List<String> listStyles;
+    public Object currentStyle;
+    private SkinEditorGame game;
+    private Array<String> listItems = new Array<String>();
+    private Table tableFields;
+    private ObjectMap<String, Object> styles;
 
     /**
      *
@@ -457,6 +458,7 @@ public class OptionsPane extends Table {
         tableFields.row();
 
         Field[] fields = ClassReflection.getFields(currentStyle.getClass());
+        Arrays.sort(fields, (field, t1) -> field.getName().compareTo(t1.getName()));
         for (final Field field : fields) {
             try {
 
@@ -544,10 +546,10 @@ public class OptionsPane extends Table {
                     // Grey optional
                     if (game.opt.isFieldOptional(currentStyle.getClass(), field.getName())) {
 
-                        tableFields.add(new Label(field.getName() + "(" + name +")", game.skin, "optional")).left();
+                        tableFields.add(new Label(field.getName() + "(" + name + ")", game.skin, "optional")).left();
 
                     } else {
-                        tableFields.add(new Label(field.getName() + "(" + name +")", game.skin, "default")).left();
+                        tableFields.add(new Label(field.getName() + "(" + name + ")", game.skin, "default")).left();
 
                     }
 //                    tableFields.add(actor).left().height(64).padRight(24).expandX().fillX();

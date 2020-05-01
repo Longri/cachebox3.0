@@ -24,6 +24,7 @@ import de.longri.cachebox3.CB;
 public class MenuIconStyle extends AbstractIconStyle {
 
 
+    public Drawable addCache;
     public Drawable baseMapOnlineVector;
     public Drawable baseMapOnlineBitmap;
     public Drawable baseMapMapsforge;
@@ -32,7 +33,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable mapLayer;
     public Drawable deleteAllDrafts;
     public Drawable ownerLogTypes;
-    public Drawable edit;
+    public Drawable editDraft;
     public Drawable fileTransfer;
     public Drawable favPoint;
     public Drawable theme;
@@ -40,7 +41,6 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable import_PQ;
     public Drawable favorit;
     public Drawable docIcon;
-    public Drawable addCacheIcon;
     public Drawable deleteIcon;
     public Drawable sortIcon;
     public Drawable filterIcon;
@@ -82,7 +82,6 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable tbListIcon;
     public Drawable waypointListIcon;
     public Drawable trackListIcon;
-    public Drawable GC_Live;
     public Drawable gc_logo;
     public Drawable viewSettings;
     public Drawable reloadCacheIcon;

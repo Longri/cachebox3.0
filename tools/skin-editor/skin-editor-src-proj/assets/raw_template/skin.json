@@ -84,13 +84,13 @@
       "path": "svg/add-wp.svg",
       "scale": 0.175
     },
-    "addCacheIcon": {
-      "path": "svg/addCacheIcon.svg",
-      "scale": 0.18
+    "addCache": {
+      "path": "svg/addCache.svg",
+      "scale": 1
     },
     "api_key_ex": {
       "path": "svg/api_key_ex.svg",
-      "scale": 0.25
+      "scale": 1
     },
     "api_key_io": {
       "path": "svg/api_key_io.svg",
@@ -814,7 +814,7 @@
     },
     "closeIcon": {
       "path": "svg/closeIcon.svg",
-      "scale": 1.05
+      "scale": 1
     },
     "cluster1": {
       "path": "svg/cluster1.svg",
@@ -866,7 +866,7 @@
     },
     "database": {
       "path": "svg/database.svg",
-      "scale": 0.19
+      "scale": 1
     },
     "dayNight": {
       "path": "svg/dayNight.svg",
@@ -1016,6 +1016,10 @@
       "path": "svg/pencil.svg",
       "scale": 0.3
     },
+    "editDraft": {
+      "path": "svg/editDraft.svg",
+      "scale": 1
+    },
     "editWp": {
       "path": "svg/editWp.svg",
       "scale": 0.18
@@ -1058,7 +1062,7 @@
     },
     "fileTransfer": {
       "path": "svg/fileTransfer.svg",
-      "scale": 0.2
+      "scale": 1
     },
     "filebackIcon": {
       "path": "svg/backIcon.svg",
@@ -1120,14 +1124,6 @@
       "path": "svg/gb-eng.svg",
       "scale": 0.08
     },
-    "gc_liveIcon": {
-      "path": "svg/gc_liveIcon.svg",
-      "scale": 0.75
-    },
-    "gc_liveMenuIcon": {
-      "path": "svg/gc_liveIcon.svg",
-      "scale": 0.75
-    },
     "gc_logo": {
       "path": "svg/gc_logo.svg",
       "scale": 1.4
@@ -1138,7 +1134,7 @@
     },
     "gpxFileIcon": {
       "path": "svg/gpxFileIcon.svg",
-      "scale": 0.9
+      "scale": 1
     },
     "helpIcon": {
       "path": "svg/helpIcon.svg",
@@ -1166,11 +1162,11 @@
     },
     "import": {
       "path": "svg/import.svg",
-      "scale": 0.21
+      "scale": 1
     },
     "import_PQ": {
       "path": "svg/import_PQ.svg",
-      "scale": 1.55
+      "scale": 1
     },
     "infoIcon": {
       "path": "svg/infoIcon.svg",
@@ -1826,7 +1822,7 @@
     },
     "reload_cache": {
       "path": "svg/reload_cache.svg",
-      "scale": 0.19
+      "scale": 1
     },
     "reviewer_note": {
       "path": "svg/reviewer_note.svg",
@@ -1926,7 +1922,7 @@
     },
     "todo": {
       "path": "svg/todo.svg",
-      "scale": 0.34
+      "scale": 1
     },
     "toggleOff": {
       "path": "svg/toggleOff.svg",
@@ -1966,7 +1962,7 @@
     },
     "view": {
       "path": "svg/view.svg",
-      "scale": 0.21
+      "scale": 1
     },
     "virtual": {
       "path": "svg/virtual.svg",
@@ -1982,7 +1978,7 @@
     },
     "warning": {
       "path": "svg/warning.svg",
-      "scale": 1.2
+      "scale": 1
     },
     "waypointListIcon": {
       "path": "svg/waypointListIcon.svg",
@@ -2910,7 +2906,7 @@
       "value": 5
     }
   },
-  "de.longri.cachebox3.gui.skin.styles.IconsStyle": {
+  "de.longri.cachebox3.gui.skin.styles.MessageBoxIconStyle": {
     "default": {
       "Asterisk": "infoIcon",
       "Error": "closeIcon",
@@ -2920,8 +2916,6 @@
       "Question": "helpIcon",
       "Stop": "closeIcon",
       "Warning": "warning",
-      "Powerd_by_GC_Live": "gc_liveIcon",
-      "GC_Live": "gc_liveIcon",
       "Close": "closeIcon",
       "Help": "helpIcon",
       "ExpiredApiKey": "api_key_ex",
@@ -2930,6 +2924,7 @@
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
     "default": {
+      "addCache": "addCache",
       "baseMapOnlineVector": "baseMapOnlineVector",
       "baseMapOnlineBitmap": "baseMapOnlineBitmap",
       "baseMapMapsforge": "baseMapMapsforge",
@@ -2938,7 +2933,7 @@
       "mapLayer": "map-layer",
       "deleteAllDrafts": "deleteIcon",
       "ownerLogTypes": "ownerLogTypes",
-      "edit": "edit",
+      "editDraft": "editDraft",
       "fileTransfer": "fileTransfer",
       "favPoint": "favpointFilter",
       "theme": "map_theme",
@@ -2946,7 +2941,6 @@
       "import_PQ": "import_PQ",
       "favorit": "favIcon",
       "docIcon": "description",
-      "addCacheIcon": "addCacheIcon",
       "deleteIcon": "deleteIcon",
       "sortIcon": "sortIcon",
       "filterIcon": "filter",
@@ -2991,7 +2985,6 @@
       "tbListIcon": "tbListIcon",
       "waypointListIcon": "waypointListIcon",
       "trackListIcon": "trackListIcon",
-      "GC_Live": "gc_liveMenuIcon",
       "gc_logo": "gc_logo",
       "viewSettings": "view",
       "reloadCacheIcon": "reload_cache",

@@ -49,7 +49,7 @@ public class SvgSkin extends Skin {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(SvgSkin.class);
     public static final String SKIN_JSON_NAME = "skin.json";
     private boolean forceCreateNewAtlas = false;
-    public IconsStyle getIcon;
+    public MessageBoxIconStyle getIcon;
     public MenuIconStyle getMenuIcon;
 
     public enum StorageType {
@@ -117,7 +117,7 @@ public class SvgSkin extends Skin {
 
         //after load set iconStyle
         try {
-            getIcon = get(IconsStyle.class);
+            getIcon = get(MessageBoxIconStyle.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

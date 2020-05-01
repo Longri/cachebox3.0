@@ -515,7 +515,7 @@ public class DraftsView extends AbstractView {
                             CB.scheduleOnGlThread(new NamedRunnable("DraftsView") {
                                 @Override
                                 public void run() {
-                                    MessageBox.show(Translation.get("uploadFinished"), Translation.get("uploadDrafts"), MessageBoxButton.OK, MessageBoxIcon.GC_Live, null);
+                                    MessageBox.show(Translation.get("uploadFinished"), Translation.get("uploadDrafts"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
                                     log.debug("Show MessageBox for uploaded Draft");
                                 }
                             }, 300);

@@ -85,7 +85,7 @@ public class UpdateStatusAndOthers extends ActivityBase {
         super("UpdateStatusAndOthers");
 
         bCancel = new CB_Button(Translation.get("cancel"));
-        gsLogo = new Image(CB.getSkin().getIcon.GC_Live);
+        gsLogo = new Image(CB.getSkin().getMenuIcon.gc_logo);
         lblTitle = new VisLabel(Translation.get("chkApiState"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());
         style.fontColor.set(Color.WHITE);

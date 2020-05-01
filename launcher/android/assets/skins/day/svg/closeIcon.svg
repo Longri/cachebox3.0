@@ -1,21 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="50" height="50" viewBox="0 0 50.00 50.00" enable-background="new 0 0 50.00 50.00" xml:space="preserve">
-	<radialGradient id="SVGID_Fill1_" cx="25" cy="25" r="24" gradientUnits="userSpaceOnUse">
-		<stop offset="0" stop-color="#FCD7D7" stop-opacity="1"/>
-		<stop offset="0.991379" stop-color="#FF0000" stop-opacity="1"/>
-	</radialGradient>
-	<ellipse fill="url(#SVGID_Fill1_)" stroke-width="2" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" cx="25" cy="25" rx="22.5" ry="22.5"/>
-	<radialGradient id="SVGID_Fill2_" cx="25" cy="-6.03446" r="40" gradientUnits="userSpaceOnUse">
-		<stop offset="0" stop-color="#FFFFFF" stop-opacity="0.486275"/>
-		<stop offset="0.271552" stop-color="#FFF1F1" stop-opacity="0.486275"/>
-		<stop offset="1" stop-color="#FF0000" stop-opacity="0.486275"/>
-	</radialGradient>
-	<ellipse fill="url(#SVGID_Fill2_)" stroke-width="0.2" stroke-linejoin="round" cx="25" cy="25" rx="20" ry="20"/>
-	<radialGradient id="SVGID_Fill3_" cx="25" cy="12.5862" r="40" gradientUnits="userSpaceOnUse" gradientTransform="rotate(180.000000 25.000002 12.586222)">
-		<stop offset="0.116379" stop-color="#FFFFFF" stop-opacity="0"/>
-		<stop offset="1" stop-color="#FFE700" stop-opacity="0.513725"/>
-	</radialGradient>
-	<ellipse fill="url(#SVGID_Fill3_)" stroke-width="0.2" stroke-linejoin="round" cx="25" cy="25" rx="20" ry="20"/>
-	<path fill="#FFFFFF" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 11.875,17.9896L 18,12.1146L 24.9375,19.2396L 31.75,11.9896L 37.9375,18.3646L 30.9375,25.1146L 37.6875,31.8021L 31.625,37.4896L 25.1875,31.4896L 18.625,37.9271L 12.3125,31.8021L 18.9375,25.6146L 11.875,17.9896 Z "/>
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <radialGradient cx="25" cy="25" r="24" fx="25" fy="25" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.021276, 0, 0, 1.021277, -1.531909, -1.531917)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#FCD7D7" stop-opacity="1" id="stop2" xml:space="preserve" />
+    <stop offset="99.1379%" stop-color="#FF0000" stop-opacity="1" id="stop4" xml:space="preserve" />
+  </radialGradient>
+  <ellipse cx="24" cy="24" rx="22.97872" ry="22.97872" stroke="#000000" stroke-width="2.042553" stroke-linejoin="round" id="ellipse7" xml:space="preserve" style="fill:url(#SVGID_Fill1_);" />
+  <radialGradient cx="25" cy="-6.03446" r="40" fx="25" fy="-6.03446" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.021276, 0, 0, 1.021277, -1.531909, -1.531917)" id="SVGID_Fill2_" xml:space="preserve">
+    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.486275" id="stop9" xml:space="preserve" />
+    <stop offset="27.1552%" stop-color="#FFF1F1" stop-opacity="0.486275" id="stop11" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FF0000" stop-opacity="0.486275" id="stop13" xml:space="preserve" />
+  </radialGradient>
+  <ellipse cx="24" cy="24" rx="20.42553" ry="20.42553" stroke-width="0.2042553" stroke-linejoin="round" id="ellipse16" xml:space="preserve" style="fill:url(#SVGID_Fill2_);" />
+  <radialGradient cx="25" cy="12.5862" r="40" fx="25" fy="12.5862" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-1.021276, 0, 0, -1.021277, 49.53192, 24.17612)" id="SVGID_Fill3_" xml:space="preserve">
+    <stop offset="11.6379%" stop-color="#FFFFFF" stop-opacity="0" id="stop18" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FFE700" stop-opacity="0.513725" id="stop20" xml:space="preserve" />
+  </radialGradient>
+  <ellipse cx="24" cy="24" rx="20.42553" ry="20.42553" stroke-width="0.2042553" stroke-linejoin="round" id="ellipse23" xml:space="preserve" style="fill:url(#SVGID_Fill3_);" />
+  <path d="M10.59575 16.84044 L16.85107 10.84045 L23.93617 18.11704 L30.89362 10.71278 L37.21277 17.22342 L30.06383 24.11704 L36.95745 30.94683 L30.76596 36.75534 L24.19149 30.62768 L17.48937 37.20215 L11.04256 30.94683 L17.80852 24.62768 z" stroke-width="0.2042553" stroke-linejoin="round" id="path25" xml:space="preserve" style="fill:#FFFFFF;" />
 </svg>
