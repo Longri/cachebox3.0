@@ -34,24 +34,24 @@ public class ApiButton extends IconButton {
 
     public ApiButton() {
         super("");
-        this.getLabel().setText(Translation.get("getApiKey"));
-        this.style = VisUI.getSkin().get("ApiButton", ApiButtonStyle.class);
+        getLabel().setText(Translation.get("getApiKey"));
+        style = VisUI.getSkin().get(ApiButtonStyle.class);
         TextButtonStyle btnStyle = new VisTextButtonStyle();
         btnStyle.up = style.up;
         btnStyle.down = style.down;
         btnStyle.font = style.font;
         btnStyle.fontColor = style.fontColor;
-        this.setStyle(btnStyle);
+        setStyle(btnStyle);
         setPreferredHeight(style.unchecked.getMinHeight() + CB.scaledSizes.MARGINx2);
         setIcon();
     }
 
     @Override
     public void layout() {
-        this.getLabel().setHeight(this.getHeight());
-        this.getCell(this.getLabel()).spaceLeft(CB.scaledSizes.MARGINx2);
+        getLabel().setHeight(getHeight());
+        getCell(getLabel()).spaceLeft(CB.scaledSizes.MARGINx2);
         if (image != null && style != null && style.unchecked != null)
-            image.setBounds(this.getWidth() - (style.unchecked.getMinHeight() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN, style.unchecked.getMinHeight(), style.unchecked.getMinHeight());
+            image.setBounds(getWidth() - (style.unchecked.getMinHeight() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN, style.unchecked.getMinHeight(), style.unchecked.getMinHeight());
         super.layout();
     }
 
@@ -73,7 +73,7 @@ public class ApiButton extends IconButton {
                 // setIcon(style.check);
             } else {
                 if (GroundspeakAPI.getInstance().isPremiumMember()) {
-                    setIcon(style.unchecked);
+                    setIcon(style.check);
                 } else {
                     setIcon(style.unchecked);
                 }

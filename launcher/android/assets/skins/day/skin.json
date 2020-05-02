@@ -1,9 +1,5 @@
 {
   "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
-    "DraftUploaded": {
-      "path": "svg/UPLOADFIELDNOTE.svg",
-      "scale": 0.1
-    },
     "Mapstate.car": {
       "path": "svg/map-state-car.svg",
       "scale": 0.75
@@ -43,10 +39,6 @@
     "TB_picked": {
       "path": "svg/TB_picked.svg",
       "scale": 0.15
-    },
-    "UPLOADFIELDNOTE": {
-      "path": "svg/UPLOADFIELDNOTE.svg",
-      "scale": 0.18
     },
     "Wikipedia": {
       "path": "svg/mapWikipedia1.svg",
@@ -1656,10 +1648,6 @@
       "path": "svg/map_theme_setting.svg",
       "scale": 0.18
     },
-    "uploadCorrectedCoordinates": {
-      "path": "svg/uploadCorrectedCoordinates.svg",
-      "scale": 1
-    },	
     "mega": {
       "path": "svg/mega.svg",
       "scale": 0.2
@@ -1959,6 +1947,14 @@
     "traddi": {
       "path": "svg/traddi.svg",
       "scale": 0.21
+    },
+    "uploadCorrectedCoordinates": {
+      "path": "svg/uploadCorrectedCoordinates.svg",
+      "scale": 1
+    },
+    "uploadDraft": {
+      "path": "svg/uploadDraft.svg",
+      "scale": 1
     },
     "videoIcon": {
       "path": "svg/videoIcon.svg",
@@ -2973,7 +2969,7 @@
       "torchDisabled": "light_disabled",
       "takePhoto": "takePhoto",
       "dayNight": "dayNight",
-      "uploadDraft": "UPLOADFIELDNOTE",
+      "uploadDraft": "uploadDraft",
       "manageDB": "database",
       "settingsIcon": "settings_icon",
       "compassIcon": "compas_icon",
@@ -3070,7 +3066,7 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.ApiButtonStyle": {
-    "ApiButton": {
+    "default": {
       "up": "default_button_9_Patch",
       "down": "drawable_default_button_pressed",
       "check": "api_key_io",
@@ -3451,7 +3447,8 @@
       "logTypesStyle": "logViewLogStyles",
       "cacheTypeStyle": "cacheList",
       "headerBackground": "list_rec_header_9_Patch",
-      "uploadedIcon": "DraftUploaded",
+      "uploadedOverlay": "activityBack_drawable",
+      "uploadedIcon": "uploadDraft",
       "starStyle": "cachelist",
       "cacheSizeStyle": "cachelist"
     }

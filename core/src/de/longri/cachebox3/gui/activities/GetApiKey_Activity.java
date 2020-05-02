@@ -1,6 +1,5 @@
 package de.longri.cachebox3.gui.activities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.VisUI;
@@ -11,8 +10,6 @@ import de.longri.cachebox3.callbacks.GenericHandleCallBack;
 import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.skin.styles.ApiButtonStyle;
 import de.longri.cachebox3.gui.widgets.WebView;
-import de.longri.cachebox3.locator.AtomicMutableCoordinate;
-import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.translation.Translation;
@@ -35,7 +32,7 @@ public class GetApiKey_Activity extends Activity {
 
     public GetApiKey_Activity() {
         //TODO replace icon with own style for GetApiKey_Activity
-        super("getApiKey", VisUI.getSkin().get("ApiButton", ApiButtonStyle.class).check);
+        super("getApiKey", VisUI.getSkin().get(ApiButtonStyle.class).check);
         defaults().pad(CB.scaledSizes.MARGIN_HALF);
 
         btnOK.setText(Translation.get("save"));

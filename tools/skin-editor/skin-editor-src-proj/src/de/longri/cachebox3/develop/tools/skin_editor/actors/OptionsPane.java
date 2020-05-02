@@ -343,52 +343,46 @@ public class OptionsPane extends Table {
 
                     styles = (ObjectMap<String, Object>) game.skinProject.getAll(style);
 
-                    if (widgetStyle.equals("de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle")) {
-                        MapArrowStyle mapArrowStyle = game.skinProject.get("myLocation", MapArrowStyle.class);
-                        styles.put("myLocation", mapArrowStyle);
+                    switch (widgetStyle) {
+                        case "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle":
+                            MapArrowStyle mapArrowStyle = game.skinProject.get("myLocation", MapArrowStyle.class);
+                            styles.put("myLocation", mapArrowStyle);
 
-                        MapCenterCrossStyle mapCenterCrossStyle = game.skinProject.get("centerCross", MapCenterCrossStyle.class);
-                        styles.put("centerCross", mapCenterCrossStyle);
+                            MapCenterCrossStyle mapCenterCrossStyle = game.skinProject.get("centerCross", MapCenterCrossStyle.class);
+                            styles.put("centerCross", mapCenterCrossStyle);
 
-                        MapInfoPanelStyle mapInfoPanelStyle = game.skinProject.get("infoPanel", MapInfoPanelStyle.class);
-                        styles.put("infoPanel", mapInfoPanelStyle);
+                            MapInfoPanelStyle mapInfoPanelStyle = game.skinProject.get("infoPanel", MapInfoPanelStyle.class);
+                            styles.put("infoPanel", mapInfoPanelStyle);
 
-                        DirectLineRendererStyle directLineRendererStyle = game.skinProject.get("directLine", DirectLineRendererStyle.class);
-                        styles.put("directline", directLineRendererStyle);
+                            DirectLineRendererStyle directLineRendererStyle = game.skinProject.get("directLine", DirectLineRendererStyle.class);
+                            styles.put("directline", directLineRendererStyle);
 
-                        MapBubbleStyle mapBubbleStyle = game.skinProject.get("bubble", MapBubbleStyle.class);
-                        styles.put("bubble", mapBubbleStyle);
-                    }
+                            MapBubbleStyle mapBubbleStyle = game.skinProject.get("bubble", MapBubbleStyle.class);
+                            styles.put("bubble", mapBubbleStyle);
+                            break;
+                        case "de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle":
 
-                    if (widgetStyle.equals("de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle")) {
+                            CacheListItemStyle cacheListItemStyle = game.skinProject.get("cacheListItems", CacheListItemStyle.class);
+                            styles.put("cacheListItems", cacheListItemStyle);
 
-                        CacheListItemStyle cacheListItemStyle = game.skinProject.get("cacheListItems", CacheListItemStyle.class);
-                        styles.put("cacheListItems", cacheListItemStyle);
+                            WayPointListItemStyle wayPointListItemStyle = game.skinProject.get("WayPointListItems", WayPointListItemStyle.class);
+                            styles.put("WayPointListItems", wayPointListItemStyle);
 
-                        WayPointListItemStyle wayPointListItemStyle = game.skinProject.get("WayPointListItems", WayPointListItemStyle.class);
-                        styles.put("WayPointListItems", wayPointListItemStyle);
+                            LogListItemStyle logListItemStyle = game.skinProject.get("logListItems", LogListItemStyle.class);
+                            styles.put("logListItems", logListItemStyle);
 
-                        LogListItemStyle logListItemStyle = game.skinProject.get("logListItems", LogListItemStyle.class);
-                        styles.put("logListItems", logListItemStyle);
+                            DraftListItemStyle draftListItemStyle = game.skinProject.get("DraftListItemStyle", DraftListItemStyle.class);
+                            styles.put("DraftListItemStyle", draftListItemStyle);
 
-                        DraftListItemStyle draftListItemStyle = game.skinProject.get("DraftListItemStyle", DraftListItemStyle.class);
-                        styles.put("DraftListItemStyle", draftListItemStyle);
-
-                    }
-
-                    if (widgetStyle.equals("com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle")) {
-                        ApiButtonStyle apiButtonStyle = game.skinProject.get("ApiButton", ApiButtonStyle.class);
-                        styles.put("ApiButton", apiButtonStyle);
-                    }
-
-                    if (widgetStyle.equals("de.longri.cachebox3.gui.skin.styles.CompassStyle")) {
-                        CompassViewStyle compassViewStyle = game.skinProject.get("compassViewStyle", CompassViewStyle.class);
-                        styles.put("compassViewStyle", compassViewStyle);
-                    }
-
-                    if (widgetStyle.equals("com.badlogic.gdx.scenes.scene2d.ui.CB_ProgressBar$ProgressBarStyle")) {
-                        CircularProgressStyle circularProgressStyle = game.skinProject.get("circularProgressStyle", CircularProgressStyle.class);
-                        styles.put("circularProgressStyle", circularProgressStyle);
+                            break;
+                        case "de.longri.cachebox3.gui.skin.styles.CompassStyle":
+                            CompassViewStyle compassViewStyle = game.skinProject.get("compassViewStyle", CompassViewStyle.class);
+                            styles.put("compassViewStyle", compassViewStyle);
+                            break;
+                        case "com.badlogic.gdx.scenes.scene2d.ui.CB_ProgressBar$ProgressBarStyle":
+                            CircularProgressStyle circularProgressStyle = game.skinProject.get("circularProgressStyle", CircularProgressStyle.class);
+                            styles.put("circularProgressStyle", circularProgressStyle);
+                            break;
                     }
 
                     if (styles == null || styles.size == 0) {
