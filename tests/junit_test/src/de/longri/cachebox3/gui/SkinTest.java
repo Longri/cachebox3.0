@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.TestUtils;
 import de.longri.cachebox3.gui.skin.styles.AbstractIconStyle;
+import de.longri.cachebox3.gui.skin.styles.EditWaypointStyle;
 import de.longri.cachebox3.gui.skin.styles.MenuIconStyle;
 import de.longri.cachebox3.platform_test.AfterAll;
 import de.longri.cachebox3.platform_test.StyleEntry;
@@ -86,12 +87,10 @@ public class SkinTest {
                 System.out.println("ignore AbstractIconStyle.class");
                 continue; // ignore abstract classes
             }
-            /*
             if (clazz.equals(EditWaypointStyle.class)) {
                 System.out.println("Must implement the missing EditWaypointStyle");
                 continue; // TODO implement EditWaypointStyle
             }
-             */
 
             ObjectMap<String, ?> allStyles = testSkin.getAll(clazz);
             assertNotNull(allStyles, "Style for class:" + clazz.toString() + " must not be Null");
@@ -121,6 +120,8 @@ public class SkinTest {
         Field[] fields = ClassReflection.getFields(MenuIconStyle.class);
         MenuIconStyle style = testSkin.get(MenuIconStyle.class);
 
+        String assertation = null;
+
         for (Field field : fields) {
             try {
                 Drawable drawable = (Drawable) field.get(style);
@@ -129,11 +130,17 @@ public class SkinTest {
                     float width = textureRegionDrawable.getRegion().getRegionWidth();
                     float height = textureRegionDrawable.getRegion().getRegionHeight();
 
-                    if (width < ICON_MIN_WIDTH || width > ICON_MAX_WIDTH || height < ICON_MIN_HEIGHT || height > ICON_MAX_HEIGHT)
-                        Assertions.fail("Menu icon '" + field.getName() + "' has wrong size! min width:" + ICON_MIN_WIDTH
+                    if (width < ICON_MIN_WIDTH || width > ICON_MAX_WIDTH || height < ICON_MIN_HEIGHT || height > ICON_MAX_HEIGHT) {
+                        String msg = "Menu icon '" + field.getName() + "' has wrong size! min width:" + ICON_MIN_WIDTH
                                 + "/ max width:" + ICON_MAX_WIDTH + "/ min height:" + ICON_MIN_HEIGHT + "/ max height:"
-                                + ICON_MAX_HEIGHT + " || icon with:" + width + " / icon height:" + height);
+                                + ICON_MAX_HEIGHT + " || icon with:" + width + " / icon height:" + height;
 
+                        if (assertation == null) {
+                            assertation = "\n" + msg;
+                        } else {
+                            assertation += "\n" + msg;
+                        }
+                    }
                 } else {
                     System.out.println("WARNING: no menu icon on Skin for '" + field.getName() + "'");
                 }
@@ -141,7 +148,7 @@ public class SkinTest {
                 e.printStackTrace();
             }
         }
-
+        if (assertation != null) Assertions.fail(assertation);
     }
 
 }
