@@ -437,8 +437,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             cm.addMenuItem("delete", CB.getSkin().getMenuIcon.delWp, this::deleteWP);
         if (actWaypoint != null || actAbstractCache != null)
             cm.addMenuItem("Projection", CB.getSkin().getMenuIcon.projectWp, this::addProjection);
-        // todo icon for UploadCorrectedCoordinates
-        MenuItem mi = cm.addMenuItem("UploadCorrectedCoordinates", null, () -> {
+        MenuItem mi = cm.addMenuItem("UploadCorrectedCoordinates", CB.getSkin().getMenuIcon.uploadCorrectedCoordinates, () -> {
             if (actAbstractCache.hasCorrectedCoordinates())
                 GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGeoCacheCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
             else if (isCorrectedFinal())

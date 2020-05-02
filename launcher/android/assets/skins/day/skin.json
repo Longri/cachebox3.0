@@ -1656,6 +1656,10 @@
       "path": "svg/map_theme_setting.svg",
       "scale": 0.18
     },
+    "uploadCorrectedCoordinates": {
+      "path": "svg/uploadCorrectedCoordinates.svg",
+      "scale": 1
+    },	
     "mega": {
       "path": "svg/mega.svg",
       "scale": 0.2
@@ -2938,6 +2942,7 @@
       "favPoint": "favpointFilter",
       "theme": "map_theme",
       "themeStyle": "map_theme_setting",
+      "uploadCorrectedCoordinates": "uploadCorrectedCoordinates",
       "import_PQ": "import_PQ",
       "favorit": "favIcon",
       "docIcon": "description",

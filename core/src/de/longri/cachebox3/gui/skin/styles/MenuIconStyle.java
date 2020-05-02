@@ -38,6 +38,7 @@ public class MenuIconStyle extends AbstractIconStyle {
     public Drawable favPoint;
     public Drawable theme;
     public Drawable themeStyle;
+    public Drawable uploadCorrectedCoordinates;
     public Drawable import_PQ;
     public Drawable favorit;
     public Drawable docIcon;
