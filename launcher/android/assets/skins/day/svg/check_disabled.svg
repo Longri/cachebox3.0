@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="55" height="55" viewBox="0 0 55.00 55.00" enable-background="new 0 0 55.00 55.00" xml:space="preserve">
-	<path fill="#FFFFFF" fill-opacity="1" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 7.50002,2.50001L 47.5,2.50001C 50.2614,2.50001 52.5,4.73858 52.5,7.49999L 52.5,47.5C 52.5,50.2614 50.2614,52.5 47.5,52.5L 7.50002,52.5C 4.73859,52.5 2.50002,50.2614 2.50002,47.5L 2.50002,7.49999C 2.50002,4.73858 4.73859,2.50001 7.50002,2.50001 Z "/>
-	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.666148" y1="0.726325" x2="1.22325" y2="0.726325" gradientTransform="rotate(233.557144 0.666148 0.726325)">
-		<stop offset="0" stop-color="#AFB6AF" stop-opacity="1"/>
-		<stop offset="1" stop-color="#FFFFFF" stop-opacity="1"/>
-	</linearGradient>
-	<path fill="url(#SVGID_Fill1_)" stroke-linejoin="round" stroke="#888888" stroke-opacity="1" d="M 25.1643,26.077C 29.5245,21.9676 37.9533,14.3253 42.5531,10.5562C 47.153,6.78707 47.9238,6.89123 48.4681,7.45113C 49.0123,8.01102 49.3301,9.02665 44.9377,15.9277C 40.5453,22.8287 31.4429,35.6152 26.5167,42.2167C 21.5905,48.8183 20.8405,49.235 20.1183,49.1933C 19.396,49.1516 18.7016,48.6516 16.3882,44.9667C 14.0749,41.2818 10.1425,34.4121 8.06442,30.2324C 5.9863,26.0527 5.76234,24.5631 6.31182,23.9459C 6.8613,23.3287 8.18422,23.5839 10.6313,24.9615C 13.0783,26.3391 16.6495,28.8391 18.5809,29.8009C 20.5124,30.7628 20.804,30.1864 25.1643,26.077 Z "/>
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <path d="M5.915274 1.09323 L42.55932 1.09323 C45.08905 1.09323 47.13983 3.164856 47.13983 5.72033 L47.13983 42.73729 C47.13983 45.29276 45.08905 47.36441 42.55932 47.36441 L5.915274 47.36441 C3.385524 47.36441 1.334766 45.29276 1.334766 42.73729 L1.334766 5.72033 C1.334766 3.164856 3.385524 1.09323 5.915274 1.09323 z" stroke="#000000" stroke-linejoin="round" id="path2" xml:space="preserve" style="fill:#FFFFFF;" />
+  <linearGradient x1="34.40773" y1="38.21865" x2="58.57168" y2="38.21865" gradientUnits="userSpaceOnUse" gradientTransform="scale(1.007935, 0.9921276)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#AFB6AF" stop-opacity="1" id="stop4" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" id="stop6" xml:space="preserve" />
+  </linearGradient>
+  <path d="M22.09755 22.91194 C26.09194 19.109 33.81358 12.03663 38.02746 8.548619 C42.24144 5.060577 42.94757 5.15697 43.4462 5.675114 C43.94474 6.19325 44.23588 7.133138 40.21199 13.51953 C36.18811 19.90588 27.84939 31.73881 23.33649 37.848 C18.82359 43.95728 18.13651 44.3429 17.4749 44.30431 C16.8132 44.26572 16.17706 43.80301 14.05775 40.39291 C11.93853 36.98282 8.336055 30.62543 6.432322 26.75744 C4.528553 22.88945 4.323382 21.51094 4.826762 20.93977 C5.330142 20.3686 6.542071 20.60476 8.783845 21.87963 C11.02555 23.15449 14.29713 25.46805 16.06649 26.35812 C17.83594 27.24829 18.10307 26.71487 22.09755 22.91194 z" stroke="#888888" stroke-linejoin="round" id="path9" xml:space="preserve" style="fill:url(#SVGID_Fill1_);" />
 </svg>

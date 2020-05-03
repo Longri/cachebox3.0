@@ -782,7 +782,7 @@
     },
     "check_disabled": {
       "path": "svg/check_disabled.svg",
-      "scale": 0.9
+      "scale": 1
     },
     "check_not": {
       "path": "svg/check_not.svg",
@@ -858,7 +858,7 @@
     },
     "database": {
       "path": "svg/database.svg",
-      "scale": 0.95
+      "scale": 1
     },
     "dayNight": {
       "path": "svg/dayNight.svg",
@@ -1010,7 +1010,7 @@
     },
     "editDraft": {
       "path": "svg/editDraft.svg",
-      "scale": 0.95
+      "scale": 1
     },
     "editWp": {
       "path": "svg/editWp.svg",
@@ -1050,7 +1050,7 @@
     },
     "file": {
       "path": "svg/file.svg",
-      "scale": 0.95
+      "scale": 1
     },
     "fileTransfer": {
       "path": "svg/fileTransfer.svg",
@@ -1290,7 +1290,7 @@
     },
     "mapFile": {
       "path": "svg/mapFile.svg",
-      "scale": 0.9
+      "scale": 1
     },
     "mapFinal": {
       "path": "svg/final.svg",
@@ -1954,7 +1954,7 @@
     },
     "uploadDraft": {
       "path": "svg/uploadDraft.svg",
-      "scale": 0.95
+      "scale": 1
     },
     "videoIcon": {
       "path": "svg/videoIcon.svg",

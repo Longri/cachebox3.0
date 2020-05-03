@@ -50,48 +50,39 @@
       <stop offset="23.2558%" stop-color="#171F18" stop-opacity="1" id="stop1479" xml:space="preserve" />
       <stop offset="100%" stop-color="#989D99" stop-opacity="1" id="stop1481" xml:space="preserve" />
     </linearGradient>
-  </defs>
-  <g transform="matrix(0.178028, 0, 0, 0.1934457, 4.575136, 0.2545386)" id="g104" xml:space="preserve">
-    <linearGradient x1="125.6134" y1="144.5582" x2="226.6822" y2="144.5582" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.9364066, 0, 0, 1.067912, -3.970433, 15.84032)" id="SVGID_Stroke3_" xml:space="preserve">
-      <stop offset="1.86047%" stop-color="#58A406" stop-opacity="1" id="stop50" xml:space="preserve" />
-      <stop offset="100%" stop-color="#163B02" stop-opacity="1" id="stop52" xml:space="preserve" />
-    </linearGradient>
-    <linearGradient x1="125.151" y1="144.3532" x2="227.2302" y2="144.3532" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.9364066, 0, 0, 1.067912, -3.970433, 15.84032)" id="SVGID_Fill4_" xml:space="preserve">
+    <linearGradient x1="125.151" y1="144.3532" x2="227.2302" y2="144.3532" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.9364066, 0, 0, 1.067912, -3.970433, 15.84033)" id="SVGID_Fill4_" xml:space="preserve">
       <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop55" xml:space="preserve" />
       <stop offset="100%" stop-color="#235E03" stop-opacity="1" id="stop57" xml:space="preserve" />
     </linearGradient>
-    <path d="M111.594 153.084 L144.261 158.417 L144.927 123.084 L174.261 125.75 L174.094 163.917 L208.594 169.417 L208.594 201.917 L175.094 195.917 L175.094 234.417 L145.094 226.917 L145.094 189.917 L111.094 182.417 z" stroke="url(#SVGID_Stroke3_)" stroke-linejoin="round" id="path60" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill4_);" />
-    <linearGradient x1="66.93926" y1="255.498" x2="86.9892" y2="255.498" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.670828, 0, 0, 0.5985056, -3.970433, 15.84032)" id="SVGID_Fill5_" xml:space="preserve">
+    <linearGradient x1="125.6134" y1="144.5582" x2="226.6822" y2="144.5582" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.9364066, 0, 0, 1.067912, -3.970433, 15.84033)" id="SVGID_Stroke3_" xml:space="preserve">
+      <stop offset="1.86047%" stop-color="#58A406" stop-opacity="1" id="stop50" xml:space="preserve" />
+      <stop offset="100%" stop-color="#163B02" stop-opacity="1" id="stop52" xml:space="preserve" />
+    </linearGradient>
+    <linearGradient x1="66.93926" y1="255.498" x2="86.9892" y2="255.498" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.670828, 0, 0, 0.5985056, -3.970433, 15.84033)" id="SVGID_Fill5_" xml:space="preserve">
       <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop62" xml:space="preserve" />
       <stop offset="100%" stop-color="#64BE0C" stop-opacity="1" id="stop64" xml:space="preserve" />
     </linearGradient>
-    <path d="M111.844 152.917 L140.844 146.917 L145.344 147.417 L145.344 158.917 z" stroke-width="0.2" stroke-linejoin="round" id="path67" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill5_);" />
-    <linearGradient x1="55.7567" y1="314.4047" x2="76.36806" y2="314.4047" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.603759, 0, 0, 0.3840601, -3.970433, 15.84032)" id="SVGID_Fill6_" xml:space="preserve">
+    <linearGradient x1="55.7567" y1="314.4047" x2="76.36806" y2="314.4047" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.603759, 0, 0, 0.3840601, -3.970433, 15.84033)" id="SVGID_Fill6_" xml:space="preserve">
       <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop69" xml:space="preserve" />
       <stop offset="100%" stop-color="#235E03" stop-opacity="1" id="stop71" xml:space="preserve" />
     </linearGradient>
-    <path d="M145.177 123.417 L171.261 117.834 L198.844 119.75 L173.511 125.75 z" stroke-width="0.2" stroke-linejoin="round" id="path74" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill6_);" />
-    <linearGradient x1="231.0139" y1="106.6706" x2="263.7928" y2="106.6706" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.752526, 0, 0, 1.328858, -3.970433, 15.84032)" id="SVGID_Fill7_" xml:space="preserve">
+    <linearGradient x1="231.0139" y1="106.6706" x2="263.7928" y2="106.6706" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.752526, 0, 0, 1.328858, -3.970433, 15.84033)" id="SVGID_Fill7_" xml:space="preserve">
       <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop76" xml:space="preserve" />
       <stop offset="100%" stop-color="#235E03" stop-opacity="1" id="stop78" xml:space="preserve" />
     </linearGradient>
-    <path d="M173.844 163.75 L198.511 157.417 L198.511 119.75 L173.594 125.667 z" stroke-width="0.2" stroke-linejoin="round" id="path81" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill7_);" />
-    <linearGradient x1="76.37841" y1="369.4758" x2="103.238" y2="369.4758" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.258636, 0, 0, 0.4427451, -3.970433, 15.84032)" id="SVGID_Fill8_" xml:space="preserve">
+    <linearGradient x1="76.37841" y1="369.4758" x2="103.238" y2="369.4758" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.258636, 0, 0, 0.4427451, -3.970433, 15.84033)" id="SVGID_Fill8_" xml:space="preserve">
       <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop83" xml:space="preserve" />
       <stop offset="100%" stop-color="#163A01" stop-opacity="1" id="stop85" xml:space="preserve" />
     </linearGradient>
-    <path d="M198.511 157.417 L235.427 164.75 L208.177 169.75 L172.511 163.75 z" stroke-width="0.2" stroke-linejoin="round" id="path88" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill8_);" />
-    <linearGradient x1="245.9832" y1="154.9786" x2="277.1479" y2="154.9786" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.8449532, 0, 0, 1.183498, -3.970433, 15.84032)" id="SVGID_Fill9_" xml:space="preserve">
+    <linearGradient x1="245.9832" y1="154.9786" x2="277.1479" y2="154.9786" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.8449532, 0, 0, 1.183498, -3.970433, 15.84033)" id="SVGID_Fill9_" xml:space="preserve">
       <stop offset="1.86047%" stop-color="#2E6F05" stop-opacity="1" id="stop90" xml:space="preserve" />
       <stop offset="100%" stop-color="#133401" stop-opacity="1" id="stop92" xml:space="preserve" />
     </linearGradient>
-    <path d="M208.511 201.75 L234.927 196.25 L234.927 164.75 L208.594 169.834 z" stroke-width="0.2" stroke-linejoin="round" id="path95" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill9_);" />
-    <linearGradient x1="223.4065" y1="167.2286" x2="254.1309" y2="167.2286" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.7811368, 0, 0, 1.280185, -3.970433, 15.84032)" id="SVGID_Fill10_" xml:space="preserve">
+    <linearGradient x1="223.4065" y1="167.2286" x2="254.1309" y2="167.2286" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.7811368, 0, 0, 1.280185, -3.970433, 15.84033)" id="SVGID_Fill10_" xml:space="preserve">
       <stop offset="1.86047%" stop-color="#3C8406" stop-opacity="1" id="stop97" xml:space="preserve" />
       <stop offset="100%" stop-color="#153801" stop-opacity="1" id="stop99" xml:space="preserve" />
     </linearGradient>
-    <path d="M174.844 233.75 L198.511 227.417 L198.511 198.75 L174.511 194.417 z" stroke-width="0.2" stroke-linejoin="round" id="path102" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill10_);" />
-  </g>
+  </defs>
   <g transform="translate(66.79401, 6.834881)" id="g1791" xml:space="preserve">
     <path d="M-39.57745 14.33733 L-26.2841 1.245792 C-26.33039 0.2332782 -26.17283 0.6754758 -26.17283 2.802044 L-26.12832 4.318117 C-25.95029 7.350378 -28.55413 9.420015 -27.39677 8.096401 L-42.42625 26.97959 C-43.07908 28.26329 -42.78231 26.27351 -42.30751 23.00079 L-42.36697 20.36974 C-42.36697 18.24319 -43.20014 14.17464 -39.57745 14.33733 z" stroke="url(#SVGID_Stroke1_)" stroke-width="0.5567304" stroke-linejoin="round" id="path22" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill2_);" />
     <path d="M-59.4706 9.418913 L-44.56081 13.52234 C-42.62333 13.52234 -42.45598 14.51626 -42.45598 16.62444 L-42.45598 25.59451 C-42.45598 27.70268 -43.783 28.73162 -47.11586 27.39569 L-61.79477 22.06297 C-64.89383 20.91409 -64.20687 14.31431 -64.20664 13.47456 L-64.20664 9.418913 C-64.20664 7.3108 -61.40811 9.418913 -59.4706 9.418913 z" stroke="url(#SVGID_Stroke2_)" stroke-width="0.5567304" stroke-linejoin="round" id="path34" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill3_);" />
@@ -101,5 +92,46 @@
     <path d="M-32.64593 0.1741424 L-43.53163 -1.477555 L-53.96855 5.49187 L-53.66811 5.558377 L-43.48712 -1.285056 L-32.82395 0.4159513 z" stroke="#B29331" stroke-width="0.5567304" stroke-linejoin="round" id="path42" xml:space="preserve" connector-curvature="0" style="fill:#967D2D;" />
     <line x1="-60.80135" y1="11.22072" x2="-49.96324" y2="14.51781" stroke="#6C5B24" stroke-width="0.5567304" stroke-linejoin="round" id="line44" xml:space="preserve" />
     <line x1="-60.86811" y1="11.49754" x2="-50.03" y2="14.79463" stroke="#B29331" stroke-width="0.1855768" stroke-linejoin="round" id="line46" xml:space="preserve" />
+  </g>
+  <g transform="matrix(0.178028, 0, 0, 0.1934457, 4.575136, 0.2545349)" id="g104" xml:space="preserve">
+    <linearGradient x1="125.6134" y1="144.5582" x2="226.6822" y2="144.5582" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.9364066, 0, 0, 1.067912, -3.970433, 15.84032)" id="linearGradient924" xml:space="preserve">
+      <stop offset="1.86047%" stop-color="#58A406" stop-opacity="1" id="stop920" xml:space="preserve" />
+      <stop offset="100%" stop-color="#163B02" stop-opacity="1" id="stop922" xml:space="preserve" />
+    </linearGradient>
+    <linearGradient x1="125.151" y1="144.3532" x2="227.2302" y2="144.3532" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.9364066, 0, 0, 1.067912, -3.970433, 15.84032)" id="linearGradient930" xml:space="preserve">
+      <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop926" xml:space="preserve" />
+      <stop offset="100%" stop-color="#235E03" stop-opacity="1" id="stop928" xml:space="preserve" />
+    </linearGradient>
+    <path d="M111.594 153.084 L144.261 158.417 L144.927 123.084 L174.261 125.75 L174.094 163.917 L208.594 169.417 L208.594 201.917 L175.094 195.917 L175.094 234.417 L145.094 226.917 L145.094 189.917 L111.094 182.417 z" stroke="url(#SVGID_Stroke3_)" stroke-linejoin="round" id="path60" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill4_);" />
+    <linearGradient x1="66.93926" y1="255.498" x2="86.9892" y2="255.498" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.670828, 0, 0, 0.5985056, -3.970433, 15.84032)" id="linearGradient937" xml:space="preserve">
+      <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop933" xml:space="preserve" />
+      <stop offset="100%" stop-color="#64BE0C" stop-opacity="1" id="stop935" xml:space="preserve" />
+    </linearGradient>
+    <path d="M111.844 152.917 L140.844 146.917 L145.344 147.417 L145.344 158.917 z" stroke-width="0.2" stroke-linejoin="round" id="path67" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill5_);" />
+    <linearGradient x1="55.7567" y1="314.4047" x2="76.36806" y2="314.4047" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.603759, 0, 0, 0.3840601, -3.970433, 15.84032)" id="linearGradient944" xml:space="preserve">
+      <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop940" xml:space="preserve" />
+      <stop offset="100%" stop-color="#235E03" stop-opacity="1" id="stop942" xml:space="preserve" />
+    </linearGradient>
+    <path d="M145.177 123.417 L171.261 117.834 L198.844 119.75 L173.511 125.75 z" stroke-width="0.2" stroke-linejoin="round" id="path74" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill6_);" />
+    <linearGradient x1="231.0139" y1="106.6706" x2="263.7928" y2="106.6706" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.752526, 0, 0, 1.328858, -3.970433, 15.84032)" id="linearGradient951" xml:space="preserve">
+      <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop947" xml:space="preserve" />
+      <stop offset="100%" stop-color="#235E03" stop-opacity="1" id="stop949" xml:space="preserve" />
+    </linearGradient>
+    <path d="M173.844 163.75 L198.511 157.417 L198.511 119.75 L173.594 125.667 z" stroke-width="0.2" stroke-linejoin="round" id="path81" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill7_);" />
+    <linearGradient x1="76.37841" y1="369.4758" x2="103.238" y2="369.4758" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.258636, 0, 0, 0.4427451, -3.970433, 15.84032)" id="linearGradient958" xml:space="preserve">
+      <stop offset="1.86047%" stop-color="#7DE30F" stop-opacity="1" id="stop954" xml:space="preserve" />
+      <stop offset="100%" stop-color="#163A01" stop-opacity="1" id="stop956" xml:space="preserve" />
+    </linearGradient>
+    <path d="M198.511 157.417 L235.427 164.75 L208.177 169.75 L172.511 163.75 z" stroke-width="0.2" stroke-linejoin="round" id="path88" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill8_);" />
+    <linearGradient x1="245.9832" y1="154.9786" x2="277.1479" y2="154.9786" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.8449532, 0, 0, 1.183498, -3.970433, 15.84032)" id="linearGradient965" xml:space="preserve">
+      <stop offset="1.86047%" stop-color="#2E6F05" stop-opacity="1" id="stop961" xml:space="preserve" />
+      <stop offset="100%" stop-color="#133401" stop-opacity="1" id="stop963" xml:space="preserve" />
+    </linearGradient>
+    <path d="M208.511 201.75 L234.927 196.25 L234.927 164.75 L208.594 169.834 z" stroke-width="0.2" stroke-linejoin="round" id="path95" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill9_);" />
+    <linearGradient x1="223.4065" y1="167.2286" x2="254.1309" y2="167.2286" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.7811368, 0, 0, 1.280185, -3.970433, 15.84032)" id="linearGradient972" xml:space="preserve">
+      <stop offset="1.86047%" stop-color="#3C8406" stop-opacity="1" id="stop968" xml:space="preserve" />
+      <stop offset="100%" stop-color="#153801" stop-opacity="1" id="stop970" xml:space="preserve" />
+    </linearGradient>
+    <path d="M174.844 233.75 L198.511 227.417 L198.511 198.75 L174.511 194.417 z" stroke-width="0.2" stroke-linejoin="round" id="path102" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill10_);" />
   </g>
 </svg>

@@ -1,31 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg x="0" y="0" width="48" height="48.02264" overflow="hidden" viewBox="0, 0, 47.9906, 48.01324"
-     preserveAspectRatio="xMidYMid" font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0px" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
      xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
-  <g transform="matrix(0.2556294, 0, 0, 0.2029845, -11.99028, -2.305397)" id="g16" xml:space="preserve">
-    <path d="M57.6794 13.8575 L211.028 13.8575 C215.612 13.8575 219.307 17.5321 219.307 22.1109 L219.307 237.115 C219.307 241.699 215.612 245.394 211.028 245.394 L57.6794 245.394 C53.0955 245.394 49.4053 241.699 49.4053 237.115 L49.4053 22.1109 C49.4053 17.5321 53.0955 13.8575 57.6794 13.8575 z" stroke="#333232" stroke-width="5" stroke-linejoin="round" id="path2" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
-    <path d="M140.049 30.933 C140.049 34.0855 137.501 36.6283 134.375 36.6283 C131.248 36.6283 128.7 34.0855 128.7 30.933 C128.7 27.7855 131.248 25.222 134.375 25.222 C137.501 25.222 140.049 27.7855 140.049 30.933 z" stroke="#333232" stroke-width="5" stroke-linejoin="round" id="path4" xml:space="preserve" connector-curvature="0" style="fill:none;" />
-    <path d="M90.9727 30.933 C90.9727 34.0855 88.4248 36.6283 85.2979 36.6283 C82.16601 36.6283 79.6235 34.0855 79.6235 30.933 C79.6235 27.7855 82.16601 25.222 85.2979 25.222 C88.4248 25.222 90.9727 27.7855 90.9727 30.933 z" stroke="#333232" stroke-width="5" stroke-linejoin="round" id="path6" xml:space="preserve" connector-curvature="0" style="fill:none;" />
-    <path d="M189.126 30.933 C189.126 34.0855 186.583 36.6283 183.451 36.6283 C180.322 36.6283 177.778 34.0855 177.778 30.933 C177.778 27.7855 180.322 25.222 183.451 25.222 C186.583 25.222 189.126 27.7855 189.126 30.933 z" stroke="#333232" stroke-width="5" stroke-linejoin="round" id="path8" xml:space="preserve" connector-curvature="0" style="fill:none;" />
-    <path d="M219.406 51.87 L219.406 237.922 C219.406 242.103 216.057 245.473 211.876 245.493 L57.0544 245.493 C55.0337 245.493 53.1162 244.687 51.7261 243.251 C50.3101 241.819 49.5039 239.902 49.5244 237.881 L49.5244 51.8285" stroke-width="0.2" stroke-linejoin="round" id="path10" xml:space="preserve" connector-curvature="0" style="fill:#1EB265;" />
-    <path d="M219.307 47.993 L219.307 237.658 C219.344 241.859 215.974 245.312 211.777 245.394 L56.9353 245.394 C52.7339 245.312 49.364 241.859 49.4053 237.658 L49.4053 47.993" stroke="#333232" stroke-width="5" stroke-linejoin="round" id="path12" xml:space="preserve" connector-curvature="0" style="fill:none;" />
-    <path d="M70.1553 76.5003 L202.469 76.5003 M70.1553 103.07 L202.469 103.07 M70.1553 129.613 L202.469 129.613 M70.1553 156.203 L202.469 156.203 M70.1553 182.788 L134.375 182.788" stroke="#333232" stroke-width="5" stroke-linejoin="round" id="path14" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+  <defs id="def1" xml:space="preserve">
+    <linearGradient x1="140.6871" y1="153.8409" x2="233.2256" y2="153.8409" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.9050295, 0, 0, 1.104936, -6.566993, 70.57574)" id="SVGID_Fill4_" xml:space="preserve">
+      <stop offset="0%" stop-color="#000000" stop-opacity="1" id="stop47" xml:space="preserve" />
+      <stop offset="27.2524%" stop-color="#080573" stop-opacity="1" id="stop49" xml:space="preserve" />
+      <stop offset="52.5581%" stop-color="#110BE7" stop-opacity="0.996078" id="stop51" xml:space="preserve" />
+      <stop offset="100%" stop-color="#9789BD" stop-opacity="1" id="stop53" xml:space="preserve" />
+    </linearGradient>
+    <linearGradient x1="238.8605" y1="96.73347" x2="269.0581" y2="96.73347" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.7533727, 0, 0, 1.327364, -6.566993, 70.57574)" id="SVGID_Fill5_" xml:space="preserve">
+      <stop offset="0%" stop-color="#574781" stop-opacity="1" id="stop58" xml:space="preserve" />
+      <stop offset="27.2524%" stop-color="#4A4186" stop-opacity="1" id="stop60" xml:space="preserve" />
+      <stop offset="52.5581%" stop-color="#3E3C8C" stop-opacity="0.996078" id="stop62" xml:space="preserve" />
+      <stop offset="100%" stop-color="#190257" stop-opacity="1" id="stop64" xml:space="preserve" />
+    </linearGradient>
+  </defs>
+  <g stroke-width="0.986042" transform="matrix(0.2675616, 0, 0, 0.1994615, -12.16904, -1.87136)" id="g16" xml:space="preserve">
+    <path d="M57.6794 13.8575 L211.028 13.8575 C215.612 13.8575 219.307 17.5321 219.307 22.1109 L219.307 237.115 C219.307 241.699 215.612 245.394 211.028 245.394 L57.6794 245.394 C53.0955 245.394 49.4053 241.699 49.4053 237.115 L49.4053 22.1109 C49.4053 17.5321 53.0955 13.8575 57.6794 13.8575 z" stroke="#333232" stroke-width="4.93021" stroke-linejoin="round" id="path2" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    <path d="M140.049 30.933 C140.049 34.0855 137.501 36.6283 134.375 36.6283 C131.248 36.6283 128.7 34.0855 128.7 30.933 C128.7 27.7855 131.248 25.222 134.375 25.222 C137.501 25.222 140.049 27.7855 140.049 30.933 z" stroke="#333232" stroke-width="4.93021" stroke-linejoin="round" id="path4" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+    <path d="M90.9727 30.933 C90.9727 34.0855 88.4248 36.6283 85.2979 36.6283 C82.16602 36.6283 79.6235 34.0855 79.6235 30.933 C79.6235 27.7855 82.16602 25.222 85.2979 25.222 C88.4248 25.222 90.9727 27.7855 90.9727 30.933 z" stroke="#333232" stroke-width="4.93021" stroke-linejoin="round" id="path6" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+    <path d="M189.126 30.933 C189.126 34.0855 186.583 36.6283 183.451 36.6283 C180.322 36.6283 177.778 34.0855 177.778 30.933 C177.778 27.7855 180.322 25.222 183.451 25.222 C186.583 25.222 189.126 27.7855 189.126 30.933 z" stroke="#333232" stroke-width="4.93021" stroke-linejoin="round" id="path8" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+    <path d="M219.406 51.87 L219.406 237.922 C219.406 242.103 216.057 245.473 211.876 245.493 L57.0544 245.493 C55.0337 245.493 53.1162 244.687 51.7261 243.251 C50.3101 241.819 49.5039 239.902 49.5244 237.881 L49.5244 51.8285" stroke-width="0.1972084" stroke-linejoin="round" id="path10" xml:space="preserve" connector-curvature="0" style="fill:#1EB265;" />
+    <path d="M219.307 47.993 L219.307 237.658 C219.344 241.859 215.974 245.312 211.777 245.394 L56.9353 245.394 C52.7339 245.312 49.364 241.859 49.4053 237.658 L49.4053 47.993" stroke="#333232" stroke-width="4.93021" stroke-linejoin="round" id="path12" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+    <path d="M70.1553 76.5003 L202.469 76.5003 M70.1553 103.07 L202.469 103.07 M70.1553 129.613 L202.469 129.613 M70.1553 156.203 L202.469 156.203 M70.1553 182.788 L134.375 182.788" stroke="#333232" stroke-width="4.93021" stroke-linejoin="round" id="path14" xml:space="preserve" connector-curvature="0" style="fill:none;" />
   </g>
-  <g transform="matrix(0.2556294, 0, 0, 0.2029845, -11.99028, -2.305397)" id="g40" xml:space="preserve">
-    <linearGradient x1="259.7844" y1="95.21258" x2="426.597" y2="95.21258" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.9032106, 1.107162)" id="SVGID_Fill1_" xml:space="preserve">
-      <stop offset="0%" stop-color="#293128" stop-opacity="1" id="stop18" xml:space="preserve" />
-      <stop offset="27.2524%" stop-color="#1D8C19" stop-opacity="1" id="stop20" xml:space="preserve" />
-      <stop offset="52.5581%" stop-color="#11E70B" stop-opacity="0.996078" id="stop22" xml:space="preserve" />
-      <stop offset="100%" stop-color="#97BD89" stop-opacity="1" id="stop24" xml:space="preserve" />
+  <g transform="matrix(0, 0.4686828, -0.2160096, 0, 63.46167, -52.6676)" id="g69" xml:space="preserve">
+    <linearGradient x1="0" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox" id="linearGradient974" xml:space="preserve">
+      <stop offset="0%" stop-color="#000000" stop-opacity="1" id="stop966" xml:space="preserve" />
+      <stop offset="27.2524%" stop-color="#080573" stop-opacity="1" id="stop968" xml:space="preserve" />
+      <stop offset="52.5581%" stop-color="#110BE7" stop-opacity="0.996078" id="stop970" xml:space="preserve" />
+      <stop offset="100%" stop-color="#9789BD" stop-opacity="1" id="stop972" xml:space="preserve" />
     </linearGradient>
-    <path d="M103.904 195.761 L102.065 178.75 L103.904 162.198 L112.18 147.945 L124.134 137.37 L137.008 132.773 L147.582 131.393 L148.502 150.704 L151.26 159.439 L160.456 160.359 L230.801 97.83019 L232.64 90.47399 L232.18 82.19809 L232.18 81.73809 L225.743 74.84159 L161.375 16.45099 L155.858 15.07159 L155.858 15.53129 L150.341 17.83019 L147.582 21.96809 L148.042 44.95659 L132.87 47.71519 L116.318 54.61189 L101.145 69.32459 L91.4902 90.93369 L85.97311 118.98 L88.272 155.761 L96.08791 180.129 z" stroke="#000000" stroke-width="4" stroke-linejoin="round" id="path27" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill1_);" />
-    <linearGradient x1="186.4051" y1="134.5205" x2="238.44" y2="134.5205" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.7395614, 1.352153)" id="SVGID_Fill2_" xml:space="preserve">
-      <stop offset="0%" stop-color="#293128" stop-opacity="1" id="stop29" xml:space="preserve" />
-      <stop offset="27.2524%" stop-color="#1D8C19" stop-opacity="1" id="stop31" xml:space="preserve" />
-      <stop offset="52.5581%" stop-color="#11E70B" stop-opacity="0.996078" id="stop33" xml:space="preserve" />
-      <stop offset="100%" stop-color="#97BD89" stop-opacity="1" id="stop35" xml:space="preserve" />
+    <path d="M199.326 120.859 L200.326 130.109 L199.326 139.109 L194.826 146.859 L188.326 152.609 L181.326 155.109 L175.576 155.859 L175.076 145.359 L173.576 140.609 L168.576 140.109 L130.326 174.109 L129.326 178.109 L129.576 182.609 L129.576 182.859 L133.076 186.609 L168.076 218.359 L171.076 219.109 L171.076 218.859 L174.076 217.609 L175.576 215.359 L175.326 202.859 L183.576 201.359 L192.576 197.609 L200.826 189.609 L206.076 177.859 L209.076 162.609 L207.826 142.609 L203.576 129.359 z" stroke="#000000" stroke-width="4" stroke-linejoin="round" id="path56" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill4_);" />
+    <linearGradient x1="0" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox" id="linearGradient985" xml:space="preserve">
+      <stop offset="0%" stop-color="#574781" stop-opacity="1" id="stop977" xml:space="preserve" />
+      <stop offset="27.2524%" stop-color="#4A4186" stop-opacity="1" id="stop979" xml:space="preserve" />
+      <stop offset="52.5581%" stop-color="#3E3C8C" stop-opacity="0.996078" id="stop981" xml:space="preserve" />
+      <stop offset="100%" stop-color="#190257" stop-opacity="1" id="stop983" xml:space="preserve" />
     </linearGradient>
-    <path d="M103.674 195.455 L112.257 204.497 L120.532 211.7 L128.348 215.072 L132.793 215.072 L135.398 211.853 L135.858 207.102 L133.406 199.286 L128.502 193.462 L121.759 185.8 L115.015 176.144 L112.103 166.642 L110.417 154.076 L111.797 148.712 L102.908 161.891 L101.375 182.734 z" stroke="#000000" stroke-width="4" stroke-linejoin="round" id="path38" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill2_);" />
+    <path d="M199.451 121.026 L194.784 116.109 L190.284 112.193 L186.034 110.359 L183.618 110.359 L182.201 112.109 L181.951 114.693 L183.284 118.943 L185.951 122.109 L189.618 126.276 L193.284 131.526 L194.868 136.693 L195.784 143.526 L195.034 146.443 L199.868 139.276 L200.701 127.943 z" stroke="#000000" stroke-width="4" stroke-linejoin="round" id="path67" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill5_);" />
   </g>
 </svg>
