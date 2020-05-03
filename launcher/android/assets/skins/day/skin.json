@@ -2,27 +2,27 @@
   "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
     "Mapstate.car": {
       "path": "svg/map-state-car.svg",
-      "scale": 0.75
+      "scale": 1
     },
     "Mapstate.free": {
       "path": "svg/map-state-free.svg",
-      "scale": 0.75
+      "scale": 1
     },
     "Mapstate.gps": {
       "path": "svg/map-state-gps.svg",
-      "scale": 0.75
+      "scale": 1
     },
     "Mapstate.lock": {
       "path": "svg/map-state-lock.svg",
-      "scale": 0.75
+      "scale": 1
     },
     "Mapstate.waypoint": {
       "path": "svg/map-state-wp.svg",
-      "scale": 0.75
+      "scale": 1
     },
     "MapstateOverdraw": {
       "path": "svg/map-state-overdraw.svg",
-      "scale": 0.75
+      "scale": 1
     },
     "QuickDraft": {
       "path": "svg/mapFound0.svg",
