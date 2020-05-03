@@ -43,3 +43,10 @@ task copyAssets(type: Copy) {
 }
 
 copyAssets.dependsOn classes
+
+task copyAssetsRaw(type: Copy) {
+    from("../android/assets")
+    into("../../tools/skin-editor/skin-editor-src-proj/assets/raw_template")
+}
+
+copyAssetsRaw.dependsOn classes

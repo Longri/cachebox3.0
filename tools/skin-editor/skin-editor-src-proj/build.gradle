@@ -7,3 +7,10 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+task copyAssetsRaw(type: Copy) {
+    from("../android/assets")
+    into("../../tools/skin-editor/skin-editor-src-proj/assets/raw_template")
+}
+
+copyAssetsRaw.dependsOn classes
+
