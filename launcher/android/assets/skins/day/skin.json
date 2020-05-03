@@ -78,7 +78,7 @@
     },
     "addCache": {
       "path": "svg/addCache.svg",
-      "scale": 0.95
+      "scale": 1
     },
     "api_key_ex": {
       "path": "svg/api_key_ex.svg",

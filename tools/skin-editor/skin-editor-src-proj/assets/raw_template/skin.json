@@ -858,7 +858,7 @@
     },
     "database": {
       "path": "svg/database.svg",
-      "scale": 1
+      "scale": 0.95
     },
     "dayNight": {
       "path": "svg/dayNight.svg",
@@ -1010,7 +1010,7 @@
     },
     "editDraft": {
       "path": "svg/editDraft.svg",
-      "scale": 1
+      "scale": 0.95
     },
     "editWp": {
       "path": "svg/editWp.svg",
@@ -1954,7 +1954,7 @@
     },
     "uploadDraft": {
       "path": "svg/uploadDraft.svg",
-      "scale": 1
+      "scale": 0.95
     },
     "videoIcon": {
       "path": "svg/videoIcon.svg",
