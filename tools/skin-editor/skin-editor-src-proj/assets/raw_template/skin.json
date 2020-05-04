@@ -80,6 +80,10 @@
       "path": "svg/addCache.svg",
       "scale": 1
     },
+    "announcement": {
+      "path": "svg/announcement.svg",
+      "scale": 0.5
+    },
     "api_key_ex": {
       "path": "svg/api_key_ex.svg",
       "scale": 1
@@ -95,54 +99,6 @@
     "archived": {
       "path": "svg/archived.svg",
       "scale": 0.1
-    },
-    "unarchive": {
-      "path": "svg/unarchive.svg",
-      "scale": 1
-    },
-    "retract": {
-      "path": "svg/retract.svg",
-      "scale": 1
-    },
-    "update_coord": {
-      "path": "svg/update_coord.svg",
-      "scale": 1
-    },
-    "retrieve": {
-      "path": "svg/retrieve.svg",
-      "scale": 1
-    },
-    "dropped_off": {
-      "path": "svg/TB_drop.svg",
-      "scale": 0.15
-    },
-    "mark_missing": {
-      "path": "svg/mark_missing.svg",
-      "scale": 1
-    },
-    "grab_it": {
-      "path": "svg/grab_it.svg",
-      "scale": 1
-    },
-    "discovered": {
-      "path": "svg/discovered.svg",
-      "scale": 1
-    },
-    "move_to_collection": {
-      "path": "svg/move_to_collection.svg",
-      "scale": 1
-    },
-    "move_to_inventory": {
-      "path": "svg/move_to_inventory.svg",
-      "scale": 1
-    },
-    "announcement": {
-      "path": "svg/announcement.svg",
-      "scale": 1
-    },
-    "visited": {
-      "path": "svg/visited.svg",
-      "scale": 1
     },
     "arrow-compass": {
       "path": "svg/arrow-compass.svg",
@@ -1008,6 +964,10 @@
       "path": "svg/disabledOverlay2.svg",
       "scale": 0.15
     },
+    "discovered": {
+      "path": "svg/discovered.svg",
+      "scale": 1
+    },
     "download-1": {
       "path": "svg/download-1.svg",
       "scale": 0.17
@@ -1039,6 +999,10 @@
     "downloadLogs": {
       "path": "svg/downloadLogs.svg",
       "scale": 0.18
+    },
+    "dropped_off": {
+      "path": "svg/TB_drop.svg",
+      "scale": 0.15
     },
     "e_mailToOwner": {
       "path": "svg/e_mailToOwner.svg",
@@ -1171,6 +1135,10 @@
     "gpxFileIcon": {
       "path": "svg/gpxFileIcon.svg",
       "scale": 1
+    },
+    "grab_it": {
+      "path": "svg/grab_it.svg",
+      "scale": 0.5
     },
     "helpIcon": {
       "path": "svg/helpIcon.svg",
@@ -1704,6 +1672,10 @@
       "path": "svg/map_theme_setting.svg",
       "scale": 1
     },
+    "mark_missing": {
+      "path": "svg/mark_missing.svg",
+      "scale": 1
+    },
     "mega": {
       "path": "svg/mega.svg",
       "scale": 0.2
@@ -1743,6 +1715,14 @@
     "misc_selected": {
       "path": "svg/misc_selected.svg",
       "scale": 0.72
+    },
+    "move_to_collection": {
+      "path": "svg/move_to_collection.svg",
+      "scale": 0.5
+    },
+    "move_to_inventory": {
+      "path": "svg/move_to_inventory.svg",
+      "scale": 1
     },
     "multi": {
       "path": "svg/multi.svg",
@@ -1870,6 +1850,14 @@
     },
     "reload_cache": {
       "path": "svg/reload_cache.svg",
+      "scale": 1
+    },
+    "retract": {
+      "path": "svg/retract.svg",
+      "scale": 1
+    },
+    "retrieve": {
+      "path": "svg/retrieve.svg",
       "scale": 1
     },
     "reviewer_note": {
@@ -2004,6 +1992,14 @@
       "path": "svg/traddi.svg",
       "scale": 0.21
     },
+    "unarchive": {
+      "path": "svg/unarchive.svg",
+      "scale": 1
+    },
+    "update_coord": {
+      "path": "svg/update_coord.svg",
+      "scale": 1
+    },
     "uploadCorrectedCoordinates": {
       "path": "svg/uploadCorrectedCoordinates.svg",
       "scale": 1
@@ -2027,6 +2023,10 @@
     "virtualSize": {
       "path": "svg/virtualSize.svg",
       "scale": 0.25
+    },
+    "visited": {
+      "path": "svg/visited.svg",
+      "scale": 1
     },
     "voiceRecIcon": {
       "path": "svg/voiceRecIcon.svg",
@@ -3386,7 +3386,7 @@
       "move_to_inventory": "move_to_inventory",
       "announcement": "announcement",
       "visited": "visited",
-	  "ownFavorite": "favIcon"
+      "ownFavorite": "favIcon"
     },
     "cacheListViewLogTypes": {
       "found": "found",
