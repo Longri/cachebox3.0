@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="56.3333" height="30.0492" viewBox="0 0 56.33 30.05" enable-background="new 0 0 56.33 30.05" xml:space="preserve">
-	<path fill="#006432" fill-opacity="1" stroke-width="2" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 7.44808,8.38245L 7.44808,29.0492L 48.1147,29.0492L 48.1147,8.63269L 55.3333,8.66663L 55.3333,0.999878L 1.16667,0.999878L 1,8.33337L 7.44808,8.38245 Z "/>
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <path d="M6.424024 16.8742 L6.424024 39.04601 L40.92233 39.04601 L40.92233 17.14266 L47.04601 17.17907 L47.04601 8.953993 L1.095379 8.953993 L0.9539893 16.82155 z" stroke="#000000" stroke-width="1.907982" stroke-linejoin="round" id="path2" xml:space="preserve" style="fill:#006432;" />
 </svg>

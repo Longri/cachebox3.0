@@ -48,8 +48,8 @@ public class LogTypesStyle extends AbstractIconStyle {
             move_to_collection, // 22
             move_to_inventory, // 23
             announcement, // 24
-            visited; // 25
-    public Drawable ownFavorite;
+            visited, // 25
+            ownFavorite;
 
     @Override
     public int getPrefWidth() {

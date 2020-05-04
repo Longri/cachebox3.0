@@ -96,6 +96,54 @@
       "path": "svg/archived.svg",
       "scale": 0.1
     },
+    "unarchive": {
+      "path": "svg/unarchive.svg",
+      "scale": 1
+    },
+    "retract": {
+      "path": "svg/retract.svg",
+      "scale": 1
+    },
+    "update_coord": {
+      "path": "svg/update_coord.svg",
+      "scale": 1
+    },
+    "retrieve": {
+      "path": "svg/retrieve.svg",
+      "scale": 1
+    },
+    "dropped_off": {
+      "path": "svg/TB_drop.svg",
+      "scale": 0.15
+    },
+    "mark_missing": {
+      "path": "svg/mark_missing.svg",
+      "scale": 1
+    },
+    "grab_it": {
+      "path": "svg/grab_it.svg",
+      "scale": 1
+    },
+    "discovered": {
+      "path": "svg/discovered.svg",
+      "scale": 1
+    },
+    "move_to_collection": {
+      "path": "svg/move_to_collection.svg",
+      "scale": 1
+    },
+    "move_to_inventory": {
+      "path": "svg/move_to_inventory.svg",
+      "scale": 1
+    },
+    "announcement": {
+      "path": "svg/announcement.svg",
+      "scale": 1
+    },
+    "visited": {
+      "path": "svg/visited.svg",
+      "scale": 1
+    },
     "arrow-compass": {
       "path": "svg/arrow-compass.svg",
       "scale": 0.15
@@ -658,19 +706,19 @@
     },
     "baseMapFreizeitkarte": {
       "path": "svg/baseMapFreizeitkarte.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "baseMapMapsforge": {
       "path": "svg/baseMapMapsforge.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "baseMapOnlineBitmap": {
       "path": "svg/baseMapOnlineBitmap.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "baseMapOnlineVector": {
       "path": "svg/baseMapOnlineVector.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "beginner": {
       "path": "svg/beginner.svg",
@@ -751,10 +799,6 @@
     "cache": {
       "path": "svg/cache.svg",
       "scale": 0.72
-    },
-    "cacheFavIcon": {
-      "path": "svg/favIcon.svg",
-      "scale": 0.1
     },
     "cacheListIcon": {
       "path": "svg/cacheListIcon.svg",
@@ -914,7 +958,7 @@
     },
     "deleteIcon": {
       "path": "svg/deleteIcon.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "delete_Archived": {
       "path": "svg/delete_Archived.svg",
@@ -934,7 +978,7 @@
     },
     "description": {
       "path": "svg/description.svg",
-      "scale": 0.235
+      "scale": 1
     },
     "dialog_center": {
       "path": "svg/dialog_center.svg",
@@ -1034,14 +1078,14 @@
     },
     "favIcon": {
       "path": "svg/favIcon.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "favpoint": {
       "path": "svg/favpoint.svg",
-      "scale": 0.2
+      "scale": 1
     },
     "favpointFilter": {
-      "path": "svg/favpoint.svg",
+      "path": "svg/favpointFilter.svg",
       "scale": 0.51
     },
     "fieldnoteListIcon": {
@@ -1062,11 +1106,11 @@
     },
     "filter": {
       "path": "svg/filter.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "filterReset": {
       "path": "svg/filterReset.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "finger": {
       "path": "svg/finger.svg",
@@ -1216,10 +1260,6 @@
       "path": "svg/map-info-panel-background.svg",
       "scale": 0.75
     },
-    "map-layer": {
-      "path": "svg/map-layer.svg",
-      "scale": 0.18
-    },
     "mapCITO": {
       "path": "svg/cito.svg",
       "scale": 0.15
@@ -1344,6 +1384,10 @@
       "path": "svg/mapLabCache2.svg",
       "scale": 0.15
     },
+    "mapLayer": {
+      "path": "svg/mapLayer.svg",
+      "scale": 1
+    },
     "mapLetterbox": {
       "path": "svg/letterbox.svg",
       "scale": 0.15
@@ -1374,7 +1418,7 @@
     },
     "mapMulti0": {
       "path": "svg/mapMulti0.svg",
-      "scale": 0.27
+      "scale": 0.25
     },
     "mapMulti1": {
       "path": "svg/mapMulti1.svg",
@@ -1448,6 +1492,18 @@
       "path": "svg/mapMyParking.svg",
       "scale": 0.18
     },
+    "mapMyParking0": {
+      "path": "svg/mapMyParking.svg",
+      "scale": 0.04
+    },
+    "mapMyParking1": {
+      "path": "svg/mapMyParking.svg",
+      "scale": 0.08
+    },
+    "mapMyParking2": {
+      "path": "svg/mapMyParking.svg",
+      "scale": 0.16
+    },
     "mapMystery": {
       "path": "svg/myterie.svg",
       "scale": 0.15
@@ -1490,7 +1546,7 @@
     },
     "mapParkingArea2": {
       "path": "svg/mapParkingArea.svg",
-      "scale": 0.15
+      "scale": 0.2
     },
     "mapReferencePoint": {
       "path": "svg/mapReferencePoint.svg",
@@ -1522,7 +1578,7 @@
     },
     "mapSolved2": {
       "path": "svg/mapSolved2.svg",
-      "scale": 0.15
+      "scale": 1
     },
     "mapStar0": {
       "path": "svg/mapStar0.svg",
@@ -1534,7 +1590,7 @@
     },
     "mapStar2": {
       "path": "svg/mapStar2.svg",
-      "scale": 0.15
+      "scale": 1
     },
     "mapTraditional": {
       "path": "svg/traddi.svg",
@@ -1642,11 +1698,11 @@
     },
     "map_theme": {
       "path": "svg/map_theme.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "map_theme_setting": {
       "path": "svg/map_theme_setting.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "mega": {
       "path": "svg/mega.svg",
@@ -1766,7 +1822,7 @@
     },
     "ownerLogTypes": {
       "path": "svg/ownerLogTypes.svg",
-      "scale": 1.4
+      "scale": 1
     },
     "owner_maintenance": {
       "path": "svg/owner_maintenance.svg",
@@ -1870,7 +1926,7 @@
     },
     "sortIcon": {
       "path": "svg/sortIcon.svg",
-      "scale": 0.18
+      "scale": 1
     },
     "soundOff": {
       "path": "svg/soundOff.svg",
@@ -1898,7 +1954,7 @@
     },
     "target": {
       "path": "svg/target.svg",
-      "scale": 0.23
+      "scale": 1
     },
     "tbListIcon": {
       "path": "svg/tbListIcon.svg",
@@ -2819,9 +2875,9 @@
       "large": "mapMultiStartP2"
     },
     "mapMyParking": {
-      "small": "mapMyParking",
-      "middle": "mapMyParking",
-      "large": "mapMyParking"
+      "small": "mapMyParking0",
+      "middle": "mapMyParking1",
+      "large": "mapMyParking2"
     },
     "mapMystery": {
       "small": "mapMystery0",
@@ -2930,12 +2986,12 @@
       "baseMapMapsforge": "baseMapMapsforge",
       "baseMapFreizeitkarte": "baseMapFreizeitkarte",
       "target": "target",
-      "mapLayer": "map-layer",
+      "mapLayer": "mapLayer",
       "deleteAllDrafts": "deleteIcon",
       "ownerLogTypes": "ownerLogTypes",
       "editDraft": "editDraft",
       "fileTransfer": "fileTransfer",
-      "favPoint": "favpointFilter",
+      "favPoint": "favpoint",
       "theme": "map_theme",
       "themeStyle": "map_theme_setting",
       "uploadCorrectedCoordinates": "uploadCorrectedCoordinates",
@@ -3303,16 +3359,63 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
-    "buuble_LogTypes": {
+    "bubble_LogTypes": {
       "found": "mapFound0",
-      "temporarily_disabled": "bubble_tempDisabled"
+      "didnt_find": "notFound",
+      "note": "noteIconType",
+      "published": "published",
+      "enabled": "enabled",
+      "needs_maintenance": "needs_maintenance",
+      "temporarily_disabled": "bubble_tempDisabled",
+      "owner_maintenance": "owner_maintenance",
+      "will_attend": "will_attend",
+      "attended": "attended",
+      "webcam_photo_taken": "webcam_photo_taken",
+      "archived": "archived",
+      "reviewer_note": "reviewer_note",
+      "needs_archived": "needs_archived",
+      "unarchive": "unarchive",
+      "retract": "retract",
+      "update_coord": "update_coord",
+      "retrieve": "retrieve",
+      "dropped_off": "dropped_off",
+      "mark_missing": "mark_missing",
+      "grab_it": "grab_it",
+      "discovered": "discovered",
+      "move_to_collection": "move_to_collection",
+      "move_to_inventory": "move_to_inventory",
+      "announcement": "announcement",
+      "visited": "visited",
+	  "ownFavorite": "favIcon"
     },
     "cacheListViewLogTypes": {
       "found": "found",
       "didnt_find": "notFound",
+      "note": "noteIconType",
+      "published": "published",
+      "enabled": "enabled",
+      "needs_maintenance": "needs_maintenance",
       "temporarily_disabled": "tempDisabled",
+      "owner_maintenance": "owner_maintenance",
+      "will_attend": "will_attend",
+      "attended": "attended",
+      "webcam_photo_taken": "webcam_photo_taken",
       "archived": "archived",
-      "ownFavorite": "cacheFavIcon"
+      "reviewer_note": "reviewer_note",
+      "needs_archived": "needs_archived",
+      "unarchive": "unarchive",
+      "retract": "retract",
+      "update_coord": "update_coord",
+      "retrieve": "retrieve",
+      "dropped_off": "dropped_off",
+      "mark_missing": "mark_missing",
+      "grab_it": "grab_it",
+      "discovered": "discovered",
+      "move_to_collection": "move_to_collection",
+      "move_to_inventory": "move_to_inventory",
+      "announcement": "announcement",
+      "visited": "visited",
+      "ownFavorite": "favIcon"
     },
     "logViewLogStyles": {
       "found": "found",
@@ -3328,7 +3431,20 @@
       "webcam_photo_taken": "webcam_photo_taken",
       "archived": "archived",
       "reviewer_note": "reviewer_note",
-      "needs_archived": "needs_archived"
+      "needs_archived": "needs_archived",
+      "unarchive": "unarchive",
+      "retract": "retract",
+      "update_coord": "update_coord",
+      "retrieve": "retrieve",
+      "dropped_off": "dropped_off",
+      "mark_missing": "mark_missing",
+      "grab_it": "grab_it",
+      "discovered": "discovered",
+      "move_to_collection": "move_to_collection",
+      "move_to_inventory": "move_to_inventory",
+      "announcement": "announcement",
+      "visited": "visited",
+      "ownFavorite": "favIcon"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogListItemStyle": {
@@ -3402,7 +3518,7 @@
       "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color",
       "typeStyle": "bubble",
-      "logTypesStyle": "buuble_LogTypes",
+      "logTypesStyle": "bubble_LogTypes",
       "starStyle": "bubble",
       "cacheSizeStyle": "bubble"
     },

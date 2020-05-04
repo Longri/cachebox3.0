@@ -1,19 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="258" height="258" viewBox="0 0 258.00 258.00" enable-background="new 0 0 258.00 258.00" xml:space="preserve">
-	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.5" y1="1.08111" x2="1.66222" y2="1.08111" gradientTransform="rotate(-90.000000 0.500000 1.081107)">
-		<stop offset="0" stop-color="#ABC4AB" stop-opacity="1"/>
-		<stop offset="0.771552" stop-color="#D5E1D5" stop-opacity="1"/>
-		<stop offset="1" stop-color="#FFFFFF" stop-opacity="1"/>
-	</linearGradient>
-	<path fill="url(#SVGID_Fill1_)" stroke-width="8" stroke-linecap="square" stroke-linejoin="bevel" stroke="#000000" stroke-opacity="1" d="M 44,3.99994L 214,3.99994C 236.091,3.99994 254,21.9085 254,43.9999L 254,214C 254,236.091 236.091,254 214,254L 44,254C 21.9086,254 4,236.091 4,214L 4,43.9999C 4,21.9085 21.9086,3.99994 44,3.99994 Z "/>
-	<radialGradient id="SVGID_Fill2_" cx="178.495" cy="213.639" r="199.244" gradientUnits="userSpaceOnUse" gradientTransform="rotate(7.720263 178.495117 213.638733)">
-		<stop offset="0" stop-color="#C7C400" stop-opacity="1"/>
-		<stop offset="0.387213" stop-color="#BEAD00" stop-opacity="1"/>
-		<stop offset="0.520927" stop-color="#B69600" stop-opacity="1"/>
-		<stop offset="0.706977" stop-color="#E88500" stop-opacity="1"/>
-		<stop offset="0.916279" stop-color="#EEB100" stop-opacity="1"/>
-		<stop offset="0.986046" stop-color="#F4DD00" stop-opacity="1"/>
-	</radialGradient>
-	<path fill="url(#SVGID_Fill2_)" stroke-width="4" stroke-linejoin="round" stroke="#FC9100" stroke-opacity="1" d="M 194.547,225.465L 169.226,149.117L 234.195,101.692L 153.76,102.181L 128.733,25.7363L 104.341,102.386L 23.9047,102.565L 89.2655,149.449L 64.5797,226.004L 129.366,178.33L 194.547,225.465 Z "/>
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <linearGradient x1="129" y1="278.9264" x2="428.8528" y2="278.9264" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.1860465, 0, 0, 0.1860465, -1.120363E-07, 1.592453E-05)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#ABC4AB" stop-opacity="1" id="stop2" xml:space="preserve" />
+    <stop offset="77.1552%" stop-color="#D5E1D5" stop-opacity="1" id="stop4" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" id="stop6" xml:space="preserve" />
+  </linearGradient>
+  <path d="M8.186047 0.7441859 L39.81395 0.7441859 C43.92391 0.7441859 47.25581 4.076016 47.25581 8.186036 L47.25581 39.81396 C47.25581 43.92391 43.92391 47.25582 39.81395 47.25582 L8.186047 47.25582 C4.076019 47.25582 0.7441859 43.92391 0.7441859 39.81396 L0.7441859 8.186036 C0.7441859 4.076016 4.076018 0.7441859 8.186047 0.7441859 z" stroke="#000000" stroke-width="1.488372" stroke-linecap="square" stroke-linejoin="bevel" id="path9" xml:space="preserve" style="fill:url(#SVGID_Fill1_);" />
+  <radialGradient cx="178.495" cy="213.639" r="199.244" fx="178.495" fy="213.639" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.1843601, 0.02499286, -0.02499287, 0.1843601, 5.640453, -4.100814)" id="SVGID_Fill2_" xml:space="preserve">
+    <stop offset="0%" stop-color="#C7C400" stop-opacity="1" id="stop11" xml:space="preserve" />
+    <stop offset="38.7213%" stop-color="#BEAD00" stop-opacity="1" id="stop13" xml:space="preserve" />
+    <stop offset="52.0927%" stop-color="#B69600" stop-opacity="1" id="stop15" xml:space="preserve" />
+    <stop offset="70.6977%" stop-color="#E88500" stop-opacity="1" id="stop17" xml:space="preserve" />
+    <stop offset="91.6279%" stop-color="#EEB100" stop-opacity="1" id="stop19" xml:space="preserve" />
+    <stop offset="98.6046%" stop-color="#F4DD00" stop-opacity="1" id="stop21" xml:space="preserve" />
+  </radialGradient>
+  <path d="M36.19479 41.94699 L31.48391 27.74271 L43.57116 18.91945 L28.60651 19.01044 L23.95033 4.788175 L19.41228 19.04858 L4.447386 19.08188 L16.60753 27.80449 L12.01483 42.04728 L24.06809 33.1777 z" stroke="#FC9100" stroke-width="0.7441859" stroke-linejoin="round" id="path24" xml:space="preserve" style="fill:url(#SVGID_Fill2_);" />
 </svg>

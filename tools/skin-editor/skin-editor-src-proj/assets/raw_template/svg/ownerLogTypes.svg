@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg x="0" y="0" width="32" height="33.45454" overflow="hidden" viewBox="0, 0, 110, 115" preserveAspectRatio="xMidYMid" font-size="0" id="svg" xml:space="default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid" font-size="0px" id="svg" xml:space="default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
   <defs id="def1" xml:space="default">
-    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient8148" xml:space="default">
+    <linearGradient x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox" id="linearGradient8148" xml:space="default">
       <stop offset="0%" stop-color="#BFBFBF" stop-opacity="1" id="stop8150" xml:space="default" />
       <stop offset="100%" stop-color="#F0F0F0" stop-opacity="1" id="stop8152" xml:space="default" />
     </linearGradient>
-    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient8140" xml:space="default">
+    <linearGradient x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox" id="linearGradient8140" xml:space="default">
       <stop offset="0%" stop-color="#FFFE7F" stop-opacity="1" id="stop8142" xml:space="default" />
       <stop offset="100%" stop-color="#FFFFBF" stop-opacity="1" id="stop8144" xml:space="default" />
     </linearGradient>
-    <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="objectBoundingBox" id="linearGradient7144" xml:space="default">
+    <linearGradient x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox" id="linearGradient7144" xml:space="default">
       <stop offset="0%" stop-color="#5E411F" stop-opacity="1" id="stop7146" xml:space="default" />
       <stop offset="100%" stop-color="#BE843F" stop-opacity="1" id="stop7148" xml:space="default" />
     </linearGradient>
@@ -26,19 +26,19 @@
     <linearGradient x1="133.039" y1="105.8345" x2="139.6259" y2="107.8173" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient8148" id="linearGradient9155" xml:space="default" />
     <linearGradient x1="48.71321" y1="86.89435" x2="129.1785" y2="139.4696" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient7144" id="linearGradient9157" xml:space="default" />
     <linearGradient x1="105.8816" y1="84.85782" x2="110.659" y2="57.38205" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient8140" gradientTransform="translate(-1.133022, -0.679813)" id="linearGradient9159" xml:space="default" />
-    <linearGradient x1="105.8816" y1="84.85782" x2="110.659" y2="57.38205" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient8140" gradientTransform="translate(-23.25079, -22.4791)" id="linearGradient9162" xml:space="default" />
-    <linearGradient x1="48.71321" y1="86.89435" x2="129.1785" y2="139.4696" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient7144" gradientTransform="translate(-22.11777, -21.79929)" id="linearGradient9165" xml:space="default" />
-    <linearGradient x1="133.039" y1="105.8345" x2="139.6259" y2="107.8173" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient8148" gradientTransform="translate(-22.11777, -21.79929)" id="linearGradient9168" xml:space="default" />
-    <linearGradient x1="107.3915" y1="136.2486" x2="106.2585" y2="147.3332" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient8148" gradientTransform="translate(-22.11777, -21.79929)" id="linearGradient9171" xml:space="default" />
-    <linearGradient x1="81.77898" y1="82.10371" x2="134.5559" y2="154.2993" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient7144" gradientTransform="translate(-22.11777, -21.79929)" id="linearGradient9174" xml:space="default" />
-    <linearGradient x1="59.666" y1="97.32125" x2="62.82787" y2="98.21825" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient7144" gradientTransform="translate(-22.11777, -21.79929)" id="linearGradient9177" xml:space="default" />
+    <linearGradient x1="105.8816" y1="84.85782" x2="110.659" y2="57.38205" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient8140" gradientTransform="matrix(2.241379, 0, 0, 2.313023, -78.53287, -77.06052)" id="linearGradient9162" xml:space="default" />
+    <linearGradient x1="48.71321" y1="86.89435" x2="129.1785" y2="139.4696" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient7144" gradientTransform="matrix(2.241379, 0, 0, 2.313023, -75.99334, -75.4881)" id="linearGradient9165" xml:space="default" />
+    <linearGradient x1="133.039" y1="105.8345" x2="139.6259" y2="107.8173" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient8148" gradientTransform="matrix(2.241379, 0, 0, 2.313023, -75.99334, -75.4881)" id="linearGradient9168" xml:space="default" />
+    <linearGradient x1="107.3915" y1="136.2486" x2="106.2585" y2="147.3332" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient8148" gradientTransform="matrix(2.241379, 0, 0, 2.313023, -75.99334, -75.4881)" id="linearGradient9171" xml:space="default" />
+    <linearGradient x1="81.77898" y1="82.10371" x2="134.5559" y2="154.2993" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient7144" gradientTransform="matrix(2.241379, 0, 0, 2.313023, -75.99334, -75.4881)" id="linearGradient9174" xml:space="default" />
+    <linearGradient x1="59.666" y1="97.32125" x2="62.82787" y2="98.21825" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient7144" gradientTransform="matrix(2.241379, 0, 0, 2.313023, -75.99334, -75.4881)" id="linearGradient9177" xml:space="default" />
   </defs>
-  <g display="inline" transform="translate(-22.26877, -20.46287)" id="layer1" xml:space="default">
-    <path d="M55.75997 23.93455 C53.70679 23.72958 52.84424 27.14166 51.59784 30.28981 L25.66023 114.2247 L31.00079 117.3579 L55.75997 23.93455 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path4189" xml:space="default" nodetypes="ccccc" style="fill:url(#linearGradient9177);" />
-    <path d="M29.90143 109.3879 C25.08506 108.978 23.39301 122.3534 26.90265 123.1095 L112.1506 132 L129.5 43.82839 L115.069 41.86086 L101.8228 110.774 L29.90143 109.3879 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path3206" xml:space="default" nodetypes="ccccccc" style="fill:url(#linearGradient9174);" />
-    <path d="M104.3087 114.2555 L31.63124 108.0906 C27.94898 108.1047 25.47136 120.4968 28.35401 121.0833 L109.7002 128.8145" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path5162" xml:space="default" nodetypes="cccc" style="fill:url(#linearGradient9171);" />
-    <path d="M126.027 45.55587 L109.1507 128.5604 C105.1224 127.0145 102.3869 118.0469 104.952 114.3874 L121.5512 31.08041 C120.3062 34.96844 122.8636 44.44247 126.027 45.55587 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path6139" xml:space="default" nodetypes="ccccc" style="fill:url(#linearGradient9168);" />
-    <path d="M107.3158 117.1703 L29.69663 109.3879 L55.70623 23.98631 L124.7238 28.90151 L107.3158 117.1703 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path4187" xml:space="default" style="fill:url(#linearGradient9165);" />
-    <path d="M64.31639 33.1369 L107.9824 36.39189 L102.2916 65.2905 L57.73243 61.17269 L64.31639 33.1369 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path3214" xml:space="default" nodetypes="ccccc" style="fill:url(#linearGradient9162);" />
+  <g display="inline" transform="matrix(0.446154, 0, 0, 0.4323346, -10.48181, -9.626044)" id="layer1" xml:space="default">
+    <path d="M55.75997 23.93455 C53.70679 23.72958 52.84424 27.14166 51.59784 30.28981 L25.66023 114.2247 L31.00079 117.3579 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path4189" xml:space="default" nodetypes="ccccc" connector-curvature="0" style="fill:url(#linearGradient9177);" />
+    <path d="M29.90143 109.3879 C25.08506 108.978 23.39301 122.3534 26.90265 123.1095 L112.1506 132 L129.5 43.82839 L115.069 41.86086 L101.8228 110.774 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path3206" xml:space="default" nodetypes="ccccccc" connector-curvature="0" style="fill:url(#linearGradient9174);" />
+    <path d="M104.3087 114.2555 L31.63124 108.0906 C27.94898 108.1047 25.47136 120.4968 28.35401 121.0833 L109.7002 128.8145" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path5162" xml:space="default" nodetypes="cccc" connector-curvature="0" style="fill:url(#linearGradient9171);" />
+    <path d="M126.027 45.55587 L109.1507 128.5604 C105.1224 127.0145 102.3869 118.0469 104.952 114.3874 L121.5512 31.0804 C120.3062 34.96843 122.8636 44.44246 126.027 45.55586 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path6139" xml:space="default" nodetypes="ccccc" connector-curvature="0" style="fill:url(#linearGradient9168);" />
+    <path d="M107.3158 117.1703 L29.69663 109.3879 L55.70623 23.98631 L124.7238 28.90151 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path4187" xml:space="default" connector-curvature="0" style="fill:url(#linearGradient9165);" />
+    <path d="M64.31639 33.1369 L107.9824 36.39189 L102.2916 65.2905 L57.73243 61.17269 z" display="inline" stroke="#000000" fill-rule="evenOdd" stroke-width="1px" id="path3214" xml:space="default" nodetypes="ccccc" connector-curvature="0" style="fill:url(#linearGradient9162);" />
   </g>
 </svg>

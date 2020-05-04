@@ -1,21 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 42, 42" preserveAspectRatio="xMidYMid"
-     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
-     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid" font-size="0px" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <defs id="def1" xml:space="preserve">
+    <linearGradient x1="3.804716E-07" y1="24.07512" x2="47.96567" y2="24.07512" gradientUnits="userSpaceOnUse" xlink:href="#SVGID_Fill1_" id="linearGradient868" xml:space="preserve" />
+    <linearGradient x1="0.256595" y1="24.00001" x2="48" y2="24.00001" gradientUnits="userSpaceOnUse" xlink:href="#SVGID_Fill1_" id="linearGradient870" xml:space="preserve" />
+    <linearGradient x1="20.25085" y1="26.61095" x2="27.17251" y2="26.61095" gradientUnits="userSpaceOnUse" xlink:href="#SVGID_Fill1_" id="linearGradient872" xml:space="preserve" />
+  </defs>
   <radialGradient cx="21.0767" cy="52.2322" r="58.0992" fx="21.0767" fy="52.2322" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-90, 21.07674, 52.23219)" id="SVGID_Stroke1_" xml:space="preserve">
-    <stop offset="0%" stop-color="#F68A0C" stop-opacity="1" xml:space="preserve" />
-    <stop offset="84.6512%" stop-color="#FAB71C" stop-opacity="1" xml:space="preserve" />
-    <stop offset="100%" stop-color="#FFE42C" stop-opacity="1" xml:space="preserve" />
+    <stop offset="0%" stop-color="#F68A0C" stop-opacity="1" id="stop2" xml:space="preserve" />
+    <stop offset="84.6512%" stop-color="#FAB71C" stop-opacity="1" id="stop4" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FFE42C" stop-opacity="1" id="stop6" xml:space="preserve" />
   </radialGradient>
-  <linearGradient x1="0.501089" y1="1.36086" x2="1.95885" y2="1.36086" gradientUnits="objectBoundingBox" gradientTransform="rotate(-90, 0.501089, 1.360859)" id="SVGID_Fill1_" xml:space="preserve">
-    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1" xml:space="preserve" />
-    <stop offset="6.03448%" stop-color="#FFE17F" stop-opacity="1" xml:space="preserve" />
-    <stop offset="46.9767%" stop-color="#FFC400" stop-opacity="1" xml:space="preserve" />
-    <stop offset="89.642%" stop-color="#FFE17F" stop-opacity="1" xml:space="preserve" />
-    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" xml:space="preserve" />
+  <linearGradient x1="20.09235" y1="56.62801" x2="78.56053" y2="56.62801" gradientUnits="userSpaceOnUse" gradientTransform="scale(1.049563, 0.9527771)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1" id="stop9" xml:space="preserve" />
+    <stop offset="6.03448%" stop-color="#FFE17F" stop-opacity="1" id="stop11" xml:space="preserve" />
+    <stop offset="46.9767%" stop-color="#FFC400" stop-opacity="1" id="stop13" xml:space="preserve" />
+    <stop offset="89.642%" stop-color="#FFE17F" stop-opacity="1" id="stop15" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" id="stop17" xml:space="preserve" />
   </linearGradient>
-  <path d="M40.8139 34.1045 L25.5722 5.88278 C24.5941 3.97365 22.7212 2.85308 20.4696 2.9559 C19.7643 2.98809 17.5603 3.1851 16.4574 5.26023 L1.80192 31.9949 C1.32764 32.7914 0.836578 34.3941 1.06115 35.6665 C1.3719 37.4273 2.66783 38.587 4.25764 39.1639 L37.734 39.15 C38.8628 38.6813 40.1309 37.8641 40.7282 36.8906 C41.2121 36.1019 41.1036 34.8999 40.8139 34.1045 z" stroke="url(#SVGID_Stroke1_)" fill-rule="evenOdd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xml:space="preserve" style="fill:url(#SVGID_Fill1_);" />
-  <path d="M40.9389 34.1111 L25.6627 5.74546 C24.6824 3.8266 22.8052 2.70032 20.5485 2.80365 C19.8417 2.83602 17.6327 3.03404 16.5272 5.11975 L1.83859 31.9908 C1.36324 32.7913 1.08489 34.2146 1.30996 35.4935 C1.62142 37.2633 2.70646 38.6166 4.29987 39.1963 L37.852 39.1824 C38.9833 38.7113 40.0357 37.8638 40.6344 36.8852 C41.1194 36.0925 41.2292 34.9106 40.9389 34.1111 z" stroke="#000000" fill-rule="evenOdd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xml:space="preserve" style="fill:none;" />
-  <path d="M19.4944 28.3753 L18.2852 17.0847 L18.2852 11.8676 L23.3243 11.8676 L23.3243 17.0847 L22.1321 28.3753 L19.4944 28.3753 z M18.2852 34.2932 L18.2852 29.9327 L23.3243 29.9327 L23.3243 34.2932 L18.2852 34.2932 z" stroke="#937209" stroke-linejoin="round" xml:space="preserve" style="fill:#FFFFFF;" />
+  <path d="M46.45687 40.42572 L29.13103 5.059875 C28.01918 2.667461 25.89018 1.263227 23.3307 1.392075 C22.52896 1.432414 20.02358 1.679296 18.76987 4.27973 L2.110413 37.78209 C1.57128 38.78022 1.013071 40.78864 1.268351 42.38313 C1.621593 44.58967 3.094727 46.04294 4.901927 46.76588 L42.95583 46.74847 C44.23898 46.16112 45.68048 45.13705 46.35945 43.91712 C46.90952 42.92876 46.78618 41.42249 46.45687 40.42574 z" stroke="url(#SVGID_Stroke1_)" fill-rule="evenOdd" stroke-width="2.387046" stroke-linecap="round" stroke-linejoin="round" id="path20" xml:space="preserve" style="fill:url(#linearGradient868);" />
+  <path d="M46.59896 40.43399 L29.2339 4.887793 C28.11956 2.483187 25.98567 1.071797 23.42039 1.201284 C22.61694 1.241848 20.10589 1.489996 18.84922 4.103689 L2.152097 37.77695 C1.611748 38.7801 1.295337 40.56369 1.551183 42.16634 C1.905231 44.38415 3.138639 46.08003 4.949931 46.80648 L43.08996 46.78906 C44.37595 46.19871 45.57226 45.13667 46.25282 43.91034 C46.80414 42.91698 46.92896 41.43589 46.59896 40.434 z" stroke="#000000" fill-rule="evenOdd" stroke-width="2.387046" stroke-linecap="round" stroke-linejoin="round" id="path22" xml:space="preserve" style="fill:url(#linearGradient870);" />
+  <path d="M22.22215 33.24622 L20.84761 19.09748 L20.84761 12.55971 L26.57575 12.55971 L26.57575 19.09748 L25.22053 33.24622 z M20.84761 40.66219 L20.84761 35.19786 L26.57575 35.19786 L26.57575 40.66219 z" stroke="#937209" stroke-width="1.193523" stroke-linejoin="round" id="path24" xml:space="preserve" style="fill:url(#linearGradient872);" />
 </svg>

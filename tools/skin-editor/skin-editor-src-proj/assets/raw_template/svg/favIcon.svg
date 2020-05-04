@@ -1,15 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="250" height="250" viewBox="0 0 250.00 250.00" enable-background="new 0 0 250.00 250.00" xml:space="preserve">
-	<g>
-		<path fill="#FF0000" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 77.4829,32.4046C 48.5263,32.4046 25,55.9127 25,84.941C 25,143.909 84.4499,159.325 125,217.596C 163.317,159.682 225,141.962 225,84.941C 225,55.9127 201.474,32.4046 172.445,32.4046C 151.438,32.4046 133.378,44.8197 125,62.6832C 116.551,44.8197 98.4905,32.4046 77.4829,32.4046 Z "/>
-		<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.49991" y1="1.00009" x2="1.49985" y2="1.00009" gradientTransform="rotate(-90.000000 0.499910 1.000089)">
-			<stop offset="0" stop-color="#701818" stop-opacity="1"/>
-			<stop offset="0.588997" stop-color="#CD0000" stop-opacity="1"/>
-			<stop offset="1" stop-color="#FF0000" stop-opacity="1"/>
-		</linearGradient>
-		<path fill="url(#SVGID_Fill1_)" stroke-width="0.2" stroke-linejoin="round" d="M 42.3098,133.101C 62.96,159.2 98.1333,179.01 125,217.596C 159.477,165.541 247.812,127.367 219.337,61.2896C 215.3,97.8565 179.144,121.311 144.543,131.904C 121.302,139.103 75.8753,149.768 42.3098,133.101 Z "/>
-		<path fill="#FFFFFF" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 72.1776,55.5736C 63.5316,55.5736 55.8503,59.6107 50.8306,65.8985C 47.1329,70.5787 44.8999,76.5094 44.8999,82.9224C 44.8999,88.9249 46.1504,94.0872 48.2405,98.6959C 46.2217,81.815 57.3865,61.4327 72.1776,55.5736 Z "/>
-		<path fill="none" stroke-width="5" stroke-linejoin="round" stroke="#EE0D0D" stroke-opacity="1" d="M 77.4829,32.4046C 48.5263,32.4046 25,55.9127 25,84.941C 25,143.909 84.4499,159.325 125,217.596C 163.317,159.682 225,141.962 225,84.941C 225,55.9127 201.474,32.4046 172.445,32.4046C 151.438,32.4046 133.378,44.8197 125,62.6832C 116.551,44.8197 98.4905,32.4046 77.4829,32.4046 Z "/>
-	</g>
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <g transform="matrix(0.2268578, 0, 0, 0.2458955, -4.427401, -6.738197)" id="g17" xml:space="preserve">
+    <path d="M77.4829 32.4046 C48.5263 32.4046 25 55.9127 25 84.941 C25 143.909 84.4499 159.325 125 217.596 C163.317 159.682 225 141.962 225 84.941 C225 55.9127 201.474 32.4046 172.445 32.4046 C151.438 32.4046 133.378 44.8197 125 62.6832 C116.551 44.8197 98.4905 32.4046 77.4829 32.4046 z" stroke-width="0.2" stroke-linejoin="round" id="path2" xml:space="preserve" connector-curvature="0" style="fill:#FF0000;" />
+    <linearGradient x1="123.6004" y1="235.1974" x2="292.5294" y2="235.1974" gradientUnits="userSpaceOnUse" gradientTransform="matrix(4.764308, 0, 0, 3.762667, 19.51619, 27.40269)" id="SVGID_Fill1_" xml:space="preserve">
+      <stop offset="0%" stop-color="#701818" stop-opacity="1" id="stop4" xml:space="preserve" />
+      <stop offset="58.8997%" stop-color="#CD0000" stop-opacity="1" id="stop6" xml:space="preserve" />
+      <stop offset="100%" stop-color="#FF0000" stop-opacity="1" id="stop8" xml:space="preserve" />
+    </linearGradient>
+    <path d="M42.3098 133.101 C62.96 159.2 98.1333 179.01 125 217.596 C159.477 165.541 247.812 127.367 219.337 61.2896 C215.3 97.8565 179.144 121.311 144.543 131.904 C121.302 139.103 75.8753 149.768 42.3098 133.101 z" stroke-width="0.2" stroke-linejoin="round" id="path11" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill1_);" />
+    <path d="M72.1776 55.5736 C63.5316 55.5736 55.8503 59.6107 50.8306 65.8985 C47.1329 70.5787 44.8999 76.5094 44.8999 82.92239 C44.8999 88.9249 46.1504 94.0872 48.2405 98.69589 C46.2217 81.81499 57.3865 61.43269 72.1776 55.57359 z" stroke-width="0.2" stroke-linejoin="round" id="path13" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    <path d="M77.4829 32.4046 C48.5263 32.4046 25 55.9127 25 84.941 C25 143.909 84.4499 159.325 125 217.596 C163.317 159.682 225 141.962 225 84.941 C225 55.9127 201.474 32.4046 172.445 32.4046 C151.438 32.4046 133.378 44.8197 125 62.6832 C116.551 44.8197 98.4905 32.4046 77.4829 32.4046 z" stroke="#EE0D0D" stroke-width="5" stroke-linejoin="round" id="path15" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+  </g>
 </svg>
