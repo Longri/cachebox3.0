@@ -159,6 +159,11 @@ public class IOS_DescriptionView extends UIViewController implements PlatformWeb
     }
 
     @Override
+    public void decidePolicyForNavigationAction(WKWebView wkWebView, WKNavigationAction wkNavigationAction, WKWebpagePreferences wkWebpagePreferences, VoidBlock2<WKNavigationActionPolicy, WKWebpagePreferences> voidBlock2) {
+        log.debug("decidePolicyForNavigationAction");
+    }
+
+    @Override
     public void decidePolicyForNavigationResponse(WKWebView wkWebView, WKNavigationResponse wkNavigationResponse, VoidBlock1<WKNavigationResponsePolicy> voidBlock1) {
         log.debug("decidePolicyForNavigationResponse");
         voidBlock1.invoke(WKNavigationResponsePolicy.Allow);
