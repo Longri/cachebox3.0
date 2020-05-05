@@ -20,22 +20,22 @@ public class Validate_Icons extends Validate_Abstract_Icons {
     }
 
     @Override
-    protected int getMinWidth() {
+    protected int getMinWidth(String styleName) {
         return validationSkin.messageBoxIcon.getPrefWidth() - TOLERANCE;
     }
 
     @Override
-    protected int getMaxWidth() {
+    protected int getMaxWidth(String styleName) {
         return validationSkin.messageBoxIcon.getPrefWidth() + TOLERANCE;
     }
 
     @Override
-    protected int getMinHeight() {
+    protected int getMinHeight(String styleName) {
         return validationSkin.messageBoxIcon.getPrefHeight() - TOLERANCE;
     }
 
     @Override
-    protected int getMaxHeight() {
+    protected int getMaxHeight(String styleName) {
         return validationSkin.messageBoxIcon.getPrefHeight() + TOLERANCE;
     }
 }

@@ -36,10 +36,6 @@
       "path": "svg/TB_drop.svg",
       "scale": 0.15
     },
-    "TB_picked": {
-      "path": "svg/TB_picked.svg",
-      "scale": 0.15
-    },
     "Wikipedia": {
       "path": "svg/mapWikipedia1.svg",
       "scale": 0.18
@@ -80,9 +76,21 @@
       "path": "svg/addCache.svg",
       "scale": 1
     },
-    "announcement": {
+    "announcement12": {
+      "path": "svg/announcement.svg",
+      "scale": 0.25
+    },
+    "announcement18": {
+      "path": "svg/announcement.svg",
+      "scale": 0.375
+    },
+    "announcement24": {
       "path": "svg/announcement.svg",
       "scale": 0.5
+    },
+    "announcement48": {
+      "path": "svg/announcement.svg",
+      "scale": 1
     },
     "api_key_ex": {
       "path": "svg/api_key_ex.svg",
@@ -96,9 +104,21 @@
       "path": "svg/api_key_no.svg",
       "scale": 0.22
     },
-    "archived": {
+    "archived12": {
       "path": "svg/archived.svg",
-      "scale": 0.1
+      "scale": 0.25
+    },
+    "archived18": {
+      "path": "svg/archived.svg",
+      "scale": 0.375
+    },
+    "archived24": {
+      "path": "svg/archived.svg",
+      "scale": 0.5
+    },
+    "archived48": {
+      "path": "svg/archived.svg",
+      "scale": 1
     },
     "arrow-compass": {
       "path": "svg/arrow-compass.svg",
@@ -648,13 +668,21 @@
       "path": "svg/att_Wireless_Beacon_1.svg",
       "scale": 0.5
     },
-    "attended": {
+    "attended12": {
       "path": "svg/attended.svg",
-      "scale": 0.1
+      "scale": 0.25
     },
-    "attendedBig": {
+    "attended18": {
       "path": "svg/attended.svg",
-      "scale": 0.2
+      "scale": 0.375
+    },
+    "attended24": {
+      "path": "svg/attended.svg",
+      "scale": 0.5
+    },
+    "attended48": {
+      "path": "svg/attended.svg",
+      "scale": 1
     },
     "autosortOff": {
       "path": "svg/autosortOff.svg",
@@ -695,10 +723,6 @@
     "bubble_TB": {
       "path": "svg/TB.svg",
       "scale": 0.05
-    },
-    "bubble_archived": {
-      "path": "svg/archived.svg",
-      "scale": 0.06
     },
     "bubble_favpoint": {
       "path": "svg/favpoint.svg",
@@ -743,10 +767,6 @@
     "bubble_star_half": {
       "path": "svg/star_half.svg",
       "scale": 0.16
-    },
-    "bubble_tempDisabled": {
-      "path": "svg/tempDisabled.svg",
-      "scale": 0.12
     },
     "bubble_virtualSize": {
       "path": "svg/virtualSize.svg",
@@ -968,7 +988,19 @@
       "path": "svg/disabledOverlay2.svg",
       "scale": 0.15
     },
-    "discovered": {
+    "discovered12": {
+      "path": "svg/discovered.svg",
+      "scale": 0.25
+    },
+    "discovered18": {
+      "path": "svg/discovered.svg",
+      "scale": 0.375
+    },
+    "discovered24": {
+      "path": "svg/discovered.svg",
+      "scale": 0.5
+    },
+    "discovered48": {
       "path": "svg/discovered.svg",
       "scale": 1
     },
@@ -1004,9 +1036,21 @@
       "path": "svg/downloadLogs.svg",
       "scale": 0.18
     },
-    "dropped_off": {
+    "dropped_off12": {
       "path": "svg/TB_drop.svg",
-      "scale": 0.15
+      "scale": 0.25
+    },
+    "dropped_off18": {
+      "path": "svg/TB_drop.svg",
+      "scale": 0.375
+    },
+    "dropped_off24": {
+      "path": "svg/TB_drop.svg",
+      "scale": 0.5
+    },
+    "dropped_off48": {
+      "path": "svg/TB_drop.svg",
+      "scale": 1
     },
     "e_mailToOwner": {
       "path": "svg/e_mailToOwner.svg",
@@ -1028,13 +1072,21 @@
       "path": "svg/editWp.svg",
       "scale": 0.18
     },
-    "enabled": {
+    "enabled12": {
       "path": "svg/enabled.svg",
-      "scale": 0.12
+      "scale": 0.25
     },
-    "enabledBig": {
+    "enabled18": {
       "path": "svg/enabled.svg",
-      "scale": 0.24
+      "scale": 0.375
+    },
+    "enabled24": {
+      "path": "svg/enabled.svg",
+      "scale": 0.5
+    },
+    "enabled48": {
+      "path": "svg/enabled.svg",
+      "scale": 1
     },
     "erth": {
       "path": "svg/erth.svg",
@@ -1048,7 +1100,19 @@
       "path": "svg/fastCache.svg",
       "scale": 0.16
     },
-    "favIcon": {
+    "favIcon12": {
+      "path": "svg/favIcon.svg",
+      "scale": 0.25
+    },
+    "favIcon18": {
+      "path": "svg/favIcon.svg",
+      "scale": 0.375
+    },
+    "favIcon24": {
+      "path": "svg/favIcon.svg",
+      "scale": 0.5
+    },
+    "favIcon48": {
       "path": "svg/favIcon.svg",
       "scale": 1
     },
@@ -1100,13 +1164,21 @@
       "path": "svg/folder.svg",
       "scale": 1
     },
-    "found": {
+    "found12": {
       "path": "svg/log0icon.svg",
-      "scale": 0.098
+      "scale": 0.25
     },
-    "foundBig": {
+    "found18": {
       "path": "svg/log0icon.svg",
-      "scale": 0.2
+      "scale": 0.375
+    },
+    "found24": {
+      "path": "svg/log0icon.svg",
+      "scale": 0.5
+    },
+    "found48": {
+      "path": "svg/log0icon.svg",
+      "scale": 1
     },
     "fr": {
       "path": "svg/fr.svg",
@@ -1148,9 +1220,21 @@
       "path": "svg/gpxFileIcon.svg",
       "scale": 1
     },
-    "grab_it": {
+    "grab_it12": {
+      "path": "svg/grab_it.svg",
+      "scale": 0.25
+    },
+    "grab_it18": {
+      "path": "svg/grab_it.svg",
+      "scale": 0.375
+    },
+    "grab_it24": {
       "path": "svg/grab_it.svg",
       "scale": 0.5
+    },
+    "grab_it48": {
+      "path": "svg/grab_it.svg",
+      "scale": 1
     },
     "helpIcon": {
       "path": "svg/helpIcon.svg",
@@ -1191,10 +1275,6 @@
     "large": {
       "path": "svg/large.svg",
       "scale": 0.25
-    },
-    "letterbox": {
-      "path": "svg/letterbox.svg",
-      "scale": 0.2
     },
     "light_disabled": {
       "path": "svg/light_disabled.svg",
@@ -1330,7 +1410,7 @@
     },
     "bubbleLogsFound": {
       "path": "svg/mapFound0.svg",
-      "scale": 0.4
+      "scale": 0.2
     },
     "mapFound0": {
       "path": "svg/mapFound0.svg",
@@ -1371,10 +1451,6 @@
     "mapLayer": {
       "path": "svg/mapLayer.svg",
       "scale": 1
-    },
-    "mapLetterbox": {
-      "path": "svg/letterbox.svg",
-      "scale": 0.15
     },
     "mapLetterbox0": {
       "path": "svg/mapLetterbox0.svg",
@@ -1688,7 +1764,19 @@
       "path": "svg/map_theme_setting.svg",
       "scale": 1
     },
-    "mark_missing": {
+    "mark_missing12": {
+      "path": "svg/mark_missing.svg",
+      "scale": 0.25
+    },
+    "mark_missing18": {
+      "path": "svg/mark_missing.svg",
+      "scale": 0.375
+    },
+    "mark_missing24": {
+      "path": "svg/mark_missing.svg",
+      "scale": 0.5
+    },
+    "mark_missing48": {
       "path": "svg/mark_missing.svg",
       "scale": 1
     },
@@ -1732,11 +1820,35 @@
       "path": "svg/misc_selected.svg",
       "scale": 0.72
     },
-    "move_to_collection": {
+    "move_to_collection12": {
+      "path": "svg/move_to_collection.svg",
+      "scale": 0.25
+    },
+    "move_to_collection18": {
+      "path": "svg/move_to_collection.svg",
+      "scale": 0.375
+    },
+    "move_to_collection24": {
       "path": "svg/move_to_collection.svg",
       "scale": 0.5
     },
-    "move_to_inventory": {
+    "move_to_collection48": {
+      "path": "svg/move_to_collection.svg",
+      "scale": 1
+    },
+    "move_to_inventory12": {
+      "path": "svg/move_to_inventory.svg",
+      "scale": 0.25
+    },
+    "move_to_inventory18": {
+      "path": "svg/move_to_inventory.svg",
+      "scale": 0.375
+    },
+    "move_to_inventory24": {
+      "path": "svg/move_to_inventory.svg",
+      "scale": 0.5
+    },
+    "move_to_inventory48": {
       "path": "svg/move_to_inventory.svg",
       "scale": 1
     },
@@ -1776,21 +1888,37 @@
       "path": "svg/navigate.svg",
       "scale": 1.4736
     },
-    "needs_archived": {
+    "needs_archived12": {
       "path": "svg/needs_archived.svg",
-      "scale": 0.12
+      "scale": 0.25
     },
-    "needs_archivedBig": {
+    "needs_archived18": {
       "path": "svg/needs_archived.svg",
-      "scale": 0.24
+      "scale": 0.375
     },
-    "needs_maintenance": {
-      "path": "svg/needs_maintenance.svg",
-      "scale": 0.12
+    "needs_archived24": {
+      "path": "svg/needs_archived.svg",
+      "scale": 0.5
     },
-    "needs_maintenanceBig": {
+    "needs_archived48": {
+      "path": "svg/needs_archived.svg",
+      "scale": 1
+    },
+    "needs_maintenance12": {
       "path": "svg/needs_maintenance.svg",
-      "scale": 0.24
+      "scale": 0.25
+    },
+    "needs_maintenance18": {
+      "path": "svg/needs_maintenance.svg",
+      "scale": 0.375
+    },
+    "needs_maintenance24": {
+      "path": "svg/needs_maintenance.svg",
+      "scale": 0.5
+    },
+    "needs_maintenance48": {
+      "path": "svg/needs_maintenance.svg",
+      "scale": 1
     },
     "nl": {
       "path": "svg/nl.svg",
@@ -1800,25 +1928,37 @@
       "path": "svg/notChosen.svg",
       "scale": 0.25
     },
-    "notFound": {
+    "notFound12": {
       "path": "svg/log1icon.svg",
-      "scale": 0.098
+      "scale": 0.25
     },
-    "notFoundBig": {
+    "notFound18": {
       "path": "svg/log1icon.svg",
-      "scale": 0.2
+      "scale": 0.375
     },
-    "noteIcon": {
-      "path": "svg/noteIcon.svg",
-      "scale": 0.18
+    "notFound24": {
+      "path": "svg/log1icon.svg",
+      "scale": 0.5
     },
-    "noteIconType": {
-      "path": "svg/noteIcon.svg",
-      "scale": 0.098
+    "notFound48": {
+      "path": "svg/log1icon.svg",
+      "scale": 1
     },
-    "noteIconTypeBig": {
+    "noteIcon12": {
       "path": "svg/noteIcon.svg",
-      "scale": 0.2
+      "scale": 0.25
+    },
+    "noteIcon18": {
+      "path": "svg/noteIcon.svg",
+      "scale": 0.375
+    },
+    "noteIcon24": {
+      "path": "svg/noteIcon.svg",
+      "scale": 0.5
+    },
+    "noteIcon48": {
+      "path": "svg/noteIcon.svg",
+      "scale": 1
     },
     "option_0": {
       "path": "svg/option_0.svg",
@@ -1836,13 +1976,21 @@
       "path": "svg/ownerLogTypes.svg",
       "scale": 1
     },
-    "owner_maintenance": {
+    "owner_maintenance12": {
       "path": "svg/owner_maintenance.svg",
-      "scale": 0.12
+      "scale": 0.25
     },
-    "owner_maintenanceBig": {
+    "owner_maintenance18": {
       "path": "svg/owner_maintenance.svg",
-      "scale": 0.24
+      "scale": 0.375
+    },
+    "owner_maintenance24": {
+      "path": "svg/owner_maintenance.svg",
+      "scale": 0.5
+    },
+    "owner_maintenance48": {
+      "path": "svg/owner_maintenance.svg",
+      "scale": 1
     },
     "pane_slider_vertical": {
       "path": "svg/pane_slider_vertical.svg",
@@ -1876,9 +2024,21 @@
       "path": "svg/pt.svg",
       "scale": 0.08
     },
-    "published": {
+    "published12": {
       "path": "svg/published.svg",
-      "scale": 0.12
+      "scale": 0.25
+    },
+    "published18": {
+      "path": "svg/published.svg",
+      "scale": 0.375
+    },
+    "published24": {
+      "path": "svg/published.svg",
+      "scale": 0.5
+    },
+    "published48": {
+      "path": "svg/published.svg",
+      "scale": 1
     },
     "regular": {
       "path": "svg/regular.svg",
@@ -1888,17 +2048,53 @@
       "path": "svg/reload_cache.svg",
       "scale": 1
     },
-    "retract": {
+    "retract12": {
+      "path": "svg/retract.svg",
+      "scale": 0.25
+    },
+    "retract18": {
+      "path": "svg/retract.svg",
+      "scale": 0.375
+    },
+    "retract24": {
+      "path": "svg/retract.svg",
+      "scale": 0.5
+    },
+    "retract48": {
       "path": "svg/retract.svg",
       "scale": 1
     },
-    "retrieve": {
+    "retrieve12": {
+      "path": "svg/retrieve.svg",
+      "scale": 0.25
+    },
+    "retrieve18": {
+      "path": "svg/retrieve.svg",
+      "scale": 0.375
+    },
+    "retrieve24": {
+      "path": "svg/retrieve.svg",
+      "scale": 0.5
+    },
+    "retrieve48": {
       "path": "svg/retrieve.svg",
       "scale": 1
     },
-    "reviewer_note": {
+    "reviewer_note12": {
       "path": "svg/reviewer_note.svg",
-      "scale": 0.12
+      "scale": 0.25
+    },
+    "reviewer_note18": {
+      "path": "svg/reviewer_note.svg",
+      "scale": 0.375
+    },
+    "reviewer_note24": {
+      "path": "svg/reviewer_note.svg",
+      "scale": 0.5
+    },
+    "reviewer_note48": {
+      "path": "svg/reviewer_note.svg",
+      "scale": 1
     },
     "search": {
       "path": "svg/search.svg",
@@ -1984,13 +2180,21 @@
       "path": "svg/tbListIcon.svg",
       "scale": 0.18
     },
-    "tempDisabled": {
+    "tempDisabled12": {
       "path": "svg/tempDisabled.svg",
-      "scale": 0.11
+      "scale": 0.25
     },
-    "tempDisabledBig": {
+    "tempDisabled18": {
       "path": "svg/tempDisabled.svg",
-      "scale": 0.22
+      "scale": 0.375
+    },
+    "tempDisabled24": {
+      "path": "svg/tempDisabled.svg",
+      "scale": 0.5
+    },
+    "tempDisabled48": {
+      "path": "svg/tempDisabled.svg",
+      "scale": 1
     },
     "toast_background": {
       "path": "svg/toast_background.svg",
@@ -2032,11 +2236,35 @@
       "path": "svg/traddi.svg",
       "scale": 0.21
     },
-    "unarchive": {
+    "unarchive12": {
+      "path": "svg/unarchive.svg",
+      "scale": 0.25
+    },
+    "unarchive18": {
+      "path": "svg/unarchive.svg",
+      "scale": 0.375
+    },
+    "unarchive24": {
+      "path": "svg/unarchive.svg",
+      "scale": 0.5
+    },
+    "unarchive48": {
       "path": "svg/unarchive.svg",
       "scale": 1
     },
-    "update_coord": {
+    "update_coord12": {
+      "path": "svg/update_coord.svg",
+      "scale": 0.25
+    },
+    "update_coord18": {
+      "path": "svg/update_coord.svg",
+      "scale": 0.375
+    },
+    "update_coord24": {
+      "path": "svg/update_coord.svg",
+      "scale": 0.5
+    },
+    "update_coord48": {
       "path": "svg/update_coord.svg",
       "scale": 1
     },
@@ -2064,7 +2292,19 @@
       "path": "svg/virtualSize.svg",
       "scale": 0.25
     },
-    "visited": {
+    "visited12": {
+      "path": "svg/visited.svg",
+      "scale": 0.25
+    },
+    "visited18": {
+      "path": "svg/visited.svg",
+      "scale": 0.375
+    },
+    "visited24": {
+      "path": "svg/visited.svg",
+      "scale": 0.5
+    },
+    "visited48": {
       "path": "svg/visited.svg",
       "scale": 1
     },
@@ -2080,25 +2320,49 @@
       "path": "svg/waypointListIcon.svg",
       "scale": 0.18
     },
-    "webcam_photo_taken": {
+    "webcam_photo_taken12": {
       "path": "svg/webcam_photo_taken.svg",
-      "scale": 0.12
+      "scale": 0.25
     },
-    "webcam_photo_takenBig": {
+    "webcam_photo_taken18": {
       "path": "svg/webcam_photo_taken.svg",
-      "scale": 0.24
+      "scale": 0.375
+    },
+    "webcam_photo_taken24": {
+      "path": "svg/webcam_photo_taken.svg",
+      "scale": 0.5
+    },
+    "webcam_photo_taken48": {
+      "path": "svg/webcam_photo_taken.svg",
+      "scale": 1
     },
     "whereigo": {
       "path": "svg/whereigo.svg",
       "scale": 0.2
     },
-    "will_attend": {
+    "mapLetterbox": {
       "path": "svg/letterbox.svg",
-      "scale": 0.11
+      "scale": 0.15
     },
-    "will_attendBig": {
+    "letterbox": {
       "path": "svg/letterbox.svg",
-      "scale": 0.22
+      "scale": 0.2
+    },
+    "will_attend12": {
+      "path": "svg/will_attend.svg",
+      "scale": 0.25
+    },
+    "will_attend18": {
+      "path": "svg/will_attend.svg",
+      "scale": 0.375
+    },
+    "will_attend24": {
+      "path": "svg/will_attend.svg",
+      "scale": 0.5
+    },
+    "will_attend48": {
+      "path": "svg/will_attend.svg",
+      "scale": 1
     }
   },
   "de.longri.cachebox3.utils.SkinColor": {
@@ -3044,7 +3308,7 @@
       "themeStyle": "map_theme_setting",
       "uploadCorrectedCoordinates": "uploadCorrectedCoordinates",
       "import_PQ": "import_PQ",
-      "favorit": "favIcon",
+      "favorit": "favIcon48",
       "docIcon": "description",
       "deleteIcon": "deleteIcon",
       "sortIcon": "sortIcon",
@@ -3081,7 +3345,7 @@
       "fieldNoteList": "fieldnoteListIcon",
       "logViewIcon": "listIcon",
       "mapIcon": "map",
-      "noteIcon": "noteIcon",
+      "noteIcon": "noteIcon48",
       "solverIcon": "solver-icon",
       "solver2Icon": "solver-icon-2",
       "imagesIcon": "images-icon",
@@ -3409,119 +3673,119 @@
   "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
     "bubble_LogTypes": {
       "found": "bubbleLogsFound",
-      "didnt_find": "notFound",
-      "note": "noteIconType",
-      "published": "published",
-      "enabled": "enabled",
-      "needs_maintenance": "needs_maintenance",
-      "temporarily_disabled": "bubble_tempDisabled",
-      "owner_maintenance": "owner_maintenance",
-      "will_attend": "will_attend",
-      "attended": "attended",
-      "webcam_photo_taken": "webcam_photo_taken",
-      "archived": "archived",
-      "reviewer_note": "reviewer_note",
-      "needs_archived": "needs_archived",
-      "unarchive": "unarchive",
-      "retract": "retract",
-      "update_coord": "update_coord",
-      "retrieve": "retrieve",
-      "dropped_off": "dropped_off",
-      "mark_missing": "mark_missing",
-      "grab_it": "grab_it",
-      "discovered": "discovered",
-      "move_to_collection": "move_to_collection",
-      "move_to_inventory": "move_to_inventory",
-      "announcement": "announcement",
-      "visited": "visited",
-      "ownFavorite": "favIcon"
+      "didnt_find": "notFound12",
+      "note": "noteIcon12",
+      "published": "published12",
+      "enabled": "enabled12",
+      "needs_maintenance": "needs_maintenance12",
+      "temporarily_disabled": "tempDisabled12",
+      "owner_maintenance": "owner_maintenance12",
+      "will_attend": "will_attend12",
+      "attended": "attended12",
+      "webcam_photo_taken": "webcam_photo_taken12",
+      "archived": "archived12",
+      "reviewer_note": "reviewer_note12",
+      "needs_archived": "needs_archived12",
+      "unarchive": "unarchive12",
+      "retract": "retract12",
+      "update_coord": "update_coord12",
+      "retrieve": "retrieve12",
+      "dropped_off": "dropped_off12",
+      "mark_missing": "mark_missing12",
+      "grab_it": "grab_it12",
+      "discovered": "discovered12",
+      "move_to_collection": "move_to_collection12",
+      "move_to_inventory": "move_to_inventory12",
+      "announcement": "announcement12",
+      "visited": "visited12",
+      "ownFavorite": "favIcon12"
     },
     "cacheListViewLogTypes": {
-      "found": "found",
-      "didnt_find": "notFound",
-      "note": "noteIconType",
-      "published": "published",
-      "enabled": "enabled",
-      "needs_maintenance": "needs_maintenance",
-      "temporarily_disabled": "tempDisabled",
-      "owner_maintenance": "owner_maintenance",
-      "will_attend": "will_attend",
-      "attended": "attended",
-      "webcam_photo_taken": "webcam_photo_taken",
-      "archived": "archived",
-      "reviewer_note": "reviewer_note",
-      "needs_archived": "needs_archived",
-      "unarchive": "unarchive",
-      "retract": "retract",
-      "update_coord": "update_coord",
-      "retrieve": "retrieve",
-      "dropped_off": "dropped_off",
-      "mark_missing": "mark_missing",
-      "grab_it": "grab_it",
-      "discovered": "discovered",
-      "move_to_collection": "move_to_collection",
-      "move_to_inventory": "move_to_inventory",
-      "announcement": "announcement",
-      "visited": "visited",
-      "ownFavorite": "favIcon"
+      "found": "found18",
+      "didnt_find": "notFound18",
+      "note": "noteIcon18",
+      "published": "published18",
+      "enabled": "enabled18",
+      "needs_maintenance": "needs_maintenance18",
+      "temporarily_disabled": "tempDisabled18",
+      "owner_maintenance": "owner_maintenance18",
+      "will_attend": "will_attend18",
+      "attended": "attended18",
+      "webcam_photo_taken": "webcam_photo_taken18",
+      "archived": "archived18",
+      "reviewer_note": "reviewer_note18",
+      "needs_archived": "needs_archived18",
+      "unarchive": "unarchive18",
+      "retract": "retract18",
+      "update_coord": "update_coord18",
+      "retrieve": "retrieve18",
+      "dropped_off": "dropped_off18",
+      "mark_missing": "mark_missing18",
+      "grab_it": "grab_it18",
+      "discovered": "discovered18",
+      "move_to_collection": "move_to_collection18",
+      "move_to_inventory": "move_to_inventory18",
+      "announcement": "announcement18",
+      "visited": "visited18",
+      "ownFavorite": "favIcon18"
     },
     "logViewLogStyles": {
-      "found": "found",
-      "didnt_find": "notFound",
-      "note": "noteIconType",
-      "published": "published",
-      "enabled": "enabled",
-      "needs_maintenance": "needs_maintenance",
-      "temporarily_disabled": "tempDisabled",
-      "owner_maintenance": "owner_maintenance",
-      "will_attend": "will_attend",
-      "attended": "attended",
-      "webcam_photo_taken": "webcam_photo_taken",
-      "archived": "archived",
-      "reviewer_note": "reviewer_note",
-      "needs_archived": "needs_archived",
-      "unarchive": "unarchive",
-      "retract": "retract",
-      "update_coord": "update_coord",
-      "retrieve": "retrieve",
-      "dropped_off": "dropped_off",
-      "mark_missing": "mark_missing",
-      "grab_it": "grab_it",
-      "discovered": "discovered",
-      "move_to_collection": "move_to_collection",
-      "move_to_inventory": "move_to_inventory",
-      "announcement": "announcement",
-      "visited": "visited",
-      "ownFavorite": "favIcon"
+      "found": "found24",
+      "didnt_find": "notFound24",
+      "note": "noteIcon24",
+      "published": "published24",
+      "enabled": "enabled24",
+      "needs_maintenance": "needs_maintenance24",
+      "temporarily_disabled": "tempDisabled24",
+      "owner_maintenance": "owner_maintenance24",
+      "will_attend": "will_attend24",
+      "attended": "attended24",
+      "webcam_photo_taken": "webcam_photo_taken24",
+      "archived": "archived24",
+      "reviewer_note": "reviewer_note24",
+      "needs_archived": "needs_archived24",
+      "unarchive": "unarchive24",
+      "retract": "retract24",
+      "update_coord": "update_coord24",
+      "retrieve": "retrieve24",
+      "dropped_off": "dropped_off24",
+      "mark_missing": "mark_missing24",
+      "grab_it": "grab_it24",
+      "discovered": "discovered24",
+      "move_to_collection": "move_to_collection24",
+      "move_to_inventory": "move_to_inventory24",
+      "announcement": "announcement24",
+      "visited": "visited24",
+      "ownFavorite": "favIcon24"
     },
     "DraftListItemStyle": {
-      "found": "foundBig",
-      "didnt_find": "notFoundBig",
-      "note": "noteIconTypeBig",
-      "published": "published",
-      "enabled": "enabledBig",
-      "needs_maintenance": "needs_maintenanceBig",
-      "temporarily_disabled": "tempDisabledBig",
-      "owner_maintenance": "owner_maintenanceBig",
-      "will_attend": "will_attendBig",
-      "attended": "attendedBig",
-      "webcam_photo_taken": "webcam_photo_takenBig",
-      "archived": "archived",
-      "reviewer_note": "reviewer_note",
-      "needs_archived": "needs_archivedBig",
-      "unarchive": "unarchive",
-      "retract": "retract",
-      "update_coord": "update_coord",
-      "retrieve": "retrieve",
-      "dropped_off": "dropped_off",
-      "mark_missing": "mark_missing",
-      "grab_it": "grab_it",
-      "discovered": "discovered",
-      "move_to_collection": "move_to_collection",
-      "move_to_inventory": "move_to_inventory",
-      "announcement": "announcement",
-      "visited": "visited",
-      "ownFavorite": "favIcon"
+      "found": "found48",
+      "didnt_find": "notFound48",
+      "note": "noteIcon48",
+      "published": "published48",
+      "enabled": "enabled48",
+      "needs_maintenance": "needs_maintenance48",
+      "temporarily_disabled": "tempDisabled48",
+      "owner_maintenance": "owner_maintenance48",
+      "will_attend": "will_attend48",
+      "attended": "attended48",
+      "webcam_photo_taken": "webcam_photo_taken48",
+      "archived": "archived48",
+      "reviewer_note": "reviewer_note48",
+      "needs_archived": "needs_archived48",
+      "unarchive": "unarchive48",
+      "retract": "retract48",
+      "update_coord": "update_coord48",
+      "retrieve": "retrieve48",
+      "dropped_off": "dropped_off48",
+      "mark_missing": "mark_missing48",
+      "grab_it": "grab_it48",
+      "discovered": "discovered48",
+      "move_to_collection": "move_to_collection48",
+      "move_to_inventory": "move_to_inventory48",
+      "announcement": "announcement48",
+      "visited": "visited48",
+      "ownFavorite": "favIcon48"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogListItemStyle": {
@@ -3654,18 +3918,18 @@
       "QuickCaches": "fastCache",
       "AllCachesToFind": "erth",
       "BEGINNER": "beginner",
-      "GrabTB": "TB_picked",
+      "GrabTB": "grab_it48",
       "DropTB": "TB_drop",
       "Highlights": "mapStar2",
-      "Favorites": "favIcon",
-      "PrepareToArchive": "archived",
+      "Favorites": "favIcon48",
+      "PrepareToArchive": "archived48",
       "ListingChanged": "warning",
       "AllCaches": "erth",
       "CheckNo": "check_off",
       "CheckOff": "check_not",
       "Check": "check_on",
-      "Available": "tempDisabled",
-      "finds": "found",
+      "Available": "tempDisabled48",
+      "finds": "found48",
       "FavPoints": "favpointFilter"
     }
   },

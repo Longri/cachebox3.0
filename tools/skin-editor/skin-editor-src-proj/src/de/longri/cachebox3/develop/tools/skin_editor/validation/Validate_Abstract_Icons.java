@@ -62,7 +62,7 @@ public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends 
 
             for (Object instance : allStyles.values()) {
 
-                String styleName = allStyles.findKey(instance, false) + " / ";
+                String styleName = allStyles.findKey(instance, false);
 
                 for (Field field : fields) {
                     Object object = field.get(instance);
@@ -80,7 +80,7 @@ public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends 
                             isMissingIconList.add(styleName + field.getName());
                         }
 
-                        checkSize(object, styleName + field.getName());
+                        checkSize(object, styleName, field.getName());
 
 
                     } else {
@@ -122,7 +122,7 @@ public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends 
         }
     }
 
-    private void checkSize(Object object, String fieldName) {
+    private void checkSize(Object object, String styleName, String fieldName) {
         int width = 0, height = 0;
 
         if (object instanceof TextureRegionDrawable) {
@@ -131,34 +131,38 @@ public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends 
             height = (int) trd.getMinHeight();
         }
 
-        if (width < getMinWidth() || width > getMaxWidth()) {
-            wrongBitmapsSize.append(fieldName)
+        if (width < getMinWidth(styleName) || width > getMaxWidth(styleName)) {
+            wrongBitmapsSize.append(styleName)
+                    .append(" / ")
+                    .append(fieldName)
                     .append(" width: ")
                     .append(String.valueOf(width))
                     .append("   => The width should be between ")
-                    .append(String.valueOf(getMinWidth()))
+                    .append(String.valueOf(getMinWidth(styleName)))
                     .append(" and ")
-                    .append(String.valueOf(getMaxWidth()))
+                    .append(String.valueOf(getMaxWidth(styleName)))
                     .append("  !\n");
         }
 
-        if (height < getMinHeight() || height > getMaxHeight()) {
-            wrongBitmapsSize.append(fieldName)
+        if (height < getMinHeight(styleName) || height > getMaxHeight(styleName)) {
+            wrongBitmapsSize.append(styleName)
+                    .append(" / ")
+                    .append(fieldName)
                     .append(" height: ")
                     .append(String.valueOf(height))
                     .append("   => The height should be between ")
-                    .append(String.valueOf(getMinHeight()))
+                    .append(String.valueOf(getMinHeight(styleName)))
                     .append(" and ")
-                    .append(String.valueOf(getMaxHeight()))
+                    .append(String.valueOf(getMaxHeight(styleName)))
                     .append("  !, \n");
         }
     }
 
-    protected abstract int getMinWidth();
+    protected abstract int getMinWidth(String styleName);
 
-    protected abstract int getMaxWidth();
+    protected abstract int getMaxWidth(String styleName);
 
-    protected abstract int getMinHeight();
+    protected abstract int getMinHeight(String styleName);
 
-    protected abstract int getMaxHeight();
+    protected abstract int getMaxHeight(String styleName);
 }

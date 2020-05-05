@@ -3,12 +3,6 @@
 <svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
      font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
      xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
-  <defs id="def1" xml:space="preserve">
-    <linearGradient x1="34.40774" y1="38.21864" x2="58.57169" y2="38.21864" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.3445339, 0, 0, 0.7391667, 15.76106, -4.241308)" id="SVGID_Fill1_-6" xml:space="preserve">
-      <stop offset="0%" stop-color="#04A100" stop-opacity="1" id="stop2" xml:space="preserve" />
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" id="stop4" xml:space="preserve" />
-    </linearGradient>
-  </defs>
   <g transform="matrix(0.2150734, 0, 0, 0.3498082, -2.889791, -19.73002)" id="g1216" xml:space="preserve">
     <linearGradient x1="43.21983" y1="198.67" x2="74.81563" y2="198.67" gradientUnits="userSpaceOnUse" gradientTransform="scale(1.24027, 0.8062762)" id="SVGID_Fill1_" xml:space="preserve">
       <stop offset="0%" stop-color="#D9D9D9" stop-opacity="1" id="stop1131" xml:space="preserve" />
@@ -224,5 +218,4 @@
       <path d="M182.014 67.0204 C179.799 66.4301 175.425 65.6287 170.422 68.0005 C165.419 70.37241 159.787 75.9174 157.112 78.77611 C154.438 81.63501 154.72 81.80741 156.27 80.47631 C157.821 79.14531 160.639 76.31101 162.935 74.34081 C165.23 72.37081 167.004 71.26511 168.996 70.13271 C170.987 69.00002 173.196 67.84061 175.79 67.54221 C178.384 67.24371 181.363 67.80641 182.824 67.89822 C184.286 67.98962 184.229 67.61062 182.014 67.02042 z" stroke-width="0.2" stroke-linejoin="round" id="path1433" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill31_);" />
     </g>
   </g>
-  <path d="M24.36276 15.18688 C25.85317 12.12525 28.73432 6.431495 30.30663 3.623395 C31.87897 0.8152661 32.14245 0.892869 32.3285 1.310019 C32.51452 1.727156 32.62315 2.483824 31.12174 7.625332 C29.62032 12.7668 26.50892 22.29314 24.82504 27.21147 C23.14116 32.12987 22.88479 32.44033 22.63793 32.40926 C22.39103 32.37819 22.15367 32.00567 21.3629 29.26031 C20.57217 26.51494 19.22802 21.39672 18.51766 18.28279 C17.80731 15.16878 17.73076 14.05898 17.91858 13.59915 C18.10641 13.13931 18.55861 13.32944 19.39507 14.3558 C20.23151 15.38216 21.45222 17.24474 22.11241 17.96131 C22.77264 18.67795 22.87232 18.24852 24.36276 15.18688 z" stroke="#000000" stroke-width="0.5046464" stroke-linejoin="round" id="path7" xml:space="preserve" style="fill:url(#SVGID_Fill1_-6);" />
 </svg>

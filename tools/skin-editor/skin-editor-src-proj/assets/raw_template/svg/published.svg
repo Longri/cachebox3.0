@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="210" height="210" viewBox="0 0 210.00 210.00" enable-background="new 0 0 210.00 210.00" xml:space="preserve">
-	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.823092" y1="0.739077" x2="1.32309" y2="0.739077" gradientTransform="rotate(253.000229 0.823092 0.739077)">
-		<stop offset="0" stop-color="#12E00C" stop-opacity="1"/>
-		<stop offset="1" stop-color="#1E851A" stop-opacity="1"/>
-	</linearGradient>
-	<ellipse fill="url(#SVGID_Fill1_)" stroke-width="5" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" cx="104.997" cy="105.003" rx="100" ry="100"/>
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid" font-size="0px" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <defs id="def1" xml:space="preserve">
+    <linearGradient x1="-5.960464E-07" y1="24" x2="48" y2="24" gradientUnits="userSpaceOnUse" xlink:href="#SVGID_Fill1_" id="linearGradient823" xml:space="preserve" />
+  </defs>
+  <linearGradient x1="171.2309" y1="154.0138" x2="273.7304" y2="154.0138" gradientUnits="userSpaceOnUse" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#12E00C" stop-opacity="1" id="stop2" xml:space="preserve" />
+    <stop offset="100%" stop-color="#1E851A" stop-opacity="1" id="stop4" xml:space="preserve" />
+  </linearGradient>
+  <circle cx="24" cy="24" r="23.41463" stroke="#000000" stroke-width="1.170732" stroke-linejoin="round" id="ellipse7" xml:space="preserve" style="fill:url(#linearGradient823);" />
 </svg>

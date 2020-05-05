@@ -11,11 +11,27 @@ import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
  */
 public class Validate_LogTypeIcons extends Validate_Abstract_Icons {
 
-    final int iconSize;
+    final int bubble_LogTypesIconSize, cacheListViewLogTypesIconSize, logViewLogStylesIconSize, DraftListItemStyleIconSize;
 
     public Validate_LogTypeIcons(SkinEditorGame game, SavableSvgSkin validationSkin, Stage stage) {
         super(game, validationSkin, stage, LogTypesStyle.class);
-        this.iconSize = CB.getScaledInt(24);
+        this.bubble_LogTypesIconSize = CB.getScaledInt(12);
+        this.cacheListViewLogTypesIconSize = CB.getScaledInt(18);
+        this.logViewLogStylesIconSize = CB.getScaledInt(24);
+        this.DraftListItemStyleIconSize = CB.getScaledInt(48);
+    }
+
+    private int getIconSize(String styleName) {
+        switch (styleName) {
+            case "bubble_LogTypes":
+                return bubble_LogTypesIconSize;
+            case "cacheListViewLogTypes":
+                return cacheListViewLogTypesIconSize;
+            case "logViewLogStyles":
+                return logViewLogStylesIconSize;
+            default:
+                return DraftListItemStyleIconSize;
+        }
     }
 
     @Override
@@ -24,22 +40,22 @@ public class Validate_LogTypeIcons extends Validate_Abstract_Icons {
     }
 
     @Override
-    protected int getMinWidth() {
-        return iconSize - TOLERANCE;
+    protected int getMinWidth(String styleName) {
+        return getIconSize(styleName) - TOLERANCE;
     }
 
     @Override
-    protected int getMaxWidth() {
-        return iconSize + TOLERANCE;
+    protected int getMaxWidth(String styleName) {
+        return getIconSize(styleName) + TOLERANCE;
     }
 
     @Override
-    protected int getMinHeight() {
-        return iconSize - TOLERANCE;
+    protected int getMinHeight(String styleName) {
+        return getIconSize(styleName) - TOLERANCE;
     }
 
     @Override
-    protected int getMaxHeight() {
-        return iconSize + TOLERANCE;
+    protected int getMaxHeight(String styleName) {
+        return getIconSize(styleName) + TOLERANCE;
     }
 }

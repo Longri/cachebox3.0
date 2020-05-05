@@ -1,14 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="220" height="220" viewBox="0 0 220.00 220.00" enable-background="new 0 0 220.00 220.00" xml:space="preserve">
-	<linearGradient id="SVGID_Stroke1_" gradientUnits="objectBoundingBox" x1="0.180997" y1="0.14571" x2="1.13449" y2="0.14571" gradientTransform="rotate(47.999966 0.180997 0.145710)">
-		<stop offset="0" stop-color="#851A1A" stop-opacity="1"/>
-		<stop offset="1" stop-color="#E00C0C" stop-opacity="1"/>
-	</linearGradient>
-	<linearGradient id="SVGID_Fill1_" gradientUnits="objectBoundingBox" x1="0.157072" y1="0.119138" x2="1.18207" y2="0.119138" gradientTransform="rotate(47.999958 0.157072 0.119138)">
-		<stop offset="0" stop-color="#E00C0C" stop-opacity="1"/>
-		<stop offset="1" stop-color="#851A1A" stop-opacity="1"/>
-	</linearGradient>
-	<path fill="url(#SVGID_Fill1_)" stroke-width="15" stroke-linejoin="round" stroke="url(#SVGID_Stroke1_)" d="M 110,10.0001C 165.229,10.0001 210,54.7716 210,110C 210,165.229 165.228,210 110,210C 54.7715,210 9.99976,165.229 9.99976,110C 9.99976,54.7716 54.7708,10.0001 110,10.0001 Z "/>
-	<line fill="none" stroke-width="27" stroke-linecap="round" stroke-linejoin="round" stroke="#FFFFFF" stroke-opacity="1" x1="57.7529" y1="109.085" x2="160.253" y2="109.085"/>
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <linearGradient x1="41.41413" y1="33.82776" x2="246.4152" y2="33.82776" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.2232556, 0, 0, 0.2232559, -0.558084, -0.5581619)" id="SVGID_Stroke1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#851A1A" stop-opacity="1" id="stop2" xml:space="preserve" />
+    <stop offset="100%" stop-color="#E00C0C" stop-opacity="1" id="stop4" xml:space="preserve" />
+  </linearGradient>
+  <linearGradient x1="36.27025" y1="28.11478" x2="256.6449" y2="28.11478" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.2232556, 0, 0, 0.2232559, -0.558084, -0.5581619)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#E00C0C" stop-opacity="1" id="stop7" xml:space="preserve" />
+    <stop offset="100%" stop-color="#851A1A" stop-opacity="1" id="stop9" xml:space="preserve" />
+  </linearGradient>
+  <path d="M24.00003 1.674418 C36.33021 1.674418 46.32558 11.66992 46.32558 23.99999 C46.32558 36.33018 36.32999 46.32558 24.00003 46.32558 C11.66996 46.32558 1.674419 36.33018 1.674419 23.99999 C1.674419 11.66992 11.6698 1.674417 24.00003 1.674417 z" stroke="url(#SVGID_Stroke1_)" stroke-width="3.348836" stroke-linejoin="round" id="path12" xml:space="preserve" style="fill:url(#SVGID_Fill1_);" />
+  <line x1="12.33557" y1="23.79571" x2="35.21929" y2="23.79571" stroke="#FFFFFF" stroke-width="6.027905" stroke-linecap="round" stroke-linejoin="round" id="line14" xml:space="preserve" />
 </svg>
