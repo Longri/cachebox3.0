@@ -32,11 +32,11 @@ public class Action_Switch_Torch extends AbstractAction {
     @Override
     public Drawable getIcon() {
         if (!PlatformConnector.isTorchAvailable())
-            return CB.getSkin().getMenuIcon.torchDisabled;
+            return CB.getSkin().menuIcon.torchDisabled;
         if (PlatformConnector.isTorchOn()) {
-            return CB.getSkin().getMenuIcon.torchOn;
+            return CB.getSkin().menuIcon.torchOn;
         } else {
-            return CB.getSkin().getMenuIcon.torchOff;
+            return CB.getSkin().menuIcon.torchOff;
         }
     }
 

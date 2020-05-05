@@ -51,8 +51,8 @@ public class Show_SpoilerAction extends AbstractShowAction {
     public Drawable getIcon() {
         boolean hasSpoiler = CB.selectedCachehasSpoiler();
         if (hasSpoiler)
-            return CB.getSkin().getMenuIcon.imagesIcon;
+            return CB.getSkin().menuIcon.imagesIcon;
         else
-            return CB.getSkin().getMenuIcon.imagesIconOff;
+            return CB.getSkin().menuIcon.imagesIconOff;
     }
 }

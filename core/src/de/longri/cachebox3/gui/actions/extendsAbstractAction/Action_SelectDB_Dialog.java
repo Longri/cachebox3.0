@@ -43,7 +43,7 @@ public class Action_SelectDB_Dialog extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.manageDB;
+        return CB.getSkin().menuIcon.manageDB;
     }
 
     @Override

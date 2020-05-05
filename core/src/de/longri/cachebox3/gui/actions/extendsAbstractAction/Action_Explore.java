@@ -47,6 +47,6 @@ public class Action_Explore extends AbstractAction {
     @Override
     public Drawable getIcon() {
         //TODO create icon like finder/explorer
-        return CB.getSkin().getMenuIcon.todo;
+        return CB.getSkin().menuIcon.todo;
     }
 }

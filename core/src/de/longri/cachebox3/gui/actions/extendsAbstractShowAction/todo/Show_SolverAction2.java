@@ -49,6 +49,6 @@ public class Show_SolverAction2 extends AbstractShowAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.solver2Icon;
+        return CB.getSkin().menuIcon.solver2Icon;
     }
 }

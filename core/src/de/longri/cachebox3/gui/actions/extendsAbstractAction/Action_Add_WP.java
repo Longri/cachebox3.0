@@ -42,7 +42,7 @@ public class Action_Add_WP extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.addWp;
+        return CB.getSkin().menuIcon.addWp;
     }
 
     @Override

@@ -52,14 +52,14 @@ public class ShowImportMenu extends Menu {
     public ShowImportMenu() {
         super("ImportMenuTitle");
 
-        addMenuItem("chkState", CB.getSkin().getMenuIcon.gc_logo, () -> new UpdateStatusAndOthers().show());
-        addMenuItem("API_PocketQuery", CB.getSkin().getMenuIcon.import_PQ, () -> new ImportPQActivity(Database.Data).show());
-        addMenuItem("GPX_IMPORT", CB.getSkin().getMenuIcon.gpxFile, this::importGpxFile);
-        addMenuItem("moreImport", CB.getSkin().getMenuIcon.importIcon, this::selectableImport); // todo ISSUE (#123 add More Import)
-        addMenuItem("importCachesOverPosition", CB.getSkin().getMenuIcon.target, this::importOverPosition);
+        addMenuItem("chkState", CB.getSkin().menuIcon.gc_logo, () -> new UpdateStatusAndOthers().show());
+        addMenuItem("API_PocketQuery", CB.getSkin().menuIcon.import_PQ, () -> new ImportPQActivity(Database.Data).show());
+        addMenuItem("GPX_IMPORT", CB.getSkin().menuIcon.gpxFile, this::importGpxFile);
+        addMenuItem("moreImport", CB.getSkin().menuIcon.importIcon, this::selectableImport); // todo ISSUE (#123 add More Import)
+        addMenuItem("importCachesOverPosition", CB.getSkin().menuIcon.target, this::importOverPosition);
         // todo ISSUE (#125 add Import over name, owner code) menu.addItem(MenuID.MI_IMPORT_GS_API_SEARCH, "API_IMPORT_NAME_OWNER_CODE");
         addMenuItem("GCVoteRatings", null, () -> {
-            SelectableImport.getInstance("moreImport", CB.getSkin().getMenuIcon.importIcon).importGCVote();
+            SelectableImport.getInstance("moreImport", CB.getSkin().menuIcon.importIcon).importGCVote();
         }); // todo create icon: CB.getSkin().getMenuIcon.importGCVote
         addDivider(0);
 
@@ -70,7 +70,7 @@ public class ShowImportMenu extends Menu {
     }
 
     private void selectableImport() {
-        SelectableImport.getInstance("moreImport", CB.getSkin().getMenuIcon.importIcon).show();
+        SelectableImport.getInstance("moreImport", CB.getSkin().menuIcon.importIcon).show();
     }
 
     private void importOverPosition() {

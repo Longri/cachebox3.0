@@ -154,17 +154,17 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
             return cm;
         }
         // now a GC Cache is selected
-        cm.addMenuItem("ReloadLogs", CB.getSkin().getMenuIcon.downloadLogs, () -> reloadLogs(true));
+        cm.addMenuItem("ReloadLogs", CB.getSkin().menuIcon.downloadLogs, () -> reloadLogs(true));
         if (Config.Friends.getValue().length() > 0) {
-            cm.addMenuItem("LoadLogsOfFriends", CB.getSkin().getMenuIcon.downloadFriendsLogs, () -> reloadLogs(false));
-            mi = cm.addMenuItem("FilterLogsOfFriends", CB.getSkin().getMenuIcon.friendsLogs, () -> {
+            cm.addMenuItem("LoadLogsOfFriends", CB.getSkin().menuIcon.downloadFriendsLogs, () -> reloadLogs(false));
+            mi = cm.addMenuItem("FilterLogsOfFriends", CB.getSkin().menuIcon.friendsLogs, () -> {
                 logsOfFriendsAreShown = !logsOfFriendsAreShown;
                 // todo implement filter friends logs;
             });
             mi.setCheckable(true);
             mi.setChecked(logsOfFriendsAreShown);
         }
-        cm.addMenuItem("LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages, () -> {
+        cm.addMenuItem("LoadLogImages", CB.getSkin().menuIcon.downloadLogImages, () -> {
             // todo implement
         });
 

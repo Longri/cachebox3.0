@@ -324,16 +324,16 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
     @Override
     public Menu getContextMenu() {
         final Menu cm = new Menu("CacheListViewTitle");
-        cm.addMenuItem("ResortList", CB.getSkin().getMenuIcon.sortIcon, this::resort);
-        cm.addMenuItem("Filter", CB.getSkin().getMenuIcon.filterIcon, () -> new Action_EditFilterSettings().execute());
-        cm.addMenuItem("MI_RESET_FILTER", CB.getSkin().getMenuIcon.resetFilterIcon, () -> CB.viewmanager.setNewFilter(FilterInstances.ALL));
-        cm.addMenuItem("Search", CB.getSkin().getMenuIcon.searchIcon, () -> new Action_SearchDialog().execute());
-        cm.addMoreMenuItem("importExport", "", CB.getSkin().getMenuIcon.importIcon, new ShowImportMenu());
-        cm.addCheckableMenuItem("setOrResetFavorites", "", CB.getSkin().getMenuIcon.favorit, true, setOrResetFavorites(cm));
-        cm.addMenuItem("manage", getSelectDBTitleExtension(), CB.getSkin().getMenuIcon.manageDB, this::selectDbDialog);
-        cm.addMenuItem("AutoResort", CB.getAutoResort() ? CB.getSkin().getMenuIcon.autoSortOnIcon : CB.getSkin().getMenuIcon.autoSortOffIcon, this::setAutoResort);
-        cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCache, this::createCache);
-        cm.addMoreMenuItem("DeleteCaches", "", CB.getSkin().getMenuIcon.deleteCaches, new ShowDeleteMenu());
+        cm.addMenuItem("ResortList", CB.getSkin().menuIcon.sortIcon, this::resort);
+        cm.addMenuItem("Filter", CB.getSkin().menuIcon.filterIcon, () -> new Action_EditFilterSettings().execute());
+        cm.addMenuItem("MI_RESET_FILTER", CB.getSkin().menuIcon.resetFilterIcon, () -> CB.viewmanager.setNewFilter(FilterInstances.ALL));
+        cm.addMenuItem("Search", CB.getSkin().menuIcon.searchIcon, () -> new Action_SearchDialog().execute());
+        cm.addMoreMenuItem("importExport", "", CB.getSkin().menuIcon.importIcon, new ShowImportMenu());
+        cm.addCheckableMenuItem("setOrResetFavorites", "", CB.getSkin().menuIcon.favorit, true, setOrResetFavorites(cm));
+        cm.addMenuItem("manage", getSelectDBTitleExtension(), CB.getSkin().menuIcon.manageDB, this::selectDbDialog);
+        cm.addMenuItem("AutoResort", CB.getAutoResort() ? CB.getSkin().menuIcon.autoSortOnIcon : CB.getSkin().menuIcon.autoSortOffIcon, this::setAutoResort);
+        cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().menuIcon.addCache, this::createCache);
+        cm.addMoreMenuItem("DeleteCaches", "", CB.getSkin().menuIcon.deleteCaches, new ShowDeleteMenu());
         return cm;
     }
 
@@ -408,7 +408,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
     }
 
     private void createCache() {
-        EditCache.getInstance(Database.Data, "MI_NEW_CACHE", CB.getSkin().getMenuIcon.addCache).create();
+        EditCache.getInstance(Database.Data, "MI_NEW_CACHE", CB.getSkin().menuIcon.addCache).create();
     }
 
     private void setAutoResort() {

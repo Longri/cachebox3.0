@@ -42,6 +42,6 @@ public class Action_NavigateInt extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.navigate;
+        return CB.getSkin().menuIcon.navigate;
     }
 }

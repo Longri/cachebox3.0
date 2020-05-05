@@ -52,70 +52,37 @@ public enum LogTypes implements SelectBoxItem {
     unknown;
 
     /**
-     * Returns True if the log type a TB Log
+     * Returns True if the log type is a TB Log
      *
-     * @return
+     * @return ?
      */
     public boolean isTbLog() {
-        int t = this.ordinal();
-        if (t == 17)
-            return true; // retrieve
-        if (t == 18)
-            return true; // dropped_off
-        if (t == 19)
-            return true; // mark_missing
-        if (t == 20)
-            return true; // grab_it
-        if (t == 21)
-            return true; // discovered
-        if (t == 22)
-            return true; // move_to_collection
-        if (t == 23)
-            return true; // move_to_inventory
-        if (t == 25)
-            return true; // visited
-
-        return false;
+        return this == retrieve //
+                || this == dropped_off //
+                || this == mark_missing //
+                || this == grab_it //
+                || this == discovered //
+                || this == move_to_collection //
+                || this == move_to_inventory //
+                || this == visited //
+                ;
     }
 
     /**
      * Returns True if the log type possible to direct online Log
      *
-     * @return
+     * @return ?
      */
     public boolean isDirectLogType() {
         if (Config.DirectOnlineLog.getValue())
             return true;
-        int t = this.ordinal();
-        if (t == 4)
-            return true; // enabled
-        if (t == 5)
-            return true; // needs_maintenance
-        if (t == 6)
-            return true; // temporarily_disabled
-        if (t == 7)
-            return true; // owner_maintenance
-        if (t == 8)
-            return true; // will_attend
-
-        if (t == 17)
-            return true; // retrieve
-        if (t == 18)
-            return true; // dropped_off
-        if (t == 19)
-            return true; // mark_missing
-        if (t == 20)
-            return true; // grab_it
-        if (t == 21)
-            return true; // discovered
-        if (t == 22)
-            return true; // move_to_collection
-        if (t == 23)
-            return true; // move_to_inventory
-        if (t == 25)
-            return true; // visited
-
-        return false;
+        return this == enabled //
+                || this == needs_maintenance //
+                || this == temporarily_disabled //
+                || this == owner_maintenance //
+                || this == will_attend //
+                || isTbLog()
+                ;
     }
 
     public static LogTypes parseString(String text) {
@@ -189,58 +156,58 @@ public enum LogTypes implements SelectBoxItem {
     }
 
     public int getIconID() {
-        switch (this.ordinal()) {
-            case 0:
+        switch (this) {
+            case found:
                 return 0; // Found
-            case 1:
+            case didnt_find:
                 return 1; // DNF
-            case 2:
+            case note:
                 return 2; // Note
-            case 3:
+            case published:
                 return 3; // Publish
-            case 4:
+            case enabled:
                 return 4; // Enable
-            case 5:
+            case needs_maintenance:
                 return 5; // needs maintains
-            case 6:
+            case temporarily_disabled:
                 return 6; // Disable
-            case 7:
+            case owner_maintenance:
                 return 7; // Owner Maintains
-            case 8:
+            case will_attend:
                 return 8; // Will attend
-            case 9:
+            case attended:
                 return 9; // Attended
-            case 10:
+            case webcam_photo_taken:
                 return 10; // Photo
-            case 11:
+            case archived:
                 return 11; // Archive
-            case 12:
+            case reviewer_note:
                 return 12; // Reviewer Note
-            case 13:
+            case needs_archived:
                 return 13; // needs maintains
-            case 14:
+            case unarchive:
                 return 11; // Unarchive
-            case 15:
+            case retract:
                 return 14; // Retract
-            case 16:
+            case update_coord:
                 return 16; // Update Coords
-            case 17:
+            case retrieve:
                 return 17; // Retrive
-            case 18:
+            case dropped_off:
                 return 18; // Dropped
-            case 19:
+            case mark_missing:
                 return 2; // Mark missing
-            case 20:
+            case grab_it:
                 return 19; // Grab It
-            case 21:
+            case discovered:
                 return 20; // Discover
-            case 22:
+            case move_to_collection:
                 return 2; // Move to Collection
-            case 23:
+            case move_to_inventory:
                 return 2; // Move to Inventory
-            case 24:
+            case announcement:
                 return 15; // Announcement
-            case 25:
+            case visited:
                 return 21; // Visited
 
         }
@@ -251,6 +218,7 @@ public enum LogTypes implements SelectBoxItem {
     public static LogTypes GC2CB_LogType(int value) {
         switch (value) {
             case 1:
+            case 12:
                 return unarchive;
             case 2:
                 return found;
@@ -268,8 +236,6 @@ public enum LogTypes implements SelectBoxItem {
                 return attended;
             case 11:
                 return webcam_photo_taken;
-            case 12:
-                return unarchive;
             case 13:
                 return retrieve;
             case 14:
@@ -277,6 +243,7 @@ public enum LogTypes implements SelectBoxItem {
             case 16:
                 return mark_missing;
             case 18:
+            case 68:
                 return reviewer_note;
             case 19:
                 return grab_it;
@@ -296,8 +263,6 @@ public enum LogTypes implements SelectBoxItem {
                 return update_coord;
             case 48:
                 return discovered;
-            case 68:
-                return reviewer_note;
             case 69:
                 return move_to_collection;
             case 70:
@@ -317,8 +282,8 @@ public enum LogTypes implements SelectBoxItem {
      * GS LogTypeId's:</br>4 - Post Note </br>13 - Retrieve It from a Cache </br>14 - Place in a cache </br>16 - Mark as missing </br>19 -
      * Grab </br>48 - Discover </br>69 - Move to collection </br>70 - Move to inventory </br>75 - Visit
      *
-     * @param value
-     * @return
+     * @param value ?
+     * @return ?
      */
     public static int CB_LogType2GC(LogTypes value) {
         switch (value) {

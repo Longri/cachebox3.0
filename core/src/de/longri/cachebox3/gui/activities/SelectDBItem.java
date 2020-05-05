@@ -59,7 +59,7 @@ public class SelectDBItem extends ListViewItem {
         infoTable.row();
         infoTable.add(lblInfoSize).right().expandX().fillX();
 
-        Image iconImage = new Image(CB.getSkin().getMenuIcon.manageDB, Scaling.none);
+        Image iconImage = new Image(CB.getSkin().menuIcon.manageDB, Scaling.none);
         this.add(iconImage).center().padRight(CB.scaledSizes.MARGIN_HALF);
 
         this.add(infoTable).expandX().fillX();

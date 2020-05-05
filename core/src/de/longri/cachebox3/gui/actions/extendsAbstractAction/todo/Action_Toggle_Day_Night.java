@@ -36,6 +36,6 @@ public class Action_Toggle_Day_Night extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.dayNight;
+        return CB.getSkin().menuIcon.dayNight;
     }
 }

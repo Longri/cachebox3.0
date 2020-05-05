@@ -79,7 +79,7 @@ public class ReloadCacheActivity extends ActivityBase {
     public ReloadCacheActivity() {
         super("UpdateStatusAndOthers");
         bCancel = new CB_Button(Translation.get("cancel"));
-        gsLogo = new Image(CB.getSkin().getMenuIcon.gc_logo);
+        gsLogo = new Image(CB.getSkin().menuIcon.gc_logo);
         lblTitle = new VisLabel(Translation.get("ReloadCacheAPI"));
         Label.LabelStyle style = new Label.LabelStyle(lblTitle.getStyle());
         style.fontColor.set(Color.WHITE);

@@ -35,13 +35,13 @@ public class Action_Upload_Drafts extends AbstractAction {
     @Override
     public void execute() {
         final Menu cm = new Menu("DraftsContextMenuTitle");
-        cm.addMenuItem("uploadDrafts", CB.getSkin().getMenuIcon.uploadDraft, DraftsView.getInstance()::uploadDraft);
-        cm.addMenuItem("directLog", CB.getSkin().getMenuIcon.logViewIcon, DraftsView.getInstance()::uploadLog);
+        cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, DraftsView.getInstance()::uploadDraft);
+        cm.addMenuItem("directLog", CB.getSkin().menuIcon.logViewIcon, DraftsView.getInstance()::uploadLog);
         cm.show();
     }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.uploadDraft;
+        return CB.getSkin().menuIcon.uploadDraft;
     }
 }

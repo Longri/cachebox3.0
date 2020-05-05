@@ -613,14 +613,14 @@ public class DraftsView extends AbstractView {
 
         // Owner logs
         if (abstractCache != null && !abstractCache.iAmTheOwner()) {
-            cm.addMenuItem("ownerLogTypes", CB.getSkin().getMenuIcon.ownerLogTypes, () -> {
+            cm.addMenuItem("ownerLogTypes", CB.getSkin().menuIcon.ownerLogTypes, () -> {
             }).setMoreMenu(getSecondMenu());
         }
 
         cm.addDivider(-1);
-        cm.addMenuItem("uploadDrafts", CB.getSkin().getMenuIcon.uploadDraft, this::uploadDraft);
-        cm.addMenuItem("directLog", CB.getSkin().getMenuIcon.logViewIcon, this::uploadLog);
-        cm.addMenuItem("DeleteAllDrafts", CB.getSkin().getMenuIcon.deleteAllDrafts, this::deleteAllDrafts);
+        cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, this::uploadDraft);
+        cm.addMenuItem("directLog", CB.getSkin().menuIcon.logViewIcon, this::uploadLog);
+        cm.addMenuItem("DeleteAllDrafts", CB.getSkin().menuIcon.deleteAllDrafts, this::deleteAllDrafts);
 
         return cm;
     }

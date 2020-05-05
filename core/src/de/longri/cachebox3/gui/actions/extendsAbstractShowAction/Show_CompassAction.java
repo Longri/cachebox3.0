@@ -39,7 +39,7 @@ public class Show_CompassAction extends AbstractShowAction {
     }
 
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.compassIcon;
+        return CB.getSkin().menuIcon.compassIcon;
     }
 
 

@@ -31,10 +31,10 @@ import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
  */
 public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends ValidationTask {
 
-    protected final int TOLLERANCE = 1;
+    protected final int TOLERANCE = 1;
 
-    private final Array<String> isNullList = new Array<String>();
-    private final Array<String> isMissingIconList = new Array<String>();
+    private final Array<String> isNullList = new Array<>();
+    private final Array<String> isMissingIconList = new Array<>();
     private final StringBuilder wrongBitmapsSize = new StringBuilder();
     private final Class<T> tClass;
 
@@ -132,17 +132,25 @@ public abstract class Validate_Abstract_Icons<T extends ValidationTask> extends 
         }
 
         if (width < getMinWidth() || width > getMaxWidth()) {
-            wrongBitmapsSize.append(fieldName);
-            wrongBitmapsSize.append(" width: " + width);
-            wrongBitmapsSize.append("   => The width should be between " + getMinWidth() + " and " + getMaxWidth() + "  !");
-            wrongBitmapsSize.append(" \n");
+            wrongBitmapsSize.append(fieldName)
+                    .append(" width: ")
+                    .append(String.valueOf(width))
+                    .append("   => The width should be between ")
+                    .append(String.valueOf(getMinWidth()))
+                    .append(" and ")
+                    .append(String.valueOf(getMaxWidth()))
+                    .append("  !\n");
         }
 
         if (height < getMinHeight() || height > getMaxHeight()) {
-            wrongBitmapsSize.append(fieldName);
-            wrongBitmapsSize.append(" height: " + height);
-            wrongBitmapsSize.append("   => The height should be between " + getMinHeight() + " and " + getMaxHeight() + "  !");
-            wrongBitmapsSize.append(", \n");
+            wrongBitmapsSize.append(fieldName)
+                    .append(" height: ")
+                    .append(String.valueOf(height))
+                    .append("   => The height should be between ")
+                    .append(String.valueOf(getMinHeight()))
+                    .append(" and ")
+                    .append(String.valueOf(getMaxHeight()))
+                    .append("  !, \n");
         }
     }
 

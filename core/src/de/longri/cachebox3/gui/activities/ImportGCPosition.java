@@ -65,7 +65,7 @@ public class ImportGCPosition extends Activity {
     private SearchCoordinates searchCoordinates;
 
     public ImportGCPosition() {
-        super("importCachesOverPosition", CB.getSkin().getMenuIcon.target);
+        super("importCachesOverPosition", CB.getSkin().menuIcon.target);
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         coordinateButton = new CoordinateButton(EventHandler.getMyPosition());

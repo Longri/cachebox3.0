@@ -708,7 +708,7 @@ public class TestView extends AbstractView {
                 Field field = fields[i];
                 if (field.getType() == Drawable.class)
                     try {
-                        Drawable drawable = (Drawable) field.get(CB.getSkin().getMenuIcon);
+                        Drawable drawable = (Drawable) field.get(CB.getSkin().menuIcon);
                         if (iconWidth == 0) {
                             iconWidth = drawable.getMinWidth();
                             iconHeight = drawable.getMinHeight();

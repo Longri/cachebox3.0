@@ -429,15 +429,15 @@ public class WaypointView extends AbstractView implements PositionChangedListene
         Menu cm = new Menu("WaypointViewContextMenuTitle");
 
         if (actWaypoint != null) {
-            cm.addMenuItem("show", CB.getSkin().getMenuIcon.showWp, () -> showEditWpDialog(actWaypoint, false));
-            cm.addMenuItem("edit", CB.getSkin().getMenuIcon.editWp, () -> showEditWpDialog(actWaypoint, true));
+            cm.addMenuItem("show", CB.getSkin().menuIcon.showWp, () -> showEditWpDialog(actWaypoint, false));
+            cm.addMenuItem("edit", CB.getSkin().menuIcon.editWp, () -> showEditWpDialog(actWaypoint, true));
         }
-        cm.addMenuItem("AddWaypoint", CB.getSkin().getMenuIcon.addWp, this::addWp);
+        cm.addMenuItem("AddWaypoint", CB.getSkin().menuIcon.addWp, this::addWp);
         if ((actWaypoint != null) && (actWaypoint.isUserWaypoint()))
-            cm.addMenuItem("delete", CB.getSkin().getMenuIcon.delWp, this::deleteWP);
+            cm.addMenuItem("delete", CB.getSkin().menuIcon.delWp, this::deleteWP);
         if (actWaypoint != null || actAbstractCache != null)
-            cm.addMenuItem("Projection", CB.getSkin().getMenuIcon.projectWp, this::addProjection);
-        MenuItem mi = cm.addMenuItem("UploadCorrectedCoordinates", CB.getSkin().getMenuIcon.uploadCorrectedCoordinates, () -> {
+            cm.addMenuItem("Projection", CB.getSkin().menuIcon.projectWp, this::addProjection);
+        MenuItem mi = cm.addMenuItem("UploadCorrectedCoordinates", CB.getSkin().menuIcon.uploadCorrectedCoordinates, () -> {
             if (actAbstractCache.hasCorrectedCoordinates())
                 GroundspeakAPI.getInstance().uploadCorrectedCoordinates(actAbstractCache.getGeoCacheCode().toString(), actAbstractCache.getLatitude(), actAbstractCache.getLongitude());
             else if (isCorrectedFinal())
@@ -449,7 +449,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             }
         });
         mi.setEnabled(actAbstractCache.hasCorrectedCoordinates() || isCorrectedFinal());
-        cm.addMenuItem("FromGps", CB.getSkin().getMenuIcon.mesureWp, this::addMeasure);
+        cm.addMenuItem("FromGps", CB.getSkin().menuIcon.mesureWp, this::addMeasure);
 
         return cm;
     }

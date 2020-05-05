@@ -37,14 +37,14 @@ public class ContactOwner extends AbstractAction {
     @Override
     public void execute() {
         Menu menu = new Menu("contactOwner");
-        menu.addMenuItem("MailToOwner", CB.getSkin().getMenuIcon.e_mailToOwner, () -> {
+        menu.addMenuItem("MailToOwner", CB.getSkin().menuIcon.e_mailToOwner, () -> {
             try {
                 String mOwner = URLEncoder.encode(EventHandler.getSelectedCache().getOwner().toString(), "UTF-8");
                 PlatformConnector.callUrl("https://www.geocaching.com/email/?u=" + mOwner);
             } catch (Exception ignored) {
             }
         });
-        menu.addMenuItem("MessageToOwner", CB.getSkin().getMenuIcon.messageToOwner, () -> CB.postAsync(new NamedRunnable("MessageToOwner") {
+        menu.addMenuItem("MessageToOwner", CB.getSkin().menuIcon.messageToOwner, () -> CB.postAsync(new NamedRunnable("MessageToOwner") {
             @Override
             public void run() {
                 try {
@@ -93,6 +93,6 @@ public class ContactOwner extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.contactOwner;
+        return CB.getSkin().menuIcon.contactOwner;
     }
 }

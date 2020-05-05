@@ -406,7 +406,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         if (selectedCacheIsSet) {
             boolean selectedCacheIsGC = geoCache.getGeoCacheCode().toString().startsWith("GC");
             if (forDescription) {
-                cacheContextMenu.addCheckableMenuItem("ShowOriginalHtmlColor", "", CB.getSkin().getMenuIcon.showOriginalHtmlColor,
+                cacheContextMenu.addCheckableMenuItem("ShowOriginalHtmlColor", "", CB.getSkin().menuIcon.showOriginalHtmlColor,
                         geoCache.getShowOriginalHtmlColor(), this::showOriginalHtmlColor);
                 cacheContextMenu.addDivider(0);
             }
@@ -417,14 +417,14 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                  */
             }
             if (selectedCacheIsGC) {
-                cacheContextMenu.addMenuItem("ReloadCacheAPI", CB.getSkin().getMenuIcon.reloadCacheIcon, () -> new ReloadCacheActivity().show());
+                cacheContextMenu.addMenuItem("ReloadCacheAPI", CB.getSkin().menuIcon.reloadCacheIcon, () -> new ReloadCacheActivity().show());
             }
-            cacheContextMenu.addMenuItem("Open_Cache_Link", CB.getSkin().getMenuIcon.gc_logo, () -> PlatformConnector.callUrl(geoCache.getUrl().toString()));
+            cacheContextMenu.addMenuItem("Open_Cache_Link", CB.getSkin().menuIcon.gc_logo, () -> PlatformConnector.callUrl(geoCache.getUrl().toString()));
             // CB.getSkin()."big" + geoCache.getType().name()),
             // getType -> getGeoCacheType
-            cacheContextMenu.addCheckableMenuItem("Favorite", "", CB.getSkin().getMenuIcon.favorit, geoCache.isFavorite(), this::toggleAsFavorite);
-            cacheContextMenu.addMenuItem("MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon,
-                    () -> EditCache.getInstance(Database.Data, "MI_EDIT_CACHE", CB.getSkin().getMenuIcon.reloadCacheIcon).edit(geoCache));
+            cacheContextMenu.addCheckableMenuItem("Favorite", "", CB.getSkin().menuIcon.favorit, geoCache.isFavorite(), this::toggleAsFavorite);
+            cacheContextMenu.addMenuItem("MI_EDIT_CACHE", CB.getSkin().menuIcon.reloadCacheIcon,
+                    () -> EditCache.getInstance(Database.Data, "MI_EDIT_CACHE", CB.getSkin().menuIcon.reloadCacheIcon).edit(geoCache));
             if (selectedCacheIsGC) {
                 cacheContextMenu.addMenuItem("contactOwner", ContactOwner.getInstance().getIcon(), () -> ContactOwner.getInstance().execute());
                 cacheContextMenu.addMenuItem("GroundSpeakLists", ListsAtGroundSpeak.getInstance().getIcon(), () -> ListsAtGroundSpeak.getInstance().execute());
@@ -433,11 +433,11 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 cacheContextMenu.addCheckableMenuItem("rememberGeoCache", "", null,
                         Config.rememberedGeoCache.getValue().equals(geoCache.getGeoCacheCode().toString()), this::rememberGeoCache);
             }
-            cacheContextMenu.addMenuItem("MI_DELETE_CACHE", CB.getSkin().getMenuIcon.deleteCaches, this::deleteGeoCache);
+            cacheContextMenu.addMenuItem("MI_DELETE_CACHE", CB.getSkin().menuIcon.deleteCaches, this::deleteGeoCache);
         }
 
         cacheContextMenu.addDivider(1);
-        cacheContextMenu.addMenuItem("Solver", CB.getSkin().getMenuIcon.todo, () -> {
+        cacheContextMenu.addMenuItem("Solver", CB.getSkin().menuIcon.todo, () -> {
             // replace icon with CB.getSkin().getMenuIcon.solverIcon
             SolverView view = new SolverView();
             CB.viewmanager.showView(view);

@@ -80,7 +80,7 @@ public class Action_QuickDraft extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.draft;
+        return CB.getSkin().menuIcon.draft;
     }
 
     private void finalHandling(boolean found, AbstractCache cache) {

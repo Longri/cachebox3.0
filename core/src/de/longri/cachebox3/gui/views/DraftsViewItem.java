@@ -184,14 +184,14 @@ public class DraftsViewItem extends ListViewItem {
     private boolean onHeaderClicked() {
         Menu cm = new Menu("DraftItemMenuTitle");
         cm.addMenuItem("SelectCache", ":\n" + entry.CacheName, entry.cacheType.getDrawable(), this::selectCacheFromDraft);
-        cm.addMenuItem("edit", CB.getSkin().getMenuIcon.editDraft, this::editDraft);
+        cm.addMenuItem("edit", CB.getSkin().menuIcon.editDraft, this::editDraft);
         if (entry.GcId.startsWith("GL")) {
-            cm.addMenuItem("uploadLogImage", CB.getSkin().getMenuIcon.uploadDraft, this::uploadLogImage);
+            cm.addMenuItem("uploadLogImage", CB.getSkin().menuIcon.uploadDraft, this::uploadLogImage);
             cm.addMenuItem("BrowseLog", null, () -> PlatformConnector.callUrl("https://coord.info/" + entry.GcId));
         }
-        cm.addMenuItem("uploadDrafts", CB.getSkin().getMenuIcon.uploadDraft, () -> logOnline(false));
-        cm.addMenuItem("directLog", CB.getSkin().getMenuIcon.logViewIcon, () -> logOnline(true));
-        cm.addMenuItem("delete", CB.getSkin().getMenuIcon.deleteAllDrafts, this::deleteDraft);
+        cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, () -> logOnline(false));
+        cm.addMenuItem("directLog", CB.getSkin().menuIcon.logViewIcon, () -> logOnline(true));
+        cm.addMenuItem("delete", CB.getSkin().menuIcon.deleteAllDrafts, this::deleteDraft);
         cm.show();
         return true;
     }

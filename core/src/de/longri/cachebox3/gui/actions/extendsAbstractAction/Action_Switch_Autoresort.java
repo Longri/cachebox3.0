@@ -49,7 +49,7 @@ public class Action_Switch_Autoresort extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getAutoResort() ? CB.getSkin().getMenuIcon.autoSortOnIcon : CB.getSkin().getMenuIcon.autoSortOffIcon;
+        return CB.getAutoResort() ? CB.getSkin().menuIcon.autoSortOnIcon : CB.getSkin().menuIcon.autoSortOffIcon;
     }
 
 }

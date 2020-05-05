@@ -155,10 +155,10 @@ public class SpoilerView extends AbstractView {
     public Menu getContextMenu() {
         Menu contextMenu = new Menu("SpoilerViewContextMenuTitle");
 
-        contextMenu.addMenuItem("reloadSpoiler", CB.getSkin().getMenuIcon.importIcon, () -> {
+        contextMenu.addMenuItem("reloadSpoiler", CB.getSkin().menuIcon.importIcon, () -> {
             downloadSpoiler(false);
         });
-        contextMenu.addMenuItem("LoadLogImages", CB.getSkin().getMenuIcon.downloadLogImages, () -> {
+        contextMenu.addMenuItem("LoadLogImages", CB.getSkin().menuIcon.downloadLogImages, () -> {
             downloadSpoiler(true);
         });
 

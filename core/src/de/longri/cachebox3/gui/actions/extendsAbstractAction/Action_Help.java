@@ -41,6 +41,6 @@ public class Action_Help extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.Help;
+        return CB.getSkin().messageBoxIcon.Help;
     }
 }

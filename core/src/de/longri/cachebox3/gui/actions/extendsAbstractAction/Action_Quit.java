@@ -54,6 +54,6 @@ public class Action_Quit extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getIcon.Close;
+        return CB.getSkin().messageBoxIcon.Close;
     }
 }

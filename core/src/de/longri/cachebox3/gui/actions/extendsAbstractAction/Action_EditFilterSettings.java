@@ -32,7 +32,7 @@ public class Action_EditFilterSettings extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.filterIcon;
+        return CB.getSkin().menuIcon.filterIcon;
     }
 
     @Override

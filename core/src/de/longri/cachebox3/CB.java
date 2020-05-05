@@ -194,8 +194,7 @@ public class CB {
         float margin = CB.getScaledFloat(actSkin.get("margin", ScaledSize.class).value);
         float check_box_height = CB.getScaledFloat(actSkin.get("check_box_height", ScaledSize.class).value);
         float window_margin = CB.getScaledFloat(actSkin.get("check_box_height", ScaledSize.class).value);
-        CB.scaledSizes = new ScaledSizes(button_width, button_height, button_width_wide, margin,
-                check_box_height, window_margin);
+        CB.scaledSizes = new ScaledSizes(button_width, button_height, button_width_wide, margin, check_box_height, window_margin);
     }
 
     public static SkinColor getColor(String name) {

@@ -49,8 +49,8 @@ public class SvgSkin extends Skin {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(SvgSkin.class);
     public static final String SKIN_JSON_NAME = "skin.json";
     private boolean forceCreateNewAtlas = false;
-    public MessageBoxIconStyle getIcon;
-    public MenuIconStyle getMenuIcon;
+    public MessageBoxIconStyle messageBoxIcon;
+    public MenuIconStyle menuIcon;
 
     public enum StorageType {
         LOCAL, INTERNAL
@@ -84,7 +84,7 @@ public class SvgSkin extends Skin {
 
 
     /**
-     * Create a Skin from given Jason-file!
+     * Create a Skin from given Json-file!
      * The drawable resources are created from Svg-Folder and putted into a Atlas
      *
      * @param name        name of this skin, will be used for create tmp cache folder!
@@ -117,13 +117,13 @@ public class SvgSkin extends Skin {
 
         //after load set iconStyle
         try {
-            getIcon = get(MessageBoxIconStyle.class);
+            messageBoxIcon = get(MessageBoxIconStyle.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            getMenuIcon = get(MenuIconStyle.class);
+            menuIcon = get(MenuIconStyle.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

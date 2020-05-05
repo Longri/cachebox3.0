@@ -713,16 +713,16 @@ public class MapView extends AbstractView {
     @Override
     public Menu getContextMenu() {
         Menu icm = new Menu("MapViewContextMenuTitle");
-        icm.addMenuItem("Layer", CB.getSkin().getMenuIcon.mapLayer, () -> showMapViewLayerMenu());
+        icm.addMenuItem("Layer", CB.getSkin().menuIcon.mapLayer, () -> showMapViewLayerMenu());
         if (cacheboxMapAdapter.getBaseMap() instanceof MapsforgeSingleMap) {
-            icm.addMenuItem("Renderthemes", CB.getSkin().getMenuIcon.theme, () -> showMapViewThemeMenu());
-            icm.addMenuItem("Styles", CB.getSkin().getMenuIcon.themeStyle, () -> showMapViewThemeStyleMenu());
+            icm.addMenuItem("Renderthemes", CB.getSkin().menuIcon.theme, () -> showMapViewThemeMenu());
+            icm.addMenuItem("Styles", CB.getSkin().menuIcon.themeStyle, () -> showMapViewThemeStyleMenu());
         }
-        icm.addMenuItem("overlays", CB.getSkin().getMenuIcon.todo, () -> showMapViewOverlaysMenu()); // todo icon
-        icm.addMenuItem("view", CB.getSkin().getMenuIcon.viewSettings, () -> showMapViewElementsMenu());
+        icm.addMenuItem("overlays", CB.getSkin().menuIcon.todo, () -> showMapViewOverlaysMenu()); // todo icon
+        icm.addMenuItem("view", CB.getSkin().menuIcon.viewSettings, () -> showMapViewElementsMenu());
         // todo needed? nach Kompass ausrichten | setAlignToCompass
-        icm.addMenuItem("CenterWP", CB.getSkin().getMenuIcon.addWp, () -> createWaypointAtCenter());
-        icm.addMenuItem("RecTrack", CB.getSkin().getMenuIcon.todo, () -> showTrackRecordMenu()); // todo icon
+        icm.addMenuItem("CenterWP", CB.getSkin().menuIcon.addWp, () -> createWaypointAtCenter());
+        icm.addMenuItem("RecTrack", CB.getSkin().menuIcon.todo, () -> showTrackRecordMenu()); // todo icon
         return icm;
     }
 
@@ -970,7 +970,7 @@ public class MapView extends AbstractView {
         if (themesPath.length() > 0) {
             mapViewThemeMenu.addDivider(-1);
             mapViewThemeMenu.addMenuItem("Download", "\n OpenAndroMaps",
-                    CB.getSkin().getMenuIcon.baseMapMapsforge,
+                    CB.getSkin().menuIcon.baseMapMapsforge,
                     new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
                             if (mapViewThemeMenu.mustHandle(event)) {
@@ -988,7 +988,7 @@ public class MapView extends AbstractView {
                         }
                     });
             mapViewThemeMenu.addMenuItem("Download", "\n Freizeitkarte",
-                    CB.getSkin().getMenuIcon.baseMapFreizeitkarte, () -> showFZKDownloadMenu());
+                    CB.getSkin().menuIcon.baseMapFreizeitkarte, () -> showFZKDownloadMenu());
         }
 
         mapViewThemeMenu.show();
@@ -1008,7 +1008,7 @@ public class MapView extends AbstractView {
 
         for (FZKThemesInfo fzkThemesInfo : fzkThemesInfoList) {
             // todo change to explicit clicklistener, if animation works
-            mapViewFZKDownloadMenu.addMenuItem("Download", "\n" + fzkThemesInfo.Description, CB.getSkin().getMenuIcon.baseMapFreizeitkarte, () -> {
+            mapViewFZKDownloadMenu.addMenuItem("Download", "\n" + fzkThemesInfo.Description, CB.getSkin().menuIcon.baseMapFreizeitkarte, () -> {
                 String zipFile = fzkThemesInfo.Url.substring(fzkThemesInfo.Url.lastIndexOf("/") + 1);
                 String target = themesPath + "/" + zipFile;
 

@@ -462,7 +462,7 @@ public class CompassView extends AbstractView implements
 
     public Menu getContextMenu() {
         Menu icm = new Menu("Compass");
-        icm.addMenuItem("view", CB.getSkin().getMenuIcon.viewSettings, this::showOtionMenu);
+        icm.addMenuItem("view", CB.getSkin().menuIcon.viewSettings, this::showOtionMenu);
         return icm;
     }
 

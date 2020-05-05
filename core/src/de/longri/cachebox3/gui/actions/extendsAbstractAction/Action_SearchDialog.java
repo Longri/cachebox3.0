@@ -33,11 +33,11 @@ public class Action_SearchDialog extends AbstractAction {
 
     @Override
     public void execute() {
-        SearchDialog.getInstance(title, CB.getSkin().getMenuIcon.searchIcon).show();
+        SearchDialog.getInstance(title, CB.getSkin().menuIcon.searchIcon).show();
     }
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.searchIcon;
+        return CB.getSkin().menuIcon.searchIcon;
     }
 }

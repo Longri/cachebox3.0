@@ -49,6 +49,6 @@ public class Show_WaypointAction extends AbstractShowAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.waypointListIcon;
+        return CB.getSkin().menuIcon.waypointListIcon;
     }
 }

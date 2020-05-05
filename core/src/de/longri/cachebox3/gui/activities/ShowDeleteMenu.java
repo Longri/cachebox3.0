@@ -34,9 +34,9 @@ public class ShowDeleteMenu extends Menu {
 
     public ShowDeleteMenu() {
         super("DeleteMenuTitle");
-        addMenuItem("DelActFilter", CB.getSkin().getMenuIcon.deleteFilter, () -> askAndExecute(CB.viewmanager.getActFilter(), "DelActFilter"));
-        addMenuItem("DelArchived", CB.getSkin().getMenuIcon.deleteArchived, () -> askAndExecute(FilterInstances.ARCHIVED, "DelArchived"));
-        addMenuItem("DelFound", CB.getSkin().getMenuIcon.deleteFounds, () -> askAndExecute(FilterInstances.MYFOUNDS, "DelFound"));
+        addMenuItem("DelActFilter", CB.getSkin().menuIcon.deleteFilter, () -> askAndExecute(CB.viewmanager.getActFilter(), "DelActFilter"));
+        addMenuItem("DelArchived", CB.getSkin().menuIcon.deleteArchived, () -> askAndExecute(FilterInstances.ARCHIVED, "DelArchived"));
+        addMenuItem("DelFound", CB.getSkin().menuIcon.deleteFounds, () -> askAndExecute(FilterInstances.MYFOUNDS, "DelFound"));
     }
 
     private void askAndExecute(final FilterProperties filter, String msg) {

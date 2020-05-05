@@ -41,8 +41,8 @@ public class SavableSvgSkin extends SvgSkin {
 
     public SavableSvgSkin clone(String newName) {
         SavableSvgSkin newSkin = new SavableSvgSkin(newName);
-        newSkin.getIcon = getIcon;
-        newSkin.getMenuIcon = getMenuIcon;
+        newSkin.messageBoxIcon = messageBoxIcon;
+        newSkin.menuIcon = menuIcon;
         newSkin.resources = resources;
         newSkin.atlas = atlas;
 

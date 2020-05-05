@@ -196,7 +196,7 @@ public class Action_MapDownload extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.baseMapFreizeitkarte;
+        return CB.getSkin().menuIcon.baseMapFreizeitkarte;
     }
 
     public static class MapRepositoryInfo {

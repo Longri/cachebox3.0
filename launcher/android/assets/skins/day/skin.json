@@ -652,6 +652,10 @@
       "path": "svg/attended.svg",
       "scale": 0.1
     },
+    "attendedBig": {
+      "path": "svg/attended.svg",
+      "scale": 0.2
+    },
     "autosortOff": {
       "path": "svg/autosortOff.svg",
       "scale": 1.4736
@@ -742,7 +746,7 @@
     },
     "bubble_tempDisabled": {
       "path": "svg/tempDisabled.svg",
-      "scale": 0.06
+      "scale": 0.12
     },
     "bubble_virtualSize": {
       "path": "svg/virtualSize.svg",
@@ -1028,6 +1032,10 @@
       "path": "svg/enabled.svg",
       "scale": 0.12
     },
+    "enabledBig": {
+      "path": "svg/enabled.svg",
+      "scale": 0.24
+    },
     "erth": {
       "path": "svg/erth.svg",
       "scale": 0.16
@@ -1095,6 +1103,10 @@
     "found": {
       "path": "svg/log0icon.svg",
       "scale": 0.098
+    },
+    "foundBig": {
+      "path": "svg/log0icon.svg",
+      "scale": 0.2
     },
     "fr": {
       "path": "svg/fr.svg",
@@ -1315,6 +1327,10 @@
     "mapFinal2": {
       "path": "svg/mapFinal2.svg",
       "scale": 0.15
+    },
+    "bubbleLogsFound": {
+      "path": "svg/mapFound0.svg",
+      "scale": 0.4
     },
     "mapFound0": {
       "path": "svg/mapFound0.svg",
@@ -1764,9 +1780,17 @@
       "path": "svg/needs_archived.svg",
       "scale": 0.12
     },
+    "needs_archivedBig": {
+      "path": "svg/needs_archived.svg",
+      "scale": 0.24
+    },
     "needs_maintenance": {
       "path": "svg/needs_maintenance.svg",
       "scale": 0.12
+    },
+    "needs_maintenanceBig": {
+      "path": "svg/needs_maintenance.svg",
+      "scale": 0.24
     },
     "nl": {
       "path": "svg/nl.svg",
@@ -1780,6 +1804,10 @@
       "path": "svg/log1icon.svg",
       "scale": 0.098
     },
+    "notFoundBig": {
+      "path": "svg/log1icon.svg",
+      "scale": 0.2
+    },
     "noteIcon": {
       "path": "svg/noteIcon.svg",
       "scale": 0.18
@@ -1787,6 +1815,10 @@
     "noteIconType": {
       "path": "svg/noteIcon.svg",
       "scale": 0.098
+    },
+    "noteIconTypeBig": {
+      "path": "svg/noteIcon.svg",
+      "scale": 0.2
     },
     "option_0": {
       "path": "svg/option_0.svg",
@@ -1807,6 +1839,10 @@
     "owner_maintenance": {
       "path": "svg/owner_maintenance.svg",
       "scale": 0.12
+    },
+    "owner_maintenanceBig": {
+      "path": "svg/owner_maintenance.svg",
+      "scale": 0.24
     },
     "pane_slider_vertical": {
       "path": "svg/pane_slider_vertical.svg",
@@ -1952,6 +1988,10 @@
       "path": "svg/tempDisabled.svg",
       "scale": 0.11
     },
+    "tempDisabledBig": {
+      "path": "svg/tempDisabled.svg",
+      "scale": 0.22
+    },
     "toast_background": {
       "path": "svg/toast_background.svg",
       "scale": 1
@@ -2044,6 +2084,10 @@
       "path": "svg/webcam_photo_taken.svg",
       "scale": 0.12
     },
+    "webcam_photo_takenBig": {
+      "path": "svg/webcam_photo_taken.svg",
+      "scale": 0.24
+    },
     "whereigo": {
       "path": "svg/whereigo.svg",
       "scale": 0.2
@@ -2051,6 +2095,10 @@
     "will_attend": {
       "path": "svg/letterbox.svg",
       "scale": 0.11
+    },
+    "will_attendBig": {
+      "path": "svg/letterbox.svg",
+      "scale": 0.22
     }
   },
   "de.longri.cachebox3.utils.SkinColor": {
@@ -3360,7 +3408,7 @@
   },
   "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
     "bubble_LogTypes": {
-      "found": "mapFound0",
+      "found": "bubbleLogsFound",
       "didnt_find": "notFound",
       "note": "noteIconType",
       "published": "published",
@@ -3432,6 +3480,35 @@
       "archived": "archived",
       "reviewer_note": "reviewer_note",
       "needs_archived": "needs_archived",
+      "unarchive": "unarchive",
+      "retract": "retract",
+      "update_coord": "update_coord",
+      "retrieve": "retrieve",
+      "dropped_off": "dropped_off",
+      "mark_missing": "mark_missing",
+      "grab_it": "grab_it",
+      "discovered": "discovered",
+      "move_to_collection": "move_to_collection",
+      "move_to_inventory": "move_to_inventory",
+      "announcement": "announcement",
+      "visited": "visited",
+      "ownFavorite": "favIcon"
+    },
+    "DraftListItemStyle": {
+      "found": "foundBig",
+      "didnt_find": "notFoundBig",
+      "note": "noteIconTypeBig",
+      "published": "published",
+      "enabled": "enabledBig",
+      "needs_maintenance": "needs_maintenanceBig",
+      "temporarily_disabled": "tempDisabledBig",
+      "owner_maintenance": "owner_maintenanceBig",
+      "will_attend": "will_attendBig",
+      "attended": "attendedBig",
+      "webcam_photo_taken": "webcam_photo_takenBig",
+      "archived": "archived",
+      "reviewer_note": "reviewer_note",
+      "needs_archived": "needs_archivedBig",
       "unarchive": "unarchive",
       "retract": "retract",
       "update_coord": "update_coord",
@@ -3560,7 +3637,7 @@
       "headerFontColor": "font_color",
       "descriptionFont": "normal_font",
       "descriptionFontColor": "font_color",
-      "logTypesStyle": "logViewLogStyles",
+      "logTypesStyle": "DraftListItemStyle",
       "cacheTypeStyle": "cacheList",
       "headerBackground": "list_rec_header_9_Patch",
       "uploadedOverlay": "activityBack_drawable",

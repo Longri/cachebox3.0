@@ -51,6 +51,6 @@ public class Show_AboutAction extends AbstractShowAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.cb;
+        return CB.getSkin().menuIcon.cb;
     }
 }

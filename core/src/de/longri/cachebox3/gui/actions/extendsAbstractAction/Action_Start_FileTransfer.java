@@ -39,7 +39,7 @@ public class Action_Start_FileTransfer extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.fileTransfer;
+        return CB.getSkin().menuIcon.fileTransfer;
     }
 
 }

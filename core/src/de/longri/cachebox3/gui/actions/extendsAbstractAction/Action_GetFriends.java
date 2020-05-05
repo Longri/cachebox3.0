@@ -33,6 +33,6 @@ public class Action_GetFriends extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().getMenuIcon.friends;
+        return CB.getSkin().menuIcon.friends;
     }
 }

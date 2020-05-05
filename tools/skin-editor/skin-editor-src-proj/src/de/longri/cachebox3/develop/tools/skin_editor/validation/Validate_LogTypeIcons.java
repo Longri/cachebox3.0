@@ -25,21 +25,21 @@ public class Validate_LogTypeIcons extends Validate_Abstract_Icons {
 
     @Override
     protected int getMinWidth() {
-        return iconSize - TOLLERANCE;
+        return iconSize - TOLERANCE;
     }
 
     @Override
     protected int getMaxWidth() {
-        return iconSize + TOLLERANCE;
+        return iconSize + TOLERANCE;
     }
 
     @Override
     protected int getMinHeight() {
-        return iconSize - TOLLERANCE;
+        return iconSize - TOLERANCE;
     }
 
     @Override
     protected int getMaxHeight() {
-        return iconSize + TOLLERANCE;
+        return iconSize + TOLERANCE;
     }
 }
