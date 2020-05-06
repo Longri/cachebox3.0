@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <g transform="matrix(0.2573752, 0, 0, 0.3086802, -4.037238, -9.48613)" id="g833" xml:space="preserve">
+    <path d="M108.936 33.2324 C159.056 33.2324 199.686 61.4384 199.686 96.2324 C199.686 111.151 192.217 124.858 179.733 135.65 L175.186 140.732 L165.186 147.732 L158.186 159.232 L151.186 173.232 L143.686 183.732 L138.686 182.732 L137.186 173.732 L135.925 156.399 C127.4 158.241 118.335 159.232 108.936 159.232 C58.8163 159.232 18.1862 131.026 18.1862 96.23238 C18.1862 61.43838 58.8163 33.23238 108.936 33.23238 z" stroke="#000000" stroke-width="5" stroke-linejoin="round" id="path2" xml:space="preserve" connector-curvature="0" style="fill:#E4E4E1;" />
+    <path d="M177.686 58.6302 C161.646 44.1134 136.199 34.7324 107.549 34.7324 C59.0233 34.7324 19.686 61.6429 19.686 94.839 C19.686 104.308 22.8864 113.265 28.58751 121.232 L49.13 110.388 C44.6963 104.933 42.1963 98.7572 42.1963 92.215 C42.1963 70.0845 70.8053 52.144 106.096 52.144 C123.889 52.144 139.984 56.7046 151.57 64.0631 z" stroke-width="0.2" stroke-linejoin="round" id="path4" xml:space="preserve" connector-curvature="0" style="fill:#EFF487;" />
+    <ellipse cx="107.686" cy="93.232" rx="66" ry="41.9999" stroke-width="0.2" stroke-linejoin="round" id="ellipse6" xml:space="preserve" style="fill:#FFFFFF;" />
+    <rect x="66.1859" y="70.7321" width="91.5" height="17" stroke="#CE9696" stroke-width="2" stroke-linejoin="round" id="rect8" xml:space="preserve" style="fill:#BE7474;" />
+    <rect x="96.6859" y="95.4821" width="60.3331" height="17" stroke="#CE9696" stroke-width="2" stroke-linejoin="round" id="rect10" xml:space="preserve" style="fill:#BE7474;" />
+  </g>
+</svg>

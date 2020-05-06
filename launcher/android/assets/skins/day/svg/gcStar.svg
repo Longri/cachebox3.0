@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <radialGradient cx="38.9977" cy="47.3256" r="49.811" fx="38.9977" fy="47.3256" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.8708068, 0.1239591, -0.1180514, 0.9143853, 6.490179, -3.860878)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#C7C400" stop-opacity="1" id="stop2" xml:space="preserve" />
+    <stop offset="38.7213%" stop-color="#BEAD00" stop-opacity="1" id="stop4" xml:space="preserve" />
+    <stop offset="52.0927%" stop-color="#B69600" stop-opacity="1" id="stop6" xml:space="preserve" />
+    <stop offset="70.6977%" stop-color="#E88500" stop-opacity="1" id="stop8" xml:space="preserve" />
+    <stop offset="91.6279%" stop-color="#EEB100" stop-opacity="1" id="stop10" xml:space="preserve" />
+    <stop offset="98.6046%" stop-color="#F4DD00" stop-opacity="1" id="stop12" xml:space="preserve" />
+  </radialGradient>
+  <path d="M38.38913 46.97508 L32.82642 29.36266 L47.0997 18.42236 L29.42855 18.53512 L23.93034 0.900231 L18.57168 18.58237 L0.9003022 18.6237 L15.25958 29.43925 L9.836329 47.09966 L24.06954 36.10178 z" stroke="#5B3400" stroke-width="1.800985" stroke-linejoin="round" id="path15" xml:space="preserve" style="fill:url(#SVGID_Fill1_);" />
+</svg>

@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full" width="220" height="220" viewBox="0 0 220.00 220.00" enable-background="new 0 0 220.00 220.00" xml:space="preserve">
-	<path fill="#E4E4E1" fill-opacity="1" stroke-width="5" stroke-linejoin="round" stroke="#000000" stroke-opacity="1" d="M 108.936,33.2324C 159.056,33.2324 199.686,61.4384 199.686,96.2324C 199.686,111.151 192.217,124.858 179.733,135.65L 175.186,140.732L 165.186,147.732L 158.186,159.232L 151.186,173.232L 143.686,183.732L 138.686,182.732L 137.186,173.732L 135.925,156.399C 127.4,158.241 118.335,159.232 108.936,159.232C 58.8163,159.232 18.1862,131.026 18.1862,96.2324C 18.1862,61.4384 58.8163,33.2324 108.936,33.2324 Z "/>
-	<path fill="#EFF487" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" d="M 177.686,58.6302C 161.646,44.1134 136.199,34.7324 107.549,34.7324C 59.0233,34.7324 19.686,61.6429 19.686,94.839C 19.686,104.308 22.8864,113.265 28.5875,121.232L 49.13,110.388C 44.6963,104.933 42.1963,98.7572 42.1963,92.215C 42.1963,70.0845 70.8053,52.144 106.096,52.144C 123.889,52.144 139.984,56.7046 151.57,64.0631L 177.686,58.6302 Z "/>
-	<ellipse fill="#FFFFFF" fill-opacity="1" stroke-width="0.2" stroke-linejoin="round" cx="107.686" cy="93.232" rx="66" ry="41.9999"/>
-	<rect x="66.1859" y="70.7321" fill="#BE7474" fill-opacity="1" stroke-width="2" stroke-linejoin="round" stroke="#CE9696" stroke-opacity="1" width="91.5" height="17"/>
-	<rect x="96.6859" y="95.4821" fill="#BE7474" fill-opacity="1" stroke-width="2" stroke-linejoin="round" stroke="#CE9696" stroke-opacity="1" width="60.3331" height="17"/>
-</svg>

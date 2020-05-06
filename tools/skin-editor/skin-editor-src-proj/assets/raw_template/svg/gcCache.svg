@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <g transform="matrix(0.2526349, 0, 0, 0.2528628, -8.504293, -8.62836)" id="g33" xml:space="preserve">
+    <linearGradient x1="109.3434" y1="91.19613" x2="216.8948" y2="91.19613" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.7958948, 1.256447)" id="SVGID_Fill1_" xml:space="preserve">
+      <stop offset="0%" stop-color="#1FA3FF" stop-opacity="1" id="stop2" xml:space="preserve" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="1" id="stop4" xml:space="preserve" />
+    </linearGradient>
+    <path d="M94.225 58.3834 L165.425 58.3834 L165.425 74.9711 L152.226 85.5533 L152.226 146.473 L165.425 156.197 L165.425 170.784 L94.22499 170.784 L94.22499 156.195 L108.626 145.901 L108.626 85.5533 L94.225 74.6871 z" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" id="path7" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill1_);" />
+    <linearGradient x1="383.4969" y1="65.24517" x2="401.0718" y2="65.24517" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.3305789, 3.024996)" id="SVGID_Fill2_" xml:space="preserve">
+      <stop offset="0%" stop-color="#909CA4" stop-opacity="1" id="stop9" xml:space="preserve" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="1" id="stop11" xml:space="preserve" />
+    </linearGradient>
+    <path d="M126.776 170.784 L132.586 170.784 L132.411 220.799 L129.561 223.949 L126.776 220.699 z" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" id="path14" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill2_);" />
+    <radialGradient cx="128.661" cy="128.048" r="98.9999" fx="128.661" fy="128.048" gradientUnits="userSpaceOnUse" id="SVGID_Stroke1_" xml:space="preserve">
+      <stop offset="0%" stop-color="#909CA4" stop-opacity="1" id="stop16" xml:space="preserve" />
+      <stop offset="46.9828%" stop-color="#768087" stop-opacity="1" id="stop18" xml:space="preserve" />
+      <stop offset="51.7774%" stop-color="#626B71" stop-opacity="1" id="stop20" xml:space="preserve" />
+      <stop offset="54.7414%" stop-color="#4E565B" stop-opacity="1" id="stop22" xml:space="preserve" />
+      <stop offset="57.0813%" stop-color="#6B747B" stop-opacity="1" id="stop24" xml:space="preserve" />
+      <stop offset="62.931%" stop-color="#88939B" stop-opacity="1" id="stop26" xml:space="preserve" />
+      <stop offset="100%" stop-color="#88939B" stop-opacity="1" id="stop28" xml:space="preserve" />
+    </radialGradient>
+    <path d="M109.011 216.972 C68.7557 208.007 38.6613 172.08 38.6613 129.124 C38.6613 79.41809 78.9558 39.1237 128.661 39.1237 C178.367 39.1237 218.661 79.41809 218.661 129.124 C218.661 170.789 190.348 205.842 151.911 216.092" stroke="url(#SVGID_Stroke1_)" fill-rule="evenOdd" stroke-width="10" stroke-linecap="square" stroke-linejoin="bevel" id="path31" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+  </g>
+</svg>

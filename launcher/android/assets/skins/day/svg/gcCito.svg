@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <radialGradient cx="73.6056" cy="132.094" r="39.2039" fx="73.6056" fy="132.094" gradientUnits="userSpaceOnUse" id="SVGID_Stroke1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#F3F8F8" stop-opacity="1" id="stop8" xml:space="preserve" />
+    <stop offset="100%" stop-color="#00EEFC" stop-opacity="1" id="stop10" xml:space="preserve" />
+  </radialGradient>
+  <radialGradient cx="70.8741" cy="101.881" r="9.56018" fx="70.8741" fy="101.881" gradientUnits="userSpaceOnUse" id="SVGID_Stroke2_" xml:space="preserve">
+    <stop offset="0%" stop-color="#F3F8F8" stop-opacity="1" id="stop15" xml:space="preserve" />
+    <stop offset="100%" stop-color="#00EEFC" stop-opacity="1" id="stop17" xml:space="preserve" />
+  </radialGradient>
+  <g transform="matrix(0.2338647, 0, 0, 0.2395998, -1.896082, -2.309904)" id="g879" xml:space="preserve">
+    <ellipse cx="109.149" cy="109.225" rx="96.8333" ry="97.6667" stroke-width="0.2" stroke-linejoin="round" id="ellipse2" xml:space="preserve" style="fill:#16376C;" />
+    <path d="M112.649 12.7246 C150.633 17.0465 167.901 35.8736 158.316 34.5579 C124.316 29.8911 116.239 40.167 115.649 40.5579 C87.23231 59.3911 95.69621 88.4034 109.982 106.891 C138.316 143.558 121.982 168.225 113.316 176.891 C83.54141 206.666 14.31581 179.224 15.81571 110.391 C16.99071 56.46459 59.50671 6.677879 112.649 12.72459 z" stroke-width="0.2" stroke-linejoin="round" id="path4" xml:space="preserve" connector-curvature="0" style="fill:#339B2C;" />
+    <ellipse cx="107.441" cy="109.808" rx="96.8334" ry="97.6667" stroke="#16376C" stroke-width="5" stroke-linejoin="round" id="ellipse6" xml:space="preserve" style="fill:none;" />
+    <path d="M47.6566 170.219 L64.8259 170.219 L65.6063 144.682 L67.9476 135.69 L72.6301 130.655 L78.48331 131.374 L84.72671 135.331 L93.31141 146.121 L96.82321 148.638 L105.408 149.358 L110.09 149.358 L110.481 142.524 L97.60361 130.655 L88.62881 124.9 L80.82461 120.584 L90.57981 109.434 L95.65261 99.72327 L97.60361 95.04757 L89.79941 97.92497 L81.60501 106.917 L75.75181 111.952 L71.84971 113.751 L64.04551 110.873 L59.36291 109.794 L56.63151 112.671 L56.63151 108.355 L55.07071 105.118 L43.75451 94.32826 L40.24261 93.96846 L40.63281 100.083 L47.26641 107.996 L50.77831 109.794 L36.7306 109.794 L41.0231 114.829 L53.5098 113.751 L46.87609 117.707 L42.58389 120.224 L41.80329 123.462 L45.70559 124.181 L49.21739 122.382 L53.50979 119.865 L56.63149 119.505 L59.75319 123.821 L56.24119 132.453 L52.72939 137.848 L49.60769 145.761 L47.65659 154.753 z" stroke="url(#SVGID_Stroke1_)" stroke-linejoin="round" id="path13" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    <path d="M70.6791 94.688 L65.9965 95.76691 L63.6553 99.36361 L62.4846 105.118 L64.8259 108.355 L67.94759 107.636 L69.11829 105.118 L71.9799 105.358 L72.2399 107.276 L74.0609 108.955 L77.18259 107.276 L78.09309 103.68 L79.26379 99.7233 L76.92249 95.76691 z" stroke="url(#SVGID_Stroke2_)" stroke-linejoin="round" id="path20" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    <g id="g26" xml:space="preserve">
+      <path d="M142.684 104.146 C137.251 103.61 127.313 104.388 124.865 101.385 C122.418 98.3815 127.462 91.5978 129.639 86.9187 C131.816 82.2395 131.126 79.6651 127.052 83.4054 C122.977 87.14581 115.519 97.2013 115.849 102.457 C116.18 107.712 124.298 108.168 131.282 108.356 C138.266 108.544 144.116 108.463 146.579 107.498 C149.041 106.533 148.116 104.683 142.684 104.146 z" stroke="#FFFFFF" stroke-linejoin="round" id="path22" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+      <path d="M119.214 80.9888 C117.6 80.8302 120.236 79.2127 123.646 77.3958 C127.056 75.5793 131.24 73.564 133.391 72.8644 C135.543 72.16509 135.662 72.78179 136.847 76.48759 C138.032 80.1935 140.283 86.9883 139.746 87.8463 C139.209 88.7044 135.883 83.6255 131.288 81.7364 C126.693 79.8472 120.828 81.1476 119.214 80.9888 z" stroke="#FFFFFF" stroke-linejoin="round" id="path24" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    </g>
+    <g id="g32" xml:space="preserve">
+      <path d="M177.268 83.4004 C179.467 87.8947 185.186 95.2384 183.515 98.6441 C181.843 102.05 172.782 101.517 167.182 102.163 C161.583 102.809 159.446 104.633 165.089 105.933 C170.732 107.232 184.155 108.007 189.056 105.122 C193.957 102.237 190.338 95.69339 187.026 90.16579 C183.715 84.63829 180.713 80.1272 178.551 78.6944 C176.389 77.2613 175.068 78.906 177.268 83.4004 z" stroke="#FFFFFF" stroke-linejoin="round" id="path28" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+      <path d="M166.678 113.238 C167.333 114.574 164.455 113.331 160.999 111.587 C157.542 109.842 153.508 107.595 151.758 106.271 C150.008 104.947 150.543 104.545 153.522 101.77 C156.502 98.9954 161.927 93.84679 163.023 93.83569 C164.119 93.82469 160.885 98.95129 161.362 103.471 C161.838 107.991 166.024 111.903 166.678 113.238 z" stroke="#FFFFFF" stroke-linejoin="round" id="path30" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    </g>
+    <g id="g38" xml:space="preserve">
+      <path d="M141.146 66.9021 C144.38 62.9441 148.599 54.8228 152.718 54.4202 C156.837 54.0177 160.854 61.3338 164.276 65.3672 C167.699 69.40041 170.526 70.1509 168.957 65.111 C167.388 60.0711 161.424 49.2409 156.192 46.8701 C150.961 44.4991 146.462 50.5872 142.789 55.927 C139.116 61.2668 136.269 65.8584 135.968 68.2566 C135.667 70.6551 137.913 70.8601 141.146 66.9021 z" stroke="#FFFFFF" stroke-linejoin="round" id="path34" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+      <path d="M175.205 60.2213 C176.165 59.0446 176.406 61.9046 176.453 65.466 C176.499 69.0274 176.35 73.28979 175.948 75.31329 C175.547 77.33689 174.893 77.12139 170.728 76.19059 C166.563 75.25979 158.887 73.61359 158.328 72.76639 C157.77 71.91949 164.328 71.87169 168.448 69.24139 C172.566 66.61089 174.245 61.39769 175.205 60.22129 z" stroke="#FFFFFF" stroke-linejoin="round" id="path36" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    </g>
+    <g id="g44" xml:space="preserve">
+      <path d="M188.435 15.1286 L182.835 15.1286 L182.835 31.0885 L178.355 31.0885 L178.355 15.1286 L172.755 15.1286 L172.755 11.4886 L188.435 11.4886 z" stroke-width="0.2" stroke-linejoin="round" id="path40" xml:space="preserve" connector-curvature="0" style="fill:#000000;" />
+      <path d="M213.355 31.0885 L208.875 31.0885 L208.875 19.3592 C208.875 18.0933 208.932 16.6949 209.046 15.1636 L208.936 15.1636 C208.709 16.3682 208.503 17.2344 208.319 17.7624 L203.725 31.0885 L200.116 31.0885 L195.439 17.898 C195.311 17.5421 195.105 16.6306 194.822 15.1636 L194.7 15.1636 C194.817 17.0973 194.875 18.7932 194.875 20.2516 L194.875 31.0885 L190.955 31.0885 L190.955 11.4886 L197.364 11.4886 L201.367 23.1086 C201.688 24.0359 201.922 24.9694 202.067 25.9085 L202.151 25.9085 C202.395 24.8235 202.655 23.88 202.929 23.0779 L206.932 11.4886 L213.355 11.4886 z" stroke-width="0.2" stroke-linejoin="round" id="path42" xml:space="preserve" connector-curvature="0" style="fill:#000000;" />
+    </g>
+  </g>
+</svg>

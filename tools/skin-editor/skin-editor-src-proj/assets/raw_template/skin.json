@@ -1,32 +1,28 @@
 {
   "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
     "Mapstate.car": {
-      "path": "svg/map-state-car.svg",
+      "path": "svg/state-car.svg",
       "scale": 1
     },
     "Mapstate.free": {
-      "path": "svg/map-state-free.svg",
+      "path": "svg/state-free.svg",
       "scale": 1
     },
     "Mapstate.gps": {
-      "path": "svg/map-state-gps.svg",
+      "path": "svg/state-gps.svg",
       "scale": 1
     },
     "Mapstate.lock": {
-      "path": "svg/map-state-lock.svg",
+      "path": "svg/state-lock.svg",
       "scale": 1
     },
     "Mapstate.waypoint": {
-      "path": "svg/map-state-wp.svg",
+      "path": "svg/state-wp.svg",
       "scale": 1
     },
     "MapstateOverdraw": {
-      "path": "svg/map-state-overdraw.svg",
+      "path": "svg/state-overdraw.svg",
       "scale": 1
-    },
-    "QuickDraft": {
-      "path": "svg/mapFound0.svg",
-      "scale": 0.73
     },
     "TB": {
       "path": "svg/TB.svg",
@@ -35,10 +31,6 @@
     "TB_drop": {
       "path": "svg/TB_drop.svg",
       "scale": 0.15
-    },
-    "Wikipedia": {
-      "path": "svg/mapWikipedia1.svg",
-      "scale": 0.18
     },
     "ZoomMinus": {
       "path": "svg/minus.svg",
@@ -716,10 +708,6 @@
       "path": "svg/bubble.svg",
       "scale": 2
     },
-    "bubbleNotFound": {
-      "path": "svg/log1icon.svg",
-      "scale": 0.06
-    },
     "bubble_TB": {
       "path": "svg/TB.svg",
       "scale": 0.05
@@ -823,10 +811,6 @@
     "check_only": {
       "path": "svg/check_only.svg",
       "scale": 0.9
-    },
-    "cito": {
-      "path": "svg/cito.svg",
-      "scale": 0.21
     },
     "closeIcon": {
       "path": "svg/closeIcon.svg",
@@ -1056,10 +1040,6 @@
       "path": "svg/e_mailToOwner.svg",
       "scale": 1.4737
     },
-    "earth": {
-      "path": "svg/earth.svg",
-      "scale": 0.21
-    },
     "edit": {
       "path": "svg/pencil.svg",
       "scale": 0.3
@@ -1091,10 +1071,6 @@
     "erth": {
       "path": "svg/erth.svg",
       "scale": 0.16
-    },
-    "event": {
-      "path": "svg/event.svg",
-      "scale": 0.2
     },
     "fastCache": {
       "path": "svg/fastCache.svg",
@@ -1165,19 +1141,19 @@
       "scale": 1
     },
     "found12": {
-      "path": "svg/log0icon.svg",
+      "path": "svg/gcFound.svg",
       "scale": 0.25
     },
     "found18": {
-      "path": "svg/log0icon.svg",
+      "path": "svg/gcFound.svg",
       "scale": 0.375
     },
     "found24": {
-      "path": "svg/log0icon.svg",
+      "path": "svg/gcFound.svg",
       "scale": 0.5
     },
     "found48": {
-      "path": "svg/log0icon.svg",
+      "path": "svg/gcFound.svg",
       "scale": 1
     },
     "fr": {
@@ -1211,10 +1187,6 @@
     "gc_logo": {
       "path": "svg/gc_logo.svg",
       "scale": 1.4
-    },
-    "giga": {
-      "path": "svg/giga.svg",
-      "scale": 0.2
     },
     "gpxFileIcon": {
       "path": "svg/gpxFileIcon.svg",
@@ -1317,232 +1289,256 @@
       "scale": 0.18
     },
     "map-info-panel-background": {
-      "path": "svg/map-info-panel-background.svg",
+      "path": "svg/InfoPanelMapBackground.svg",
       "scale": 0.75
     },
-    "mapCITO": {
-      "path": "svg/cito.svg",
-      "scale": 0.15
+    "cito48": {
+      "path": "svg/gcCito.svg",
+      "scale": 1
     },
-    "mapCITO0": {
-      "path": "svg/mapCITO0.svg",
-      "scale": 0.2
+    "cito24": {
+      "path": "svg/gcCito.svg",
+      "scale": 0.5
     },
-    "mapCITO1": {
-      "path": "svg/mapCITO1.svg",
-      "scale": 0.09
+    "cito12": {
+      "path": "svg/gcCito.svg",
+      "scale": 0.25
     },
     "mapCITO2": {
       "path": "svg/mapCITO2.svg",
       "scale": 0.15
     },
-    "mapCache0": {
-      "path": "svg/mapCache0.svg",
-      "scale": 0.2
+    "Cache48": {
+      "path": "svg/gcCache.svg",
+      "scale": 1
     },
-    "mapCache1": {
-      "path": "svg/mapCache1.svg",
-      "scale": 0.09
+    "Cache24": {
+      "path": "svg/gcCache.svg",
+      "scale": 0.5
+    },
+    "Cache12": {
+      "path": "svg/gcCache.svg",
+      "scale": 0.25
     },
     "mapCache2": {
       "path": "svg/mapCache2.svg",
       "scale": 0.15
     },
-    "mapCamera0": {
-      "path": "svg/mapCamera0.svg",
-      "scale": 0.2
+    "Camera48": {
+      "path": "svg/gcCamera.svg",
+      "scale": 1
     },
-    "mapCamera1": {
-      "path": "svg/mapCamera1.svg",
-      "scale": 0.09
+    "Camera24": {
+      "path": "svg/gcCamera.svg",
+      "scale": 0.5
+    },
+    "Camera12": {
+      "path": "svg/gcCamera.svg",
+      "scale": 0.25
     },
     "mapCamera2": {
       "path": "svg/mapCamera2.svg",
       "scale": 0.15
     },
-    "mapEarth": {
-      "path": "svg/earth.svg",
-      "scale": 0.15
+    "earth48": {
+      "path": "svg/gcEarth.svg",
+      "scale": 1
     },
-    "mapEarth0": {
-      "path": "svg/mapEarth0.svg",
-      "scale": 0.2
+    "earth24": {
+      "path": "svg/gcEarth.svg",
+      "scale": 0.5
     },
-    "mapEarth1": {
-      "path": "svg/mapEarth1.svg",
-      "scale": 0.09
+    "earth12": {
+      "path": "svg/gcEarth.svg",
+      "scale": 0.25
     },
     "mapEarth2": {
       "path": "svg/mapEarth2.svg",
       "scale": 0.15
     },
-    "mapEvent": {
-      "path": "svg/event.svg",
-      "scale": 0.15
+    "event48": {
+      "path": "svg/gcEvent.svg",
+      "scale": 1
     },
-    "mapEvent1": {
-      "path": "svg/mapEvent1.svg",
-      "scale": 0.09
+    "event24": {
+      "path": "svg/gcEvent.svg",
+      "scale": 0.5
+    },
+    "event12": {
+      "path": "svg/gcEvent.svg",
+      "scale": 0.25
     },
     "mapEvent2": {
       "path": "svg/mapEvent2.svg",
+      "scale": 0.15
+    },
+    "final48": {
+      "path": "svg/wpFinal.svg",
+      "scale": 1
+    },
+    "final24": {
+      "path": "svg/wpFinal.svg",
+      "scale": 0.5
+    },
+    "final12": {
+      "path": "svg/wpFinal.svg",
+      "scale": 0.25
+    },
+    "mapFinal2": {
+      "path": "svg/mapFinal2.svg",
+      "scale": 0.15
+    },
+    "mapFound2": {
+      "path": "svg/mapFound2.svg",
       "scale": 0.15
     },
     "mapFile": {
       "path": "svg/mapFile.svg",
       "scale": 1
     },
-    "mapFinal": {
-      "path": "svg/final.svg",
+    "giga48": {
+      "path": "svg/gcGiga.svg",
+      "scale": 1
+    },
+    "giga24": {
+      "path": "svg/gcGiga.svg",
+      "scale": 0.5
+    },
+    "giga12": {
+      "path": "svg/gcGiga.svg",
       "scale": 0.25
-    },
-    "mapFinal0": {
-      "path": "svg/mapFinal0.svg",
-      "scale": 0.2
-    },
-    "mapFinal1": {
-      "path": "svg/mapFinal1.svg",
-      "scale": 0.09
-    },
-    "mapFinal2": {
-      "path": "svg/mapFinal2.svg",
-      "scale": 0.15
-    },
-    "bubbleLogsFound": {
-      "path": "svg/mapFound0.svg",
-      "scale": 0.2
-    },
-    "mapFound0": {
-      "path": "svg/mapFound0.svg",
-      "scale": 0.2
-    },
-    "mapFound1": {
-      "path": "svg/mapFound1.svg",
-      "scale": 0.09
-    },
-    "mapFound2": {
-      "path": "svg/mapFound2.svg",
-      "scale": 0.15
-    },
-    "mapGiga0": {
-      "path": "svg/mapGiga0.svg",
-      "scale": 0.2
-    },
-    "mapGiga1": {
-      "path": "svg/mapGiga1.svg",
-      "scale": 0.09
     },
     "mapGiga2": {
       "path": "svg/mapGiga2.svg",
       "scale": 0.15
     },
-    "mapLabCache0": {
-      "path": "svg/mapLabCache0.svg",
-      "scale": 0.2
+    "labCache48": {
+      "path": "svg/gcLabCache.svg",
+      "scale": 1
     },
-    "mapLabCache1": {
-      "path": "svg/mapLabCache1.svg",
-      "scale": 0.09
+    "labCache24": {
+      "path": "svg/gcLabCache.svg",
+      "scale": 0.5
+    },
+    "labCache12": {
+      "path": "svg/gcLabCache.svg",
+      "scale": 0.25
     },
     "mapLabCache2": {
       "path": "svg/mapLabCache2.svg",
       "scale": 0.15
     },
     "mapLayer": {
-      "path": "svg/mapLayer.svg",
+      "path": "svg/mnuSelectLayer.svg",
       "scale": 1
     },
-    "mapLetterbox0": {
-      "path": "svg/mapLetterbox0.svg",
-      "scale": 0.2
+    "letterbox48": {
+      "path": "svg/gcLetterbox.svg",
+      "scale": 1
     },
-    "mapLetterbox1": {
-      "path": "svg/mapLetterbox1.svg",
-      "scale": 0.09
+    "letterbox24": {
+      "path": "svg/gcLetterbox.svg",
+      "scale": 0.5
+    },
+    "letterbox12": {
+      "path": "svg/gcLetterbox.svg",
+      "scale": 0.25
     },
     "mapLetterbox2": {
       "path": "svg/mapLetterbox2.svg",
       "scale": 0.15
     },
-    "mapMegaEvent1": {
-      "path": "svg/mapMegaEvent1.svg",
-      "scale": 0.09
+    "mega48": {
+      "path": "svg/gcMega.svg",
+      "scale": 1
+    },
+    "mega24": {
+      "path": "svg/gcMega.svg",
+      "scale": 0.5
+    },
+    "mega12": {
+      "path": "svg/gcMega.svg",
+      "scale": 0.25
     },
     "mapMegaEvent2": {
       "path": "svg/mapMegaEvent2.svg",
       "scale": 0.15
     },
-    "mapMulti": {
-      "path": "svg/multi.svg",
-      "scale": 0.15
+    "multi48": {
+      "path": "svg/gcMulti.svg",
+      "scale": 1
     },
-    "mapMulti0": {
-      "path": "svg/mapMulti0.svg",
+    "multi24": {
+      "path": "svg/gcMulti.svg",
+      "scale": 0.5
+    },
+    "multi12": {
+      "path": "svg/gcMulti.svg",
       "scale": 0.25
-    },
-    "mapMulti1": {
-      "path": "svg/mapMulti1.svg",
-      "scale": 0.09
     },
     "mapMulti2": {
       "path": "svg/mapMulti2.svg",
       "scale": 0.15
     },
-    "mapMultiQuestion": {
-      "path": "svg/multiQuestion.svg",
+    "Question48": {
+      "path": "svg/wpQuestion.svg",
+      "scale": 1
+    },
+    "Question24": {
+      "path": "svg/wpQuestion.svg",
+      "scale": 0.5
+    },
+    "Question12": {
+      "path": "svg/wpQuestion.svg",
       "scale": 0.25
-    },
-    "mapMultiQuestion0": {
-      "path": "svg/mapMultiQuestion0.svg",
-      "scale": 0.2
-    },
-    "mapMultiQuestion1": {
-      "path": "svg/mapMultiQuestion1.svg",
-      "scale": 0.09
     },
     "mapMultiQuestion2": {
       "path": "svg/mapMultiQuestion2.svg",
       "scale": 0.15
     },
-    "mapMultiStage": {
-      "path": "svg/multiStage.svg",
+    "stage48": {
+      "path": "svg/wpStage.svg",
+      "scale": 1
+    },
+    "stage24": {
+      "path": "svg/wpStage.svg",
+      "scale": 0.5
+    },
+    "stage12": {
+      "path": "svg/wpStage.svg",
       "scale": 0.25
-    },
-    "mapMultiStage0": {
-      "path": "svg/mapMultiStage0.svg",
-      "scale": 0.2
-    },
-    "mapMultiStage1": {
-      "path": "svg/mapMultiStage1.svg",
-      "scale": 0.09
     },
     "mapMultiStage2": {
       "path": "svg/mapMultiStage2.svg",
       "scale": 0.15
     },
-    "mapMultiStageStartP": {
-      "path": "svg/multiStageStartP.svg",
-      "scale": 0.13
+    "stageStart48": {
+      "path": "svg/wpStageStart.svg",
+      "scale": 1
     },
-    "mapMultiStageStartP0": {
-      "path": "svg/mapMultiStageStartP0.svg",
-      "scale": 0.2
+    "stageStart24": {
+      "path": "svg/wpStageStart.svg",
+      "scale": 0.5
     },
-    "mapMultiStageStartP1": {
-      "path": "svg/mapMultiStageStartP1.svg",
-      "scale": 0.09
+    "stageStart12": {
+      "path": "svg/wpStageStart.svg",
+      "scale": 0.25
     },
     "mapMultiStageStartP2": {
       "path": "svg/mapMultiStageStartP2.svg",
       "scale": 0.15
     },
-    "mapMultiStartP0": {
-      "path": "svg/mapMultiStartP0.svg",
-      "scale": 0.2
+    "multiWithStart48": {
+      "path": "svg/gcMultiWithStart.svg",
+      "scale": 1
     },
-    "mapMultiStartP1": {
-      "path": "svg/mapMultiStartP1.svg",
-      "scale": 0.09
+    "multiWithStart24": {
+      "path": "svg/gcMultiWithStart.svg",
+      "scale": 0.5
+    },
+    "multiWithStart12": {
+      "path": "svg/gcMultiWithStart.svg",
+      "scale": 0.25
     },
     "mapMultiStartP2": {
       "path": "svg/mapMultiStartP2.svg",
@@ -1564,29 +1560,33 @@
       "path": "svg/mapMyParking.svg",
       "scale": 0.16
     },
-    "mapMystery": {
-      "path": "svg/myterie.svg",
-      "scale": 0.15
+    "Mystery48": {
+      "path": "svg/gcMystery.svg",
+      "scale": 1
     },
-    "mapMystery0": {
-      "path": "svg/mapMystery0.svg",
+    "Mystery24": {
+      "path": "svg/gcMystery.svg",
+      "scale": 0.5
+    },
+    "Mystery12": {
+      "path": "svg/gcMystery.svg",
       "scale": 0.25
-    },
-    "mapMystery1": {
-      "path": "svg/mapMystery1.svg",
-      "scale": 0.09
     },
     "mapMystery2": {
       "path": "svg/mapMystery2.svg",
       "scale": 0.15
     },
-    "mapMysteryStartP0": {
-      "path": "svg/mapMysteryStartP0.svg",
-      "scale": 0.2
+    "MysteryWithStart48": {
+      "path": "svg/gcMysteryWithStart.svg",
+      "scale": 1
     },
-    "mapMysteryStartP1": {
-      "path": "svg/mapMysteryStartP1.svg",
-      "scale": 0.09
+    "MysteryWithStart24": {
+      "path": "svg/gcMysteryWithStart.svg",
+      "scale": 0.5
+    },
+    "MysteryWithStart12": {
+      "path": "svg/gcMysteryWithStart.svg",
+      "scale": 0.25
     },
     "mapMysteryStartP2": {
       "path": "svg/mapMysteryStartP2.svg",
@@ -1608,129 +1608,145 @@
       "path": "svg/mapParkingArea.svg",
       "scale": 0.2
     },
-    "mapReferencePoint": {
-      "path": "svg/mapReferencePoint.svg",
-      "scale": 0.23
+    "ReferencePoint48": {
+      "path": "svg/wpReferencePoint.svg",
+      "scale": 1
     },
-    "mapReferencePoint0": {
-      "path": "svg/mapReferencePoint0.svg",
-      "scale": 0.05
+    "ReferencePoint24": {
+      "path": "svg/wpReferencePoint.svg",
+      "scale": 0.5
     },
-    "mapReferencePoint1": {
-      "path": "svg/mapReferencePoint0.svg",
-      "scale": 0.09
+    "ReferencePoint12": {
+      "path": "svg/wpReferencePoint.svg",
+      "scale": 0.25
     },
     "mapReferencePoint2": {
       "path": "svg/mapReferencePoint1.svg",
       "scale": 0.15
     },
-    "mapSolved": {
-      "path": "svg/solved.svg",
-      "scale": 0.15
+    "MysterySolved48": {
+      "path": "svg/gcMysterySolved.svg",
+      "scale": 1
     },
-    "mapSolved0": {
-      "path": "svg/mapSolved0.svg",
+    "MysterySolved24": {
+      "path": "svg/gcMysterySolved.svg",
+      "scale": 0.5
+    },
+    "MysterySolved12": {
+      "path": "svg/gcMysterySolved.svg",
       "scale": 0.25
-    },
-    "mapSolved1": {
-      "path": "svg/mapSolved1.svg",
-      "scale": 0.12
     },
     "mapSolved2": {
       "path": "svg/mapSolved2.svg",
       "scale": 1
     },
-    "mapStar0": {
-      "path": "svg/mapStar0.svg",
-      "scale": 0.25
+    "Star48": {
+      "path": "svg/gcStar.svg",
+      "scale": 1
     },
-    "mapStar1": {
-      "path": "svg/mapStar1.svg",
-      "scale": 0.09
+    "Star24": {
+      "path": "svg/gcStar.svg",
+      "scale": 0.5
+    },
+    "Star12": {
+      "path": "svg/gcStar.svg",
+      "scale": 0.25
     },
     "mapStar2": {
       "path": "svg/mapStar2.svg",
       "scale": 1
     },
-    "mapTraditional": {
-      "path": "svg/traddi.svg",
-      "scale": 0.15
+    "Traditional48": {
+      "path": "svg/gcTraditional.svg",
+      "scale": 1
     },
-    "mapTraditional0": {
-      "path": "svg/mapTraditional0.svg",
+    "Traditional24": {
+      "path": "svg/gcTraditional.svg",
+      "scale": 0.5
+    },
+    "Traditional12": {
+      "path": "svg/gcTraditional.svg",
       "scale": 0.25
-    },
-    "mapTraditional1": {
-      "path": "svg/mapTraditional1.svg",
-      "scale": 0.09
     },
     "mapTraditional2": {
       "path": "svg/mapTraditional2.svg",
       "scale": 0.15
     },
-    "mapTrailhead": {
-      "path": "svg/mapTrailhead.svg",
-      "scale": 0.21
+    "Trailhead48": {
+      "path": "svg/wpTrailhead.svg",
+      "scale": 1
     },
-    "mapTrailhead0": {
-      "path": "svg/mapTrailhead0.svg",
-      "scale": 0.15
+    "Trailhead24": {
+      "path": "svg/wpTrailhead.svg",
+      "scale": 0.5
     },
-    "mapTrailhead1": {
-      "path": "svg/mapTrailhead1.svg",
-      "scale": 0.09
+    "Trailhead12": {
+      "path": "svg/wpTrailhead.svg",
+      "scale": 0.25
     },
     "mapTrailhead2": {
       "path": "svg/mapTrailhead2.svg",
       "scale": 0.15
     },
-    "mapUndefined0": {
-      "path": "svg/mapUndefined0.svg",
-      "scale": 0.2
+    "Undefined48": {
+      "path": "svg/gcUndefined.svg",
+      "scale": 1
     },
-    "mapUndefined1": {
-      "path": "svg/mapUndefined1.svg",
-      "scale": 0.09
+    "Undefined24": {
+      "path": "svg/gcUndefined.svg",
+      "scale": 0.5
+    },
+    "Undefined12": {
+      "path": "svg/gcUndefined.svg",
+      "scale": 0.25
     },
     "mapUndefined2": {
       "path": "svg/mapUndefined2.svg",
       "scale": 0.15
     },
-    "mapVirtual0": {
-      "path": "svg/mapVirtual0.svg",
-      "scale": 0.2
+    "Virtual48": {
+      "path": "svg/gcVirtual.svg",
+      "scale": 1
     },
-    "mapVirtual1": {
-      "path": "svg/mapVirtual1.svg",
-      "scale": 0.09
+    "Virtual24": {
+      "path": "svg/gcVirtual.svg",
+      "scale": 0.5
+    },
+    "Virtual12": {
+      "path": "svg/gcVirtual.svg",
+      "scale": 0.25
     },
     "mapVirtual2": {
       "path": "svg/mapVirtual2.svg",
       "scale": 0.15
     },
-    "mapWherigo": {
-      "path": "svg/whereigo.svg",
-      "scale": 0.15
+    "Wherigo48": {
+      "path": "svg/gcWherigo.svg",
+      "scale": 1
     },
-    "mapWherigo0": {
-      "path": "svg/mapWherigo0.svg",
-      "scale": 0.2
+    "Wherigo24": {
+      "path": "svg/gcWherigo.svg",
+      "scale": 0.5
     },
-    "mapWherigo1": {
-      "path": "svg/mapWherigo1.svg",
-      "scale": 0.09
+    "Wherigo12": {
+      "path": "svg/gcWherigo.svg",
+      "scale": 0.25
     },
     "mapWherigo2": {
       "path": "svg/mapWherigo2.svg",
       "scale": 0.15
     },
-    "mapWikipedia0": {
-      "path": "svg/mapWikipedia0.svg",
-      "scale": 0.2
+    "Wikipedia48": {
+      "path": "svg/gcWikipedia.svg",
+      "scale": 1
     },
-    "mapWikipedia1": {
-      "path": "svg/mapWikipedia1.svg",
-      "scale": 0.09
+    "Wikipedia24": {
+      "path": "svg/gcWikipedia.svg",
+      "scale": 0.5
+    },
+    "Wikipedia12": {
+      "path": "svg/gcWikipedia.svg",
+      "scale": 0.25
     },
     "mapWikipedia2": {
       "path": "svg/mapWikipedia2.svg",
@@ -1779,10 +1795,6 @@
     "mark_missing48": {
       "path": "svg/mark_missing.svg",
       "scale": 1
-    },
-    "mega": {
-      "path": "svg/mega.svg",
-      "scale": 0.2
     },
     "menu_back": {
       "path": "svg/menu_back.svg",
@@ -1852,10 +1864,6 @@
       "path": "svg/move_to_inventory.svg",
       "scale": 1
     },
-    "multi": {
-      "path": "svg/multi.svg",
-      "scale": 0.2
-    },
     "myLocation": {
       "path": "svg/myLocation.svg",
       "scale": 0.3
@@ -1867,10 +1875,6 @@
     "myLocationTransparent": {
       "path": "svg/myLocationTransparent.svg",
       "scale": 0.3
-    },
-    "myterie": {
-      "path": "svg/myterie.svg",
-      "scale": 0.2
     },
     "nav": {
       "path": "svg/nav.svg",
@@ -1929,19 +1933,19 @@
       "scale": 0.25
     },
     "notFound12": {
-      "path": "svg/log1icon.svg",
+      "path": "svg/gcDNF.svg",
       "scale": 0.25
     },
     "notFound18": {
-      "path": "svg/log1icon.svg",
+      "path": "svg/gcDNF.svg",
       "scale": 0.375
     },
     "notFound24": {
-      "path": "svg/log1icon.svg",
+      "path": "svg/gcDNF.svg",
       "scale": 0.5
     },
     "notFound48": {
-      "path": "svg/log1icon.svg",
+      "path": "svg/gcDNF.svg",
       "scale": 1
     },
     "noteIcon12": {
@@ -2232,10 +2236,6 @@
       "path": "svg/trackListIcon.svg",
       "scale": 0.18
     },
-    "traddi": {
-      "path": "svg/traddi.svg",
-      "scale": 0.21
-    },
     "unarchive12": {
       "path": "svg/unarchive.svg",
       "scale": 0.25
@@ -2284,10 +2284,6 @@
       "path": "svg/view.svg",
       "scale": 1
     },
-    "virtual": {
-      "path": "svg/virtual.svg",
-      "scale": 0.3
-    },
     "virtualSize": {
       "path": "svg/virtualSize.svg",
       "scale": 0.25
@@ -2335,18 +2331,6 @@
     "webcam_photo_taken48": {
       "path": "svg/webcam_photo_taken.svg",
       "scale": 1
-    },
-    "whereigo": {
-      "path": "svg/whereigo.svg",
-      "scale": 0.2
-    },
-    "mapLetterbox": {
-      "path": "svg/letterbox.svg",
-      "scale": 0.15
-    },
-    "letterbox": {
-      "path": "svg/letterbox.svg",
-      "scale": 0.2
     },
     "will_attend12": {
       "path": "svg/will_attend.svg",
@@ -3092,98 +3076,98 @@
       "large": "disabledOverlay2"
     },
     "mapAPE": {
-      "small": "mapWikipedia0",
-      "middle": "mapWikipedia1",
-      "large": "mapWikipedia2"
+      "small": "Cache12",
+      "middle": "Cache24",
+      "large": "mapCache2"
     },
     "mapAdventuresExhibit": {
-      "small": "mapWikipedia0",
-      "middle": "mapWikipedia1",
-      "large": "mapWikipedia2"
+      "small": "Cache12",
+      "middle": "Cache24",
+      "large": "mapCache2"
     },
     "mapCITO": {
-      "small": "mapCITO0",
-      "middle": "mapCITO1",
+      "small": "cito12",
+      "middle": "cito24",
       "large": "mapCITO2"
     },
     "mapCache": {
-      "small": "mapCache0",
-      "middle": "mapCache1",
+      "small": "Cache12",
+      "middle": "Cache24",
       "large": "mapCache2"
     },
     "mapCamera": {
-      "small": "mapCamera0",
-      "middle": "mapCamera1",
+      "small": "Camera12",
+      "middle": "Camera24",
       "large": "mapCamera2"
     },
     "mapEarth": {
-      "small": "mapEarth0",
-      "middle": "mapEarth1",
+      "small": "earth12",
+      "middle": "earth24",
       "large": "mapEarth2"
     },
     "mapEvent": {
-      "small": "mapGiga0",
-      "middle": "mapEvent1",
+      "small": "event12",
+      "middle": "event24",
       "large": "mapEvent2"
     },
     "mapFinal": {
-      "small": "mapFinal0",
-      "middle": "mapFinal1",
+      "small": "final12",
+      "middle": "final24",
       "large": "mapFinal2"
     },
     "mapFound": {
-      "small": "mapFound0",
-      "middle": "mapFound1",
+      "small": "found12",
+      "middle": "found24",
       "large": "mapFound2"
     },
     "mapGiga": {
-      "small": "mapGiga0",
-      "middle": "mapGiga1",
+      "small": "giga12",
+      "middle": "giga24",
       "large": "mapGiga2"
     },
     "mapHQ": {
-      "small": "mapWikipedia0",
-      "middle": "mapWikipedia1",
-      "large": "mapWikipedia2"
+      "small": "Cache12",
+      "middle": "Cache24",
+      "large": "mapCache2"
     },
     "mapLabCache": {
-      "small": "mapLabCache0",
-      "middle": "mapLabCache1",
+      "small": "labCache12",
+      "middle": "labCache24",
       "large": "mapLabCache2"
     },
     "mapLetterbox": {
-      "small": "mapLetterbox0",
-      "middle": "mapLetterbox1",
+      "small": "letterbox12",
+      "middle": "letterbox24",
       "large": "mapLetterbox2"
     },
     "mapMegaEvent": {
-      "small": "mapGiga0",
-      "middle": "mapMegaEvent1",
+      "small": "mega12",
+      "middle": "mega24",
       "large": "mapMegaEvent2"
     },
     "mapMulti": {
-      "small": "mapMulti0",
-      "middle": "mapMulti1",
+      "small": "multi12",
+      "middle": "multi24",
       "large": "mapMulti2"
     },
     "mapMultiQuestion": {
-      "small": "mapMultiQuestion0",
-      "middle": "mapMultiQuestion1",
+      "small": "Question12",
+      "middle": "Question24",
       "large": "mapMultiQuestion2"
     },
     "mapMultiStage": {
-      "small": "mapMultiStage0",
-      "middle": "mapMultiStage1",
+      "small": "stage12",
+      "middle": "stage24",
       "large": "mapMultiStage2"
     },
     "mapMultiStageStartP": {
-      "small": "mapMultiStageStartP0",
-      "middle": "mapMultiStageStartP1",
+      "small": "stageStart12",
+      "middle": "stageStart24",
       "large": "mapMultiStageStartP2"
     },
     "mapMultiStartP": {
-      "small": "mapMultiStartP0",
-      "middle": "mapMultiStartP1",
+      "small": "multiWithStart12",
+      "middle": "multiWithStart24",
       "large": "mapMultiStartP2"
     },
     "mapMyParking": {
@@ -3192,13 +3176,13 @@
       "large": "mapMyParking2"
     },
     "mapMystery": {
-      "small": "mapMystery0",
-      "middle": "mapMystery1",
+      "small": "Mystery12",
+      "middle": "Mystery24",
       "large": "mapMystery2"
     },
     "mapMysteryStartP": {
-      "small": "mapMysteryStartP0",
-      "middle": "mapMysteryStartP1",
+      "small": "MysteryWithStart12",
+      "middle": "MysteryWithStart24",
       "large": "mapMysteryStartP2"
     },
     "mapParkingArea": {
@@ -3207,48 +3191,48 @@
       "large": "mapParkingArea2"
     },
     "mapReferencePoint": {
-      "small": "mapReferencePoint0",
-      "middle": "mapReferencePoint1",
+      "small": "ReferencePoint12",
+      "middle": "ReferencePoint24",
       "large": "mapReferencePoint2"
     },
     "mapSolved": {
-      "small": "mapSolved0",
-      "middle": "mapSolved1",
+      "small": "MysterySolved12",
+      "middle": "MysterySolved24",
       "large": "mapSolved2"
     },
     "mapStar": {
-      "small": "mapStar0",
-      "middle": "mapStar1",
+      "small": "Star12",
+      "middle": "Star24",
       "large": "mapStar2"
     },
     "mapTraditional": {
-      "small": "mapTraditional0",
-      "middle": "mapTraditional1",
+      "small": "Traditional12",
+      "middle": "Traditional24",
       "large": "mapTraditional2"
     },
     "mapTrailhead": {
-      "small": "mapTrailhead0",
-      "middle": "mapTrailhead1",
+      "small": "Trailhead12",
+      "middle": "Trailhead24",
       "large": "mapTrailhead2"
     },
     "mapUndefined": {
-      "small": "mapUndefined0",
-      "middle": "mapUndefined1",
+      "small": "Undefined12",
+      "middle": "Undefined24",
       "large": "mapUndefined2"
     },
     "mapVirtual": {
-      "small": "mapVirtual0",
-      "middle": "mapVirtual1",
+      "small": "Virtual12",
+      "middle": "Virtual24",
       "large": "mapVirtual2"
     },
     "mapWherigo": {
-      "small": "mapWherigo0",
-      "middle": "mapWherigo1",
+      "small": "Wherigo12",
+      "middle": "Wherigo24",
       "large": "mapWherigo2"
     },
     "mapWikipedia": {
-      "small": "mapWikipedia0",
-      "middle": "mapWikipedia1",
+      "small": "Wikipedia12",
+      "middle": "Wikipedia24",
       "large": "mapWikipedia2"
     },
     "selectOverlay": {
@@ -3324,7 +3308,7 @@
       "editWp": "editWp",
       "mesureWp": "mesureWp",
       "navigate": "navigate",
-      "draft": "QuickDraft",
+      "draft": "found48",
       "videoIcon": "videoIcon",
       "voiceRecIcon": "voiceRecIcon",
       "hintIconOn": "hintOn",
@@ -3672,7 +3656,7 @@
   },
   "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
     "bubble_LogTypes": {
-      "found": "bubbleLogsFound",
+      "found": "found12",
       "didnt_find": "notFound12",
       "note": "noteIcon12",
       "published": "published12",
@@ -3799,54 +3783,54 @@
   },
   "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
     "bubble": {
-      "traditional": "mapTraditional1",
-      "multi": "mapMulti1",
-      "mystery": "mapMystery1",
-      "camera": "mapCamera1",
-      "earth": "mapEarth1",
-      "event": "mapEvent1",
-      "megaEvent": "mapMegaEvent1",
-      "cito": "mapCITO1",
-      "virtual": "mapVirtual1",
-      "letterbox": "mapLetterbox1",
-      "wherigo": "mapWherigo1",
-      "referencePoint": "mapReferencePoint1",
-      "wikipedia": "mapWikipedia1",
-      "undefined": "mapUndefined1",
-      "multiStage": "mapMultiStage1",
-      "multiQuestion": "mapMultiQuestion1",
-      "trailhead": "mapTrailhead1",
+      "traditional": "Traditional24",
+      "multi": "multi24",
+      "mystery": "Mystery24",
+      "camera": "Camera24",
+      "earth": "earth24",
+      "event": "event24",
+      "megaEvent": "mega24",
+      "cito": "cito24",
+      "virtual": "Virtual24",
+      "letterbox": "letterbox24",
+      "wherigo": "Wherigo24",
+      "referencePoint": "ReferencePoint24",
+      "wikipedia": "Wikipedia24",
+      "undefined": "Undefined24",
+      "multiStage": "stage24",
+      "multiQuestion": "Question24",
+      "trailhead": "Trailhead24",
       "parkingArea": "mapParkingArea1",
-      "Final": "mapFinal1",
-      "cache": "mapCache1",
+      "Final": "final24",
+      "cache": "Cache24",
       "myParking": "mapParkingArea1",
-      "giga": "mapGiga1",
-      "labCache": "mapLabCache1"
+      "giga": "giga24",
+      "labCache": "labCache24"
     },
     "cacheList": {
-      "traditional": "traddi",
-      "multi": "multi",
-      "mystery": "mapMystery",
-      "camera": "camera",
-      "earth": "earth",
-      "event": "event",
-      "megaEvent": "mega",
-      "cito": "cito",
-      "virtual": "virtual",
-      "letterbox": "letterbox",
-      "wherigo": "whereigo",
-      "referencePoint": "mapReferencePoint",
-      "wikipedia": "Wikipedia",
-      "undefined": "mapUndefined1",
-      "multiStage": "mapMultiStage",
-      "multiQuestion": "mapMultiQuestion",
-      "trailhead": "mapTrailhead",
+      "traditional": "Traditional48",
+      "multi": "multi48",
+      "mystery": "Mystery48",
+      "camera": "Camera48",
+      "earth": "earth48",
+      "event": "event48",
+      "megaEvent": "mega48",
+      "cito": "cito48",
+      "virtual": "Virtual48",
+      "letterbox": "letterbox48",
+      "wherigo": "Wherigo48",
+      "referencePoint": "ReferencePoint48",
+      "wikipedia": "Wikipedia48",
+      "undefined": "Undefined48",
+      "multiStage": "stage48",
+      "multiQuestion": "Question48",
+      "trailhead": "Trailhead48",
       "parkingArea": "mapParkingArea",
-      "Final": "mapFinal",
-      "cache": "mapCache1",
+      "Final": "final48",
+      "cache": "Cache48",
       "myParking": "mapMyParking",
-      "giga": "giga",
-      "labCache": "mapLabCache1"
+      "giga": "giga48",
+      "labCache": "labCache48"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle": {
@@ -3920,7 +3904,7 @@
       "BEGINNER": "beginner",
       "GrabTB": "grab_it48",
       "DropTB": "TB_drop",
-      "Highlights": "mapStar2",
+      "Highlights": "Star48",
       "Favorites": "favIcon48",
       "PrepareToArchive": "archived48",
       "ListingChanged": "warning",

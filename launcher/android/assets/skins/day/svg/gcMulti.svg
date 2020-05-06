@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <linearGradient x1="-0.0487922" y1="0.500001" x2="1.04879" y2="0.499999" gradientUnits="objectBoundingBox" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0.925926%" stop-color="#C0C0C0" stop-opacity="1" id="stop18" xml:space="preserve" />
+    <stop offset="19.7949%" stop-color="#8B8B8B" stop-opacity="0.501961" id="stop20" xml:space="preserve" />
+    <stop offset="42.1296%" stop-color="#575757" stop-opacity="0" id="stop22" xml:space="preserve" />
+    <stop offset="61.1111%" stop-color="#626262" stop-opacity="0" id="stop24" xml:space="preserve" />
+    <stop offset="100%" stop-color="#C0C0C0" stop-opacity="0.4" id="stop26" xml:space="preserve" />
+  </linearGradient>
+  <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur1_" xml:space="preserve">
+    <feGaussianBlur stdDeviation="1.88976" id="feGaussianBlur29" xml:space="preserve" />
+  </filter>
+  <linearGradient x1="52.59378" y1="140.7033" x2="91.55468" y2="140.7033" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.726265, 0, 0, 0.2683653, -408.3051, 6.525424)" id="SVGID_Fill2_" xml:space="preserve">
+    <stop offset="0.462963%" stop-color="#B24E04" stop-opacity="1" id="stop38" xml:space="preserve" />
+    <stop offset="66.0537%" stop-color="#D06515" stop-opacity="1" id="stop40" xml:space="preserve" />
+    <stop offset="99.53699%" stop-color="#EE7C27" stop-opacity="1" id="stop42" xml:space="preserve" />
+  </linearGradient>
+  <linearGradient x1="-0.0487919" y1="0.5" x2="1.04879" y2="0.5" gradientUnits="objectBoundingBox" id="SVGID_Fill3_" xml:space="preserve">
+    <stop offset="0%" stop-color="#C0C0C0" stop-opacity="0" id="stop49" xml:space="preserve" />
+    <stop offset="19.505%" stop-color="#989898" stop-opacity="0" id="stop51" xml:space="preserve" />
+    <stop offset="42.5926%" stop-color="#707070" stop-opacity="0" id="stop53" xml:space="preserve" />
+    <stop offset="78.7037%" stop-color="#6C6C6C" stop-opacity="0" id="stop55" xml:space="preserve" />
+    <stop offset="98.6111%" stop-color="#B9B9B9" stop-opacity="0.6" id="stop57" xml:space="preserve" />
+  </linearGradient>
+  <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur2_" xml:space="preserve">
+    <feGaussianBlur stdDeviation="1.88976" id="feGaussianBlur60" xml:space="preserve" />
+  </filter>
+  <linearGradient x1="84.65575" y1="171.6886" x2="141.103" y2="171.6886" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.724384, 0, 0, 0.5799171, -408.3051, 6.525424)" id="SVGID_Fill4_" xml:space="preserve">
+    <stop offset="0.462963%" stop-color="#B24E04" stop-opacity="1" id="stop67" xml:space="preserve" />
+    <stop offset="66.0537%" stop-color="#D06515" stop-opacity="1" id="stop69" xml:space="preserve" />
+    <stop offset="99.53699%" stop-color="#EE7C27" stop-opacity="1" id="stop71" xml:space="preserve" />
+  </linearGradient>
+  <g transform="matrix(0.2187756, 0, 0, 0.2878759, 88.78267, -8.96154)" id="g906" xml:space="preserve">
+    <g transform="translate(-408.3051, 6.525424)" id="g12" xml:space="preserve">
+      <path d="M28.8597 47.1849 L190.86 46.8827 L190.86 60.0918 L29.1611 60.3077 z" stroke="#000000" stroke-width="5" stroke-linejoin="bevel" id="path2" xml:space="preserve" connector-curvature="0" style="fill:#FFDE19;" />
+      <path d="M188.901 47.2759 L218.901 28.3107 L218.901 41.5605 L188.973 60.3988 z" stroke="#000000" stroke-width="5" stroke-linejoin="bevel" id="path4" xml:space="preserve" connector-curvature="0" style="fill:#FFDE19;" />
+      <path d="M68.1513 28.3077 L219.901 27.3077 L190.305 47.4303 L31.6513 46.808 z" stroke="#000000" stroke-width="5" stroke-linejoin="bevel" id="path6" xml:space="preserve" connector-curvature="0" style="fill:#FFDE19;" />
+      <path d="M186.901 61.308 L216.693 44.4452 L216.693 92.1118 L186.901 111.808 z" stroke="#000000" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" id="path8" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+      <rect x="39.2763" y="60.8085" width="146.875" height="51.25" stroke="#000000" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" id="rect10" xml:space="preserve" style="fill:#FFFFFF;" />
+    </g>
+    <path d="M-317.1997 144.9924 L-226.8661 94.49312 L-226.8661 142.1594 L-317.1997 194.9924 z" stroke="#000000" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" id="path14" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    <path d="M-397.1998 142.1594 L-317.8664 142.1594 L-317.8248 195.1184 L-380.0748 195.3684 L-390.8248 192.3684 L-397.0748 183.3684 z" stroke="#000000" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" id="path16" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    <path d="M-403.2831 129.2434 L-313.6997 128.9514 L-313.6997 141.7014 L-403.1164 141.9094 z" stroke="#000000" stroke-width="5" id="path34" xml:space="preserve" connector-curvature="0" style="fill:#FFDE19;" />
+    <path d="M-403.9497 129.4094 L-305.7351 76.68123 L-224.9501 76.20153 L-317.1713 129.4514 z" stroke="#000000" stroke-width="5" id="path36" xml:space="preserve" connector-curvature="0" style="fill:#FFDE19;" />
+    <path d="M-351.2788 47.74332 L-225.8621 47.62502 L-211.9451 37.70852 L-335.1954 38.95842 z" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" id="path45" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill2_);" />
+    <path d="M-312.6164 128.0764 L-222.2411 74.70122 L-222.2411 90.20122 L-312.6164 141.7424 z" stroke="#000000" stroke-width="5" stroke-linecap="square" stroke-linejoin="bevel" id="path47" xml:space="preserve" connector-curvature="0" style="fill:#FFDE19;" />
+    <path d="M-377.6581 141.7014 L-331.1581 141.9514 L-347.6581 159.9514 L-391.4081 159.9514 z" stroke="#000000" stroke-width="5" stroke-linejoin="bevel" id="path65" xml:space="preserve" connector-curvature="0" style="fill:#FFDE19;" />
+    <path d="M-355.4871 116.9164 L-318.4038 116.8334 L-262.0701 85.49992 L-300.7371 85.83343 z" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" id="path74" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill4_);" />
+  </g>
+</svg>

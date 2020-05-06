@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <linearGradient x1="229.0478" y1="125.9711" x2="432.4746" y2="125.9711" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.9957165, 1.004302)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#052F73" stop-opacity="1" id="stop2" xml:space="preserve" />
+    <stop offset="100%" stop-color="#3883FC" stop-opacity="1" id="stop4" xml:space="preserve" />
+  </linearGradient>
+  <linearGradient x1="193.5781" y1="127.1552" x2="325.2048" y2="127.1552" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.9955245, 1.004496)" id="SVGID_Fill2_" xml:space="preserve">
+    <stop offset="0%" stop-color="#B4CAEE" stop-opacity="1" id="stop9" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" id="stop11" xml:space="preserve" />
+  </linearGradient>
+  <linearGradient x1="170.8254" y1="126.3511" x2="258.5763" y2="126.3511" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.9955261, 1.004494)" id="SVGID_Fill3_" xml:space="preserve">
+    <stop offset="0%" stop-color="#052F73" stop-opacity="1" id="stop16" xml:space="preserve" />
+    <stop offset="100%" stop-color="#3883FC" stop-opacity="1" id="stop18" xml:space="preserve" />
+  </linearGradient>
+  <g transform="matrix(0.2553183, 0, 0, 0.2531361, -8.371581, -8.02502)" id="g839" xml:space="preserve">
+    <ellipse cx="126.789" cy="126.513" rx="90.0002" ry="90.8107" stroke="#1A5EC7" stroke-width="8" stroke-linecap="square" stroke-linejoin="bevel" id="ellipse7" xml:space="preserve" style="fill:url(#SVGID_Fill1_);" />
+    <ellipse cx="127.193" cy="127.727" rx="60.8108" ry="61.3588" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" id="ellipse14" xml:space="preserve" style="fill:url(#SVGID_Fill2_);" />
+    <ellipse cx="126.382" cy="126.919" rx="40.5405" ry="40.9057" stroke-width="0.2" stroke-linecap="square" stroke-linejoin="bevel" id="ellipse21" xml:space="preserve" style="fill:url(#SVGID_Fill3_);" />
+  </g>
+</svg>

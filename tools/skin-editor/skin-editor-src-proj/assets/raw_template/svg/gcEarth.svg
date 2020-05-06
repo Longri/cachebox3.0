@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <radialGradient cx="138.555" cy="89.7021" r="104.227" fx="138.555" fy="89.7021" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-90, 138.5554, 89.70215)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#FFFDFD" stop-opacity="1" id="stop8" xml:space="preserve" />
+    <stop offset="73.1481%" stop-color="#FFFFFF" stop-opacity="1" id="stop10" xml:space="preserve" />
+    <stop offset="80.5556%" stop-color="#FFB600" stop-opacity="1" id="stop12" xml:space="preserve" />
+    <stop offset="92.59261%" stop-color="#FFB600" stop-opacity="1" id="stop14" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FFE45C" stop-opacity="1" id="stop16" xml:space="preserve" />
+  </radialGradient>
+  <radialGradient cx="115.467" cy="108.387" r="70.3325" fx="115.467" fy="108.387" gradientUnits="userSpaceOnUse" id="SVGID_Fill2_" xml:space="preserve">
+    <stop offset="0%" stop-color="#FFFDFD" stop-opacity="1" id="stop21" xml:space="preserve" />
+    <stop offset="60.6481%" stop-color="#FFFFFF" stop-opacity="1" id="stop23" xml:space="preserve" />
+    <stop offset="69.90739%" stop-color="#FFB600" stop-opacity="1" id="stop25" xml:space="preserve" />
+    <stop offset="92.59261%" stop-color="#FFB600" stop-opacity="1" id="stop27" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FFE45C" stop-opacity="1" id="stop29" xml:space="preserve" />
+  </radialGradient>
+  <radialGradient cx="131.019" cy="91.4152" r="59.875" fx="131.019" fy="91.4152" gradientUnits="userSpaceOnUse" id="SVGID_Fill3_" xml:space="preserve">
+    <stop offset="0%" stop-color="#FFFDFD" stop-opacity="1" id="stop34" xml:space="preserve" />
+    <stop offset="60.6481%" stop-color="#FFFFFF" stop-opacity="1" id="stop36" xml:space="preserve" />
+    <stop offset="69.90739%" stop-color="#FFB600" stop-opacity="1" id="stop38" xml:space="preserve" />
+    <stop offset="92.59261%" stop-color="#FFB600" stop-opacity="1" id="stop40" xml:space="preserve" />
+    <stop offset="100%" stop-color="#FFE45C" stop-opacity="1" id="stop42" xml:space="preserve" />
+  </radialGradient>
+  <g transform="matrix(0.2229185, 0, 0, 0.2436548, -2.883786, -3.102218)" id="g875" xml:space="preserve">
+    <ellipse cx="111.103" cy="111.232" rx="95.6665" ry="96" stroke="#000000" stroke-width="5" stroke-linejoin="bevel" id="ellipse2" xml:space="preserve" style="fill:#A0D4E0;" />
+    <path d="M197.644 116.024 L192.394 119.024 L189.894 121.274 L189.144 130.274 L190.894 137.274 L189.644 141.524 L186.644 144.774 L184.644 149.524 L181.394 152.524 L178.644 154.274 L171.394 154.774 L168.644 151.774 L162.394 149.024 L153.644 148.274 L148.644 145.774 L142.394 145.524 L135.644 148.274 L131.644 151.024 L129.644 157.024 L130.644 162.274 L132.644 166.024 L131.144 169.774 L127.894 171.774 L126.144 176.524 L127.394 184.774 L129.644 188.274 L127.894 192.024 L125.394 195.274 L122.644 199.774 L123.394 204.274 L123.603 205.136 C168.123 198.343 202.561 160.758 204.667 114.708 L203.144 114.774 z" stroke-width="0.2" stroke-linejoin="bevel" id="path4" xml:space="preserve" connector-curvature="0" style="fill:#205910;" />
+    <path d="M75.1442 36.2739 L75.6443 28.2738 L73.0953 24.0043 C41.1177 38.7977 18.6613 70.7775 17.4845 108.144 L22.1442 108.774 L27.6442 108.024 L31.8942 104.524 L34.1442 101.024 L36.1442 96.2739 L39.1442 94.0239 L39.8942 87.5239 L41.8942 81.5239 L45.6442 78.0239 L49.1442 77.2739 L52.3942 78.7739 L55.6442 81.5239 L61.3942 82.0239 L67.6442 81.5239 L69.8942 77.0239 L74.8942 73.2739 L78.3942 68.0239 L80.8942 61.5239 L80.3942 53.5239 L78.8942 48.7739 L75.1442 44.2739 z" stroke-width="0.2" stroke-linejoin="bevel" id="path6" xml:space="preserve" connector-curvature="0" style="fill:#205910;" />
+    <path d="M132.858 106.273 L132.191 106.748 L126.762 108.542 L89.0631 133.149 L85.79569 116.445 L83.93579 94.9567 L85.14219 78.80849 L88.45969 59.5841 L95.39648 44.46109 L103.841 28.31289 L113.492 15.49669 L116.022 17.83739 L130.005 106.309 z" stroke="#000000" stroke-width="5" stroke-linejoin="bevel" id="path19" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill1_);" />
+    <path d="M115.019 98.0654 L205.915 110.275 C204.874 60.1968 165.62 19.5459 116.231 16.4989 z" stroke="#000000" stroke-width="5" stroke-linejoin="bevel" id="path32" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill2_);" />
+    <path d="M114.857 96.1383 L114.394 96.6906 L112.644 101.191 L88.6443 132.44 L104.936 135.149 L125.894 136.691 L141.644 135.691 L160.394 132.941 L175.144 127.191 L190.894 120.191 L203.394 112.191 L201.111 110.094 L114.822 98.50261 z" stroke="#000000" stroke-width="5" stroke-linejoin="bevel" id="path45" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill3_);" />
+    <g id="g51" xml:space="preserve">
+      <path d="M203.343 30.1893 L197.743 30.1893 L197.743 46.1493 L193.262 46.1493 L193.262 30.1893 L187.663 30.1893 L187.663 26.5493 L203.343 26.5493 z" stroke-width="0.2" stroke-linejoin="round" id="path47" xml:space="preserve" connector-curvature="0" style="fill:#000000;" />
+      <path d="M228.262 46.1493 L223.782 46.1493 L223.782 34.4199 C223.782 33.1539 223.839 31.7555 223.953 30.2242 L223.844 30.2242 C223.616 31.4288 223.411 32.295 223.227 32.8231 L218.633 46.1493 L215.024 46.1493 L210.347 32.9586 C210.219 32.6029 210.013 31.6914 209.73 30.2242 L209.607 30.2242 C209.724 32.1581 209.782 33.854 209.782 35.3124 L209.782 46.1493 L205.862 46.1493 L205.862 26.5493 L212.272 26.5493 L216.275 38.1693 C216.596 39.0967 216.829 40.0302 216.975 40.9692 L217.058 40.9692 C217.303 39.8843 217.563 38.9408 217.837 38.1387 L221.84 26.5493 L228.262 26.5493 z" stroke-width="0.2" stroke-linejoin="round" id="path49" xml:space="preserve" connector-curvature="0" style="fill:#000000;" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <radialGradient cx="128.228" cy="220.222" r="115.574" fx="128.228" fy="220.222" gradientUnits="userSpaceOnUse" gradientTransform="rotate(180, -17.69619, 226.2114)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#626CA8" stop-opacity="1" id="stop2" xml:space="preserve" />
+    <stop offset="100%" stop-color="#000000" stop-opacity="1" id="stop4" xml:space="preserve" />
+  </radialGradient>
+  <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur1_" xml:space="preserve">
+    <feGaussianBlur stdDeviation="7.937" id="feGaussianBlur7" xml:space="preserve" />
+  </filter>
+  <g transform="matrix(0.1896344, 0, 0, 0.1974211, 0.5183371, 1.021864)" id="g155" xml:space="preserve">
+    <radialGradient cx="148.324" cy="95.8514" r="153.928" fx="148.324" fy="95.8514" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-123.1746, 148.324, 95.85141)" id="SVGID_Fill2_" xml:space="preserve">
+      <stop offset="0%" stop-color="#969AD9" stop-opacity="1" id="stop12" xml:space="preserve" />
+      <stop offset="37.8049%" stop-color="#323CE7" stop-opacity="1" id="stop14" xml:space="preserve" />
+      <stop offset="74.0593%" stop-color="#131ECB" stop-opacity="1" id="stop16" xml:space="preserve" />
+      <stop offset="100%" stop-color="#0803BD" stop-opacity="1" id="stop18" xml:space="preserve" />
+    </radialGradient>
+    <path d="M15.1953 128.878 C15.1953 189.121 64.4434 237.959 125.196 237.959 L125.196 237.959 C185.947 237.959 235.195 189.121 235.195 128.878 L235.195 128.878 C235.195 68.63442 185.947 19.79792 125.196 19.79792 L125.196 19.79792 C64.44341 19.79792 15.1953 68.63441 15.1953 128.878 z" stroke-width="0.2" stroke-linejoin="round" id="path21" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill2_);" />
+    <path d="M102.096 15.5035 C102.096 15.5035 58.9224 25.9081 42.1055 61.8436 C48.0732 19.5316 102.096 15.5035 102.096 15.5035 z" stroke="#653D00" stroke-width="7.224" stroke-linecap="round" stroke-linejoin="round" id="path23" xml:space="preserve" connector-curvature="0" style="fill:#643D00;" />
+    <path d="M146.223 13.5033 C146.223 13.5033 185.076 23.2572 200.591 59.8436 C189.091 18.5081 146.223 13.5033 146.223 13.5033 z" stroke="#653D00" stroke-width="7.224" stroke-linecap="round" stroke-linejoin="round" id="path25" xml:space="preserve" connector-curvature="0" style="fill:#643D00;" />
+    <radialGradient cx="162.466" cy="76.0091" r="35.0062" fx="162.466" fy="76.0091" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-177.9289, 162.4661, 76.00912)" id="SVGID_Fill3_" xml:space="preserve">
+      <stop offset="0%" stop-color="#FFFFFB" stop-opacity="1" id="stop27" xml:space="preserve" />
+      <stop offset="75.53979%" stop-color="#FBFBFB" stop-opacity="1" id="stop29" xml:space="preserve" />
+      <stop offset="100%" stop-color="#B3B3B3" stop-opacity="1" id="stop31" xml:space="preserve" />
+    </radialGradient>
+    <path d="M136.811 85.2867 C136.811 90.1424 137.458 94.7892 138.629 99.05479 L138.629 99.05479 C156.192 99.75909 171.933 103.694 183.559 109.712 L183.559 109.712 C187.477 103.124 189.856 94.59849 189.856 85.28669 L189.856 85.28669 C189.856 64.41439 177.579 48.17289 160.089 48.17289 L160.089 48.17289 C149.043 48.17289 136.811 64.41439 136.811 85.28669 z" stroke-width="0.2" stroke-linejoin="round" id="path34" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill3_);" />
+    <radialGradient cx="154.697" cy="75.4996" r="45.2335" fx="154.697" fy="75.4996" gradientUnits="userSpaceOnUse" gradientTransform="rotate(-80.47527, 154.6965, 75.4996)" id="SVGID_Fill4_" xml:space="preserve">
+      <stop offset="0%" stop-color="#B88000" stop-opacity="1" id="stop36" xml:space="preserve" />
+      <stop offset="100%" stop-color="#4F2F00" stop-opacity="1" id="stop38" xml:space="preserve" />
+    </radialGradient>
+    <path d="M153.194 50.3592 C148.311 55.5702 145.083 64.8092 145.083 75.3287 L145.083 75.3287 C145.083 85.95419 148.4 95.2613 153.368 100.44 L153.368 100.44 C158.321 101.193 163.06 102.235 167.491 103.49 L167.491 103.49 C174.591 99.8031 179.746 88.5941 179.746 75.3287 L179.746 75.3287 C179.746 63.4854 175.64 53.2826 169.706 48.6046 L169.706 48.6046 C167.665 47.8875 165.517 47.5121 163.32 47.5121 L163.32 47.5121 C159.727 47.5121 156.319 48.5162 153.194 50.3592 z" stroke-width="0.2" stroke-linejoin="round" id="path41" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill4_);" />
+    <path d="M152.632 77.5921 C152.632 86.4642 156.712 93.6561 161.744 93.6561 C166.777 93.6561 170.857 86.4642 170.857 77.5921 C170.857 68.7206 166.777 61.5287 161.744 61.5287 C156.712 61.5287 152.632 68.7206 152.632 77.5921 z" stroke-width="0.2" stroke-linejoin="round" id="path43" xml:space="preserve" connector-curvature="0" style="fill:#000000;" />
+    <linearGradient x1="218.4491" y1="41.05557" x2="239.292" y2="41.05557" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.7682192, 1.301712)" id="SVGID_Fill5_" xml:space="preserve">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.388235" id="stop45" xml:space="preserve" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.388235" id="stop47" xml:space="preserve" />
+    </linearGradient>
+    <path d="M157.654 66.1229 C157.654 73.8763 161.362 80.1605 165.938 80.1605 C170.513 80.1605 174.223 73.8763 174.223 66.1229 C174.223 58.3702 170.513 52.0851 165.938 52.0851 C161.362 52.0851 157.654 58.3702 157.654 66.1229 z" stroke-width="0.2" stroke-linejoin="round" id="path50" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill5_);" />
+    <radialGradient cx="82.303" cy="78.6053" r="33.4808" fx="82.303" fy="78.6053" gradientUnits="userSpaceOnUse" gradientTransform="rotate(175.3948, 82.30298, 78.60532)" id="SVGID_Fill6_" xml:space="preserve">
+      <stop offset="0%" stop-color="#FFFFFB" stop-opacity="1" id="stop52" xml:space="preserve" />
+      <stop offset="75.53979%" stop-color="#FBFBFB" stop-opacity="1" id="stop54" xml:space="preserve" />
+      <stop offset="100%" stop-color="#B3B3B3" stop-opacity="1" id="stop56" xml:space="preserve" />
+    </radialGradient>
+    <path d="M55.7786 85.2867 C55.7786 94.5985 58.1589 103.124 62.0767 109.712 L62.0767 109.712 C73.7029 103.694 89.4441 99.75909 107.006 99.05479 L107.006 99.05479 C108.177 94.78919 108.824 90.1424 108.824 85.2867 L108.824 85.2867 C108.824 64.4144 99.0605 50.4051 90.1309 48.1729 L90.1309 48.1729 C88.3838 47.7367 86.6567 47.5287 84.9648 47.5287 L84.9648 47.5287 C68.8369 47.5267 55.7786 66.3954 55.7786 85.2867 z" stroke-width="0.2" stroke-linejoin="round" id="path59" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill6_);" />
+    <radialGradient cx="83.2217" cy="75.4996" r="17.7908" fx="83.2217" fy="75.4996" gradientUnits="userSpaceOnUse" gradientTransform="rotate(180, 83.22168, 75.4996)" id="SVGID_Fill7_" xml:space="preserve">
+      <stop offset="0%" stop-color="#B88000" stop-opacity="1" id="stop61" xml:space="preserve" />
+      <stop offset="100%" stop-color="#4F2F00" stop-opacity="1" id="stop63" xml:space="preserve" />
+    </radialGradient>
+    <path d="M75.9292 48.6046 C69.9946 53.2826 65.8901 63.4854 65.8901 75.3287 L65.8901 75.3287 C65.8901 88.5941 71.0442 99.8031 78.145 103.49 L78.145 103.49 C82.57619 102.235 87.314 101.193 92.269 100.44 L92.269 100.44 C97.2363 95.26129 100.554 85.95419 100.554 75.3287 L100.554 75.3287 C100.554 64.8092 97.3247 55.5702 92.4414 50.3592 L92.4414 50.3592 C89.3162 48.5162 85.9084 47.5121 82.3157 47.5121 L82.3157 47.5121 C80.1187 47.5121 77.97089 47.8875 75.9292 48.6046 z" stroke-width="0.2" stroke-linejoin="round" id="path66" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill7_);" />
+    <path d="M82.3154 47.5116 C80.1182 47.5116 77.9707 47.8873 75.9302 48.6043 C69.9946 53.2823 65.8901 63.4852 65.8901 75.3285 C65.8901 88.5938 71.0439 99.8028 78.1448 103.491 C82.57619 102.235 87.314 101.194 92.269 100.441 C97.2361 95.26109 100.553 85.9539 100.553 75.32849 C100.553 64.80989 97.3252 55.56969 92.44119 50.35969 C89.3159 48.51599 85.9082 47.51159 82.31539 47.51159 z" stroke="#5C3900" stroke-width="1.33333" stroke-linejoin="round" id="path68" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+    <path d="M92.2666 77.5921 C92.2666 86.4642 88.187 93.6561 83.1545 93.6561 C78.1221 93.6561 74.0415 86.4642 74.0415 77.5921 C74.0415 68.7206 78.1221 61.5287 83.1545 61.5287 C88.187 61.5287 92.2666 68.7206 92.2666 77.5921 z" stroke-width="0.2" stroke-linejoin="round" id="path70" xml:space="preserve" connector-curvature="0" style="fill:#000000;" />
+    <linearGradient x1="116.6339" y1="39.97618" x2="139.448" y2="39.97618" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.7682202, 1.30171)" id="SVGID_Fill8_" xml:space="preserve">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.388235" id="stop72" xml:space="preserve" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.388235" id="stop74" xml:space="preserve" />
+    </linearGradient>
+    <path d="M95.8066 65.6624 C95.8066 73.4159 92.0979 79.7003 87.522 79.7003 C82.9463 79.7003 79.2375 73.4159 79.2375 65.6624 C79.2375 57.91 82.9463 51.6248 87.522 51.6248 C92.0979 51.6248 95.8066 57.91 95.8066 65.6624 z" stroke-width="0.2" stroke-linejoin="round" id="path77" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill8_);" />
+    <path d="M130.156 135.56 C132.633 131.711 136.391 127.092 140.235 123.902 C144.079 120.713 148.008 118.953 152.023 118.843 C156.037 118.733 160.137 120.273 163.042 122.913 C165.946 125.552 167.654 129.291 167.91 131.491 C168.167 133.691 166.971 134.35 165.775 133.251 C164.579 132.151 163.383 129.291 160.906 127.092 C158.429 124.892 154.671 123.352 150.144 125.222 C145.616 127.092 140.321 132.371 137.075 136.55 C133.829 140.729 132.633 143.809 131.01 145.128 C129.387 146.448 127.337 146.008 126.91 144.248 C126.483 142.489 127.679 139.41 130.156 135.56 z" stroke="#D98004" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" id="path79" xml:space="preserve" connector-curvature="0" style="fill:#FE0C0C;" />
+    <linearGradient x1="6.324015" y1="170.0551" x2="78.9519" y2="170.0551" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.9317886, 1.073205)" id="SVGID_Fill9_" xml:space="preserve">
+      <stop offset="50.6977%" stop-color="#E7E8EE" stop-opacity="1" id="stop81" xml:space="preserve" />
+      <stop offset="100%" stop-color="#4D5793" stop-opacity="1" id="stop83" xml:space="preserve" />
+    </linearGradient>
+    <path d="M55.6875 146.954 C52.1321 146.399 47.6877 145.954 43.7988 146.732 C39.9099 147.51 36.5767 149.51 32.6594 151.981 C28.7422 154.452 24.2412 157.395 20.4907 160.324 C16.7402 163.254 13.7402 166.171 11.907 168.212 C10.0737 170.254 9.40698 171.421 9.09448 172.296 C8.78198 173.171 8.82373 173.754 9.96948 174.171 C11.1152 174.587 13.3652 174.837 15.6777 174.337 C17.9902 173.837 20.3652 172.587 23.0811 171.324 C25.7969 170.061 28.8535 168.786 30.52 168.925 C32.1868 169.063 32.4634 170.617 32.0464 172.616 C31.6292 174.615 30.5181 177.059 28.5391 180.441 C26.5598 183.824 23.7124 188.143 21.1638 192.566 C18.6152 196.99 16.3652 201.518 16.3445 204.469 C16.3237 207.421 18.532 208.796 21.3027 206.705 C24.0737 204.615 27.407 199.059 29.9556 194.622 C32.5042 190.184 34.2681 186.865 35.6501 185.428 C37.03201 183.99 38.03201 184.434 37.5876 186.212 C37.1431 187.99 35.2542 191.101 33.4763 194.768 C31.6987 198.434 30.032 202.657 29.0388 205.983 C28.0459 209.309 27.7266 211.74 28.1431 213.393 C28.5598 215.046 29.7124 215.921 31.0459 215.143 C32.3792 214.365 33.8931 211.934 36.2056 207.497 C38.5181 203.059 41.6292 196.615 43.1846 193.393 C44.7402 190.171 44.7402 190.171 45.0112 190.4 C45.282 190.629 45.8237 191.087 45.4277 193.483 C45.032 195.879 43.6987 200.212 43.0388 204.428 C42.3792 208.643 42.3931 212.74 42.8445 215.289 C43.2959 217.837 44.1848 218.837 45.3516 218.615 C46.5181 218.393 47.9624 216.949 49.0181 213.893 C50.0737 210.837 50.7402 206.171 51.6362 202.872 C52.532 199.574 53.657 197.643 55.5527 195.233 C57.4487 192.824 60.1152 189.934 62.5254 187.345 C64.9358 184.756 67.0894 182.466 68.6382 179.765 C70.1868 177.063 71.1301 173.951 71.4634 171.284 C71.79691 168.617 71.52 166.397 70.2705 162.731 C69.021 159.065 66.7988 153.954 64.3542 151.066 C61.9099 148.177 59.2432 147.51 55.6875 146.954 z" stroke="#A9ADC9" stroke-linecap="round" stroke-linejoin="round" id="path86" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill9_);" />
+    <linearGradient x1="271.4313" y1="174.3056" x2="344.0595" y2="174.3056" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.9317873, 1.073206)" id="SVGID_Fill10_" xml:space="preserve">
+      <stop offset="50.6977%" stop-color="#E7E8EE" stop-opacity="1" id="stop88" xml:space="preserve" />
+      <stop offset="100%" stop-color="#4D5793" stop-opacity="1" id="stop90" xml:space="preserve" />
+    </linearGradient>
+    <path d="M203.121 151.516 C206.677 150.96 211.121 150.516 215.01 151.294 C218.899 152.071 222.232 154.071 226.149 156.543 C230.066 159.014 234.567 161.956 238.318 164.886 C242.068 167.816 245.068 170.732 246.902 172.774 C248.735 174.816 249.402 175.982 249.714 176.857 C250.027 177.732 249.985 178.316 248.839 178.732 C247.693 179.149 245.443 179.399 243.131 178.899 C240.818 178.399 238.443 177.149 235.728 175.886 C233.012 174.623 229.955 173.347 228.289 173.486 C226.622 173.625 226.345 175.179 226.762 177.178 C227.18 179.177 228.291 181.621 230.27 185.003 C232.249 188.385 235.096 192.704 237.645 197.128 C240.193 201.552 242.443 206.079 242.464 209.031 C242.485 211.982 240.277 213.357 237.506 211.267 C234.735 209.177 231.402 203.621 228.853 199.183 C226.305 194.746 224.541 191.427 223.159 189.989 C221.777 188.552 220.777 188.996 221.221 190.774 C221.666 192.552 223.555 195.663 225.333 199.329 C227.11 202.996 228.777 207.218 229.77 210.545 C230.763 213.871 231.082 216.302 230.666 217.954 C230.249 219.607 229.096 220.482 227.763 219.704 C226.43 218.927 224.916 216.496 222.603 212.058 C220.291 207.621 217.18 201.177 215.624 197.954 C214.068 194.732 214.068 194.732 213.798 194.961 C213.527 195.191 212.985 195.649 213.381 198.045 C213.777 200.441 215.11 204.774 215.77 208.989 C216.43 213.204 216.416 217.302 215.964 219.85 C215.513 222.399 214.624 223.399 213.457 223.177 C212.291 222.954 210.846 221.51 209.625 218.556 C208.403 215.602 207.404 211.139 205.446 207.116 C203.488 203.093 200.571 199.51 198.759 197.072 C196.946 194.635 196.238 193.343 194.89 191.478 C193.542 189.614 191.553 187.176 190.088 184.4 C188.622 181.625 187.679 178.512 187.345 175.845 C187.012 173.179 187.289 170.958 188.538 167.293 C189.788 163.627 192.01 158.516 194.455 155.627 C196.899 152.738 199.565 152.071 203.121 151.516 z" stroke="#A9ADC9" stroke-linecap="round" stroke-linejoin="round" id="path93" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill10_);" />
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur2_" xml:space="preserve" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="2.83465" id="feGaussianBlur95" xml:space="preserve" />
+    </filter>
+    <path d="M190.821 166.468 L188.571 173.218 L191.571 183.218 L198.571 192.218 L206.571 200.718 L209.571 208.718 L211.321 218.218" filter="url(#Filter_GaussianBlur2_)" stroke="#16171F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" id="path98" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur3_" xml:space="preserve" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="2.4567" id="feGaussianBlur100" xml:space="preserve" />
+    </filter>
+    <path d="M215.571 192.218 L217.571 197.218 L223.321 207.968 L227.071 216.468" filter="url(#Filter_GaussianBlur3_)" stroke="#16171F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" id="path103" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur4_" xml:space="preserve" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="2.4567" id="feGaussianBlur105" xml:space="preserve" />
+    </filter>
+    <path d="M224.071 187.343 L228.821 194.093 L234.571 203.343 L238.321 209.843" filter="url(#Filter_GaussianBlur4_)" stroke="#16171F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" id="path108" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur5_" xml:space="preserve" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="2.83465" id="feGaussianBlur110" xml:space="preserve" />
+    </filter>
+    <path d="M229.071 170.343 L235.571 173.093 L243.071 176.593 L246.071 176.593" filter="url(#Filter_GaussianBlur5_)" stroke="#16171F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" id="path113" xml:space="preserve" connector-curvature="0" style="fill:none;" />
+    <linearGradient x1="12.5618" y1="2.518654" x2="25.56803" y2="2.518654" gradientUnits="userSpaceOnUse" gradientTransform="scale(1.199419, 0.8337372)" id="SVGID_Fill11_" xml:space="preserve">
+      <stop offset="50.6977%" stop-color="#E7E8EE" stop-opacity="1" id="stop115" xml:space="preserve" />
+      <stop offset="100%" stop-color="#4D5793" stop-opacity="1" id="stop117" xml:space="preserve" />
+    </linearGradient>
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur6_" xml:space="preserve" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="2.64567" id="feGaussianBlur120" xml:space="preserve" />
+    </filter>
+    <path d="M40.5767 151.011 L28.5767 157.677 L19.5767 164.011 L13.2432 170.011" filter="url(#Filter_GaussianBlur6_)" stroke="#040618" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" id="path123" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill11_);" />
+    <linearGradient x1="8.013001" y1="3.411701" x2="24.85344" y2="3.411701" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.7363166, 1.358112)" id="SVGID_Fill12_" xml:space="preserve">
+      <stop offset="50.6977%" stop-color="#E7E8EE" stop-opacity="1" id="stop125" xml:space="preserve" />
+      <stop offset="100%" stop-color="#4D5793" stop-opacity="1" id="stop127" xml:space="preserve" />
+    </linearGradient>
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur7_" xml:space="preserve" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="2.64567" id="feGaussianBlur130" xml:space="preserve" />
+    </filter>
+    <path d="M33.2432 176.344 L25.9099 188.677 L20.2432 198.344 L18.2432 204.011" filter="url(#Filter_GaussianBlur7_)" stroke="#040618" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" id="path133" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill12_);" />
+    <linearGradient x1="5.957531" y1="2.247655" x2="21.23267" y2="2.247655" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.6546494, 1.527535)" id="SVGID_Fill13_" xml:space="preserve">
+      <stop offset="50.6977%" stop-color="#E7E8EE" stop-opacity="1" id="stop135" xml:space="preserve" />
+      <stop offset="100%" stop-color="#4D5793" stop-opacity="1" id="stop137" xml:space="preserve" />
+    </linearGradient>
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur8_" xml:space="preserve" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="2.83465" id="feGaussianBlur140" xml:space="preserve" />
+    </filter>
+    <path d="M40.2432 185.677 L34.9099 195.677 L31.2432 205.011 L29.2432 211.344" filter="url(#Filter_GaussianBlur8_)" stroke="#040618" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" id="path143" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill13_);" />
+    <linearGradient x1="-2.490208" y1="1.617426" x2="15.02717" y2="1.617426" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.388186, 2.576085)" id="SVGID_Fill14_" xml:space="preserve">
+      <stop offset="50.6977%" stop-color="#E7E8EE" stop-opacity="1" id="stop145" xml:space="preserve" />
+      <stop offset="100%" stop-color="#4D5793" stop-opacity="1" id="stop147" xml:space="preserve" />
+    </linearGradient>
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur9_" xml:space="preserve" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="2.83465" id="feGaussianBlur150" xml:space="preserve" />
+    </filter>
+    <path d="M47.9099 190.344 L45.2432 201.344 L44.5767 207.344 L44.2432 214.677" filter="url(#Filter_GaussianBlur9_)" stroke="#040618" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" id="path153" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill14_);" />
+  </g>
+</svg>

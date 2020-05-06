@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <linearGradient x1="109.9284" y1="201.6293" x2="289.3322" y2="201.6293" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.2664203, 0, 0, 0.2662363, -5.820587, -7.20299)" id="SVGID_Fill1_" xml:space="preserve">
+    <stop offset="0%" stop-color="#07620C" stop-opacity="1" id="stop2" xml:space="preserve" />
+    <stop offset="100%" stop-color="#389D3E" stop-opacity="1" id="stop4" xml:space="preserve" />
+  </linearGradient>
+  <path d="M22.37697 9.05406 L22.30907 6.23535 L23.35732 3.77723 L26.1642 1.58121 L29.95144 0.5324496 L32.6566 0.9913096 L34.95599 2.04013 L36.98486 3.351099 L39.01374 5.252079 L39.75766 7.74303 L39.08136 9.971829 L37.45799 11.21725 L35.15887 11.67616 L34.14417 12.52832 L33.94155 14.88817 L36.17331 16.98581 L47.46738 21.77092 L44.90856 26.82938 L42.85723 26.021 L41.14405 25.10328 L39.47578 23.87957 L38.4838 22.65612 L36.50172 21.85351 L34.78664 21.65083 L33.11864 22.43744 L31.54045 24.09799 L30.12051 26.21765 L29.42149 28.07485 L29.48912 30.06341 L30.05288 31.78951 L30.95451 33.23163 L32.71287 34.62998 L34.47123 34.71728 L36.45493 34.58618 L40.12935 34.52058 L39.68976 37.40639 L34.68548 47.46721 L21.64577 41.36596 L22.45732 36.58072 L25.28503 35.20913 L26.09631 33.17678 L25.89369 30.35807 L24.87898 28.26043 L22.57986 26.55636 L19.87456 25.63838 L16.96651 25.76949 L15.0729 26.29389 L12.70588 27.67047 L11.48855 28.85039 L11.21804 30.42362 L11.55618 32.32461 L12.57062 34.29115 L11.89433 35.73327 L8.580497 36.19213 L0.5326306 32.52126 L11.1504 7.34974 L21.76831 11.9383 L22.78248 11.6761 z" stroke="#00C800" stroke-width="1.065313" stroke-linejoin="round" id="path7" xml:space="preserve" style="fill:url(#SVGID_Fill1_);" />
+</svg>

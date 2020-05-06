@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <g transform="matrix(0.2500027, 0, 0, 0.2546406, -7.957841, -7.7998)" id="g27" xml:space="preserve">
+    <ellipse cx="123.33" cy="197.381" rx="19" ry="19.2499" stroke="#000000" stroke-width="5" stroke-linejoin="round" id="ellipse2" xml:space="preserve" style="fill:#D66919;" />
+    <path d="M96.83 115.631 L79.83 108.131 L70.83 97.1309 L66.83 87.1309 L66.33 74.1309 L70.33 63.6309 L76.33 54.1309 L82.83 47.6309 L93.83 40.1309 L102.33 36.6309 L113.33 34.6309 L124.83 34.1309 L136.83 33.1309 L148.33 34.6309 L155.83 38.1309 L165.83 43.1309 L174.83 49.6309 L181.33 56.6309 L188.33 68.6309 L189.33 79.6309 L187.83 93.6309 L183.33 101.131 L175.83 109.131 L166.83 119.131 L154.83 127.631 L142.83 137.631 L136.33 149.131 L132.83 157.131 L133.102 160.664 L132.517 163.818 L129.642 165.318 L118.83 165.131 L114.83 162.131 L114.83 153.131 L121.33 142.631 L129.83 130.131 L141.33 117.131 L145.83 110.131 L149.83 98.63091 L149.83 88.13091 L147.33 76.13091 L141.33 70.13091 L131.33 65.63091 L122.33 64.63091 L114.83 65.13091 L105.83 68.13091 L99.83 73.63091 L99.83 80.13091 L101.83 86.63091 L109.33 91.63091 L114.33 94.63091 L115.83 99.63091 L114.83 105.131 L111.83 109.131 L108.33 112.631 L101.83 114.131 z" stroke="#000000" stroke-width="5" stroke-linejoin="round" id="path4" xml:space="preserve" connector-curvature="0" style="fill:#D66919;" />
+    <linearGradient x1="228.6479" y1="55.81557" x2="282.6383" y2="55.81557" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.8141804, 1.228229)" id="SVGID_Fill1_" xml:space="preserve">
+      <stop offset="0.925926%" stop-color="#FFFFFF" stop-opacity="1" id="stop6" xml:space="preserve" />
+      <stop offset="100%" stop-color="#FCFCFF" stop-opacity="0" id="stop8" xml:space="preserve" />
+    </linearGradient>
+    <path d="M142.163 39.6306 L153.497 47.2974 L162.83 54.6309 L171.163 64.9641 L174.83 74.2975 L176.163 86.6309 L174.163 98.6309 L170.83 104.298 L175.461 105.844 L184.83 93.29749 L186.497 83.63089 L186.163 70.63089 L178.961 58.84379 L174.497 53.63089 L172.83 51.29749 L168.163 48.29749 L161.497 43.29749 L154.83 40.29749 L148.83 38.96409 z" stroke-width="0.2" stroke-linejoin="round" id="path11" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill1_);" />
+    <linearGradient x1="136.1074" y1="79.59934" x2="159.1973" y2="79.59934" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.8288189, 1.206536)" id="SVGID_Fill2_" xml:space="preserve">
+      <stop offset="0.925926%" stop-color="#FFFFFF" stop-opacity="1" id="stop13" xml:space="preserve" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" id="stop15" xml:space="preserve" />
+    </linearGradient>
+    <path d="M98.9966 85.7141 L96.0383 83.6725 L93.6633 89.3806 L97.6633 93.7141 L101.663 98.3809 L102.663 103.714 L102.33 109.714 L101.788 111.756 L106.205 111.006 L109.872 108.922 L112.705 106.256 L112.622 102.756 L112.955 99.3391 L111.955 96.5059 L107.288 93.5059 L103.872 91.3391 L100.872 89.17249" stroke-width="0.2" stroke-linejoin="round" id="path18" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill2_);" />
+    <linearGradient x1="200.6483" y1="136.2746" x2="222.4708" y2="136.2746" gradientUnits="userSpaceOnUse" gradientTransform="scale(0.6983948, 1.431855)" id="SVGID_Fill3_" xml:space="preserve">
+      <stop offset="0.925926%" stop-color="#FFFFFF" stop-opacity="1" id="stop20" xml:space="preserve" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" id="stop22" xml:space="preserve" />
+    </linearGradient>
+    <path d="M124.83 180.964 L128.497 185.297 L130.83 189.964 L130.497 196.631 L129.163 203.298 L126.83 208.964 L127.497 211.964 L130.856 211.865 L134.69 209.615 L137.773 205.448 L139.44 200.531 C139.44 200.531 140.249 196.819 139.83 195.298 C139.465 193.972 138.83 189.964 138.83 189.964 L137.497 185.964 L134.163 182.964 L131.163 180.964 z" stroke-width="0.2" stroke-linejoin="round" id="path25" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill3_);" />
+  </g>
+</svg>

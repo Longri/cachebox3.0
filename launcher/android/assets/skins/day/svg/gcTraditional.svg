@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <defs id="def1" xml:space="preserve">
+    <linearGradient x1="-15.7752" y1="49.74831" x2="115.2713" y2="49.74819" gradientUnits="userSpaceOnUse" gradientTransform="scale(1.232255, 0.8115205)" id="SVGID_Fill1_" xml:space="preserve">
+      <stop offset="0.925926%" stop-color="#C0C0C0" stop-opacity="1" id="stop6" xml:space="preserve" />
+      <stop offset="19.7949%" stop-color="#8B8B8B" stop-opacity="0.501961" id="stop8" xml:space="preserve" />
+      <stop offset="42.1296%" stop-color="#575757" stop-opacity="0" id="stop10" xml:space="preserve" />
+      <stop offset="61.1111%" stop-color="#626262" stop-opacity="0" id="stop12" xml:space="preserve" />
+      <stop offset="100%" stop-color="#C0C0C0" stop-opacity="0.4" id="stop14" xml:space="preserve" />
+    </linearGradient>
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur1_" xml:space="preserve">
+      <feGaussianBlur stdDeviation="1.88976" id="feGaussianBlur17" xml:space="preserve" />
+    </filter>
+    <linearGradient x1="119.3891" y1="136.4298" x2="236.2815" y2="136.4298" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.3865903, 0, 0, 0.1506242, -116.7106, -21.57602)" id="SVGID_Fill2_" xml:space="preserve">
+      <stop offset="0%" stop-color="#8FC072" stop-opacity="1" id="stop24" xml:space="preserve" />
+      <stop offset="66.2037%" stop-color="#87B76B" stop-opacity="1" id="stop26" xml:space="preserve" />
+      <stop offset="100%" stop-color="#80AF64" stop-opacity="1" id="stop28" xml:space="preserve" />
+    </linearGradient>
+    <linearGradient x1="90.818" y1="138.7088" x2="147.2656" y2="138.7088" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.3696679, 0, 0, 0.1575194, -116.7106, -21.57602)" id="SVGID_Fill3_" xml:space="preserve">
+      <stop offset="0%" stop-color="#316013" stop-opacity="1" id="stop33" xml:space="preserve" />
+      <stop offset="66.2037%" stop-color="#447327" stop-opacity="1" id="stop35" xml:space="preserve" />
+      <stop offset="100%" stop-color="#58873B" stop-opacity="1" id="stop37" xml:space="preserve" />
+    </linearGradient>
+    <linearGradient x1="-15.77522" y1="49.74829" x2="115.2716" y2="49.74829" gradientUnits="userSpaceOnUse" gradientTransform="scale(1.232254, 0.8115209)" id="SVGID_Fill4_" xml:space="preserve">
+      <stop offset="0%" stop-color="#C0C0C0" stop-opacity="0" id="stop44" xml:space="preserve" />
+      <stop offset="19.505%" stop-color="#989898" stop-opacity="0" id="stop46" xml:space="preserve" />
+      <stop offset="42.5926%" stop-color="#707070" stop-opacity="0" id="stop48" xml:space="preserve" />
+      <stop offset="78.7037%" stop-color="#6C6C6C" stop-opacity="0" id="stop50" xml:space="preserve" />
+      <stop offset="98.6111%" stop-color="#B9B9B9" stop-opacity="0.6" id="stop52" xml:space="preserve" />
+    </linearGradient>
+    <filter x="none" y="none" width="none" height="none" color-interpolation-filters="auto" id="Filter_GaussianBlur2_" xml:space="preserve">
+      <feGaussianBlur stdDeviation="1.88976" id="feGaussianBlur55" xml:space="preserve" />
+    </filter>
+  </defs>
+  <g transform="matrix(1.137526, 0, 0, 1.41752, 131.0184, 12.95775)" id="g920" xml:space="preserve">
+    <path d="M-94.62405 10.43439 L-75.25842 -3.282422 L-75.25842 9.664886 L-94.62405 24.0155 z" stroke="#000000" stroke-width="1.206543" stroke-linecap="square" stroke-linejoin="bevel" id="path2" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    <path d="M-111.7742 9.664886 L-94.76684 9.664886 L-94.75804 24.04946 L-108.103 24.11736 L-110.4076 23.3025 L-111.7474 20.8579 z" stroke="#000000" stroke-width="1.206543" stroke-linecap="square" stroke-linejoin="bevel" id="path4" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    <path d="M-113.0784 6.156342 L-93.87373 6.077302 L-93.87373 9.540485 L-113.0426 9.596986 z" stroke="#000000" stroke-width="1.206543" id="path22" xml:space="preserve" connector-curvature="0" style="fill:#80AF64;" />
+    <path d="M-113.2213 6.201703 L-92.16621 -8.120502 L-74.84767 -8.250799 L-94.61784 6.213112 z" stroke="#000000" stroke-width="1.206543" id="path31" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill2_);" />
+    <path d="M-103.1098 3.213913 L-95.16 3.191263 L-83.08322 -5.319612 L-91.37258 -5.229022 z" stroke-width="0.04826173" stroke-linecap="square" stroke-linejoin="bevel" id="path40" xml:space="preserve" connector-curvature="0" style="fill:url(#SVGID_Fill3_);" />
+    <path d="M-93.64135 5.83963 L-74.26692 -8.658287 L-74.26692 -4.448143 L-93.64135 9.551619 z" stroke="#000000" stroke-width="1.206543" stroke-linecap="square" stroke-linejoin="bevel" id="path42" xml:space="preserve" connector-curvature="0" style="fill:#80AF64;" />
+    <path d="M-107.5849 9.540483 L-97.61635 9.608394 L-101.1536 14.49759 L-110.5326 14.49759 z" stroke="#000000" stroke-width="1.206543" stroke-linejoin="bevel" id="path60" xml:space="preserve" connector-curvature="0" style="fill:#80AF64;" />
+  </g>
+</svg>
