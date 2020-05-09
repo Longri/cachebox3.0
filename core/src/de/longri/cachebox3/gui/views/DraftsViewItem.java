@@ -190,8 +190,8 @@ public class DraftsViewItem extends ListViewItem {
             cm.addMenuItem("BrowseLog", null, () -> PlatformConnector.callUrl("https://coord.info/" + entry.GcId));
         }
         cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, () -> logOnline(false));
-        cm.addMenuItem("directLog", CB.getSkin().menuIcon.logViewIcon, () -> logOnline(true));
-        cm.addMenuItem("delete", CB.getSkin().menuIcon.deleteAllDrafts, this::deleteDraft);
+        cm.addMenuItem("directLog", CB.getSkin().menuIcon.me2Logbook, () -> logOnline(true));
+        cm.addMenuItem("delete", CB.getSkin().menuIcon.delete, this::deleteDraft);
         cm.show();
         return true;
     }

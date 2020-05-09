@@ -40,7 +40,7 @@ public class Action_HintDialog extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return hasHint() ? CB.getSkin().menuIcon.hintIconOn : CB.getSkin().menuIcon.hintIconOff;
+        return hasHint() ? CB.getSkin().menuIcon.me2Hint : CB.getSkin().menuIcon.me2HintNo;
     }
 
     public boolean hasHint() {

@@ -38,6 +38,6 @@ public class Action_RecVideo extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.videoIcon;
+        return CB.getSkin().menuIcon.me4RecordVideo;
     }
 }

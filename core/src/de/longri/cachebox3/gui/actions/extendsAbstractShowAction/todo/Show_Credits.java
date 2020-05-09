@@ -44,7 +44,7 @@ public class Show_Credits extends AbstractShowAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.creditsIcon;
+        return CB.getSkin().menuIcon.me5Credits;
     }
 
     @Override

@@ -91,7 +91,7 @@ public class CacheItem extends VisTable implements Disposable {
         if (this.style == null) return;
         if (this.type != null) {
             VisTable iconTable = new VisTable();
-            iconTable.add(type.getCacheWidget(style.typeStyle, leftInfoIcon, rightInfoIcon, null, rightTopIcon));
+            iconTable.add(type.getCacheWidget(style.cacheTypeStyle, leftInfoIcon, rightInfoIcon, null, rightTopIcon));
             iconTable.pack();
             iconTable.layout();
             this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGIN);

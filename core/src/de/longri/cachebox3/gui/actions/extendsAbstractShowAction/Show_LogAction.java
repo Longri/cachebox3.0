@@ -49,6 +49,6 @@ public class Show_LogAction extends AbstractShowAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.logViewIcon;
+        return CB.getSkin().menuIcon.me2Logbook;
     }
 }

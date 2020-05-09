@@ -50,7 +50,7 @@ public class MapBubble extends Catch_Table {
     private MapBubble(AbstractCache cache, AbstractWaypoint waypoint) {
         this.cache = cache;
         this.waypoint = waypoint;
-        style = VisUI.getSkin().get("bubble", MapBubbleStyle.class);
+        style = VisUI.getSkin().get(MapBubbleStyle.class);
 
         boolean isSelected = false;
 

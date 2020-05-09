@@ -59,6 +59,6 @@ public class Show_PlatformTestAction extends AbstractShowAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.cb;
+        return CB.getSkin().menuIcon.me5CacheBox;
     }
 }

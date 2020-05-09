@@ -422,7 +422,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             cacheContextMenu.addMenuItem("Open_Cache_Link", CB.getSkin().menuIcon.gc_logo, () -> PlatformConnector.callUrl(geoCache.getUrl().toString()));
             // CB.getSkin()."big" + geoCache.getType().name()),
             // getType -> getGeoCacheType
-            cacheContextMenu.addCheckableMenuItem("Favorite", "", CB.getSkin().menuIcon.favorit, geoCache.isFavorite(), this::toggleAsFavorite);
+            cacheContextMenu.addCheckableMenuItem("Favorite", "", CB.getSkin().menuIcon.favorite, geoCache.isFavorite(), this::toggleAsFavorite);
             cacheContextMenu.addMenuItem("MI_EDIT_CACHE", CB.getSkin().menuIcon.reloadCacheIcon,
                     () -> EditCache.getInstance(Database.Data, "MI_EDIT_CACHE", CB.getSkin().menuIcon.reloadCacheIcon).edit(geoCache));
             if (selectedCacheIsGC) {

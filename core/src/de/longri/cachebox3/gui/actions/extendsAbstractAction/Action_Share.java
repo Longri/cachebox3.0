@@ -20,6 +20,6 @@ public class Action_Share extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.shareInfos;
+        return CB.getSkin().menuIcon.me1ShareInfos;
     }
 }

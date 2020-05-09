@@ -329,7 +329,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         cm.addMenuItem("MI_RESET_FILTER", CB.getSkin().menuIcon.resetFilterIcon, () -> CB.viewmanager.setNewFilter(FilterInstances.ALL));
         cm.addMenuItem("Search", CB.getSkin().menuIcon.searchIcon, () -> new Action_SearchDialog().execute());
         cm.addMoreMenuItem("importExport", "", CB.getSkin().menuIcon.importIcon, new ShowImportMenu());
-        cm.addCheckableMenuItem("setOrResetFavorites", "", CB.getSkin().menuIcon.favorit, true, setOrResetFavorites(cm));
+        cm.addCheckableMenuItem("setOrResetFavorites", "", CB.getSkin().menuIcon.favorite, true, setOrResetFavorites(cm));
         cm.addMenuItem("manage", getSelectDBTitleExtension(), CB.getSkin().menuIcon.manageDB, this::selectDbDialog);
         cm.addMenuItem("AutoResort", CB.getAutoResort() ? CB.getSkin().menuIcon.autoSortOnIcon : CB.getSkin().menuIcon.autoSortOffIcon, this::setAutoResort);
         cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().menuIcon.addCache, this::createCache);

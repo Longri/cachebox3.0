@@ -49,6 +49,6 @@ public class Show_NoteAction extends AbstractShowAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.noteIcon;
+        return CB.getSkin().menuIcon.me2Note;
     }
 }

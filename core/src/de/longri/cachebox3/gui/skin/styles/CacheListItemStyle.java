@@ -13,7 +13,7 @@ public class CacheListItemStyle {
     public Drawable arrow, trackable, favoritPoints;
     public BitmapFont distanceFont;
     public Color distanceFontColor;
-    public CacheTypeStyle typeStyle;
+    public CacheTypeStyle cacheTypeStyle;
     public LogTypesStyle logTypesStyle;
     public StarsStyle starStyle;
     public CacheSizeStyle cacheSizeStyle;

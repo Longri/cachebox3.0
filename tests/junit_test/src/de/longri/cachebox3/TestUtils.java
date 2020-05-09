@@ -189,7 +189,7 @@ public class TestUtils {
 
         //de.longri.cachebox3.gui.skin.styles.MapBubbleStyle registered with name: bubble
         MapBubbleStyle mapBubbleStyle = new MapBubbleStyle();
-        VisUI.getSkin().add("bubble", mapBubbleStyle, MapBubbleStyle.class);
+        VisUI.getSkin().add("default", mapBubbleStyle, MapBubbleStyle.class);
 
         //de.longri.cachebox3.gui.skin.styles.FloatControlStyle registered with name: default
         FloatControlStyle floatControlStyle = new FloatControlStyle();

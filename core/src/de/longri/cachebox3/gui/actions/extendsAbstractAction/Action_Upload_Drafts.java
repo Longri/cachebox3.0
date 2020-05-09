@@ -36,7 +36,7 @@ public class Action_Upload_Drafts extends AbstractAction {
     public void execute() {
         final Menu cm = new Menu("DraftsContextMenuTitle");
         cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, DraftsView.getInstance()::uploadDraft);
-        cm.addMenuItem("directLog", CB.getSkin().menuIcon.logViewIcon, DraftsView.getInstance()::uploadLog);
+        cm.addMenuItem("directLog", CB.getSkin().menuIcon.me2Logbook, DraftsView.getInstance()::uploadLog);
         cm.show();
     }
 

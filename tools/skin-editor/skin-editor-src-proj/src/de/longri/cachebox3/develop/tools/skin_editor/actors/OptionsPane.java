@@ -356,9 +356,6 @@ public class OptionsPane extends Table {
 
                             DirectLineRendererStyle directLineRendererStyle = game.skinProject.get("directLine", DirectLineRendererStyle.class);
                             styles.put("directline", directLineRendererStyle);
-
-                            MapBubbleStyle mapBubbleStyle = game.skinProject.get("bubble", MapBubbleStyle.class);
-                            styles.put("bubble", mapBubbleStyle);
                             break;
                         case "de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle":
 

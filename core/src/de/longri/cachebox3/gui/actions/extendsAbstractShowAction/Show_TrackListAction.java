@@ -38,7 +38,7 @@ public class Show_TrackListAction extends AbstractShowAction {
     }
 
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.trackListIcon;
+        return CB.getSkin().menuIcon.me3TrackList;
     }
 
     @Override

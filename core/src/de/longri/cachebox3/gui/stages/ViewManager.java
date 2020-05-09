@@ -88,7 +88,7 @@ public class ViewManager extends NamedStage
     private final AtomicBoolean isFiltered = new AtomicBoolean(false);
     AbstractCache lastAbstractCache = null;
     private AbstractView currentView;
-    private GestureButton db_button, cache_button, navButton, tool_button, misc_button;
+    private GestureButton db_button, cache_button, nav_button, tool_button, misc_button;
     private VisLabel toastLabel;
     private Slider slider;
     private float sliderPos = 0;
@@ -124,14 +124,14 @@ public class ViewManager extends NamedStage
 
         db_button = new GestureButton(VisUI.getSkin().get("db", GestureButtonStyle.class), this);
         cache_button = new GestureButton(VisUI.getSkin().get("cache", GestureButtonStyle.class), this);
-        navButton = new GestureButton(VisUI.getSkin().get("nav", GestureButtonStyle.class), this);
+        nav_button = new GestureButton(VisUI.getSkin().get("nav", GestureButtonStyle.class), this);
         tool_button = new GestureButton(VisUI.getSkin().get("tool", GestureButtonStyle.class), this);
         misc_button = new GestureButton(VisUI.getSkin().get("misc", GestureButtonStyle.class), this);
 
         mainButtonBar = new ButtonBar(CB.getSkin().get("main_button_bar", ButtonBar.ButtonBarStyle.class));
         mainButtonBar.addButton(db_button);
         mainButtonBar.addButton(cache_button);
-        mainButtonBar.addButton(navButton);
+        mainButtonBar.addButton(nav_button);
         mainButtonBar.addButton(tool_button);
         mainButtonBar.addButton(misc_button);
         mainButtonBar.setBounds(0, 0, width, mainButtonBar.getPrefHeight());
@@ -274,16 +274,16 @@ public class ViewManager extends NamedStage
         cache_button.addAction(new ActionButton(action_show_waypointView, false, GestureDirection.Right));
         cache_button.addAction(new ActionButton(action_show_logView, false, GestureDirection.Down));
         cache_button.addAction(new ActionButton(new Action_HintDialog(), false));
-//        cache_button.addAction(new ActionButton(actionShowDescExt, false));
         cache_button.addAction(new ActionButton(action_show_spoilerView, false));
         cache_button.addAction(new ActionButton(action_show_noteView, false));
+//        cache_button.addAction(new ActionButton(actionShowDescExt, false));
 
-        navButton.addAction(new ActionButton(action_show_mapView, true, GestureDirection.Up));
-        navButton.addAction(new ActionButton(action_show_compassView, false, GestureDirection.Right));
-        navButton.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
-        // navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left)); not implemented, obsolete?! ACB2 removed
-        navButton.addAction(new ActionButton(action_show_trackListView, false, GestureDirection.Left));
-        navButton.addAction(new ActionButton(new Action_MapDownload(), false));
+        nav_button.addAction(new ActionButton(action_show_mapView, true, GestureDirection.Up));
+        nav_button.addAction(new ActionButton(action_show_compassView, false, GestureDirection.Right));
+        nav_button.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
+        // navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left));
+        nav_button.addAction(new ActionButton(action_show_trackListView, false, GestureDirection.Left));
+        nav_button.addAction(new ActionButton(new Action_MapDownload(), false));
 
 //
 //        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));

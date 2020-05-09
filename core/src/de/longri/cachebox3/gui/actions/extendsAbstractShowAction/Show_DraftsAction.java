@@ -48,6 +48,6 @@ public class Show_DraftsAction extends AbstractShowAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.fieldNoteList;
+        return CB.getSkin().menuIcon.me4Drafts;
     }
 }

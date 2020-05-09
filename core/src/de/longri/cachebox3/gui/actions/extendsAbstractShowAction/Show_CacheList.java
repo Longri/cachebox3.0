@@ -61,7 +61,7 @@ public class Show_CacheList extends AbstractShowAction {
     }
 
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.cacheListIcon;
+        return CB.getSkin().menuIcon.me1CacheList;
     }
 
     @Override

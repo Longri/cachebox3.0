@@ -619,8 +619,8 @@ public class DraftsView extends AbstractView {
 
         cm.addDivider(-1);
         cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, this::uploadDraft);
-        cm.addMenuItem("directLog", CB.getSkin().menuIcon.logViewIcon, this::uploadLog);
-        cm.addMenuItem("DeleteAllDrafts", CB.getSkin().menuIcon.deleteAllDrafts, this::deleteAllDrafts);
+        cm.addMenuItem("directLog", CB.getSkin().menuIcon.me2Logbook, this::uploadLog);
+        cm.addMenuItem("DeleteAllDrafts", CB.getSkin().menuIcon.delete, this::deleteAllDrafts);
 
         return cm;
     }

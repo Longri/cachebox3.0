@@ -29,7 +29,7 @@
       "scale": 0.08
     },
     "TB_drop": {
-      "path": "svg/TB_drop.svg",
+      "path": "svg/logDropped.svg",
       "scale": 0.15
     },
     "ZoomMinus": {
@@ -64,24 +64,24 @@
       "path": "svg/add-wp.svg",
       "scale": 0.175
     },
-    "addCache": {
-      "path": "svg/addCache.svg",
+    "mc1AddCache": {
+      "path": "svg/mc1AddCache.svg",
       "scale": 1
     },
     "announcement12": {
-      "path": "svg/announcement.svg",
+      "path": "svg/logAnnouncement.svg",
       "scale": 0.25
     },
     "announcement18": {
-      "path": "svg/announcement.svg",
+      "path": "svg/logAnnouncement.svg",
       "scale": 0.375
     },
     "announcement24": {
-      "path": "svg/announcement.svg",
+      "path": "svg/logAnnouncement.svg",
       "scale": 0.5
     },
     "announcement48": {
-      "path": "svg/announcement.svg",
+      "path": "svg/logAnnouncement.svg",
       "scale": 1
     },
     "api_key_ex": {
@@ -97,19 +97,19 @@
       "scale": 0.22
     },
     "archived12": {
-      "path": "svg/archived.svg",
+      "path": "svg/logArchived.svg",
       "scale": 0.25
     },
     "archived18": {
-      "path": "svg/archived.svg",
+      "path": "svg/logArchived.svg",
       "scale": 0.375
     },
     "archived24": {
-      "path": "svg/archived.svg",
+      "path": "svg/logArchived.svg",
       "scale": 0.5
     },
     "archived48": {
-      "path": "svg/archived.svg",
+      "path": "svg/logArchived.svg",
       "scale": 1
     },
     "arrow-compass": {
@@ -661,19 +661,19 @@
       "scale": 0.5
     },
     "attended12": {
-      "path": "svg/attended.svg",
+      "path": "svg/logAttended.svg",
       "scale": 0.25
     },
     "attended18": {
-      "path": "svg/attended.svg",
+      "path": "svg/logAttended.svg",
       "scale": 0.375
     },
     "attended24": {
-      "path": "svg/attended.svg",
+      "path": "svg/logAttended.svg",
       "scale": 0.5
     },
     "attended48": {
-      "path": "svg/attended.svg",
+      "path": "svg/logAttended.svg",
       "scale": 1
     },
     "autosortOff": {
@@ -684,20 +684,20 @@
       "path": "svg/autosortOn.svg",
       "scale": 1.4736
     },
-    "baseMapFreizeitkarte": {
-      "path": "svg/baseMapFreizeitkarte.svg",
+    "mc3Freizeitkarte": {
+      "path": "svg/mc3Freizeitkarte.svg",
       "scale": 1
     },
-    "baseMapMapsforge": {
-      "path": "svg/baseMapMapsforge.svg",
+    "mc3Mapsforge": {
+      "path": "svg/mc3Mapsforge.svg",
       "scale": 1
     },
-    "baseMapOnlineBitmap": {
-      "path": "svg/baseMapOnlineBitmap.svg",
+    "mc3OnlineBitmap": {
+      "path": "svg/mc3OnlineBitmap.svg",
       "scale": 1
     },
-    "baseMapOnlineVector": {
-      "path": "svg/baseMapOnlineVector.svg",
+    "mc3OnlineVector": {
+      "path": "svg/mc3OnlineVector.svg",
       "scale": 1
     },
     "beginner": {
@@ -711,10 +711,6 @@
     "bubble_TB": {
       "path": "svg/TB.svg",
       "scale": 0.05
-    },
-    "bubble_favpoint": {
-      "path": "svg/favpoint.svg",
-      "scale": 0.16
     },
     "bubble_large": {
       "path": "svg/large.svg",
@@ -768,8 +764,8 @@
       "path": "svg/cache.svg",
       "scale": 0.72
     },
-    "cacheListIcon": {
-      "path": "svg/cacheListIcon.svg",
+    "me1CacheList": {
+      "path": "svg/me1CacheList.svg",
       "scale": 0.18
     },
     "cache_pressed": {
@@ -780,16 +776,12 @@
       "path": "svg/cache_selected.svg",
       "scale": 0.72
     },
-    "camera": {
-      "path": "svg/camera.svg",
-      "scale": 0.21
-    },
     "car": {
       "path": "svg/car.svg",
       "scale": 1
     },
-    "cb": {
-      "path": "svg/cb.svg",
+    "mexCacheBox": {
+      "path": "svg/mexCacheBox.svg",
       "scale": 0.09
     },
     "check_disabled": {
@@ -812,8 +804,8 @@
       "path": "svg/check_only.svg",
       "scale": 0.9
     },
-    "closeIcon": {
-      "path": "svg/closeIcon.svg",
+    "mbxClose": {
+      "path": "svg/mbxClose.svg",
       "scale": 1
     },
     "cluster1": {
@@ -836,8 +828,8 @@
       "path": "svg/cm_icon_filterd.svg",
       "scale": 0.72
     },
-    "compas_icon": {
-      "path": "svg/compas_icon.svg",
+    "me3Compass": {
+      "path": "svg/me3Compass.svg",
       "scale": 0.29
     },
     "compass_1_arrow": {
@@ -860,16 +852,16 @@
       "path": "svg/cursor.svg",
       "scale": 1
     },
-    "cz": {
-      "path": "svg/cz.svg",
+    "flagCZ": {
+      "path": "svg/flagCZ.svg",
       "scale": 0.08
     },
     "database": {
       "path": "svg/database.svg",
       "scale": 1
     },
-    "dayNight": {
-      "path": "svg/dayNight.svg",
+    "me5DayNight": {
+      "path": "svg/me5DayNight.svg",
       "scale": 1.4737
     },
     "db": {
@@ -896,8 +888,8 @@
       "path": "svg/db_selected_filter_active.svg",
       "scale": 0.72
     },
-    "de": {
-      "path": "svg/de.svg",
+    "flagDE": {
+      "path": "svg/flagDE.svg",
       "scale": 0.08
     },
     "default_button": {
@@ -920,8 +912,8 @@
       "path": "svg/delWp.svg",
       "scale": 0.225
     },
-    "deleteIcon": {
-      "path": "svg/deleteIcon.svg",
+    "mcxDelete": {
+      "path": "svg/mcxDelete.svg",
       "scale": 1
     },
     "delete_Archived": {
@@ -940,8 +932,8 @@
       "path": "svg/delete_Founds.svg",
       "scale": 0.18
     },
-    "description": {
-      "path": "svg/description.svg",
+    "me2Description": {
+      "path": "svg/me2Description.svg",
       "scale": 1
     },
     "dialog_center": {
@@ -973,19 +965,19 @@
       "scale": 0.15
     },
     "discovered12": {
-      "path": "svg/discovered.svg",
+      "path": "svg/logDiscovered.svg",
       "scale": 0.25
     },
     "discovered18": {
-      "path": "svg/discovered.svg",
+      "path": "svg/logDiscovered.svg",
       "scale": 0.375
     },
     "discovered24": {
-      "path": "svg/discovered.svg",
+      "path": "svg/logDiscovered.svg",
       "scale": 0.5
     },
     "discovered48": {
-      "path": "svg/discovered.svg",
+      "path": "svg/logDiscovered.svg",
       "scale": 1
     },
     "download-1": {
@@ -1021,19 +1013,19 @@
       "scale": 0.18
     },
     "dropped_off12": {
-      "path": "svg/TB_drop.svg",
+      "path": "svg/logDropped.svg",
       "scale": 0.25
     },
     "dropped_off18": {
-      "path": "svg/TB_drop.svg",
+      "path": "svg/logDropped.svg",
       "scale": 0.375
     },
     "dropped_off24": {
-      "path": "svg/TB_drop.svg",
+      "path": "svg/logDropped.svg",
       "scale": 0.5
     },
     "dropped_off48": {
-      "path": "svg/TB_drop.svg",
+      "path": "svg/logDropped.svg",
       "scale": 1
     },
     "e_mailToOwner": {
@@ -1044,8 +1036,8 @@
       "path": "svg/pencil.svg",
       "scale": 0.3
     },
-    "editDraft": {
-      "path": "svg/editDraft.svg",
+    "mc4EditDraft": {
+      "path": "svg/mc4EditDraft.svg",
       "scale": 1
     },
     "editWp": {
@@ -1053,19 +1045,19 @@
       "scale": 0.18
     },
     "enabled12": {
-      "path": "svg/enabled.svg",
+      "path": "svg/logEnabled.svg",
       "scale": 0.25
     },
     "enabled18": {
-      "path": "svg/enabled.svg",
+      "path": "svg/logEnabled.svg",
       "scale": 0.375
     },
     "enabled24": {
-      "path": "svg/enabled.svg",
+      "path": "svg/logEnabled.svg",
       "scale": 0.5
     },
     "enabled48": {
-      "path": "svg/enabled.svg",
+      "path": "svg/logEnabled.svg",
       "scale": 1
     },
     "erth": {
@@ -1077,39 +1069,39 @@
       "scale": 0.16
     },
     "favIcon12": {
-      "path": "svg/favIcon.svg",
+      "path": "svg/mc1MarkAsFavorite.svg",
       "scale": 0.25
     },
     "favIcon18": {
-      "path": "svg/favIcon.svg",
+      "path": "svg/mc1MarkAsFavorite.svg",
       "scale": 0.375
     },
     "favIcon24": {
-      "path": "svg/favIcon.svg",
+      "path": "svg/mc1MarkAsFavorite.svg",
       "scale": 0.5
     },
     "favIcon48": {
-      "path": "svg/favIcon.svg",
+      "path": "svg/mc1MarkAsFavorite.svg",
       "scale": 1
     },
-    "favpoint": {
+    "favpoint48": {
       "path": "svg/favpoint.svg",
       "scale": 1
     },
-    "favpointFilter": {
-      "path": "svg/favpointFilter.svg",
-      "scale": 0.51
+    "favpoint12": {
+      "path": "svg/favpoint.svg",
+      "scale": 0.25
     },
-    "fieldnoteListIcon": {
-      "path": "svg/fieldnoteListIcon.svg",
+    "me4Drafts": {
+      "path": "svg/me4Drafts.svg",
       "scale": 0.18
     },
     "file": {
       "path": "svg/file.svg",
       "scale": 1
     },
-    "fileTransfer": {
-      "path": "svg/fileTransfer.svg",
+    "me4FileTransfer": {
+      "path": "svg/me4FileTransfer.svg",
       "scale": 1
     },
     "filebackIcon": {
@@ -1156,8 +1148,8 @@
       "path": "svg/gcFound.svg",
       "scale": 1
     },
-    "fr": {
-      "path": "svg/fr.svg",
+    "flagFR": {
+      "path": "svg/flagFR.svg",
       "scale": 0.08
     },
     "frame_align": {
@@ -1168,20 +1160,16 @@
       "path": "svg/frame_user.svg",
       "scale": 0.145
     },
-    "friends": {
-      "path": "svg/friends.svg",
+    "me5ImportFriends": {
+      "path": "svg/me5ImportFriends.svg",
       "scale": 0.18
     },
     "friendsLogs": {
       "path": "svg/friendsLogs.svg",
       "scale": 0.18
     },
-    "gb": {
-      "path": "svg/gb.svg",
-      "scale": 0.08
-    },
-    "gb-eng": {
-      "path": "svg/gb-eng.svg",
+    "flagGB": {
+      "path": "svg/flagGB.svg",
       "scale": 0.08
     },
     "gc_logo": {
@@ -1193,43 +1181,43 @@
       "scale": 1
     },
     "grab_it12": {
-      "path": "svg/grab_it.svg",
+      "path": "svg/logGrabIt.svg",
       "scale": 0.25
     },
     "grab_it18": {
-      "path": "svg/grab_it.svg",
+      "path": "svg/logGrabIt.svg",
       "scale": 0.375
     },
     "grab_it24": {
-      "path": "svg/grab_it.svg",
+      "path": "svg/logGrabIt.svg",
       "scale": 0.5
     },
     "grab_it48": {
-      "path": "svg/grab_it.svg",
+      "path": "svg/logGrabIt.svg",
       "scale": 1
     },
-    "helpIcon": {
-      "path": "svg/helpIcon.svg",
+    "mbxHelp": {
+      "path": "svg/mbxHelp.svg",
       "scale": 1
     },
-    "hintOff": {
-      "path": "svg/hintOff.svg",
+    "me2HintNo": {
+      "path": "svg/me2HintNo.svg",
       "scale": 0.18
     },
-    "hintOn": {
-      "path": "svg/hintOn.svg",
+    "me2Hint": {
+      "path": "svg/me2Hint.svg",
       "scale": 0.18
     },
-    "hu": {
-      "path": "svg/hu.svg",
+    "flagHU": {
+      "path": "svg/flagHU.svg",
       "scale": 0.08
     },
-    "image_off": {
-      "path": "svg/image_off.svg",
+    "me2SpoilerNo": {
+      "path": "svg/me2SpoilerNo.svg",
       "scale": 0.18
     },
-    "images-icon": {
-      "path": "svg/images-icon.svg",
+    "me2Spoiler": {
+      "path": "svg/me2Spoiler.svg",
       "scale": 0.18
     },
     "import": {
@@ -1240,8 +1228,8 @@
       "path": "svg/import_PQ.svg",
       "scale": 1
     },
-    "infoIcon": {
-      "path": "svg/infoIcon.svg",
+    "mbxInfo": {
+      "path": "svg/mbxInfo.svg",
       "scale": 1
     },
     "large": {
@@ -1260,8 +1248,8 @@
       "path": "svg/light_on.svg",
       "scale": 0.19
     },
-    "listIcon": {
-      "path": "svg/listIcon.svg",
+    "me2Logbook": {
+      "path": "svg/me2Logbook.svg",
       "scale": 0.18
     },
     "list_background": {
@@ -1284,8 +1272,8 @@
       "path": "svg/listrec_selected.svg",
       "scale": 1
     },
-    "map": {
-      "path": "svg/map.svg",
+    "me3Map": {
+      "path": "svg/me3Map.svg",
       "scale": 0.18
     },
     "map-info-panel-background": {
@@ -1428,8 +1416,8 @@
       "path": "svg/mapLabCache2.svg",
       "scale": 0.15
     },
-    "mapLayer": {
-      "path": "svg/mnuSelectLayer.svg",
+    "mc3SelectLayer": {
+      "path": "svg/mc3SelectLayer.svg",
       "scale": 1
     },
     "letterbox48": {
@@ -1544,20 +1532,20 @@
       "path": "svg/mapMultiStartP2.svg",
       "scale": 0.15
     },
-    "mapMyParking": {
-      "path": "svg/mapMyParking.svg",
+    "me1MyParking": {
+      "path": "svg/me1MyParking.svg",
       "scale": 0.18
     },
     "mapMyParking0": {
-      "path": "svg/mapMyParking.svg",
+      "path": "svg/me1MyParking.svg",
       "scale": 0.04
     },
     "mapMyParking1": {
-      "path": "svg/mapMyParking.svg",
+      "path": "svg/me1MyParking.svg",
       "scale": 0.08
     },
     "mapMyParking2": {
-      "path": "svg/mapMyParking.svg",
+      "path": "svg/me1MyParking.svg",
       "scale": 0.16
     },
     "Mystery48": {
@@ -1654,10 +1642,6 @@
     },
     "mapStar2": {
       "path": "svg/mapStar2.svg",
-      "scale": 1
-    },
-    "Traditional48": {
-      "path": "svg/gcTraditional.svg",
       "scale": 1
     },
     "Traditional24": {
@@ -1781,19 +1765,19 @@
       "scale": 1
     },
     "mark_missing12": {
-      "path": "svg/mark_missing.svg",
+      "path": "svg/logMarkMissing.svg",
       "scale": 0.25
     },
     "mark_missing18": {
-      "path": "svg/mark_missing.svg",
+      "path": "svg/logMarkMissing.svg",
       "scale": 0.375
     },
     "mark_missing24": {
-      "path": "svg/mark_missing.svg",
+      "path": "svg/logMarkMissing.svg",
       "scale": 0.5
     },
     "mark_missing48": {
-      "path": "svg/mark_missing.svg",
+      "path": "svg/logMarkMissing.svg",
       "scale": 1
     },
     "menu_back": {
@@ -1833,35 +1817,35 @@
       "scale": 0.72
     },
     "move_to_collection12": {
-      "path": "svg/move_to_collection.svg",
+      "path": "svg/logMoveToCollection.svg",
       "scale": 0.25
     },
     "move_to_collection18": {
-      "path": "svg/move_to_collection.svg",
+      "path": "svg/logMoveToCollection.svg",
       "scale": 0.375
     },
     "move_to_collection24": {
-      "path": "svg/move_to_collection.svg",
+      "path": "svg/logMoveToCollection.svg",
       "scale": 0.5
     },
     "move_to_collection48": {
-      "path": "svg/move_to_collection.svg",
+      "path": "svg/logMoveToCollection.svg",
       "scale": 1
     },
     "move_to_inventory12": {
-      "path": "svg/move_to_inventory.svg",
+      "path": "svg/logMoveToInventory.svg",
       "scale": 0.25
     },
     "move_to_inventory18": {
-      "path": "svg/move_to_inventory.svg",
+      "path": "svg/logMoveToInventory.svg",
       "scale": 0.375
     },
     "move_to_inventory24": {
-      "path": "svg/move_to_inventory.svg",
+      "path": "svg/logMoveToInventory.svg",
       "scale": 0.5
     },
     "move_to_inventory48": {
-      "path": "svg/move_to_inventory.svg",
+      "path": "svg/logMoveToInventory.svg",
       "scale": 1
     },
     "myLocation": {
@@ -1888,44 +1872,44 @@
       "path": "svg/nav_selected.svg",
       "scale": 0.72
     },
-    "navigate": {
-      "path": "svg/navigate.svg",
+    "me3Navigate": {
+      "path": "svg/me3Navigate.svg",
       "scale": 1.4736
     },
     "needs_archived12": {
-      "path": "svg/needs_archived.svg",
+      "path": "svg/logNeedsArchived.svg",
       "scale": 0.25
     },
     "needs_archived18": {
-      "path": "svg/needs_archived.svg",
+      "path": "svg/logNeedsArchived.svg",
       "scale": 0.375
     },
     "needs_archived24": {
-      "path": "svg/needs_archived.svg",
+      "path": "svg/logNeedsArchived.svg",
       "scale": 0.5
     },
     "needs_archived48": {
-      "path": "svg/needs_archived.svg",
+      "path": "svg/logNeedsArchived.svg",
       "scale": 1
     },
     "needs_maintenance12": {
-      "path": "svg/needs_maintenance.svg",
+      "path": "svg/logNeedsMaintenance.svg",
       "scale": 0.25
     },
     "needs_maintenance18": {
-      "path": "svg/needs_maintenance.svg",
+      "path": "svg/logNeedsMaintenance.svg",
       "scale": 0.375
     },
     "needs_maintenance24": {
-      "path": "svg/needs_maintenance.svg",
+      "path": "svg/logNeedsMaintenance.svg",
       "scale": 0.5
     },
     "needs_maintenance48": {
-      "path": "svg/needs_maintenance.svg",
+      "path": "svg/logNeedsMaintenance.svg",
       "scale": 1
     },
-    "nl": {
-      "path": "svg/nl.svg",
+    "flagNL": {
+      "path": "svg/flagNL.svg",
       "scale": 0.08
     },
     "notChosen": {
@@ -1948,20 +1932,20 @@
       "path": "svg/gcDNF.svg",
       "scale": 1
     },
-    "noteIcon12": {
-      "path": "svg/noteIcon.svg",
+    "logWriteNote12": {
+      "path": "svg/logWriteNote.svg",
       "scale": 0.25
     },
-    "noteIcon18": {
-      "path": "svg/noteIcon.svg",
+    "logWriteNote18": {
+      "path": "svg/logWriteNote.svg",
       "scale": 0.375
     },
-    "noteIcon24": {
-      "path": "svg/noteIcon.svg",
+    "logWriteNote24": {
+      "path": "svg/logWriteNote.svg",
       "scale": 0.5
     },
-    "noteIcon48": {
-      "path": "svg/noteIcon.svg",
+    "logWriteNote48": {
+      "path": "svg/logWriteNote.svg",
       "scale": 1
     },
     "option_0": {
@@ -1976,24 +1960,24 @@
       "path": "svg/other.svg",
       "scale": 0.25
     },
-    "ownerLogTypes": {
-      "path": "svg/ownerLogTypes.svg",
+    "mc4OwnerLogTypes": {
+      "path": "svg/mc4OwnerLogTypes.svg",
       "scale": 1
     },
     "owner_maintenance12": {
-      "path": "svg/owner_maintenance.svg",
+      "path": "svg/logOwnerMaintenance.svg",
       "scale": 0.25
     },
     "owner_maintenance18": {
-      "path": "svg/owner_maintenance.svg",
+      "path": "svg/logOwnerMaintenance.svg",
       "scale": 0.375
     },
     "owner_maintenance24": {
-      "path": "svg/owner_maintenance.svg",
+      "path": "svg/logOwnerMaintenance.svg",
       "scale": 0.5
     },
     "owner_maintenance48": {
-      "path": "svg/owner_maintenance.svg",
+      "path": "svg/logOwnerMaintenance.svg",
       "scale": 1
     },
     "pane_slider_vertical": {
@@ -2008,8 +1992,8 @@
       "path": "svg/pencil.svg",
       "scale": 0.12
     },
-    "pl": {
-      "path": "svg/pl.svg",
+    "flagPL": {
+      "path": "svg/flagPL.svg",
       "scale": 0.08
     },
     "progress_back": {
@@ -2024,24 +2008,24 @@
       "path": "svg/projectWp.svg",
       "scale": 0.18
     },
-    "pt": {
-      "path": "svg/pt.svg",
+    "flagPT": {
+      "path": "svg/flagPT.svg",
       "scale": 0.08
     },
     "published12": {
-      "path": "svg/published.svg",
+      "path": "svg/logPublished.svg",
       "scale": 0.25
     },
     "published18": {
-      "path": "svg/published.svg",
+      "path": "svg/logPublished.svg",
       "scale": 0.375
     },
     "published24": {
-      "path": "svg/published.svg",
+      "path": "svg/logPublished.svg",
       "scale": 0.5
     },
     "published48": {
-      "path": "svg/published.svg",
+      "path": "svg/logPublished.svg",
       "scale": 1
     },
     "regular": {
@@ -2053,51 +2037,51 @@
       "scale": 1
     },
     "retract12": {
-      "path": "svg/retract.svg",
+      "path": "svg/logRetract.svg",
       "scale": 0.25
     },
     "retract18": {
-      "path": "svg/retract.svg",
+      "path": "svg/logRetract.svg",
       "scale": 0.375
     },
     "retract24": {
-      "path": "svg/retract.svg",
+      "path": "svg/logRetract.svg",
       "scale": 0.5
     },
     "retract48": {
-      "path": "svg/retract.svg",
+      "path": "svg/logRetract.svg",
       "scale": 1
     },
     "retrieve12": {
-      "path": "svg/retrieve.svg",
+      "path": "svg/logRetrieve.svg",
       "scale": 0.25
     },
     "retrieve18": {
-      "path": "svg/retrieve.svg",
+      "path": "svg/logRetrieve.svg",
       "scale": 0.375
     },
     "retrieve24": {
-      "path": "svg/retrieve.svg",
+      "path": "svg/logRetrieve.svg",
       "scale": 0.5
     },
     "retrieve48": {
-      "path": "svg/retrieve.svg",
+      "path": "svg/logRetrieve.svg",
       "scale": 1
     },
     "reviewer_note12": {
-      "path": "svg/reviewer_note.svg",
+      "path": "svg/logReviewerNote.svg",
       "scale": 0.25
     },
     "reviewer_note18": {
-      "path": "svg/reviewer_note.svg",
+      "path": "svg/logReviewerNote.svg",
       "scale": 0.375
     },
     "reviewer_note24": {
-      "path": "svg/reviewer_note.svg",
+      "path": "svg/logReviewerNote.svg",
       "scale": 0.5
     },
     "reviewer_note48": {
-      "path": "svg/reviewer_note.svg",
+      "path": "svg/logReviewerNote.svg",
       "scale": 1
     },
     "search": {
@@ -2112,12 +2096,12 @@
       "path": "svg/select_box.svg",
       "scale": 1
     },
-    "settings_icon": {
-      "path": "svg/settings_icon.svg",
+    "me5Settings": {
+      "path": "svg/me5Settings.svg",
       "scale": 0.18
     },
-    "shareInfos": {
-      "path": "svg/shareInfos.svg",
+    "me1ShareInfos": {
+      "path": "svg/me1ShareInfos.svg",
       "scale": 1.4737
     },
     "showOriginalHtmlColor": {
@@ -2172,32 +2156,32 @@
       "path": "svg/star_half.svg",
       "scale": 0.25
     },
-    "takePhoto": {
-      "path": "svg/takePhoto.svg",
+    "me4TakePhoto": {
+      "path": "svg/me4TakePhoto.svg",
       "scale": 1.4737
     },
-    "target": {
-      "path": "svg/target.svg",
+    "mc1ImportOverPosition": {
+      "path": "svg/mc1ImportOverPosition.svg",
       "scale": 1
     },
-    "tbListIcon": {
-      "path": "svg/tbListIcon.svg",
+    "me1TrackableList": {
+      "path": "svg/me1TrackableList.svg",
       "scale": 0.18
     },
     "tempDisabled12": {
-      "path": "svg/tempDisabled.svg",
+      "path": "svg/logTemporaryDisabled.svg",
       "scale": 0.25
     },
     "tempDisabled18": {
-      "path": "svg/tempDisabled.svg",
+      "path": "svg/logTemporaryDisabled.svg",
       "scale": 0.375
     },
     "tempDisabled24": {
-      "path": "svg/tempDisabled.svg",
+      "path": "svg/logTemporaryDisabled.svg",
       "scale": 0.5
     },
     "tempDisabled48": {
-      "path": "svg/tempDisabled.svg",
+      "path": "svg/logTemporaryDisabled.svg",
       "scale": 1
     },
     "toast_background": {
@@ -2232,40 +2216,40 @@
       "path": "svg/tool_selected.svg",
       "scale": 0.72
     },
-    "trackListIcon": {
-      "path": "svg/trackListIcon.svg",
+    "me3TrackList": {
+      "path": "svg/me3TrackList.svg",
       "scale": 0.18
     },
     "unarchive12": {
-      "path": "svg/unarchive.svg",
+      "path": "svg/logUnArchive.svg",
       "scale": 0.25
     },
     "unarchive18": {
-      "path": "svg/unarchive.svg",
+      "path": "svg/logUnArchive.svg",
       "scale": 0.375
     },
     "unarchive24": {
-      "path": "svg/unarchive.svg",
+      "path": "svg/logUnArchive.svg",
       "scale": 0.5
     },
     "unarchive48": {
-      "path": "svg/unarchive.svg",
+      "path": "svg/logUnArchive.svg",
       "scale": 1
     },
     "update_coord12": {
-      "path": "svg/update_coord.svg",
+      "path": "svg/logUpdateCoord.svg",
       "scale": 0.25
     },
     "update_coord18": {
-      "path": "svg/update_coord.svg",
+      "path": "svg/logUpdateCoord.svg",
       "scale": 0.375
     },
     "update_coord24": {
-      "path": "svg/update_coord.svg",
+      "path": "svg/logUpdateCoord.svg",
       "scale": 0.5
     },
     "update_coord48": {
-      "path": "svg/update_coord.svg",
+      "path": "svg/logUpdateCoord.svg",
       "scale": 1
     },
     "uploadCorrectedCoordinates": {
@@ -2276,8 +2260,8 @@
       "path": "svg/uploadDraft.svg",
       "scale": 1
     },
-    "videoIcon": {
-      "path": "svg/videoIcon.svg",
+    "me4RecordVideo": {
+      "path": "svg/me4RecordVideo.svg",
       "scale": 1.4736
     },
     "view": {
@@ -2289,63 +2273,63 @@
       "scale": 0.25
     },
     "visited12": {
-      "path": "svg/visited.svg",
+      "path": "svg/logVsited.svg",
       "scale": 0.25
     },
     "visited18": {
-      "path": "svg/visited.svg",
+      "path": "svg/logVsited.svg",
       "scale": 0.375
     },
     "visited24": {
-      "path": "svg/visited.svg",
+      "path": "svg/logVsited.svg",
       "scale": 0.5
     },
     "visited48": {
-      "path": "svg/visited.svg",
+      "path": "svg/logVsited.svg",
       "scale": 1
     },
-    "voiceRecIcon": {
-      "path": "svg/voiceRecIcon.svg",
+    "me4RecordVoice": {
+      "path": "svg/me4RecordVoice.svg",
       "scale": 1.4736
     },
-    "warning": {
-      "path": "svg/warning.svg",
+    "mbxWarning": {
+      "path": "svg/mbxWarning.svg",
       "scale": 1
     },
-    "waypointListIcon": {
-      "path": "svg/waypointListIcon.svg",
+    "me2Waypoints": {
+      "path": "svg/me2Waypoints.svg",
       "scale": 0.18
     },
     "webcam_photo_taken12": {
-      "path": "svg/webcam_photo_taken.svg",
+      "path": "svg/logWebCam.svg",
       "scale": 0.25
     },
     "webcam_photo_taken18": {
-      "path": "svg/webcam_photo_taken.svg",
+      "path": "svg/logWebCam.svg",
       "scale": 0.375
     },
     "webcam_photo_taken24": {
-      "path": "svg/webcam_photo_taken.svg",
+      "path": "svg/logWebCam.svg",
       "scale": 0.5
     },
     "webcam_photo_taken48": {
-      "path": "svg/webcam_photo_taken.svg",
+      "path": "svg/logWebCam.svg",
       "scale": 1
     },
     "will_attend12": {
-      "path": "svg/will_attend.svg",
+      "path": "svg/logWillAttend.svg",
       "scale": 0.25
     },
     "will_attend18": {
-      "path": "svg/will_attend.svg",
+      "path": "svg/logWillAttend.svg",
       "scale": 0.375
     },
     "will_attend24": {
-      "path": "svg/will_attend.svg",
+      "path": "svg/logWillAttend.svg",
       "scale": 0.5
     },
     "will_attend48": {
-      "path": "svg/will_attend.svg",
+      "path": "svg/logWillAttend.svg",
       "scale": 1
     }
   },
@@ -3260,84 +3244,84 @@
   },
   "de.longri.cachebox3.gui.skin.styles.MessageBoxIconStyle": {
     "default": {
-      "Asterisk": "infoIcon",
-      "Error": "closeIcon",
-      "Exclamation": "warning",
-      "Hand": "closeIcon",
-      "Information": "infoIcon",
-      "Question": "helpIcon",
-      "Stop": "closeIcon",
-      "Warning": "warning",
-      "Close": "closeIcon",
-      "Help": "helpIcon",
+      "Asterisk": "mbxInfo",
+      "Error": "mbxClose",
+      "Exclamation": "mbxWarning",
+      "Hand": "mbxClose",
+      "Information": "mbxInfo",
+      "Question": "mbxHelp",
+      "Stop": "mbxClose",
+      "Warning": "mbxWarning",
+      "Close": "mbxClose",
+      "Help": "mbxHelp",
       "ExpiredApiKey": "api_key_ex",
       "Database": "database"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
     "default": {
-      "addCache": "addCache",
-      "baseMapOnlineVector": "baseMapOnlineVector",
-      "baseMapOnlineBitmap": "baseMapOnlineBitmap",
-      "baseMapMapsforge": "baseMapMapsforge",
-      "baseMapFreizeitkarte": "baseMapFreizeitkarte",
-      "target": "target",
-      "mapLayer": "mapLayer",
-      "deleteAllDrafts": "deleteIcon",
-      "ownerLogTypes": "ownerLogTypes",
-      "editDraft": "editDraft",
-      "fileTransfer": "fileTransfer",
-      "favPoint": "favpoint",
+      "me1CacheList": "me1CacheList",
+      "me1MyParking": "me1MyParking",
+      "me1TrackableList": "me1TrackableList",
+      "me1ShareInfos": "me1ShareInfos",
+      "me2Description": "me2Description",
+      "me2Waypoints": "me2Waypoints",
+      "me2Logbook": "me2Logbook",
+      "me2Hint": "me2Hint",
+      "me2HintNo": "me2HintNo",
+      "me2Spoiler": "me2Spoiler",
+      "me2SpoilerNo": "me2SpoilerNo",
+      "me2Note": "logWriteNote48",
+      "me3Map": "me3Map",
+      "me3Compass": "me3Compass",
+      "me3Navigate": "me3Navigate",
+      "me3TrackList": "me3TrackList",
+      "me4Drafts": "me4Drafts",
+      "me4TakePhoto": "me4TakePhoto",
+      "me4RecordVideo": "me4RecordVideo",
+      "me4RecordVoice": "me4RecordVoice",
+      "me4FileTransfer": "me4FileTransfer",
+      "me5CacheBox": "mexCacheBox",
+      "me5Credits": "mexCacheBox",
+      "me5Settings": "me5Settings",
+      "me5DayNight": "me5DayNight",
+      "me5ImportFriends": "me5ImportFriends",
+      "target": "mc1ImportOverPosition",
+      "addCache": "mc1AddCache",
+      "baseMapOnlineVector": "mc3OnlineVector",
+      "baseMapOnlineBitmap": "mc3OnlineBitmap",
+      "baseMapMapsforge": "mc3Mapsforge",
+      "baseMapFreizeitkarte": "mc3Freizeitkarte",
+      "mapLayer": "mc3SelectLayer",
+      "ownerLogTypes": "mc4OwnerLogTypes",
+      "delete": "mcxDelete",
+      "editDraft": "mc4EditDraft",
       "theme": "map_theme",
       "themeStyle": "map_theme_setting",
       "uploadCorrectedCoordinates": "uploadCorrectedCoordinates",
       "import_PQ": "import_PQ",
-      "favorit": "favIcon48",
-      "docIcon": "description",
-      "deleteIcon": "deleteIcon",
+      "favorite": "favIcon48",
       "sortIcon": "sortIcon",
       "filterIcon": "filter",
       "resetFilterIcon": "filterReset",
       "searchIcon": "search",
       "importIcon": "import",
-      "cacheListIcon": "cacheListIcon",
       "addWp": "add-wp",
       "delWp": "delWp",
       "projectWp": "projectWp",
       "showWp": "showWp",
       "editWp": "editWp",
       "mesureWp": "mesureWp",
-      "navigate": "navigate",
       "draft": "found48",
-      "videoIcon": "videoIcon",
-      "voiceRecIcon": "voiceRecIcon",
-      "hintIconOn": "hintOn",
-      "hintIconOff": "hintOff",
-      "my_parking": "mapMyParking",
       "autoSortOnIcon": "autosortOn",
       "autoSortOffIcon": "autosortOff",
       "torchOn": "light_on",
       "torchOff": "light_off",
       "torchDisabled": "light_disabled",
-      "takePhoto": "takePhoto",
-      "dayNight": "dayNight",
       "uploadDraft": "uploadDraft",
       "manageDB": "database",
-      "settingsIcon": "settings_icon",
-      "compassIcon": "compas_icon",
-      "creditsIcon": "cb",
-      "fieldNoteList": "fieldnoteListIcon",
-      "logViewIcon": "listIcon",
-      "mapIcon": "map",
-      "noteIcon": "noteIcon48",
       "solverIcon": "solver-icon",
       "solver2Icon": "solver-icon-2",
-      "imagesIcon": "images-icon",
-      "imagesIconOff": "image_off",
-      "cb": "cb",
-      "tbListIcon": "tbListIcon",
-      "waypointListIcon": "waypointListIcon",
-      "trackListIcon": "trackListIcon",
       "gc_logo": "gc_logo",
       "viewSettings": "view",
       "reloadCacheIcon": "reload_cache",
@@ -3346,7 +3330,6 @@
       "deleteArchived": "delete_Archived",
       "deleteFounds": "delete_Founds",
       "gpxFile": "gpxFileIcon",
-      "friends": "friends",
       "friendsLogs": "friendsLogs",
       "downloadLogs": "downloadLogs",
       "downloadFriendsLogs": "downloadFriendsLogs",
@@ -3355,8 +3338,7 @@
       "todo": "todo",
       "contactOwner": "contactOwner",
       "e_mailToOwner": "e_mailToOwner",
-      "messageToOwner": "messageToOwner",
-      "shareInfos": "shareInfos"
+      "messageToOwner": "messageToOwner"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
@@ -3644,21 +3626,21 @@
   },
   "de.longri.cachebox3.gui.skin.styles.LanguageStyle": {
     "settings": {
-      "cs": "cz",
-      "de": "de",
-      "en_GB": "gb",
-      "fr": "fr",
-      "hu": "hu",
-      "nl": "nl",
-      "pl": "pl",
-      "pt_PT": "pt"
+      "cs": "flagCZ",
+      "de": "flagDE",
+      "en_GB": "flagGB",
+      "fr": "flagFR",
+      "hu": "flagHU",
+      "nl": "flagNL",
+      "pl": "flagPL",
+      "pt_PT": "flagPT"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
     "bubble_LogTypes": {
       "found": "found12",
       "didnt_find": "notFound12",
-      "note": "noteIcon12",
+      "note": "logWriteNote12",
       "published": "published12",
       "enabled": "enabled12",
       "needs_maintenance": "needs_maintenance12",
@@ -3687,7 +3669,7 @@
     "cacheListViewLogTypes": {
       "found": "found18",
       "didnt_find": "notFound18",
-      "note": "noteIcon18",
+      "note": "logWriteNote18",
       "published": "published18",
       "enabled": "enabled18",
       "needs_maintenance": "needs_maintenance18",
@@ -3716,7 +3698,7 @@
     "logViewLogStyles": {
       "found": "found24",
       "didnt_find": "notFound24",
-      "note": "noteIcon24",
+      "note": "logWriteNote24",
       "published": "published24",
       "enabled": "enabled24",
       "needs_maintenance": "needs_maintenance24",
@@ -3745,7 +3727,7 @@
     "DraftListItemStyle": {
       "found": "found48",
       "didnt_find": "notFound48",
-      "note": "noteIcon48",
+      "note": "logWriteNote48",
       "published": "published48",
       "enabled": "enabled48",
       "needs_maintenance": "needs_maintenance48",
@@ -3783,6 +3765,31 @@
   },
   "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
     "bubble": {
+      "traditional": "Traditional12",
+      "multi": "multi12",
+      "mystery": "Mystery12",
+      "camera": "Camera12",
+      "earth": "earth12",
+      "event": "event12",
+      "megaEvent": "mega12",
+      "cito": "cito12",
+      "virtual": "Virtual12",
+      "letterbox": "letterbox12",
+      "wherigo": "Wherigo12",
+      "referencePoint": "ReferencePoint12",
+      "wikipedia": "Wikipedia12",
+      "undefined": "Undefined12",
+      "multiStage": "stage12",
+      "multiQuestion": "Question12",
+      "trailhead": "Trailhead12",
+      "parkingArea": "mapParkingArea1",
+      "Final": "final12",
+      "cache": "Cache12",
+      "myParking": "mapParkingArea1",
+      "giga": "giga12",
+      "labCache": "labCache12"
+    },
+    "cacheList": {
       "traditional": "Traditional24",
       "multi": "multi24",
       "mystery": "Mystery24",
@@ -3806,31 +3813,6 @@
       "myParking": "mapParkingArea1",
       "giga": "giga24",
       "labCache": "labCache24"
-    },
-    "cacheList": {
-      "traditional": "Traditional48",
-      "multi": "multi48",
-      "mystery": "Mystery48",
-      "camera": "Camera48",
-      "earth": "earth48",
-      "event": "event48",
-      "megaEvent": "mega48",
-      "cito": "cito48",
-      "virtual": "Virtual48",
-      "letterbox": "letterbox48",
-      "wherigo": "Wherigo48",
-      "referencePoint": "ReferencePoint48",
-      "wikipedia": "Wikipedia48",
-      "undefined": "Undefined48",
-      "multiStage": "stage48",
-      "multiQuestion": "Question48",
-      "trailhead": "Trailhead48",
-      "parkingArea": "mapParkingArea",
-      "Final": "final48",
-      "cache": "Cache48",
-      "myParking": "mapMyParking",
-      "giga": "giga48",
-      "labCache": "labCache48"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle": {
@@ -3839,10 +3821,10 @@
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
       "trackable": "bubble_TB",
-      "favoritPoints": "bubble_favpoint",
+      "favoritPoints": "favpoint12",
       "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color",
-      "typeStyle": "bubble",
+      "cacheTypeStyle": "bubble",
       "logTypesStyle": "bubble_LogTypes",
       "starStyle": "bubble",
       "cacheSizeStyle": "bubble"
@@ -3853,10 +3835,10 @@
       "notAvailableColor": "notAvailable",
       "arrow": "arrow-compass",
       "trackable": "TB",
-      "favoritPoints": "favpoint",
+      "favoritPoints": "favpoint12",
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
-      "typeStyle": "cacheList",
+      "cacheTypeStyle": "cacheList",
       "logTypesStyle": "cacheListViewLogTypes",
       "starStyle": "cachelist",
       "cacheSizeStyle": "cachelist"
@@ -3907,14 +3889,14 @@
       "Highlights": "Star48",
       "Favorites": "favIcon48",
       "PrepareToArchive": "archived48",
-      "ListingChanged": "warning",
+      "ListingChanged": "mbxWarning",
       "AllCaches": "erth",
       "CheckNo": "check_off",
       "CheckOff": "check_not",
       "Check": "check_on",
       "Available": "tempDisabled48",
       "finds": "found48",
-      "FavPoints": "favpointFilter"
+      "FavPoints": "favpoint48"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CircularProgressStyle": {
@@ -3938,7 +3920,7 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapBubbleStyle": {
-    "bubble": {
+    "default": {
       "background": "bubble_9_Patch",
       "selectedBackground": "bubble_selected_9_Patch",
       "offsetX": -13,

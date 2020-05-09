@@ -439,7 +439,7 @@ public class TrackListView extends AbstractView {
                             if (!track.isActualTrack()) {
                                 FileHandle trackAbstractFile = new FileHandle(track.getFileName());
                                 if (trackAbstractFile.exists()) {
-                                    cm.addMenuItem("delete", CB.getSkin().menuIcon.deleteIcon,
+                                    cm.addMenuItem("delete", CB.getSkin().menuIcon.delete,
                                             () -> {
                                                 ButtonDialog bd = new ButtonDialog("", Translation.get("DeleteTrack"),
                                                         Translation.get("DeleteTrack"),

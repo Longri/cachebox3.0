@@ -48,6 +48,6 @@ public class Show_DescriptionAction extends AbstractShowAction {
 
     @Override
     public Drawable getIcon() {
-        return CB.getSkin().menuIcon.docIcon;
+        return CB.getSkin().menuIcon.me2Description;
     }
 }
