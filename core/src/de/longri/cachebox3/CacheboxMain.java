@@ -259,6 +259,10 @@ public class CacheboxMain extends ApplicationAdapter {
         log.debug("onDispose");
         CB.viewmanager.dispose();
         batch.dispose();
+
+        if (CB.isQuitCalled()) {
+            PlatformConnector.callQuit();
+        }
     }
 
     @Override

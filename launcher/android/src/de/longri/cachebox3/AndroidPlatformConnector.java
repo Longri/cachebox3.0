@@ -381,11 +381,13 @@ public class AndroidPlatformConnector extends PlatformConnector {
     @Override
     public void _callQuit() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            application.getActivity().finishAndRemoveTask();
+            // want to see CB3 in recent tasklist
+            application.getActivity().finishAffinity();
+            // application.getActivity().finishAndRemoveTask();
         } else {
             application.getActivity().finishAffinity();
         }
-        Gdx.app.exit();
+        System.exit(0); // else app cb3 hangs on next start
     }
 
     @Override

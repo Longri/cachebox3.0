@@ -236,7 +236,7 @@ public class IOS_PlatformConnector extends PlatformConnector {
 
     @Override
     public void _callQuit() {
-        Gdx.app.exit();
+        // Gdx.app.exit(); already called in callQuit()
     }
 
     @Override

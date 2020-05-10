@@ -281,7 +281,7 @@ public class CB {
     }
 
     public static void callQuit() {
-        PlatformConnector.callQuit();
+        Gdx.app.exit();
         quitCalled.set(true);
     }
 
