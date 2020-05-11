@@ -57,7 +57,7 @@ public class EditCache extends Activity {
         cacheSize.setSelectTitle("EditCacheSize");
         cacheSize.set(CacheSizes.Values());
         cacheCoords = new CoordinateButton();
-        cacheDescription = new EditTextField();
+        cacheDescription = new EditTextField(true);
         cacheDescription.setWrap(true);
     }
 
