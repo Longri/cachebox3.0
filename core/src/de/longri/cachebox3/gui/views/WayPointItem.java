@@ -30,55 +30,55 @@ import de.longri.cachebox3.types.CacheTypes;
  */
 public class WayPointItem extends VisTable implements Disposable {
 
-    private final WayPointListItemStyle style;
-    private final CacheTypes type;
+    private final WayPointListItemStyle wayPointListItemStyle;
+    private final CacheTypes cacheTypes;
     final CharSequence wayPointGcCode, description, wayPointTitle, coord;
     private boolean needsLayout = true;
     Image arrowImage;
     VisLabel distanceLabel;
     boolean distanceOrBearingChanged = true;
 
-    public WayPointItem(CacheTypes type, CharSequence wayPointGcCode, CharSequence wayPointTitle,
-                        CharSequence description, CharSequence coord, WayPointListItemStyle style) {
+    public WayPointItem(CacheTypes _cacheTypes, CharSequence _wayPointGcCode, CharSequence _wayPointTitle,
+                        CharSequence _description, CharSequence _coord, WayPointListItemStyle _wayPointListItemStyle) {
         super();
-        this.style = style;
-        this.type = type;
-        this.wayPointGcCode = wayPointGcCode;
-        this.wayPointTitle = wayPointTitle;
-        this.description = description;
-        this.coord = coord;
+        wayPointListItemStyle = _wayPointListItemStyle;
+        cacheTypes = _cacheTypes;
+        wayPointGcCode = _wayPointGcCode;
+        wayPointTitle = _wayPointTitle;
+        description = _description;
+        coord = _coord;
     }
 
 
     public synchronized void layout() {
-//        this.setDebug(true, false);
+//        setDebug(true, false);
         if (!needsLayout) {
             super.layout();
             return;
         }
 
-        this.clear();
+        clear();
 
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
-        nameLabelStyle.font = this.style.nameFont;
-        nameLabelStyle.fontColor = this.style.nameFontColor;
+        nameLabelStyle.font = wayPointListItemStyle.nameFont;
+        nameLabelStyle.fontColor = wayPointListItemStyle.nameFontColor;
 
 
-        arrowImage = new Image(this.style.arrow);
+        arrowImage = new Image(wayPointListItemStyle.arrow);
 
         Label.LabelStyle distanceLabelStyle = new Label.LabelStyle();
-        distanceLabelStyle.font = this.style.distanceFont;
-        distanceLabelStyle.fontColor = this.style.distanceFontColor;
+        distanceLabelStyle.font = wayPointListItemStyle.distanceFont;
+        distanceLabelStyle.fontColor = wayPointListItemStyle.distanceFontColor;
 
         distanceLabel = new VisLabel("---- --", distanceLabelStyle);
 
 
-        if (type != null) {
+        if (cacheTypes != null) {
             VisTable iconTable = new VisTable();
-            iconTable.add(type.getCacheWidget(style.typeStyle, null, null, null, null));
+            iconTable.add(cacheTypes.getCacheWidget(wayPointListItemStyle.typeStyle, null, null, null, null));
             iconTable.pack();
             iconTable.layout();
-            this.add(iconTable).left().top().padRight(CB.scaledSizes.MARGINx2);
+            add(iconTable).left().top().padRight(CB.scaledSizes.MARGINx2);
         }
 
         Table contentTable = new Table();
@@ -86,11 +86,11 @@ public class WayPointItem extends VisTable implements Disposable {
         VisLabel descriptionLabel = description == null ? null : new VisLabel(description, nameLabelStyle);
         VisLabel coordLabel = new VisLabel(coord, nameLabelStyle);
 
-        if (type != null) {
+        if (cacheTypes != null) {
             nameLabel.setWrap(true);
             coordLabel.setWrap(true);
         }
-        descriptionLabel.setWrap(true);
+        if (descriptionLabel != null) descriptionLabel.setWrap(true);
         contentTable.add(nameLabel).left().expandX().fillX();
         contentTable.row();
         contentTable.add(descriptionLabel).left().expandX().fillX();
@@ -100,18 +100,18 @@ public class WayPointItem extends VisTable implements Disposable {
         contentTable.invalidate();
         contentTable.pack();
 
-        this.add(contentTable).expandX().fillX();
+        add(contentTable).expandX().fillX();
 
-        if (type != null) {
+        if (cacheTypes != null) {
             VisTable arrowTable = new VisTable();
-            if (this.style.arrow != null) {
-                arrowImage.setOrigin(this.style.arrow.getMinWidth() / 2, this.style.arrow.getMinHeight() / 2);
+            if (wayPointListItemStyle.arrow != null) {
+                arrowImage.setOrigin(wayPointListItemStyle.arrow.getMinWidth() / 2, wayPointListItemStyle.arrow.getMinHeight() / 2);
                 arrowTable.add(arrowImage);
                 arrowTable.row();
             }
 
             arrowTable.add(distanceLabel).padTop(CB.scaledSizes.MARGIN);
-            this.add(arrowTable).right();
+            add(arrowTable).right();
         }
         super.layout();
         needsLayout = false;
@@ -146,6 +146,6 @@ public class WayPointItem extends VisTable implements Disposable {
     }
 
     public CharSequence getWaypointGcCode() {
-        return this.wayPointGcCode;
+        return wayPointGcCode;
     }
 }

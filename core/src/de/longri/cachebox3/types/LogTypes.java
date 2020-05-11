@@ -424,13 +424,13 @@ public enum LogTypes implements SelectBoxItem {
     }
 
 
-    static LogTypesStyle logListTypeStyle;
+    static LogTypesStyle logTypesStyle;
 
     @Override
     public Drawable getDrawable() {
         // for select Box interface, use 'cacheList' style
-        if (logListTypeStyle == null) logListTypeStyle = VisUI.getSkin().get("logViewLogStyles", LogTypesStyle.class);
-        return getDrawable(logListTypeStyle);
+        if (logTypesStyle == null) logTypesStyle = VisUI.getSkin().get("logViewLogStyles", LogTypesStyle.class);
+        return getDrawable(logTypesStyle);
     }
 
     public Drawable getDrawable(LogTypesStyle style) {

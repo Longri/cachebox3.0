@@ -28,10 +28,6 @@
       "path": "svg/TB.svg",
       "scale": 0.08
     },
-    "TB_drop": {
-      "path": "svg/logDropped.svg",
-      "scale": 0.15
-    },
     "ZoomMinus": {
       "path": "svg/minus.svg",
       "scale": 0.5
@@ -3637,7 +3633,7 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogTypesStyle": {
-    "bubble_LogTypes": {
+    "LogTypesSize12": {
       "found": "found12",
       "didnt_find": "notFound12",
       "note": "logWriteNote12",
@@ -3666,7 +3662,7 @@
       "visited": "visited12",
       "ownFavorite": "favIcon12"
     },
-    "cacheListViewLogTypes": {
+    "LogTypesSize18": {
       "found": "found18",
       "didnt_find": "notFound18",
       "note": "logWriteNote18",
@@ -3695,7 +3691,7 @@
       "visited": "visited18",
       "ownFavorite": "favIcon18"
     },
-    "logViewLogStyles": {
+    "LogTypesSize24": {
       "found": "found24",
       "didnt_find": "notFound24",
       "note": "logWriteNote24",
@@ -3724,7 +3720,7 @@
       "visited": "visited24",
       "ownFavorite": "favIcon24"
     },
-    "DraftListItemStyle": {
+    "LogTypesSize48": {
       "found": "found48",
       "didnt_find": "notFound48",
       "note": "logWriteNote48",
@@ -3755,12 +3751,12 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.LogListItemStyle": {
-    "logListItems": {
+    "default": {
       "headerFont": "normal_bold_font",
       "headerFontColor": "font_color",
       "descriptionFont": "normal_font",
       "descriptionFontColor": "font_color",
-      "typeStyle": "logViewLogStyles"
+      "logTypesStyle": "LogTypesSize24"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CacheTypeStyle": {
@@ -3825,11 +3821,11 @@
       "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color",
       "cacheTypeStyle": "bubble",
-      "logTypesStyle": "bubble_LogTypes",
+      "logTypesStyle": "LogTypesSize12",
       "starStyle": "bubble",
       "cacheSizeStyle": "bubble"
     },
-    "cacheListItems": {
+    "default": {
       "nameFont": "normal_font",
       "nameFontColor": "font_color",
       "notAvailableColor": "notAvailable",
@@ -3839,13 +3835,13 @@
       "distanceFont": "settings_default_value_font",
       "distanceFontColor": "font_color",
       "cacheTypeStyle": "cacheList",
-      "logTypesStyle": "cacheListViewLogTypes",
+      "logTypesStyle": "LogTypesSize18",
       "starStyle": "cachelist",
       "cacheSizeStyle": "cachelist"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.WayPointListItemStyle": {
-    "WayPointListItems": {
+    "default": {
       "nameFont": "normal_font",
       "nameFontColor": "font_color",
       "arrow": "arrow-compass",
@@ -3859,15 +3855,14 @@
       "distanceFont": "AboutInfo",
       "distanceFontColor": "font_color"
     },
-    "logListItems": {}
   },
   "de.longri.cachebox3.gui.skin.styles.DraftListItemStyle": {
-    "DraftListItemStyle": {
+    "default": {
       "headerFont": "normal_bold_font",
       "headerFontColor": "font_color",
       "descriptionFont": "normal_font",
       "descriptionFontColor": "font_color",
-      "logTypesStyle": "DraftListItemStyle",
+      "logTypesStyle": "LogTypesSize24",
       "cacheTypeStyle": "cacheList",
       "headerBackground": "list_rec_header_9_Patch",
       "uploadedOverlay": "activityBack_drawable",
@@ -3885,7 +3880,7 @@
       "AllCachesToFind": "erth",
       "BEGINNER": "beginner",
       "GrabTB": "grab_it48",
-      "DropTB": "TB_drop",
+      "DropTB": "dropped_off48",
       "Highlights": "Star48",
       "Favorites": "favIcon48",
       "PrepareToArchive": "archived48",

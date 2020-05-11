@@ -26,19 +26,20 @@ import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.types.LogEntry;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by Longri on 31.05.2017.
  */
 public class LogListViewItem extends ListViewItem {
 
-    private final LogListItemStyle style;
+    private final LogListItemStyle logListItemStyle;
     private final LogEntry logEntry;
     private boolean needsLayout = true;
 
     public LogListViewItem(int listIndex, LogEntry logEntry) {
         super(listIndex);
-        this.style = VisUI.getSkin().get("logListItems", LogListItemStyle.class);
+        this.logListItemStyle = VisUI.getSkin().get(LogListItemStyle.class);
         this.logEntry = logEntry;
         internLayout();
     }
@@ -46,18 +47,17 @@ public class LogListViewItem extends ListViewItem {
     private void internLayout() {
 
         VisTable headerTable = new VisTable();
-        headerTable.add(new Image(this.logEntry.Type.getDrawable(style.typeStyle)));
+        headerTable.add(new Image(this.logEntry.Type.getDrawable(logListItemStyle.logTypesStyle)));
 
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
-        nameLabelStyle.font = this.style.headerFont;
-        nameLabelStyle.fontColor = this.style.headerFontColor;
+        nameLabelStyle.font = this.logListItemStyle.headerFont;
+        nameLabelStyle.fontColor = this.logListItemStyle.headerFontColor;
         VisLabel nameLabel = new VisLabel(this.logEntry.Finder, nameLabelStyle);
         nameLabel.setWrap(true);
         headerTable.add(nameLabel).left().padLeft(CB.scaledSizes.MARGINx2).expandX().fillX();
 
-        //TODO replace with formatter from localisation settings
-        SimpleDateFormat postFormater = new SimpleDateFormat("dd.MM.yyyy");
-        String dateString = postFormater.format(logEntry.Timestamp);
+        SimpleDateFormat postFormatter = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
+        String dateString = postFormatter.format(logEntry.Timestamp);
         VisLabel dateLabel = new VisLabel(dateString, nameLabelStyle);
         headerTable.add(dateLabel).padRight(CB.scaledSizes.MARGINx2).right();
 
@@ -70,8 +70,8 @@ public class LogListViewItem extends ListViewItem {
         this.row().padTop(CB.scaledSizes.MARGINx2);
 
         Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
-        commentLabelStyle.font = this.style.descriptionFont;
-        commentLabelStyle.fontColor = this.style.descriptionFontColor;
+        commentLabelStyle.font = this.logListItemStyle.descriptionFont;
+        commentLabelStyle.fontColor = this.logListItemStyle.descriptionFontColor;
 
         String comment = logEntry.Comment;
         int maxLength = 500;

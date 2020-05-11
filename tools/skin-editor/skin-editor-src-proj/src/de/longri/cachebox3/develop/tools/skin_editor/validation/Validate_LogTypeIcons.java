@@ -11,26 +11,28 @@ import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
  */
 public class Validate_LogTypeIcons extends Validate_Abstract_Icons {
 
-    final int bubble_LogTypesIconSize, cacheListViewLogTypesIconSize, logViewLogStylesIconSize, DraftListItemStyleIconSize;
+    final int scaled12, scaled18, scaled48, scaled24;
 
     public Validate_LogTypeIcons(SkinEditorGame game, SavableSvgSkin validationSkin, Stage stage) {
         super(game, validationSkin, stage, LogTypesStyle.class);
-        this.bubble_LogTypesIconSize = CB.getScaledInt(12);
-        this.cacheListViewLogTypesIconSize = CB.getScaledInt(18);
-        this.logViewLogStylesIconSize = CB.getScaledInt(24);
-        this.DraftListItemStyleIconSize = CB.getScaledInt(48);
+        this.scaled12 = CB.getScaledInt(12);
+        this.scaled18 = CB.getScaledInt(18);
+        this.scaled24 = CB.getScaledInt(24);
+        this.scaled48 = CB.getScaledInt(48);
     }
 
     private int getIconSize(String styleName) {
         switch (styleName) {
-            case "bubble_LogTypes":
-                return bubble_LogTypesIconSize;
-            case "cacheListViewLogTypes":
-                return cacheListViewLogTypesIconSize;
-            case "logViewLogStyles":
-                return logViewLogStylesIconSize;
+            case "LogTypesSize12":
+                return scaled12;
+            case "LogTypesSize18":
+                return scaled18;
+            case "LogTypesSize48":
+                return scaled48;
+            case "LogTypesSize24":
+                return scaled24;
             default:
-                return DraftListItemStyleIconSize;
+                return -1;
         }
     }
 

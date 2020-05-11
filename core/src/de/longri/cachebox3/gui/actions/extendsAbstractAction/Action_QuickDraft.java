@@ -43,7 +43,7 @@ public class Action_QuickDraft extends AbstractAction {
     public void execute() {
         Menu cm = new Menu("QuickDraft");
         AbstractCache cache = EventHandler.getSelectedCache();
-        DraftListItemStyle draftListItemStyle = CB.getSkin().get("DraftListItemStyle", DraftListItemStyle.class);
+        DraftListItemStyle draftListItemStyle = CB.getSkin().get(DraftListItemStyle.class);
 
         switch (cache.getType()) {
             case Event:

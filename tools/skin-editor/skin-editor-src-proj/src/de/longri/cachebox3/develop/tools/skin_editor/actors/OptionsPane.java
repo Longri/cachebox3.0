@@ -323,98 +323,80 @@ public class OptionsPane extends Table {
      *
      */
     public void refresh(final boolean stylePane, final String style) {
-        final String widgetStyle = game.resolveWidgetPackageName(style);
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                setStylePaneVisible(stylePane);
+        final String widgetStyle = SkinEditorGame.resolveWidgetPackageName(style);
+        Gdx.app.postRunnable((Runnable) () -> {
+            setStylePaneVisible(stylePane);
 
-                Gdx.app.log("OptionsPane", "Refresh");
-                Gdx.app.log("OptionsPane", "Fetching style:" + widgetStyle);
+            Gdx.app.log("OptionsPane", "Refresh");
+            Gdx.app.log("OptionsPane", "Fetching style:" + widgetStyle);
 
-                listItems.clear();
-                int selection = -1;
+            listItems.clear();
+            int selection = -1;
 
-                try {
+            try {
 
-                    Class<?> style = Class.forName(widgetStyle);
+                Class<?> style1 = Class.forName(widgetStyle);
 
-                    currentStyle = style.newInstance();
+                currentStyle = style1.newInstance();
 
-                    styles = (ObjectMap<String, Object>) game.skinProject.getAll(style);
+                styles = (ObjectMap<String, Object>) game.skinProject.getAll(style1);
 
-                    switch (widgetStyle) {
-                        case "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle":
-                            MapArrowStyle mapArrowStyle = game.skinProject.get("myLocation", MapArrowStyle.class);
-                            styles.put("myLocation", mapArrowStyle);
+                switch (widgetStyle) {
+                    case "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle":
+                        MapArrowStyle mapArrowStyle = game.skinProject.get("myLocation", MapArrowStyle.class);
+                        styles.put("myLocation", mapArrowStyle);
 
-                            MapCenterCrossStyle mapCenterCrossStyle = game.skinProject.get("centerCross", MapCenterCrossStyle.class);
-                            styles.put("centerCross", mapCenterCrossStyle);
+                        MapCenterCrossStyle mapCenterCrossStyle = game.skinProject.get("centerCross", MapCenterCrossStyle.class);
+                        styles.put("centerCross", mapCenterCrossStyle);
 
-                            MapInfoPanelStyle mapInfoPanelStyle = game.skinProject.get("infoPanel", MapInfoPanelStyle.class);
-                            styles.put("infoPanel", mapInfoPanelStyle);
+                        MapInfoPanelStyle mapInfoPanelStyle = game.skinProject.get("infoPanel", MapInfoPanelStyle.class);
+                        styles.put("infoPanel", mapInfoPanelStyle);
 
-                            DirectLineRendererStyle directLineRendererStyle = game.skinProject.get("directLine", DirectLineRendererStyle.class);
-                            styles.put("directline", directLineRendererStyle);
-                            break;
-                        case "de.longri.cachebox3.gui.views.listview.ListView$ListViewStyle":
+                        DirectLineRendererStyle directLineRendererStyle = game.skinProject.get("directLine", DirectLineRendererStyle.class);
+                        styles.put("directline", directLineRendererStyle);
+                        break;
+                    case "de.longri.cachebox3.gui.skin.styles.CompassStyle":
+                        CompassViewStyle compassViewStyle = game.skinProject.get("compassViewStyle", CompassViewStyle.class);
+                        styles.put("compassViewStyle", compassViewStyle);
+                        break;
+                    case "com.badlogic.gdx.scenes.scene2d.ui.CB_ProgressBar$ProgressBarStyle":
+                        CircularProgressStyle circularProgressStyle = game.skinProject.get("circularProgressStyle", CircularProgressStyle.class);
+                        styles.put("circularProgressStyle", circularProgressStyle);
+                        break;
+                }
 
-                            CacheListItemStyle cacheListItemStyle = game.skinProject.get("cacheListItems", CacheListItemStyle.class);
-                            styles.put("cacheListItems", cacheListItemStyle);
+                if (styles == null || styles.size == 0) {
+                    Gdx.app.error("OptionsPane", "No styles defined for this widget type");
 
-                            WayPointListItemStyle wayPointListItemStyle = game.skinProject.get("WayPointListItems", WayPointListItemStyle.class);
-                            styles.put("WayPointListItems", wayPointListItemStyle);
+                    tableFields.clear();
+                } else {
+                    Array<String> keys = styles.keys().toArray();
+                    boolean first = true;
 
-                            LogListItemStyle logListItemStyle = game.skinProject.get("logListItems", LogListItemStyle.class);
-                            styles.put("logListItems", logListItemStyle);
+                    for (int i = 0, n = keys.size; i < n; i++) {
+                        String key = keys.get(i);
+                        listItems.add(key);
 
-                            DraftListItemStyle draftListItemStyle = game.skinProject.get("DraftListItemStyle", DraftListItemStyle.class);
-                            styles.put("DraftListItemStyle", draftListItemStyle);
+                        if (first == true) {
 
-                            break;
-                        case "de.longri.cachebox3.gui.skin.styles.CompassStyle":
-                            CompassViewStyle compassViewStyle = game.skinProject.get("compassViewStyle", CompassViewStyle.class);
-                            styles.put("compassViewStyle", compassViewStyle);
-                            break;
-                        case "com.badlogic.gdx.scenes.scene2d.ui.CB_ProgressBar$ProgressBarStyle":
-                            CircularProgressStyle circularProgressStyle = game.skinProject.get("circularProgressStyle", CircularProgressStyle.class);
-                            styles.put("circularProgressStyle", circularProgressStyle);
-                            break;
-                    }
-
-                    if (styles == null || styles.size == 0) {
-                        Gdx.app.error("OptionsPane", "No styles defined for this widget type");
-
-                        tableFields.clear();
-                    } else {
-                        Array<String> keys = styles.keys().toArray();
-                        boolean first = true;
-
-                        for (int i = 0, n = keys.size; i < n; i++) {
-                            String key = keys.get(i);
-                            listItems.add(key);
-
-                            if (first == true) {
-
-                                currentStyle = styles.get(key);
-                                updateTableFields(key);
-                                selection = listItems.size - 1;
-                                first = false;
-                            }
-
+                            currentStyle = styles.get(key);
+                            updateTableFields(key);
+                            selection = listItems.size - 1;
+                            first = false;
                         }
 
                     }
-                    listItems.sort();
-                    listStyles.setItems(listItems);
 
-                    if (selection != -1) {
-                        listStyles.setSelectedIndex(selection);
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+                listItems.sort();
+                listStyles.setItems(listItems);
+
+                if (selection != -1) {
+                    listStyles.setSelectedIndex(selection);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 

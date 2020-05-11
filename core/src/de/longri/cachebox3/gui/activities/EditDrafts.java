@@ -120,7 +120,7 @@ public class EditDrafts extends ActivityBase {
 
     private EditDrafts() {
         super("EditDraft");
-        draftListItemStyle = CB.getSkin().get("DraftListItemStyle", DraftListItemStyle.class);
+        draftListItemStyle = CB.getSkin().get(DraftListItemStyle.class);
 
         btnOk = new CB_Button(Translation.get("save"));
         btnOk.addListener(saveClickListener);

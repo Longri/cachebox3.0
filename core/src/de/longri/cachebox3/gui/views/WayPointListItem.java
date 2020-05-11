@@ -30,8 +30,8 @@ public class WayPointListItem extends ListViewItem implements Disposable {
 
     WayPointListItem(int listIndex, CacheTypes type, CharSequence wayPointGcCode, CharSequence wayPointTitle, CharSequence description, CharSequence coord) {
         super(listIndex);
-        WayPointListItemStyle style = VisUI.getSkin().get("WayPointListItems", WayPointListItemStyle.class);
-        this.wayPointItem = new WayPointItem(type, wayPointGcCode, wayPointTitle, description, coord, style);
+        WayPointListItemStyle wayPointListItemStyle = VisUI.getSkin().get(WayPointListItemStyle.class);
+        this.wayPointItem = new WayPointItem(type, wayPointGcCode, wayPointTitle, description, coord, wayPointListItemStyle);
         this.add(wayPointItem).expand().fill();
     }
 

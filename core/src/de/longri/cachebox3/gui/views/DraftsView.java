@@ -354,7 +354,7 @@ public class DraftsView extends AbstractView {
 
     @Override
     protected void create() {
-        draftListItemStyle = VisUI.getSkin().get("DraftListItemStyle", DraftListItemStyle.class);
+        draftListItemStyle = VisUI.getSkin().get(DraftListItemStyle.class);
 
         draftEntries = new DraftList();
         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);

@@ -55,7 +55,7 @@ public class CacheListItem extends ListViewItem implements Disposable {
             rightLogType = LogTypes.archived;
             isAvailable = false;
         }
-        CacheListItemStyle style = VisUI.getSkin().get("cacheListItems", CacheListItemStyle.class);
+        CacheListItemStyle style = VisUI.getSkin().get(CacheListItemStyle.class);
         cacheItem = new CacheItem(_geoCache.getType(), _geoCache.getGeoCacheName(), (int) (_geoCache.getDifficulty() * 2), (int) (_geoCache.getTerrain() * 2),
                 (int) Math.min(_geoCache.getRating() * 2, 5 * 2), _geoCache.getSize(), _geoCache.getSize().toShortString(),
                 leftLogType, rightLogType, isAvailable, _geoCache.isFavorite(), _geoCache.getFavoritePoints(), _geoCache.getNumTravelbugs(), style);

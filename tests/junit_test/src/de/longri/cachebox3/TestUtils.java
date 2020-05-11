@@ -161,7 +161,7 @@ public class TestUtils {
 
         //de.longri.cachebox3.gui.skin.styles.DraftListItemStyle registered with name: DraftListItemStyle
         DraftListItemStyle draftListItemStyle = new DraftListItemStyle();
-        VisUI.getSkin().add("DraftListItemStyle", draftListItemStyle, DraftListItemStyle.class);
+        VisUI.getSkin().add("default", draftListItemStyle, DraftListItemStyle.class);
 
         //de.longri.cachebox3.gui.ActivityBase$ActivityBaseStyle registered with name: default
         ActivityBase.ActivityBaseStyle activityBaseStyle = new ActivityBase.ActivityBaseStyle();
@@ -185,7 +185,7 @@ public class TestUtils {
         CacheListItemStyle cacheListItemStyle = new CacheListItemStyle();
         cacheListItemStyle.nameFont = new BitmapFont();
         cacheListItemStyle.distanceFont = new BitmapFont();
-        VisUI.getSkin().add("cacheListItems", cacheListItemStyle, CacheListItemStyle.class);
+        VisUI.getSkin().add("default", cacheListItemStyle, CacheListItemStyle.class);
 
         //de.longri.cachebox3.gui.skin.styles.MapBubbleStyle registered with name: bubble
         MapBubbleStyle mapBubbleStyle = new MapBubbleStyle();

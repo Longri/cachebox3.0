@@ -424,7 +424,7 @@ public class PreviewPane extends Table {
                             Catch_Table tbl = new Catch_Table(true);
                             tbl.defaults().pad(0);
                             // tbl.setDebug(true);
-                            DraftListItemStyle draftListItemStyle = game.skinProject.get("DraftListItemStyle", DraftListItemStyle.class);
+                            DraftListItemStyle draftListItemStyle = game.skinProject.get(DraftListItemStyle.class);
                             entry.foundNumber = 12345;
                             entry.timestamp = new Date();
                             entry.cacheType = CacheTypes.Traditional;

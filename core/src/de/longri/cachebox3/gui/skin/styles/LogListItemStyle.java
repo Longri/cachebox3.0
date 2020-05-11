@@ -26,5 +26,5 @@ public class LogListItemStyle {
     public Color headerFontColor;
     public BitmapFont descriptionFont;
     public Color descriptionFontColor;
-    public LogTypesStyle typeStyle;
+    public LogTypesStyle logTypesStyle;
 }
