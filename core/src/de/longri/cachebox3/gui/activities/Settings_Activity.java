@@ -941,6 +941,7 @@ public class Settings_Activity extends ActivityBase {
                     new NumericInput_Activity<Float>(setting.getValue()) {
                         public void returnValue(Float value) {
                             setting.setValue(value);
+                            valueLabel.setText(Float.toString(value));
                             WidgetGroup group = listViews.peek();
                             for (Actor actor : group.getChildren()) {
                                 if (actor instanceof ListView) {
@@ -971,6 +972,7 @@ public class Settings_Activity extends ActivityBase {
                     new NumericInput_Activity<Double>(setting.getValue()) {
                         public void returnValue(Double value) {
                             setting.setValue(value);
+                            valueLabel.setText(Double.toString(value));
                             WidgetGroup group = listViews.peek();
                             for (Actor actor : group.getChildren()) {
                                 if (actor instanceof ListView) {
@@ -1001,6 +1003,7 @@ public class Settings_Activity extends ActivityBase {
                     new NumericInput_Activity<Integer>(setting.getValue()) {
                         public void returnValue(Integer value) {
                             setting.setValue(value);
+                            valueLabel.setText("" + value);
                             WidgetGroup group = listViews.peek();
                             for (Actor actor : group.getChildren()) {
                                 if (actor instanceof ListView) {
