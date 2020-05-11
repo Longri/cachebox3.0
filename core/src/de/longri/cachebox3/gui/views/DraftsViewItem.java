@@ -38,6 +38,7 @@ import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.skin.styles.CacheTypeStyle;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
@@ -183,7 +184,7 @@ public class DraftsViewItem extends ListViewItem {
 
     private boolean onHeaderClicked() {
         Menu cm = new Menu("DraftItemMenuTitle");
-        cm.addMenuItem("SelectCache", ":\n" + entry.CacheName, entry.cacheType.getDrawable(), this::selectCacheFromDraft);
+        cm.addMenuItem("SelectCache", ":\n" + entry.CacheName, entry.cacheType.getDrawable(CB.getSkin().get("Size48", CacheTypeStyle.class)), this::selectCacheFromDraft);
         cm.addMenuItem("edit", CB.getSkin().menuIcon.editDraft, this::editDraft);
         if (entry.GcId.startsWith("GL")) {
             cm.addMenuItem("uploadLogImage", CB.getSkin().menuIcon.uploadDraft, this::uploadLogImage);

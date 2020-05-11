@@ -659,7 +659,7 @@ public class TestView extends AbstractView {
             contentTable.row();
             iconWidth = 0;
             LogTypes[] logTypes = LogTypes.values();
-            LogTypesStyle logTypesStyle = VisUI.getSkin().get("logViewLogStyles", LogTypesStyle.class);
+            LogTypesStyle logTypesStyle = VisUI.getSkin().get("LogTypesSize24", LogTypesStyle.class);
             for (int i = 0, n = logTypes.length; i < n; i++) {
                 LogTypes logType = logTypes[i];
 

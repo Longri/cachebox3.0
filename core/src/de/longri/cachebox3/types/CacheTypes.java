@@ -79,13 +79,13 @@ public enum CacheTypes implements SelectBoxItem {
 
     private final static Logger log = LoggerFactory.getLogger(CacheTypes.class);
     static CacheTypeStyle cacheTypeStyle;
-    private boolean isCache;
+    private final boolean isCache;
 
     CacheTypes(boolean isCache) {
         this.isCache = isCache;
     }
 
-    public final static Array<CacheTypes> caches() {
+    public static Array<CacheTypes> caches() {
         Array<CacheTypes> result = new Array<>();
         for (CacheTypes c : CacheTypes.values()) {
             if (c.isCache) {
@@ -96,8 +96,8 @@ public enum CacheTypes implements SelectBoxItem {
     }
 
     /**
-     * @param string
-     * @return
+     * @param string ?
+     * @return ?
      */
     public static CacheTypes parseString(String string) {
 
@@ -164,7 +164,7 @@ public enum CacheTypes implements SelectBoxItem {
             return valueOf(string);
         } catch (Exception ex) {
             CacheTypes cacheType = Undefined;
-            Boolean blnCacheTypeFound = false;
+            boolean blnCacheTypeFound = false;
             for (CacheTypes ct : CacheTypes.values()) {
                 if (ct.toString().toLowerCase().contains(string.toLowerCase())) {
                     cacheType = ct;

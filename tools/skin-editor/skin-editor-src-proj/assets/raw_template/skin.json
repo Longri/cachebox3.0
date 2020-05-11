@@ -1640,6 +1640,10 @@
       "path": "svg/mapStar2.svg",
       "scale": 1
     },
+    "Traditional48": {
+      "path": "svg/gcTraditional.svg",
+      "scale": 1
+    },
     "Traditional24": {
       "path": "svg/gcTraditional.svg",
       "scale": 0.5
@@ -3809,6 +3813,31 @@
       "myParking": "mapParkingArea1",
       "giga": "giga24",
       "labCache": "labCache24"
+    },
+    "Size48": {
+      "traditional": "Traditional48",
+      "multi": "multi48",
+      "mystery": "Mystery48",
+      "camera": "Camera48",
+      "earth": "earth48",
+      "event": "event48",
+      "megaEvent": "mega48",
+      "cito": "cito48",
+      "virtual": "Virtual48",
+      "letterbox": "letterbox48",
+      "wherigo": "Wherigo48",
+      "referencePoint": "ReferencePoint48",
+      "wikipedia": "Wikipedia48",
+      "undefined": "Undefined48",
+      "multiStage": "stage48",
+      "multiQuestion": "Question48",
+      "trailhead": "Trailhead48",
+      "parkingArea": "mapParkingArea1",
+      "Final": "final48",
+      "cache": "Cache48",
+      "myParking": "mapParkingArea1",
+      "giga": "giga48",
+      "labCache": "labCache48"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.CacheListItemStyle": {
