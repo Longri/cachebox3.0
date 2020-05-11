@@ -28,6 +28,7 @@ import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.popUps.QuickDraftFeedbackPopUp;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.gui.utils.TemplateFormatter;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
@@ -63,6 +64,7 @@ public class DraftsView extends AbstractView {
     private static EditDrafts efnActivity;
     private ListView listView = new ListView(VERTICAL);
     private DraftListItemStyle draftListItemStyle;
+    private LogTypesStyle logTypesStyle;
     private Array<ListViewItem> items;
     private ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
@@ -355,6 +357,7 @@ public class DraftsView extends AbstractView {
     @Override
     protected void create() {
         draftListItemStyle = VisUI.getSkin().get(DraftListItemStyle.class);
+        logTypesStyle = VisUI.getSkin().get("LogTypesSize48", LogTypesStyle.class);
 
         draftEntries = new DraftList();
         loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
@@ -529,9 +532,9 @@ public class DraftsView extends AbstractView {
     private Menu getSecondMenu() {
         Menu sm = new Menu("OwnerLogTypesTitle");
         boolean IM_owner = EventHandler.getSelectedCache().iAmTheOwner();
-        sm.addMenuItem("enabled", draftListItemStyle.logTypesStyle.enabled, () -> addNewDraft(LogTypes.enabled)).setEnabled(IM_owner);
-        sm.addMenuItem("temporarilyDisabled", draftListItemStyle.logTypesStyle.temporarily_disabled, () -> addNewDraft(LogTypes.temporarily_disabled)).setEnabled(IM_owner);
-        sm.addMenuItem("ownerMaintenance", draftListItemStyle.logTypesStyle.owner_maintenance, () -> addNewDraft(LogTypes.owner_maintenance)).setEnabled(IM_owner);
+        sm.addMenuItem("enabled", logTypesStyle.enabled, () -> addNewDraft(LogTypes.enabled)).setEnabled(IM_owner);
+        sm.addMenuItem("temporarilyDisabled", logTypesStyle.temporarily_disabled, () -> addNewDraft(LogTypes.temporarily_disabled)).setEnabled(IM_owner);
+        sm.addMenuItem("ownerMaintenance", logTypesStyle.owner_maintenance, () -> addNewDraft(LogTypes.owner_maintenance)).setEnabled(IM_owner);
         // todo check if needed: addNewFieldnote(LogTypes.reviewer_note)
         return sm;
     }
@@ -591,24 +594,24 @@ public class DraftsView extends AbstractView {
                 case MegaEvent:
                 case Event:
                 case CITO:
-                    cm.addMenuItem("will-attended", draftListItemStyle.logTypesStyle.will_attend, () -> addNewDraft(LogTypes.will_attend));
-                    cm.addMenuItem("attended", draftListItemStyle.logTypesStyle.attended, () -> addNewDraft(LogTypes.attended));
+                    cm.addMenuItem("will-attended", logTypesStyle.will_attend, () -> addNewDraft(LogTypes.will_attend));
+                    cm.addMenuItem("attended", logTypesStyle.attended, () -> addNewDraft(LogTypes.attended));
                     break;
                 case Camera:
-                    cm.addMenuItem("webCamFotoTaken", draftListItemStyle.logTypesStyle.webcam_photo_taken, () -> addNewDraft(LogTypes.webcam_photo_taken));
+                    cm.addMenuItem("webCamFotoTaken", logTypesStyle.webcam_photo_taken, () -> addNewDraft(LogTypes.webcam_photo_taken));
                     break;
                 default:
-                    cm.addMenuItem("found", draftListItemStyle.logTypesStyle.found, () -> addNewDraft(LogTypes.found));
+                    cm.addMenuItem("found", logTypesStyle.found, () -> addNewDraft(LogTypes.found));
                     break;
             }
 
-            cm.addMenuItem("DNF", draftListItemStyle.logTypesStyle.didnt_find, () -> addNewDraft(LogTypes.didnt_find));
+            cm.addMenuItem("DNF", logTypesStyle.didnt_find, () -> addNewDraft(LogTypes.didnt_find));
         }
 
         // Aktueller Cache ist von geocaching.com
         if (abstractCache != null && abstractCache.getGeoCacheCode().toString().toLowerCase().startsWith("gc")) {
-            cm.addMenuItem("maintenance", draftListItemStyle.logTypesStyle.needs_maintenance, () -> addNewDraft(LogTypes.needs_maintenance));
-            cm.addMenuItem("writenote", draftListItemStyle.logTypesStyle.note, () -> addNewDraft(LogTypes.note));
+            cm.addMenuItem("maintenance", logTypesStyle.needs_maintenance, () -> addNewDraft(LogTypes.needs_maintenance));
+            cm.addMenuItem("writenote", logTypesStyle.note, () -> addNewDraft(LogTypes.note));
         }
 
         // Owner logs

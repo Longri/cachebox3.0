@@ -16,6 +16,7 @@
 package de.longri.cachebox3.gui.actions.extendsAbstractAction;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
@@ -23,7 +24,7 @@ import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.menu.MenuID;
-import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
+import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
 import de.longri.cachebox3.gui.views.DraftsView;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.AbstractCache;
@@ -43,33 +44,33 @@ public class Action_QuickDraft extends AbstractAction {
     public void execute() {
         Menu cm = new Menu("QuickDraft");
         AbstractCache cache = EventHandler.getSelectedCache();
-        DraftListItemStyle draftListItemStyle = CB.getSkin().get(DraftListItemStyle.class);
+        LogTypesStyle logTypesStyle = VisUI.getSkin().get("LogTypesSize48", LogTypesStyle.class);
 
         switch (cache.getType()) {
             case Event:
             case MegaEvent:
             case Giga:
             case CITO:
-                cm.addMenuItem("attended", draftListItemStyle.logTypesStyle.attended, () -> {
+                cm.addMenuItem("attended", logTypesStyle.attended, () -> {
                     DraftsView.addNewDraft(LogTypes.attended, true);
                     finalHandling(true, cache);
                 });
                 break;
             case Camera:
-                cm.addMenuItem("webCamFotoTaken", draftListItemStyle.logTypesStyle.webcam_photo_taken, () -> {
+                cm.addMenuItem("webCamFotoTaken", logTypesStyle.webcam_photo_taken, () -> {
                     DraftsView.addNewDraft(LogTypes.webcam_photo_taken, true);
                     finalHandling(true, cache);
                 });
-                cm.addMenuItem("DNF", draftListItemStyle.logTypesStyle.didnt_find, () -> {
+                cm.addMenuItem("DNF", logTypesStyle.didnt_find, () -> {
                     finalHandling(false, cache);
                 });
                 break;
             default:
-                cm.addMenuItem("found", draftListItemStyle.logTypesStyle.found, () -> {
+                cm.addMenuItem("found", logTypesStyle.found, () -> {
                     DraftsView.addNewDraft(LogTypes.found, true);
                     finalHandling(true, cache);
                 });
-                cm.addMenuItem("DNF", draftListItemStyle.logTypesStyle.didnt_find, () -> {
+                cm.addMenuItem("DNF", logTypesStyle.didnt_find, () -> {
                     DraftsView.addNewDraft(LogTypes.didnt_find, true);
                     finalHandling(false, cache);
                 });
