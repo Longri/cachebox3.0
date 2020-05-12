@@ -110,7 +110,7 @@ public class ShowImportMenu extends Menu {
                 });
             }
         });
-        folderChooser.setDirectory(Gdx.files.absolute(WorkPath));
+        folderChooser.setDirectory(Gdx.files.absolute(WorkPath + "/user"));
         folderChooser.show();
     }
 
