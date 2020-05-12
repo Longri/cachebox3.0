@@ -13,5 +13,5 @@ public class WayPointListItemStyle {
     public Drawable arrow;
     public BitmapFont distanceFont;
     public Color distanceFontColor;
-    public CacheTypeStyle typeStyle;
+    public CacheTypeStyle cacheTypeStyle;
 }

@@ -153,7 +153,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
             if (cursor != null) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    cacheList.getCacheById(cursor.getLong(0)).setText(cursor);
+                    cacheList.getCacheById(cursor.getLong(0)).setTextFieldsFromCursor(cursor);
                     cursor.next();
                 }
             }

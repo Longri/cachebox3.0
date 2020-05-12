@@ -75,7 +75,7 @@ public class WayPointItem extends VisTable implements Disposable {
 
         if (cacheTypes != null) {
             VisTable iconTable = new VisTable();
-            iconTable.add(cacheTypes.getCacheWidget(wayPointListItemStyle.typeStyle, null, null, null, null));
+            iconTable.add(cacheTypes.getCacheWidget(wayPointListItemStyle.cacheTypeStyle, null, null, null, null));
             iconTable.pack();
             iconTable.layout();
             add(iconTable).left().top().padRight(CB.scaledSizes.MARGINx2);

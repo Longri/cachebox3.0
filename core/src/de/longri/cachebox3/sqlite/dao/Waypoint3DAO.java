@@ -68,16 +68,16 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
 
 
     @Override
-    public void writeToDatabase(Database database, AbstractWaypoint wp, boolean fireChangedEvent) {
-        writeToDatabase(database, wp, false, fireChangedEvent);
+    public void writeToDatabase(Database database, AbstractWaypoint wp, boolean fireCacheListChangedEvent) {
+        writeToDatabase(database, wp, false, fireCacheListChangedEvent);
     }
 
     @Override
-    public boolean updateDatabase(Database database, AbstractWaypoint wp, boolean fireChangedEvent) {
-        return writeToDatabase(database, wp, true, fireChangedEvent);
+    public boolean updateDatabase(Database database, AbstractWaypoint wp, boolean fireCacheListChangedEvent) {
+        return writeToDatabase(database, wp, true, fireCacheListChangedEvent);
     }
 
-    private boolean writeToDatabase(Database database, AbstractWaypoint wp, boolean update, boolean fireChangedEvent) {
+    private boolean writeToDatabase(Database database, AbstractWaypoint wp, boolean update, boolean fireCacheListChangedEvent) {
         //TODO  int newCheckSum = createCheckSum(database, wp);
 
         Database.Parameters args = new Database.Parameters();
@@ -109,7 +109,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
             database.insert("WaypointsText", args2);
         }
         checkUserWaypointFlag(database, wp);
-        waypointListChanged(database, wp, false, fireChangedEvent);
+        waypointListChanged(database, wp, false, fireCacheListChangedEvent);
         return updated;
     }
 
@@ -120,7 +120,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
     }
 
     @Override
-    public void delete(Database database, AbstractWaypoint waypoint, boolean fireChangedEvent) {
+    public void delete(Database database, AbstractWaypoint waypoint, boolean fireCacheListChangedEvent) {
 
         //delete from Waypoints table
         database.delete("Waypoints", "GcCode='" + waypoint.getGcCode() + "'");
@@ -128,7 +128,7 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         //delete from WaypointsText table
         database.delete("WaypointsText", "GcCode='" + waypoint.getGcCode() + "'");
 
-        waypointListChanged(database, waypoint, true, fireChangedEvent);
+        waypointListChanged(database, waypoint, true, fireCacheListChangedEvent);
     }
 
     private int createCheckSum(Database database, AbstractWaypoint WP) {
@@ -170,15 +170,15 @@ public class Waypoint3DAO extends AbstractWaypointDAO {
         }
     }
 
-    private void waypointListChanged(Database database, AbstractWaypoint wp, boolean delete, boolean fireChangedEvent) {
+    private void waypointListChanged(Database database, AbstractWaypoint wp, boolean delete, boolean fireCacheListChangedEvent) {
         AbstractCache cache = database.cacheList.getCacheById(wp.getCacheId());
         if (cache != null && cache.getWaypoints() != null) {
             if (delete) {
                 cache.getWaypoints().removeValue(wp, false);
-            } else {
-                cache.getWaypoints().add(wp);
             }
-            if (fireChangedEvent) {
+            // a possibly addition to the cache.getWaypoints() has (and must have) already been done
+            // if adding here, the waypoint will be twice in the list
+            if (fireCacheListChangedEvent) {
                 CB.postAsyncDelayd(100, new NamedRunnable("Call CacheListChanged Event") {
                     @Override
                     public void run() {

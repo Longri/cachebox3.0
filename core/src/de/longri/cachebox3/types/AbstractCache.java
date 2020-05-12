@@ -112,7 +112,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
     /**
      * true, if a this mystery cache has a final waypoint
      */
-    public abstract boolean HasFinalWaypoint();
+    public abstract boolean hasFinalWaypoint();
 
     /**
      * search the final waypoint for a mystery cache
@@ -360,7 +360,7 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setInfo(GdxSqliteCursor cursor);
 
-    public abstract void setText(GdxSqliteCursor cursor);
+    public abstract void setTextFieldsFromCursor(GdxSqliteCursor cursor);
 
     public abstract void setAttributes(GdxSqliteCursor cursor);
 

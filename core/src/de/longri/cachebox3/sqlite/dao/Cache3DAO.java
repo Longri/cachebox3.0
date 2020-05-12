@@ -276,7 +276,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         cursor = database.rawQuery(statement, new String[]{String.valueOf(cache.getId())});
         if (cursor != null) {
             cursor.moveToFirst();
-            cache.setText(cursor);
+            cache.setTextFieldsFromCursor(cursor);
         }
         cursor.close();
 

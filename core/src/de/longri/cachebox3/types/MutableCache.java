@@ -258,7 +258,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public void setText(GdxSqliteCursor cursor) {
+    public void setTextFieldsFromCursor(GdxSqliteCursor cursor) {
         // cursor include
 //        Id               BIGINT         PRIMARY KEY
 //        Url              NVARCHAR (255),
@@ -277,12 +277,12 @@ public class MutableCache extends AbstractCache {
         textRead = true;
     }
 
-    private void readTextFromDB() {
+    private void readTextFieldsFromDB() {
         String statement = "SELECT * from CacheText WHERE Id=?";
         GdxSqliteCursor cursor = database.rawQuery(statement, new String[]{String.valueOf(id)});
         if (cursor != null) {
             cursor.moveToFirst();
-            setText(cursor);
+            setTextFieldsFromCursor(cursor);
             cursor.close();
         }
     }
@@ -354,7 +354,7 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public boolean HasFinalWaypoint() {
+    public boolean hasFinalWaypoint() {
         return false;
     }
 
@@ -425,7 +425,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getHint() {
-        if (!textRead) readTextFromDB();
+        if (!textRead) readTextFieldsFromDB();
         return this.hint;
     }
 
@@ -600,7 +600,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getTmpNote() {
-        if (!textRead) readTextFromDB();
+        if (!textRead) readTextFieldsFromDB();
         return this.note;
     }
 
@@ -621,7 +621,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getTmpSolver() {
-        if (!textRead) readTextFromDB();
+        if (!textRead) readTextFieldsFromDB();
         return this.solver;
     }
 
@@ -632,7 +632,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getUrl() {
-        if (!textRead) readTextFromDB();
+        if (!textRead) readTextFieldsFromDB();
         return this.url;
     }
 
@@ -697,7 +697,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getLongDescription() {
-        if (!textRead) readTextFromDB();
+        if (!textRead) readTextFieldsFromDB();
         return this.longDescription;
     }
 
@@ -708,7 +708,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public CharSequence getShortDescription() {
-        if (!textRead) readTextFromDB();
+        if (!textRead) readTextFieldsFromDB();
         return this.shortDescription;
     }
 

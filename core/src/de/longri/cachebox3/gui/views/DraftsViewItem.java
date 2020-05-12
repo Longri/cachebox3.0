@@ -225,7 +225,7 @@ public class DraftsViewItem extends ListViewItem {
 
         AbstractWaypoint finalWp = null;
         if (cache != null) {
-            if (cache.HasFinalWaypoint())
+            if (cache.hasFinalWaypoint())
                 finalWp = cache.getFinalWaypoint();
             else if (cache.hasStartWaypoint())
                 finalWp = cache.getStartWaypoint();
