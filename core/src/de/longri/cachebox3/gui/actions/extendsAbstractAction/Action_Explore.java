@@ -21,8 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.actions.MenuID;
 import de.longri.cachebox3.gui.activities.FileChooser;
-import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.translation.Translation;
 

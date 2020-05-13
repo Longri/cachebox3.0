@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractShowAction;
-import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.actions.MenuID;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.sqlite.Database;

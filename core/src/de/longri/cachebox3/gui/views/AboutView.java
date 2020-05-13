@@ -27,7 +27,7 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
-import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.utils.BuildInfo;
 

@@ -30,7 +30,7 @@ import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.MutableWaypoint;
 
-import static de.longri.cachebox3.gui.menu.MenuID.AID_ADD_WP;
+import static de.longri.cachebox3.gui.actions.MenuID.AID_ADD_WP;
 
 /**
  * Created by Longri on 14.09.2016.

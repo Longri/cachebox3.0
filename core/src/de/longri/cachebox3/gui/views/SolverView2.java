@@ -15,7 +15,7 @@
  */
 package de.longri.cachebox3.gui.views;
 
-import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.serializable.BitStore;
 
 /**

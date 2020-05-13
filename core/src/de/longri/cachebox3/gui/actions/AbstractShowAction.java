@@ -16,8 +16,8 @@
 package de.longri.cachebox3.gui.actions;
 
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.widgets.menu.Menu;
 
 /**
  * Created by Longri on 16.08.2016.

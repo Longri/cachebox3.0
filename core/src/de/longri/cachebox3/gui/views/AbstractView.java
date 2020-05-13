@@ -17,10 +17,10 @@ package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.utils.Align;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.Menu;
 import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.CB_View_Base;
 import de.longri.cachebox3.gui.widgets.ColorWidget;
+import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.utils.SkinColor;
 import de.longri.serializable.BitStore;
 

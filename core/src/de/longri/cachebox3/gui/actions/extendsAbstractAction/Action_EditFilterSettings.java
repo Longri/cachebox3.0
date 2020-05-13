@@ -22,7 +22,7 @@ import de.longri.cachebox3.gui.activities.EditFilterSettings;
 import de.longri.cachebox3.types.FilterProperties;
 import de.longri.cachebox3.utils.NamedRunnable;
 
-import static de.longri.cachebox3.gui.menu.MenuID.AID_SHOW_FILTER_DIALOG;
+import static de.longri.cachebox3.gui.actions.MenuID.AID_SHOW_FILTER_DIALOG;
 
 public class Action_EditFilterSettings extends AbstractAction {
 

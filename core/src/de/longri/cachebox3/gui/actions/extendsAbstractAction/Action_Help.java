@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.gui.actions.AbstractAction;
-import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.actions.MenuID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

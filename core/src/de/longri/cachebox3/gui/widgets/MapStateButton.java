@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.map.MapMode;
-import de.longri.cachebox3.gui.menu.Menu;
+import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.translation.Translation;
 import org.oscim.event.Event;
 import org.slf4j.Logger;

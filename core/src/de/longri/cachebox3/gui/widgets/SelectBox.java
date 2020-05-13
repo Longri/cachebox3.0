@@ -26,10 +26,10 @@ import com.badlogic.gdx.utils.Scaling;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
-import de.longri.cachebox3.gui.menu.Menu;
-import de.longri.cachebox3.gui.menu.MenuItem;
-import de.longri.cachebox3.gui.menu.OnItemClickListener;
 import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
+import de.longri.cachebox3.gui.widgets.menu.Menu;
+import de.longri.cachebox3.gui.widgets.menu.MenuItem;
+import de.longri.cachebox3.gui.widgets.menu.OnItemClickListener;
 
 /**
  * Created by Longri on 15.05.2017.

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.menu;
+package de.longri.cachebox3.gui.actions;
 
 /**
  * Diese Klasse enth�lt alle Menu Item ID�s.</br></br> Da ein Men� auch aus mehreren Men�s zusammengesetzt werden kann, m�ssen die Items

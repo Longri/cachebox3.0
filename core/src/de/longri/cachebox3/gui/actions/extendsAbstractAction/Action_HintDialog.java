@@ -19,8 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.actions.MenuID;
 import de.longri.cachebox3.gui.dialogs.HintDialog;
-import de.longri.cachebox3.gui.menu.MenuID;
 
 /**
  * Created by Longri on 14.09.2016.
