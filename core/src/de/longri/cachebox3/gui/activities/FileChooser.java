@@ -55,7 +55,8 @@ import java.io.FileFilter;
 import java.util.regex.Matcher;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
-import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.MULTI;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.SINGLE;
 
 /**
  * Created by Longri on 20.02.2017.
@@ -63,9 +64,8 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
 public class FileChooser extends ActivityBase {
 
     private final static Logger log = LoggerFactory.getLogger(FileChooser.class);
-    private final Array<FileHandle> actFileList = new Array<>();
+    private final Array<FileHandle> currentFileList = new Array<>();
     private final SelectionMode selectionMode;
-    private final Mode mode;
     FileFilter directoryFileFilter = File::isDirectory;
     FileFilter fileFilter = pathname -> true;
     FileFilter browseFilter = pathname -> true;
@@ -89,7 +89,7 @@ public class FileChooser extends ActivityBase {
             String ext = name.substring(dotIndex + 1);
 
             for (String ex : fileExtensions) {
-                if (ext.equals(ex)) return true;
+                if (ext.equalsIgnoreCase(ex)) return true;
             }
             return false;
         }
@@ -115,8 +115,7 @@ public class FileChooser extends ActivityBase {
             finish();
         }
     };
-    private Array<WidgetGroup> listViews = new Array<>();
-    private Array<String> listViewsNames = new Array<>();
+    private final Array<WidgetGroup> listViews = new Array<>();
     private final ClickListener deleteClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             // ask for deletion selected files
@@ -162,19 +161,21 @@ public class FileChooser extends ActivityBase {
             });
         }
     };
+    private SelectionType selectionType;
 
-    public FileChooser(CharSequence title, Mode mode, SelectionMode selectMode) {
-        this(title, mode, selectMode, (String) null);
+    public FileChooser(CharSequence title, SelectionMode fileOrDirectoryorBrowse) {
+        this(title, fileOrDirectoryorBrowse, (String) null);
     }
 
-    public FileChooser(CharSequence title, Mode _mode, SelectionMode selectMode, String... extensions) {
+    public FileChooser(CharSequence title, SelectionMode fileOrDirectoryorBrowse, String... extensions) {
         super("FileChooser", VisUI.getSkin().get(FileChooserStyle.class));
-        mode = _mode;
+        selectionMode = fileOrDirectoryorBrowse;
+        selectionType = SINGLE; // MULTI is not yet handled
         fileChooserStyle = (FileChooserStyle) style;
         setStageBackground(style.background);
         createButtons();
 
-        switch (selectMode) {
+        switch (selectionMode) {
             case FILES:
                 if (extensions == null || extensions.length == 0 || (extensions.length == 1 && extensions[0] == null)) {
                     currentFilter = fileFilter;
@@ -187,7 +188,6 @@ public class FileChooser extends ActivityBase {
                 currentFilter = directoryFileFilter;
                 break;
         }
-        selectionMode = selectMode;
 
     }
 
@@ -203,6 +203,8 @@ public class FileChooser extends ActivityBase {
 
         if (isRoot)
             rootDir = directory;
+        else
+            rootDir = new FileHandle("/");
 
         // list all parents
         String absolutPath = directory.file().getAbsolutePath();
@@ -223,27 +225,32 @@ public class FileChooser extends ActivityBase {
     }
 
     private void setInternDirectory(FileHandle directory, boolean isRoot) {
-        selectedFile = null;
-        currentDirectory = directory;
-        currentDirectoryIsRoot = isRoot;
-        fillFileList(currentDirectoryIsRoot, false);
+        // cause clicked is called twice per real click compare directory != currentDirectory
+        if (directory != currentDirectory) {
+            selectedFile = null;
+            currentDirectory = directory;
+            currentDirectoryIsRoot = isRoot;
+            fillFileList(currentDirectoryIsRoot, false);
+        }
     }
 
     private void fillFileList(boolean actDirIsRoot, boolean reload) {
-        actFileList.clear();
+        currentFileList.clear();
         for (FileHandle fileHandle : currentDirectory.list(currentFilter))
-            actFileList.add(fileHandle);
+            currentFileList.add(fileHandle);
         fillContent(actDirIsRoot, reload);
-        checkButton(null);
+        updateActionButton(null);
     }
 
-    private void checkButton(ListView listView) {
+    private void updateActionButton(ListView listView) {
+        // btnAction is either select (for  SelectionMode.DIRECTORIES and  SelectionMode.Files, calling the return listener)
+        // or delete (for  SelectionMode.BROWSE, handled in this class)
         if (selectionMode != SelectionMode.DIRECTORIES) {
             if (listView == null || listView.getSelectedItem() == null) {
-                log.debug("chekButton switch off");
+                log.debug("ActionButton disabled");
                 btnAction.setDisabled(true);
             } else {
-                log.debug("chekButton switch on");
+                log.debug("ActionButton enabled");
                 btnAction.setDisabled(false);
             }
         }
@@ -252,7 +259,7 @@ public class FileChooser extends ActivityBase {
 
     private void createButtons() {
 
-        if (mode == Mode.BROWSE) {
+        if (selectionMode == SelectionMode.BROWSE) {
             btnAction = new IconButton(Translation.get("delete"), fileChooserStyle.deleteBtnIcon);
             btnAction.addListener(deleteClickListener);
         } else {
@@ -260,13 +267,13 @@ public class FileChooser extends ActivityBase {
             btnAction.addListener(selectClickListener);
         }
 
-        btnCancel = new CB_Button(Translation.get(mode == Mode.BROWSE ? "close" : "cancel"));
+        btnCancel = new CB_Button(Translation.get(selectionMode == SelectionMode.BROWSE ? "close" : "cancel"));
+        btnCancel.addListener(cancelClickListener);
+        CB.stageManager.registerForBackKey(cancelClickListener);
 
         addActor(btnAction);
         addActor(btnCancel);
 
-        btnCancel.addListener(cancelClickListener);
-        CB.stageManager.registerForBackKey(cancelClickListener);
     }
 
     public void setSelectionReturnListener(SelectionReturnListner listener) {
@@ -293,7 +300,7 @@ public class FileChooser extends ActivityBase {
         nameStyle.font = fileChooserStyle.itemNameFont;
         nameStyle.fontColor = fileChooserStyle.itemNameFontColor;
 
-        actFileList.sort((o1, o2) -> {
+        currentFileList.sort((o1, o2) -> {
             // directories first
             if (o1.isDirectory() && !o2.isDirectory()) return -1;
             if (!o1.isDirectory() && o2.isDirectory()) return 1;
@@ -303,7 +310,7 @@ public class FileChooser extends ActivityBase {
         });
 
 
-        final FileListAdapter listViewAdapter = new FileListAdapter(actFileList) {
+        final FileListAdapter listViewAdapter = new FileListAdapter(currentFileList) {
 
             IntMap<FileChooserItem> items = new IntMap<>();
 
@@ -351,7 +358,7 @@ public class FileChooser extends ActivityBase {
                     item.addListener(new ClickLongClickListener() {
                         public boolean clicked(InputEvent event, float x, float y) {
                             if (event.getType() == InputEvent.Type.touchUp) {
-                                if (mode == Mode.BROWSE) {
+                                if (selectionMode == SelectionMode.BROWSE) {
                                     log.debug("click");
                                     //remove selection before switch to dir
                                     item.setSelected(false);
@@ -372,7 +379,7 @@ public class FileChooser extends ActivityBase {
                         public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
                             log.debug("longClick on Actor: {}", actor.toString());
                             //select and not browse
-                            if (mode == Mode.BROWSE) {
+                            if (selectionMode == SelectionMode.BROWSE) {
                                 if (item.isSelected()) {
                                     item.setSelected(false);
                                     Array<ListViewItemInterface> selectedItems = listView.getSelectedItems();
@@ -401,7 +408,7 @@ public class FileChooser extends ActivityBase {
                                 CB.postAsyncDelayd(200, new NamedRunnable("") {
                                     @Override
                                     public void run() {
-                                        checkButton(listView);
+                                        updateActionButton(listView);
                                     }
                                 });
                             }
@@ -451,19 +458,24 @@ public class FileChooser extends ActivityBase {
 
         };
         final ListView listView = new ListView(VERTICAL);
-
+        listView.setSelectionType(selectionType);
         listViewAdapter.listView = listView;
 
+        showListView(listView, currentDirectory.name(), true, isRoot, reload); // do not in postOnNextGlThread for listviews must be uptodate on return
         CB.postOnNextGlThread(() -> {
             listView.setAdapter(listViewAdapter);
-            showListView(listView, currentDirectory.name(), true, isRoot, reload);
         });
 
 
     }
 
+    public void setSelectionType(SelectionType newSelectionType) {
+        // there is no usage or result of setting selection to multi
+        selectionType = newSelectionType;
+    }
+
     private void select(ListView listView, int index) {
-        if (selectionMode == SelectionMode.ALL) {
+        if (listView.getSelectionType() == MULTI) {
             ListViewItemInterface item = listView.getListItem(index);
             if (item.isSelected()) {
                 listView.getSelectedItems().removeValue(item, true);
@@ -479,10 +491,10 @@ public class FileChooser extends ActivityBase {
                 }
             }
         } else {
-            listView.setSelectable(SINGLE);
+            listView.setSelectionType(SINGLE);
             listView.setSelection(index);
         }
-        checkButton(listView);
+        updateActionButton(listView);
     }
 
     private void showListView(ListView listView, String name, boolean animate, boolean isRoot, boolean reload) {
@@ -505,7 +517,7 @@ public class FileChooser extends ActivityBase {
         };
 
         // add the titleLabel on top
-        if (fileChooserStyle.backIcon != null && listViewsNames.size > 0) {
+        if (fileChooserStyle.backIcon != null && !isRoot) {
             Image backImage = new Image(fileChooserStyle.backIcon);
             backImage.setPosition(xPos, 0);
             xPos += backImage.getWidth() + CB.scaledSizes.MARGIN;
@@ -516,15 +528,13 @@ public class FileChooser extends ActivityBase {
         Label.LabelStyle nameStyle = new Label.LabelStyle();
         nameStyle.font = fileChooserStyle.itemNameFont;
         nameStyle.fontColor = fileChooserStyle.itemNameFontColor;
-
         VisLabel titleLabel = new VisLabel(name, nameStyle);
 
-        if (listViewsNames.size > 0) {
+        if (!isRoot) {
             Label.LabelStyle parentStyle = new Label.LabelStyle();
             parentStyle.font = fileChooserStyle.backItemNameFont;
             parentStyle.fontColor = fileChooserStyle.backItemNameFontColor;
-
-            VisLabel parentTitleLabel = new VisLabel(listViewsNames.get(listViewsNames.size - 1), parentStyle);
+            VisLabel parentTitleLabel = new VisLabel(currentDirectory.parent().name(), parentStyle);
             parentTitleLabel.setPosition(xPos, 0);
 
             if (parentTitleLabel.getWidth() + CB.scaledSizes.MARGINx2 > (Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2) {
@@ -551,11 +561,6 @@ public class FileChooser extends ActivityBase {
         listView.setBounds(0, 0, widgetGroup.getWidth(), titleGroup.getY() - CB.scaledSizes.MARGIN);
         listView.layout();
         listView.setBackground(null); // remove default background
-
-        //set selection mode
-        if (selectionMode == SelectionMode.ALL)
-            listView.setSelectable(SelectableType.MULTI);
-
 
         widgetGroup.addActor(listView);
 
@@ -584,22 +589,33 @@ public class FileChooser extends ActivityBase {
             }
         }
         listViews.add(widgetGroup);
-        listViewsNames.add(name);
+        widgetGroup.setUserObject(currentDirectory);
         addActor(widgetGroup);
     }
 
     private void backClick() {
+        btnAction.setDisabled(true);
         float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
 
-        if (listViews.size == 0) return;
+        if (listViews.size == 0) return; // if: we should never end up here, cause back click is not activated for the root directory
 
-        listViewsNames.pop();
-        WidgetGroup actWidgetGroup = listViews.pop();
-        WidgetGroup showingWidgetGroup = listViews.get(listViews.size - 1);
-
-        float y = actWidgetGroup.getY();
-        actWidgetGroup.addAction(Actions.sequence(Actions.moveTo(nextXPos, y, Menu.MORE_MENU_ANIMATION_TIME), Actions.removeActor()));
-        showingWidgetGroup.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
+        WidgetGroup currentListView = listViews.pop();
+        if (listViews.size == 0) {
+            if (!currentDirectoryIsRoot){
+                selectedFile = null;
+                currentDirectory = currentDirectory.parent();
+                currentDirectoryIsRoot = currentDirectory.path().equals(rootDir.path());
+                fillFileList(currentDirectoryIsRoot, true); // must immediately add to listViews (not in postOnNextGlThread)
+            }
+        }
+        if (listViews.size > 0) {
+            float y = currentListView.getY();
+            currentListView.addAction(Actions.sequence(Actions.moveTo(nextXPos, y, Menu.MORE_MENU_ANIMATION_TIME), Actions.removeActor()));
+            // for comparison works correct in setInternDirectory (go down same directory after up(back) clicked)
+            currentDirectory = (FileHandle) listViews.get(listViews.size - 1).getUserObject();
+            listViews.get(listViews.size - 1).addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
+        }
+        // else we are on the highest level
     }
 
     @Override
@@ -608,14 +624,8 @@ public class FileChooser extends ActivityBase {
         CB.stageManager.unRegisterForBackKey(cancelClickListener);
     }
 
-    public enum Mode {
-        OPEN, //
-        SAVE, //
-        BROWSE // can only delete (Button = delete)
-    }
-
     public enum SelectionMode {
-        FILES, DIRECTORIES, ALL
+        FILES, DIRECTORIES, BROWSE
     }
 
     public interface SelectionReturnListner {

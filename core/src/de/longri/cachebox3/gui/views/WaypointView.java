@@ -59,7 +59,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
-import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.SINGLE;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -235,7 +235,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             listView.setBounds(0, 0, this.getWidth(), this.getHeight());
             addActor(listView);
             listView.setCullingArea(new Rectangle(0, 0, this.getWidth(), this.getHeight()));
-            listView.setSelectable(SINGLE);
+            listView.setSelectionType(SINGLE);
             CB.requestRendering();
         }
 

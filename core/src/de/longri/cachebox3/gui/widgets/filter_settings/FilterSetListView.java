@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.SIZE;
 import static de.longri.cachebox3.gui.widgets.AdjustableStarWidget.Type.STAR;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
-import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.NONE;
 
 /**
  * Created by Longri on 16.11.2017.
@@ -72,7 +72,7 @@ public class FilterSetListView extends Catch_Table implements EditFilterSettings
         this.filterSettings = editFilterSettings;
 
         setListView = new ListView(VERTICAL);
-        setListView.setSelectable(NONE);
+        setListView.setSelectionType(NONE);
         this.add(setListView).expand().fill();
         setListView.setEmptyString("EmptyList");
     }

@@ -40,8 +40,8 @@ import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.HORIZONTAL;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
-import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
-import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.NONE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.SINGLE;
 
 /**
  * Created by Longri on 03.02.18.
@@ -122,7 +122,7 @@ public class ListView extends Catch_WidgetGroup {
     Array<EventListener> originalCapturelistener = new Array<>();
     boolean isDisabled = false;
     private float maxScrollChange = 0;
-    private SelectableType selectionType;
+    private SelectionType selectionType;
     private ListViewAdapter adapter;
     private Drawable backgroundDrawable;
     private float lastFiredScrollX = 0;
@@ -446,7 +446,11 @@ public class ListView extends Catch_WidgetGroup {
         changedEventListeners.removeValue(event, true);
     }
 
-    public void setSelectable(SelectableType selectionType) {
+    public SelectionType getSelectionType() {
+        return selectionType;
+    }
+
+    public void setSelectionType(SelectionType selectionType) {
         this.selectionType = selectionType;
     }
 

@@ -64,7 +64,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
-import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.SINGLE;
 
 /**
  * Created by Longri on 24.07.16.
@@ -177,7 +177,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         this.listView.setBounds(0, 0, this.getWidth(), this.getHeight());
 
         this.listView.setCullingArea(new Rectangle(0, 0, this.getWidth(), this.getHeight()));
-        this.listView.setSelectable(SINGLE);
+        this.listView.setSelectionType(SINGLE);
 
         // add selection changed event listener
         this.listView.addSelectionChangedEventListner(() -> {

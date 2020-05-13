@@ -45,7 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
-import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.SINGLE;
 
 /**
  * Created by Longri on 16.11.2017.
@@ -66,7 +66,7 @@ public class PresetListView extends Catch_Table implements EditFilterSettings.On
         fillPresetList();
 
         presetListView = new ListView(VERTICAL);
-        presetListView.setSelectable(SINGLE);
+        presetListView.setSelectionType(SINGLE);
         this.add(presetListView).expand().fill();
         presetListView.setEmptyString("EmptyList");
         Gdx.app.postRunnable(() -> {

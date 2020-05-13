@@ -64,7 +64,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
-import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.NONE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.NONE;
 
 /**
  * Created by Longri on 24.08.2016.
@@ -230,7 +230,7 @@ public class Settings_Activity extends ActivityBase {
         };
 
         final ListView lv = new ListView(VERTICAL);
-        lv.setSelectable(NONE);
+        lv.setSelectionType(NONE);
         CB.postOnNextGlThread(() -> {
             lv.setAdapter(listViewAdapter);
             showListView(lv, Translation.get("SettingsTitle"), true);
@@ -443,7 +443,7 @@ public class Settings_Activity extends ActivityBase {
         };
 
         final ListView newListView = new ListView(VERTICAL);
-        newListView.setSelectable(NONE);
+        newListView.setSelectionType(NONE);
         CB.postOnNextGlThread(() -> {
             newListView.setAdapter(listViewAdapter);
             newListView.setUserObject(category);
@@ -886,8 +886,7 @@ public class Settings_Activity extends ActivityBase {
                 if (event.getType() == InputEvent.Type.touchUp) {
                     Menu selectClearMenu = new Menu("SelectPathTitle");
                     selectClearMenu.addMenuItem("select_folder", null, () -> {
-                        FileChooser folderChooser = new FileChooser(Translation.get("selectFolder"),
-                                FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES);
+                        FileChooser folderChooser = new FileChooser(Translation.get("selectFolder"), FileChooser.SelectionMode.DIRECTORIES);
                         folderChooser.setSelectionReturnListener(fileHandle -> {
                             if (fileHandle == null) return;
                             // check WriteProtection

@@ -96,8 +96,7 @@ public class ShowImportMenu extends Menu {
     }
 
     private void importGpxFile() {
-        FileChooser folderChooser = new FileChooser(Translation.get("select_file"),
-                FileChooser.Mode.OPEN, FileChooser.SelectionMode.FILES, "gpx", "GPX");
+        FileChooser folderChooser = new FileChooser(Translation.get("select_file"), FileChooser.SelectionMode.FILES, "gpx");
         folderChooser.setSelectionReturnListener(new FileChooser.SelectionReturnListner() {
             @Override
             public void selected(final FileHandle fileHandle) {

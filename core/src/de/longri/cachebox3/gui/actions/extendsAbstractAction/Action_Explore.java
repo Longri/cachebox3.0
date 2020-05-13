@@ -18,10 +18,12 @@ package de.longri.cachebox3.gui.actions.extendsAbstractAction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.actions.AbstractAction;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.menu.MenuID;
+import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.translation.Translation;
 
 /**
@@ -36,9 +38,8 @@ public class Action_Explore extends AbstractAction {
     @Override
     public void execute() {
         Gdx.app.postRunnable(() -> {
-            final FileChooser fileChooser = new FileChooser(Translation.get("Xplore"),
-                    FileChooser.Mode.BROWSE, FileChooser.SelectionMode.ALL);
-            fileChooser.setDirectory(CB.WorkPathFileHandle, true);
+            final FileChooser fileChooser = new FileChooser(Translation.get("Xplore"), FileChooser.SelectionMode.BROWSE);
+            fileChooser.setDirectory(CB.WorkPathFileHandle, false);
             fileChooser.show();
         });
     }
@@ -46,7 +47,6 @@ public class Action_Explore extends AbstractAction {
 
     @Override
     public Drawable getIcon() {
-        //TODO create icon like finder/explorer
-        return CB.getSkin().menuIcon.todo;
+        return VisUI.getSkin().get(FileChooserStyle.class).folderIcon;
     }
 }

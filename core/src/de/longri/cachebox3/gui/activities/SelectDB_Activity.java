@@ -54,7 +54,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
-import static de.longri.cachebox3.gui.widgets.list_view.SelectableType.SINGLE;
+import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.SINGLE;
 
 /**
  * Created by Longri on 29.08.2016.
@@ -110,7 +110,7 @@ public class SelectDB_Activity extends ActivityBase {
         this.returnListener = returnListener;
         this.mustSelect = mustSelect;
         lvFiles = new ListView(VERTICAL);
-        lvFiles.setSelectable(SINGLE);
+        lvFiles.setSelectionType(SINGLE);
         this.setListViewAdapter();
         this.addActor(lvFiles);
 

@@ -239,7 +239,7 @@ public class DraftsViewItem extends ListViewItem {
             mPath = CB.WorkPath + "/User/Media/";
         }
         // PlatformConnector.getFile(mPath, "*.jpg", Translation.get("SelectImage"), Translation.get("SelectImageButton"), PathAndName -> { });
-        FileChooser fileChooser = new FileChooser(Translation.get("SelectImage"), FileChooser.Mode.OPEN, FileChooser.SelectionMode.ALL, "jpg", "JPG", "png", "PNG");
+        FileChooser fileChooser = new FileChooser(Translation.get("SelectImage"), FileChooser.SelectionMode.FILES, "jpg", "png");
         fileChooser.setSelectionReturnListener(fileHandle -> {
             if (fileHandle != null) {
                 InputString inputDescription = new InputString("imageDescription", null) {

@@ -18,6 +18,6 @@ package de.longri.cachebox3.gui.widgets.list_view;
 /**
  * Created by Longri on 04.02.18.
  */
-public enum SelectableType {
+public enum SelectionType {
     NONE, SINGLE, MULTI
 }

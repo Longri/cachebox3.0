@@ -98,8 +98,8 @@ public class GalleryView extends Catch_Table {
             }
         };
         gallery.addInputListener(doubleClickListener);
-        gallery.setSelectable(SelectableType.NONE);
-        overview.setSelectable(SelectableType.SINGLE);
+        gallery.setSelectionType(SelectionType.NONE);
+        overview.setSelectionType(SelectionType.SINGLE);
 
         overview.addSelectionChangedEventListner(new SelectionChangedEvent() {
             @Override

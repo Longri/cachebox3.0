@@ -211,7 +211,7 @@ public class PlatformTestView extends AbstractView {
         testListView = new ListView(ListViewType.VERTICAL, false);
         testListView.setBackground(VisUI.getSkin().get(ActivityBase.ActivityBaseStyle.class).background);
         testListView.setEmptyString("No Unit Test found");
-        testListView.setSelectable(SelectableType.SINGLE);
+        testListView.setSelectionType(SelectionType.SINGLE);
         testListView.addSelectionChangedEventListner(new SelectionChangedEvent() {
             @Override
             public void selectionChanged() {
