@@ -239,8 +239,13 @@ public class TestUtils {
         GalleryViewStyle galleryViewStyle = new GalleryViewStyle();
         galleryViewStyle.galleryListStyle = listViewStyle;
         galleryViewStyle.overviewListStyle = listViewStyle;
-
         VisUI.getSkin().add("default", galleryViewStyle, GalleryViewStyle.class);
+
+
+        //No de.longri.cachebox3.gui.skin.styles.LogTypesStyle registered with name: LogTypesSize48
+        LogTypesStyle logTypesStyle = new LogTypesStyle();
+        VisUI.getSkin().add("LogTypesSize48", logTypesStyle, LogTypesStyle.class);
+
 
     }
 
