@@ -58,6 +58,7 @@ public abstract class PlatformConnector {
     }
 
     public static void setClipboard(Clipboard _clipBoard) {
+        // do not delete. it is necessary initialization call (over platform implementations in those launchers)
         clipBoard = _clipBoard;
     }
 

@@ -66,6 +66,7 @@ public class FileChooser extends ActivityBase {
     private final static Logger log = LoggerFactory.getLogger(FileChooser.class);
     private final Array<FileHandle> currentFileList = new Array<>();
     private final SelectionMode selectionMode;
+    private final Array<WidgetGroup> listViews = new Array<>();
     FileFilter directoryFileFilter = File::isDirectory;
     FileFilter fileFilter = pathname -> true;
     FileFilter browseFilter = pathname -> true;
@@ -115,7 +116,7 @@ public class FileChooser extends ActivityBase {
             finish();
         }
     };
-    private final Array<WidgetGroup> listViews = new Array<>();
+    private SelectionType selectionType;
     private final ClickListener deleteClickListener = new ClickListener() {
         public void clicked(InputEvent event, float x, float y) {
             // ask for deletion selected files
@@ -161,15 +162,15 @@ public class FileChooser extends ActivityBase {
             });
         }
     };
-    private SelectionType selectionType;
 
-    public FileChooser(CharSequence title, SelectionMode fileOrDirectoryorBrowse) {
-        this(title, fileOrDirectoryorBrowse, (String) null);
+    public FileChooser(CharSequence title, SelectionMode fileOrDirectoryOrBrowse) {
+        this(title, fileOrDirectoryOrBrowse, (String) null);
     }
 
-    public FileChooser(CharSequence title, SelectionMode fileOrDirectoryorBrowse, String... extensions) {
+    public FileChooser(CharSequence title, SelectionMode fileOrDirectoryOrBrowse, String... extensions) {
+        // todo show title
         super("FileChooser", VisUI.getSkin().get(FileChooserStyle.class));
-        selectionMode = fileOrDirectoryorBrowse;
+        selectionMode = fileOrDirectoryOrBrowse;
         selectionType = SINGLE; // MULTI is not yet handled
         fileChooserStyle = (FileChooserStyle) style;
         setStageBackground(style.background);
@@ -594,14 +595,15 @@ public class FileChooser extends ActivityBase {
     }
 
     private void backClick() {
-        btnAction.setDisabled(true);
+        if (selectionMode == SelectionMode.FILES) btnAction.setDisabled(true);
         float nextXPos = Gdx.graphics.getWidth() + CB.scaledSizes.MARGIN;
 
-        if (listViews.size == 0) return; // if: we should never end up here, cause back click is not activated for the root directory
+        if (listViews.size == 0)
+            return; // if: we should never end up here, cause back click is not activated for the root directory
 
         WidgetGroup currentListView = listViews.pop();
         if (listViews.size == 0) {
-            if (!currentDirectoryIsRoot){
+            if (!currentDirectoryIsRoot) {
                 selectedFile = null;
                 currentDirectory = currentDirectory.parent();
                 currentDirectoryIsRoot = currentDirectory.path().equals(rootDir.path());

@@ -424,13 +424,13 @@ public class TrackListView extends AbstractView {
             track = aTrack;
             tracksView = parent;
 
-            showItemMenu = new ClickListener(){
+            showItemMenu = new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
                     setSelected(true);
                     Menu cm = new Menu("TrackRecordMenuTitle");
-                    cm.addMenuItem("ShowOnMap", null, () -> positionLatLon()); // CB.getSkin().getMenuIcon.
+                    cm.addMenuItem("ShowOnMap", CB.getSkin().menuIcon.me3Map, () -> positionLatLon());
                     cm.addMenuItem("rename", null, () -> setTrackName());
-                    cm.addMenuItem("save", null, () -> saveAsFile()); //CB.getSkin().getMenuIcon.
+                    cm.addMenuItem("save", CB.getSkin().menuIcon.gpxFile, () -> saveAsFile());
                     cm.addMenuItem("unload", null, () -> unloadTrack());
 
                     // (rename, save,) delete darf nicht mit dem aktuellen Track gemacht werden....
@@ -536,39 +536,39 @@ public class TrackListView extends AbstractView {
         }
 
         private void saveAsFile() {
-        /*
-        if (track.getName().length() > 0) {
-            new FileOrFolderPicker(Config.TrackFolder.getValue(),
-                    Translation.get("SaveTrack"),
-                    Translation.get("save"),
-                    abstractFile -> {
-                        if (abstractFile != null) {
-                            String trackName = track.getName().replaceAll("[^a-zA-Z0-9_\\.\\-]", "_");
-                            String extension = track.getName().toLowerCase().endsWith(".gpx") ? "" : ".gpx";
-                            AbstractFile f = FileFactory.createFile(abstractFile, trackName + extension);
-                            saveRoute(f, track);
-                            if (f.exists()) {
-                                track.setFileName(f.getAbsolutePath());
-                                log.info(f.getAbsolutePath() + " saved.");
-                            } else {
-                                log.error("Error saving " + abstractFile + "/" + track.getName() + extension);
-                            }
+            if (track.getName().length() > 0) {
+                // normally a track has a name, so only select directory
+                // Buttontext Translation.get("save"),
+                FileChooser fc = new FileChooser(Translation.get("SaveTrack"), FileChooser.SelectionMode.DIRECTORIES);
+                fc.setSelectionReturnListener(_FileHandle -> {
+                    if (_FileHandle != null) {
+                        String trackName = track.getName().replaceAll("[^a-zA-Z0-9_\\.\\-]", "_");
+                        String extension = track.getName().toLowerCase().endsWith(".gpx") ? "" : ".gpx";
+                        FileHandle f = new FileHandle(_FileHandle.path() + "/" + trackName + extension);
+                        saveRoute(f, track);
+                        if (f.exists()) {
+                            track.setFileName(f.path());
+                            log.info(f.path() + " saved.");
+                        } else {
+                            log.error("Error saving " + f.path() + "/" + track.getName() + extension);
                         }
-                    }).show();
-        } else {
-            // existing gpx-file
-            new FileOrFolderPicker(Config.TrackFolder.getValue(),
-                    "*.gpx",
-                    Translation.get("SaveTrack"),
-                    Translation.get("save"),
-                    abstractFile -> {
-                        if (abstractFile != null) {
-                            saveRoute(abstractFile, track);
-                            log.debug("TrackListViewItem: Load Track :" + abstractFile);
-                        }
-                    }).show();
-        }
-         */
+                    }
+                });
+                fc.setDirectory(Config.TrackFolder.getValue(), false);
+                fc.show();
+            } else {
+                // a track with no name
+                // Buttontext Translation.get("save"),
+                FileChooser fc = new FileChooser(Translation.get("SaveTrack"), FileChooser.SelectionMode.FILES, "gpx");
+                fc.setSelectionReturnListener(_FileHandle -> {
+                    if (_FileHandle != null) {
+                        saveRoute(_FileHandle, track);
+                        log.debug("TrackListViewItem: Load Track :" + _FileHandle.path());
+                    }
+                });
+                fc.setDirectory(Config.TrackFolder.getValue(), false);
+                fc.show();
+            }
         }
 
         private void saveRoute(FileHandle gpxAbstractFile, Track track) {

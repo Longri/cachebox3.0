@@ -109,7 +109,7 @@ public class RingSegment extends Ring {
     @Override
     public void compute() {
         if (!isDirty)
-            return; // Nothing todo
+            return; // Nothing to do
 
         // calculate segment count
         double alpha = (360 * MIN_CIRCLE_SEGMENTH_LENGTH) / (MathUtils.PI2 * outerRadius);

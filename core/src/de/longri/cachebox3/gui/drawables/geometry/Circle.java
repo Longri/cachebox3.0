@@ -127,7 +127,7 @@ public class Circle implements IGeometry {
     @Override
     public void compute() {
         if (!isDirty.get())
-            return; // Nothing todo
+            return; // Nothing to do
 
         // calculate segment count
         double alpha = (360 * MIN_CIRCLE_SEGMENTH_LENGTH) / (MathUtils.PI2 * radius);
