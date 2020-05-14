@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.widgets;
+package de.longri.cachebox3.gui.stages;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -26,10 +26,9 @@ import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
-import de.longri.cachebox3.gui.stages.AbstractAction;
-import de.longri.cachebox3.gui.stages.AbstractShowAction;
-import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
+import de.longri.cachebox3.gui.views.AbstractView;
+import de.longri.cachebox3.gui.widgets.Window;
 import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.gui.widgets.menu.MenuItem;
 import de.longri.cachebox3.gui.widgets.menu.OnItemClickListener;
@@ -51,26 +50,164 @@ public class GestureButton extends Button {
     private static int idCounter = 0;
 
     private final GestureButtonStyle style, filterStyle;
-    private final ArrayList<ActionButton> buttonActions;
+    private final ArrayList<AbstractAction> buttonActions;
     private final int ID;
-    public AbstractShowAction currentActionView;
+    private final ViewManager viewManager;
+    private AbstractShowAction<AbstractView> currentShowAction;
     private boolean hasContextMenu;
     private GestureHelp gestureHelper;
     private Drawable gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon;
-    private final ViewManager viewManager;
+    private AbstractAction defaultAction;
+    ClickLongClickListener gestureListener = new ClickLongClickListener() {
 
-    public ArrayList<ActionButton> getButtonActions() {
-        return buttonActions;
-    }
+        @Override
+        public boolean clicked(InputEvent event, float x, float y) {
+            log.debug("on click");
 
-    public void setHasContextMenu(boolean hasContextMenu) {
-        this.hasContextMenu = hasContextMenu;
-    }
+
+            // Einfacher Click -> alle Actions durchsuchen, ob die aktActionView darin enthalten ist und diese sichtbar ist
+            if ((currentShowAction != null) && (currentShowAction.hasContextMenu())) {
+                for (AbstractAction ba : buttonActions) {
+                    if (ba == currentShowAction) {
+                        if (currentShowAction.isActVisible()) {
+                            // Dieses View ist aktuell das Sichtbare
+                            // -> ein Click auf den Menü-Button zeigt das Contextmenü
+                            // if (aktActionView.ShowContextMenu()) return true;
+
+                            if (currentShowAction.hasContextMenu()) {
+                                // das View Context Menü mit dem LongKlick Menü zusammen führen!
+
+                                // Menu zusammen stellen!
+                                // zuerst das View Context Menu
+                                final Menu compoundMenu = new Menu("");
+
+                                final OnItemClickListener[] bothListener = new OnItemClickListener[2];
+                                final OnItemClickListener bothItemClickListener = item -> {
+
+                                    boolean handeld = false;
+
+                                    if (bothListener[0] != null)
+                                        handeld = bothListener[0].onItemClick(item);
+
+                                    if (!handeld && bothListener[1] != null)
+                                        handeld = bothListener[1].onItemClick(item);
+
+                                    return handeld;
+                                };
+
+
+                                final Menu viewContextMenu = currentShowAction.getContextMenu();
+                                if (viewContextMenu != null) {
+                                    compoundMenu.setName(viewContextMenu.getName()); // for title translation
+                                    viewContextMenu.setCompoundMenu(compoundMenu);
+                                    compoundMenu.addItems(viewContextMenu.getItems());
+                                    bothListener[0] = viewContextMenu.getOnItemClickListeners();
+
+                                    // add divider
+                                    compoundMenu.addDivider(-1);
+                                }
+
+                                Menu longClickMenu = getLongClickMenu();
+                                longClickMenu.setCompoundMenu(compoundMenu);
+                                compoundMenu.addItems(longClickMenu.getItems());
+                                bothListener[1] = longClickMenu.getOnItemClickListeners();
+                                compoundMenu.setOnItemClickListener(bothItemClickListener);
+                                compoundMenu.reorganizeListIndexes();
+
+                                Menu.OnHideListener onHideListener = compoundMenu::hide;
+                                if (viewContextMenu != null) viewContextMenu.addOnHideListener(onHideListener);
+                                longClickMenu.addOnHideListener(onHideListener);
+                                compoundMenu.show();
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // execute default action
+            boolean actionExecuted = false;
+            if (defaultAction != null) {
+                boolean mustExecuteDefaultAction = true;
+
+                if (defaultAction instanceof AbstractShowAction) {
+                    //check if target view not actView
+                    Class clazz = ((AbstractShowAction<AbstractView>) defaultAction).getViewClass();
+                    if (clazz.isAssignableFrom(CB.viewmanager.getCurrentView().getClass())) {
+                        mustExecuteDefaultAction = false;
+                    }
+                }
+                if (mustExecuteDefaultAction) {
+                    defaultAction.execute();
+                    if (defaultAction instanceof AbstractShowAction)
+                        currentShowAction = (AbstractShowAction<AbstractView>) defaultAction;
+                    actionExecuted = true;
+                }
+            }
+
+            // if no default action set, show context-menu from view (like long click)
+            if (!actionExecuted) {
+                longPress(event.getTarget(), x, y, true);
+            }
+            return true;
+        }
+
+        @Override
+        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
+            log.debug("onLongClick");
+            // GL_MsgBox.show("Button " + Me.getName() + " recivet a LongClick Event");
+            // Wenn diesem Button mehrere Actions zugeordnet sind dann wird nach einem Lang-Click ein Menü angezeigt aus dem eine dieser
+            // Actions gewählt werden kann
+
+            if (buttonActions.size() > 1) {
+                getLongClickMenu().show();
+            } else if (buttonActions.size() == 1) {
+                // nur eine Action dem Button zugeordnet -> diese Action gleich ausführen
+                AbstractAction action = buttonActions.get(0);
+                if (action != null) {
+                    action.execute();
+                    if (action instanceof AbstractShowAction)
+                        currentShowAction = (AbstractShowAction<AbstractView>) action;
+                }
+            }
+            return true;
+        }
+
+        public void fling(InputEvent event, float velocityX, float velocityY, int button) {
+
+            float maxVelocity = Math.max(Math.abs(velocityX), Math.abs(velocityY));
+
+            if (maxVelocity < MIN_GESTURE_VELOCITY) {
+                // not really a gesture
+                return;
+            }
+
+
+            AbstractAction.GestureDirection direction = AbstractAction.GestureDirection.Up;
+            if (Math.abs(velocityX) >= Math.abs(velocityY)) {
+                // left or right
+                if (velocityX > 0) {
+                    direction = AbstractAction.GestureDirection.Right;
+                } else {
+                    direction = AbstractAction.GestureDirection.Left;
+                }
+            } else {
+                // up or down
+                if (velocityY > 0) {
+                    direction = AbstractAction.GestureDirection.Up;
+                } else {
+                    direction = AbstractAction.GestureDirection.Down;
+                }
+            }
+            executeAction(direction);
+        }
+    };
+    private boolean isLastFiltered = false;
 
     public GestureButton(GestureButtonStyle style, ViewManager viewManager) {
         this.style = style;
         style.checked = style.select;
-
+        defaultAction = null;
         filterStyle = new GestureButtonStyle();
         filterStyle.down = style.down;
         filterStyle.checked = style.checked;
@@ -93,6 +230,14 @@ public class GestureButton extends Button {
         this.pack();
     }
 
+    public ArrayList<AbstractAction> getButtonActions() {
+        return buttonActions;
+    }
+
+    public void setHasContextMenu(boolean hasContextMenu) {
+        this.hasContextMenu = hasContextMenu;
+    }
+
     public boolean equals(Object other) {
         if (other instanceof GestureButton) {
             return ((GestureButton) other).ID == ID;
@@ -100,23 +245,42 @@ public class GestureButton extends Button {
         return false;
     }
 
-    public void addAction(ActionButton action) {
-        buttonActions.add(action);
+    public void addDefaultAction(AbstractAction buttonAction, AbstractAction.GestureDirection gestureDirection) {
+        buttonAction.setGestureDirection(gestureDirection);
+        addToButtonActions(buttonAction, true);
+    }
+
+    public void addAction(AbstractAction buttonAction, AbstractAction.GestureDirection gestureDirection) {
+        buttonAction.setGestureDirection(gestureDirection);
+        addToButtonActions(buttonAction, false);
+    }
+
+    public void addDefaultAction(AbstractAction buttonAction) {
+        addToButtonActions(buttonAction, true);
+    }
+
+    public void addAction(AbstractAction buttonAction) {
+        addToButtonActions(buttonAction, false);
+    }
+
+    private void addToButtonActions(AbstractAction buttonAction, boolean isDefaultAction) {
+        buttonActions.add(buttonAction);
+        if (isDefaultAction) defaultAction = buttonAction;
 
         //check if this a gesture
-        if (action.getGestureDirection() != ActionButton.GestureDirection.None) {
-            switch (action.getGestureDirection()) {
+        if (buttonAction.getGestureDirection() != AbstractAction.GestureDirection.None) {
+            switch (buttonAction.getGestureDirection()) {
                 case Right:
-                    gestureRightIcon = action.getIcon();
+                    gestureRightIcon = buttonAction.getIcon();
                     break;
                 case Up:
-                    gestureUpIcon = action.getIcon();
+                    gestureUpIcon = buttonAction.getIcon();
                     break;
                 case Left:
-                    gestureLeftIcon = action.getIcon();
+                    gestureLeftIcon = buttonAction.getIcon();
                     break;
                 case Down:
-                    gestureDownIcon = action.getIcon();
+                    gestureDownIcon = buttonAction.getIcon();
                     break;
             }
         }
@@ -124,191 +288,25 @@ public class GestureButton extends Button {
     }
 
     public void executeDefaultAction() {
-        for (ActionButton action : buttonActions) {
-            if (action.isDefaultAction()) {
-                action.getAction().execute();
-                return;
+        if (defaultAction != null)
+            defaultAction.execute();
+        else {
+            //if no default button so take the first or do nothing if no buttonAction set
+            if (!buttonActions.isEmpty()) {
+                AbstractAction action = buttonActions.get(0);
+                if (action != null) action.execute();
             }
-        }
-
-        //if no default button so take the first or do nothing if no buttonAction set
-        if (!buttonActions.isEmpty()) {
-            ActionButton action = buttonActions.get(0);
-            if (action != null) action.getAction().execute();
         }
     }
 
-    public void executeAction(ActionButton.GestureDirection direction) {
-        for (ActionButton action : buttonActions) {
+    public void executeAction(AbstractAction.GestureDirection direction) {
+        for (AbstractAction action : buttonActions) {
             if (action.getGestureDirection() == direction) {
-                action.getAction().execute();
+                action.execute();
                 return;
             }
         }
     }
-
-    ClickLongClickListener gestureListener = new ClickLongClickListener() {
-
-        @Override
-        public boolean clicked(InputEvent event, float x, float y) {
-            log.debug("on click");
-
-
-            // Einfacher Click -> alle Actions durchsuchen, ob die aktActionView darin enthalten ist und diese sichtbar ist
-            if ((currentActionView != null) && (currentActionView.hasContextMenu())) {
-                for (ActionButton ba : buttonActions) {
-                    if (ba.getAction() == currentActionView) {
-                        if (currentActionView.isActVisible()) {
-                            // Dieses View ist aktuell das Sichtbare
-                            // -> ein Click auf den Menü-Button zeigt das Contextmenü
-                            // if (aktActionView.ShowContextMenu()) return true;
-
-                            if (currentActionView.hasContextMenu()) {
-                                // das View Context Menü mit dem LongKlick Menü zusammen führen!
-
-                                // Menu zusammen stellen!
-                                // zuerst das View Context Menu
-                                final Menu compoundMenu = new Menu("");
-
-                                final OnItemClickListener bothListener[] = new OnItemClickListener[2];
-                                final OnItemClickListener bothItemClickListener = new OnItemClickListener() {
-
-
-                                    @Override
-                                    public boolean onItemClick(MenuItem item) {
-
-                                        boolean handeld = false;
-
-                                        if (bothListener[0] != null)
-                                            handeld = bothListener[0].onItemClick(item);
-
-                                        if (!handeld && bothListener[1] != null)
-                                            handeld = bothListener[1].onItemClick(item);
-
-                                        return handeld;
-                                    }
-                                };
-
-
-                                final Menu viewContextMenu = currentActionView.getContextMenu();
-                                if (viewContextMenu != null) {
-                                    compoundMenu.setName(viewContextMenu.getName()); // for title translation
-                                    viewContextMenu.setCompoundMenu(compoundMenu);
-                                    compoundMenu.addItems(viewContextMenu.getItems());
-                                    bothListener[0] = viewContextMenu.getOnItemClickListeners();
-
-                                    // add divider
-                                    compoundMenu.addDivider(-1);
-                                }
-
-                                Menu longClickMenu = getLongClickMenu();
-                                if (longClickMenu != null) {
-                                    longClickMenu.setCompoundMenu(compoundMenu);
-                                    compoundMenu.addItems(longClickMenu.getItems());
-                                    bothListener[1] = longClickMenu.getOnItemClickListeners();
-                                }
-                                compoundMenu.setOnItemClickListener(bothItemClickListener);
-                                compoundMenu.reorganizeListIndexes();
-
-                                Menu.OnHideListener onHideListener = new Menu.OnHideListener() {
-                                    @Override
-                                    public void onHide() {
-                                        compoundMenu.hide();
-                                    }
-                                };
-                                if (viewContextMenu != null) viewContextMenu.addOnHideListener(onHideListener);
-                                if (longClickMenu != null) longClickMenu.addOnHideListener(onHideListener);
-                                compoundMenu.show();
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            // execute default action
-            boolean actionExecuted = false;
-            for (ActionButton ba : buttonActions) {
-                if (ba.isDefaultAction()) {
-                    AbstractAction action = ba.getAction();
-
-                    if (action instanceof AbstractShowAction) {
-                        //check if target view not actView
-                        Class clazz = ((AbstractShowAction) action).getViewClass();
-                        if (clazz.isAssignableFrom(CB.viewmanager.getCurrentView().getClass())) {
-                            actionExecuted = false;
-                            break;
-                        }
-                    }
-
-                    if (action != null) {
-                        action.execute();
-                        if (action instanceof AbstractShowAction)
-                            currentActionView = (AbstractShowAction) action;
-                        actionExecuted = true;
-                        break;
-                    }
-                }
-            }
-
-            // if no default action seted, show context-menu from view (like long click)
-            if (!actionExecuted) {
-                longPress(event.getTarget(), x, y, true);
-            }
-            return true;
-        }
-
-        @Override
-        public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
-            log.debug("onLongClick");
-            // GL_MsgBox.show("Button " + Me.getName() + " recivet a LongClick Event");
-            // Wenn diesem Button mehrere Actions zugeordnet sind dann wird nach einem Lang-Click ein Menü angezeigt aus dem eine dieser
-            // Actions gewählt werden kann
-
-            if (buttonActions.size() > 1) {
-                getLongClickMenu().show();
-            } else if (buttonActions.size() == 1) {
-                // nur eine Action dem Button zugeordnet -> diese Action gleich ausführen
-                ActionButton ba = buttonActions.get(0);
-                AbstractAction action = ba.getAction();
-                if (action != null) {
-                    action.execute();
-                    if (action instanceof AbstractShowAction)
-                        currentActionView = (AbstractShowAction) action;
-                }
-            }
-            return true;
-        }
-
-        public void fling(InputEvent event, float velocityX, float velocityY, int button) {
-
-            float maxVelocity = Math.max(Math.abs(velocityX), Math.abs(velocityY));
-
-            if (maxVelocity < MIN_GESTURE_VELOCITY) {
-                // not really a gesture
-                return;
-            }
-
-
-            ActionButton.GestureDirection direction = ActionButton.GestureDirection.Up;
-            if (Math.abs(velocityX) >= Math.abs(velocityY)) {
-                // left or right
-                if (velocityX > 0) {
-                    direction = ActionButton.GestureDirection.Right;
-                } else {
-                    direction = ActionButton.GestureDirection.Left;
-                }
-            } else {
-                // up or down
-                if (velocityY > 0) {
-                    direction = ActionButton.GestureDirection.Up;
-                } else {
-                    direction = ActionButton.GestureDirection.Down;
-                }
-            }
-            executeAction(direction);
-        }
-    };
 
     private Menu getLongClickMenu() {
         Menu longClickMenu = new Menu("");
@@ -318,12 +316,12 @@ public class GestureButton extends Button {
             public boolean onItemClick(MenuItem item) {
                 int mId = item.getMenuItemId();
 
-                for (ActionButton ba : buttonActions) {
-                    if (ba.getAction().getId() == mId) {
-                        final AbstractAction action = ba.getAction();
+                for (AbstractAction ba : buttonActions) {
+                    if (ba.getId() == mId) {
+                        final AbstractAction action = ba;
 
                         //have the calling action a gesture, then show gesture helper
-                        if (Config.showGestureHelp.getValue() && ba.getGestureDirection() != ActionButton.GestureDirection.None) {
+                        if (Config.showGestureHelp.getValue() && ba.getGestureDirection() != AbstractAction.GestureDirection.None) {
                             if (gestureHelper == null) {
                                 gestureHelper = new GestureHelp(GestureHelp.getHelpEllipseFromActor(GestureButton.this),
                                         style.up, gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon);
@@ -334,7 +332,7 @@ public class GestureButton extends Button {
                                     gestureHelper.clearWindowCloseListener();
                                     action.execute();
                                     if (action instanceof AbstractShowAction)
-                                        currentActionView = (AbstractShowAction) action;
+                                        currentShowAction = (AbstractShowAction<AbstractView>) action;
                                 }
                             });
                             gestureHelper.show(ba.getGestureDirection());
@@ -343,7 +341,7 @@ public class GestureButton extends Button {
                             // no gesture, call direct
                             action.execute();
                             if (action instanceof AbstractShowAction)
-                                currentActionView = (AbstractShowAction) action;
+                                currentShowAction = (AbstractShowAction<AbstractView>) action;
                             return true;
                         }
                     }
@@ -352,8 +350,7 @@ public class GestureButton extends Button {
             }
         });
 
-        for (ActionButton ba : buttonActions) {
-            AbstractAction action = ba.getAction();
+        for (AbstractAction action : buttonActions) {
             // if (action == null || !action.getEnabled())
             //    continue;
             MenuItem mi = longClickMenu.addItem(action.getId(), action.getTitleTranslationId(), action.getNameExtension());
@@ -364,9 +361,6 @@ public class GestureButton extends Button {
         }
         return longClickMenu;
     }
-
-
-    private boolean isLastFiltered = false;
 
     public void draw(Batch batch, float parentAlpha) {
 
@@ -401,5 +395,15 @@ public class GestureButton extends Button {
                 }
             }
         }
+    }
+
+    /*
+    public AbstractShowAction<AbstractView> getCurrentActionView() {
+        return currentActionView;
+    }
+     */
+
+    public void setCurrentShowAction(AbstractShowAction<AbstractView> _currentActionView) {
+        currentShowAction = _currentActionView;
     }
 }

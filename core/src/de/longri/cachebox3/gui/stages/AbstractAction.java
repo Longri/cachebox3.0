@@ -33,6 +33,11 @@ public abstract class AbstractAction {
     protected final String titleTranslationId;
     protected final int id;
     protected String nameExtension = "";
+    protected GestureDirection gestureDirection;
+
+    public enum GestureDirection {
+        None, Right, Up, Left, Down
+    }
 
     /**
      * Constructor
@@ -61,6 +66,7 @@ public abstract class AbstractAction {
         this.id = id;
         this.nameExtension = nameExtension;
         this.functionDisabled = disabled;
+        gestureDirection = GestureDirection.None;
     }
 
 
@@ -92,6 +98,14 @@ public abstract class AbstractAction {
 
     public boolean getIsChecked() {
         return false;
+    }
+
+    public GestureDirection getGestureDirection() {
+        return gestureDirection;
+    }
+
+    public void setGestureDirection(GestureDirection _gestureDirection) {
+        gestureDirection = _gestureDirection;
     }
 
 }

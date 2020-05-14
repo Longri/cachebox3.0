@@ -32,8 +32,8 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.animations.actor_animations.Blink;
 import de.longri.cachebox3.gui.animations.actor_animations.GestureHelpAnimation;
 import de.longri.cachebox3.gui.drawables.ColorDrawable;
+import de.longri.cachebox3.gui.stages.AbstractAction;
 import de.longri.cachebox3.gui.stages.ViewManager;
-import de.longri.cachebox3.gui.widgets.ActionButton;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
@@ -234,7 +234,7 @@ public class GestureHelp extends HelpWindow {
         if (arrowUp != null) arrowUp.clearActions();
     }
 
-    public void show(ActionButton.GestureDirection gestureDirection) {
+    public void show(AbstractAction.GestureDirection gestureDirection) {
         this.show();
 
         Vector2 start = new Vector2();

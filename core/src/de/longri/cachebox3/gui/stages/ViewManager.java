@@ -47,10 +47,7 @@ import de.longri.cachebox3.gui.menu.menuBtn5.todo.Show_Credits;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
 import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.widgets.ActionButton;
-import de.longri.cachebox3.gui.widgets.ActionButton.GestureDirection;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
-import de.longri.cachebox3.gui.widgets.GestureButton;
 import de.longri.cachebox3.gui.widgets.Slider;
 import de.longri.cachebox3.locator.GlobalLocationReceiver;
 import de.longri.cachebox3.settings.Config;
@@ -247,15 +244,15 @@ public class ViewManager extends NamedStage
         for (Button button : mainButtonBar.getButtons()) {
             GestureButton gestureButton = (GestureButton) button;
             gestureButton.setChecked(false);
-            gestureButton.currentActionView = null;
+            gestureButton.setCurrentShowAction(null);
             if (!buttonFound) {
-                for (ActionButton actionButton : gestureButton.getButtonActions()) {
-                    if (actionButton.getAction() instanceof AbstractShowAction) {
-                        AbstractShowAction viewAction = (AbstractShowAction) actionButton.getAction();
+                for (AbstractAction buttonAction : gestureButton.getButtonActions()) {
+                    if (buttonAction instanceof AbstractShowAction) {
+                        AbstractShowAction<AbstractView> viewAction = (AbstractShowAction<AbstractView>) buttonAction;
                         if (viewAction.viewTypeEquals(currentView)) {
                             gestureButton.setChecked(true);
                             gestureButton.setHasContextMenu(viewAction.hasContextMenu());
-                            gestureButton.currentActionView = viewAction;
+                            gestureButton.setCurrentShowAction(viewAction);
                             buttonFound = true;
                             break;
                         }
@@ -268,48 +265,48 @@ public class ViewManager extends NamedStage
     private void initialActionButtons() {
         // assign the actions to the buttons
 
-        db_button.addAction(new ActionButton(action_show_cacheList, true, GestureDirection.Up));
-        db_button.addAction(new ActionButton(new Action_ParkingDialog(), false));
-        db_button.addAction(new ActionButton(action_show_trackableListView, false, GestureDirection.Right));
-        db_button.addAction(new ActionButton(new Action_Share(), false, GestureDirection.Right));
+        db_button.addDefaultAction(action_show_cacheList, AbstractAction.GestureDirection.Up);
+        db_button.addAction(new Action_ParkingDialog());
+        db_button.addAction(action_show_trackableListView, AbstractAction.GestureDirection.Right);
+        db_button.addAction(new Action_Share(), AbstractAction.GestureDirection.Right);
 
-        cache_button.addAction(new ActionButton(action_show_descriptionView, true, GestureDirection.Up));
-        cache_button.addAction(new ActionButton(action_show_waypointView, false, GestureDirection.Right));
-        cache_button.addAction(new ActionButton(action_show_logView, false, GestureDirection.Down));
-        cache_button.addAction(new ActionButton(new Action_HintDialog(), false));
-        cache_button.addAction(new ActionButton(action_show_spoilerView, false));
-        cache_button.addAction(new ActionButton(action_show_noteView, false));
-//        cache_button.addAction(new ActionButton(actionShowDescExt, false));
+        cache_button.addDefaultAction(action_show_descriptionView, AbstractAction.GestureDirection.Up);
+        cache_button.addAction(action_show_waypointView, AbstractAction.GestureDirection.Right);
+        cache_button.addAction(action_show_logView, AbstractAction.GestureDirection.Down);
+        cache_button.addAction(new Action_HintDialog());
+        cache_button.addAction(action_show_spoilerView);
+        cache_button.addAction(action_show_noteView);
+//        cache_button.addAction(actionShowDescExt);
 
-        nav_button.addAction(new ActionButton(action_show_mapView, true, GestureDirection.Up));
-        nav_button.addAction(new ActionButton(action_show_compassView, false, GestureDirection.Right));
-        nav_button.addAction(new ActionButton(new Action_NavigateExt(), false, GestureDirection.Down));
-        // navButton.addAction(new ActionButton(new Action_NavigateInt(), false, GestureDirection.Left));
-        nav_button.addAction(new ActionButton(action_show_trackListView, false, GestureDirection.Left));
-        nav_button.addAction(new ActionButton(new Action_MapDownload(), false));
+        nav_button.addDefaultAction(action_show_mapView, AbstractAction.GestureDirection.Up);
+        nav_button.addAction(action_show_compassView, AbstractAction.GestureDirection.Right);
+        nav_button.addAction(new Action_NavigateExt(), AbstractAction.GestureDirection.Down);
+        // navButton.addAction(new Action_NavigateInt(), AbstractAction.GestureDirection.Left);
+        nav_button.addAction(action_show_trackListView, AbstractAction.GestureDirection.Left);
+        nav_button.addAction(new Action_MapDownload());
 
 //
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, false, GestureDirection.Up));
-        tool_button.addAction(new ActionButton(action_show_DraftsView, true, GestureDirection.Up));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, false, GestureDirection.Left));
-//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, false, GestureDirection.Right));
-        tool_button.addAction(new ActionButton(new Action_TakePhoto(), false, GestureDirection.Down));
-        tool_button.addAction(new ActionButton(new Action_RecVideo(), false));
-        tool_button.addAction(new ActionButton(new Action_RecVoice(), false));
-        tool_button.addAction(new ActionButton(new Action_Explore(), false));
-        tool_button.addAction(new ActionButton(new Action_Start_FileTransfer(), false));
+//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionQuickDraft, AbstractAction.GestureDirection.Up);
+        tool_button.addDefaultAction(action_show_DraftsView, AbstractAction.GestureDirection.Up);
+//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView, AbstractAction.GestureDirection.Left);
+//        mToolsButtonOnLeftTab.addAction(new CB_ActionButton(actionShowSolverView2, AbstractAction.GestureDirection.Right);
+        tool_button.addAction(new Action_TakePhoto(), AbstractAction.GestureDirection.Down);
+        tool_button.addAction(new Action_RecVideo());
+        tool_button.addAction(new Action_RecVoice());
+        tool_button.addAction(new Action_Explore());
+        tool_button.addAction(new Action_Start_FileTransfer());
         if (CB.isTestVersion()) {
-            tool_button.addAction(new ActionButton(new Show_TestAction(), false));
-            tool_button.addAction(new ActionButton(new Show_PlatformTestAction(), false));
+            tool_button.addAction(new Show_TestAction());
+            tool_button.addAction(new Show_PlatformTestAction());
         }
 
-        misc_button.addAction(new ActionButton(new Show_AboutAction(), true, GestureDirection.Up));
-        misc_button.addAction(new ActionButton(new Show_Credits(), false));
-        misc_button.addAction(new ActionButton(new Action_Settings_Activity(), false, GestureDirection.Left));
-        misc_button.addAction(new ActionButton(new Action_Toggle_Day_Night(), false));
-        misc_button.addAction(new ActionButton(new Action_Help(), false));
-        misc_button.addAction(new ActionButton(new Action_GetFriends(), false));
-        misc_button.addAction(new ActionButton(action_quit, false, GestureDirection.Down));
+        misc_button.addDefaultAction(new Show_AboutAction(), AbstractAction.GestureDirection.Up);
+        misc_button.addAction(new Show_Credits());
+        misc_button.addAction(new Action_Settings_Activity(), AbstractAction.GestureDirection.Left);
+        misc_button.addAction(new Action_Toggle_Day_Night());
+        misc_button.addAction(new Action_Help());
+        misc_button.addAction(new Action_GetFriends());
+        misc_button.addAction(action_quit, AbstractAction.GestureDirection.Down);
 
 //        actionShowAboutView.execute();
     }
