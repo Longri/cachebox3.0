@@ -2922,7 +2922,7 @@
       "background": "list_background_drawable"
     }
   },
-  "de.longri.cachebox3.gui.menu.Menu$MenuStyle": {
+  "de.longri.cachebox3.gui.widgets.menu.Menu$MenuStyle": {
     "default": {
       "font": "normal_font",
       "fontColor": "font_color",
@@ -2933,7 +2933,7 @@
       "divider": "menu_divider_drawable"
     }
   },
-  "de.longri.cachebox3.gui.menu.MenuItem$MenuItemStyle": {
+  "de.longri.cachebox3.gui.widgets.menu.MenuItem$MenuItemStyle": {
     "default": {
       "font": "normal_font",
       "fontColor": "font_color"

@@ -18,7 +18,7 @@ package gdx.utils;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.TestUtils;
-import de.longri.cachebox3.gui.actions.extendsAbstractAction.Action_MapDownload;
+import de.longri.cachebox3.gui.menu.menuBtn3.Action_MapDownload;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
 import org.junit.jupiter.api.Test;

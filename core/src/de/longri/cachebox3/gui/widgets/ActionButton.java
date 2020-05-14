@@ -16,7 +16,7 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import de.longri.cachebox3.gui.actions.AbstractAction;
+import de.longri.cachebox3.gui.stages.AbstractAction;
 
 /**
  * Created by Longri on 24.07.16.
@@ -24,7 +24,7 @@ import de.longri.cachebox3.gui.actions.AbstractAction;
 public class ActionButton {
     private final AbstractAction action;
     private final boolean defaultAction;
-    private GestureDirection gestureDirection;
+    private final GestureDirection gestureDirection;
     public ActionButton(AbstractAction action, boolean defaultAction, GestureDirection gestureDirection) {
         this.action = action;
         this.defaultAction = defaultAction;

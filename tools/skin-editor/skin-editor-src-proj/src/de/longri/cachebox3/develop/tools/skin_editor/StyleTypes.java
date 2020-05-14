@@ -50,8 +50,8 @@ public class StyleTypes {
         items.add(de.longri.cachebox3.gui.skin.styles.ButtonDialogStyle.class);
         items.add(com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle.class);
         items.add(de.longri.cachebox3.gui.skin.styles.ListViewStyle.class);
-        items.add(de.longri.cachebox3.gui.menu.Menu.MenuStyle.class);
-        items.add(de.longri.cachebox3.gui.menu.MenuItem.MenuItemStyle.class);
+        items.add(de.longri.cachebox3.gui.widgets.menu.Menu.MenuStyle.class);
+        items.add(de.longri.cachebox3.gui.widgets.menu.MenuItem.MenuItemStyle.class);
         items.add(de.longri.cachebox3.gui.help.HelpWindow.HelpWindowStyle.class);
         items.add(de.longri.cachebox3.gui.help.GestureHelp.GestureHelpStyle.class);
         items.add(de.longri.cachebox3.gui.ActivityBase.ActivityBaseStyle.class);
