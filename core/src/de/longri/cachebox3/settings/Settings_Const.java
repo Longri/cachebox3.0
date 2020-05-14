@@ -44,7 +44,7 @@ public abstract class Settings_Const {
     protected static final String GRABED = "<br> ##time##, Grabed it with Cachebox!";
 
     protected static final Integer[] approach = new Integer[]{0, 2, 10, 25, 50, 100, 200, 500, 1000};
-    protected static final Integer[] TrackDistanceArray = new Integer[]{1, 3, 5, 10, 20};
+    public static final Integer[] trackDistanceArray = new Integer[]{1, 3, 5, 10, 20};
     protected static final String[] Navis = new String[]{"Navigon", "Google", "Copilot", "OsmAnd", "OsmAnd2", "Waze", "Orux", "Ask"};
 
 

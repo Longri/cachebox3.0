@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.gui.popUps;
+package de.longri.cachebox3.gui.widgets;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.stages.ViewManager;

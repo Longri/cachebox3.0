@@ -20,6 +20,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.menuBtn1.Action_ParkingDialog;
 import de.longri.cachebox3.gui.menu.menuBtn1.contextmenus.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.menu.menuBtn2.Action_HintDialog;
+import de.longri.cachebox3.gui.menu.menuBtn3.ShowTracks;
 import de.longri.cachebox3.gui.menu.menuBtn4.Action_RecVideo;
 import de.longri.cachebox3.gui.menu.menuBtn4.Action_TakePhoto;
 import de.longri.cachebox3.gui.menu.menuBtn4.Action_Upload_Drafts;
@@ -83,7 +84,7 @@ public enum QuickActions {
             case CacheListView:
                 return CB.viewmanager.getAction_Show_CacheList();
             case TrackListView:
-                return CB.viewmanager.getAction_Show_TrackListView();
+                return ShowTracks.getInstance();
             case TakePhoto:
                 return new Action_TakePhoto();
             case TakeVideo:

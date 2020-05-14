@@ -177,8 +177,8 @@ public class TrackRecorder implements PositionChangedListener {
     }
 
     private String generateTrackFileName() {
-        SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd-HHmmss");
-        String sDate = datFormat.format(new Date());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale.US);
+        String sDate = dateFormat.format(new Date());
 
         return "Track_" + sDate + ".gpx";
     }
@@ -242,7 +242,7 @@ public class TrackRecorder implements PositionChangedListener {
                 } catch (FileNotFoundException e) {
                     log.error("FileNotFoundException", e);
                 } catch (IOException e) {
-                    log.error("Trackrecorder", "IOException", e);
+                    log.error("Trackrecorder IOException", e);
                 }
 
                 newPoint = new Coordinate(event.pos.getLatitude(), event.pos.getLongitude(), newCoord.getElevation(),

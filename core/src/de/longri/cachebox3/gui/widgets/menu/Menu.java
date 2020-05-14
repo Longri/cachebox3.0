@@ -386,7 +386,7 @@ public class Menu extends Window {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public OnItemClickListener getOnItemClickListeners() {
+    public OnItemClickListener getOnItemClickListener() {
         return this.onItemClickListener;
     }
 

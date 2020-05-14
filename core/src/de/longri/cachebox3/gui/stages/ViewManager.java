@@ -79,7 +79,6 @@ public class ViewManager extends NamedStage
     private final Show_MapAction action_show_mapView = new Show_MapAction();
     private final Show_CompassAction action_show_compassView = new Show_CompassAction();
     private final Show_CacheList action_show_cacheList = new Show_CacheList();
-    private final Show_TrackListAction action_show_trackListView = new Show_TrackListAction();
     private final Show_SpoilerAction action_show_spoilerView = new Show_SpoilerAction();
     private final Show_TrackableListAction action_show_trackableListView = new Show_TrackableListAction();
     private final Show_NoteAction action_show_noteView = new Show_NoteAction();
@@ -282,7 +281,7 @@ public class ViewManager extends NamedStage
         nav_button.addAction(action_show_compassView, AbstractAction.GestureDirection.Right);
         nav_button.addAction(new Action_NavigateExt(), AbstractAction.GestureDirection.Down);
         // navButton.addAction(new Action_NavigateInt(), AbstractAction.GestureDirection.Left);
-        nav_button.addAction(action_show_trackListView, AbstractAction.GestureDirection.Left);
+        nav_button.addAction(ShowTracks.getInstance(), AbstractAction.GestureDirection.Left);
         nav_button.addAction(new Action_MapDownload());
 
 //
@@ -374,10 +373,6 @@ public class ViewManager extends NamedStage
 
     public AbstractAction getAction_Show_CacheList() {
         return action_show_cacheList;
-    }
-
-    public AbstractAction getAction_Show_TrackListView() {
-        return action_show_trackListView;
     }
 
     public AbstractAction getAction_Show_SolverView() {

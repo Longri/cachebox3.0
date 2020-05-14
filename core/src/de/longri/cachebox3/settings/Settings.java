@@ -42,7 +42,7 @@ public class Settings extends Settings_Skin {
     // EXPERT visible
     public static final SettingInt LongClicktime = (SettingInt) settingsList.addSetting(new SettingInt("LongClicktime", Misc, EXPERT, 600, Global, ACB));
     public static final SettingFolder TrackFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("TrackFolder", Folder, EXPERT, "?/user/tracks", Global, ACB, true));
-    public static final SettingIntArray TrackDistance = (SettingIntArray) settingsList.addSetting(new SettingIntArray("TrackDistance", Misc, EXPERT, 3, Global, ACB, TrackDistanceArray));
+    public static final SettingIntArray TrackDistance = (SettingIntArray) settingsList.addSetting(new SettingIntArray("TrackDistance", Misc, NEVER, 3, Global, ACB, trackDistanceArray));
 
 
     // DEVELOPER visible

@@ -64,9 +64,11 @@ import de.longri.cachebox3.gui.widgets.menu.OptionMenu;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.settings.Settings_Const;
 import de.longri.cachebox3.settings.Settings_Map;
 import de.longri.cachebox3.settings.types.SettingBool;
 import de.longri.cachebox3.translation.Language;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
 import de.longri.cachebox3.utils.CharSequenceUtil;
@@ -124,7 +126,7 @@ public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
 
     private static double lastCenterPosLat, lastCenterPosLon;
-    private static MapState actMapState = new MapState();
+    private static final MapState actMapState = new MapState();
     private final Event selfEvent = new Event();
     private boolean menuInShow;
     private InputMultiplexer mapInputHandler;
@@ -713,16 +715,16 @@ public class MapView extends AbstractView {
     @Override
     public Menu getContextMenu() {
         Menu icm = new Menu("MapViewContextMenuTitle");
-        icm.addMenuItem("Layer", CB.getSkin().menuIcon.mapLayer, () -> showMapViewLayerMenu());
+        icm.addMenuItem("Layer", CB.getSkin().menuIcon.mapLayer, this::showMapViewLayerMenu);
         if (cacheboxMapAdapter.getBaseMap() instanceof MapsforgeSingleMap) {
-            icm.addMenuItem("Renderthemes", CB.getSkin().menuIcon.theme, () -> showMapViewThemeMenu());
-            icm.addMenuItem("Styles", CB.getSkin().menuIcon.themeStyle, () -> showMapViewThemeStyleMenu());
+            icm.addMenuItem("Renderthemes", CB.getSkin().menuIcon.theme, this::showMapViewThemeMenu);
+            icm.addMenuItem("Styles", CB.getSkin().menuIcon.themeStyle, this::showMapViewThemeStyleMenu);
         }
-        icm.addMenuItem("overlays", CB.getSkin().menuIcon.todo, () -> showMapViewOverlaysMenu()); // todo icon
-        icm.addMenuItem("view", CB.getSkin().menuIcon.viewSettings, () -> showMapViewElementsMenu());
+        icm.addMenuItem("overlays", CB.getSkin().menuIcon.todo, this::showMapViewOverlaysMenu).setEnabled(false); // todo icon
+        icm.addMenuItem("view", CB.getSkin().menuIcon.viewSettings, this::showMapViewElementsMenu);
         // todo needed? nach Kompass ausrichten | setAlignToCompass
-        icm.addMenuItem("CenterWP", CB.getSkin().menuIcon.addWp, () -> createWaypointAtCenter());
-        icm.addMenuItem("RecTrack", CB.getSkin().menuIcon.todo, () -> showTrackRecordMenu()); // todo icon
+        icm.addMenuItem("CenterWP", CB.getSkin().menuIcon.addWp, this::createWaypointAtCenter);
+        icm.addMenuItem("TrackRecordMenuTitle", CB.getSkin().menuIcon.me3TrackList, this::showMenuTrackFunctions);
         return icm;
     }
 
@@ -1169,15 +1171,40 @@ public class MapView extends AbstractView {
         new Action_Add_WP().execute();
     }
 
-    //todo ISSUE (#112 Record Track)
-    private void showTrackRecordMenu() {
+    private void showMenuTrackFunctions() {
         Menu cm2 = new Menu("TrackRecordMenuTitle");
+        //todo internal routing
+        cm2.addMenuItem("generateRoute", CB.getSkin().menuIcon.todo, () -> {
+        }).setEnabled(false); // routeProfileIcons[Config.routeProfile.getValue()] // pedestrian, bicycle, car
+        cm2.addDivider(-1);
+        cm2.addMenuItem("", Translation.get("TrackDistance", "" + Config.TrackDistance.getValue()).toString(), null, () -> {
+            Menu tdMenu = new Menu("TrackDistance");
+            for (int possibleDistance : Settings_Const.trackDistanceArray) {
+                MenuItem mi = tdMenu.addCheckableMenuItem("", "" + possibleDistance, null, possibleDistance == Config.TrackDistance.getValue(), new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        if (tdMenu.mustHandle(event)) {
+                            int newDistance = (Integer) event.getListenerActor().getUserObject();
+                            Config.TrackDistance.setValue(newDistance);
+                            Config.AcceptChanges();
+                            showMenuTrackFunctions();
+                        }
+                    }
+                });
+                mi.setUserObject(possibleDistance);
+            }
+            tdMenu.show();
+        });
         cm2.addMenuItem("start", null, () -> TrackRecorder.getInstance().startRecording()).setEnabled(!TrackRecorder.getInstance().recording);
         if (TrackRecorder.getInstance().pauseRecording)
             cm2.addMenuItem("continue", null, () -> TrackRecorder.getInstance().pauseRecording()).setEnabled(TrackRecorder.getInstance().recording);
         else
             cm2.addMenuItem("pause", null, () -> TrackRecorder.getInstance().pauseRecording()).setEnabled(TrackRecorder.getInstance().recording);
         cm2.addMenuItem("stop", null, () -> TrackRecorder.getInstance().stopRecording()).setEnabled(TrackRecorder.getInstance().recording | TrackRecorder.getInstance().pauseRecording);
+        cm2.addDivider(0);
+        cm2.addMenuItem("load", CB.getSkin().menuIcon.me3TrackList, new TrackListView()::selectTrackFileReadAndAddToTracks);
+        //todo cm2.addMenuItem("generate", null, () -> TrackCreation.getInstance().execute());
+        cm2.addDivider(1);
+        cm2.addMenuItem("Tracks", CB.getSkin().menuIcon.me3TrackList, () -> CB.viewmanager.showView(new TrackListView()));
         cm2.show();
     }
 

@@ -116,7 +116,7 @@ public class TrackListView extends AbstractView {
         return cm;
     }
 
-    private void selectTrackFileReadAndAddToTracks() {
+    void selectTrackFileReadAndAddToTracks() {
         FileChooser fc = new FileChooser(Translation.get("LoadTrack"), FileChooser.SelectionMode.FILES, "gpx");
         // button text Translation.get("load")
         fc.setDirectory(Config.TrackFolder.getValue(), false);

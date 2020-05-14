@@ -101,7 +101,7 @@ public class GestureButton extends Button {
                                     compoundMenu.setName(viewContextMenu.getName()); // for title translation
                                     viewContextMenu.setCompoundMenu(compoundMenu);
                                     compoundMenu.addItems(viewContextMenu.getItems());
-                                    bothListener[0] = viewContextMenu.getOnItemClickListeners();
+                                    bothListener[0] = viewContextMenu.getOnItemClickListener();
 
                                     // add divider
                                     compoundMenu.addDivider(-1);
@@ -110,7 +110,7 @@ public class GestureButton extends Button {
                                 Menu longClickMenu = getLongClickMenu();
                                 longClickMenu.setCompoundMenu(compoundMenu);
                                 compoundMenu.addItems(longClickMenu.getItems());
-                                bothListener[1] = longClickMenu.getOnItemClickListeners();
+                                bothListener[1] = longClickMenu.getOnItemClickListener();
                                 compoundMenu.setOnItemClickListener(bothItemClickListener);
                                 compoundMenu.reorganizeListIndexes();
 

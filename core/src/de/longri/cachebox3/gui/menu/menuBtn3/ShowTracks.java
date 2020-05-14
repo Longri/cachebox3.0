@@ -25,9 +25,16 @@ import de.longri.cachebox3.gui.views.TrackListView;
 /**
  * Created by Longri on 24.07.16.
  */
-public class Show_TrackListAction extends AbstractShowAction {
-    public Show_TrackListAction() {
+public class ShowTracks extends AbstractShowAction {
+    private static ShowTracks showTracks;
+
+    private ShowTracks() {
         super(TrackListView.class, ENABLED, "Tracks", MenuID.AID_SHOW_TRACKLIST);
+    }
+
+    public static ShowTracks getInstance() {
+        if (showTracks == null) showTracks = new ShowTracks();
+        return showTracks;
     }
 
     @Override

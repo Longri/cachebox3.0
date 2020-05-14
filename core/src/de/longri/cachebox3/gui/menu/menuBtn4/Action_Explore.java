@@ -32,7 +32,7 @@ import de.longri.cachebox3.translation.Translation;
 public class Action_Explore extends AbstractAction {
 
     public Action_Explore() {
-        super("FileXplore", MenuID.AID_FILE_X_PLORE);
+        super("Xplore", MenuID.AID_FILE_X_PLORE);
     }
 
     @Override
