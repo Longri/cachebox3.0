@@ -19,10 +19,7 @@ package de.longri.cachebox3.types;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.gdx.sqlite.GdxSqliteCursor;
 
-import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LogEntry {
@@ -30,71 +27,71 @@ public class LogEntry {
     /**
      * Benutzername des Loggers
      */
-    public String Finder = "";
+    public String finder = "";
 
     /**
      * Logtyp, z.B. "Found it!"
      */
-    public LogTypes Type = LogTypes.unknown;
+    public LogTypes geoCacheLogType = LogTypes.unknown;
 
 
     /**
      * Geschriebener Text
      */
-    public String Comment = "";
+    public String logText = "";
 
     /**
      * Zeitpunkt
      */
-    public Date Timestamp = new Date(0);
+    public Date logDate = new Date(0);
 
     /**
      * Id des Caches
      */
-    public long CacheId = -1;
+    public long cacheId = -1;
 
     /**
      * Id des Logs
      */
-    public long Id = -1;
+    public long logId = -1;
 
     public LogEntry(GdxSqliteCursor cursor) {
-        this.Id = cursor.getLong(0);
-        this.CacheId = cursor.getLong(1);
+        this.logId = cursor.getLong(0);
+        this.cacheId = cursor.getLong(1);
 
         try {
-            this.Timestamp = Database.cbDbFormat.parse(cursor.getString(2));
+            this.logDate = Database.cbDbFormat.parse(cursor.getString(2));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        this.Finder = cursor.getString(3);
-        this.Type = LogTypes.values()[cursor.getInt(4)];
-        this.Comment = cursor.getString(5);
+        this.finder = cursor.getString(3);
+        this.geoCacheLogType = LogTypes.values()[cursor.getInt(4)];
+        this.logText = cursor.getString(5);
     }
 
     public LogEntry() {
     }
 
     public void clear() {
-        Finder = "";
-        Type = null;
-        Comment = "";
-        Timestamp = new Date(0);
-        CacheId = -1;
-        Id = -1;
+        finder = "";
+        geoCacheLogType = null;
+        logText = "";
+        logDate = new Date(0);
+        cacheId = -1;
+        logId = -1;
     }
 
     public void dispose() {
-        Finder = null;
-        Type = null;
-        Comment = null;
-        Timestamp = null;
+        finder = null;
+        geoCacheLogType = null;
+        logText = null;
+        logDate = null;
     }
 
     @Override
     public String toString() {
-        return "ID:" + Id;
+        return "ID:" + logId;
     }
 
 
@@ -102,17 +99,17 @@ public class LogEntry {
     public boolean equals(Object other) {
         if (other == null) return false;
         // return true, if the id are equals
-        return other instanceof LogEntry && ((LogEntry) other).Id == this.Id;
+        return other instanceof LogEntry && ((LogEntry) other).logId == this.logId;
     }
 
     public LogEntry copy() {
         LogEntry ret = new LogEntry();
-        ret.Finder = Finder;
-        ret.Type = Type;
-        ret.Comment = Comment;
-        ret.Timestamp = Timestamp;
-        ret.CacheId = CacheId;
-        ret.Id = Id;
+        ret.finder = finder;
+        ret.geoCacheLogType = geoCacheLogType;
+        ret.logText = logText;
+        ret.logDate = logDate;
+        ret.cacheId = cacheId;
+        ret.logId = logId;
         return ret;
     }
 

@@ -342,12 +342,12 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
     protected void createNewLogEntry() {
         LogEntry newLogEntry = new LogEntry();
-        newLogEntry.CacheId = this.id;
-        newLogEntry.Id = this.logId;
-        newLogEntry.Timestamp = this.logDate;
-        newLogEntry.Finder = this.logFinder;
-        newLogEntry.Comment = this.logComment;
-        newLogEntry.Type = this.logType;
+        newLogEntry.cacheId = this.id;
+        newLogEntry.logId = this.logId;
+        newLogEntry.logDate = this.logDate;
+        newLogEntry.finder = this.logFinder;
+        newLogEntry.logText = this.logComment;
+        newLogEntry.geoCacheLogType = this.logType;
 
         storeLogEntry.add(newLogEntry);
         resetLogValues();
@@ -590,12 +590,12 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
                             try {
                                 REPLACE_LOGS.bind(
-                                        entry.Id,
-                                        entry.CacheId,
-                                        Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                                        entry.Finder,
-                                        entry.Type,
-                                        entry.Comment
+                                        entry.logId,
+                                        entry.cacheId,
+                                        Database.cbDbFormat.format(entry.logDate == null ? new Date() : entry.logDate),
+                                        entry.finder,
+                                        entry.geoCacheLogType,
+                                        entry.logText
                                 ).commit();
                             } catch (Exception e) {
                                 log.error("Can't write Log-Entry with values: \n" +
@@ -605,11 +605,11 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                                 "Finder:{}\n" +
                                                 "Type:{}\n" +
                                                 "Comment:{}\n\n\n",
-                                        entry.Id, entry.CacheId,
-                                        Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                                        entry.Finder,
-                                        entry.Type,
-                                        entry.Comment
+                                        entry.logId, entry.cacheId,
+                                        Database.cbDbFormat.format(entry.logDate == null ? new Date() : entry.logDate),
+                                        entry.finder,
+                                        entry.geoCacheLogType,
+                                        entry.logText
                                 );
                             } finally {
                                 REPLACE_LOGS.reset();

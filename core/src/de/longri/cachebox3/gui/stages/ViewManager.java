@@ -41,7 +41,10 @@ import de.longri.cachebox3.gui.menu.menuBtn2.*;
 import de.longri.cachebox3.gui.menu.menuBtn3.*;
 import de.longri.cachebox3.gui.menu.menuBtn4.*;
 import de.longri.cachebox3.gui.menu.menuBtn4.todo.Action_RecVoice;
-import de.longri.cachebox3.gui.menu.menuBtn5.*;
+import de.longri.cachebox3.gui.menu.menuBtn5.Action_Help;
+import de.longri.cachebox3.gui.menu.menuBtn5.Action_Quit;
+import de.longri.cachebox3.gui.menu.menuBtn5.Action_Settings_Activity;
+import de.longri.cachebox3.gui.menu.menuBtn5.Show_AboutAction;
 import de.longri.cachebox3.gui.menu.menuBtn5.todo.Action_Toggle_Day_Night;
 import de.longri.cachebox3.gui.menu.menuBtn5.todo.Show_Credits;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
@@ -304,7 +307,6 @@ public class ViewManager extends NamedStage
         misc_button.addAction(new Action_Settings_Activity(), AbstractAction.GestureDirection.Left);
         misc_button.addAction(new Action_Toggle_Day_Night());
         misc_button.addAction(new Action_Help());
-        misc_button.addAction(new Action_GetFriends());
         misc_button.addAction(action_quit, AbstractAction.GestureDirection.Down);
 
 //        actionShowAboutView.execute();

@@ -31,13 +31,13 @@ public class LogDAO {
 
     public synchronized void WriteToDatabase(LogEntry logEntry) {
         Database.Parameters args = new Database.Parameters();
-        args.put("Id", logEntry.Id);
-        args.put("Finder", logEntry.Finder);
-        args.put("Type", logEntry.Type.ordinal());
-        args.put("Comment", logEntry.Comment);
-        String stimestamp = Database.cbDbFormat.format(logEntry.Timestamp);
+        args.put("Id", logEntry.logId);
+        args.put("Finder", logEntry.finder);
+        args.put("Type", logEntry.geoCacheLogType.ordinal());
+        args.put("Comment", logEntry.logText);
+        String stimestamp = Database.cbDbFormat.format(logEntry.logDate);
         args.put("Timestamp", stimestamp);
-        args.put("CacheId", logEntry.CacheId);
+        args.put("CacheId", logEntry.cacheId);
         try {
             Database.Data.insertWithConflictReplace("Logs", args);
         } catch (Exception exc) {
@@ -86,12 +86,12 @@ public class LogDAO {
         for (LogEntry entry : logList) {
             try {
                 REPLACE_LOGS.bind(
-                        entry.Id,
-                        entry.CacheId,
-                        Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                        entry.Finder,
-                        entry.Type,
-                        entry.Comment
+                        entry.logId,
+                        entry.cacheId,
+                        Database.cbDbFormat.format(entry.logDate == null ? new Date() : entry.logDate),
+                        entry.finder,
+                        entry.geoCacheLogType,
+                        entry.logText
                 ).commit();
             } catch (Exception e) {
                 log.error("Can't write Log-Entry with values: \n" +
@@ -101,11 +101,11 @@ public class LogDAO {
                         "Finder:{}\n" +
                         "Type:{}\n" +
                         "Comment:{}\n\n\n",
-                        entry.Id,entry.CacheId,
-                        Database.cbDbFormat.format(entry.Timestamp == null ? new Date() : entry.Timestamp),
-                        entry.Finder,
-                        entry.Type,
-                        entry.Comment
+                        entry.logId,entry.cacheId,
+                        Database.cbDbFormat.format(entry.logDate == null ? new Date() : entry.logDate),
+                        entry.finder,
+                        entry.geoCacheLogType,
+                        entry.logText
                         );
             } finally {
                 REPLACE_LOGS.reset();

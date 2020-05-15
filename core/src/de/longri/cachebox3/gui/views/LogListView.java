@@ -40,6 +40,9 @@ import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
@@ -51,9 +54,6 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     private final ListView logListView = new ListView(VERTICAL);
     Array<LogEntry> logEntries;
-
-    private String currentGcCode;
-    private boolean logsOfFriendsAreShown;
     private final ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
         @Override
@@ -72,6 +72,9 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
         }
 
     };
+    private String currentGcCode;
+    private boolean logsOfFriendsAreShown;
+    private ArrayList<String> friendList;
 
     public LogListView(BitStore reader) {
         super(reader);
@@ -79,10 +82,16 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     public LogListView() {
         super("LogListView");
-        logListView.setEmptyString(Translation.get("EmptyLogList"));
-        this.addActor(logListView);
+        addActor(logListView);
         EventHandler.add(this);
         logsOfFriendsAreShown = false;
+        createFriendList();
+    }
+
+    private void createFriendList() {
+        String friends = Config.friends.getValue().replace(", ", "|").replace(",", "|");
+        friendList = new ArrayList<>();
+        Collections.addAll(friendList, friends.split("\\|"));
     }
 
     @Override
@@ -96,24 +105,37 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
     }
 
     private void setListViewAdapter() {
-        CB.postOnNextGlThread((new NamedRunnable("LogListView") {
+        CB.postOnNextGlThread(new NamedRunnable("LogListView") {
             @Override
             public void run() {
                 AbstractCache selectedCache = EventHandler.getSelectedCache();
                 String selectedGcCode = selectedCache == null ? "" : selectedCache.getGeoCacheCode().toString();
-                if (currentGcCode == null || !currentGcCode.equals(selectedGcCode)) {
+                if (!selectedGcCode.equals(currentGcCode)) {
                     if (selectedCache != null) {
                         currentGcCode = selectedGcCode;
-                        logEntries = Database.Data.getLogs(selectedCache);
-                        logEntries.sort((o1, o2) -> o1.Timestamp.compareTo(o2.Timestamp) * -1);
+                        if (logsOfFriendsAreShown) {
+                            if (logEntries == null) logEntries = new Array<>();
+                            else logEntries.clear();
+                            for (LogEntry logEntry : Database.Data.getLogs(selectedCache)) {
+                                if (!friendList.contains(logEntry.finder)) {
+                                    continue;
+                                }
+                                logEntries.add(logEntry);
+                            }
+                            logListView.setEmptyString(Translation.get("NoFriendLogs"));
+                        } else {
+                            logEntries = Database.Data.getLogs(selectedCache);
+                            logListView.setEmptyString(Translation.get("EmptyLogList"));
+                        }
+                        logEntries.sort((o1, o2) -> o1.logDate.compareTo(o2.logDate) * -1);
                     } else {
-                        // todo or set actGcCode to null ?
-                        currentGcCode = ""; // = selectedGcCode
+                        currentGcCode = "";
                     }
                 }
+                // if (logEntries.size == 0) logListView.setAdapter(null);
                 logListView.setAdapter(listViewAdapter);
             }
-        }));
+        });
     }
 
     @Override
@@ -142,58 +164,67 @@ public class LogListView extends AbstractView implements SelectedCacheChangedLis
 
     @Override
     public Menu getContextMenu() {
-        Menu cm = new Menu("LogListViewMenuTitle");
+        Menu contextMenu = new Menu("LogListViewMenuTitle");
         MenuItem mi;
         boolean isSelected = (EventHandler.getSelectedCache() != null);
         if (isSelected) {
             boolean selectedCacheIsNoGC = !EventHandler.getSelectedCache().getGeoCacheCode().toString().startsWith("GC");
             // menu only for GC caches
-            if (selectedCacheIsNoGC) return cm;
+            if (selectedCacheIsNoGC) return contextMenu;
         } else {
-            // no menuitem without selected cache
-            return cm;
+            // no logs without a selected cache
+            return contextMenu;
         }
         // now a GC Cache is selected
-        cm.addMenuItem("ReloadLogs", CB.getSkin().menuIcon.downloadLogs, () -> reloadLogs(true));
-        if (Config.Friends.getValue().length() > 0) {
-            cm.addMenuItem("LoadLogsOfFriends", CB.getSkin().menuIcon.downloadFriendsLogs, () -> reloadLogs(false));
-            mi = cm.addMenuItem("FilterLogsOfFriends", CB.getSkin().menuIcon.friendsLogs, () -> {
+        contextMenu.addMenuItem("ReloadLogs", CB.getSkin().menuIcon.downloadLogs, () -> reloadLogs(true));
+        if (Config.friends.getValue().length() > 0) {
+            contextMenu.addMenuItem("LoadLogsOfFriends", CB.getSkin().menuIcon.downloadFriendsLogs, () -> reloadLogs(false));
+            mi = contextMenu.addMenuItem("FilterLogsOfFriends", CB.getSkin().menuIcon.friendsLogs, () -> {
                 logsOfFriendsAreShown = !logsOfFriendsAreShown;
-                // todo implement filter friends logs;
+                selectedCacheChanged(null); // reload adapter
             });
             mi.setCheckable(true);
             mi.setChecked(logsOfFriendsAreShown);
         }
-        cm.addMenuItem("LoadLogImages", CB.getSkin().menuIcon.downloadLogImages, () -> {
+        contextMenu.addMenuItem("ImportFriends", CB.getSkin().menuIcon.me5ImportFriends, this::getFriends);
+        contextMenu.addMenuItem("LoadLogImages", CB.getSkin().menuIcon.downloadLogImages, () -> {
             // todo implement
         });
 
-        return cm;
+        return contextMenu;
     }
 
-    // todo perhaps ask for number of logs to fetch
+    private void getFriends() {
+        String friends = GroundspeakAPI.getInstance().fetchFriends();
+        if (GroundspeakAPI.getInstance().APIError == OK) {
+            Config.friends.setValue(friends);
+            Config.AcceptChanges();
+            MessageBox.show(Translation.get("ok") + ":\n" + friends, Translation.get("Friends"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
+        } else {
+            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Friends"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
+        }
+    }
+
+    // perhaps ask for number of logs to fetch
     private void reloadLogs(boolean loadAllLogs) {
         // todo animation while waiting
         Array<LogEntry> logList = GroundspeakAPI.getInstance().fetchGeoCacheLogs(EventHandler.getSelectedCache(), loadAllLogs, null);
         if (GroundspeakAPI.getInstance().APIError != OK) {
             MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("errorAPI"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
         } else {
-            if (logList.size > 0) {
-
-                Database.Data.beginTransaction();
-
-                LogDAO dao = new LogDAO();
-                if (loadAllLogs)
-                    dao.deleteLogs(EventHandler.getSelectedCache().getId());
-                for (LogEntry writeTmp : logList) {
-                    // ChangedCount++;
-                    dao.WriteToDatabase(writeTmp);
-                }
-
-                Database.Data.endTransaction();
-
+            // if not all: try to load more friend logs and then filter
+            Database.Data.beginTransaction();
+            LogDAO dao = new LogDAO();
+            if (loadAllLogs)
+                dao.deleteLogs(EventHandler.getSelectedCache().getId());
+            for (LogEntry writeTmp : logList) {
+                // ChangedCount++;
+                dao.WriteToDatabase(writeTmp);
             }
+            Database.Data.endTransaction();
         }
+        logsOfFriendsAreShown = !loadAllLogs;
+        selectedCacheChanged(null); // reload adapter
     }
 
 }

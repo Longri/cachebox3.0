@@ -111,7 +111,7 @@ public class Database {
     }
 
     public Array<LogEntry> getLogs(long id) {
-        Array<LogEntry> result = new Array<LogEntry>();
+        Array<LogEntry> result = new Array<>();
 
         GdxSqliteCursor reader = this.rawQuery("select CacheId, Timestamp, Finder, Type, Comment, Id from Logs where CacheId = \"" + Long.toString(id) + "\"", (String[]) null);
         if (reader != null) {
@@ -132,20 +132,20 @@ public class Database {
 
     private static LogEntry getLogEntry(GdxSqliteCursor reader, boolean filterBbCode) {
         LogEntry retLogEntry = new LogEntry();
-        retLogEntry.CacheId = reader.getLong(0);
+        retLogEntry.cacheId = reader.getLong(0);
         String sDate = reader.getString(1);
         try {
-            retLogEntry.Timestamp = Database.cbDbFormat.parse(sDate);
+            retLogEntry.logDate = Database.cbDbFormat.parse(sDate);
         } catch (ParseException e) {
         }
-        retLogEntry.Finder = reader.getString(2);
-        retLogEntry.Type = LogTypes.values()[reader.getInt(3)];
+        retLogEntry.finder = reader.getString(2);
+        retLogEntry.geoCacheLogType = LogTypes.values()[reader.getInt(3)];
         // retLogEntry.TypeIcon = reader.getInt(3);
-        retLogEntry.Comment = reader.getString(4);
-        retLogEntry.Id = reader.getLong(5);
+        retLogEntry.logText = reader.getString(4);
+        retLogEntry.logId = reader.getLong(5);
 
         if (filterBbCode) {
-            retLogEntry.Comment = LogEntry.filterBBCode(retLogEntry.Comment);
+            retLogEntry.logText = LogEntry.filterBBCode(retLogEntry.logText);
         }
         return retLogEntry;
     }

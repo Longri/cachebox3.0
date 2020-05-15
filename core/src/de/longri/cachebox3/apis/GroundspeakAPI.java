@@ -287,6 +287,9 @@ public class GroundspeakAPI {
                 .resultWithLogs(30)
                 //.resultWithImages(30) // todo maybe remove, cause not used from DB
                 ;
+        if (Config.numberOfLogs.getValue() > 0) {
+            query.resultWithLogs(Config.numberOfLogs.getValue());
+        }
         return updateGeoCaches(query, caches);
     }
 
@@ -571,7 +574,7 @@ public class GroundspeakAPI {
 
         Array<String> friendList = new Array<>();
         if (!all) {
-            String friends = Config.Friends.getValue().replace(", ", "|").replace(",", "|");
+            String friends = Config.friends.getValue().replace(", ", "|").replace(",", "|");
             for (String f : friends.split("\\|")) {
                 friendList.add(f.toLowerCase(Locale.US));
             }
@@ -605,9 +608,9 @@ public class GroundspeakAPI {
                             if (finder.length() == 0 || !friendList.contains(finder.toLowerCase(Locale.US), false)) {
                                 continue;
                             }
-                            friendList.removeValue(finder.toLowerCase(Locale.US), false);
+                            // if only one log of the friend is requested
+                            // friendList.removeValue(finder.toLowerCase(Locale.US), false);
                         }
-
                         logList.add(createLog(geocacheLog, cache.getId()));
                     }
 
@@ -627,7 +630,7 @@ public class GroundspeakAPI {
             }
             while (doRetry);
             // die nächsten Logs laden
-            start += count;
+            start = start + count;
         }
         APIError = ERROR;
         LastAPIError = "Loading Logs canceled";
@@ -1419,18 +1422,18 @@ public class GroundspeakAPI {
 
     private LogEntry createLog(JSONObject geocacheLog, long cacheId) {
         LogEntry logEntry = new LogEntry();
-        logEntry.CacheId = cacheId;
-        logEntry.Comment = geocacheLog.optString("text", "");
-        logEntry.Finder = getStringValue(geocacheLog, "owner", "username");
+        logEntry.cacheId = cacheId;
+        logEntry.logText = geocacheLog.optString("text", "");
+        logEntry.finder = getStringValue(geocacheLog, "owner", "username");
         String dateCreated = geocacheLog.optString("loggedDate", "");
         try {
-            logEntry.Timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).parse(dateCreated);
+            logEntry.logDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).parse(dateCreated);
         } catch (Exception e) {
-            logEntry.Timestamp = new Date();
+            logEntry.logDate = new Date();
         }
-        logEntry.Type = LogTypes.parseString(geocacheLog.optString("type", ""));
+        logEntry.geoCacheLogType = LogTypes.parseString(geocacheLog.optString("type", ""));
         String referenceCode = geocacheLog.optString("referenceCode", "");
-        logEntry.Id = generateLogId(referenceCode);
+        logEntry.logId = generateLogId(referenceCode);
         return logEntry;
     }
 

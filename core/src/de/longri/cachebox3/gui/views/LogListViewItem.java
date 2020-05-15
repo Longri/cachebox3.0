@@ -47,17 +47,17 @@ public class LogListViewItem extends ListViewItem {
     private void internLayout() {
 
         VisTable headerTable = new VisTable();
-        headerTable.add(new Image(this.logEntry.Type.getDrawable(logListItemStyle.logTypesStyle)));
+        headerTable.add(new Image(this.logEntry.geoCacheLogType.getDrawable(logListItemStyle.logTypesStyle)));
 
         Label.LabelStyle nameLabelStyle = new Label.LabelStyle();
         nameLabelStyle.font = this.logListItemStyle.headerFont;
         nameLabelStyle.fontColor = this.logListItemStyle.headerFontColor;
-        VisLabel nameLabel = new VisLabel(this.logEntry.Finder, nameLabelStyle);
+        VisLabel nameLabel = new VisLabel(this.logEntry.finder, nameLabelStyle);
         nameLabel.setWrap(true);
         headerTable.add(nameLabel).left().padLeft(CB.scaledSizes.MARGINx2).expandX().fillX();
 
         SimpleDateFormat postFormatter = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
-        String dateString = postFormatter.format(logEntry.Timestamp);
+        String dateString = postFormatter.format(logEntry.logDate);
         VisLabel dateLabel = new VisLabel(dateString, nameLabelStyle);
         headerTable.add(dateLabel).padRight(CB.scaledSizes.MARGINx2).right();
 
@@ -73,7 +73,7 @@ public class LogListViewItem extends ListViewItem {
         commentLabelStyle.font = this.logListItemStyle.descriptionFont;
         commentLabelStyle.fontColor = this.logListItemStyle.descriptionFontColor;
 
-        String comment = logEntry.Comment;
+        String comment = logEntry.logText;
         int maxLength = 500;
         for (int i = 0; i < comment.length(); i += maxLength) {
             String subComment = comment.substring(i, Math.min(i + maxLength, comment.length()));
