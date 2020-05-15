@@ -40,6 +40,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
+import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
 import de.longri.cachebox3.gui.stages.StageManager;
@@ -1043,7 +1044,93 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getIntArrayView(int listIndex, SettingIntArray setting) {
-        return null;
+
+        SelectBoxStyle style = VisUI.getSkin().get(SelectBoxStyle.class);
+        style.up = null;
+        style.down = null;
+
+        final AtomicBoolean callBackClick = new AtomicBoolean(false);
+        final SelectBox selectBox = new SelectBox(style, null);
+        ClickListener clickListener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
+                //show select menu
+                Menu menu = selectBox.getMenu();
+                showListView(menu.getListview(), Translation.get("select"), true);
+                CB.postOnNextGlThread(new NamedRunnable("selectBox clicked callBack") {
+                    @Override
+                    public void run() {
+                        callBackClick.set(true);
+                    }
+                });
+            }
+        };
+
+        int currentSelectedIndex = 0;
+        Array<SelectBoxItem> itemList = new Array<>();
+        for (Integer i : setting.getValues()) {
+            itemList.add(new SelectBoxItem() {
+                @Override
+                public Drawable getDrawable() {
+                    return null;
+                }
+
+                @Override
+                public String getName() {
+                    return "" + i;
+                }
+            });
+            if (setting.getValue() == i) {
+                currentSelectedIndex = setting.getIndex();
+            }
+        }
+
+        selectBox.setPrefix(Translation.get(setting.getName()) + " :  ");
+        selectBox.set(itemList);
+        selectBox.select(currentSelectedIndex);
+
+        selectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SelectBoxItem selected = selectBox.getSelected();
+                setting.setValue(Integer.parseInt(selected.getName()));
+                if (event.getStage() == null || callBackClick.get()) {
+                    callBackClick.set(false);
+                    backClick();
+                }
+            }
+        });
+        selectBox.setHideWithItemClick(false);
+
+        ListViewItem table = new ListViewItem(listIndex) {
+            @Override
+            public void dispose() {
+            }
+        };
+        table.addListener(clickListener);
+        float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
+
+        table.add(selectBox).width(new Value.Fixed(buttonWidth)).center();
+
+        // add description line if description exist
+        CharSequence description = Translation.get("Desc_" + setting.getName());
+        if (!CharSequenceUtil.contains(description, "$ID:")) {
+            table.row();
+            VisLabel desclabel = new VisLabel(description, descStyle);
+            desclabel.setWrap(true);
+            desclabel.setAlignment(Align.left);
+            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        }
+
+        // add defaultValue line
+
+        table.row();
+        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
+        desclabel.setWrap(true);
+        desclabel.setAlignment(Align.left);
+        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        return table;
     }
 
     private ListViewItem getBoolView(int listIndex, final SettingBool setting) {

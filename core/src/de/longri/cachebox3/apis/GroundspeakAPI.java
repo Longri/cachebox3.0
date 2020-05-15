@@ -284,7 +284,7 @@ public class GroundspeakAPI {
         // not .onlyActiveGeoCaches() : must be updated to the latest status
         Query query = new Query()
                 .resultWithFullFields()
-                .resultWithLogs(30)
+                // .resultWithLogs(30)
                 //.resultWithImages(30) // todo maybe remove, cause not used from DB
                 ;
         if (Config.numberOfLogs.getValue() > 0) {
