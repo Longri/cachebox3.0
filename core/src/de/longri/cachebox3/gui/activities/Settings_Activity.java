@@ -659,25 +659,7 @@ public class Settings_Activity extends ActivityBase {
             }
         });
 
-
-        // add description line if description exist
-        CharSequence description = Translation.get("Desc_" + setting.getName());
-        if (!CharSequenceUtil.contains(description, "$ID:")) {
-            table.row();
-            VisLabel desclabel = new VisLabel(description, descStyle);
-            desclabel.setWrap(true);
-            desclabel.setAlignment(Align.left);
-            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-        }
-
-        // add defaultValue line
-
-        table.row();
-        VisLabel desclabel = new VisLabel("default: " + (int) (setting.getDefaultValue().Volume) * 100
-                + "%", defaultValueStyle);
-        desclabel.setWrap(true);
-        desclabel.setAlignment(Align.left);
-        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        addDescriptionAndDefaultInfo(table, setting.getName(), (int) (100 * setting.getDefaultValue().Volume) + "%");
 
         return table;
     }
@@ -703,24 +685,7 @@ public class Settings_Activity extends ActivityBase {
         valuelabel.setAlignment(Align.left);
         table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
-        // add description line if description exist
-        CharSequence description = Translation.get("Desc_" + setting.getName());
-        if (!CharSequenceUtil.contains(description, "$ID:")) {
-            table.row();
-            VisLabel desclabel = new VisLabel(description, descStyle);
-            desclabel.setWrap(true);
-            desclabel.setAlignment(Align.left);
-            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-        }
-
-        // add defaultValue line
-
-        table.row();
-        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
-        desclabel.setWrap(true);
-        desclabel.setAlignment(Align.left);
-        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
+        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue());
         // add clickListener
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -829,7 +794,74 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getFileView(int listIndex, SettingFile setting) {
-        return null;
+        ListViewItem table = new ListViewItem(listIndex) {
+            @Override
+            public void dispose() {
+            }
+        };
+
+        // add label with category name, align left
+        table.left();
+        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
+        label.setWrap(true);
+        label.setAlignment(Align.left);
+        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+
+        FileChooserStyle style = VisUI.getSkin().get(FileChooserStyle.class);
+        Image folderIcon = new Image(style.fileIcon);
+        table.add(folderIcon).width(folderIcon.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+
+        // add value line
+        table.row();
+        final VisLabel valuelabel = new VisLabel("Value: " + setting.getValue(), valueStyle);
+        valuelabel.setWrap(true);
+        valuelabel.setAlignment(Align.left);
+        table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        if (setting.isDefault()) {
+            valuelabel.setText("Default");
+        }
+
+        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue() + "\n");
+
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
+                if (event.getType() == InputEvent.Type.touchUp) {
+                    Menu selectOrClearMenu = new Menu("SelectFileTitle");
+                    selectOrClearMenu.addMenuItem("select_file", style.fileIcon, () -> {
+                        FileChooser fileChooser = new FileChooser(Translation.get("select_file"), FileChooser.SelectionMode.FILES);
+                        fileChooser.setSelectionReturnListener(fileHandle -> {
+                            if (fileHandle == null) return;
+                            setting.setValue(fileHandle.path());
+                            valuelabel.setText("Value: " + setting.getValue());
+                        });
+                        fileChooser.setDirectory(CB.WorkPathFileHandle, false);
+                        fileChooser.show();
+                    });
+                    selectOrClearMenu.addMenuItem("ClearPath", style.deleteBtnIcon, () -> {
+                        setting.setValue(setting.getDefaultValue());
+                        valuelabel.setText("Default");
+                    });
+                    selectOrClearMenu.show();
+                }
+            }
+        });
+
+
+        table.setWidth(itemWidth);
+        table.setPrefWidth(itemWidth);
+        table.invalidate();
+        table.pack();
+
+        int rows = table.getRows();
+        float calcHeight = 0;
+        float pad = CB.scaledSizes.MARGIN;
+        for (int i = 0; i < rows; i++) {
+            calcHeight += table.getRowPrefHeight(i);
+            calcHeight += pad;
+        }
+        table.setFinalHeight(calcHeight);
+        return table;
     }
 
     private ListViewItem getFolderView(int listIndex, final SettingFolder setting) {
@@ -847,39 +879,20 @@ public class Settings_Activity extends ActivityBase {
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
         FileChooserStyle style = VisUI.getSkin().get(FileChooserStyle.class);
-
         Image folderIcon = new Image(style.folderIcon);
         table.add(folderIcon).width(folderIcon.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
-        // add description line if description exist
-        CharSequence description = Translation.get("Desc_" + setting.getName());
-        if (!CharSequenceUtil.contains(description, "$ID:")) {
-            table.row();
-            VisLabel desclabel = new VisLabel(description, descStyle);
-            desclabel.setWrap(true);
-            desclabel.setAlignment(Align.left);
-            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-        }
-
         // add value line
-
         table.row();
         final VisLabel valuelabel = new VisLabel("Value: " + setting.getValue(), valueStyle);
         valuelabel.setWrap(true);
         valuelabel.setAlignment(Align.left);
         table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
         if (setting.isDefault()) {
             valuelabel.setText("Default");
         }
 
-
-        // add defaultValue line
-        table.row();
-        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
-        desclabel.setWrap(true);
-        desclabel.setAlignment(Align.left);
-        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue());
 
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -897,7 +910,7 @@ public class Settings_Activity extends ActivityBase {
                                 CB.viewmanager.toast(WriteProtectionMsg, ViewManager.ToastLength.EXTRA_LONG);
                             } else {
                                 setting.setValue(path);
-                                valuelabel.setText("Value: " + String.valueOf(setting.getValue()));
+                                valuelabel.setText("Value: " + setting.getValue());
                             }
                         });
                         folderChooser.setDirectory(CB.WorkPathFileHandle, true);
@@ -1112,24 +1125,7 @@ public class Settings_Activity extends ActivityBase {
 
         table.add(selectBox).width(new Value.Fixed(buttonWidth)).center();
 
-        // add description line if description exist
-        CharSequence description = Translation.get("Desc_" + setting.getName());
-        if (!CharSequenceUtil.contains(description, "$ID:")) {
-            table.row();
-            VisLabel desclabel = new VisLabel(description, descStyle);
-            desclabel.setWrap(true);
-            desclabel.setAlignment(Align.left);
-            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-        }
-
-        // add defaultValue line
-
-        table.row();
-        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
-        desclabel.setWrap(true);
-        desclabel.setAlignment(Align.left);
-        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
+        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue().toString());
         return table;
     }
 
@@ -1174,24 +1170,7 @@ public class Settings_Activity extends ActivityBase {
         });
 
 
-        // add description line if description exist
-        CharSequence description = Translation.get("Desc_" + setting.getName());
-        if (!CharSequenceUtil.contains(description, "$ID:")) {
-            table.row();
-            VisLabel desclabel = new VisLabel(description, descStyle);
-            desclabel.setWrap(true);
-            desclabel.setAlignment(Align.left);
-            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-        }
-
-        // add defaultValue line
-
-        table.row();
-        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
-        desclabel.setWrap(true);
-        desclabel.setAlignment(Align.left);
-        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
+        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue().toString());
         table.setWidth(itemWidth);
         table.setPrefWidth(itemWidth);
         table.invalidate();
@@ -1228,8 +1207,13 @@ public class Settings_Activity extends ActivityBase {
         // add value lable
         table.add(valueLabel).width(valueLabel.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
 
+        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue().toString());
+        return table;
+    }
+
+    private void addDescriptionAndDefaultInfo(ListViewItem table, String settingName, String settingDefaultValue) {
         // add description line if description exist
-        CharSequence description = Translation.get("Desc_" + setting.getName());
+        CharSequence description = Translation.get("Desc_" + settingName);
         if (!CharSequenceUtil.contains(description, "$ID:")) {
             table.row();
             VisLabel desclabel = new VisLabel(description, descStyle);
@@ -1241,12 +1225,10 @@ public class Settings_Activity extends ActivityBase {
         // add defaultValue line
 
         table.row();
-        VisLabel desclabel = new VisLabel("default: " + setting.getDefaultValue(), defaultValueStyle);
+        VisLabel desclabel = new VisLabel("default: " + settingDefaultValue, defaultValueStyle);
         desclabel.setWrap(true);
         desclabel.setAlignment(Align.left);
         table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
-        return table;
     }
 
     @Override

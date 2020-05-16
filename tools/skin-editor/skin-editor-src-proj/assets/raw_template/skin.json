@@ -3359,6 +3359,7 @@
       "folderIcon": "folder",
       "fileIcon": "file",
       "mapFileIcon": "mapFile",
+	  "deleteBtnIcon": "mcxDelete",
       "background": "activityBack_drawable"
     }
   },
