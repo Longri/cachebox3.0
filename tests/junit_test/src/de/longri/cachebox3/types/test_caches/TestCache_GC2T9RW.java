@@ -147,10 +147,10 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
     @Override
     protected boolean addLogs() throws ParseException {
         LogEntry logEntry1 = new LogEntry();
-        logEntry1.CacheId = this.id;
-        logEntry1.Finder = "SaarFuchs";
-        logEntry1.Type = LogTypes.found;
-        logEntry1.Comment = "Heute auf dem Rückweg vom Business-Meeting in Darmstadt gesucht, gefunden und geloggt... [:D]\n" +
+        logEntry1.cacheId = this.id;
+        logEntry1.finder = "SaarFuchs";
+        logEntry1.geoCacheLogType = LogTypes.found;
+        logEntry1.logText = "Heute auf dem Rückweg vom Business-Meeting in Darmstadt gesucht, gefunden und geloggt... [:D]\n" +
                 "\n" +
                 "So ein Cache nach der Arbeit kann den Feierabend doch immer etwas auflockern! [8D]\n" +
                 "\n" +
@@ -163,37 +163,37 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 "([url=http://saarfuchs.blogspot.com/]Follow my blog![/url])\n" +
                 "\n" +
                 "T5 #255";
-        logEntry1.Timestamp = DATE_PATTERN.parse("2011-07-04T19:00:00Z");
-        logEntry1.Id = 170855167L;
+        logEntry1.logDate = DATE_PATTERN.parse("2011-07-04T19:00:00Z");
+        logEntry1.logId = 170855167L;
         this.logEntries.add(logEntry1);
 
         LogEntry logEntry2 = new LogEntry();
-        logEntry2.CacheId = this.id;
-        logEntry2.Finder = "Vespa6";
-        logEntry2.Type = LogTypes.found;
-        logEntry2.Comment = "heute auf dem weg nach frankfurt hier kurz gehalten, umgedreht, geparkt und das bäumchen erklommen, wirklich schön angelegtes döslein.TFTC";
-        logEntry2.Timestamp = DATE_PATTERN.parse("2011-06-07T19:00:00Z");
-        logEntry2.Id = 165483338L;
+        logEntry2.cacheId = this.id;
+        logEntry2.finder = "Vespa6";
+        logEntry2.geoCacheLogType = LogTypes.found;
+        logEntry2.logText = "heute auf dem weg nach frankfurt hier kurz gehalten, umgedreht, geparkt und das bäumchen erklommen, wirklich schön angelegtes döslein.TFTC";
+        logEntry2.logDate = DATE_PATTERN.parse("2011-06-07T19:00:00Z");
+        logEntry2.logId = 165483338L;
         this.logEntries.add(logEntry2);
 
         LogEntry logEntry3 = new LogEntry();
-        logEntry3.CacheId = this.id;
-        logEntry3.Finder = "ascona2";
-        logEntry3.Type = LogTypes.found;
-        logEntry3.Comment = "So hat ide heutige Fahrt von Wuppertal nach Karlsruhe doch mal Spass gemacht. Der Cache war allererste Sahne!!!!!!Wenn doch jeder Autobahncache so wäre. Das Seil war schnell eingebaut und dann ging es auch schon zu der tollen Dose. Hat echt Spass gemacht.\n" +
+        logEntry3.cacheId = this.id;
+        logEntry3.finder = "ascona2";
+        logEntry3.geoCacheLogType = LogTypes.found;
+        logEntry3.logText = "So hat ide heutige Fahrt von Wuppertal nach Karlsruhe doch mal Spass gemacht. Der Cache war allererste Sahne!!!!!!Wenn doch jeder Autobahncache so wäre. Das Seil war schnell eingebaut und dann ging es auch schon zu der tollen Dose. Hat echt Spass gemacht.\n" +
                 "\n" +
                 "out: Coin\n" +
                 "\n" +
                 "TFTC";
-        logEntry3.Timestamp = DATE_PATTERN.parse("2011-06-07T19:00:00Z");
-        logEntry3.Id = 165457525L;
+        logEntry3.logDate = DATE_PATTERN.parse("2011-06-07T19:00:00Z");
+        logEntry3.logId = 165457525L;
         this.logEntries.add(logEntry3);
 
         LogEntry logEntry4 = new LogEntry();
-        logEntry4.CacheId = this.id;
-        logEntry4.Finder = "Goline";
-        logEntry4.Type = LogTypes.found;
-        logEntry4.Comment = "Als das Listing erschien freute ich mich sofort über den neuen Kletter-T5er in der Nähe.\n" +
+        logEntry4.cacheId = this.id;
+        logEntry4.finder = "Goline";
+        logEntry4.geoCacheLogType = LogTypes.found;
+        logEntry4.logText = "Als das Listing erschien freute ich mich sofort über den neuen Kletter-T5er in der Nähe.\n" +
                 "Beim lesen des Listings stieg dann leise aber stetig die Angst in mir hoch.....nachdem ich mich dann mehrere Nächte lang schlaflos in meinem Bett hin- und hergewältzt habe war klar, dass hier nur eine Therapie helfen kann.....also bei der Krankenkasse angefragt....und als die mir grünes Licht gegeben hatte, konnte es mit der Behandlung losgehen. Heute nun stand dann zum erfolgreichen Abschluß der Therapie der Besuch beim Hampir auf dem Programm. Mit jedem Höhenmeter wurden meine Beine wackeliger....und oben angekommen nahm ich dann all meinen übrig gebliebenen Mut zusammen....[;)]\n" +
                 "\n" +
                 "Ein wirklich absolut geil gemachter Cache !!!!!  Eine richtig tolle Bastelarbeit !!! [8D]\n" +
@@ -205,15 +205,15 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 "\n" +
                 "IN: nix\n" +
                 "Out: Geocoin \"Micro Compass Rose - AlienHeads 1\"";
-        logEntry4.Timestamp = DATE_PATTERN.parse("2011-06-02T19:00:00Z");
-        logEntry4.Id = 164390256L;
+        logEntry4.logDate = DATE_PATTERN.parse("2011-06-02T19:00:00Z");
+        logEntry4.logId = 164390256L;
         this.logEntries.add(logEntry4);
 
         LogEntry logEntry5 = new LogEntry();
-        logEntry5.CacheId = this.id;
-        logEntry5.Finder = "Biene97";
-        logEntry5.Type = LogTypes.found;
-        logEntry5.Comment = "Heute bei schönem Wetter zusammen mit Goline diesen T-5er angegangen.\n" +
+        logEntry5.cacheId = this.id;
+        logEntry5.finder = "Biene97";
+        logEntry5.geoCacheLogType = LogTypes.found;
+        logEntry5.logText = "Heute bei schönem Wetter zusammen mit Goline diesen T-5er angegangen.\n" +
                 "Der Hampir konnte mich nicht daran hindern, mich ins Logbuch einzutragen [:D]\n" +
                 "\n" +
                 "Vielen Dank fürs auslegen und herführen und das tolle Versteck.\n" +
@@ -226,15 +226,15 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 " \n" +
                 "out: TB \" \"K\" the Cook\"\n" +
                 "   Coin \"Eli+Veru\"";
-        logEntry5.Timestamp = DATE_PATTERN.parse("2011-06-02T19:00:00Z");
-        logEntry5.Id = 164266702L;
+        logEntry5.logDate = DATE_PATTERN.parse("2011-06-02T19:00:00Z");
+        logEntry5.logId = 164266702L;
         this.logEntries.add(logEntry5);
 
         LogEntry logEntry6 = new LogEntry();
-        logEntry6.CacheId = this.id;
-        logEntry6.Finder = "Shadows0001";
-        logEntry6.Type = LogTypes.found;
-        logEntry6.Comment = "Hi,\n" +
+        logEntry6.cacheId = this.id;
+        logEntry6.finder = "Shadows0001";
+        logEntry6.geoCacheLogType = LogTypes.found;
+        logEntry6.logText = "Hi,\n" +
                 "\n" +
                 "heute ging es zusammen mit der OPWG zum Hampir :-)\n" +
                 "So erklomm Eine/r nach dem Anderen diesen schönen Baum und bewunderte die schöne Handwerkskunst :-)\n" +
@@ -244,15 +244,15 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 "#899\n" +
                 "\n" +
                 "Gruß Shadows0001";
-        logEntry6.Timestamp = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
-        logEntry6.Id = 163987510L;
+        logEntry6.logDate = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
+        logEntry6.logId = 163987510L;
         this.logEntries.add(logEntry6);
 
         LogEntry logEntry7 = new LogEntry();
-        logEntry7.CacheId = this.id;
-        logEntry7.Finder = "DdaA";
-        logEntry7.Type = LogTypes.found;
-        logEntry7.Comment = "found on 30.05.2011 @ 20:20, Cache #420\n" +
+        logEntry7.cacheId = this.id;
+        logEntry7.finder = "DdaA";
+        logEntry7.geoCacheLogType = LogTypes.found;
+        logEntry7.logText = "found on 30.05.2011 @ 20:20, Cache #420\n" +
                 "\n" +
                 "So... Es war mal wieder so weit.\n" +
                 "Ein großer Teil der OPWG hat es mal wieder geschafft und sich zum Klettern verabredet.\n" +
@@ -263,15 +263,15 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 "Danke für den Cache, '[i][b][orange]A[/orange][/b][/i]' von '[i][b][orange]DdaA[/orange][/b][/i]'\n" +
                 "\n" +
                 "No trade";
-        logEntry7.Timestamp = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
-        logEntry7.Id = 163965795L;
+        logEntry7.logDate = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
+        logEntry7.logId = 163965795L;
         this.logEntries.add(logEntry7);
 
         LogEntry logEntry8 = new LogEntry();
-        logEntry8.CacheId = this.id;
-        logEntry8.Finder = "Wotan1";
-        logEntry8.Type = LogTypes.found;
-        logEntry8.Comment = "Found on 30.05.2011 @ 19:57, Cache #609\n" +
+        logEntry8.cacheId = this.id;
+        logEntry8.finder = "Wotan1";
+        logEntry8.geoCacheLogType = LogTypes.found;
+        logEntry8.logText = "Found on 30.05.2011 @ 19:57, Cache #609\n" +
                 "\n" +
                 "Bei 2 T5er so nah bei einander...\n" +
                 "Das bot sich für ein kleines Event der OPWG gerade zu an. Der Hampir rief, und die meisten kamen....[:D]\n" +
@@ -280,101 +280,101 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 "\n" +
                 "Danke,\n" +
                 "Wotan1";
-        logEntry8.Timestamp = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
-        logEntry8.Id = 163926440L;
+        logEntry8.logDate = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
+        logEntry8.logId = 163926440L;
         this.logEntries.add(logEntry8);
 
         LogEntry logEntry9 = new LogEntry();
-        logEntry9.CacheId = this.id;
-        logEntry9.Finder = "Casiopya";
-        logEntry9.Type = LogTypes.found;
-        logEntry9.Comment = "Mit einem Grossteil der OPWG endlich seit langem mal wieder auf Klettertour gewesen.\n" +
+        logEntry9.cacheId = this.id;
+        logEntry9.finder = "Casiopya";
+        logEntry9.geoCacheLogType = LogTypes.found;
+        logEntry9.logText = "Mit einem Grossteil der OPWG endlich seit langem mal wieder auf Klettertour gewesen.\n" +
                 "Hat mich ein wenig Ueberwindung gekostet, aber dank der fuersorglichen Hilfestellung war alles kein Problem [:D]";
-        logEntry9.Timestamp = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
-        logEntry9.Id = 163871656L;
+        logEntry9.logDate = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
+        logEntry9.logId = 163871656L;
         this.logEntries.add(logEntry9);
 
         LogEntry logEntry10 = new LogEntry();
-        logEntry10.CacheId = this.id;
-        logEntry10.Finder = "Fanta_2";
-        logEntry10.Type = LogTypes.found;
-        logEntry10.Comment = "Mal wieder zusammen mit einem Großteil der OPWG auf einer kleinen T5 Tour gewesen.\n" +
+        logEntry10.cacheId = this.id;
+        logEntry10.finder = "Fanta_2";
+        logEntry10.geoCacheLogType = LogTypes.found;
+        logEntry10.logText = "Mal wieder zusammen mit einem Großteil der OPWG auf einer kleinen T5 Tour gewesen.\n" +
                 "Bei den Temperaturen war das zwar ziemlich schweißtreibend[:P], hat aber trotzdem jede Menge Spass gemacht [:D] und die Dose da oben ist ja mal genial.[8D]\n" +
                 "\n" +
                 "Danke für die kleine Klettereinlage\n" +
                 "Fanta_2\n" +
                 "\n" +
                 "In: TB";
-        logEntry10.Timestamp = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
-        logEntry10.Id = 163870090L;
+        logEntry10.logDate = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
+        logEntry10.logId = 163870090L;
         this.logEntries.add(logEntry10);
 
         LogEntry logEntry11 = new LogEntry();
-        logEntry11.CacheId = this.id;
-        logEntry11.Finder = "Greenmaya";
-        logEntry11.Type = LogTypes.found;
-        logEntry11.Comment = "Zusammen mit der OPWG\n" +
+        logEntry11.cacheId = this.id;
+        logEntry11.finder = "Greenmaya";
+        logEntry11.geoCacheLogType = LogTypes.found;
+        logEntry11.logText = "Zusammen mit der OPWG\n" +
                 "heute auch diesen T5er besucht, welcher mir noch besser gefallen hat als der Erste :-)\n" +
                 "\n" +
                 "Vielen Dank und Gruß\n" +
                 "Greenmaya";
-        logEntry11.Timestamp = DATE_PATTERN.parse("2011-05-30T07:00:00Z");
-        logEntry11.Id = 163722750L;
+        logEntry11.logDate = DATE_PATTERN.parse("2011-05-30T07:00:00Z");
+        logEntry11.logId = 163722750L;
         this.logEntries.add(logEntry11);
 
         LogEntry logEntry12 = new LogEntry();
-        logEntry12.CacheId = this.id;
-        logEntry12.Finder = "jotriweil";
-        logEntry12.Type = LogTypes.found;
-        logEntry12.Comment = "Sehr interessante T5er Ecke: 2 Caches dicht beieinander und von der Autobahnraststätte schnell erreichbar.\n" +
+        logEntry12.cacheId = this.id;
+        logEntry12.finder = "jotriweil";
+        logEntry12.geoCacheLogType = LogTypes.found;
+        logEntry12.logText = "Sehr interessante T5er Ecke: 2 Caches dicht beieinander und von der Autobahnraststätte schnell erreichbar.\n" +
                 "Heute bei genialen Wetter (25°C und sehr trocken) hat der Seileinbau nicht so recht funktioniert. Die Astgabel zu treffen ist nicht ganz einfach, daher oben mal einen Seilumbau vornehmen müssen, um auf den nächsten Stock zu kommen.\n" +
                 "Der Hampir funktioniert hervorragend und hat mich nett verabschiedet.\n" +
                 "TFTC  .. jotriweil (16:30)\n" +
                 "\n" +
                 "This entry was edited by jotriweil on Monday, 30 May 2011 at 10:22:01 UTC.";
-        logEntry12.Timestamp = DATE_PATTERN.parse("2011-05-29T19:00:00Z");
-        logEntry12.Id = 163450672L;
+        logEntry12.logDate = DATE_PATTERN.parse("2011-05-29T19:00:00Z");
+        logEntry12.logId = 163450672L;
         this.logEntries.add(logEntry12);
 
         LogEntry logEntry13 = new LogEntry();
-        logEntry13.CacheId = this.id;
-        logEntry13.Finder = "Zwerga";
-        logEntry13.Type = LogTypes.found;
-        logEntry13.Comment = "Der zweite Streich auf der heutigen Tour!\n" +
+        logEntry13.cacheId = this.id;
+        logEntry13.finder = "Zwerga";
+        logEntry13.geoCacheLogType = LogTypes.found;
+        logEntry13.logText = "Der zweite Streich auf der heutigen Tour!\n" +
                 "Klasse Idee, superschönes Final,bei dem wir auf uns gut bekannte Cacher trafen. \n" +
                 "Katie Eagle sagte noch verwundert:Mensch, das sieht von unten ja aus wie ein....Klar, ist ja auch ein...., wo sollen denn Hampire sonst schlafen[:o)] Herzliche Grüße an die owner.\n" +
                 "\n" +
                 "TFTC um 12:30Uhr\n" +
                 "[b][green]Zwerga[/green][/b]";
-        logEntry13.Timestamp = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
-        logEntry13.Id = 163700211L;
+        logEntry13.logDate = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
+        logEntry13.logId = 163700211L;
         this.logEntries.add(logEntry13);
 
         LogEntry logEntry14 = new LogEntry();
-        logEntry14.CacheId = this.id;
-        logEntry14.Finder = "Katie Eagle";
-        logEntry14.Type = LogTypes.note;
-        logEntry14.Comment = "Ach ja, TB abgelegt [8D]";
-        logEntry14.Timestamp = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
-        logEntry14.Id = 163338659L;
+        logEntry14.cacheId = this.id;
+        logEntry14.finder = "Katie Eagle";
+        logEntry14.geoCacheLogType = LogTypes.note;
+        logEntry14.logText = "Ach ja, TB abgelegt [8D]";
+        logEntry14.logDate = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
+        logEntry14.logId = 163338659L;
         this.logEntries.add(logEntry14);
 
         LogEntry logEntry15 = new LogEntry();
-        logEntry15.CacheId = this.id;
-        logEntry15.Finder = "Katie Eagle";
-        logEntry15.Type = LogTypes.found;
-        logEntry15.Comment = "Auf dem Weg zu diesem Baum hörten wir vertraute Stimmen im Wald und sahen den Mechaniker, sowie Staubfinger und seinen Sohn Oskar, die gerade fertig wurden. Sie waren so nett und nahmen unsere Pilotleine auf den Baum - An dieser Stelle vielen Dank dafür [:)] Die Cache \"Box\" ist klasse! Erstaunlich, dass der Hampyr nicht zu Staub wurde, als ich am helligten Tag die Tür öffnete [;)]\n" +
+        logEntry15.cacheId = this.id;
+        logEntry15.finder = "Katie Eagle";
+        logEntry15.geoCacheLogType = LogTypes.found;
+        logEntry15.logText = "Auf dem Weg zu diesem Baum hörten wir vertraute Stimmen im Wald und sahen den Mechaniker, sowie Staubfinger und seinen Sohn Oskar, die gerade fertig wurden. Sie waren so nett und nahmen unsere Pilotleine auf den Baum - An dieser Stelle vielen Dank dafür [:)] Die Cache \"Box\" ist klasse! Erstaunlich, dass der Hampyr nicht zu Staub wurde, als ich am helligten Tag die Tür öffnete [;)]\n" +
                 "Vielen Dank an die Owner für die Idee und den Cache\n" +
                 "[b][red]Katie Eagle[/red][/b]";
-        logEntry15.Timestamp = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
-        logEntry15.Id = 163338340L;
+        logEntry15.logDate = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
+        logEntry15.logId = 163338340L;
         this.logEntries.add(logEntry15);
 
         LogEntry logEntry16 = new LogEntry();
-        logEntry16.CacheId = this.id;
-        logEntry16.Finder = "Dolphiner";
-        logEntry16.Type = LogTypes.found;
-        logEntry16.Comment = "Wow! Der ist ja mal richtig gut gemacht! \n" +
+        logEntry16.cacheId = this.id;
+        logEntry16.finder = "Dolphiner";
+        logEntry16.geoCacheLogType = LogTypes.found;
+        logEntry16.logText = "Wow! Der ist ja mal richtig gut gemacht! \n" +
                 "\n" +
                 "Schöne Arbeit, netter Audioeffekt. [:D]\n" +
                 "\n" +
@@ -386,39 +386,39 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 "\n" +
                 "TFTC\n" +
                 "[b][blue]Dolphiner[/blue][/b] [:)]";
-        logEntry16.Timestamp = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
-        logEntry16.Id = 163213651L;
+        logEntry16.logDate = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
+        logEntry16.logId = 163213651L;
         this.logEntries.add(logEntry16);
 
         LogEntry logEntry17 = new LogEntry();
-        logEntry17.CacheId = this.id;
-        logEntry17.Finder = "manic.mechanic";
-        logEntry17.Type = LogTypes.found;
-        logEntry17.Comment = "Schöne kleiner T5er zum Aufwärmen. Besonders begeistert war ich neben der tollen Dose von den vielen Facilities die es in unmittelbarer Nähe gibt [;)]...\n" +
+        logEntry17.cacheId = this.id;
+        logEntry17.finder = "manic.mechanic";
+        logEntry17.geoCacheLogType = LogTypes.found;
+        logEntry17.logText = "Schöne kleiner T5er zum Aufwärmen. Besonders begeistert war ich neben der tollen Dose von den vielen Facilities die es in unmittelbarer Nähe gibt [;)]...\n" +
                 "\n" +
                 "TNLNSL\n" +
                 "T4TC\n" +
                 "manic.mechanic";
-        logEntry17.Timestamp = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
-        logEntry17.Id = 163152743L;
+        logEntry17.logDate = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
+        logEntry17.logId = 163152743L;
         this.logEntries.add(logEntry17);
 
         LogEntry logEntry18 = new LogEntry();
-        logEntry18.CacheId = this.id;
-        logEntry18.Finder = "staubfinger0702";
-        logEntry18.Type = LogTypes.found;
-        logEntry18.Comment = "Nachdem ich gestern die ersten T5 Versuche gemacht hatte, sind heute manic.mechanic und ich mit meinem Sohn Oskar auf eine T5 Tour los gezogen.\n" +
+        logEntry18.cacheId = this.id;
+        logEntry18.finder = "staubfinger0702";
+        logEntry18.geoCacheLogType = LogTypes.found;
+        logEntry18.logText = "Nachdem ich gestern die ersten T5 Versuche gemacht hatte, sind heute manic.mechanic und ich mit meinem Sohn Oskar auf eine T5 Tour los gezogen.\n" +
                 "Dabei sind wir sogar noch auf hiesige Cacher gestoßen.\n" +
                 "Danke fürs Verstecken.";
-        logEntry18.Timestamp = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
-        logEntry18.Id = 163136663L;
+        logEntry18.logDate = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
+        logEntry18.logId = 163136663L;
         this.logEntries.add(logEntry18);
 
         LogEntry logEntry19 = new LogEntry();
-        logEntry19.CacheId = this.id;
-        logEntry19.Finder = "BlindEagle";
-        logEntry19.Type = LogTypes.found;
-        logEntry19.Comment = "Gut, dass Biene Maya und ich das T5-Grödel im Auto hatten, denn dieses skurile Kerlchen entdeckten wir mehr zufällig auf der Anfahrt zu unserer heutigen Spontantour. Nachdem wir den Wurfsack aus dem Nachbarbaum geborgen hatten, gab es kein Halten mehr und wir öffneten den knarzenden Sargdeckel........welch ein Schock........erst auf den zweiten Blick erkannte ich, wie ausbruchsicher das Verlies gestaltet ist. So konnten wir uns den seltenen Hampir in aller Ruhe ansehen, prompt fiel mir dazu eine Geschichte ein, die sich angeblich ganz in der Nähe zugetragen haben soll:\n" +
+        logEntry19.cacheId = this.id;
+        logEntry19.finder = "BlindEagle";
+        logEntry19.geoCacheLogType = LogTypes.found;
+        logEntry19.logText = "Gut, dass Biene Maya und ich das T5-Grödel im Auto hatten, denn dieses skurile Kerlchen entdeckten wir mehr zufällig auf der Anfahrt zu unserer heutigen Spontantour. Nachdem wir den Wurfsack aus dem Nachbarbaum geborgen hatten, gab es kein Halten mehr und wir öffneten den knarzenden Sargdeckel........welch ein Schock........erst auf den zweiten Blick erkannte ich, wie ausbruchsicher das Verlies gestaltet ist. So konnten wir uns den seltenen Hampir in aller Ruhe ansehen, prompt fiel mir dazu eine Geschichte ein, die sich angeblich ganz in der Nähe zugetragen haben soll:\n" +
                 "\n" +
                 "Hoppelt ein Häschen durch den Wald. Begegnet es einem sehr zottigen Hund. \"Was bist Du denn für ein Tier?\" \"Ich bin ein Wolfshund. Meine Mutter war ein Wolf, mein Vater ein Hund.\" Häschen hoppelt weiter und begegnet einem Muli. \"Was bist Du denn für ein Tier?\" \"Ich bin ein Maultier. Mutter Esel, Vater Pferd.\" Häschen wundert sich, was es alles gibt und hoppelt weiter. Begenet es einem ganz unbekannten Tier. \"Was bist Du denn für ein Tier?\" \"Ich bin ein Ameisenbär.\" Häschen entsetzt: \"Ne ne ne ne, das kannst Du mir nicht erzählen!\"\n" +
                 "\n" +
@@ -427,21 +427,21 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
                 "- Nix getauscht -\n" +
                 "\n" +
                 "Vielen Dank dafür und schöne Grüße, BlindEagle";
-        logEntry19.Timestamp = DATE_PATTERN.parse("2011-05-27T19:00:00Z");
-        logEntry19.Id = 163673347L;
+        logEntry19.logDate = DATE_PATTERN.parse("2011-05-27T19:00:00Z");
+        logEntry19.logId = 163673347L;
         this.logEntries.add(logEntry19);
 
         LogEntry logEntry20 = new LogEntry();
-        logEntry20.CacheId = this.id;
-        logEntry20.Finder = "Biene Maya";
-        logEntry20.Type = LogTypes.found;
-        logEntry20.Comment = "Das hat man nun davon, da möchte man nett sein und dem Hampier einen Besuch abstatten und was macht er, versucht alles um es zu verhindern. [:(!] Nach den ersten Versuchen mit der Pilotleine hat er doch glatt das Wurfsäckchen im Nachbarbaum verankert \t[:O] und so dauerte es eine ganze Weile ehe es dank BlindEagle wieder befreit war. Und dann gings ganz flott,BlindEagle hatte das Seil gelegt und ehe ich mich versah war er auch schon beim Hampier um ihm das Logbuch zu entlocken. Am Boden wurde dann geloggt und ich durfte es dann dem Hampier zurückgeben. Letztendlich war er dann aber doch sehr gastfreundlich. [;)]\n" +
+        logEntry20.cacheId = this.id;
+        logEntry20.finder = "Biene Maya";
+        logEntry20.geoCacheLogType = LogTypes.found;
+        logEntry20.logText = "Das hat man nun davon, da möchte man nett sein und dem Hampier einen Besuch abstatten und was macht er, versucht alles um es zu verhindern. [:(!] Nach den ersten Versuchen mit der Pilotleine hat er doch glatt das Wurfsäckchen im Nachbarbaum verankert \t[:O] und so dauerte es eine ganze Weile ehe es dank BlindEagle wieder befreit war. Und dann gings ganz flott,BlindEagle hatte das Seil gelegt und ehe ich mich versah war er auch schon beim Hampier um ihm das Logbuch zu entlocken. Am Boden wurde dann geloggt und ich durfte es dann dem Hampier zurückgeben. Letztendlich war er dann aber doch sehr gastfreundlich. [;)]\n" +
                 "Danke!\n" +
                 "\n" +
                 "Liebe Grüße\n" +
                 "Biene Maya";
-        logEntry20.Timestamp = DATE_PATTERN.parse("2011-05-27T19:00:00Z");
-        logEntry20.Id = 163319268L;
+        logEntry20.logDate = DATE_PATTERN.parse("2011-05-27T19:00:00Z");
+        logEntry20.logId = 163319268L;
         this.logEntries.add(logEntry20);
 
         return true;

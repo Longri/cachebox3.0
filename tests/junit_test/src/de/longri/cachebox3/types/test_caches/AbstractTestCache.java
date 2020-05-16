@@ -52,7 +52,7 @@ public abstract class AbstractTestCache {
         if (lt) {
             // BBCODE are filtered with read from DB
             for (LogEntry entry : logEntries) {
-                entry.Comment = LogEntry.filterBBCode(entry.Comment);
+                entry.logText = LogEntry.filterBBCode(entry.logText);
             }
         }
         testLogs = lt;
@@ -288,20 +288,20 @@ public abstract class AbstractTestCache {
     protected boolean fullLogEntryEquals(LogEntry log1, LogEntry log2, Database database) {
         if (!log1.equals(log2)) return false; // check GcCode
 
-        assertTrue(log1.Type == log2.Type, "LogEntry Type of " + log1.Id + " are wrong! " +
-                "was " + log1.Type + " instead of " + log2.Type);
+        assertTrue(log1.geoCacheLogType == log2.geoCacheLogType, "LogEntry Type of " + log1.logId + " are wrong! " +
+                "was " + log1.geoCacheLogType + " instead of " + log2.geoCacheLogType);
 
-        assertTrue(log1.Finder.equals(log2.Finder), "LogEntry Finder of " + log1.Id + " are wrong! " +
-                "was " + log1.Finder + " instead of " + log2.Finder);
+        assertTrue(log1.finder.equals(log2.finder), "LogEntry Finder of " + log1.logId + " are wrong! " +
+                "was " + log1.finder + " instead of " + log2.finder);
 
-        assertTrue(log1.CacheId == log2.CacheId, "LogEntry CacheId of " + log1.Id + " are wrong! " +
-                "was " + log1.CacheId + " instead of " + log2.CacheId);
+        assertTrue(log1.cacheId == log2.cacheId, "LogEntry CacheId of " + log1.logId + " are wrong! " +
+                "was " + log1.cacheId + " instead of " + log2.cacheId);
 
-        assertEquals(log1.Comment, log2.Comment, "LogEntry Comment of " + log1.Id + " are wrong! ");
+        assertEquals(log1.logText, log2.logText, "LogEntry Comment of " + log1.logId + " are wrong! ");
 
-        String expectedDate = DATE_PATTERN.format(log1.Timestamp);
-        String actualDate = DATE_PATTERN.format(log2.Timestamp);
-        assertEquals(expectedDate, actualDate, "Timestamp of LogEntry " + log1.Id + " should be charSequenceEquals");
+        String expectedDate = DATE_PATTERN.format(log1.logDate);
+        String actualDate = DATE_PATTERN.format(log2.logDate);
+        assertEquals(expectedDate, actualDate, "Timestamp of LogEntry " + log1.logId + " should be charSequenceEquals");
 
         return true;
     }

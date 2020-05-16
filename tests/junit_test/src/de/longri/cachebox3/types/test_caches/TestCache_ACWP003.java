@@ -81,21 +81,21 @@ public class TestCache_ACWP003 extends AbstractTestCache {
         SimpleDateFormat DATE_PATTERN2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
 
         LogEntry logEntry1 = new LogEntry();
-        logEntry1.CacheId = this.id;
-        logEntry1.Finder = "GSAK";
-        logEntry1.Type = LogTypes.note;
-        logEntry1.Comment = "User Note\n    ";
-        logEntry1.Timestamp = DATE_PATTERN2.parse("2014-07-19T08:00:00");
-        logEntry1.Id = -3L;
+        logEntry1.cacheId = this.id;
+        logEntry1.finder = "GSAK";
+        logEntry1.geoCacheLogType = LogTypes.note;
+        logEntry1.logText = "User Note\n    ";
+        logEntry1.logDate = DATE_PATTERN2.parse("2014-07-19T08:00:00");
+        logEntry1.logId = -3L;
         this.logEntries.add(logEntry1);
 
         LogEntry logEntry2 = new LogEntry();
-        logEntry2.CacheId = this.id;
-        logEntry2.Finder = "GSAK";
-        logEntry2.Type = LogTypes.note;
-        logEntry2.Comment = "User Note$~Log Section\n    ";
-        logEntry2.Timestamp = DATE_PATTERN2.parse("2014-07-19T08:00:00");
-        logEntry2.Id = -2L;
+        logEntry2.cacheId = this.id;
+        logEntry2.finder = "GSAK";
+        logEntry2.geoCacheLogType = LogTypes.note;
+        logEntry2.logText = "User Note$~Log Section\n    ";
+        logEntry2.logDate = DATE_PATTERN2.parse("2014-07-19T08:00:00");
+        logEntry2.logId = -2L;
         this.logEntries.add(logEntry2);
         return true;
     }

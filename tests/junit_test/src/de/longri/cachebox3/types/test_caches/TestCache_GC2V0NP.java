@@ -105,24 +105,24 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
     protected boolean addLogs() throws ParseException {
 
         LogEntry logEntry1 = new LogEntry();
-        logEntry1.CacheId = this.id;
-        logEntry1.Finder = "Vlad_Tepes";
-        logEntry1.Type = LogTypes.found;
-        logEntry1.Comment = "#2283 | 19.10.2017 | 14:37 Uhr\n" +
+        logEntry1.cacheId = this.id;
+        logEntry1.finder = "Vlad_Tepes";
+        logEntry1.geoCacheLogType = LogTypes.found;
+        logEntry1.logText = "#2283 | 19.10.2017 | 14:37 Uhr\n" +
                 "\n" +
                 "Während sich ein Teil unserer Familie im Miramar austobte, zogen ZALE5KA und ich es vor Weinheim zu erkunden. Wir wählten zuerst diesen Cache aus. Wir genossen einen tollen Rundgang entlang der einzelnen Stationen. Zwischendurch gönnten wir uns noch eine kurze Pause in einem der zahlreichen Cafes.\n" +
                 "Abschließend können wir sagen, dass Weinheim sehr schön ist und wir viel gelernt haben. \n" +
                 "\n" +
                 "Danke sagt Vlad_Tepes";
-        logEntry1.Timestamp = DATE_PATTERN.parse("2017-10-19T21:00:00Z");
-        logEntry1.Id = 728484100L;
+        logEntry1.logDate = DATE_PATTERN.parse("2017-10-19T21:00:00Z");
+        logEntry1.logId = 728484100L;
         this.logEntries.add(logEntry1);
 
         LogEntry logEntry2 = new LogEntry();
-        logEntry2.CacheId = this.id;
-        logEntry2.Finder = "ZALE5KA";
-        logEntry2.Type = LogTypes.found;
-        logEntry2.Comment = "#0907 | 19.10.2017 | 14:37 Uhr\n" +
+        logEntry2.cacheId = this.id;
+        logEntry2.finder = "ZALE5KA";
+        logEntry2.geoCacheLogType = LogTypes.found;
+        logEntry2.logText = "#0907 | 19.10.2017 | 14:37 Uhr\n" +
                 "\n" +
                 "Während R9D3 mitsamt Freund im nahem Schwimmbad waren, haben der weibliche Teil von Vlad_Tepes und ich uns Weinheim angeschaut.\n" +
                 "\n" +
@@ -130,15 +130,15 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
                 "Die Fragen konnten ebenfalls gut beantwortet werden und es war auch eine sehr informative Runde.\n" +
                 "\n" +
                 "Danke sagt ZALE5KA";
-        logEntry2.Timestamp = DATE_PATTERN.parse("2017-10-19T21:00:00Z");
-        logEntry2.Id = 728466575L;
+        logEntry2.logDate = DATE_PATTERN.parse("2017-10-19T21:00:00Z");
+        logEntry2.logId = 728466575L;
         this.logEntries.add(logEntry2);
 
         LogEntry logEntry3 = new LogEntry();
-        logEntry3.CacheId = this.id;
-        logEntry3.Finder = "Die Breakers";
-        logEntry3.Type = LogTypes.found;
-        logEntry3.Comment = "Bei tollem Sonnenschein, ging es auf eine kleine Runde hier in Weinheim um die Tore, Türme und Pforten kennen zu lernen.\n" +
+        logEntry3.cacheId = this.id;
+        logEntry3.finder = "Die Breakers";
+        logEntry3.geoCacheLogType = LogTypes.found;
+        logEntry3.logText = "Bei tollem Sonnenschein, ging es auf eine kleine Runde hier in Weinheim um die Tore, Türme und Pforten kennen zu lernen.\n" +
                 "Die Wegführung fanden wir beide etwas merkwürdig an einer Stelle, aber wir haben alles gut gefunden.\n" +
                 "Das Finale ist dann wieder schön etwas weg vom Trubel, was uns auch gut gefallen hat.\n" +
                 "So konnten wir den Kuchen in der City genießen und das Finale im grünen.\n" +
@@ -149,24 +149,24 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
                 "\n" +
                 "IN: -\n" +
                 "OUT: -\n";
-        logEntry3.Timestamp = DATE_PATTERN.parse("2017-10-02T01:11:00Z");
-        logEntry3.Id = 724161334L;
+        logEntry3.logDate = DATE_PATTERN.parse("2017-10-02T01:11:00Z");
+        logEntry3.logId = 724161334L;
         this.logEntries.add(logEntry3);
 
         LogEntry logEntry4 = new LogEntry();
-        logEntry4.CacheId = this.id;
-        logEntry4.Finder = "Blue two";
-        logEntry4.Type = LogTypes.found;
-        logEntry4.Comment = "Trotz der großen Hitze in der Stadt, haben wir uns das historische Weinheim angeschaut und diesen Cache schnell gefunden! Leider ist ja nicht mehr viel von den Objekten erhalten, und dann dieses Final soweit abseits?! Trotzdem haben wir viel gelernt! TFTC";
-        logEntry4.Timestamp = DATE_PATTERN.parse("2017-08-26T23:55:01Z");
-        logEntry4.Id = 715278765L;
+        logEntry4.cacheId = this.id;
+        logEntry4.finder = "Blue two";
+        logEntry4.geoCacheLogType = LogTypes.found;
+        logEntry4.logText = "Trotz der großen Hitze in der Stadt, haben wir uns das historische Weinheim angeschaut und diesen Cache schnell gefunden! Leider ist ja nicht mehr viel von den Objekten erhalten, und dann dieses Final soweit abseits?! Trotzdem haben wir viel gelernt! TFTC";
+        logEntry4.logDate = DATE_PATTERN.parse("2017-08-26T23:55:01Z");
+        logEntry4.logId = 715278765L;
         this.logEntries.add(logEntry4);
 
         LogEntry logEntry5 = new LogEntry();
-        logEntry5.CacheId = this.id;
-        logEntry5.Finder = "Maus229";
-        logEntry5.Type = LogTypes.found;
-        logEntry5.Comment = "heut gings mit Frau zwee hoggemer bei bestem Cacherwetterchen nach Weinheim. Schon laaange standen die beiden Multis aufm Programm. \n" +
+        logEntry5.cacheId = this.id;
+        logEntry5.finder = "Maus229";
+        logEntry5.geoCacheLogType = LogTypes.found;
+        logEntry5.logText = "heut gings mit Frau zwee hoggemer bei bestem Cacherwetterchen nach Weinheim. Schon laaange standen die beiden Multis aufm Programm. \n" +
                 "\n" +
                 "Weinheim ist einfach schön! Und es macht Spaß, wohlbekannte Ecken immer wieder anzuschauen. \n" +
                 "\n" +
@@ -175,8 +175,8 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
                 "Vielen Dank fürs Herführen und TFTC!\n" +
                 "\n" +
                 "maus229";
-        logEntry5.Timestamp = DATE_PATTERN.parse("2017-08-20T21:00:00Z");
-        logEntry5.Id = 714706105L;
+        logEntry5.logDate = DATE_PATTERN.parse("2017-08-20T21:00:00Z");
+        logEntry5.logId = 714706105L;
         this.logEntries.add(logEntry5);
 
         return true;

@@ -115,22 +115,22 @@ public class TestCache_OCF19A extends AbstractTestCache {
     protected boolean addLogs() throws ParseException {
 
         LogEntry logEntry1 = new LogEntry();
-        logEntry1.CacheId = this.id;
-        logEntry1.Finder = "Danlex";
-        logEntry1.Type = LogTypes.owner_maintenance;
-        logEntry1.Comment = "<p>Ich habe hier eben mal nach dem Rechten gesehen, abgesehen davon, dass hier ganz vieles zugewuchert ist, ist alles im Lot. Der Start und Station 1 waren zu finden, Station 2 die zuletzt nicht gefunden wurde war aber auch vor Ort.</p>\n" +
+        logEntry1.cacheId = this.id;
+        logEntry1.finder = "Danlex";
+        logEntry1.geoCacheLogType = LogTypes.owner_maintenance;
+        logEntry1.logText = "<p>Ich habe hier eben mal nach dem Rechten gesehen, abgesehen davon, dass hier ganz vieles zugewuchert ist, ist alles im Lot. Der Start und Station 1 waren zu finden, Station 2 die zuletzt nicht gefunden wurde war aber auch vor Ort.</p>\n" +
                 "<p>Somit also viel Spaß und Erfolg!</p>";
-        logEntry1.Timestamp = DATE_PATTERN.parse("2013-07-07T14:30:00Z");
-        logEntry1.Id = 903547L;
+        logEntry1.logDate = DATE_PATTERN.parse("2013-07-07T14:30:00Z");
+        logEntry1.logId = 903547L;
         this.logEntries.add(logEntry1);
 
         LogEntry logEntry2 = new LogEntry();
-        logEntry2.CacheId = this.id;
-        logEntry2.Finder = "Danlex";
-        logEntry2.Type = LogTypes.temporarily_disabled;
-        logEntry2.Comment = "<p>Ich werde die Runde mal überprüfen und ggf. auch umbauen, daher ist hier vorerst Pause.</p>";
-        logEntry2.Timestamp = DATE_PATTERN.parse("2013-06-16T00:00:00Z");
-        logEntry2.Id = 899684L;
+        logEntry2.cacheId = this.id;
+        logEntry2.finder = "Danlex";
+        logEntry2.geoCacheLogType = LogTypes.temporarily_disabled;
+        logEntry2.logText = "<p>Ich werde die Runde mal überprüfen und ggf. auch umbauen, daher ist hier vorerst Pause.</p>";
+        logEntry2.logDate = DATE_PATTERN.parse("2013-06-16T00:00:00Z");
+        logEntry2.logId = 899684L;
         this.logEntries.add(logEntry2);
         return true;
     }
