@@ -17,8 +17,10 @@ package de.longri.cachebox3.settings;
 
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.settings.types.SettingBool;
+import de.longri.cachebox3.settings.types.SettingColor;
 import de.longri.cachebox3.settings.types.SettingFolder;
 import de.longri.cachebox3.settings.types.SettingString;
+import de.longri.cachebox3.utils.HSV_Color;
 
 import static de.longri.cachebox3.settings.types.SettingCategory.Skin;
 import static de.longri.cachebox3.settings.types.SettingStoreType.Global;
@@ -40,6 +42,6 @@ public abstract class Settings_Skin extends Settings_Map {
 //    public static final SettingBool dontUseAmbient = (SettingBool) settingsList.addSetting(new SettingBool("dontUseAmbient", Skin, EXPERT, true, Global, ACB));
 //    public static final SettingInt ambientTime = (SettingInt) settingsList.addSetting(new SettingInt("ambientTime", Skin, EXPERT, 10, Global, ACB));
 //
-//    public static final SettingColor SolvedMysteryColor = (SettingColor) settingsList.addSetting(new SettingColor("SolvedMysteryColor", Skin, EXPERT, new HSV_Color(0.2f, 1f, 0.2f, 1f), Global, ACB));
+    public static final SettingColor SolvedMysteryColor = (SettingColor) settingsList.addSetting(new SettingColor("SolvedMysteryColor", Skin, EXPERT, new HSV_Color(0.2f, 1f, 0.2f, 1f), Global, ACB));
 
 }

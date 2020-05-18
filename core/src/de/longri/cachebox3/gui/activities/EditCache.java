@@ -23,15 +23,19 @@ import java.util.Date;
  * Created by Longri on 23.08.2016.
  */
 public class EditCache extends Activity {
-    private final CB_Label lblCachetitle, lblGcCode, lblOwner, lblCountry, lblState, lblDescription;
+    private final CB_Label lblCachetitle;
+    private final CB_Label lblGcCode;
+    private final CB_Label lblOwner;
+    private final CB_Label lblCountry;
+    private final CB_Label lblState;
     private final EditTextField cacheTitle, cacheCode, cacheOwner, cacheCountry, cacheState;
     private final EditTextField cacheDescription;
     private final Database database;
-    private CoordinateButton cacheCoords;
-    private SelectBox<CacheTypes> cacheTyp;
-    private SelectBox<CacheSizes> cacheSize;
-    private AdjustableStarWidget cacheDifficulty;
-    private AdjustableStarWidget cacheTerrain;
+    private final CoordinateButton cacheCoords;
+    private final SelectBox<CacheTypes> cacheTyp;
+    private final SelectBox<CacheSizes> cacheSize;
+    private final AdjustableStarWidget cacheDifficulty;
+    private final AdjustableStarWidget cacheTerrain;
     private MutableCache cache, newValues;
 
     private EditCache(Database database, String title, Drawable icon) {
@@ -42,7 +46,7 @@ public class EditCache extends Activity {
         lblOwner = new CB_Label(Translation.get("Owner"));
         lblCountry = new CB_Label(Translation.get("Country"));
         lblState = new CB_Label(Translation.get("State"));
-        lblDescription = new CB_Label(Translation.get("Description"));
+        // CB_Label lblDescription = new CB_Label(Translation.get("Description"));
         cacheTitle = new EditTextField(true);
         cacheCode = new EditTextField();
         cacheOwner = new EditTextField();

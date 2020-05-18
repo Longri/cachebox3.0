@@ -25,9 +25,9 @@ import com.badlogic.gdx.graphics.Color;
 public class HSV_Color extends Color {
 
 
-    private float h;
-    private float s;
-    private float v;
+    private float hue;
+    private float saturation;
+    private float value;
 
     public HSV_Color(Color color) {
         super(color);
@@ -116,69 +116,69 @@ public class HSV_Color extends Color {
 
         float delta;
 
-        v = max; // v
+        value = max; // v
 
         delta = max - min;
 
         if (max != 0)
-            s = delta / max; // s
+            saturation = delta / max; // s
         else {
             // r = g = b = 0 // s = 0, v is undefined
-            s = 0;
-            h = 0;
+            saturation = 0;
+            hue = 0;
             return;
         }
 
         if (r == max)
-            h = (g - b) / delta; // between yellow & magenta
+            hue = (g - b) / delta; // between yellow & magenta
         else if (g == max)
-            h = 2 + (b - r) / delta; // between cyan & yellow
+            hue = 2 + (b - r) / delta; // between cyan & yellow
         else
-            h = 4 + (r - g) / delta; // between magenta & cyan
+            hue = 4 + (r - g) / delta; // between magenta & cyan
 
-        h *= 60; // degrees
-        if (h < 0)
-            h += 360;
+        hue *= 60; // degrees
+        if (hue < 0)
+            hue += 360;
 
     }
 
     public void convertHSVtoRGB() {
-        float hue = h / 60;
+        float hue = this.hue / 60;
 
         int i = (int) Math.floor(hue);
         float f = hue - i; // factorial part of h
-        float p = v * (1 - s);
-        float q = v * (1 - s * f);
-        float t = v * (1 - s * (1 - f));
+        float p = value * (1 - saturation);
+        float q = value * (1 - saturation * f);
+        float t = value * (1 - saturation * (1 - f));
 
         switch (i) {
             case 0:
-                r = v;
+                r = value;
                 g = t;
                 b = p;
                 break;
             case 1:
                 r = q;
-                g = v;
+                g = value;
                 b = p;
                 break;
             case 2:
                 r = p;
-                g = v;
+                g = value;
                 b = t;
                 break;
             case 3:
                 r = p;
                 g = q;
-                b = v;
+                b = value;
                 break;
             case 4:
                 r = t;
                 g = p;
-                b = v;
+                b = value;
                 break;
             default:
-                r = v;
+                r = value;
                 g = p;
                 b = q;
                 break;
@@ -186,29 +186,29 @@ public class HSV_Color extends Color {
     }
 
     public void setHue(float hue) {
-        h = hue;
+        this.hue = hue;
         convertHSVtoRGB();
     }
 
     public float getHue() {
-        return h;
+        return hue;
     }
 
     public float getSat() {
-        return s;
+        return saturation;
     }
 
     public float getVal() {
-        return v;
+        return value;
     }
 
     public void setSat(float sat) {
-        s = sat;
+        saturation = sat;
         convertHSVtoRGB();
     }
 
     public void setVal(float val) {
-        v = val;
+        value = val;
         convertHSVtoRGB();
     }
 

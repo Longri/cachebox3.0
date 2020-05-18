@@ -36,17 +36,15 @@ import org.slf4j.LoggerFactory;
  */
 public class NotesView extends AbstractTableView implements SelectedCacheChangedListener {
     private final static Logger log = LoggerFactory.getLogger(NotesView.class);
-    private boolean mustLoadNotes;
     private CB_Button getSolverButton;
     private EditTextField notes;
     private CB_Button btnUpload;
     private AbstractCache currentCache;
-
+    private String notesText;
 
     public NotesView(BitStore reader) {
         super(reader);
     }
-
 
     public NotesView() {
         super("NotesView");
@@ -108,26 +106,13 @@ public class NotesView extends AbstractTableView implements SelectedCacheChanged
                 btnUpload.enable();
         });
 
-        mustLoadNotes = true;
-
         contentTable.setTableAndCellDefaults();
 
     }
 
     @Override
     public void onShow() {
-        if (mustLoadNotes) {
-            currentCache = EventHandler.getSelectedCache();
-            String text = currentCache != null ? Database.getNote(currentCache.getId()) : "";
-            if (text == null)
-                text = "";
-            notes.setText(text);
-            mustLoadNotes = false;
-            if (text.length() > 0) {
-                btnUpload.setText(Translation.get("Upload"));
-                btnUpload.enable();
-            }
-        }
+        loadNotes(EventHandler.getSelectedCache());
         if (notes.getText().trim().length() == 0) {
             btnUpload.disable();
         }
@@ -136,16 +121,37 @@ public class NotesView extends AbstractTableView implements SelectedCacheChanged
 
     @Override
     public void onHide() {
+        saveNotes();
+    }
+
+    private void loadNotes(AbstractCache newCache) {
+        if (currentCache != newCache) {
+            currentCache = newCache;
+            notesText = currentCache != null ? Database.getNote(currentCache.getId()) : "";
+            if (notesText == null)
+                notesText = "";
+            notes.setText(notesText);
+            btnUpload.setText(Translation.get("Upload"));
+            btnUpload.enable();
+        }
+    }
+
+    private void saveNotes() {
         // Save changed Note text to Database
         String text = notes.getText();
-        if (text != null)
-            if (text.length() > 0) {
+        if (!notesText.equals(text)) {
+            if (text != null) {
                 try {
-                    Database.setNote(currentCache, text);
+                    if (currentCache != null)
+                        Database.setNote(currentCache, text);
                 } catch (Exception e) {
                     log.error("Write note to database", e);
                 }
             }
+            else {
+                log.error("NotesView: null text can not be written to database");
+            }
+        }
     }
 
     @Override
@@ -171,7 +177,7 @@ public class NotesView extends AbstractTableView implements SelectedCacheChanged
 
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
-        currentCache = EventHandler.getSelectedCache();
-        mustLoadNotes = true;
+        saveNotes();
+        loadNotes(event.cache);
     }
 }

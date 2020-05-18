@@ -556,9 +556,7 @@ public class Settings_Activity extends ActivityBase {
 //                        showCategory(SettingCategory.Login, true);
 //                    });
 
-                    GetApiKey_Activity activity = new GetApiKey_Activity() {
-
-                    };
+                    GetApiKey_Activity activity = new GetApiKey_Activity();
                     activity.show();
 
                     event.cancel();
@@ -570,28 +568,42 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getColorView(int listIndex, SettingColor setting) {
-        return null;
+        ListViewItem table = createItem(listIndex, setting.getName());
+
+        final CB_Button btnColor = new CB_Button(Translation.get("select"));
+        btnColor.setColor(setting.getValue());
+        table.add(btnColor).pad(CB.scaledSizes.MARGIN / 2);
+
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
+                if (event.getType() == InputEvent.Type.touchUp) {
+                    ColorPicker.getInstance("ColorPickerTitle",
+                            CB.getSkin().menuIcon.showOriginalHtmlColor).execute(setting.getValue(),
+                            new ChangeListener() {
+                                @Override
+                                public void changed(ChangeEvent event, Actor actor) {
+                                    ColorPicker colorPicker = (ColorPicker) actor;
+                                    setting.setValue(colorPicker.getColorValue());
+                                    btnColor.setColor(setting.getValue());
+                                }
+                            });
+                    event.stop();
+                    event.cancel();
+                    event.handle();
+                }
+            }
+        });
+
+        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue().toString());
+        return table;
     }
 
     private ListViewItem getAudioView(int listIndex, final SettingsAudio setting) {
-        ListViewItem table = new ListViewItem(listIndex) {
-            @Override
-            public void dispose() {
-            }
-        };
-
         final String audioName = setting.getName();
-
-        // add label with category name, align left
-        table.left();
+        ListViewItem table = createItem(listIndex, audioName);
 
         VisTable nameSliderTable = new VisTable();
-
-        VisLabel label = new VisLabel(Translation.get(audioName), nameStyle);
-        label.setWrap(true);
-        label.setAlignment(Align.left);
-        nameSliderTable.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-        nameSliderTable.row();
         final FloatControl floatControl = new FloatControl(0f, 1f, 0.001f, true, (value, dragged) -> {
             if (!dragged) {
                 //TODO set value as property with change to setting.dirty
@@ -612,6 +624,7 @@ public class Settings_Activity extends ActivityBase {
         });
         nameSliderTable.add(floatControl).expandX().fillX();
         floatControl.setValue(setting.getValue().Volume);
+        table.row();
         table.add(nameSliderTable).pad(CB.scaledSizes.MARGIN).expandX().fillX();
 
         // add check icon
@@ -665,18 +678,7 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getStringView(int listIndex, final SettingString setting) {
-        ListViewItem table = new ListViewItem(listIndex) {
-            @Override
-            public void dispose() {
-            }
-        };
-
-        // add label with category name, align left
-        table.left();
-        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
-        label.setWrap(true);
-        label.setAlignment(Align.left);
-        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        ListViewItem table = createItem(listIndex, setting.getName());
 
         // add value label
         table.row();
@@ -729,7 +731,6 @@ public class Settings_Activity extends ActivityBase {
 
         Array<Enum<?>> itemList = new Array<>();
         Enum<?> selectedItem = setting.getEnumValue();
-
         Class<?> declaringClass = selectedItem.getDeclaringClass();
         Object[] oo = declaringClass.getEnumConstants();
         int selectIndex = 0;
@@ -746,21 +747,6 @@ public class Settings_Activity extends ActivityBase {
 
         final AtomicBoolean callBackClick = new AtomicBoolean(false);
         final SelectBox selectBox = new SelectBox(style, null);
-        ClickListener clickListener = new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (event.isHandled() || event.isCancelled()) return;
-                //show select menu
-                Menu menu = selectBox.getMenu();
-                showListView(menu.getListview(), "select item", true);
-                CB.postOnNextGlThread(new NamedRunnable("postOnGlThread") {
-                    @Override
-                    public void run() {
-                        callBackClick.set(true);
-                    }
-                });
-            }
-        };
-
 
         selectBox.set(itemList);
         if (setting == Config.localisation) {
@@ -786,26 +772,28 @@ public class Settings_Activity extends ActivityBase {
             public void dispose() {
             }
         };
-        table.addListener(clickListener);
-        float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
 
-        table.add(selectBox).width(new Value.Fixed(buttonWidth)).center();
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
+                //show select menu
+                Menu menu = selectBox.getMenu();
+                showListView(menu.getListview(), Translation.get("select"), true);
+                CB.postOnNextGlThread(new NamedRunnable("postOnGlThread") {
+                    @Override
+                    public void run() {
+                        callBackClick.set(true);
+                    }
+                });
+            }
+        });
+
+        table.add(selectBox).width(new Value.Fixed(getWidth() - (CB.scaledSizes.MARGINx2 * 2))).center();
         return table;
     }
 
     private ListViewItem getFileView(int listIndex, SettingFile setting) {
-        ListViewItem table = new ListViewItem(listIndex) {
-            @Override
-            public void dispose() {
-            }
-        };
-
-        // add label with category name, align left
-        table.left();
-        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
-        label.setWrap(true);
-        label.setAlignment(Align.left);
-        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        ListViewItem table = createItem(listIndex, setting.getName());
 
         FileChooserStyle style = VisUI.getSkin().get(FileChooserStyle.class);
         Image folderIcon = new Image(style.fileIcon);
@@ -865,18 +853,7 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getFolderView(int listIndex, final SettingFolder setting) {
-        ListViewItem table = new ListViewItem(listIndex) {
-            @Override
-            public void dispose() {
-            }
-        };
-
-        // add label with category name, align left
-        table.left();
-        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
-        label.setWrap(true);
-        label.setAlignment(Align.left);
-        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        ListViewItem table = createItem(listIndex, setting.getName());
 
         FileChooserStyle style = VisUI.getSkin().get(FileChooserStyle.class);
         Image folderIcon = new Image(style.folderIcon);
@@ -1064,20 +1041,6 @@ public class Settings_Activity extends ActivityBase {
 
         final AtomicBoolean callBackClick = new AtomicBoolean(false);
         final SelectBox selectBox = new SelectBox(style, null);
-        ClickListener clickListener = new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (event.isHandled() || event.isCancelled()) return;
-                //show select menu
-                Menu menu = selectBox.getMenu();
-                showListView(menu.getListview(), Translation.get("select"), true);
-                CB.postOnNextGlThread(new NamedRunnable("selectBox clicked callBack") {
-                    @Override
-                    public void run() {
-                        callBackClick.set(true);
-                    }
-                });
-            }
-        };
 
         int currentSelectedIndex = 0;
         Array<SelectBoxItem> itemList = new Array<>();
@@ -1120,28 +1083,30 @@ public class Settings_Activity extends ActivityBase {
             public void dispose() {
             }
         };
-        table.addListener(clickListener);
-        float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
 
-        table.add(selectBox).width(new Value.Fixed(buttonWidth)).center();
+        table.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (event.isHandled() || event.isCancelled()) return;
+                //show select menu
+                Menu menu = selectBox.getMenu();
+                showListView(menu.getListview(), Translation.get("select"), true);
+                CB.postOnNextGlThread(new NamedRunnable("selectBox clicked callBack") {
+                    @Override
+                    public void run() {
+                        callBackClick.set(true);
+                    }
+                });
+            }
+        });
+
+        table.add(selectBox).width(new Value.Fixed(getWidth() - (CB.scaledSizes.MARGINx2 * 2))).center();
 
         addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue().toString());
         return table;
     }
 
     private ListViewItem getBoolView(int listIndex, final SettingBool setting) {
-        ListViewItem table = new ListViewItem(listIndex) {
-            @Override
-            public void dispose() {
-            }
-        };
-
-        // add label with category name, align left
-        table.left();
-        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
-        label.setWrap(true);
-        label.setAlignment(Align.left);
-        table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        ListViewItem table = createItem(listIndex, setting.getName());
 
         // add check icon
         final Image[] checkImage = new Image[1];
@@ -1187,27 +1152,24 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getNumericItemTable(int listIndex, final VisLabel valueLabel, final SettingBase<?> setting) {
-
         setting.addChangedEventListener(() -> valueLabel.setText(setting.getValue().toString()));
+        ListViewItem table = createItem(listIndex, setting.getName());
+        table.add(valueLabel).width(valueLabel.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
+        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue().toString());
+        return table;
+    }
 
-
+    private ListViewItem createItem(int listIndex, String name) {
         ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {
             }
         };
-
-        // add label with category name, align left
         table.left();
-        VisLabel label = new VisLabel(Translation.get(setting.getName()), nameStyle);
+        VisLabel label = new VisLabel(Translation.get(name), nameStyle);
         label.setWrap(true);
         label.setAlignment(Align.left);
         table.add(label).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
-        // add value lable
-        table.add(valueLabel).width(valueLabel.getWidth()).pad(CB.scaledSizes.MARGIN / 2);
-
-        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue().toString());
         return table;
     }
 

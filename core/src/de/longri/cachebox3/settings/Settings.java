@@ -17,6 +17,7 @@ package de.longri.cachebox3.settings;
 
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Language;
+import de.longri.cachebox3.utils.HSV_Color;
 
 import static de.longri.cachebox3.settings.types.SettingCategory.*;
 import static de.longri.cachebox3.settings.types.SettingStoreType.Global;
@@ -196,7 +197,7 @@ public class Settings extends Settings_Skin {
 //    public static final SettingBool AppRaterDontShowAgain = (SettingBool) settingsList.addSetting(new SettingBool("AppRaterDontShowAgain", RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingString AppRaterFirstLunch = (SettingString) settingsList.addSetting(new SettingString("AppRaterFirstLunch", Internal, NEVER, "0", SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool GestureOn = (SettingBool) settingsList.addSetting(new SettingBool("GestureOn", Misc, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingColor LiveMapBackgroundColor = (SettingColor) settingsList.addSetting(new SettingColor("LiveMapBackgroundColor", LiveMap, NORMAL, new HSV_Color(0.8f, 0.8f, 1f, 1f), SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingColor LiveMapBackgroundColor = (SettingColor) settingsList.addSetting(new SettingColor("LiveMapBackgroundColor", LiveMap, NORMAL, new HSV_Color(0.8f, 0.8f, 1f, 1f), SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingLongString Filter = (SettingLongString) settingsList.addSetting(new SettingLongString("Filter", Misc, NEVER, FilterProperties.presets[0].toString(), SettingStoreType.Local, SettingUsage.ALL));
 //
 //    public static final SettingLongString UserFilterNew = (SettingLongString) settingsList.addSetting(new SettingLongString("UserFilterNew", Misc, NEVER, "", SettingStoreType.Global, SettingUsage.ACB));
