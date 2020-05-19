@@ -23,7 +23,6 @@ import de.longri.cachebox3.callbacks.FinishCallBack;
 import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.CB_ProgressBar;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
-import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.utils.NamedRunnable;
 
 

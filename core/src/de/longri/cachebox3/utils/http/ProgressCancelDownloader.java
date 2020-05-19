@@ -16,8 +16,7 @@
 package de.longri.cachebox3.utils.http;
 
 import com.badlogic.gdx.utils.Array;
-import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
-import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.gui.dialogs.ProgressCancelRunnable;
 import de.longri.cachebox3.utils.Downloader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

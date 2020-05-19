@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.SocketTimeoutException;
 
-import static de.longri.cachebox3.socket.filebrowser.FileBrowserClint.BUFFER_SIZE;
+import static de.longri.cachebox3.socket.filebrowser.FileBrowserClient.BUFFER_SIZE;
 
 /**
  * Created by longri on 30.10.17.
@@ -110,12 +110,12 @@ public class FileBrowserServer {
                             }
                         }
 
-                        if (message.equals(FileBrowserClint.CONNECT)) {
-                            dos.writeUTF(FileBrowserClint.CONNECTED);
+                        if (message.equals(FileBrowserClient.CONNECT)) {
+                            dos.writeUTF(FileBrowserClient.CONNECTED);
                             dos.flush();
-                        } else if (message.equals(FileBrowserClint.CLOSE)) {
+                        } else if (message.equals(FileBrowserClient.CLOSE)) {
                             if (closeReciver != null) closeReciver.close();
-                        } else if (message.equals(FileBrowserClint.GETFILES)) {
+                        } else if (message.equals(FileBrowserClient.GETFILES)) {
                             ServerFile root = ServerFile.getDirectory(workPath);
                             BitStore writer = new BitStore();
                             root.serialize(writer);
@@ -135,7 +135,7 @@ public class FileBrowserServer {
                                 dos.flush();
                                 offset += writeLength;
                             }
-                        } else if (message.equals(FileBrowserClint.SENDFILE)) {
+                        } else if (message.equals(FileBrowserClient.SENDFILE)) {
                             String path = dis.readUTF();
                             FileHandle outputFile = workPath.child(path);
                             outputFile.parent().mkdirs();
@@ -154,7 +154,7 @@ public class FileBrowserServer {
 
                             dos.writeUTF(TRANSFERRED);
                             dos.flush();
-                        } else if (message.equals(FileBrowserClint.GETFILE)) {
+                        } else if (message.equals(FileBrowserClient.GETFILE)) {
 
                             // read bytes for ServerFile store
                             int length = dis.readInt();
@@ -176,7 +176,7 @@ public class FileBrowserServer {
                             FileHandle fileHandle = workPath.child(deserializeServerFile.getAbsoluteWithoutRoot());
 
                             if (fileHandle.exists()) {
-                                dos.writeUTF(FileBrowserClint.START_FEILE_TRANSFER);
+                                dos.writeUTF(FileBrowserClient.START_FEILE_TRANSFER);
                                 dos.flush();
 
                                 dos.writeLong(fileHandle.length());
@@ -196,12 +196,12 @@ public class FileBrowserServer {
                                 bis.close();
                                 bos.flush();
                             } else {
-                                dos.writeUTF(FileBrowserClint.FILE_DOSENTEXIST);
+                                dos.writeUTF(FileBrowserClient.FILE_DOSENTEXIST);
                                 dos.flush();
                             }
 
 
-                        } else if (message.equals(FileBrowserClint.DELETE_SERVER_FILE)) {
+                        } else if (message.equals(FileBrowserClient.DELETE_SERVER_FILE)) {
                             // read bytes for ServerFile store
                             int length = dis.readInt();
                             byte[] data = new byte[length];
@@ -230,13 +230,13 @@ public class FileBrowserServer {
                                 }
 
                                 if (delSuccess) {
-                                    dos.writeUTF(FileBrowserClint.DELETE_SUCCESS);
+                                    dos.writeUTF(FileBrowserClient.DELETE_SUCCESS);
                                 } else {
-                                    dos.writeUTF(FileBrowserClint.DELETE_FAILED);
+                                    dos.writeUTF(FileBrowserClient.DELETE_FAILED);
                                 }
                                 dos.flush();
                             } else {
-                                dos.writeUTF(FileBrowserClint.FILE_DOSENTEXIST);
+                                dos.writeUTF(FileBrowserClient.FILE_DOSENTEXIST);
                                 dos.flush();
                             }
                         }

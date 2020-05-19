@@ -1056,8 +1056,8 @@
       "path": "svg/logEnabled.svg",
       "scale": 1
     },
-    "erth": {
-      "path": "svg/erth.svg",
+    "globe": {
+      "path": "svg/globe.svg",
       "scale": 0.16
     },
     "fastCache": {
@@ -3908,7 +3908,7 @@
       "toggleButtonFontColor": "font_color",
       "HISTORY": "flow",
       "QuickCaches": "fastCache",
-      "AllCachesToFind": "erth",
+      "AllCachesToFind": "globe",
       "BEGINNER": "beginner",
       "GrabTB": "grab_it48",
       "DropTB": "dropped_off48",
@@ -3916,7 +3916,7 @@
       "Favorites": "favIcon48",
       "PrepareToArchive": "archived48",
       "ListingChanged": "mbxWarning",
-      "AllCaches": "erth",
+      "AllCaches": "globe",
       "CheckNo": "check_off",
       "CheckOff": "check_not",
       "Check": "check_on",

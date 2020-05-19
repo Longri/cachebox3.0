@@ -19,8 +19,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.interfaces.ProgressHandler;
-import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
+import de.longri.cachebox3.socket.filebrowser.FileBrowserClient;
+import de.longri.cachebox3.socket.filebrowser.ProgressHandler;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
@@ -66,7 +66,7 @@ public class CacheboxBrowserPane extends BorderPane {
 
     private static final Logger log = LoggerFactory.getLogger(CacheboxBrowserPane.class);
 
-    private final FileBrowserClint clint;
+    private final FileBrowserClient clint;
     private final ObservableList<ServerFile> files = FXCollections.observableArrayList();
     private final ListView<ServerFile> listView = new ListView<>();
     private final ServerFile workingDir;
@@ -79,7 +79,7 @@ public class CacheboxBrowserPane extends BorderPane {
     Node actIntersectedNode = null;
 
 
-    public CacheboxBrowserPane(FileBrowserClint clint, Stage primaryStage) {
+    public CacheboxBrowserPane(FileBrowserClient clint, Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.clint = clint;
         workingDir = clint.getFiles();

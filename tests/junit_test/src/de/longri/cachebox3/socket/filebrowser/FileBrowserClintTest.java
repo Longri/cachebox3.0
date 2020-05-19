@@ -33,7 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class FileBrowserClintTest {
 
     static FileHandle workpath;
-    static FileBrowserClint clint;
+    static FileBrowserClient clint;
 
 
     @BeforeAll
@@ -43,7 +43,7 @@ class FileBrowserClintTest {
         if(!workpath.exists()){
             workpath = TestUtils.getResourceFileHandle("./", true).child("lang");
         }
-        clint = new FileBrowserClint("", 0);
+        clint = new FileBrowserClient("", 0);
     }
 
     @AfterAll

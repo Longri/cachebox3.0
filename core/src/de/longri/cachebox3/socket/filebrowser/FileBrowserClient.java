@@ -22,7 +22,6 @@ import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.utils.ObjectMap;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.interfaces.ProgressHandler;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
 import org.slf4j.Logger;
@@ -36,12 +35,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by longri on 30.10.17.
  */
-public class FileBrowserClint {
+public class FileBrowserClient {
 
     public final static int BUFFER_SIZE = 512;
 
 
-    private final Logger log = LoggerFactory.getLogger(FileBrowserClint.class);
+    private final Logger log = LoggerFactory.getLogger(FileBrowserClient.class);
 
     static final String CONNECT = "Connect";
     static final String SENDFILE = "sendFiles";
@@ -59,7 +58,7 @@ public class FileBrowserClint {
     private final int serverPort;
 
 
-    public FileBrowserClint(String serverAddress, int serverPort) {
+    public FileBrowserClient(String serverAddress, int serverPort) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
     }
@@ -262,8 +261,8 @@ public class FileBrowserClint {
                     int offset = 0;
                     while (offset < length) {
                         int writeLength = length - offset;
-                        if (writeLength > FileBrowserClint.BUFFER_SIZE) {
-                            writeLength = FileBrowserClint.BUFFER_SIZE;
+                        if (writeLength > FileBrowserClient.BUFFER_SIZE) {
+                            writeLength = FileBrowserClient.BUFFER_SIZE;
                         }
                         dos.write(serverFileBytes, offset, writeLength);
                         dos.flush();
@@ -357,8 +356,8 @@ public class FileBrowserClint {
             int offset = 0;
             while (offset < length) {
                 int writeLength = length - offset;
-                if (writeLength > FileBrowserClint.BUFFER_SIZE) {
-                    writeLength = FileBrowserClint.BUFFER_SIZE;
+                if (writeLength > FileBrowserClient.BUFFER_SIZE) {
+                    writeLength = FileBrowserClient.BUFFER_SIZE;
                 }
                 dos.write(serverFileBytes, offset, writeLength);
                 dos.flush();

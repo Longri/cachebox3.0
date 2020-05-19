@@ -15,7 +15,7 @@
  */
 package de.longri.cachebox3.file_transfer;
 
-import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
+import de.longri.cachebox3.socket.filebrowser.FileBrowserClient;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -34,7 +34,7 @@ public class ConnectPane extends BorderPane {
 
 
     private final MainWindow main;
-    private FileBrowserClint clint;
+    private FileBrowserClient clint;
 
     ConnectPane(MainWindow main) {
         this.main = main;
@@ -83,7 +83,7 @@ public class ConnectPane extends BorderPane {
 
 
     void connect(String address, String port) {
-        clint = new FileBrowserClint(address, Integer.parseInt(port));
+        clint = new FileBrowserClient(address, Integer.parseInt(port));
         if (clint.connect()) {
             MainPane fb = new MainPane(clint, this.main.primaryStage);
 

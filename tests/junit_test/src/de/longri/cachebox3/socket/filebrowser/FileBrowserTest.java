@@ -18,7 +18,6 @@ package de.longri.cachebox3.socket.filebrowser;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.ByteArray;
 import de.longri.cachebox3.TestUtils;
-import de.longri.cachebox3.interfaces.ProgressHandler;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -45,7 +44,7 @@ class FileBrowserTest {
 
     static FileHandle workpath;
     static FileBrowserServer server;
-    static FileBrowserClint clint;
+    static FileBrowserClient clint;
 
 
     @BeforeAll
@@ -54,7 +53,7 @@ class FileBrowserTest {
 
         workpath = TestUtils.getResourceFileHandle("testsResources", true);
         server = new FileBrowserServer(workpath, PORT, null);
-        clint = new FileBrowserClint(SERVER_ADRESS, PORT);
+        clint = new FileBrowserClient(SERVER_ADRESS, PORT);
         server.startListening();
     }
 

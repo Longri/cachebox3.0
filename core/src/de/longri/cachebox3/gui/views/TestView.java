@@ -50,7 +50,6 @@ import de.longri.cachebox3.gui.widgets.list_view.ListViewType;
 import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.gui.widgets.menu.MenuItem;
 import de.longri.cachebox3.gui.widgets.menu.OnItemClickListener;
-import de.longri.cachebox3.interfaces.ProgressCancelRunnable;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.*;

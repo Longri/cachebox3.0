@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.longri.cachebox3.interfaces;
+package de.longri.cachebox3.socket.filebrowser;
 
 /**
  * Created by Longri on 06.11.2017.

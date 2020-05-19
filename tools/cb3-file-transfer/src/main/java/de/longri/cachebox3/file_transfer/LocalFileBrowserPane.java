@@ -18,8 +18,8 @@ package de.longri.cachebox3.file_transfer;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.StringBuilder;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.interfaces.ProgressHandler;
-import de.longri.cachebox3.socket.filebrowser.FileBrowserClint;
+import de.longri.cachebox3.socket.filebrowser.FileBrowserClient;
+import de.longri.cachebox3.socket.filebrowser.ProgressHandler;
 import de.longri.cachebox3.socket.filebrowser.ServerFile;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
@@ -68,9 +68,9 @@ class LocalFileBrowserPane extends BorderPane {
     private Node actIntersectedNode = null;
     private TreeView treeView;
     private ObjectMap<File, FilePathTreeItem> map = new ObjectMap<>();
-    private final FileBrowserClint clint;
+    private final FileBrowserClient clint;
 
-    LocalFileBrowserPane(FileBrowserClint clint, Stage primaryStage) {
+    LocalFileBrowserPane(FileBrowserClient clint, Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.clint = clint;
 
