@@ -106,19 +106,11 @@ public class IconButton extends Catch_VisTextButton {
         }
     }
 
-    public float getPreferredHeight() {
-        return preferredHeight;
+    public void setPreferredHeight(float _preferredHeight) {
+        preferredHeight = _preferredHeight;
     }
 
-    public void setPreferredHeight(float preferredHeight) {
-        this.preferredHeight = preferredHeight;
-    }
-
-    public float getPreferredWidth() {
-        return preferredWidth;
-    }
-
-    public void setPreferredWidth(float preferredWidth) {
-        this.preferredWidth = preferredWidth;
+    public void setPreferredWidth(float _preferredWidth) {
+        preferredWidth = _preferredWidth;
     }
 }

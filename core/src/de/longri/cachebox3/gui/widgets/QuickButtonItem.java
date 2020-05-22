@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.widgets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
@@ -24,7 +23,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
-import de.longri.cachebox3.gui.menu.QuickActions;
+import de.longri.cachebox3.gui.menu.QuickAction;
 import de.longri.cachebox3.gui.menu.menuBtn1.contextmenus.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.menu.menuBtn2.Action_HintDialog;
 import de.longri.cachebox3.gui.menu.menuBtn5.Action_Switch_Torch;
@@ -35,25 +34,20 @@ import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
  * Created by Longri on 09.09.16.
  */
 public class QuickButtonItem extends ListViewItem {
-    final Drawable background;
-    private AbstractAction mAction;
+    final Drawable button;
+    private final AbstractAction action;
     private Image mButtonIcon;
-    private CharSequence mActionDesc;
-    private Button mButton;
-    private QuickActions quickActionsEnum;
-    private int autoResortState = -1;
-    private int spoilerState = -1;
-    private int hintState = -1;
-    private int torchState = -1;
+    private QuickAction quickActionEnum;
     private boolean needsLayout = true;
     private Drawable spriteDrawable;
 
-    public QuickButtonItem(int listIndex, Drawable background, final AbstractAction action, CharSequence Desc, QuickActions type) {
+    public QuickButtonItem(int listIndex, Drawable _button, QuickAction quickAction) {
         super(listIndex);
-        this.background = background;
-        quickActionsEnum = type;
-        mAction = action;
-        mActionDesc = Desc;
+        button = _button;
+        quickActionEnum = quickAction;
+        action = quickAction.getAction();
+        if (action == null) // to satisfy the formal test
+            throw new IllegalStateException("quick Action is null");
         try {
             spriteDrawable = action.getIcon();
         } catch (Exception e) {
@@ -61,25 +55,25 @@ public class QuickButtonItem extends ListViewItem {
         }
 
         mButtonIcon = new Image(spriteDrawable, Scaling.none, Align.center);
-        this.addActor(mButtonIcon);
+        addActor(mButtonIcon);
 
         if (action instanceof Action_HintDialog) {
             EventHandler.add((SelectedCacheChangedListener) event -> {
                 spriteDrawable = action.getIcon();
                 mButtonIcon.setDrawable(spriteDrawable);
                 needsLayout = true;
-                QuickButtonItem.this.invalidate();
+                mButtonIcon.invalidate();
             });
         }
     }
 
     public void clicked() {
-        mAction.execute();
-        if (mAction instanceof Action_Switch_Torch || mAction instanceof Action_Switch_Autoresort) {
-            spriteDrawable = mAction.getIcon();
+        action.execute();
+        if (action instanceof Action_Switch_Torch || action instanceof Action_Switch_Autoresort) {
+            spriteDrawable = action.getIcon();
             mButtonIcon.setDrawable(spriteDrawable);
             needsLayout = true;
-            this.invalidate();
+            invalidate();
         }
     }
 
@@ -106,20 +100,17 @@ public class QuickButtonItem extends ListViewItem {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        background.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        if (button != null) button.draw(batch, getX(), getY(), getWidth(), getHeight());
         super.draw(batch, parentAlpha);
     }
 
-    public QuickActions getAction() {
-        return quickActionsEnum;
+    public QuickAction getAction() {
+        return quickActionEnum;
     }
 
     @Override
     public void dispose() {
-        mAction = null;
         mButtonIcon = null;
-        mActionDesc = null;
-        mButton = null;
-        quickActionsEnum = null;
+        quickActionEnum = null;
     }
 }

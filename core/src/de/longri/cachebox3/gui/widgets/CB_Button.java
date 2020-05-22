@@ -48,7 +48,7 @@ public class CB_Button extends IconButton {
 
     public void setTextAndSize(CharSequence text) {
         getLabel().setText(text);
-        setSize(getPreferredWidth(), getPreferredHeight());
+        setSize(getPrefWidth(), getPrefHeight());
     }
 
     public void setState(int i) {

@@ -59,7 +59,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * an explicit call to setTableAndCellDefaults().</Further>
  */
 public class Catch_Table extends VisTable {
-    private final static int FIXED = -1;
+    public final static int FIXED = -1;
     private final static Logger log = LoggerFactory.getLogger(Catch_Table.class);
     private final static float sizingMax = 100f;
     private final AtomicBoolean drawException = new AtomicBoolean(false);

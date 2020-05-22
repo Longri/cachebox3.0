@@ -37,7 +37,7 @@ import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.menu.QuickActions;
+import de.longri.cachebox3.gui.menu.QuickAction;
 import de.longri.cachebox3.gui.menu.menuBtn1.contextmenus.Action_SelectDB_Dialog;
 import de.longri.cachebox3.gui.menu.menuBtn1.contextmenus.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.menu.quickBtns.Action_EditFilterSettings;
@@ -412,14 +412,12 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
     }
 
     private void setAutoResort() {
-        boolean isNotInQuickButtonList = true;
         for (QuickButtonItem qbi : CB.viewmanager.getSlider().getQuickButtonList().getQuickButtonList()) {
-            if (qbi.getAction() == QuickActions.AutoResort) {
-                qbi.clicked();
-                isNotInQuickButtonList = false;
-                break;
+            if (qbi.getAction() == QuickAction.AutoResort) {
+                qbi.clicked(); // executes and sets corresponding icon
+                return;
             }
         }
-        if (isNotInQuickButtonList) new Action_Switch_Autoresort().execute();
+        new Action_Switch_Autoresort().execute();
     }
 }

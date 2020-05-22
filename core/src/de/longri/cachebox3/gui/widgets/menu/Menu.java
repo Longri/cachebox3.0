@@ -91,14 +91,14 @@ public class Menu extends Window {
         this.compoundMenu = compoundMenu;
     }
 
-    public void setHideWithItemClick(boolean heideWithItemClick) {
-        this.hideWithItemClick = heideWithItemClick;
+    public void setHideWithItemClick(boolean _hideWithItemClick) {
+        this.hideWithItemClick = _hideWithItemClick;
     }
 
     public MenuItem addMenuItem(CharSequence titleTranslationId, String addUnTranslatedPart, Drawable icon, ClickListener clickListener) {
-        MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranslationId.toString() + "[" + "" + "]", this);
+        MenuItem item = new MenuItem(0, 738, "Menu Item@" + titleTranslationId + "[" + "" + "]", this);
         // String titleTranslation = (titleTranslationId.length() == 0 ? "" : Translation.get(titleTranslationId.toString()).toString());
-        item.setTitle((titleTranslationId.length() == 0 ? "" : Translation.get(titleTranslationId.toString()).toString()) + addUnTranslatedPart);
+        item.setTitle((titleTranslationId.length() == 0 ? "" : Translation.get(titleTranslationId.toString())) + addUnTranslatedPart);
         if (icon != null)
             item.setIcon(icon);
         if (clickListener != null)
@@ -370,7 +370,7 @@ public class Menu extends Window {
         listView.setBounds(((Gdx.graphics.getWidth() - CB.scaledSizes.WINDOW_WIDTH) / 2f), CB.scaledSizes.MARGIN,
                 CB.scaledSizes.WINDOW_WIDTH, maxListViewHeight);
 
-        float itemWidth = listView.getWidth() - (Math.max(listView.style.padLeft, listView.style.pad) + Math.max(listView.style.padRight, listView.style.pad));
+        float itemWidth = listView.getWidth() - (Math.max(listView.listViewStyle.padLeft, listView.listViewStyle.pad) + Math.max(listView.listViewStyle.padRight, listView.listViewStyle.pad));
 
         for (ListViewItem item : mItems) {
             item.setPrefWidth(itemWidth);

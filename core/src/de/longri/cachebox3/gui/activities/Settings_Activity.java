@@ -41,8 +41,10 @@ import de.longri.cachebox3.PlatformConnector;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.ActivityBase;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
+import de.longri.cachebox3.gui.menu.QuickAction;
 import de.longri.cachebox3.gui.skin.styles.FileChooserStyle;
 import de.longri.cachebox3.gui.skin.styles.SelectBoxStyle;
+import de.longri.cachebox3.gui.stages.AbstractAction;
 import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.ApiButton;
@@ -81,17 +83,17 @@ public class Settings_Activity extends ActivityBase {
             finish();
         }
     };
+    private final Array<WidgetGroup> listViews = new Array<>();
+    private final Array<CharSequence> listViewsNames = new Array<>();
+    private final Array<ClickListener> listBackClickListener = new Array<>();
     private Label.LabelStyle nameStyle, descStyle, defaultValueStyle, valueStyle;
     private CB_Button btnOk, btnCancel, btnMenu;
     private float itemWidth;
-    private Array<WidgetGroup> listViews = new Array<>();
-    private Array<CharSequence> listViewsNames = new Array<>();
-    private Array<ClickListener> listBackClickListener = new Array<>();
 
     public Settings_Activity() {
         super("Settings_Activity");
-        this.style = VisUI.getSkin().get(SettingsActivityStyle.class);
-        this.setStageBackground(style.background);
+        style = VisUI.getSkin().get(SettingsActivityStyle.class);
+        setStageBackground(style.background);
         createButtons();
     }
 
@@ -117,7 +119,7 @@ public class Settings_Activity extends ActivityBase {
 
         btnOk.setPosition(x, y);
 
-        itemWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 + CB.scaledSizes.MARGIN_HALF);
+        itemWidth = getWidth() - (CB.scaledSizes.MARGINx2 + CB.scaledSizes.MARGIN_HALF);
 
         log.debug("Layout Settings");
     }
@@ -128,9 +130,9 @@ public class Settings_Activity extends ActivityBase {
         btnMenu = new CB_Button("...");
         btnCancel = new CB_Button(Translation.get("cancel"));
 
-        this.addActor(btnOk);
-        this.addActor(btnMenu);
-        this.addActor(btnCancel);
+        addActor(btnOk);
+        addActor(btnMenu);
+        addActor(btnCancel);
 
         btnMenu.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -139,17 +141,17 @@ public class Settings_Activity extends ActivityBase {
                 icm.addCheckableMenuItem("Settings_Normal", normal, () -> {
                     Config.SettingsShowAll.setValue(false);
                     Config.SettingsShowExpert.setValue(false);
-                    layoutActListView(true);
+                    layoutCurrentListView();
                 });
                 icm.addCheckableMenuItem("Settings_Expert", Config.SettingsShowExpert.getValue(), () -> {
                     Config.SettingsShowExpert.setValue(true);
                     Config.SettingsShowAll.setValue(false);
-                    layoutActListView(true);
+                    layoutCurrentListView();
                 });
                 icm.addCheckableMenuItem("Settings_All", Config.SettingsShowAll.getValue(), () -> {
                     Config.SettingsShowAll.setValue(true);
                     Config.SettingsShowExpert.setValue(false);
-                    layoutActListView(true);
+                    layoutCurrentListView();
                 });
                 icm.show();
             }
@@ -211,7 +213,7 @@ public class Settings_Activity extends ActivityBase {
         }
 
 
-        final ListViewAdapter listViewAdapter = new ListViewAdapter() {
+        final ListViewAdapter settingCategoriesListViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
                 return settingCategories.size;
@@ -230,15 +232,15 @@ public class Settings_Activity extends ActivityBase {
 
         };
 
-        final ListView lv = new ListView(VERTICAL);
-        lv.setSelectionType(NONE);
+        final ListView settingCategoriesListView = new ListView(VERTICAL);
+        settingCategoriesListView.setSelectionType(NONE);
         CB.postOnNextGlThread(() -> {
-            lv.setAdapter(listViewAdapter);
-            showListView(lv, Translation.get("SettingsTitle"), true);
+            settingCategoriesListView.setAdapter(settingCategoriesListViewAdapter);
+            showListView(settingCategoriesListView, Translation.get("SettingsTitle"), true);
         });
     }
 
-    private void showListView(ListView listView, CharSequence name, boolean animate) {
+    private void showListView(ListView settingCategoriesListView, CharSequence settingsTitle, boolean animate) {
 
         float y = btnOk.getY() + btnOk.getHeight() + CB.scaledSizes.MARGIN;
 
@@ -248,10 +250,7 @@ public class Settings_Activity extends ActivityBase {
 
         // title
         WidgetGroup titleGroup = new WidgetGroup();
-
-        float topY = widgetGroup.getHeight() - CB.scaledSizes.MARGIN_HALF;
         float xPos = 0;
-
 
         ClickListener backClickListener = new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -267,7 +266,7 @@ public class Settings_Activity extends ActivityBase {
             titleGroup.addActor(backImage);
         }
 
-        VisLabel titleLabel = new VisLabel(name, "menu_title_act");
+        VisLabel titleLabel = new VisLabel(settingsTitle, "menu_title_act");
 
         if (listViewsNames.size > 0) {
             VisLabel parentTitleLabel = new VisLabel(listViewsNames.get(listViewsNames.size - 1), "menu_title_parent");
@@ -285,14 +284,14 @@ public class Settings_Activity extends ActivityBase {
         float titleHeight = titleLabel.getHeight() + CB.scaledSizes.MARGIN;
         titleGroup.setBounds(0, Gdx.graphics.getHeight() - (y + titleHeight), Gdx.graphics.getWidth(), titleHeight);
         titleGroup.addListener(backClickListener);
+
         widgetGroup.addActor(titleGroup);
 
+        settingCategoriesListView.setBounds(0, 0, widgetGroup.getWidth(), titleGroup.getY() - CB.scaledSizes.MARGIN);
+        settingCategoriesListView.layout();
+        settingCategoriesListView.setBackground(null); // remove default background
 
-        listView.setBounds(0, 0, widgetGroup.getWidth(), titleGroup.getY() - CB.scaledSizes.MARGIN);
-        listView.layout();
-        listView.setBackground(null); // remove default background
-        widgetGroup.addActor(listView);
-
+        widgetGroup.addActor(settingCategoriesListView);
 
         if (listViews.size > 0) {
             // animate
@@ -306,10 +305,11 @@ public class Settings_Activity extends ActivityBase {
             }
         }
         listViews.add(widgetGroup);
-        listViewsNames.add(name);
+        listViewsNames.add(settingsTitle);
         listBackClickListener.add(backClickListener);
         CB.stageManager.registerForBackKey(backClickListener);
-        this.addActor(widgetGroup);
+
+        addActor(widgetGroup);
     }
 
     private void backClick() {
@@ -337,34 +337,23 @@ public class Settings_Activity extends ActivityBase {
         showingWidgetGroup.addAction(Actions.moveTo(CB.scaledSizes.MARGIN, y, Menu.MORE_MENU_ANIMATION_TIME));
     }
 
-    private void layoutActListView(boolean itemCountChanged) {
+    private void layoutCurrentListView() {
         //get act listView
         WidgetGroup widgetGroup = listViews.get(listViews.size - 1);
-        ListView actListView = null;
         for (Actor actor : widgetGroup.getChildren()) {
-            if (actor instanceof ListView) {
-                actListView = (ListView) actor;
-                break;
-            }
-        }
-
-        if (itemCountChanged) {
-            Object object = actListView.getUserObject();
+            Object object = actor.getUserObject();
             if (object instanceof SettingCategory) {
                 WidgetGroup group = listViews.pop();
                 listViewsNames.pop();
-
-                //remove all Listener
-                for (Actor actor : group.getChildren())
-                    for (EventListener listener : actor.getListeners())
-                        actor.removeListener(listener);
-
-                this.removeActor(group);
+                //remove all Listeners
+                for (Actor child : group.getChildren())
+                    for (EventListener listener : child.getListeners())
+                        child.removeListener(listener);
+                removeActor(group);
                 showCategory((SettingCategory) object, false);
+                break;
             }
         }
-
-
     }
 
     private ListViewItem getCategoryItem(int listIndex, final SettingCategory category) {
@@ -436,11 +425,9 @@ public class Settings_Activity extends ActivityBase {
             }
 
             @Override
-            public void update(ListViewItem view) {
+            public void update(ListViewItem item) {
 
             }
-
-
         };
 
         final ListView newListView = new ListView(VERTICAL);
@@ -511,7 +498,7 @@ public class Settings_Activity extends ActivityBase {
 //        } else if (setting instanceof SettingsListCategoryButton) {
 //            return getButtonView((SettingsListCategoryButton<?>) setting);
         } else if (setting instanceof SettingsListGetApiButton) {
-            return getApiKeyButtonView(listIndex, (SettingsListGetApiButton<?>) setting);
+            return getApiKeyButtonView(listIndex);
 //        } else if (setting instanceof SettingsListButtonLangSpinner) {
 //            return getLangSpinnerView((SettingsListButtonLangSpinner<?>) setting);
 //        } else if (setting instanceof SettingsListButtonSkinSpinner) {
@@ -524,41 +511,21 @@ public class Settings_Activity extends ActivityBase {
         return null;
     }
 
-    private ListViewItem getApiKeyButtonView(int listIndex, SettingsListGetApiButton<?> setting) {
+    private ListViewItem getApiKeyButtonView(int listIndex) {
         ListViewItem table = new ListViewItem(listIndex) {
             @Override
             public void dispose() {
             }
         };
-
-        float buttonWidth = this.getWidth() - (CB.scaledSizes.MARGINx2 * 2);
-
+        float buttonWidth = getWidth() - (CB.scaledSizes.MARGINx2 * 2);
         final ApiButton apiButton = new ApiButton();
         table.add(apiButton).width(new Value.Fixed(buttonWidth)).center();
-
-        // alternative you can set the ClickListener of apiButton
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
-//                    PlatformConnector.getApiKey(accessToken -> {
-//                        // store the encrypted AccessToken in the Config file
-//                        if (Config.UseTestUrl.getValue()) {
-//                            Config.AccessTokenForTest.setEncryptedValue(accessToken);
-//                        } else {
-//                            Config.AccessToken.setEncryptedValue(accessToken);
-//                        }
-//                        GroundspeakAPI.getInstance().setAuthorization();
-//                        String userNameOfAuthorization = GroundspeakAPI.getInstance().fetchMyUserInfos().username;
-//                        GcLogin.setValue(userNameOfAuthorization);
-//                        // do not Config.AcceptChanges(); if you do the settings will be restored
-//                        // refresh settings view
-//                        showCategory(SettingCategory.Login, true);
-//                    });
-
                     GetApiKey_Activity activity = new GetApiKey_Activity();
                     activity.show();
-
                     event.cancel();
                     event.handle();
                 }
@@ -679,51 +646,74 @@ public class Settings_Activity extends ActivityBase {
 
     private ListViewItem getStringView(int listIndex, final SettingString setting) {
         ListViewItem table = createItem(listIndex, setting.getName());
-
-        // add value label
         table.row();
-        final VisLabel valuelabel = new VisLabel("Value: " + setting.getValue(), valueStyle);
+
+        String value = "";
+        String defaultValue = "";
+        // add value presentation
+        if (setting.equals(Config.quickButtonList)) {
+            String configActionList = Config.quickButtonList.getValue();
+            String[] configList = configActionList.split(",");
+            if (configList.length > 0) {
+                for (String s : configList) {
+                    try {
+                        s = s.replace(",", "");
+                        int ordinal = Integer.parseInt(s);
+                        if (ordinal > -1 && ordinal < QuickAction.values().length - 1) {
+                            // the last QuickAction value is "empty"
+                            AbstractAction action = QuickAction.values()[ordinal].getAction();
+                            if (action != null)
+                                value = value + "\n" + Translation.get(action.getTitleTranslationId()); // + String.format(Locale.US, "%2d", ordinal) + "= "
+                        }
+                    } catch (Exception e) {
+                        log.error("getListFromConfig", e);
+                    }
+                }
+            }
+        } else {
+            value = setting.getValue();
+            defaultValue = setting.getDefaultValue();
+        }
+        final VisLabel valuelabel = new VisLabel("Value: " + value, valueStyle);
         valuelabel.setWrap(true);
         valuelabel.setAlignment(Align.left);
         table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
-
-        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue());
-        // add clickListener
+        addDescriptionAndDefaultInfo(table, setting.getName(), defaultValue);
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (event.isHandled() || event.isCancelled()) return;
                 if (event.getType() == InputEvent.Type.touchUp) {
-                    // show multi line input dialog
-                    PlatformConnector.getMultilineTextInput(new Input.TextInputListener() {
-                        @Override
-                        public void input(String text) {
-                            setting.setValue(text);
-                            valuelabel.setText("Value: " + setting.getValue());
-                            CB.requestRendering();
-                        }
+                    if (setting.equals(Config.quickButtonList)) {
+                        EditQuickButtonList.getInstance(setting.getName(), null).execute(
+                                new ChangeListener() {
+                            @Override
+                            public void changed(ChangeEvent event, Actor actor) {
+                                backClick();
+                                showCategory(setting.getCategory(), true);
+                            }
+                        });
+                    } else {
+                        // show multi line input dialog
+                        PlatformConnector.getMultilineTextInput(new Input.TextInputListener() {
+                            @Override
+                            public void input(String text) {
+                                setting.setValue(text);
+                                backClick();
+                                showCategory(setting.getCategory(), true);
+                            }
 
-                        @Override
-                        public void canceled() {
+                            @Override
+                            public void canceled() {
 
-                        }
-                    }, 0, Translation.get(setting.getName()).toString(), setting.getValue(), "");
+                            }
+                        }, 0, Translation.get(setting.getName()).toString(), setting.getValue(), "");
+                    }
+
                     event.cancel();
                     event.handle();
                 }
             }
         });
-        table.setWidth(itemWidth);
-        table.setPrefWidth(itemWidth);
-        table.invalidate();
-        table.pack();
-        int rows = table.getRows();
-        float calcHeight = 0;
-        float pad = CB.scaledSizes.MARGIN;
-        for (int i = 0; i < rows; i++) {
-            calcHeight += table.getRowPrefHeight(i);
-            calcHeight += pad;
-        }
-        table.setFinalHeight(calcHeight);
         return table;
     }
 
@@ -744,16 +734,13 @@ public class Settings_Activity extends ActivityBase {
         SelectBoxStyle style = VisUI.getSkin().get(SelectBoxStyle.class);
         style.up = null;
         style.down = null;
-
-        final AtomicBoolean callBackClick = new AtomicBoolean(false);
         final SelectBox selectBox = new SelectBox(style, null);
-
         selectBox.set(itemList);
         if (setting == Config.localisation) {
             selectBox.setPrefix(Translation.get("SelectLanguage") + ":  ");
         }
         selectBox.select(selectIndex);
-
+        final AtomicBoolean callBackClick = new AtomicBoolean(false);
         selectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -1030,6 +1017,7 @@ public class Settings_Activity extends ActivityBase {
     }
 
     private ListViewItem getStringArrayView(int listIndex, SettingStringArray setting) {
+        // not necessary
         return null;
     }
 
@@ -1185,12 +1173,13 @@ public class Settings_Activity extends ActivityBase {
         }
 
         // add defaultValue line
-
-        table.row();
-        VisLabel desclabel = new VisLabel("default: " + settingDefaultValue, defaultValueStyle);
-        desclabel.setWrap(true);
-        desclabel.setAlignment(Align.left);
-        table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        if (settingDefaultValue.length() > 0) {
+            table.row();
+            VisLabel desclabel = new VisLabel("default: " + settingDefaultValue, defaultValueStyle);
+            desclabel.setWrap(true);
+            desclabel.setAlignment(Align.left);
+            table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
+        }
     }
 
     @Override

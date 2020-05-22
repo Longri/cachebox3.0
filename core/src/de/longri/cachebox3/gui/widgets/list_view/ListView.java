@@ -49,8 +49,8 @@ import static de.longri.cachebox3.gui.widgets.list_view.SelectionType.SINGLE;
 public class ListView extends Catch_WidgetGroup {
 
     private final static Logger log = LoggerFactory.getLogger(ListView.class);
-    public final ListViewStyle style;
-    protected final ListViewType type;
+    public final ListViewStyle listViewStyle;
+    protected final ListViewType listViewType;
     protected final ListViewItemLinkedList itemList;
     final VisScrollPane scrollPane;
     final CB_RectF tempClickRec = new CB_RectF();
@@ -74,18 +74,18 @@ public class ListView extends Catch_WidgetGroup {
                     // item Clicked
                     log.debug("ListViewItem {} clicked | item => {}", i, item.toString());
                     Array<EventListener> listeners = item.getListeners();
-                    boolean handeld = false;
+                    boolean handled = false;
                     for (EventListener listener : listeners) {
                         if (listener instanceof ClickListener) {
                             ((ClickListener) listener).clicked(event, x, y);
                         } else if (listener instanceof ClickLongClickListener) {
                             if (((ClickLongClickListener) listener).clicked(event, x, y)) {
                                 event.cancel();
-                                handeld = true;
+                                handled = true;
                             }
                         }
                     }
-                    return handeld;
+                    return handled;
                 }
             }
             return false;
@@ -100,19 +100,19 @@ public class ListView extends Catch_WidgetGroup {
                 Vector2 vec = item.localToStageCoordinates(new Vector2());
                 tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());
                 if (tempClickRec.contains(touchDownStageX, touchDownStageY)) {
-                    item.setBackground(ListView.this.style.selectedItem);
+                    item.setBackground(ListView.this.listViewStyle.selectedItem);
                     // item Clicked
                     log.debug("ListViewItem {} LongClicked", i);
                     Array<EventListener> listeners = item.getListeners();
-                    boolean handeld = false;
+                    boolean handled = false;
                     for (EventListener listener : listeners) {
                         if (listener instanceof ClickLongClickListener) {
                             if (((ClickLongClickListener) listener).longClicked(actor, x, y, touchDownStageX, touchDownStageY)) {
-                                handeld = true;
+                                handled = true;
                             }
                         }
                     }
-                    return handeld;
+                    return handled;
                 }
             }
             return false;
@@ -123,12 +123,6 @@ public class ListView extends Catch_WidgetGroup {
     boolean isDisabled = false;
     private float maxScrollChange = 0;
     private SelectionType selectionType;
-    private ListViewAdapter adapter;
-    private Drawable backgroundDrawable;
-    private float lastFiredScrollX = 0;
-    private float lastFiredScrollY = 0;
-    private long frameID = Long.MIN_VALUE;
-    private VisLabel emptyLabel;
     private final ClickLongClickListener onListItemClickListener = new ClickLongClickListener() {
         public boolean clicked(InputEvent event, float x, float y) {
             if (event.isCancelled()) return true;
@@ -169,34 +163,42 @@ public class ListView extends Catch_WidgetGroup {
             return false;
         }
     };
+    private ListViewAdapter adapter;
+    private Drawable backgroundDrawable;
+    private float lastFiredScrollX = 0;
+    private float lastFiredScrollY = 0;
+    private long frameID = Long.MIN_VALUE;
+    private VisLabel emptyLabel;
     private ScrollChangedEvent scrollChangedEventListener;
     private float lastScrollX = -1;
     private float lastScrollY = -1;
+    private float preferredWidth = 0;
+    private float preferredHeight = 0;
 
-    public ListView(ListViewType type) {
-        this(type, VisUI.getSkin().get(ListViewStyle.class), true);
+    public ListView(ListViewType _listViewType) {
+        this(_listViewType, VisUI.getSkin().get(ListViewStyle.class), true);
     }
 
-    public ListView(ListViewType type, ListViewStyle style) {
-        this(type, style, true);
+    public ListView(ListViewType _listViewType, ListViewStyle _listViewStyle) {
+        this(_listViewType, _listViewStyle, true);
     }
 
-    public ListView(ListViewType type, boolean canDisposeItems) {
-        this(type, VisUI.getSkin().get(ListViewStyle.class), canDisposeItems);
+    public ListView(ListViewType _listViewType, boolean _canDisposeItems) {
+        this(_listViewType, VisUI.getSkin().get(ListViewStyle.class), _canDisposeItems);
     }
 
-    public ListView(ListViewType type, ListViewStyle style, boolean canDisposeItems) {
+    public ListView(ListViewType _listViewType, ListViewStyle _listViewStyle, boolean _canDisposeItems) {
 
-        if (style == null) throw new RuntimeException("style can't be NULL");
+        if (_listViewStyle == null) throw new RuntimeException("style can't be NULL");
 
-        this.canDisposeItems = canDisposeItems;
-        this.type = type;
-        this.style = style;
-        this.itemList = new ListViewItemLinkedList(type, style,
-                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padLeft),
-                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padRight),
-                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padTop),
-                CB.getScaledFloat(style.pad > 0 ? style.pad : style.padBottom),
+        canDisposeItems = _canDisposeItems;
+        listViewType = _listViewType;
+        listViewStyle = _listViewStyle;
+        itemList = new ListViewItemLinkedList(_listViewType, _listViewStyle,
+                CB.getScaledFloat(_listViewStyle.pad > 0 ? _listViewStyle.pad : _listViewStyle.padLeft),
+                CB.getScaledFloat(_listViewStyle.pad > 0 ? _listViewStyle.pad : _listViewStyle.padRight),
+                CB.getScaledFloat(_listViewStyle.pad > 0 ? _listViewStyle.pad : _listViewStyle.padTop),
+                CB.getScaledFloat(_listViewStyle.pad > 0 ? _listViewStyle.pad : _listViewStyle.padBottom),
                 this.canDisposeItems) {
             @Override
             public void sizeChanged() {
@@ -217,12 +219,12 @@ public class ListView extends Catch_WidgetGroup {
                 }
 
                 if (isSelected) {
-                    item.setBackground(ListView.this.style.selectedItem);
+                    item.setBackground(ListView.this.listViewStyle.selectedItem);
                 } else {
-                    if (ListView.this.style.secondItem != null && item.getListIndex() % 2 == 1) {
-                        item.setBackground(ListView.this.style.secondItem);
+                    if (ListView.this.listViewStyle.secondItem != null && item.getListIndex() % 2 == 1) {
+                        item.setBackground(ListView.this.listViewStyle.secondItem);
                     } else {
-                        item.setBackground(ListView.this.style.firstItem);
+                        item.setBackground(ListView.this.listViewStyle.firstItem);
                     }
                 }
 
@@ -237,7 +239,7 @@ public class ListView extends Catch_WidgetGroup {
             }
         };
         this.itemList.setOnDrawListener(onDrawListener);
-        scrollPane = new VisScrollPane(itemList, style) {
+        scrollPane = new VisScrollPane(itemList, _listViewStyle) {
 
 
             @Override
@@ -253,7 +255,7 @@ public class ListView extends Catch_WidgetGroup {
             @Override
             public void sizeChanged() {
                 super.sizeChanged();
-                if (ListView.this.type == VERTICAL) {
+                if (ListView.this.listViewType == VERTICAL) {
                     float width = ListView.this.getWidth();
                     if (ListView.this.backgroundDrawable != null) {
                         width -= ListView.this.backgroundDrawable.getLeftWidth() + ListView.this.backgroundDrawable.getRightWidth();
@@ -275,7 +277,7 @@ public class ListView extends Catch_WidgetGroup {
             }
         };
         scrollPane.addCaptureListener(scrollpaneCaptureListener);
-        if (this.type == VERTICAL) {
+        if (this.listViewType == VERTICAL) {
             scrollPane.setOverscroll(false, true);
         } else {
             scrollPane.setOverscroll(true, false);
@@ -286,6 +288,21 @@ public class ListView extends Catch_WidgetGroup {
         scrollPane.setupFadeScrollBars(1f, 0.5f);
 
     }
+
+    public void setPreferredWidth(float _width) {
+        preferredWidth = _width;}
+
+    public void setPreferredHeight(float _height) {
+        preferredHeight = _height;}
+
+    public float getPrefWidth () {
+        return preferredWidth;
+    }
+
+    public float getPrefHeight () {
+        return preferredHeight;
+    }
+
 
     protected void setScrollingDisabled(boolean value, EventListener inputListener) {
         if (value) {
@@ -306,7 +323,7 @@ public class ListView extends Catch_WidgetGroup {
         } else {
             if (!isDisabled) return;
             isDisabled = false;
-            scrollPane.setScrollingDisabled(this.type == VERTICAL, this.type == HORIZONTAL);
+            scrollPane.setScrollingDisabled(this.listViewType == VERTICAL, this.listViewType == HORIZONTAL);
             scrollPane.setScrollingDisabled(false, false);
             setScrollPaneBounds();
 //            scrollPane.removeCaptureListener(inputListener);
@@ -345,7 +362,7 @@ public class ListView extends Catch_WidgetGroup {
     }
 
     private void setItemVisibleBounds() {
-        if (this.type == VERTICAL) {
+        if (this.listViewType == VERTICAL) {
             itemList.setVisibleBounds(scrollPane.getScrollY(), scrollPane.getHeight());
         } else {
             itemList.setVisibleBounds(scrollPane.getScrollX(), scrollPane.getWidth());
@@ -355,7 +372,7 @@ public class ListView extends Catch_WidgetGroup {
     @Override
     protected void sizeChanged() {
         if (scrollPane != null) {
-            maxScrollChange = type == VERTICAL ? this.getHeight() / 4 : this.getWidth() / 4;
+            maxScrollChange = listViewType == VERTICAL ? this.getHeight() / 4 : this.getWidth() / 4;
             setScrollPaneBounds();
         } else {
             invalidate();
@@ -393,7 +410,7 @@ public class ListView extends Catch_WidgetGroup {
         }
         float paneYPos = this.backgroundDrawable != null ? this.backgroundDrawable.getTopHeight() : 0;
         float completeSize = itemList.getCompleteSize();
-        if (this.type == VERTICAL) {
+        if (this.listViewType == VERTICAL) {
             if (this.getHeight() > completeSize) {
                 //set on Top
                 paneHeight = completeSize;
@@ -413,7 +430,7 @@ public class ListView extends Catch_WidgetGroup {
     }
 
     public float getScrollPos() {
-        if (this.type == VERTICAL) {
+        if (this.listViewType == VERTICAL) {
             return scrollPane.getScrollY();
         }
         return scrollPane.getScrollX();
@@ -425,7 +442,7 @@ public class ListView extends Catch_WidgetGroup {
 
     public void setScrollPos(float scrollPos, boolean withAnimation) {
         if (scrollPane != null) {
-            if (this.type == VERTICAL) {
+            if (this.listViewType == VERTICAL) {
                 scrollPane.setScrollY(scrollPos);
             } else {
                 scrollPane.setScrollX(scrollPos);
@@ -453,6 +470,15 @@ public class ListView extends Catch_WidgetGroup {
     public void setSelectionType(SelectionType selectionType) {
         this.selectionType = selectionType;
     }
+
+    /*
+    public void setSelection(ListViewItemInterface item) {
+        if (item == null) return;
+        this.selectedItemList.add(item);
+        item.setSelected(true);
+        CB.requestRendering();
+    }
+     */
 
     public void setSelection(int index) {
 
@@ -495,7 +521,7 @@ public class ListView extends Catch_WidgetGroup {
         float scrollPos = 0;
         if (item != null) {
             int index = item.getListIndex() - 1;
-            scrollPos = index < 0 ? 0 : itemList.getCompleteSize() - ((type == VERTICAL) ? (item.getY() + item.getHeight()) : (item.getX() + item.getWidth()));
+            scrollPos = index < 0 ? 0 : itemList.getCompleteSize() - ((listViewType == VERTICAL) ? (item.getY() + item.getHeight()) : (item.getX() + item.getWidth()));
         }
         this.setScrollPos(scrollPos);
         if (!withScroll) scrollPane.updateVisualScroll();
@@ -544,7 +570,7 @@ public class ListView extends Catch_WidgetGroup {
         }
 
         float scroll;
-        if (type == VERTICAL) {
+        if (listViewType == VERTICAL) {
             scroll = scrollPane.getScrollY();
             if (Math.abs(lastFiredScrollY - scroll) > maxScrollChange) {
                 lastFiredScrollY = scroll;

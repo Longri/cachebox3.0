@@ -39,7 +39,7 @@ import de.longri.cachebox3.translation.Translation;
  *
  * @author Longri
  */
-public enum QuickActions {
+public enum QuickAction {
     DescriptionView, // 0
     WaypointView, // 1
     LogView, // 2
@@ -53,7 +53,7 @@ public enum QuickActions {
     LiveSearch, // 10
     Filter, // 11
     AutoResort, // 12
-    Solver, // 13
+    Solver, // 13 !!! todo
     Spoiler, // 14
     Hint, // 15
     Parking, // 16
@@ -63,7 +63,7 @@ public enum QuickActions {
     TrackableListView, // 20
     addWP, // 21
     Solver2, // 22
-    Notesview, // 23
+    NotesView, // 23
     uploadDraft, // 24
     torch, // 25
     empty;
@@ -117,7 +117,7 @@ public enum QuickActions {
                 return new Action_Add_WP();
             case Solver2:
                 return CB.viewmanager.getAction_Show_SolverView2();
-            case Notesview:
+            case NotesView:
                 return CB.viewmanager.getAction_Show_NoteView();
             case uploadDraft:
                 return new Action_Upload_Drafts();
@@ -175,7 +175,7 @@ public enum QuickActions {
                 return Translation.get("AddWaypoint");
             case Solver2:
                 return Translation.get("Solver") + " 2";
-            case Notesview:
+            case NotesView:
                 return Translation.get("Notes");
             case uploadDraft:
                 return Translation.get("uploadDrafts");

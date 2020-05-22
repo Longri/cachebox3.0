@@ -26,7 +26,7 @@ import de.longri.cachebox3.gui.stages.AbstractAction;
  */
 public class Action_Switch_Torch extends AbstractAction {
     public Action_Switch_Torch() {
-        super(!PlatformConnector.isTorchAvailable(), "Torch", MenuID.AID_TORCH);
+        super(!PlatformConnector.isTorchAvailable(), "torch", MenuID.AID_TORCH);
     }
 
     @Override

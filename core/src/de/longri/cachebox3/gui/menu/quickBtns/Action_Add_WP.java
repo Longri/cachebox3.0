@@ -37,7 +37,7 @@ import static de.longri.cachebox3.gui.menu.MenuID.AID_ADD_WP;
  */
 public class Action_Add_WP extends AbstractAction {
     public Action_Add_WP() {
-        super("addWP", AID_ADD_WP);
+        super("addWaypoint", AID_ADD_WP);
     }
 
     @Override

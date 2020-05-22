@@ -34,7 +34,6 @@ public class ListViewItem extends Catch_Table implements Disposable, ListViewIte
     private float prefWidth = -1f;
     protected int index;
     private boolean isSelected = false;
-    private float finalWidth, finalHeight;
     private boolean hasFinalSize = false;
 
     public ListViewItem(int index) {

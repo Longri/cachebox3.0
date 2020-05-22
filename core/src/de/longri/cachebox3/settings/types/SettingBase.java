@@ -82,6 +82,7 @@ public abstract class SettingBase<T> implements Comparable<SettingBase<T>> {
     }
 
     public boolean isDirty() {
+        if (dirtyList == null) return false;
         return this.dirtyList.contains(this, true);
     }
 

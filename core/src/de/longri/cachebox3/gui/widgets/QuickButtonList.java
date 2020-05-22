@@ -27,7 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
-import de.longri.cachebox3.gui.menu.QuickActions;
+import de.longri.cachebox3.gui.menu.QuickAction;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Group;
 import de.longri.cachebox3.settings.Config;
@@ -44,7 +44,7 @@ public class QuickButtonList extends Catch_Group {
     private final static Logger log = LoggerFactory.getLogger(QuickButtonList.class);
 
 
-    final QuickButtonListStyle style;
+    final QuickButtonListStyle quickButtonListStyle;
     final ScrollPane scrollPane;
     final Group scrollPaneContent = new Group();
     private MoveableList<QuickButtonItem> quickButtonList;
@@ -52,7 +52,7 @@ public class QuickButtonList extends Catch_Group {
     final CB_RectF tempClickRec = new CB_RectF();
 
     public QuickButtonList() {
-        style = VisUI.getSkin().get(QuickButtonListStyle.class);
+        quickButtonListStyle = VisUI.getSkin().get(QuickButtonListStyle.class);
         scrollPane = new ScrollPane(scrollPaneContent);
         scrollPane.setOverscroll(true, false);
         scrollPane.setFlickScroll(true);
@@ -88,31 +88,28 @@ public class QuickButtonList extends Catch_Group {
 
     private void readQuickButtonItemsList() {
         if (quickButtonList == null) {
-            //TODO make quick buttons configurable at SettingsView
             String configActionList = Config.quickButtonList.getValue();
-            configActionList = "6,10,19,11,12,5,0,1,21,3,2,4,15,25,24";
             String[] configList = configActionList.split(",");
             quickButtonList = new MoveableList<>();
             if (configList.length != 0) {
                 boolean invalidEnumId = false;
-                try {
-                    int index = 0;
+                int index = 0;
 
-                    for (String s : configList) {
+                for (String s : configList) {
+                    try {
                         s = s.replace(",", "");
-                        int EnumId = Integer.parseInt(s);
-                        if (EnumId > -1) {
-
-                            QuickActions type = QuickActions.values()[EnumId];
-                            if (type != null) {
-                                QuickButtonItem tmp = new QuickButtonItem(index++, style.button, type.getAction(), type.getName(), type);
-                                quickButtonList.add(tmp);
+                        int ordinal = Integer.parseInt(s);
+                        if (ordinal > -1) {
+                            QuickAction quickAction = QuickAction.values()[ordinal];
+                            if (quickAction != null && quickAction.getAction() != null) {
+                                quickButtonList.add(new QuickButtonItem(index++, quickButtonListStyle.button, quickAction));
                             } else
                                 invalidEnumId = true;
                         }
+                    } catch (Exception e) {// wenn ein Fehler auftritt, gib die bis dorthin gelesenen Items zurück
+                        log.error("getListFromConfig", e);
+                        invalidEnumId = true;
                     }
-                } catch (Exception e) {// wenn ein Fehler auftritt, gib die bis dorthin gelesenen Items zurück
-                    log.error("getListFromConfig", e);
                 }
                 if (invalidEnumId) {
                     //	    write valid id's back
@@ -168,13 +165,13 @@ public class QuickButtonList extends Catch_Group {
     }
 
     protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
-        if (style.background == null) return;
+        if (quickButtonListStyle.background == null) return;
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        float drawableWidth = (style.background instanceof TextureRegionDrawable) ?
-                ((TextureRegionDrawable) style.background).getRegion().getRegionWidth() : getWidth();
+        float drawableWidth = (quickButtonListStyle.background instanceof TextureRegionDrawable) ?
+                ((TextureRegionDrawable) quickButtonListStyle.background).getRegion().getRegionWidth() : getWidth();
         float drawX = ((getWidth() - drawableWidth) / 2) + x;
-        style.background.draw(batch, drawX, y, drawableWidth, getHeight());
+        quickButtonListStyle.background.draw(batch, drawX, y, drawableWidth, getHeight());
     }
 
     public MoveableList<QuickButtonItem> getQuickButtonList() {

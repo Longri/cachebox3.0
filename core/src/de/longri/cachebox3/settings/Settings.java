@@ -99,7 +99,7 @@ public class Settings extends Settings_Skin {
     public static final SettingInt MultiDBAutoStartTime = (SettingInt) settingsList.addSetting(new SettingInt("MultiDBAutoStartTime", Internal, NEVER, 0, Global, ACB));
     public static final SettingInt lastSearchRadius = (SettingInt) settingsList.addSetting(new SettingInt("lastSearchRadius", API, NEVER, 5, Global, ACB));
     public static final SettingInt ImportLimit = (SettingInt) settingsList.addSetting(new SettingInt("ImportLimit", API, NEVER, 50, Global, ACB));
-    public static final SettingString quickButtonList = (SettingString) settingsList.addSetting(new SettingString("quickButtonList", QuickList, NEVER, "5,0,1,3,2", Global, ACB));
+    public static final SettingString quickButtonList = (SettingString) settingsList.addSetting(new SettingString("quickButtonList", QuickList, NORMAL, DefaultQuickButtons, Global, ACB));
     public static final SettingString LastSelectedCache = (SettingString) settingsList.addSetting(new SettingString("LastSelectedCache", Misc, NEVER, "", Local, ALL));
     public static final SettingLongString FilterNew = (SettingLongString) settingsList.addSetting(new SettingLongString("FilterNew", Misc, NEVER, "", Local, ALL));
 
@@ -139,10 +139,10 @@ public class Settings extends Settings_Skin {
     public static final SettingString DNFTemplate = (SettingString) settingsList.addSetting(new SettingLongString("DNFTemplate", Templates, NORMAL, DNF, Global, ACB));
     public static final SettingString NeedsMaintenanceTemplate = (SettingString) settingsList.addSetting(new SettingLongString("NeedsMaintenanceTemplate", Templates, NORMAL, LOG, Global, ACB));
     public static final SettingString AddNoteTemplate = (SettingString) settingsList.addSetting(new SettingLongString("AddNoteTemplate", Templates, NORMAL, LOG, Global, ACB));
-    public static final SettingString DiscoverdTemplate = (SettingString) settingsList.addSetting(new SettingLongString("DiscoverdTemplate", Templates, NORMAL, DISCOVERD, Global, ACB));
+    public static final SettingString DiscoverdTemplate = (SettingString) settingsList.addSetting(new SettingLongString("DiscoverdTemplate", Templates, NORMAL, DISCOVERED, Global, ACB));
     public static final SettingString VisitedTemplate = (SettingString) settingsList.addSetting(new SettingLongString("VisitedTemplate", Templates, NORMAL, VISITED, Global, ACB));
     public static final SettingString DroppedTemplate = (SettingString) settingsList.addSetting(new SettingLongString("DroppedTemplate", Templates, NORMAL, DROPPED, Global, ACB));
-    public static final SettingString GrabbedTemplate = (SettingString) settingsList.addSetting(new SettingLongString("GrabbedTemplate", Templates, NORMAL, GRABED, Global, ACB));
+    public static final SettingString GrabbedTemplate = (SettingString) settingsList.addSetting(new SettingLongString("GrabbedTemplate", Templates, NORMAL, GRABBED, Global, ACB));
     public static final SettingString PickedTemplate = (SettingString) settingsList.addSetting(new SettingLongString("PickedTemplate", Templates, NORMAL, PICKED, Global, ACB));
     public static final SettingFile DraftsGarminPath = (SettingFile) settingsList.addSetting(new SettingFile("DraftsGarminPath", Folder, DEVELOPER, "?/user/geocache_visits.txt", Global, ACB));
     public static final SettingEncryptedString GcVotePassword = (SettingEncryptedString) settingsList.addSetting(new SettingEncryptedString("GcVotePassword", Login, NORMAL, "", Global, ALL));
@@ -159,7 +159,6 @@ public class Settings extends Settings_Skin {
     public static final SettingInt lastZoomLevel = (SettingInt) settingsList.addSetting(new SettingInt("lastZoomLevel", Map, NEVER, 14, Global, ACB));
     public static final SettingDouble mapInitLatitude = (SettingDouble) settingsList.addSetting(new SettingDouble("MapInitLatitude", Positions, NEVER, 0, Global, ACB));
     public static final SettingDouble mapInitLongitude = (SettingDouble) settingsList.addSetting(new SettingDouble("MapInitLongitude", Positions, NEVER, 0, Global, ACB));
-    //public static final SettingStringArray Navis = (SettingStringArray) settingsList.addSetting(new SettingStringArray("Navis", Misc, NORMAL, "Google", SettingStoreType.Global, SettingUsage.ACB, navis));
 
     //        public static final SettingEnum<Live_Cache_Time> LiveCacheTime = new SettingEnum<Live_Cache_Time>("LiveCacheTime", LiveMap, NORMAL, Live_Cache_Time.h_6, SettingStoreType.Global, ACB, Live_Cache_Time.h_6);
 //    public static final SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius> LiveRadius = new SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius>("LiveRadius", LiveMap, NORMAL, CB_Core.Api.LiveMapQue.Live_Radius.Zoom_14,
@@ -222,7 +221,7 @@ public class Settings extends Settings_Skin {
 
 //    public static final SettingBool newInstall = (SettingBool) settingsList.addSetting(new SettingBool("newInstall", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool FieldnotesUploadAll = (SettingBool) settingsList.addSetting(new SettingBool("FieldnotesUploadAll", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool quickButtonShow = (SettingBool) settingsList.addSetting(new SettingBool("quickButtonShow", QuickList, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+public static final SettingBool quickButtonShow = (SettingBool) settingsList.addSetting(new SettingBool("quickButtonShow", QuickList, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
 
 
 }

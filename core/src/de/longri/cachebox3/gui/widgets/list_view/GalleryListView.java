@@ -16,7 +16,6 @@
 package de.longri.cachebox3.gui.widgets.list_view;
 
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
 import de.longri.cachebox3.utils.MathUtils;
@@ -97,8 +96,8 @@ public class GalleryListView extends ListView {
         if (lastSearchPos == searchPos && firstVisibleItem != null) return firstVisibleItem;
         lastSearchPos = searchPos;
         ListViewItemInterface[] itemArray = this.itemList.itemArray;
-        ListViewItemInterface firstItem = search(this.type, itemArray, searchPos, size);
-        ListViewItemInterface lastItem = ListViewItemLinkedList.search(this.type, itemArray, searchPos + size, size);
+        ListViewItemInterface firstItem = search(this.listViewType, itemArray, searchPos, size);
+        ListViewItemInterface lastItem = ListViewItemLinkedList.search(this.listViewType, itemArray, searchPos + size, size);
 
         float visualFirst = ListViewItemLinkedList.getVisualSize(ListViewType.HORIZONTAL, firstItem, searchPos, size);
         float visualLast = ListViewItemLinkedList.getVisualSize(ListViewType.HORIZONTAL, lastItem, searchPos, size);

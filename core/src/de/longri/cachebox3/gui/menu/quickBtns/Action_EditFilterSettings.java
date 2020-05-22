@@ -27,7 +27,7 @@ import static de.longri.cachebox3.gui.menu.MenuID.AID_SHOW_FILTER_DIALOG;
 public class Action_EditFilterSettings extends AbstractAction {
 
     public Action_EditFilterSettings() {
-        super("filter", AID_SHOW_FILTER_DIALOG);
+        super("FilterCaches", AID_SHOW_FILTER_DIALOG);
     }
 
     @Override

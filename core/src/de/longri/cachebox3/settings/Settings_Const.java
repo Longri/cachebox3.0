@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.settings;
 
+import de.longri.cachebox3.gui.menu.QuickAction;
 import de.longri.cachebox3.settings.types.SettingsList;
 
 /**
@@ -37,15 +38,22 @@ public abstract class Settings_Const {
     protected static final String WEBCAM = "<br>###finds##, ##time##, Photo taken!";
     protected static final String DNF = "<br>##time##. Could not find the cache!";
     protected static final String LOG = "Logged it with Cachebox!";
-    protected static final String DISCOVERD = "<br> ##time##, Discovered it with Cachebox!";
+    protected static final String DISCOVERED = "<br> ##time##, Discovered it with Cachebox!";
     protected static final String VISITED = "<br> ##time##, Visited it with Cachebox!";
     protected static final String DROPPED = "<br> ##time##, Dropped off with Cachebox!";
     protected static final String PICKED = "<br> ##time##, Picked it with Cachebox!";
-    protected static final String GRABED = "<br> ##time##, Grabed it with Cachebox!";
+    protected static final String GRABBED = "<br> ##time##, Grabbed it with Cachebox!";
 
     protected static final Integer[] approach = new Integer[]{0, 2, 10, 25, 50, 100, 200, 500, 1000};
     public static final Integer[] trackDistanceArray = new Integer[]{1, 3, 5, 10, 20};
-    protected static final String[] Navis = new String[]{"Navigon", "Google", "Copilot", "OsmAnd", "OsmAnd2", "Waze", "Orux", "Ask"};
-
+    protected static final String DefaultQuickButtons = QuickAction.WaypointView.ordinal() + ","
+            + QuickAction.Hint.ordinal() + ","
+            + QuickAction.Spoiler.ordinal() + ","
+            + QuickAction.QuickDrafts.ordinal() + ","
+            + QuickAction.AutoResort.ordinal() + ","
+            + QuickAction.NotesView.ordinal() + ","
+            + QuickAction.LogView.ordinal() + ","
+            + QuickAction.Solver.ordinal() + ","
+            ;
 
 }

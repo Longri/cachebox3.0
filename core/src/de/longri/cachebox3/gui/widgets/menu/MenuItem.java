@@ -50,10 +50,10 @@ public class MenuItem extends ListViewItem {
     private Menu moreMenu;
     private boolean backgroundOverrides = false;
 
-    public MenuItem(int Index, int ID, String name, Menu parentMenu) {
-        super(Index);
+    public MenuItem(int index, int id, String name, Menu parentMenu) {
+        super(index);
         this.name = name;
-        mID = ID;
+        mID = id;
         this.parentMenu = parentMenu;
         setDefaultStyle();
     }
@@ -92,6 +92,7 @@ public class MenuItem extends ListViewItem {
         float prefHeight = 0;
         if (checkImage != null) prefHeight = checkImage.getHeight();
         if (mIcon != null) prefHeight = Math.max(prefHeight, mIcon.getMinHeight());
+
         if (mLabel != null) {
             mLabel.setWidth(prefLabelWidth);
             mLabel.invalidate();
