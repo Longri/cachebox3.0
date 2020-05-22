@@ -43,24 +43,20 @@ public class QuickButtonList extends Catch_Group {
 
     private final static Logger log = LoggerFactory.getLogger(QuickButtonList.class);
 
-
     final QuickButtonListStyle quickButtonListStyle;
     final ScrollPane scrollPane;
     final Group scrollPaneContent = new Group();
-    private MoveableList<QuickButtonItem> quickButtonList;
-
     final CB_RectF tempClickRec = new CB_RectF();
+    private MoveableList<QuickButtonItem> quickButtonList;
+    private ClickLongClickListener captureListener;
 
     public QuickButtonList() {
         quickButtonListStyle = VisUI.getSkin().get(QuickButtonListStyle.class);
         scrollPane = new ScrollPane(scrollPaneContent);
         scrollPane.setOverscroll(true, false);
         scrollPane.setFlickScroll(true);
-        this.addActor(scrollPane);
-        readQuickButtonItemsList();
-        this.setTouchable(Touchable.childrenOnly);
-
-        scrollPaneContent.addCaptureListener(new ClickLongClickListener() {
+        addActor(scrollPane);
+        captureListener = new ClickLongClickListener() {
             @Override
             public boolean clicked(InputEvent event, float x, float y) {
                 log.debug("QuickButton clicked on x:{}  y:{}", x, y);
@@ -79,8 +75,18 @@ public class QuickButtonList extends Catch_Group {
             }
 
             @Override
-            public boolean longClicked(Actor actor, float x, float y,float touchDownStageX, float touchDownStageY) {
+            public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
                 return true;
+            }
+        };
+        readQuickButtonItemsList();
+        setTouchable(Touchable.childrenOnly);
+        Config.quickButtonList.addChangedEventListener(() -> {
+            int oldCount = quickButtonList.size;
+            quickButtonList = null;
+            readQuickButtonItemsList();
+            if (oldCount != quickButtonList.size) {
+                sizeChanged();
             }
         });
     }
@@ -132,15 +138,16 @@ public class QuickButtonList extends Catch_Group {
         scrollPaneContent.clear();
         float buttonMargin = CB.scaledSizes.MARGIN_HALF;
         float xPos = buttonMargin;
-        float buttonSqare = CB.scaledSizes.BUTTON_HEIGHT;
+        float buttonSquare = CB.scaledSizes.BUTTON_HEIGHT;
 
         for (QuickButtonItem item : quickButtonList) {
-            item.setBounds(xPos, 0, buttonSqare, buttonSqare);
+            item.setBounds(xPos, 0, buttonSquare, buttonSquare);
             scrollPaneContent.addActor(item);
-            xPos += buttonSqare + buttonMargin;
+            xPos += buttonSquare + buttonMargin;
         }
         float completeWidth = xPos + buttonMargin;
-        scrollPaneContent.setBounds(0, 0, completeWidth, buttonSqare);
+        scrollPaneContent.setBounds(0, 0, completeWidth, buttonSquare);
+        scrollPaneContent.addCaptureListener(captureListener);
     }
 
 
