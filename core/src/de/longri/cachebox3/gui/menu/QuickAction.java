@@ -19,6 +19,7 @@ package de.longri.cachebox3.gui.menu;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.menu.menuBtn1.Action_ParkingDialog;
 import de.longri.cachebox3.gui.menu.menuBtn1.contextmenus.Action_Switch_Autoresort;
+import de.longri.cachebox3.gui.menu.menuBtn1.contextmenus.RememberGeoCache;
 import de.longri.cachebox3.gui.menu.menuBtn2.Action_HintDialog;
 import de.longri.cachebox3.gui.menu.menuBtn3.ShowTracks;
 import de.longri.cachebox3.gui.menu.menuBtn4.Action_RecVideo;
@@ -62,10 +63,12 @@ public enum QuickAction {
     QuickDrafts, // 19
     TrackableListView, // 20
     addWP, // 21
-    Solver2, // 22
+    Solver2, // 22 todo
     NotesView, // 23
     uploadDraft, // 24
     torch, // 25
+    createRoute, // todo
+    rememberGeoCache,
     empty;
 
 
@@ -116,13 +119,17 @@ public enum QuickAction {
             case addWP:
                 return new Action_Add_WP();
             case Solver2:
-                return CB.viewmanager.getAction_Show_SolverView2();
+                return CB.viewmanager.getAction_Show_SolverView2(); // todo
             case NotesView:
                 return CB.viewmanager.getAction_Show_NoteView();
             case uploadDraft:
                 return new Action_Upload_Drafts();
             case torch:
                 return new Action_Switch_Torch();
+            case createRoute:
+                return null; // todo
+            case rememberGeoCache:
+                return RememberGeoCache.getInstance();
         }
         return null; // empty
     }
@@ -181,6 +188,10 @@ public enum QuickAction {
                 return Translation.get("uploadDrafts");
             case torch:
                 return Translation.get("torch");
+            case createRoute:
+                return Translation.get("generateRoute");
+            case rememberGeoCache:
+                return Translation.get("rememberGeoCacheTitle");
         }
         return "empty";
     }

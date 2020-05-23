@@ -1,5 +1,13 @@
 {
   "com.badlogic.gdx.scenes.scene2d.ui.ScaledSvg": {
+    "hasRememberedCache": {
+      "path": "svg/hasRememberedCache.svg",
+      "scale": 1
+    },
+    "noRememberedCache": {
+      "path": "svg/noRememberedCache.svg",
+      "scale": 1
+    },
     "Mapstate.car": {
       "path": "svg/state-car.svg",
       "scale": 1

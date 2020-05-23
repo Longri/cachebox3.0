@@ -24,9 +24,7 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedListener;
 import de.longri.cachebox3.gui.menu.QuickAction;
-import de.longri.cachebox3.gui.menu.menuBtn1.contextmenus.Action_Switch_Autoresort;
 import de.longri.cachebox3.gui.menu.menuBtn2.Action_HintDialog;
-import de.longri.cachebox3.gui.menu.menuBtn5.Action_Switch_Torch;
 import de.longri.cachebox3.gui.stages.AbstractAction;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 
@@ -39,7 +37,7 @@ public class QuickButtonItem extends ListViewItem {
     private Image mButtonIcon;
     private QuickAction quickActionEnum;
     private boolean needsLayout = true;
-    private Drawable spriteDrawable;
+    private Drawable iconDrawable;
 
     public QuickButtonItem(int listIndex, Drawable _button, QuickAction quickAction) {
         super(listIndex);
@@ -48,19 +46,20 @@ public class QuickButtonItem extends ListViewItem {
         action = quickAction.getAction();
         if (action == null) // to satisfy the formal test
             throw new IllegalStateException("quick Action is null");
+
         try {
-            spriteDrawable = action.getIcon();
+            iconDrawable = action.getIcon();
         } catch (Exception e) {
             throw new IllegalStateException(action.getTitleTranslationId() + " Action has no Icon");
         }
-
-        mButtonIcon = new Image(spriteDrawable, Scaling.none, Align.center);
+        mButtonIcon = new Image(iconDrawable, Scaling.none, Align.center);
         addActor(mButtonIcon);
 
+        // icon depends on selected cache
         if (action instanceof Action_HintDialog) {
             EventHandler.add((SelectedCacheChangedListener) event -> {
-                spriteDrawable = action.getIcon();
-                mButtonIcon.setDrawable(spriteDrawable);
+                iconDrawable = action.getIcon();
+                mButtonIcon.setDrawable(iconDrawable);
                 needsLayout = true;
                 mButtonIcon.invalidate();
             });
@@ -69,9 +68,18 @@ public class QuickButtonItem extends ListViewItem {
 
     public void clicked() {
         action.execute();
-        if (action instanceof Action_Switch_Torch || action instanceof Action_Switch_Autoresort) {
-            spriteDrawable = action.getIcon();
-            mButtonIcon.setDrawable(spriteDrawable);
+        updateIcon();
+    }
+
+    public void longClicked() {
+        action.longClicked();
+        updateIcon();
+    }
+
+    private void updateIcon() {
+        if (action.getIcon() != iconDrawable) {
+            iconDrawable = action.getIcon();
+            mButtonIcon.setDrawable(iconDrawable);
             needsLayout = true;
             invalidate();
         }
@@ -80,8 +88,8 @@ public class QuickButtonItem extends ListViewItem {
     @Override
     public void layout() {
         if (needsLayout || super.needsLayout()) {
-            if (spriteDrawable != null) {
-                float ratio = spriteDrawable.getMinWidth() / spriteDrawable.getMinHeight();
+            if (iconDrawable != null) {
+                float ratio = iconDrawable.getMinWidth() / iconDrawable.getMinHeight();
                 float imageHeight = getHeight() - CB.scaledSizes.MARGINx2;
                 float imageWidth = imageHeight * ratio;
                 float x = (getWidth() - imageWidth) / 2;

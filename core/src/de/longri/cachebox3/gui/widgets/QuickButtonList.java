@@ -76,7 +76,19 @@ public class QuickButtonList extends Catch_Group {
 
             @Override
             public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
-                return true;
+                log.debug("QuickButton clicked on x:{}  y:{}", x, y);
+                SnapshotArray<Actor> childs = scrollPaneContent.getChildren();
+                for (int i = 0, n = childs.size; i < n; i++) {
+                    QuickButtonItem item = (QuickButtonItem) childs.get(i);
+                    tempClickRec.set(item.getX(), item.getY(), item.getWidth(), item.getHeight());
+                    if (tempClickRec.contains(x, y)) {
+                        // item Clicked
+                        log.debug("QuickButtonItem {} long clicked", i);
+                        item.longClicked();
+                        return true;
+                    }
+                }
+                return false;
             }
         };
         readQuickButtonItemsList();

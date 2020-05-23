@@ -35,6 +35,9 @@ public abstract class AbstractAction {
     protected String nameExtension = "";
     protected GestureDirection gestureDirection;
 
+    public void longClicked() {
+    }
+
     public enum GestureDirection {
         None, Right, Up, Left, Down
     }
