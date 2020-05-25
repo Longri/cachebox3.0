@@ -1536,21 +1536,25 @@
       "path": "svg/mapMultiStartP2.svg",
       "scale": 0.15
     },
-    "me1MyParking": {
-      "path": "svg/me1MyParking.svg",
-      "scale": 0.18
+    "MyParkingAdd48": {
+      "path": "svg/me1MyParkingAdd.svg",
+      "scale": 1
     },
-    "mapMyParking0": {
-      "path": "svg/me1MyParking.svg",
-      "scale": 0.04
+    "MyParkingRemove48": {
+      "path": "svg/me1MyParkingRemove.svg",
+      "scale": 1
     },
-    "mapMyParking1": {
+    "MyParking48": {
       "path": "svg/me1MyParking.svg",
-      "scale": 0.08
+      "scale": 1
     },
-    "mapMyParking2": {
+    "MyParking12": {
       "path": "svg/me1MyParking.svg",
-      "scale": 0.16
+      "scale": 0.25
+    },
+    "MyParking24": {
+      "path": "svg/me1MyParking.svg",
+      "scale": 0.5
     },
     "Mystery48": {
       "path": "svg/gcMystery.svg",
@@ -1584,21 +1588,17 @@
       "path": "svg/mapMysteryStartP2.svg",
       "scale": 0.15
     },
-    "mapParkingArea": {
+    "mapParkingArea48": {
       "path": "svg/mapParkingArea.svg",
-      "scale": 0.26
+      "scale": 1
     },
-    "mapParkingArea0": {
+    "mapParkingArea12": {
       "path": "svg/mapParkingArea.svg",
-      "scale": 0.04
+      "scale": 0.25
     },
-    "mapParkingArea1": {
+    "mapParkingArea24": {
       "path": "svg/mapParkingArea.svg",
-      "scale": 0.09
-    },
-    "mapParkingArea2": {
-      "path": "svg/mapParkingArea.svg",
-      "scale": 0.2
+      "scale": 0.5
     },
     "ReferencePoint48": {
       "path": "svg/wpReferencePoint.svg",
@@ -3163,9 +3163,9 @@
       "large": "mapMultiStartP2"
     },
     "mapMyParking": {
-      "small": "mapMyParking0",
-      "middle": "mapMyParking1",
-      "large": "mapMyParking2"
+      "small": "MyParking12",
+      "middle": "MyParking24",
+      "large": "MyParking48"
     },
     "mapMystery": {
       "small": "Mystery12",
@@ -3178,9 +3178,9 @@
       "large": "mapMysteryStartP2"
     },
     "mapParkingArea": {
-      "small": "mapParkingArea0",
-      "middle": "mapParkingArea1",
-      "large": "mapParkingArea2"
+      "small": "mapParkingArea12",
+      "middle": "mapParkingArea24",
+      "large": "mapParkingArea48"
     },
     "mapReferencePoint": {
       "small": "ReferencePoint12",
@@ -3269,7 +3269,6 @@
   "de.longri.cachebox3.gui.skin.styles.MenuIconStyle": {
     "default": {
       "me1CacheList": "me1CacheList",
-      "me1MyParking": "me1MyParking",
       "me1TrackableList": "me1TrackableList",
       "me1ShareInfos": "me1ShareInfos",
       "me2Description": "me2Description",
@@ -3791,10 +3790,10 @@
       "multiStage": "stage12",
       "multiQuestion": "Question12",
       "trailhead": "Trailhead12",
-      "parkingArea": "mapParkingArea1",
+      "parkingArea": "mapParkingArea12",
       "Final": "final12",
       "cache": "Cache12",
-      "myParking": "mapParkingArea1",
+      "myParking": "MyParking12",
       "giga": "giga12",
       "labCache": "labCache12"
     },
@@ -3816,10 +3815,10 @@
       "multiStage": "stage24",
       "multiQuestion": "Question24",
       "trailhead": "Trailhead24",
-      "parkingArea": "mapParkingArea1",
+      "parkingArea": "mapParkingArea24",
       "Final": "final24",
       "cache": "Cache24",
-      "myParking": "mapParkingArea1",
+      "myParking": "MyParking24",
       "giga": "giga24",
       "labCache": "labCache24"
     },
@@ -3841,10 +3840,10 @@
       "multiStage": "stage48",
       "multiQuestion": "Question48",
       "trailhead": "Trailhead48",
-      "parkingArea": "mapParkingArea1",
+      "parkingArea": "mapParkingArea48",
       "Final": "final48",
       "cache": "Cache48",
-      "myParking": "mapParkingArea1",
+      "myParking": "MyParking48",
       "giga": "giga48",
       "labCache": "labCache48"
     }

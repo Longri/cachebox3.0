@@ -24,7 +24,6 @@ import de.longri.cachebox3.CB;
 public class MenuIconStyle extends AbstractIconStyle {
 
     public Drawable me1CacheList;
-    public Drawable me1MyParking;
     public Drawable me1TrackableList;
     public Drawable me1ShareInfos;
     public Drawable me2Description;
