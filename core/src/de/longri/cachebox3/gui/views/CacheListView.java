@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.CacheListChangedListener;
@@ -286,8 +287,11 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
     @Override
     public void onShow() {
         super.onShow();
+        /*
+        log.debug("CacheListView onShow (with resort)");
         resort();
         CB.requestRendering();
+         */
     }
 
     @Override
@@ -334,7 +338,15 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
         cm.addMenuItem("AutoResort", CB.getAutoResort() ? CB.getSkin().menuIcon.autoSortOnIcon : CB.getSkin().menuIcon.autoSortOffIcon, this::setAutoResort);
         cm.addMenuItem("MI_NEW_CACHE", CB.getSkin().menuIcon.addCache, this::createCache);
         cm.addMoreMenuItem("DeleteCaches", "", CB.getSkin().menuIcon.deleteCaches, new ShowDeleteMenu());
+        cm.addMenuItem("ClearHistory",  VisUI.getSkin().getDrawable("history48"), this::clearHistory);
         return cm;
+    }
+
+    private void clearHistory() {
+        CB.cacheHistory = "";
+        if (CB.viewmanager.getActFilter().isHistory) {
+            CB.viewmanager.setNewFilter(FilterInstances.ALL);
+        }
     }
 
     private void resort() {

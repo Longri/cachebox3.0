@@ -64,6 +64,7 @@ public class ListView extends Catch_WidgetGroup {
             SnapshotArray<Actor> childs = ((ListViewItemLinkedList) scrollPane.getChildren().get(0)).getChildren();
 
             for (int i = 0, n = childs.size; i < n; i++) {
+                if (!(childs.get(i) instanceof ListViewItem)) continue; // DummyListViewItem can't be cast to ListViewItem
                 ListViewItem item = (ListViewItem) childs.get(i);
                 Vector2 vec = item.localToStageCoordinates(new Vector2());
                 tempClickRec.set(vec.x, vec.y, item.getWidth(), item.getHeight());

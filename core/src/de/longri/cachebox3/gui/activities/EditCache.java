@@ -16,6 +16,8 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.MutableCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -23,6 +25,8 @@ import java.util.Date;
  * Created by Longri on 23.08.2016.
  */
 public class EditCache extends Activity {
+
+    private static final Logger log = LoggerFactory.getLogger(EditCache.class);
     private final CB_Label lblCachetitle;
     private final CB_Label lblGcCode;
     private final CB_Label lblOwner;
@@ -106,6 +110,7 @@ public class EditCache extends Activity {
     }
 
     public void edit(AbstractCache cache) {
+        log.debug("Edit for " + cache.getGeoCacheCode() + ": " + cache.getGeoCacheName());
         newValues = new MutableCache(database, cache); // copy from cache with Details
         this.cache = (MutableCache) cache;
         setValues();

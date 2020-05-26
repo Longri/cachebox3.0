@@ -484,7 +484,7 @@ public class CB {
                         filterProperties = FilterInstances.ALL;
                     }
 
-                    CB.viewmanager.setNewFilter(filterProperties, true);
+                    CB.viewmanager.setNewFilter(filterProperties, false);
                     sqlWhere = CB.viewmanager.getActFilter().getSqlWhere(Config.GcLogin.getValue());
                 } catch (Exception e) {
                     e.printStackTrace();

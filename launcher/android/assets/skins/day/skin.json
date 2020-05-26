@@ -1128,9 +1128,9 @@
       "path": "svg/finger_click.svg",
       "scale": 1
     },
-    "flow": {
-      "path": "svg/flow.svg",
-      "scale": 0.16
+    "history48": {
+      "path": "svg/mexHistory.svg",
+      "scale": 1
     },
     "folder": {
       "path": "svg/folder.svg",
@@ -3913,7 +3913,7 @@
     "default": {
       "toggleButtonFont": "AboutSmall",
       "toggleButtonFontColor": "font_color",
-      "HISTORY": "flow",
+      "HISTORY": "history48",
       "QuickCaches": "fastCache",
       "AllCachesToFind": "globe",
       "BEGINNER": "beginner",

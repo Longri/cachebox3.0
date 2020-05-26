@@ -325,11 +325,18 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
     @Override
     public void selectedCacheChanged(SelectedCacheChangedEvent event) {
         if (event.cache != null) {
-            log.debug("Set Global selected Cache: {}", event.cache);
+            log.debug("Set Global selected Cache: {}", event.cache + ": " + event.cache.getGeoCacheName().toString());
             load_unload_Cache_Waypoints(selectedCache, event.cache);
             selectedCache = event.cache;
             selectedWayPoint = null;
             fireSelectedCoordChanged(event.ID);
+            // add cache to history
+            if (!CB.cacheHistory.startsWith(selectedCache.getGeoCacheCode().toString())) {
+                CB.cacheHistory = selectedCache.getGeoCacheCode() + (CB.cacheHistory.length() > 0 ? "," : "") + CB.cacheHistory.replace("," + selectedCache.getGeoCacheCode(), "");
+                if (CB.cacheHistory.length() > 120) {
+                    CB.cacheHistory = CB.cacheHistory.substring(0, CB.cacheHistory.lastIndexOf(","));
+                }
+            }
         }
     }
 

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0px" y="0px" width="48" height="48" overflow="hidden" viewBox="0, 0, 48, 48" preserveAspectRatio="xMidYMid"
+     font-size="0px" id="svg" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <g transform="matrix(0.1911345, 0, 0, 0.191133, -0.5605977, -0.4969431)" id="g59" xml:space="preserve">
+    <linearGradient x1="23.7158" y1="-152.4307" x2="23.7158" y2="37.3438" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.2524, 0, 0, -1.2524, 98.7981, 56.0994)" id="P1_1_" xml:space="preserve">
+      <stop offset="0.56%" stop-color="#ED0000" stop-opacity="1" id="stop2" xml:space="preserve" />
+      <stop offset="54.49%" stop-color="#8D0000" stop-opacity="1" id="stop4" xml:space="preserve" />
+      <stop offset="100%" stop-color="#BD0000" stop-opacity="1" id="stop6" xml:space="preserve" />
+    </linearGradient>
+    <path d="M2.933 128.167 C2.933 197.404 59.263 253.734 128.501 253.734 C197.735 253.734 254.065 197.404 254.065 128.167 C254.065 58.93001 197.735 2.6 128.501 2.6 C59.263 2.6 2.933 58.93 2.933 128.167 z" id="P1" xml:space="preserve" connector-curvature="0" style="fill:url(#P1_1_);" />
+    <linearGradient x1="23.7148" y1="-152.4141" x2="23.7148" y2="37.3656" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.2524, 0, 0, -1.2524, 98.7981, 56.0994)" id="P2_1_" xml:space="preserve">
+      <stop offset="0.56%" stop-color="#FF4242" stop-opacity="1" id="stop10" xml:space="preserve" />
+      <stop offset="57.3%" stop-color="#FF9494" stop-opacity="1" id="stop12" xml:space="preserve" />
+      <stop offset="100%" stop-color="#FFDCDC" stop-opacity="1" id="stop14" xml:space="preserve" />
+    </linearGradient>
+    <path d="M10.486 128.167 C10.486 193.241 63.427 246.181 128.501 246.181 C193.573 246.181 246.511 193.242 246.511 128.167 C246.511 63.09398 193.573 10.15298 128.501 10.15298 C63.427 10.153 10.486 63.094 10.486 128.167 z" id="P2" xml:space="preserve" connector-curvature="0" style="fill:url(#P2_1_);" />
+    <linearGradient x1="23.7163" y1="-148.5874" x2="23.7163" y2="33.5034" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.2524, 0, 0, -1.2524, 98.7981, 56.0994)" id="P3_1_" xml:space="preserve">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1" id="stop18" xml:space="preserve" />
+      <stop offset="50%" stop-color="#FF0000" stop-opacity="1" id="stop20" xml:space="preserve" />
+      <stop offset="100%" stop-color="#FFC9C9" stop-opacity="1" id="stop22" xml:space="preserve" />
+    </linearGradient>
+    <path d="M14.472 128.167 C14.472 191.047 65.628 242.19 128.501 242.19 C191.379 242.19 242.527 191.046 242.527 128.167 C242.527 65.29399 191.379 14.13999 128.501 14.13999 C65.628 14.14 14.472 65.294 14.472 128.167 z" id="P3" xml:space="preserve" connector-curvature="0" style="fill:url(#P3_1_);" />
+    <path d="M128.501 28.385 C71.23701 28.385 24.644 74.968 24.644 132.239 C24.644 189.502 71.237 236.084 128.501 236.084 C185.767 236.084 232.355 189.502 232.355 132.239 C232.354 74.968 185.767 28.385 128.501 28.385 z" enable-background="new    " opacity="0.8" id="P4" xml:space="preserve" connector-curvature="0" style="fill:#FFFFFF;" />
+    <path d="M24.644 128.167 C24.644 185.435 71.237 232.012 128.501 232.012 C185.767 232.012 232.355 185.435 232.355 128.167 C232.355 70.90301 185.767 24.31401 128.501 24.31401 C71.237 24.314 24.644 70.903 24.644 128.167 z" id="P5" xml:space="preserve" connector-curvature="0" style="fill:#8D0000;" />
+    <radialGradient cx="-13.7617" cy="-108.6973" r="57.022" fx="-13.7617" fy="-108.6973" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.7767, 0, 0, -1.7767, 152.9529, -64.9587)" id="P6_1_" xml:space="preserve">
+      <stop offset="60.11%" stop-color="#FFFFFF" stop-opacity="1" id="stop28" xml:space="preserve" />
+      <stop offset="87.64%" stop-color="#EAEAF0" stop-opacity="1" id="stop30" xml:space="preserve" />
+      <stop offset="91.42%" stop-color="#E6E6ED" stop-opacity="1" id="stop32" xml:space="preserve" />
+      <stop offset="95%" stop-color="#DBDBE5" stop-opacity="1" id="stop34" xml:space="preserve" />
+      <stop offset="98.49%" stop-color="#C8C8D7" stop-opacity="1" id="stop36" xml:space="preserve" />
+      <stop offset="100%" stop-color="#BDBDCF" stop-opacity="1" id="stop38" xml:space="preserve" />
+    </radialGradient>
+    <path d="M27.188 128.167 C27.188 184.028 72.63499 229.475 128.501 229.475 C184.363 229.475 229.814 184.029 229.814 128.167 C229.814 72.30501 184.363 26.85601 128.501 26.85601 C72.636 26.856 27.188 72.305 27.188 128.167 z" id="P6" xml:space="preserve" connector-curvature="0" style="fill:url(#P6_1_);" />
+    <path d="M35.571 124.854 C34.444 124.854 33.529 125.768 33.529 126.897 L33.529 129.434 C33.529 130.562 34.443 131.476 35.571 131.476 L53.373 131.476 C54.5 131.476 55.415 130.562 55.415 129.434 L55.415 126.897 C55.415 125.768 54.5 124.854 53.373 124.854 z" id="P7" xml:space="preserve" connector-curvature="0" style="fill:#771111;" />
+    <rect x="35.571" y="126.897" width="17.802" height="2.537" id="RE1" xml:space="preserve" style="fill:#A00000;" />
+    <path d="M203.072 124.854 C201.944 124.854 201.031 125.768 201.031 126.897 L201.031 129.434 C201.031 130.562 201.944 131.476 203.072 131.476 L220.882 131.476 C222.008 131.476 222.923 130.562 222.923 129.434 L222.923 126.897 C222.923 125.768 222.008 124.854 220.882 124.854 z" id="P8" xml:space="preserve" connector-curvature="0" style="fill:#771111;" />
+    <rect x="203.072" y="126.897" width="17.81" height="2.537" id="RE2" xml:space="preserve" style="fill:#A00000;" />
+    <path d="M127.229 200.699 C126.101 200.699 125.187 201.613 125.187 202.74 L125.187 220.543 C125.187 221.67 126.101 222.584 127.229 222.584 L129.772 222.584 C130.901 222.584 131.813 221.67 131.813 220.543 L131.813 202.74 C131.813 201.613 130.901 200.699 129.772 200.699 z" id="P9" xml:space="preserve" connector-curvature="0" style="fill:#771111;" />
+    <rect x="127.229" y="202.74" width="2.543" height="17.803" id="RE3" xml:space="preserve" style="fill:#A00000;" />
+    <path d="M127.229 33.196 C126.101 33.196 125.187 34.11 125.187 35.237 L125.187 53.04 C125.187 54.167 126.101 55.081 127.229 55.081 L129.772 55.081 C130.901 55.081 131.813 54.167 131.813 53.04 L131.813 35.237 C131.813 34.11 130.901 33.196 129.772 33.196 z" id="P10" xml:space="preserve" connector-curvature="0" style="fill:#771111;" />
+    <rect x="127.229" y="35.237" width="2.543" height="17.803" id="RE4" xml:space="preserve" style="fill:#A00000;" />
+    <g transform="rotate(-10.50394, 308.6538, 85.74105)" id="G4" xml:space="preserve">
+      <path d="M116.233 101.013 L71.432 23.411 C69.406 19.904 70.608 15.417 74.115 13.391 L74.115 13.391 C77.624 11.365 82.111 12.567 84.136 16.076 L84.136 16.076 L128.939 93.67799 C130.964 97.187 129.762 101.672 126.255 103.697 L126.255 103.697 C124.68 104.606 122.91 104.865 121.254 104.557 L121.254 104.557 C119.216 104.18 117.351 102.947 116.233 101.013 z" id="path50" xml:space="preserve" connector-curvature="0" style="fill:#E0E0E0;" />
+      <path d="M115.25 97.347 L115.249 7.74 C115.25 3.689 118.532 0.4039998 122.585 0.4049993 L122.585 0.4049993 C126.637 0.4039993 129.919 3.689 129.921 7.738999 L129.921 7.738999 L129.921 97.347 C129.919 101.397 126.637 104.681 122.585 104.681 L122.585 104.681 C122.125 104.682 121.676 104.64 121.241 104.559 L121.241 104.559 C117.833 103.927 115.25 100.936 115.25 97.347 z" id="path52" xml:space="preserve" connector-curvature="0" style="fill:#BFBFBF;" />
+      <path d="M118.918 103.697 C115.41 101.672 114.207 97.187 116.233 93.679 L116.233 93.679 L161.036 16.076 C163.061 12.568 167.546 11.365 171.055 13.391 L171.055 13.391 C174.564 15.417 175.765 19.902 173.74 23.41101 L173.74 23.41101 L128.939 101.013 C127.342 103.779 124.217 105.111 121.248 104.56 L121.248 104.56 C120.449 104.412 119.661 104.127 118.918 103.697 z" id="path54" xml:space="preserve" connector-curvature="0" style="fill:#808080;" />
+      <path d="M118.92 103.697 L59.714 69.514 C56.205 67.49 55.003 63.004 57.03 59.494 L57.03 59.494 C59.055 55.985 63.541 54.783 67.05 56.808 L67.05 56.808 L122.588 88.874 L196.521 46.19 C200.026 44.164 204.514 45.366 206.539 48.874 L206.539 48.874 C208.563 52.381 207.36 56.868 203.856 58.894 L203.856 58.894 L126.255 103.696 C124.718 104.584 122.943 104.87 121.25 104.556 L121.25 104.556 C120.442 104.407 119.653 104.12 118.92 103.697 z" id="path56" xml:space="preserve" connector-curvature="0" />
+    </g>
+  </g>
+</svg>

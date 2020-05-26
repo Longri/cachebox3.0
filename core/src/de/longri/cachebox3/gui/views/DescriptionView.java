@@ -198,6 +198,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
     @Override
     public void onShow() {
+        log.debug("DescriptionView onShow (with showPlatformWebView on gl thread)");
         CB.postOnGlThread(new NamedRunnable("DescriptionView") {
             @Override
             public void run() {
@@ -399,11 +400,13 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     }
 
     public Menu getContextMenu(boolean forDescription) {
+        log.debug("DescriptionView create ContextMenu");
         Menu cacheContextMenu = new Menu("DescriptionViewTitle");
         AbstractCache geoCache = EventHandler.getSelectedCache();
         boolean selectedCacheIsSet = (geoCache != null);
 
         if (selectedCacheIsSet) {
+            log.debug("ContextMenu for " + geoCache.getGeoCacheCode() + ": " + geoCache.getGeoCacheName());
             boolean selectedCacheIsGC = geoCache.getGeoCacheCode().toString().startsWith("GC");
             if (forDescription) {
                 cacheContextMenu.addCheckableMenuItem("ShowOriginalHtmlColor", "", CB.getSkin().menuIcon.showOriginalHtmlColor,

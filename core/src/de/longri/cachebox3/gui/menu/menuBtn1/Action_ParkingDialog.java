@@ -21,6 +21,7 @@ import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.menu.MenuID;
 import de.longri.cachebox3.gui.stages.AbstractAction;
 import de.longri.cachebox3.gui.widgets.menu.Menu;
@@ -30,6 +31,8 @@ import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.CacheTypes;
 import de.longri.cachebox3.types.MutableCache;
 import de.longri.cachebox3.utils.NamedRunnable;
+
+import static de.longri.cachebox3.events.EventHandler.fire;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -51,8 +54,8 @@ public class Action_ParkingDialog extends AbstractAction {
                 public void run() {
                     AbstractCache myParking = Database.Data.cacheList.getCacheByGcCode(myParkingGCCode);
                     if (myParking != null) {
-                        EventHandler.fireSelectedWaypointChanged(myParking, null);
-                        EventHandler.fire(new CacheListChangedEvent()); // ? must this?
+                        fire(new SelectedCacheChangedEvent(myParking)); // selected Cache not shown selected (yellow) in cachelist
+                        fire(new CacheListChangedEvent()); // now its yellow
                     }
                 }
             });
@@ -74,7 +77,7 @@ public class Action_ParkingDialog extends AbstractAction {
             }
             else
                 myParking.setLatLon(Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue());
-            EventHandler.fire(new CacheListChangedEvent());
+            fire(new CacheListChangedEvent());
         });
 
         parkingMenu.addMenuItem("My_Parking_Area_Del", VisUI.getSkin().getDrawable("MyParkingRemove48"), () -> {
@@ -84,7 +87,7 @@ public class Action_ParkingDialog extends AbstractAction {
             AbstractCache myParking = Database.Data.cacheList.getCacheByGcCode(myParkingGCCode);
             if (myParking != null) {
                 Database.Data.cacheList.removeValue(myParking, true);
-                EventHandler.fire(new CacheListChangedEvent());
+                fire(new CacheListChangedEvent());
             }
         }).setEnabled(cbParkExists);
 

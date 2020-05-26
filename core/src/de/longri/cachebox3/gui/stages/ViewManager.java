@@ -160,10 +160,10 @@ public class ViewManager extends NamedStage
     }
 
     public void setNewFilter(FilterProperties filter) {
-        setNewFilter(filter, false);
+        setNewFilter(filter, true);
     }
 
-    public void setNewFilter(final FilterProperties filter, boolean dontLoad) {
+    public void setNewFilter(final FilterProperties filter, boolean doLoad) {
         if (!actFilter.equals(filter)) {
 
             log.debug("set New Filter: {}", filter.toString());
@@ -175,7 +175,7 @@ public class ViewManager extends NamedStage
             Config.FilterNew.setValue(actFilter.getJsonString());
             Config.AcceptChanges();
 
-            if (!dontLoad) {
+            if (doLoad) {
                 CB.postAsync(new NamedRunnable("ViewManager") {
                     @Override
                     public void run() {
@@ -305,6 +305,7 @@ public class ViewManager extends NamedStage
         misc_button.addDefaultAction(new Show_AboutAction(), AbstractAction.GestureDirection.Up);
         misc_button.addAction(new Show_Credits());
         misc_button.addAction(new Action_Settings_Activity(), AbstractAction.GestureDirection.Left);
+        misc_button.addAction(new Action_ParkingDialog());
         misc_button.addAction(new Action_Toggle_Day_Night());
         misc_button.addAction(new Action_Help());
         misc_button.addAction(action_quit, AbstractAction.GestureDirection.Down);

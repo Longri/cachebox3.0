@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
+import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.skin.styles.CacheListItemStyle;
@@ -68,8 +69,10 @@ public class CacheListItem extends ListViewItem implements Disposable {
             @Override
             public boolean clicked(InputEvent event, float x, float y) {
                 if (Config.CacheContextMenuShortClickToggle.getValue()) {
-                    if (geoCache != EventHandler.getSelectedCache())
+                    if (geoCache != EventHandler.getSelectedCache()) {
                         EventHandler.fire(new SelectedCacheChangedEvent(geoCache));
+                        EventHandler.fire(new CacheListChangedEvent()); // now its yellow
+                    }
                     new DescriptionView().getContextMenu(false).show();
                 }
                 return false; // if true selection changed won't be recognized
@@ -77,8 +80,10 @@ public class CacheListItem extends ListViewItem implements Disposable {
 
             @Override
             public boolean longClicked(Actor actor, float x, float y, float touchDownStageX, float touchDownStageY) {
-                if (geoCache != EventHandler.getSelectedCache())
+                if (geoCache != EventHandler.getSelectedCache()) {
                     EventHandler.fire(new SelectedCacheChangedEvent(geoCache));
+                    EventHandler.fire(new CacheListChangedEvent()); // now its yellow
+                }
                 new DescriptionView().getContextMenu(false).show();
                 return false; // if true selection changed won't be recognized
             }

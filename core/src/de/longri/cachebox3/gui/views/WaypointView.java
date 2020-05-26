@@ -452,7 +452,8 @@ public class WaypointView extends AbstractView implements PositionChangedListene
             }
         });
         mi.setEnabled(currentCache.hasCorrectedCoordinates() || isCorrectedFinal());
-        cm.addMenuItem("FromGps", CB.getSkin().menuIcon.mesureWp, this::addMeasure);
+        cm.addMenuItem("FromGps", CB.getSkin().menuIcon.todo, this::addMeasure).setEnabled(false);
+        // cm.addMenuItem("FromGps", CB.getSkin().menuIcon.mesureWp, this::addMeasure);
 
         return cm;
     }

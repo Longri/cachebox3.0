@@ -285,14 +285,13 @@ public class FilterProperties {
         if (isHistory) {
             ArrayList<String> orParts = new ArrayList<String>();
             String[] gcCodes = CB.cacheHistory.split(",");
-            for (int i = 0; i < gcCodes.length; i++) {
-                String gcCode = gcCodes[i];
+            for (String gcCode : gcCodes) {
                 if (gcCode.length() > 0) {
                     if (!orParts.contains(gcCode))
                         orParts.add("GcCode = '" + gcCode + "'");
                 }
             }
-            return join(" or ", orParts);
+            return "SELECT * FROM CacheCoreInfo core WHERE " + join(" or ", orParts);
         } else {
             userName = userName.replace("'", "''");
 
