@@ -108,7 +108,7 @@ public class ListsAtGroundSpeak extends AbstractAction {
     private void removeFromList(String title) {
         if (EventHandler.isSetSelectedCache()) {
             String listCode, RemoveFromTitle;
-            RemoveFromTitle = "AddTo" + title;
+            RemoveFromTitle = "RemoveFrom" + title;
             switch (title) {
                 case "Watchlist":
                     listCode = "watch";
