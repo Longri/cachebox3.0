@@ -59,7 +59,7 @@ public class Action_MapDownload extends AbstractAction {
             }
         });
 
-        if (Config.localisation.getEnumValue() == Language.de) {
+        if (Config.localization.getEnumValue() == Language.de) {
             parser.registerDataHandler("/Freizeitkarte/Map/DescriptionGerman", new XmlStreamParser.DataHandler() {
                 @Override
                 protected void handleData(char[] data, int offset, int length) {

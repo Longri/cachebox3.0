@@ -22,7 +22,6 @@ import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.translation.SequenceTranslationHandler;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.translation.StringTranslationHandler;
 import de.longri.cachebox3.utils.IChanged;
 import de.longri.cachebox3.utils.SoundCache;
 import org.slf4j.Logger;
@@ -52,7 +51,7 @@ public final class TranslationLoaderTask extends AbstractInitTask {
         loadTranslation();
 
         // add settings change handler
-        Config.localisation.addChangedEventListener(new IChanged() {
+        Config.localization.addChangedEventListener(new IChanged() {
             @Override
             public void isChanged() {
                 loadTranslation();
@@ -71,15 +70,15 @@ public final class TranslationLoaderTask extends AbstractInitTask {
     }
 
     private void loadTranslation() {
-        if (Config.localisation.getEnumValue() == loadedLang) return;
+        if (Config.localization.getEnumValue() == loadedLang) return;
         try {
-            Translation.loadTranslation(Config.localisation.getEnumValue().toString());
-            loadedLang = Config.localisation.getEnumValue();
+            Translation.loadTranslation(Config.localization.getEnumValue().toString());
+            loadedLang = Config.localization.getEnumValue();
         } catch (Exception e) {
             try {
-                log.error("can't load lang: {}", Config.localisation.getEnumValue(), e);
-                Translation.loadTranslation(Config.localisation.getEnumDefaultValue().toString());
-                loadedLang = Config.localisation.getEnumDefaultValue();
+                log.error("can't load lang: {}", Config.localization.getEnumValue(), e);
+                Translation.loadTranslation(Config.localization.getEnumDefaultValue().toString());
+                loadedLang = Config.localization.getEnumDefaultValue();
             } catch (IOException e1) {
                 log.error("can't load default lang", e1);
             }

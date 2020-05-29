@@ -736,7 +736,7 @@ public class Settings_Activity extends ActivityBase {
         style.down = null;
         final SelectBox selectBox = new SelectBox(style, null);
         selectBox.set(itemList);
-        if (setting == Config.localisation) {
+        if (setting == Config.localization) {
             selectBox.setPrefix(Translation.get("SelectLanguage") + ":  ");
         }
         selectBox.select(selectIndex);

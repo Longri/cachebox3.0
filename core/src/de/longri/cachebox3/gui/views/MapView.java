@@ -1038,7 +1038,7 @@ public class MapView extends AbstractView {
                 info[0].Name = new String(data, offset, length).trim();
             }
         });
-        if (Config.localisation.getEnumValue() == Language.de) {
+        if (Config.localization.getEnumValue() == Language.de) {
             parser.registerDataHandler("/Freizeitkarte/Theme/DescriptionGerman", new XmlStreamParser.DataHandler() {
                 @Override
                 public void handleData(char[] data, int offset, int length) {

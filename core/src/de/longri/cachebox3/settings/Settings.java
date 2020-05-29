@@ -33,7 +33,7 @@ public class Settings extends Settings_Skin {
 
     // NORMAL visible
     public static final SettingString GcLogin = (SettingString) settingsList.addSetting(new SettingString("GcLogin", Login, NORMAL, "", Global, ALL));
-    public static final SettingEnum<Language> localisation = (SettingEnum<Language>) settingsList.addSetting(new SettingEnum("localisation", Locale, NORMAL, Language.en_GB, Global, ALL, Language.en_GB));
+    public static final SettingEnum<Language> localization = (SettingEnum<Language>) settingsList.addSetting(new SettingEnum("localization", Locale, NORMAL, Language.en_GB, Global, ALL, Language.en_GB));
     public static final SettingBool showGestureHelp = (SettingBool) settingsList.addSetting(new SettingBool("showGestureHelp", RememberAsk, NORMAL, true, Global, ACB));
     public static final SettingBool UseCorrectedFinal = (SettingBool) settingsList.addSetting(new SettingBool("UseCorrectedFinal", Misc, NORMAL, true, Global, ALL));
 
