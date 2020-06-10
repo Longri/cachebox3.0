@@ -18,8 +18,11 @@ package de.longri.cachebox3.apis;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.gui.dialogs.InfoBox;
+import de.longri.cachebox3.live.LiveMapQue;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.Descriptor;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
@@ -34,11 +37,9 @@ import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -253,23 +254,23 @@ public class GroundspeakAPI {
     }
 
     private void writeSearchResultsToDisc(JSONArray fetchedCaches, Descriptor descriptor) {
-        /* todo implent livemap
         Writer writer = null;
         try {
-            String Path = descriptor.getLocalCachePath(LiveMapQue.LIVE_CACHE_NAME) + LiveMapQue.LIVE_CACHE_EXTENSION;
-            if (Utils.createDirectory(Path)) {
-                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(Path), "utf-8"));
+            String path = LiveMapQue.getInstance().getLocalCachePath(descriptor);
+            if (Utils.createDirectory(path)) {
+                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8));
                 writer.write(fetchedCaches.toString());
             }
         } catch (IOException ex) {
             // report
         } finally {
             try {
-                writer.close();
-            } catch (Exception ex) {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (Exception ignored) {
             }
         }
-        */
     }
 
     public Array<GeoCacheRelated> updateStatusOfGeoCaches(Array<AbstractCache> caches) {
@@ -979,21 +980,22 @@ public class GroundspeakAPI {
     }
 
     public boolean isAccessTokenInvalid() {
-        return (fetchMyUserInfos().memberShipType == MemberShipTypes.Unknown);
+        return (fetchMyUserInfos().memberShipType == MemberShipType.Unknown);
     }
 
     public boolean isPremiumMember() {
-        return fetchMyUserInfos().memberShipType == MemberShipTypes.Premium;
+        return fetchMyUserInfos().memberShipType == MemberShipType.Premium;
     }
 
     public boolean isDownloadLimitExceeded() {
         // do'nt want to access Web for this info (GL.postAsync)
         if (me == null) return false;
+        if (me.memberShipType == MemberShipType.Unknown) fetchMyUserInfos();
         return me.remaining <= 0 && me.remainingLite <= 0;
     }
 
     public UserInfos fetchMyUserInfos() {
-        if (me == null || me.memberShipType == MemberShipTypes.Unknown) {
+        if (me == null || me.memberShipType == MemberShipType.Unknown) {
             log.debug("fetchMyUserInfos called. Must fetch. Active now: " + active);
             do {
                 if (active) {
@@ -1014,7 +1016,7 @@ public class GroundspeakAPI {
                 }
                 active = true;
                 me = fetchUserInfos("me");
-                if (me.memberShipType == MemberShipTypes.Unknown) {
+                if (me.memberShipType == MemberShipType.Unknown) {
                     me.findCount = -1;
                     // we need a new AccessToken
                     // API_ErrorEventHandlerList.handleApiKeyError(API_ErrorEventHandlerList.API_ERROR.INVALID);
@@ -1110,16 +1112,16 @@ public class GroundspeakAPI {
         return url + command;
     }
 
-    private MemberShipTypes MemberShipTypesFromInt(int value) {
+    private MemberShipType MemberShipTypesFromInt(int value) {
         switch (value) {
             case 1:
-                return MemberShipTypes.Basic;
+                return MemberShipType.Basic;
             case 2:
-                return MemberShipTypes.Charter;
+                return MemberShipType.Charter;
             case 3:
-                return MemberShipTypes.Premium;
+                return MemberShipType.Premium;
             default:
-                return MemberShipTypes.Unknown;
+                return MemberShipType.Unknown;
         }
     }
 
@@ -1673,7 +1675,7 @@ public class GroundspeakAPI {
         return APIError;
     }
 
-    private enum MemberShipTypes {Unknown, Basic, Charter, Premium}
+    private enum MemberShipType {Unknown, Basic, Charter, Premium}
 
     public static class PQ implements Serializable, Comparable {
         private final long serialVersionUID = 8308386638170255124L;
@@ -1692,7 +1694,7 @@ public class GroundspeakAPI {
 
     public static class UserInfos {
         public String username;
-        public MemberShipTypes memberShipType;
+        public MemberShipType memberShipType;
         public int findCount;
         // geocacheLimits
         public int remaining;
@@ -1702,7 +1704,7 @@ public class GroundspeakAPI {
 
         public UserInfos() {
             username = "";
-            memberShipType = MemberShipTypes.Unknown;
+            memberShipType = MemberShipType.Unknown;
             findCount = 0;
             remaining = -1;
             remainingLite = -1;
@@ -1902,7 +1904,4 @@ public class GroundspeakAPI {
         }
     }
 
-    public static class Descriptor {
-        //todo is dummy for Descriptor for livemap
-    }
 }

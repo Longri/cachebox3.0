@@ -1178,7 +1178,15 @@
     },
     "gc_logo": {
       "path": "svg/gc_logo.svg",
-      "scale": 1.4
+      "scale": 1
+    },
+    "gc_logo_red": {
+      "path": "svg/gc_logo_red.svg",
+      "scale": 1
+    },
+    "gc_logo_grey": {
+      "path": "svg/gc_logo_grey.svg",
+      "scale": 1
     },
     "gpxFileIcon": {
       "path": "svg/gpxFileIcon.svg",

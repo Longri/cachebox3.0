@@ -1303,7 +1303,7 @@ public class Database {
             Config.DescriptionImageFolderLocal.setValue(folder + "Images");
             Config.MapPackFolderLocal.setValue(folder + "Maps");
             Config.SpoilerFolderLocal.setValue(folder + "Spoilers");
-            Config.TileCacheFolderLocal.setValue(folder + "Cache");
+            Config.tileCacheFolderLocal.setValue(folder + "Cache");
             if (dontStoreConfig == null) {
                 Config.AcceptChanges();
             }
@@ -1312,21 +1312,21 @@ public class Database {
                             Config.DescriptionImageFolderLocal.getValue() + ", \n" + //
                             Config.MapPackFolderLocal.getValue() + ", \n" + //
                             Config.SpoilerFolderLocal.getValue() + ", \n" + //
-                            Config.TileCacheFolderLocal.getValue()//
+                            Config.tileCacheFolderLocal.getValue()//
             );
 
             // Create Folder?
             boolean creationOK = Utils.createDirectory(Config.DescriptionImageFolderLocal.getValue());
             creationOK = creationOK && Utils.createDirectory(Config.MapPackFolderLocal.getValue());
             creationOK = creationOK && Utils.createDirectory(Config.SpoilerFolderLocal.getValue());
-            creationOK = creationOK && Utils.createDirectory(Config.TileCacheFolderLocal.getValue());
+            creationOK = creationOK && Utils.createDirectory(Config.tileCacheFolderLocal.getValue());
             if (!creationOK)
                 logger.debug(
                         "Problem with creation of one of the Directories:" + //
                                 Config.DescriptionImageFolderLocal.getValue() + ", " + //
                                 Config.MapPackFolderLocal.getValue() + ", " + //
                                 Config.SpoilerFolderLocal.getValue() + ", " + //
-                                Config.TileCacheFolderLocal.getValue()//
+                                Config.tileCacheFolderLocal.getValue()//
                 );
         }
         return false;

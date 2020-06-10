@@ -71,7 +71,7 @@ public class issue_166 {
         assertThat("Folder must exist '/user/temp'", testWorkpath.child("user").child("temp").exists());
 
         String PocketQueryFolder = Config.PocketQueryFolder.getDefaultValue().replace(CB.WorkPath, "");
-        String TileCacheFolder = Config.TileCacheFolder.getDefaultValue().replace(CB.WorkPath, "");
+        String TileCacheFolder = Config.tileCacheFolder.getDefaultValue().replace(CB.WorkPath, "");
         String TrackFolder = Config.TrackFolder.getDefaultValue().replace(CB.WorkPath, "");
         String UserImageFolder = Config.UserImageFolder.getDefaultValue().replace(CB.WorkPath, "");
         String DescriptionImageFolder = Config.DescriptionImageFolder.getDefaultValue().replace(CB.WorkPath, "");

@@ -38,7 +38,7 @@ public class CreateCbDirectoryStructure {
 
         ini_Dir(CB.WorkPath + "/user", false);
         ini_Dir(Config.PocketQueryFolder.getDefaultValue(), false);
-        ini_Dir(Config.TileCacheFolder.getDefaultValue(), nomedia);
+        ini_Dir(Config.tileCacheFolder.getDefaultValue(), nomedia);
         ini_Dir(Config.TrackFolder.getDefaultValue(), false);
         ini_Dir(Config.UserImageFolder.getDefaultValue(), nomedia);
         ini_Dir(CB.WorkPath + "/repository", nomedia);

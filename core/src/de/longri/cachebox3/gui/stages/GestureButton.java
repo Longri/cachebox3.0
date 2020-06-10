@@ -28,7 +28,6 @@ import de.longri.cachebox3.gui.help.GestureHelp;
 import de.longri.cachebox3.gui.skin.styles.GestureButtonStyle;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.views.AbstractView;
-import de.longri.cachebox3.gui.widgets.Window;
 import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.gui.widgets.menu.MenuItem;
 import de.longri.cachebox3.gui.widgets.menu.OnItemClickListener;
@@ -132,7 +131,7 @@ public class GestureButton extends Button {
 
                 if (defaultAction instanceof AbstractShowAction) {
                     //check if target view not actView
-                    Class clazz = ((AbstractShowAction<AbstractView>) defaultAction).getViewClass();
+                    Class<AbstractView> clazz = ((AbstractShowAction<AbstractView>) defaultAction).getViewClass();
                     if (clazz.isAssignableFrom(CB.viewmanager.getCurrentView().getClass())) {
                         mustExecuteDefaultAction = false;
                     }
@@ -326,14 +325,11 @@ public class GestureButton extends Button {
                                 gestureHelper = new GestureHelp(GestureHelp.getHelpEllipseFromActor(GestureButton.this),
                                         style.up, gestureRightIcon, gestureUpIcon, gestureLeftIcon, gestureDownIcon);
                             }
-                            gestureHelper.setWindowCloseListener(new Window.WindowCloseListener() {
-                                @Override
-                                public void windowClosed() {
-                                    gestureHelper.clearWindowCloseListener();
-                                    action.execute();
-                                    if (action instanceof AbstractShowAction)
-                                        currentShowAction = (AbstractShowAction<AbstractView>) action;
-                                }
+                            gestureHelper.setWindowCloseListener(() -> {
+                                gestureHelper.clearWindowCloseListener();
+                                action.execute();
+                                if (action instanceof AbstractShowAction)
+                                    currentShowAction = (AbstractShowAction<AbstractView>) action;
                             });
                             gestureHelper.show(ba.getGestureDirection());
                             return true;

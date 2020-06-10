@@ -98,7 +98,7 @@ public class MapInfoPanel extends Catch_Table implements SpeedChangedListener, D
 
     public void setNewValues(final Coordinate myPosition, final float bearing) {
         if (myPosition == null) return;
-        CB.postOnGlThread(new NamedRunnable("set new values") {
+        CB.postOnGlThread(new NamedRunnable("MapInfoPanel set my position + bearing.") {
             @Override
             public void run() {
                 compass.setBearing(bearing);

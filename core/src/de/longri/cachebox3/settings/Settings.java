@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.settings;
 
+import de.longri.cachebox3.live.LiveMapQue;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Language;
 import de.longri.cachebox3.utils.HSV_Color;
@@ -160,18 +161,15 @@ public class Settings extends Settings_Skin {
     public static final SettingDouble mapInitLatitude = (SettingDouble) settingsList.addSetting(new SettingDouble("MapInitLatitude", Positions, NEVER, 0, Global, ACB));
     public static final SettingDouble mapInitLongitude = (SettingDouble) settingsList.addSetting(new SettingDouble("MapInitLongitude", Positions, NEVER, 0, Global, ACB));
 
-    //        public static final SettingEnum<Live_Cache_Time> LiveCacheTime = new SettingEnum<Live_Cache_Time>("LiveCacheTime", LiveMap, NORMAL, Live_Cache_Time.h_6, SettingStoreType.Global, ACB, Live_Cache_Time.h_6);
-//    public static final SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius> LiveRadius = new SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius>("LiveRadius", LiveMap, NORMAL, CB_Core.Api.LiveMapQue.Live_Radius.Zoom_14,
-//            SettingStoreType.Global, SettingUsage.ACB, CB_Core.Api.LiveMapQue.Live_Radius.Zoom_14);
-//    public static final SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius> LiveRadius = new SettingEnum<CB_Core.Api.LiveMapQue.Live_Radius>("LiveRadius", LiveMap, NORMAL, CB_Core.Api.LiveMapQue.Live_Radius.Zoom_14,
-//            SettingStoreType.Global, SettingUsage.ACB, CB_Core.Api.LiveMapQue.Live_Radius.Zoom_14);
-//    public static final SettingEnum<Live_Cache_Time> LiveCacheTime = new SettingEnum<Live_Cache_Time>("LiveCacheTime", LiveMap, NORMAL, Live_Cache_Time.h_6, SettingStoreType.Global, SettingUsage.ACB, Live_Cache_Time.h_6);
+public static final SettingEnum<LiveMapQue.Live_Radius> liveRadius = new SettingEnum<LiveMapQue.Live_Radius>("LiveRadius", LiveMap, NORMAL, LiveMapQue.Live_Radius.Zoom_14,
+            SettingStoreType.Global, SettingUsage.ACB, LiveMapQue.Live_Radius.Zoom_14);
+    public static final SettingEnum<LiveCacheTime> liveCacheTime = new SettingEnum<LiveCacheTime>("LiveCacheTime", LiveMap, NORMAL, LiveCacheTime.h_6, SettingStoreType.Global, SettingUsage.ACB, LiveCacheTime.h_6);
 
 
-//    public static final SettingBool DisableLiveMap = (SettingBool) settingsList.addSetting(new SettingBool("DisableLiveMap", LiveMap, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingInt LiveMaxCount = (SettingInt) settingsList.addSetting(new SettingInt("LiveMaxCount", LiveMap, EXPERT, 350, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool LiveExcludeFounds = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeFounds", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool LiveExcludeOwn = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeOwn", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingBool disableLiveMap = (SettingBool) settingsList.addSetting(new SettingBool("DisableLiveMap", LiveMap, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingInt liveMaxCount = (SettingInt) settingsList.addSetting(new SettingInt("LiveMaxCount", LiveMap, EXPERT, 350, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingBool liveExcludeFounds = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeFounds", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingBool liveExcludeOwn = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeOwn", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool showSandbox = (SettingBool) settingsList.addSetting(new SettingBool("showSandbox", RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
 
 //    public static final SettingInt gpsUpdateTime = (SettingInt) settingsList.addSetting(new SettingInt("gpsUpdateTime", Gps, NORMAL, 500, SettingStoreType.Global, SettingUsage.ACB));
@@ -192,11 +190,11 @@ public class Settings extends Settings_Skin {
 //    public static final SettingString GcJoker = (SettingString) settingsList.addSetting(new SettingString("GcJoker", Login, NORMAL, "", SettingStoreType.Global, SettingUsage.ALL));
 //    public static final SettingBool ShowFieldnotesCMwithFirstShow = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesCMwithFirstShow", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool ShowFieldnotesAsDefaultView = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesAsDefaultView", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool LiveMapEnabeld = (SettingBool) settingsList.addSetting(new SettingBool("LiveMapEnabeld", LiveMap, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingBool liveMapEnabled = (SettingBool) settingsList.addSetting(new SettingBool("LiveMapEnabeld", LiveMap, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool AppRaterDontShowAgain = (SettingBool) settingsList.addSetting(new SettingBool("AppRaterDontShowAgain", RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingString AppRaterFirstLunch = (SettingString) settingsList.addSetting(new SettingString("AppRaterFirstLunch", Internal, NEVER, "0", SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool GestureOn = (SettingBool) settingsList.addSetting(new SettingBool("GestureOn", Misc, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingColor LiveMapBackgroundColor = (SettingColor) settingsList.addSetting(new SettingColor("LiveMapBackgroundColor", LiveMap, NORMAL, new HSV_Color(0.8f, 0.8f, 1f, 1f), SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingColor liveMapBackgroundColor = (SettingColor) settingsList.addSetting(new SettingColor("LiveMapBackgroundColor", LiveMap, NORMAL, new HSV_Color(0.8f, 0.8f, 1f, 1f), SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingLongString Filter = (SettingLongString) settingsList.addSetting(new SettingLongString("Filter", Misc, NEVER, FilterProperties.presets[0].toString(), SettingStoreType.Local, SettingUsage.ALL));
 //
 //    public static final SettingLongString UserFilterNew = (SettingLongString) settingsList.addSetting(new SettingLongString("UserFilterNew", Misc, NEVER, "", SettingStoreType.Global, SettingUsage.ACB));
@@ -222,6 +220,30 @@ public class Settings extends Settings_Skin {
 //    public static final SettingBool newInstall = (SettingBool) settingsList.addSetting(new SettingBool("newInstall", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 //    public static final SettingBool FieldnotesUploadAll = (SettingBool) settingsList.addSetting(new SettingBool("FieldnotesUploadAll", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 public static final SettingBool quickButtonShow = (SettingBool) settingsList.addSetting(new SettingBool("quickButtonShow", QuickList, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+
+    public enum LiveCacheTime {
+        min_10, min_30, min_60, h_6, h_12, h_24;
+
+        public int getLifetime() {
+            switch (this) {
+                case h_24:
+                    return 1440;
+                case h_12:
+                    return 720;
+                case h_6:
+                    return 360;
+                case min_10:
+                    return 10;
+                case min_30:
+                    return 30;
+                case min_60:
+                    return 60;
+                default:
+                    return 1440;
+
+            }
+        }
+    }
 
 
 }

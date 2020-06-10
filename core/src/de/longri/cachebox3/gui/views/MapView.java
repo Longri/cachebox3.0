@@ -61,6 +61,8 @@ import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.gui.widgets.menu.MenuItem;
 import de.longri.cachebox3.gui.widgets.menu.OptionMenu;
+import de.longri.cachebox3.live.LiveButton;
+import de.longri.cachebox3.live.LiveMapQue;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
@@ -124,10 +126,11 @@ import java.util.Set;
  */
 public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
-
-    private static double lastCenterPosLat, lastCenterPosLon;
     private static final MapState actMapState = new MapState();
+    private static double lastCenterPosLat, lastCenterPosLon;
     private final Event selfEvent = new Event();
+    private final Point screenPoint = new Point();
+    private final CB.ThemeUsage whichUsage;
     private boolean menuInShow;
     private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter cacheboxMapAdapter;
@@ -149,13 +152,11 @@ public class MapView extends AbstractView {
     };
     private LocationTextureLayer myLocationLayer;
     private MapViewPositionChangedHandler positionChangedHandler;
-    private Point screenPoint = new Point();
     private String themesPath;
     private Array<FZKThemesInfo> fzkThemesInfoList = new Array<>();
     private MapWayPointItem infoItem = null;
-    private CB.ThemeUsage whichUsage;
     private MapBubble infoBubble;
-    private ClickListener bubbleClickListener = new ClickListener() {
+    private final ClickListener bubbleClickListener = new ClickListener() {
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             super.touchDown(event, x, y, pointer, button);
             if (infoBubble != null) {
@@ -332,11 +333,14 @@ public class MapView extends AbstractView {
         this.addActor(infoPanel);
 
         createCacheboxMapAdapter();
+        addActor(mapStateButton);
 
-        this.addActor(mapStateButton);
-        this.setTouchable(Touchable.enabled);
+        addActor(LiveButton.getInstance());
+        LiveButton.getInstance().setVisible(Config.disableLiveMap.getValue());
 
-        this.zoomButton = new ZoomButton(changeValue -> {
+        setTouchable(Touchable.enabled);
+
+        zoomButton = new ZoomButton(changeValue -> {
             MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
             double value = mapPosition.getScale();
             if (changeValue > 0)
@@ -446,6 +450,9 @@ public class MapView extends AbstractView {
                 }
                 lastCenterPosLat = mapPosition.getLatitude();
                 lastCenterPosLon = mapPosition.getLongitude();
+                if (Config.liveMapEnabled.getValue() && !isCarMode())
+                    LiveMapQue.getInstance().quePosition(new Coordinate(lastCenterPosLat, lastCenterPosLon));
+
             }
         };
 
@@ -498,6 +505,7 @@ public class MapView extends AbstractView {
 
     @Override
     public void dispose() {
+        LiveMapQue.getInstance().cancelDownloads();
         Config.lastZoomLevel.setValue(wayPointLayer.getLastZoomLevel());
         MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
         Config.mapInitLatitude.setValue(mapPosition.getLatitude());
@@ -562,6 +570,9 @@ public class MapView extends AbstractView {
 
         mapStateButton.setPosition(getWidth() - (mapStateButton.getWidth() + CB.scaledSizes.MARGIN),
                 getHeight() - (mapStateButton.getHeight() + CB.scaledSizes.MARGIN));
+
+        LiveButton.getInstance().setWidth(mapStateButton.getWidth());
+        LiveButton.getInstance().setPosition(mapStateButton.getX(), mapStateButton.getY() - LiveButton.getInstance().getHeight());
 
         zoomButton.setPosition(getWidth() - (zoomButton.getWidth() + CB.scaledSizes.MARGIN), CB.scaledSizes.MARGIN);
 
@@ -698,6 +709,7 @@ public class MapView extends AbstractView {
     }
 
     private void setNewSettings() {
+        LiveButton.getInstance().setVisible(Config.disableLiveMap.getValue());
         //TODO
     }
 
@@ -889,7 +901,7 @@ public class MapView extends AbstractView {
         Menu icm = new OptionMenu("MapViewElementsMenuTitle");
         // icm.addCheckableMenuItem("MapShowCompass", Config.MapShowCompass.getValue(),()-> toggleSetting(Config.MapShowCompass));
         // todo icm.addCheckableMenuItem("MapShowInfoBar",Config.ShowInfo .....)
-        addViewElement(icm, "ShowAllWaypoints", Config.ShowAllWaypoints, true);
+        addViewElement(icm, "ShowLiveMap", Config.disableLiveMap, true);
         addViewElement(icm, "ShowAllWaypoints", Config.ShowAllWaypoints, true);
         addViewElement(icm, "ShowRatings", Config.MapShowRating, false);
         addViewElement(icm, "ShowDT", Config.MapShowDT, false);
@@ -1209,27 +1221,17 @@ public class MapView extends AbstractView {
     }
 
     public void clickOnItem(final MapWayPointItem item) {
-
-        if (infoBubble != null) {
-            MapView.this.removeActor(infoBubble);
-        }
-
-        VisTable table = new VisTable();
-
+        if (infoBubble != null) removeActor(infoBubble);
         infoBubble = new MapBubble(item.dataObject);
+        VisTable table = new VisTable();
         table.add(infoBubble).expand().fill();
         infoBubble.layout();
         table.layout();
-
-
-        MapView.this.addActor(infoBubble);
+        addActor(infoBubble);
         infoItem = item;
         setInfoBubblePos();
         CB.requestRendering();
-
-        this.addListener(bubbleClickListener);
-
-
+        addListener(bubbleClickListener);
     }
 
     public void closeInfoBubble() {

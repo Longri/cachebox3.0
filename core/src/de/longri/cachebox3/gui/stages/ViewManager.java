@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
@@ -52,6 +53,7 @@ import de.longri.cachebox3.gui.views.AboutView;
 import de.longri.cachebox3.gui.views.AbstractView;
 import de.longri.cachebox3.gui.widgets.ButtonBar;
 import de.longri.cachebox3.gui.widgets.Slider;
+import de.longri.cachebox3.live.LiveMapQue;
 import de.longri.cachebox3.locator.GlobalLocationReceiver;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
@@ -417,17 +419,39 @@ public class ViewManager extends NamedStage
         } else {
             if (Database.Data.cacheList == null) return;
         }
-        AbstractCache abstractCache = Database.Data.cacheList.getCacheByGcCode("CBPark");
-
-        if (abstractCache != null)
-            Database.Data.cacheList.removeValue(abstractCache, false);
 
         // add Parking Cache
+        AbstractCache myParking = Database.Data.cacheList.getCacheByGcCode("CBPark");
+        if (myParking != null)
+            Database.Data.cacheList.removeValue(myParking, false);
         if (Config.ParkingLatitude.getValue() != 0) {
-            abstractCache = new MutableCache(Database.Data, Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
-            Database.Data.cacheList.insert(0, abstractCache);
+            myParking = new MutableCache(Database.Data, Config.ParkingLatitude.getValue(), Config.ParkingLongitude.getValue(), "My Parking area", CacheTypes.MyParking, "CBPark");
+            Database.Data.cacheList.insert(0, myParking);
         }
 
+        // add Live caches
+        for (Array<AbstractCache> geoCacheList : LiveMapQue.getInstance().getAllCacheLists()) {
+            for (AbstractCache geoCache : geoCacheList) {
+                if (geoCache != null) {
+                    /*
+                    if (FilterInstances.isLastFilterSet()) {
+                        if (!Database.Data.cacheList.contains(geoCache)) {
+                            if (FilterInstances.getLastFilter().passed(geoCache)) {
+                                geoCache.setLive(true);
+                                Database.Data.cacheList.add(geoCache);
+                            }
+                        }
+                    } else {
+
+                    }
+                     */
+                    if (!Database.Data.cacheList.contains(geoCache, false)) {
+                        geoCache.setLive(true);
+                        Database.Data.cacheList.add(geoCache);
+                    }
+                }
+            }
+        }
 
         //if selected Cache not into cacheList, reset selected Cache
         AbstractCache selectedCache = EventHandler.getSelectedCache();

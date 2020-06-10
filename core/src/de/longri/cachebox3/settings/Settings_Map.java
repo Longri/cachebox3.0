@@ -59,8 +59,9 @@ public class Settings_Map extends Settings_Const {
     public static final SettingStringList CurrentMapLayer = (SettingStringList) settingsList.addSetting(new SettingStringList("CurrentMapLayer", Map, NEVER, new String[]{"Mapnik"}, Global, ACB));
     public static final SettingBool ShowAccuracyCircle = (SettingBool) settingsList.addSetting(new SettingBool("ShowAccuracyCircle", Map, NEVER, true, Global, ACB));
     public static final SettingBool ShowMapCenterCross = (SettingBool) settingsList.addSetting(new SettingBool("ShowMapCenterCross", Map, NEVER, true, Global, ACB));
-    public static final SettingFolder TileCacheFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("TileCacheFolder", Folder, NEVER, "?/repository/cache", Global, ALL, true));
-    public static final SettingFolder TileCacheFolderLocal = (SettingFolder) settingsList.addSetting(new SettingFolder("TileCacheFolderLocal", Folder, NEVER, "", Local, ALL, true));
+
+    public static final SettingFolder tileCacheFolder = (SettingFolder) settingsList.addSetting(new SettingFolder("TileCacheFolder", Folder, NEVER, "?/repository/cache", Global, ALL, true));
+    public static final SettingFolder tileCacheFolderLocal = (SettingFolder) settingsList.addSetting(new SettingFolder("TileCacheFolderLocal", Folder, NEVER, "", Local, ALL, true));
 
     public static final SettingFile MapsforgeDayTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeDayTheme", Map, NEVER, "", Global, ACB, "xml"));
     public static final SettingFile MapsforgeNightTheme = (SettingFile) settingsList.addSetting(new SettingFile("MapsforgeNightTheme", Map, NEVER, "", Global, ACB, "xml"));
