@@ -236,7 +236,7 @@ public class LiveMapQue {
     }
 
     public void quePosition(Coordinate coord) {
-        if (!Config.disableLiveMap.getValue()) {
+        if (Config.liveMapEnabled.getValue()) {
             if (coord != null && coord.isValid()) {
                 final Descriptor descriptor = new Descriptor(coord.getLatitude(), coord.getLongitude(), usedZoom);
                 if (cacheListLive.contains(descriptor)) {

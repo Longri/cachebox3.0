@@ -336,7 +336,7 @@ public class MapView extends AbstractView {
         addActor(mapStateButton);
 
         addActor(LiveButton.getInstance());
-        LiveButton.getInstance().setVisible(Config.disableLiveMap.getValue());
+        LiveButton.getInstance().setVisible(Config.showLiveButton.getValue());
 
         setTouchable(Touchable.enabled);
 
@@ -709,7 +709,7 @@ public class MapView extends AbstractView {
     }
 
     private void setNewSettings() {
-        LiveButton.getInstance().setVisible(Config.disableLiveMap.getValue());
+        LiveButton.getInstance().setVisible(Config.showLiveButton.getValue());
         //TODO
     }
 
@@ -901,7 +901,7 @@ public class MapView extends AbstractView {
         Menu icm = new OptionMenu("MapViewElementsMenuTitle");
         // icm.addCheckableMenuItem("MapShowCompass", Config.MapShowCompass.getValue(),()-> toggleSetting(Config.MapShowCompass));
         // todo icm.addCheckableMenuItem("MapShowInfoBar",Config.ShowInfo .....)
-        addViewElement(icm, "ShowLiveMap", Config.disableLiveMap, true);
+        addViewElement(icm, "ShowLiveMap", Config.showLiveButton, true);
         addViewElement(icm, "ShowAllWaypoints", Config.ShowAllWaypoints, true);
         addViewElement(icm, "ShowRatings", Config.MapShowRating, false);
         addViewElement(icm, "ShowDT", Config.MapShowDT, false);

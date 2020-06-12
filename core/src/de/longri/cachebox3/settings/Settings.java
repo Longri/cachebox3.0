@@ -96,11 +96,9 @@ public class Settings extends Settings_Skin {
     public static final SettingBool SearchOnlyAvailable = (SettingBool) settingsList.addSetting(new SettingBool("SearchOnlyAvailable", API, NEVER, true, Global, ACB));
     public static final SettingIntArray numberOfLogs = (SettingIntArray) settingsList.addSetting(new SettingIntArray("NumberOfLogs", Misc, NORMAL, 5, Global, ACB, numberOfLogsArray));
     public static final SettingBool DescriptionNoAttributes = (SettingBool) settingsList.addSetting(new SettingBool("DescriptionNoAttributes", Misc, NEVER, false, Global, ACB));
-    public static final SettingBool quickButtonLastShow = (SettingBool) settingsList.addSetting(new SettingBool("quickButtonLastShow", QuickList, NEVER, false, Global, ACB));
     public static final SettingInt MultiDBAutoStartTime = (SettingInt) settingsList.addSetting(new SettingInt("MultiDBAutoStartTime", Internal, NEVER, 0, Global, ACB));
     public static final SettingInt lastSearchRadius = (SettingInt) settingsList.addSetting(new SettingInt("lastSearchRadius", API, NEVER, 5, Global, ACB));
     public static final SettingInt ImportLimit = (SettingInt) settingsList.addSetting(new SettingInt("ImportLimit", API, NEVER, 50, Global, ACB));
-    public static final SettingString quickButtonList = (SettingString) settingsList.addSetting(new SettingString("quickButtonList", QuickList, NORMAL, DefaultQuickButtons, Global, ACB));
     public static final SettingString LastSelectedCache = (SettingString) settingsList.addSetting(new SettingString("LastSelectedCache", Misc, NEVER, "", Local, ALL));
     public static final SettingLongString FilterNew = (SettingLongString) settingsList.addSetting(new SettingLongString("FilterNew", Misc, NEVER, "", Local, ALL));
 
@@ -161,65 +159,60 @@ public class Settings extends Settings_Skin {
     public static final SettingDouble mapInitLatitude = (SettingDouble) settingsList.addSetting(new SettingDouble("MapInitLatitude", Positions, NEVER, 0, Global, ACB));
     public static final SettingDouble mapInitLongitude = (SettingDouble) settingsList.addSetting(new SettingDouble("MapInitLongitude", Positions, NEVER, 0, Global, ACB));
 
-public static final SettingEnum<LiveMapQue.Live_Radius> liveRadius = new SettingEnum<LiveMapQue.Live_Radius>("LiveRadius", LiveMap, NORMAL, LiveMapQue.Live_Radius.Zoom_14,
+    public static final SettingBool quickButtonLastShow = (SettingBool) settingsList.addSetting(new SettingBool("quickButtonLastShow", QuickList, NEVER, false, Global, ACB));
+    public static final SettingString quickButtonList = (SettingString) settingsList.addSetting(new SettingString("quickButtonList", QuickList, NORMAL, DefaultQuickButtons, Global, ACB));
+
+    public static final SettingBool showLiveButton = (SettingBool) settingsList.addSetting(new SettingBool("ShowLiveMap", LiveMap, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingEnum<LiveMapQue.Live_Radius> liveRadius = new SettingEnum<LiveMapQue.Live_Radius>("LiveRadius", LiveMap, NORMAL, LiveMapQue.Live_Radius.Zoom_14,
             SettingStoreType.Global, SettingUsage.ACB, LiveMapQue.Live_Radius.Zoom_14);
     public static final SettingEnum<LiveCacheTime> liveCacheTime = new SettingEnum<LiveCacheTime>("LiveCacheTime", LiveMap, NORMAL, LiveCacheTime.h_6, SettingStoreType.Global, SettingUsage.ACB, LiveCacheTime.h_6);
-
-
-    public static final SettingBool disableLiveMap = (SettingBool) settingsList.addSetting(new SettingBool("DisableLiveMap", LiveMap, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingInt liveMaxCount = (SettingInt) settingsList.addSetting(new SettingInt("LiveMaxCount", LiveMap, EXPERT, 350, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool liveExcludeFounds = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeFounds", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool liveExcludeOwn = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeOwn", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool showSandbox = (SettingBool) settingsList.addSetting(new SettingBool("showSandbox", RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
-
-//    public static final SettingInt gpsUpdateTime = (SettingInt) settingsList.addSetting(new SettingInt("gpsUpdateTime", Gps, NORMAL, 500, SettingStoreType.Global, SettingUsage.ACB));
-
-//    public static final SettingInt conection_timeout = (SettingInt) settingsList.addSetting(new SettingInt("conection_timeout", Internal, DEVELOPER, 10000, SettingStoreType.Global, SettingUsage.ALL));
-
-//    public static final SettingFile gpxExportFileName = (SettingFile) settingsList.addSetting(new SettingFile("gpxExportFileName", Folder, NEVER,  "?/user/export.gpx", SettingStoreType.Global, SettingUsage.ACB, "gpx"));
-//    public static final SettingBool TrackRecorderStartup = (SettingBool) settingsList.addSetting(new SettingBool("TrackRecorderStartup", Misc, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool ImportGpx = (SettingBool) settingsList.addSetting(new SettingBool("ImportGpx", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool CacheMapData = (SettingBool) settingsList.addSetting(new SettingBool("CacheMapData", Internal, DEVELOPER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool CacheImageData = (SettingBool) settingsList.addSetting(new SettingBool("CacheImageData", Internal, DEVELOPER, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool CacheSpoilerData = (SettingBool) settingsList.addSetting(new SettingBool("CacheSpoilerData", Internal, DEVELOPER, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool SuppressPowerSaving = (SettingBool) settingsList.addSetting(new SettingBool("SuppressPowerSaving", Misc, EXPERT, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool GCAdditionalImageDownload = (SettingBool) settingsList.addSetting(new SettingBool("GCAdditionalImageDownload", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingString CacheHistory = (SettingString) settingsList.addSetting(new SettingString("CacheHistory", Misc, NEVER, "", SettingStoreType.Local, SettingUsage.ALL));
-//    public static final SettingString NavigationProvider = (SettingString) settingsList.addSetting(new SettingString("NavigationProvider", Internal, DEVELOPER, "http://openls.geog.uni-heidelberg.de/testing2015/route?", SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingString SpoilersDescriptionTags = (SettingString) settingsList.addSetting(new SettingString("SpoilersDescriptionTags", Internal, DEVELOPER, "", SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingString GcJoker = (SettingString) settingsList.addSetting(new SettingString("GcJoker", Login, NORMAL, "", SettingStoreType.Global, SettingUsage.ALL));
-//    public static final SettingBool ShowFieldnotesCMwithFirstShow = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesCMwithFirstShow", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool ShowFieldnotesAsDefaultView = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesAsDefaultView", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool liveMapEnabled = (SettingBool) settingsList.addSetting(new SettingBool("LiveMapEnabeld", LiveMap, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool AppRaterDontShowAgain = (SettingBool) settingsList.addSetting(new SettingBool("AppRaterDontShowAgain", RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingString AppRaterFirstLunch = (SettingString) settingsList.addSetting(new SettingString("AppRaterFirstLunch", Internal, NEVER, "0", SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool GestureOn = (SettingBool) settingsList.addSetting(new SettingBool("GestureOn", Misc, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingColor liveMapBackgroundColor = (SettingColor) settingsList.addSetting(new SettingColor("LiveMapBackgroundColor", LiveMap, NORMAL, new HSV_Color(0.8f, 0.8f, 1f, 1f), SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingLongString Filter = (SettingLongString) settingsList.addSetting(new SettingLongString("Filter", Misc, NEVER, FilterProperties.presets[0].toString(), SettingStoreType.Local, SettingUsage.ALL));
-//
-//    public static final SettingLongString UserFilterNew = (SettingLongString) settingsList.addSetting(new SettingLongString("UserFilterNew", Misc, NEVER, "", SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingTime ScreenLock = (SettingTime) settingsList.addSetting(new SettingTime("ScreenLock", Misc, NEVER, 60000, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool ImportRatings = (SettingBool) settingsList.addSetting(new SettingBool("ImportRatings", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool ImportPQsFromGeocachingCom = (SettingBool) settingsList.addSetting(new SettingBool("ImportPQsFromGeocachingCom", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool switchViewApproach = (SettingBool) settingsList.addSetting(new SettingBool("switchViewApproach", Misc, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool hasCallPermission = (SettingBool) settingsList.addSetting(new SettingBool("hasCallPermission", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingColor liveMapBackgroundColor = (SettingColor) settingsList.addSetting(new SettingColor("LiveMapBackgroundColor", LiveMap, EXPERT, new HSV_Color(0.8f, 0.8f, 1f, 1f), SettingStoreType.Global, SettingUsage.ACB));
 
-//    public static final SettingBool hasPQ_PlugIn = (SettingBool) settingsList.addSetting(new SettingBool("hasPQ_PlugIn", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool hasFTF_PlugIn = (SettingBool) settingsList.addSetting(new SettingBool("hasFTF_PlugIn", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool dynamicFilterAtSearch = (SettingBool) settingsList.addSetting(new SettingBool("dynamicFilterAtSearch", Misc, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool DeleteLogs = (SettingBool) settingsList.addSetting(new SettingBool("DeleteLogs", Internal, DEVELOPER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool CompactDB = (SettingBool) settingsList.addSetting(new SettingBool("CompactDB", Internal, DEVELOPER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool AskAgain = (SettingBool) settingsList.addSetting(new SettingBool("AskAgain", RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ALL));
-//    public static final SettingBool RememberAsk_Get_API_Key = (SettingBool) settingsList.addSetting(new SettingBool("RememberAsk_Get_API_Key", RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool Ask_Switch_GPS_ON = (SettingBool) settingsList.addSetting(new SettingBool("Ask_Switch_GPS_ON", RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ALL));
-//    public static final SettingBool TB_DirectLog = (SettingBool) settingsList.addSetting(new SettingBool("TB_DirectLog", Internal, NEVER, true, SettingStoreType.Global, SettingUsage.ALL));
-//    public static final SettingInt LogMaxMonthAge = (SettingInt) settingsList.addSetting(new SettingInt("LogMaxMonthAge", Internal, DEVELOPER, 6, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingInt LogMinCount = (SettingInt) settingsList.addSetting(new SettingInt("LogMinCount", Internal, DEVELOPER, 99999, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingInt installRev = (SettingInt) settingsList.addSetting(new SettingInt("installRev", Internal, NEVER, 0, SettingStoreType.Global, SettingUsage.ACB));
-
-//    public static final SettingBool newInstall = (SettingBool) settingsList.addSetting(new SettingBool("newInstall", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-//    public static final SettingBool FieldnotesUploadAll = (SettingBool) settingsList.addSetting(new SettingBool("FieldnotesUploadAll", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-public static final SettingBool quickButtonShow = (SettingBool) settingsList.addSetting(new SettingBool("quickButtonShow", QuickList, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool showSandbox = (SettingBool) settingsList.addSetting(new SettingBool("showSandbox", RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingInt gpsUpdateTime = (SettingInt) settingsList.addSetting(new SettingInt("gpsUpdateTime", Gps, NORMAL, 500, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingInt conection_timeout = (SettingInt) settingsList.addSetting(new SettingInt("conection_timeout", Internal, DEVELOPER, 10000, SettingStoreType.Global, SettingUsage.ALL));
+    //    public static final SettingFile gpxExportFileName = (SettingFile) settingsList.addSetting(new SettingFile("gpxExportFileName", Folder, NEVER,  "?/user/export.gpx", SettingStoreType.Global, SettingUsage.ACB, "gpx"));
+    //    public static final SettingBool TrackRecorderStartup = (SettingBool) settingsList.addSetting(new SettingBool("TrackRecorderStartup", Misc, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool ImportGpx = (SettingBool) settingsList.addSetting(new SettingBool("ImportGpx", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool CacheMapData = (SettingBool) settingsList.addSetting(new SettingBool("CacheMapData", Internal, DEVELOPER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool CacheImageData = (SettingBool) settingsList.addSetting(new SettingBool("CacheImageData", Internal, DEVELOPER, true, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool CacheSpoilerData = (SettingBool) settingsList.addSetting(new SettingBool("CacheSpoilerData", Internal, DEVELOPER, true, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool SuppressPowerSaving = (SettingBool) settingsList.addSetting(new SettingBool("SuppressPowerSaving", Misc, EXPERT, true, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool GCAdditionalImageDownload = (SettingBool) settingsList.addSetting(new SettingBool("GCAdditionalImageDownload", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingString CacheHistory = (SettingString) settingsList.addSetting(new SettingString("CacheHistory", Misc, NEVER, "", SettingStoreType.Local, SettingUsage.ALL));
+    //    public static final SettingString NavigationProvider = (SettingString) settingsList.addSetting(new SettingString("NavigationProvider", Internal, DEVELOPER, "http://openls.geog.uni-heidelberg.de/testing2015/route?", SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingString SpoilersDescriptionTags = (SettingString) settingsList.addSetting(new SettingString("SpoilersDescriptionTags", Internal, DEVELOPER, "", SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingString GcJoker = (SettingString) settingsList.addSetting(new SettingString("GcJoker", Login, NORMAL, "", SettingStoreType.Global, SettingUsage.ALL));
+    //    public static final SettingBool ShowFieldnotesCMwithFirstShow = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesCMwithFirstShow", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool ShowFieldnotesAsDefaultView = (SettingBool) settingsList.addSetting(new SettingBool("ShowFieldnotesAsDefaultView", Drafts, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool AppRaterDontShowAgain = (SettingBool) settingsList.addSetting(new SettingBool("AppRaterDontShowAgain", RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingString AppRaterFirstLunch = (SettingString) settingsList.addSetting(new SettingString("AppRaterFirstLunch", Internal, NEVER, "0", SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool GestureOn = (SettingBool) settingsList.addSetting(new SettingBool("GestureOn", Misc, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingLongString Filter = (SettingLongString) settingsList.addSetting(new SettingLongString("Filter", Misc, NEVER, FilterProperties.presets[0].toString(), SettingStoreType.Local, SettingUsage.ALL));
+    //    public static final SettingLongString UserFilterNew = (SettingLongString) settingsList.addSetting(new SettingLongString("UserFilterNew", Misc, NEVER, "", SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingTime ScreenLock = (SettingTime) settingsList.addSetting(new SettingTime("ScreenLock", Misc, NEVER, 60000, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool ImportRatings = (SettingBool) settingsList.addSetting(new SettingBool("ImportRatings", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool ImportPQsFromGeocachingCom = (SettingBool) settingsList.addSetting(new SettingBool("ImportPQsFromGeocachingCom", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool switchViewApproach = (SettingBool) settingsList.addSetting(new SettingBool("switchViewApproach", Misc, EXPERT, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool hasCallPermission = (SettingBool) settingsList.addSetting(new SettingBool("hasCallPermission", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool hasPQ_PlugIn = (SettingBool) settingsList.addSetting(new SettingBool("hasPQ_PlugIn", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool hasFTF_PlugIn = (SettingBool) settingsList.addSetting(new SettingBool("hasFTF_PlugIn", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool dynamicFilterAtSearch = (SettingBool) settingsList.addSetting(new SettingBool("dynamicFilterAtSearch", Misc, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool DeleteLogs = (SettingBool) settingsList.addSetting(new SettingBool("DeleteLogs", Internal, DEVELOPER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool CompactDB = (SettingBool) settingsList.addSetting(new SettingBool("CompactDB", Internal, DEVELOPER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool AskAgain = (SettingBool) settingsList.addSetting(new SettingBool("AskAgain", RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ALL));
+    //    public static final SettingBool RememberAsk_Get_API_Key = (SettingBool) settingsList.addSetting(new SettingBool("RememberAsk_Get_API_Key", RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool Ask_Switch_GPS_ON = (SettingBool) settingsList.addSetting(new SettingBool("Ask_Switch_GPS_ON", RememberAsk, NORMAL, true, SettingStoreType.Global, SettingUsage.ALL));
+    //    public static final SettingBool TB_DirectLog = (SettingBool) settingsList.addSetting(new SettingBool("TB_DirectLog", Internal, NEVER, true, SettingStoreType.Global, SettingUsage.ALL));
+    //    public static final SettingInt LogMaxMonthAge = (SettingInt) settingsList.addSetting(new SettingInt("LogMaxMonthAge", Internal, DEVELOPER, 6, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingInt LogMinCount = (SettingInt) settingsList.addSetting(new SettingInt("LogMinCount", Internal, DEVELOPER, 99999, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingInt installRev = (SettingInt) settingsList.addSetting(new SettingInt("installRev", Internal, NEVER, 0, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool newInstall = (SettingBool) settingsList.addSetting(new SettingBool("newInstall", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
+    //    public static final SettingBool FieldnotesUploadAll = (SettingBool) settingsList.addSetting(new SettingBool("FieldnotesUploadAll", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 
     public enum LiveCacheTime {
         min_10, min_30, min_60, h_6, h_12, h_24;
