@@ -37,7 +37,6 @@ import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
-import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.list_view.ListView;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewAdapter;
@@ -247,12 +246,10 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                 WayPointListItem selectedItem = (WayPointListItem) listView.getSelectedItem();
                 int index = selectedItem.getListIndex() - 1;
                 AbstractWaypoint wp = currentCache.getWaypoints().get(index);
-
                 log.debug("Waypoint selection changed to: " + wp.toString());
                 //set selected Waypoint global
                 EventHandler.fire(new SelectedWayPointChangedEvent(wp));
                 currentWaypoint = wp;
-                CB.lastMapState.setPosition(new Coordinate(currentWaypoint.getLatitude(), currentWaypoint.getLongitude()));
             } else {
                 CacheListItem selectedItem = (CacheListItem) listView.getSelectedItem();
                 AbstractCache cache = Database.Data.cacheList.getCacheById(selectedItem.getId());
@@ -260,9 +257,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
                 //set selected Cache global
                 EventHandler.fire(new SelectedCacheChangedEvent(cache));
                 currentWaypoint = null;
-                CB.lastMapState.setPosition(new Coordinate(cache.getLatitude(), cache.getLongitude()));
             }
-            CB.lastMapState.setMapMode(MapMode.WP);
         });
 
         CB.postOnNextGlThread(() -> {

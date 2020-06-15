@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.async.AsyncTask;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.Utils;
 import de.longri.cachebox3.events.location.*;
+import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
@@ -119,6 +120,9 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (CB.isBackground) return;
 
         synchronized (listeners) {
+            if (event instanceof SelectedWayPointChangedEvent) {
+
+            }
             final Array<Object> list = listeners.get(event.getListenerClass());
             if (list != null) {
 
@@ -403,6 +407,8 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (this.selectedCoordinate == null || !this.selectedCoordinate.equals(event.coordinate)) {
             this.selectedCoordinate = event.coordinate;
             fire(event);
+            CB.lastMapState.setMapMode(MapMode.WP);
+            CB.lastMapState.setPosition(selectedCoordinate);
             fireDistanceChanged(event.ID);
         }
     }
