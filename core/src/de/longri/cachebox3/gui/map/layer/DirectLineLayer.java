@@ -92,7 +92,7 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
 
         private DirectLineRendererStyle getStyle() {
             try {
-                style = VisUI.getSkin().get("directLine", DirectLineRendererStyle.class);
+                style = VisUI.getSkin().get(DirectLineRendererStyle.class);
             } catch (Exception e) {
                 style = new DirectLineRendererStyle();
             }
@@ -100,12 +100,7 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
         }
 
         TextureItem textureItem = style.texture == null ? null : new TextureItem(style.texture);
-        LineBucket ll = buckets.addLineBucket(0,
-                new LineStyle(0, "",
-                        Color.get(style.color.a, (int) (style.color.r * 255), (int) (style.color.g * 255), (int) (style.color.b * 255)),
-                        CB.getScaledFloat(style.width), style.cap, true, 1.0, 0, 0, 0,
-                        -1, 0, false, textureItem, true, null, REPEAT_START_DEFAULT, REPEAT_GAP_DEFAULT)
-        );
+        LineBucket ll;
 
         GeometryBuffer g = new GeometryBuffer(2, 1);
         private boolean invalidLine = true;
@@ -114,6 +109,12 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
         private Layer layer;
 
         private DirectLineRenderer() {
+            ll = buckets.addLineBucket(0,
+                    new LineStyle(0, "",
+                            Color.get(style.color.a, (int) (style.color.r * 255), (int) (style.color.g * 255), (int) (style.color.b * 255)),
+                            CB.getScaledFloat(style.width), style.cap, true, 1.0, 0, 0, 0,
+                            -1, 0, false, textureItem, true, null, REPEAT_START_DEFAULT, REPEAT_GAP_DEFAULT)
+            );
         }
 
         @Override
@@ -126,7 +127,7 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
 
             mMapPosition.copy(v.pos);
             v.getMapExtents(buffer, 100f);
-            for (int i = 0, n = 8; i < n; i++)
+            for (int i = 0; i < 8; i++)
                 MathUtils.clampToMinMax(buffer, i, MAX_VALUE);
 
 

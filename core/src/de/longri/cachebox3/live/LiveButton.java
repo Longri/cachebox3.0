@@ -21,7 +21,10 @@ public class LiveButton extends CB_Button implements CacheListChangedListener, I
     private boolean liveMapEnabled = false;
 
     private LiveButton() {
-        super(Config.liveMapEnabled.getValue() ? iconLiveIsEnabled : iconLiveIsDisabled);
+        // always start disabled
+        super(iconLiveIsDisabled);
+        // if want to start with last value
+        // super(Config.liveMapEnabled.getValue() ? iconLiveIsEnabled : iconLiveIsDisabled);
         addCaptureListener(new ClickLongClickListener() {
             @Override
             public boolean clicked(InputEvent event, float x, float y) {
@@ -37,11 +40,17 @@ public class LiveButton extends CB_Button implements CacheListChangedListener, I
                 return false;
             }
         });
+        /*
+        // if want to start with last value
         liveMapEnabled = Config.liveMapEnabled.getValue();
         if (liveMapEnabled) {
             EventHandler.add(this);
             LiveMapQue.getInstance().addDownloadActiveListener(this);
         }
+         */
+        liveMapEnabled = false; // always start disabled
+        Config.liveMapEnabled.setValue(false);
+        Config.AcceptChanges();
     }
 
     public static LiveButton getInstance() {

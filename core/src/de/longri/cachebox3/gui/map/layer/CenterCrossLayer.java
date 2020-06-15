@@ -44,7 +44,7 @@ public class CenterCrossLayer extends GenericLayer implements Disposable {
     }
 
     private static class Renderer extends BucketRenderer {
-        final MapCenterCrossStyle style = VisUI.getSkin().get("centerCross", MapCenterCrossStyle.class);
+        final MapCenterCrossStyle style = VisUI.getSkin().get(MapCenterCrossStyle.class);
         final LineBucket ll = buckets.addLineBucket(0,
                 new LineStyle(style.color.toIntBits(), CB.getScaledFloat(style.width), style.cap));
 

@@ -2419,7 +2419,7 @@
     "dialog_background": {
       "a": 0.8
     },
-    "directLine": {
+    "directLineColor": {
       "r": 1,
       "a": 0.78431374
     },
@@ -3379,7 +3379,7 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapCenterCrossStyle": {
-    "centerCross": {
+    "default": {
       "color": "centerCrossColor",
       "width": 2,
       "length": 100
@@ -3410,9 +3410,9 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.DirectLineRendererStyle": {
-    "directLine": {
-      "color": "directLine",
-      "width": 5.5
+    "default": {
+      "color": "directLineColor",
+      "width": 2
     }
   },
   "de.longri.cachebox3.gui.skin.styles.ApiButtonStyle": {

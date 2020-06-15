@@ -58,7 +58,6 @@ public abstract class ClickLongClickListener extends ActorGestureListener {
 
     public boolean longPress(Actor actor, float x, float y, boolean force) {
         if (force || Gdx.input.isTouched()) {
-
             return longClicked(actor, x, y, touchDownStageX, touchDownStageY);
         }
         return false;

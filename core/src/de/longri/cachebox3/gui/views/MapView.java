@@ -140,7 +140,7 @@ public class MapView extends AbstractView {
     private MapInfoPanel infoPanel;
     private WaypointLayer wayPointLayer;
     private DirectLineLayer directLineLayer;
-    private CenterCrossLayer ccl;
+    private CenterCrossLayer centerCrossLayer;
     private final IChanged showMapCenterCrossChangedListener = new IChanged() {
         @Override
         public void isChanged() {
@@ -259,67 +259,63 @@ public class MapView extends AbstractView {
         //TODO use better packer like rectPack2D
         if (CB.textureRegionMap == null) CB.textureRegionMap = createTextureAtlasRegions();
 
-        mapStateButton = new MapStateButton(new MapStateButton.StateChangedListener() {
+        mapStateButton = new MapStateButton((mapMode, lastMapMode, event) -> {
 
-            @Override
-            public void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event) {
+            MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
+            actMapState.setPosition(new Coordinate(mapPosition.getLatitude(), mapPosition.getLongitude()));
+            actMapState.setMapMode(mapMode);
+            actMapState.setOrientation(mapPosition.bearing);
+            actMapState.setTilt(mapPosition.tilt);
+            actMapState.setMapOrientationMode(infoPanel.getOrientationState());
 
-                MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
-                actMapState.setPosition(new Coordinate(mapPosition.getLatitude(), mapPosition.getLongitude()));
-                actMapState.setMapMode(mapMode);
-                actMapState.setOrientation(mapPosition.bearing);
-                actMapState.setTilt(mapPosition.tilt);
-                actMapState.setMapOrientationMode(infoPanel.getOrientationState());
+            log.debug("Map state changed to:" + actMapState);
 
-                log.debug("Map state changed to:" + actMapState);
-
-                if (mapMode == MapMode.CAR) {
-                    storeMapstate(mapMode, lastMapMode);
-                    log.debug("Activate Carmode with last mapstate:{}", CB.lastMapStateBeforeCar);
-                    float bearing = -EventHandler.getHeading();
-                    positionChangedHandler.setBearing(bearing);
-                    setBuildingLayerEnabled(false);
-                    setCenterCrossLayerEnabled(false);
-                } else if (lastMapMode == MapMode.CAR) {
-                    log.debug("Disable Carmode! Activate last Mode:{}", CB.lastMapState);
-                    restoreMapstate(CB.lastMapStateBeforeCar);
-                } else if (mapMode == MapMode.GPS) {
-                    log.debug("Activate GPS Mode");
-                    storeMapstate(mapMode, null);
-                    final Coordinate myPos = EventHandler.getMyPosition();
-                    if (myPos != null) {
-                        positionChangedHandler.position(
-                                MercatorProjection.longitudeToX(myPos.getLongitude()),
-                                MercatorProjection.latitudeToY(myPos.getLatitude())
-                        );
-                    }
-                    setCenterCrossLayerEnabled(false);
-                } else if (mapMode == MapMode.WP) {
-                    storeMapstate(mapMode, null);
-                    final Coordinate wpCoord = EventHandler.getSelectedCoord();
-                    if (wpCoord == null) {
-                        // we hav no selected WP, so switch MapMode to 'LOCK'
-                        CB.postOnGlThread(new NamedRunnable("MapView") {
-                            @Override
-                            public void run() {
-                                mapStateButton.setMapMode(MapMode.LOCK, true, new Event());
-                            }
-                        });
-                    } else {
-                        log.debug("Activate WP Mode");
-                        positionChangedHandler.animateToPos(
-                                MercatorProjection.longitudeToX(wpCoord.getLongitude()),
-                                MercatorProjection.latitudeToY(wpCoord.getLatitude())
-                        );
-                        setCenterCrossLayerEnabled(false);
-                    }
-                } else if (mapMode == MapMode.LOCK) {
-                    storeMapstate(mapMode, null);
-                    setCenterCrossLayerEnabled(false);
-                } else if (mapMode == MapMode.FREE) {
-                    storeMapstate(mapMode, null);
-                    setCenterCrossLayerEnabled(true);
+            if (mapMode == MapMode.CAR) {
+                storeMapstate(mapMode, lastMapMode);
+                log.debug("Activate Carmode with last mapstate:{}", CB.lastMapStateBeforeCar);
+                float bearing = -EventHandler.getHeading();
+                positionChangedHandler.setBearing(bearing);
+                setBuildingLayerEnabled(false);
+                setCenterCrossLayerEnabled(false);
+            } else if (lastMapMode == MapMode.CAR) {
+                log.debug("Disable Carmode! Activate last Mode:{}", CB.lastMapState);
+                restoreMapstate(CB.lastMapStateBeforeCar);
+            } else if (mapMode == MapMode.GPS) {
+                log.debug("Activate GPS Mode");
+                storeMapstate(mapMode, null);
+                final Coordinate myPos = EventHandler.getMyPosition();
+                if (myPos != null) {
+                    positionChangedHandler.position(
+                            MercatorProjection.longitudeToX(myPos.getLongitude()),
+                            MercatorProjection.latitudeToY(myPos.getLatitude())
+                    );
                 }
+                setCenterCrossLayerEnabled(false);
+            } else if (mapMode == MapMode.WP) {
+                storeMapstate(mapMode, null);
+                final Coordinate wpCoord = EventHandler.getSelectedCoord();
+                if (wpCoord == null) {
+                    // we hav no selected WP, so switch MapMode to 'LOCK'
+                    CB.postOnGlThread(new NamedRunnable("MapView") {
+                        @Override
+                        public void run() {
+                            mapStateButton.setMapMode(MapMode.LOCK, true, new Event());
+                        }
+                    });
+                } else {
+                    log.debug("Activate WP Mode");
+                    positionChangedHandler.animateToPos(
+                            MercatorProjection.longitudeToX(wpCoord.getLongitude()),
+                            MercatorProjection.latitudeToY(wpCoord.getLatitude())
+                    );
+                    setCenterCrossLayerEnabled(false);
+                }
+            } else if (mapMode == MapMode.LOCK) {
+                storeMapstate(mapMode, null);
+                setCenterCrossLayerEnabled(false);
+            } else if (mapMode == MapMode.FREE) {
+                storeMapstate(mapMode, null);
+                setCenterCrossLayerEnabled(true);
             }
         }) {
             @Override
@@ -395,7 +391,7 @@ public class MapView extends AbstractView {
 
     private void setCenterCrossLayerEnabled(boolean enabled) {
         enabled &= Settings_Map.ShowMapCenterCross.getValue();
-        ccl.setEnabled(enabled);
+        centerCrossLayer.setEnabled(enabled);
     }
 
     private void setBuildingLayerEnabled(boolean enabled) {
@@ -638,7 +634,7 @@ public class MapView extends AbstractView {
         directLineLayer.setEnabled(showDirectLine);
         GroupLayer layerGroup = new GroupLayer(cacheboxMapAdapter);
 
-        ccl = new CenterCrossLayer(cacheboxMapAdapter);
+        centerCrossLayer = new CenterCrossLayer(cacheboxMapAdapter);
 
 
         if (tileGrid)
@@ -648,7 +644,7 @@ public class MapView extends AbstractView {
         layerGroup.layers.add(directLineLayer);
         layerGroup.layers.add(myLocationLayer);
         layerGroup.layers.add(mapScaleBarLayer);
-        layerGroup.layers.add(ccl);
+        layerGroup.layers.add(centerCrossLayer);
 
         Config.ShowDirektLine.addChangedEventListener(() -> {
             if (cacheboxMapAdapter == null) return;
@@ -660,8 +656,7 @@ public class MapView extends AbstractView {
 
         boolean showCenterCross = Config.ShowMapCenterCross.getValue();
         log.debug("Initial center cross layer and {}", showCenterCross ? "enable" : "disable");
-
-        ccl.setEnabled(showCenterCross);
+        centerCrossLayer.setEnabled(showCenterCross);
         Config.ShowMapCenterCross.addChangedEventListener(showMapCenterCrossChangedListener);
         cacheboxMapAdapter.layers().add(layerGroup);
     }

@@ -38,11 +38,14 @@ import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.Import.DescriptionImageGrabber;
+import de.longri.cachebox3.sqlite.dao.Cache3DAO;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
+import de.longri.cachebox3.sqlite.dao.LogDAO;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Attributes;
+import de.longri.cachebox3.types.MutableCache;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.NetUtils;
 import de.longri.serializable.BitStore;
@@ -55,6 +58,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
 import static de.longri.cachebox3.gui.dialogs.ButtonDialog.BUTTON_NEGATIVE;
 import static de.longri.cachebox3.gui.dialogs.ButtonDialog.BUTTON_POSITIVE;
+import static de.longri.cachebox3.types.MutableCache.IS_LITE;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -68,7 +72,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
     private final Array<String> nonLocalImages = new Array<>();
     private final Array<String> nonLocalImagesUrl = new Array<>();
     private final AtomicBoolean FIRST = new AtomicBoolean(true);
-    private PlatformWebView view;
+    private PlatformWebView platformWebView;
     private final GenericHandleCallBack<String> shouldOverrideUrlLoadingCallBack = url -> {
         log.debug("Load Url callback: {}", url);
         if (FIRST.get()) {
@@ -86,10 +90,9 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 MessageBox.show(Translation.get(url.substring(25, pos)));
             // todo scale of Descriptionview changes sometime (bigger)after showing msgbox
             return true;
-        } else if (url.contains("fake://fake.de/download")) {
+        } else if (url.contains("fake://fake.de?download")) {
             // not yet tested
             Thread thread = new Thread(() -> {
-
                 GroundspeakAPI.getInstance().fetchMyCacheLimits();
                 if (GroundspeakAPI.getInstance().APIError != OK) {
                     MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Friends"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
@@ -113,21 +116,21 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                     //message = msg;
                     //onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(2));
                     MessageBox.show(msg, Translation.get("download"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
-
-                    return;
-                }
-                /*
-                if (!GroundspeakAPI.getInstance().isPremiumMember()) {
-                    String msg = "Download Details of this cache?\n";
-                    msg = msg + ("Full Downloads left: " + GroundspeakAPI.getInstance().fetchMyUserInfos().remaining + "\n");
-                    message = msg;
-                    onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(3));
                 }
                 else {
-                    // call the download directly
-                    onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(4));
+                    /*
+                    if (!GroundspeakAPI.getInstance().isPremiumMember()) {
+                        String msg = "Download Details of this cache?\n";
+                        msg = msg + ("Full Downloads left: " + GroundspeakAPI.getInstance().fetchMyUserInfos().remaining + "\n");
+                        message = msg;
+                        onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(3));
+                    }
+                    else {
+                        // call the download directly
+                        onlineSearchReadyHandler.sendMessage(onlineSearchReadyHandler.obtainMessage(4));
+                    }
+                     */
                 }
-                */
             });
             // pd = ProgressDialog.show(getContext(), "", "Download Description", true);
             thread.start();
@@ -186,36 +189,59 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             @Override
             public void run() {
                 PlatformConnector.setDescriptionViewToNULL();
-                view = null;
+                platformWebView = null;
             }
         });
     }
 
     @Override
     protected void boundsChanged(float x, float y, float width, float height) {
-        if (view != null) view.setBounding(x, y, width, height, Gdx.graphics.getHeight());
+        if (platformWebView != null) platformWebView.setBounding(x, y, width, height, Gdx.graphics.getHeight());
     }
 
     @Override
     public void onShow() {
         log.debug("DescriptionView onShow (with showPlatformWebView on gl thread)");
-        CB.postOnGlThread(new NamedRunnable("DescriptionView") {
-            @Override
-            public void run() {
-                showPlatformWebView();
+        AbstractCache selectedCache = EventHandler.getSelectedCache();
+        if (selectedCache != null) {
+            if (selectedCache.isLive() || selectedCache.getApiState() == MutableCache.IS_LITE) {
+                GroundspeakAPI.UserInfos me = GroundspeakAPI.getInstance().fetchMyUserInfos();
+                if (me.remaining > 0) {
+                    // simply download // perhaps do message // perhaps do wait info
+                    Array<GroundspeakAPI.GeoCacheRelated> updatedCaches = GroundspeakAPI.getInstance().updateGeoCache(selectedCache);
+                    if (GroundspeakAPI.getInstance().APIError == GroundspeakAPI.OK) {
+                        for (GroundspeakAPI.GeoCacheRelated updatedCache : updatedCaches) {
+                            Cache3DAO dao = new Cache3DAO();
+                            dao.writeToDatabase(Database.Data, updatedCache.cache, true);
+
+                            LogDAO logdao = new LogDAO();
+                            logdao.writeToDB(Database.Data, updatedCache.logs);
+                        }
+                    } else {
+                        MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("ReloadCacheAPI"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
+                    }
+                } else {
+                    // todo implement in shouldOverrideUrlLoadingCallBack
+                }
             }
-        });
+            CB.postOnGlThread(new NamedRunnable("showPlatformWebView in DescriptionView") {
+                @Override
+                public void run() {
+                    showPlatformWebView();
+                }
+            });
+        }
     }
 
     private void showPlatformWebView() {
 
         final AtomicBoolean WAIT = new AtomicBoolean(false);
 
-        if (view == null) {
+        if (platformWebView == null) {
             WAIT.set(true);
             PlatformConnector.getDescriptionView(descriptionView -> {
-                view = descriptionView;
-                view.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
+                platformWebView = descriptionView;
+                platformWebView.setShouldOverrideUrlLoadingCallBack(shouldOverrideUrlLoadingCallBack);
                 WAIT.set(false);
             });
         }
@@ -230,6 +256,8 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             CharSequence longDescription = actCache.getLongDescription();
             CharSequence shortDescription = actCache.getShortDescription();
 
+            /*
+            // getLongDescription does a fetch from DB if needed
             // try to load from Db if NULL
             if (longDescription == null) {
                 longDescription = getStringFromDB(Database.Data, "SELECT Description FROM CacheText WHERE Id=?", actCache.getId());
@@ -243,13 +271,20 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 actCache.setShortDescription(shortDescription);
             }
 
+             */
+
             CharSequence cacheHtml = new CompoundCharSequence(longDescription, shortDescription);
             String html;
-            if (actCache.getApiState() == 1)// GC.com API lite
+            if (actCache.getApiState() == IS_LITE)// GC.com API lite
             { // Load Standard HTML
                 log.debug("load is Lite html");
                 String nodesc = Translation.get("GC_NoDescription").toString();
-                html = "</br>" + nodesc + "</br></br></br><form action=\"download\"><input type=\"submit\" value=\" " + Translation.get("GC_DownloadDescription") + " \"></form>";
+                // a IS_LITE has no description. a NOT_LIVE ?
+                // the action part is (no longer) returned in the url ( in WebViewClientCompat shouldOverrideUrlLoading )
+                // so using the input attribute name (here "download") as <input name="download" type
+                // what comes as fake://fake.de?download=+Beschreibung+herunterladen+ in shouldOverrideUrlLoading
+                html = "</br>" + nodesc + "</br></br></br><form action=\"/download.html\"><input name=\"download\" type=\"submit\" value=\" " + Translation.get("GC_DownloadDescription") + " \"></form>";
+
             } else {
                 html = DescriptionImageGrabber.ResolveImages(actCache, cacheHtml.toString(), false, nonLocalImages, nonLocalImagesUrl);
                 if (!Config.DescriptionNoAttributes.getValue()) {
@@ -270,21 +305,21 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
             if (lastCacheId == actCache.getId()) {
                 // restore last scroll position
-                if (view != null) {
+                if (platformWebView != null) {
                     //Wait for html is loaded
-                    view.setFinishLoadingCallBack(value -> {
+                    platformWebView.setFinishLoadingCallBack(value -> {
                         CB.postOnMainThreadDelayed(100, new NamedRunnable("DescriptionView:set scale") {
                             @Override
                             public void run() {
                                 log.debug("Set scale: {}", lastScale);
-                                if (view != null) {
-                                    view.setScale(lastScale);
+                                if (platformWebView != null) {
+                                    platformWebView.setScale(lastScale);
                                     CB.postOnMainThreadDelayed(200, new NamedRunnable("DescriptionView:set pos") {
                                         @Override
                                         public void run() {
-                                            if (view != null) {
+                                            if (platformWebView != null) {
                                                 log.debug("Set x: {} y: {} ", lastX, lastY);
-                                                view.setScrollPosition(lastX, lastY);
+                                                platformWebView.setScrollPosition(lastX, lastY);
                                             }
                                         }
                                     });
@@ -295,9 +330,9 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                     });
                 }
             }
-            if (view != null) {
-                view.display();
-                view.setHtml(html);
+            if (platformWebView != null) {
+                platformWebView.display();
+                platformWebView.setHtml(html);
             }
         }
 
@@ -368,11 +403,11 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
                 @Override
                 public void run() {
                     lastCacheId = selectedCache.getId();
-                    lastX = view.getScrollPositionX();
-                    lastY = view.getScrollPositionY();
-                    lastScale = view.getScale();
+                    lastX = platformWebView.getScrollPositionX();
+                    lastY = platformWebView.getScrollPositionY();
+                    lastScale = platformWebView.getScale();
                     log.debug("store last X: {} Y: {} scale: {}", lastX, lastY, lastScale);
-                    view.close();
+                    platformWebView.close();
                 }
             });
         }
