@@ -83,17 +83,17 @@ public class MapState {
     //setter
 
     public void setPosition(Coordinate latLong) {
-        this.freePosition.set(latLong);
+        freePosition.set(latLong);
         changed = true;
     }
 
-    public void setOrientation(float orientation) {
-        this.orientation = orientation;
+    public void setOrientation(float _orientation) {
+        orientation = _orientation;
         changed = true;
     }
 
-    public void setTilt(float tilt) {
-        this.tilt = tilt;
+    public void setTilt(float _tilt) {
+        tilt = _tilt;
         changed = true;
     }
 
@@ -118,16 +118,16 @@ public class MapState {
         changed = true;
     }
 
-    public void setValues(int values) {
-        this.value = values;
+    public void setValues(int _value) {
+        value = _value;
         changed = true;
     }
 
     public void set(MapState mapState) {
-        this.value = mapState.value;
-        this.tilt = mapState.tilt;
-        this.orientation = mapState.orientation;
-        this.freePosition.set(mapState.freePosition);
+        value = mapState.value;
+        tilt = mapState.tilt;
+        orientation = mapState.orientation;
+        freePosition.set(mapState.freePosition);
         changed = true;
     }
 
@@ -160,14 +160,14 @@ public class MapState {
     }
 
     public int getValues() {
-        return this.value;
+        return value;
     }
 
 
     /**
      * Returns TRUE if no value changed
      *
-     * @return
+     * @return ?
      */
     public boolean isEmpty() {
         return !changed;

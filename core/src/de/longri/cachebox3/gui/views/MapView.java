@@ -126,7 +126,7 @@ import java.util.Set;
  */
 public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
-    private static final MapState actMapState = new MapState();
+    private static final MapState currentMapState = new MapState();
     private static double lastCenterPosLat, lastCenterPosLon;
     private final Event selfEvent = new Event();
     private final Point screenPoint = new Point();
@@ -202,7 +202,7 @@ public class MapView extends AbstractView {
     }
 
     public static boolean isCarMode() {
-        return actMapState.getMapMode() == MapMode.CAR;
+        return currentMapState.getMapMode() == MapMode.CAR;
     }
 
     public static Coordinate getLastCenterPos() {
@@ -248,8 +248,8 @@ public class MapView extends AbstractView {
         return textureRegionMap;
     }
 
-    public MapState getActMapState() {
-        return actMapState;
+    public MapState getCurrentMapState() {
+        return currentMapState;
     }
 
     @Override
@@ -262,13 +262,13 @@ public class MapView extends AbstractView {
         mapStateButton = new MapStateButton((mapMode, lastMapMode, event) -> {
 
             MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
-            actMapState.setPosition(new Coordinate(mapPosition.getLatitude(), mapPosition.getLongitude()));
-            actMapState.setMapMode(mapMode);
-            actMapState.setOrientation(mapPosition.bearing);
-            actMapState.setTilt(mapPosition.tilt);
-            actMapState.setMapOrientationMode(infoPanel.getOrientationState());
+            currentMapState.setPosition(new Coordinate(mapPosition.getLatitude(), mapPosition.getLongitude()));
+            currentMapState.setMapMode(mapMode);
+            currentMapState.setOrientation(mapPosition.bearing);
+            currentMapState.setTilt(mapPosition.tilt);
+            currentMapState.setMapOrientationMode(infoPanel.getOrientationState());
 
-            log.debug("Map state changed to:" + actMapState);
+            log.debug("Map state changed to:" + currentMapState);
 
             if (mapMode == MapMode.CAR) {
                 storeMapstate(mapMode, lastMapMode);

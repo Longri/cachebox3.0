@@ -204,7 +204,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
         log.debug("DescriptionView onShow (with showPlatformWebView on gl thread)");
         AbstractCache selectedCache = EventHandler.getSelectedCache();
         if (selectedCache != null) {
-            if (selectedCache.isLive() || selectedCache.getApiState() == MutableCache.IS_LITE) {
+            if (selectedCache.isLive() || selectedCache.getApiStatus() == MutableCache.IS_LITE) {
                 GroundspeakAPI.UserInfos me = GroundspeakAPI.getInstance().fetchMyUserInfos();
                 if (me.remaining > 0) {
                     // simply download // perhaps do message // perhaps do wait info
@@ -275,7 +275,7 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
 
             CharSequence cacheHtml = new CompoundCharSequence(longDescription, shortDescription);
             String html;
-            if (actCache.getApiState() == IS_LITE)// GC.com API lite
+            if (actCache.getApiStatus() == IS_LITE)// GC.com API lite
             { // Load Standard HTML
                 log.debug("load is Lite html");
                 String nodesc = Translation.get("GC_NoDescription").toString();

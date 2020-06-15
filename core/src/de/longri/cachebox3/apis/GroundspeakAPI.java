@@ -1163,7 +1163,7 @@ public class GroundspeakAPI {
         // see https://api.groundspeak.com/documentation#lite-geocache
         if (cache == null) {
             cache = new MutableCache(database, 0, 0);
-            cache.setApiState(IS_LITE);
+            cache.setApiStatus(IS_LITE);
         }
         if (cache.getWaypoints() != null) {
             cache.getWaypoints().clear();
@@ -1332,7 +1332,7 @@ public class GroundspeakAPI {
                                 tmp = tmp.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
                             }
                             cache.setLongDescription(tmp);
-                            cache.setApiState(IS_FULL);
+                            cache.setApiStatus(IS_FULL);
                         }
                         break;
                     case "shortDescription":
@@ -1343,7 +1343,7 @@ public class GroundspeakAPI {
                                 tmp = tmp.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
                             }
                             cache.setShortDescription(tmp);
-                            cache.setApiState(IS_FULL); // got a cache without LongDescription
+                            cache.setApiStatus(IS_FULL); // got a cache without LongDescription
                         }
                         break;
                     case "additionalWaypoints":

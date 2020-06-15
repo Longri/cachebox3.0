@@ -211,9 +211,9 @@ public abstract class AbstractCache extends Coordinate implements Comparable<Abs
 
     public abstract void setDateHidden(Date date);
 
-    public abstract byte getApiState();
+    public abstract byte getApiStatus();
 
-    public abstract void setApiState(byte value);
+    public abstract void setApiStatus(byte value);
 
     public abstract int getNoteChecksum();
 

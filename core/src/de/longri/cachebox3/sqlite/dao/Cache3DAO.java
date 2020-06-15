@@ -114,7 +114,7 @@ public class Cache3DAO extends AbstractCacheDAO {
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
         args.put("state", abstractCache.getState());
         args.put("country", abstractCache.getCountry());
-        args.put("ApiStatus", abstractCache.getApiState());
+        args.put("ApiStatus", abstractCache.getApiStatus());
 
         if (args.size() > 0) {
             if (update) {

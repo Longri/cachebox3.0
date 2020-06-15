@@ -298,7 +298,7 @@ public class CacheList3DAO extends AbstractCacheListDAO {
                         null, //todo handle listing checksum
                         ca.getState(),
                         ca.getCountry(),
-                        ca.getApiState()
+                        ca.getApiStatus()
                 ).commit().reset();
 
 

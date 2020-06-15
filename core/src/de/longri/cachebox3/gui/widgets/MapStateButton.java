@@ -47,10 +47,10 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
     private boolean isLongPressed = false;
 
 
-    public MapStateButton(StateChangedListener stateChangedListener) {
-        this.style = VisUI.getSkin().get(MapStateButtonStyle.class);
+    public MapStateButton(StateChangedListener _stateChangedListener) {
+        style = VisUI.getSkin().get(MapStateButtonStyle.class);
 
-        this.stateChangedListener = stateChangedListener;
+        this.stateChangedListener = _stateChangedListener;
         if (style.stateCar == null || style.stateFree == null || style.stateLock == null
                 || style.stateWaypoint == null || style.stateGps == null) {
            return;

@@ -31,31 +31,31 @@ public class WayPointListItem extends ListViewItem implements Disposable {
     WayPointListItem(int listIndex, CacheTypes type, CharSequence wayPointGcCode, CharSequence wayPointTitle, CharSequence description, CharSequence coord) {
         super(listIndex);
         WayPointListItemStyle wayPointListItemStyle = VisUI.getSkin().get(WayPointListItemStyle.class);
-        this.wayPointItem = new WayPointItem(type, wayPointGcCode, wayPointTitle, description, coord, wayPointListItemStyle);
-        this.add(wayPointItem).expand().fill();
+        wayPointItem = new WayPointItem(type, wayPointGcCode, wayPointTitle, description, coord, wayPointListItemStyle);
+        add(wayPointItem).expand().fill();
     }
 
     public boolean update(float bearing, CharSequence distance) {
-        if (!this.wayPointItem.distanceOrBearingChanged) return false;
-        this.wayPointItem.arrowImage.setRotation(bearing);
-        this.wayPointItem.distanceLabel.setText(distance);
+        if (!wayPointItem.distanceOrBearingChanged) return false;
+        wayPointItem.arrowImage.setRotation(bearing);
+        wayPointItem.distanceLabel.setText(distance);
 
-        this.wayPointItem.arrowImage.layout();
-        this.wayPointItem.distanceLabel.layout();
-        this.wayPointItem.distanceOrBearingChanged = false;
+        wayPointItem.arrowImage.layout();
+        wayPointItem.distanceLabel.layout();
+        wayPointItem.distanceOrBearingChanged = false;
         return true;
     }
 
     public void posOrBearingChanged() {
-        this.wayPointItem.distanceOrBearingChanged = true;
+        wayPointItem.distanceOrBearingChanged = true;
     }
 
     @Override
     public synchronized void dispose() {
-        this.wayPointItem.dispose();
+        wayPointItem.dispose();
     }
 
     public CharSequence getWaypointGcCode() {
-        return this.wayPointItem.wayPointGcCode;
+        return wayPointItem.wayPointGcCode;
     }
 }

@@ -120,7 +120,7 @@ public class MutableCache extends AbstractCache {
         this.dateHidden = cache.getDateHidden();
         this.state = cache.getState();
         this.country = cache.getCountry();
-        this.apiState = cache.getApiState();
+        this.apiState = cache.getApiStatus();
         this.note = cache.getTmpNote();
         this.solver = cache.getTmpSolver();
         this.infoRead = cache.infoRead;
@@ -578,13 +578,13 @@ public class MutableCache extends AbstractCache {
     }
 
     @Override
-    public byte getApiState() {
+    public byte getApiStatus() {
         if (!infoRead) readInfoFromDB();
         return this.apiState;
     }
 
     @Override
-    public void setApiState(byte value) {
+    public void setApiStatus(byte value) {
         this.apiState = value;
     }
 

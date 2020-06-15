@@ -466,7 +466,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                         0,// TODO handle Listing CheckSum
                                         cache.getState(),
                                         cache.getCountry(),
-                                        cache.getApiState()
+                                        cache.getApiStatus()
                                 ).commit();
                             } catch (Exception e) {
                                 log.error("Can't write Cache Info" +
