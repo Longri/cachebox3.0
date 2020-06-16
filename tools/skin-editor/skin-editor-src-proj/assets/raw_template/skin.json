@@ -850,7 +850,7 @@
     },
     "contactOwner": {
       "path": "svg/contactOwner.svg",
-      "scale": 1.4737
+      "scale": 1
     },
     "cursor": {
       "path": "svg/cursor.svg",
@@ -3075,6 +3075,11 @@
       "middle": "disabledOverlay1",
       "large": "disabledOverlay2"
     },
+    "selectOverlay": {
+      "small": "selectOverlay",
+      "middle": "selectOverlay",
+      "large": "selectOverlay"
+    },
     "mapAPE": {
       "small": "Cache12",
       "middle": "Cache24",
@@ -3234,11 +3239,6 @@
       "small": "Wikipedia12",
       "middle": "Wikipedia24",
       "large": "mapWikipedia2"
-    },
-    "selectOverlay": {
-      "small": "selectOverlay",
-      "middle": "selectOverlay",
-      "large": "selectOverlay"
     }
   },
   "de.longri.cachebox3.gui.skin.styles.ScaledSize": {
@@ -3357,8 +3357,7 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapArrowStyle": {
-    "mapUndefined": {},
-    "myLocation": {
+    "default": {
       "myLocation": "myLocation",
       "myLocationTransparent": "myLocationTransparent",
       "myLocationCar": "myLocationCar"
@@ -3395,7 +3394,7 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapInfoPanelStyle": {
-    "infoPanel": {
+    "default": {
       "background": "map-info-panel-background_9_Patch",
       "distanceUnitLabel_Color": "font_color",
       "speedUnitLabel_Color": "font_color",

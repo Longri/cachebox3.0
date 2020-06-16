@@ -224,9 +224,9 @@ public class MapView extends AbstractView {
         //add Bitmaps from MapArrowStyle
         MapArrowStyle mapArrowStyle = null;
         try {
-            mapArrowStyle = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
+            mapArrowStyle = VisUI.getSkin().get(MapArrowStyle.class);
         } catch (Exception e) {
-            log.error("get MapArrowStyle 'myLocation'", e);
+            log.error("get MapArrowStyle", e);
         }
 
         if (mapArrowStyle != null) {
@@ -615,16 +615,15 @@ public class MapView extends AbstractView {
 
         directLineLayer = new DirectLineLayer(cacheboxMapAdapter);
         mapScaleBarLayer = new MapScaleBarLayer(cacheboxMapAdapter, mapScaleBar);
-        wayPointLayer = new WaypointLayer(this, cacheboxMapAdapter, CB.textureRegionMap);
+        wayPointLayer = new WaypointLayer(this, cacheboxMapAdapter);
         wayPointLayer.setLastZoomLevel(Config.lastZoomLevel.getValue());
         MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
         mapPosition.setPosition(Config.mapInitLatitude.getValue(), Config.mapInitLongitude.getValue());
         cacheboxMapAdapter.setMapPosition(mapPosition);
 
-        MapArrowStyle style = VisUI.getSkin().get("myLocation", MapArrowStyle.class);
+        MapArrowStyle style = VisUI.getSkin().get(MapArrowStyle.class);
         String bmpName = ((GetName) style.myLocation).getName();
-        TextureRegion textureRegion = CB.textureRegionMap.get(bmpName);
-        myLocationLayer = new LocationTextureLayer(cacheboxMapAdapter, textureRegion);
+        myLocationLayer = new LocationTextureLayer(cacheboxMapAdapter, CB.textureRegionMap.get(bmpName));
         myLocationLayer.locationRenderer.setAccuracyColor(Color.BLUE);
         myLocationLayer.locationRenderer.setIndicatorColor(Color.RED);
         myLocationLayer.locationRenderer.setBillboard(false);

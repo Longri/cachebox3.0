@@ -44,7 +44,10 @@ import de.longri.cachebox3.develop.tools.skin_editor.FontPickerDialog;
 import de.longri.cachebox3.develop.tools.skin_editor.SkinEditorGame;
 import de.longri.cachebox3.develop.tools.skin_editor.StyleTypes;
 import de.longri.cachebox3.gui.drawables.SvgNinePatchDrawable;
-import de.longri.cachebox3.gui.skin.styles.*;
+import de.longri.cachebox3.gui.skin.styles.CircularProgressStyle;
+import de.longri.cachebox3.gui.skin.styles.CompassViewStyle;
+import de.longri.cachebox3.gui.skin.styles.MapArrowStyle;
+import de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle;
 import de.longri.cachebox3.utils.SkinColor;
 import org.oscim.backend.canvas.Bitmap;
 
@@ -342,19 +345,6 @@ public class OptionsPane extends Table {
                 styles = (ObjectMap<String, Object>) game.skinProject.getAll(style1);
 
                 switch (widgetStyle) {
-                    case "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle":
-                        MapArrowStyle mapArrowStyle = game.skinProject.get("myLocation", MapArrowStyle.class);
-                        styles.put("myLocation", mapArrowStyle);
-
-                        MapCenterCrossStyle mapCenterCrossStyle = game.skinProject.get("centerCross", MapCenterCrossStyle.class);
-                        styles.put("centerCross", mapCenterCrossStyle);
-
-                        MapInfoPanelStyle mapInfoPanelStyle = game.skinProject.get("infoPanel", MapInfoPanelStyle.class);
-                        styles.put("infoPanel", mapInfoPanelStyle);
-
-                        DirectLineRendererStyle directLineRendererStyle = game.skinProject.get("directLine", DirectLineRendererStyle.class);
-                        styles.put("directline", directLineRendererStyle);
-                        break;
                     case "de.longri.cachebox3.gui.skin.styles.CompassStyle":
                         CompassViewStyle compassViewStyle = game.skinProject.get("compassViewStyle", CompassViewStyle.class);
                         styles.put("compassViewStyle", compassViewStyle);

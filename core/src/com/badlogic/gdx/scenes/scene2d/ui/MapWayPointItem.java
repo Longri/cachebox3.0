@@ -38,12 +38,12 @@ public class MapWayPointItem extends Coordinate {
     public boolean visible;
 
 
-    public MapWayPointItem(Coordinate pos, Object obj, Regions regions, boolean selected) {
+    public MapWayPointItem(Coordinate pos, Object obj, Regions regions, boolean _selected) {
         super(pos.getLatitude(), pos.getLongitude());
         geoPoint = new GeoPoint(pos.getLatitude(), pos.getLongitude());
         this.dataObject = obj;
         cachedHash = hashCode();
-        this.selected = selected;
+        selected = _selected;
 
         // extract regions if regions not NULL
         if (regions == null) {
@@ -52,9 +52,9 @@ public class MapWayPointItem extends Coordinate {
             large = null;
             return;
         }
-        Array<TextureRegion> smallList = new Array<TextureRegion>(new TextureRegion[0]);
-        Array<TextureRegion> middleList = new Array<TextureRegion>(new TextureRegion[0]);
-        Array<TextureRegion> largeList = new Array<TextureRegion>(new TextureRegion[0]);
+        Array<TextureRegion> smallList = new Array<>(new TextureRegion[0]);
+        Array<TextureRegion> middleList = new Array<>(new TextureRegion[0]);
+        Array<TextureRegion> largeList = new Array<>(new TextureRegion[0]);
 
 
         boolean isSelected = false;

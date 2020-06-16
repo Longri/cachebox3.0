@@ -216,7 +216,7 @@ public class TestUtils {
                 = mapInfoPanelStyle.speedUnitLabel_Font
                 = mapInfoPanelStyle.speedLabel_Font
                 = new BitmapFont();
-        VisUI.getSkin().add("infoPanel", mapInfoPanelStyle, MapInfoPanelStyle.class);
+        VisUI.getSkin().add("default", mapInfoPanelStyle, MapInfoPanelStyle.class);
 
         //de.longri.cachebox3.gui.skin.styles.CompassStyle registered with name: mapCompassStyle
         CompassStyle compassStyle = new CompassStyle();
