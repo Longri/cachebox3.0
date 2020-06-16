@@ -163,14 +163,14 @@ public class Settings extends Settings_Skin {
     public static final SettingString quickButtonList = (SettingString) settingsList.addSetting(new SettingString("quickButtonList", QuickList, NORMAL, DefaultQuickButtons, Global, ACB));
 
     public static final SettingBool showLiveButton = (SettingBool) settingsList.addSetting(new SettingBool("ShowLiveMap", LiveMap, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingEnum<LiveMapQue.Live_Radius> liveRadius = new SettingEnum<LiveMapQue.Live_Radius>("LiveRadius", LiveMap, NORMAL, LiveMapQue.Live_Radius.Zoom_14,
-            SettingStoreType.Global, SettingUsage.ACB, LiveMapQue.Live_Radius.Zoom_14);
-    public static final SettingEnum<LiveCacheTime> liveCacheTime = new SettingEnum<LiveCacheTime>("LiveCacheTime", LiveMap, NORMAL, LiveCacheTime.h_6, SettingStoreType.Global, SettingUsage.ACB, LiveCacheTime.h_6);
+    public static final SettingEnum<LiveMapQue.Live_Radius> liveRadius = new SettingEnum<>("LiveRadius", LiveMap, NORMAL, LiveMapQue.Live_Radius.Zoom_14,
+            Global, ACB, LiveMapQue.Live_Radius.Zoom_14); // (SettingEnum<LiveMapQue.Live_Radius>) settingsList.addSetting()
+    public static final SettingEnum<LiveCacheTime> liveCacheTime = new SettingEnum<>("LiveCacheTime", LiveMap, NORMAL, LiveCacheTime.h_6, Global, ACB, LiveCacheTime.h_6); // (SettingEnum<LiveCacheTime>) settingsList.addSetting()
     public static final SettingInt liveMaxCount = (SettingInt) settingsList.addSetting(new SettingInt("LiveMaxCount", LiveMap, EXPERT, 350, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool liveExcludeFounds = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeFounds", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool liveExcludeOwn = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeOwn", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool liveMapEnabled = (SettingBool) settingsList.addSetting(new SettingBool("LiveMapEnabeld", LiveMap, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingColor liveMapBackgroundColor = (SettingColor) settingsList.addSetting(new SettingColor("LiveMapBackgroundColor", LiveMap, EXPERT, new HSV_Color(0.8f, 0.8f, 1f, 1f), SettingStoreType.Global, SettingUsage.ACB));
+    public static final SettingColor liveMapBackgroundColor = (SettingColor) settingsList.addSetting(new SettingColor("LiveMapBackgroundColor", LiveMap, NEVER, new HSV_Color(0.8f, 0.8f, 1f, 1f), SettingStoreType.Global, SettingUsage.ACB));
 
     //    public static final SettingBool showSandbox = (SettingBool) settingsList.addSetting(new SettingBool("showSandbox", RememberAsk, NORMAL, false, SettingStoreType.Global, SettingUsage.ACB));
     //    public static final SettingInt gpsUpdateTime = (SettingInt) settingsList.addSetting(new SettingInt("gpsUpdateTime", Gps, NORMAL, 500, SettingStoreType.Global, SettingUsage.ACB));

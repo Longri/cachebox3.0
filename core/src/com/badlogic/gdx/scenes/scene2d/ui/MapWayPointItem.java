@@ -20,13 +20,11 @@ import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.geocluster.GeoBoundingBoxInt;
 import org.oscim.core.GeoPoint;
 import org.oscim.renderer.atlas.TextureRegion;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
 public class MapWayPointItem extends Coordinate {
-    private final static Logger log = LoggerFactory.getLogger(MapWayPointItem.class);
+    // private final static Logger log = LoggerFactory.getLogger(MapWayPointItem.class);
 
     public final Object dataObject; // Cache.class or WayPoint.class
 
@@ -76,22 +74,27 @@ public class MapWayPointItem extends Coordinate {
         middleList.add(regions.normal.middle);
         largeList.add(regions.normal.large);
 
+        // last add is under the others
+        if (regions.liteOverlay != null) {
+            if (regions.liteOverlay.small != null) smallList.add(regions.liteOverlay.small);
+            if (regions.liteOverlay.middle != null) middleList.add(regions.liteOverlay.middle);
+            if (regions.liteOverlay.large != null) largeList.add(regions.liteOverlay.large);
+        }
+
 
         while (smallList.removeValue(null, true)) ;
         while (middleList.removeValue(null, true)) ;
         while (largeList.removeValue(null, true)) ;
 
-
         if (isSelected) {
-            // set to large icons
+            // a selected cache is always large
             small = largeList.shrink();
             middle = largeList.shrink();
-            large = largeList.shrink();
         } else {
             small = smallList.shrink();
             middle = middleList.shrink();
-            large = largeList.shrink();
         }
+        large = largeList.shrink();
 
     }
 
@@ -154,12 +157,13 @@ public class MapWayPointItem extends Coordinate {
     }
 
     public static class Regions {
-        final SizedRegions normal, selectedOverlay, disabledOverlay;
+        final SizedRegions normal, selectedOverlay, disabledOverlay, liteOverlay;
 
-        public Regions(SizedRegions normal, SizedRegions selectedOverlay, SizedRegions disabledOverlay) {
-            this.normal = normal;
-            this.selectedOverlay = selectedOverlay;
-            this.disabledOverlay = disabledOverlay;
+        public Regions(SizedRegions _normal, SizedRegions _selectedOverlay, SizedRegions _disabledOverlay, SizedRegions _liteOverlay) {
+            normal = _normal;
+            selectedOverlay = _selectedOverlay;
+            disabledOverlay = _disabledOverlay;
+            liteOverlay = _liteOverlay;
         }
     }
 

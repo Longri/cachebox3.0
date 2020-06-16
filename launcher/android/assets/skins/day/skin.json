@@ -956,6 +956,18 @@
       "path": "svg/dialog_title.svg",
       "scale": 1
     },
+    "liteOverlaySmall": {
+      "path": "svg/liteOverlay.svg",
+      "scale": 0.25
+    },
+    "liteOverlayMiddle": {
+      "path": "svg/liteOverlay.svg",
+      "scale": 0.5
+    },
+    "liteOverlayLarge": {
+      "path": "svg/liteOverlay.svg",
+      "scale": 1
+    },
     "disabledOverlay0": {
       "path": "svg/disabledOverlay0.svg",
       "scale": 0.2
@@ -1556,6 +1568,10 @@
       "path": "svg/me1MyParking.svg",
       "scale": 1
     },
+    "MyParking36": {
+      "path": "svg/me1MyParking.svg",
+      "scale": 0.75
+    },
     "MyParking12": {
       "path": "svg/me1MyParking.svg",
       "scale": 0.25
@@ -1599,6 +1615,10 @@
     "mapParkingArea48": {
       "path": "svg/mapParkingArea.svg",
       "scale": 1
+    },
+    "mapParkingArea36": {
+      "path": "svg/mapParkingArea.svg",
+      "scale": 0.75
     },
     "mapParkingArea12": {
       "path": "svg/mapParkingArea.svg",
@@ -3070,6 +3090,11 @@
     }
   },
   "de.longri.cachebox3.gui.skin.styles.MapWayPointItemStyle": {
+    "liteOverlay": {
+      "small": "liteOverlaySmall",
+      "middle": "liteOverlayMiddle",
+      "large": "liteOverlayLarge"
+    },
     "disabledOverlay": {
       "small": "disabledOverlay0",
       "middle": "disabledOverlay1",
@@ -3178,7 +3203,7 @@
     "mapMyParking": {
       "small": "MyParking12",
       "middle": "MyParking24",
-      "large": "MyParking48"
+      "large": "MyParking36"
     },
     "mapMystery": {
       "small": "Mystery12",
@@ -3193,7 +3218,7 @@
     "mapParkingArea": {
       "small": "mapParkingArea12",
       "middle": "mapParkingArea24",
-      "large": "mapParkingArea48"
+      "large": "mapParkingArea36"
     },
     "mapReferencePoint": {
       "small": "ReferencePoint12",

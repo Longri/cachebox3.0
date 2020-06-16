@@ -162,9 +162,14 @@ public class EditCache extends Activity {
         cacheOwner.setText(cache.getOwner());
         cacheState.setText(cache.getState());
         cacheCountry.setText(cache.getCountry());
-        if (cache.getLongDescription().equals("\n") || cache.getLongDescription().equals("\n\r"))
-            cache.setLongDescription("");
-        cacheDescription.setText(cache.getLongDescription());
+        if (cache.isLive()) {
+            cacheDescription.setText("");
+        }
+        else {
+            if (cache.getLongDescription().equals("\n") || cache.getLongDescription().equals("\n\r"))
+                cache.setLongDescription("");
+            cacheDescription.setText(cache.getLongDescription());
+        }
         show();
     }
 

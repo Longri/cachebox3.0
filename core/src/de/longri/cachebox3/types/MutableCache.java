@@ -528,7 +528,7 @@ public class MutableCache extends AbstractCache {
 
     @Override
     public boolean isLive() {
-        return false;
+        return apiState == IS_LITE;
     }
 
     @Override
@@ -698,7 +698,8 @@ public class MutableCache extends AbstractCache {
     @Override
     public CharSequence getLongDescription() {
         if (!textRead) readTextFieldsFromDB();
-        return this.longDescription;
+        if (longDescription == null) longDescription = "";
+        return longDescription;
     }
 
     @Override
