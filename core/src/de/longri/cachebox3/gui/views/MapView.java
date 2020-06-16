@@ -1258,6 +1258,10 @@ public class MapView extends AbstractView {
         cacheboxMapAdapter.setMapPosition(actPosition);
     }
 
+    public MapStateButton getMapStateButton() {
+        return mapStateButton;
+    }
+
     public static class FZKThemesInfo {
         public String Name;
         public String Description;

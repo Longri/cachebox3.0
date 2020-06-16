@@ -28,32 +28,23 @@ import de.longri.cachebox3.gui.map.MapMode;
 import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.translation.Translation;
 import org.oscim.event.Event;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Longri on 01.10.16.
  */
 public class MapStateButton extends SelectBox<MapMode> implements Disposable {
 
-    private final static Logger log = LoggerFactory.getLogger(MapStateButton.class);
-
-    public interface StateChangedListener {
-        void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event);
-    }
+    // private final static Logger log = LoggerFactory.getLogger(MapStateButton.class);
 
     private final MapStateButtonStyle style;
     private final StateChangedListener stateChangedListener;
-    private boolean isLongPressed = false;
-
-
     public MapStateButton(StateChangedListener _stateChangedListener) {
         style = VisUI.getSkin().get(MapStateButtonStyle.class);
 
         this.stateChangedListener = _stateChangedListener;
         if (style.stateCar == null || style.stateFree == null || style.stateLock == null
                 || style.stateWaypoint == null || style.stateGps == null) {
-           return;
+            return;
         }
 
         // add values
@@ -79,7 +70,7 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
     @Override
     public void select(MapMode item) {
         super.select(item);
-        setMapMode(this.getSelected(), false, new Event());
+        setMapMode(item, false, new Event());
     }
 
     public void setMapMode(MapMode mapMode, Event event) {
@@ -87,14 +78,12 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
     }
 
     public void setMapMode(MapMode mapMode, boolean programmatic, Event event) {
-        MapMode lastMode = CB.lastMapState.getMapMode();
-        log.debug("Set to Mode: {} from last Mode {} / fireEvet:{}", mapMode, lastMode, !programmatic);
+        // log.debug("Set to Mode: {} from last Mode {} / fireEvet:{}", mapMode, CB.lastMapState.getMapMode(), !programmatic);
         if (!programmatic && this.stateChangedListener != null)
-            this.stateChangedListener.stateChanged(mapMode, lastMode, event);
+            this.stateChangedListener.stateChanged(mapMode, CB.lastMapState.getMapMode(), event);
         super.select(mapMode);
         Gdx.graphics.requestRendering();
     }
-
 
     @Override
     public float getPrefWidth() {
@@ -115,7 +104,7 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
 
-        switch ( this.getSelected()) {
+        switch (this.getSelected()) {
             case FREE:
                 style.stateFree.draw(batch, getX(), getY(), getWidth(), getHeight());
                 break;
@@ -133,17 +122,21 @@ public class MapStateButton extends SelectBox<MapMode> implements Disposable {
                 break;
         }
 
+        boolean isLongPressed = false;
         if (isPressed && !isLongPressed && style.pressedOverdraw != null) {
             style.pressedOverdraw.draw(batch, getX(), getY(), getWidth(), getHeight());
         }
     }
-
 
     @Override
     public void dispose() {
 
     }
 
+
+    public interface StateChangedListener {
+        void stateChanged(MapMode mapMode, MapMode lastMapMode, Event event);
+    }
 
     public static class MapStateButtonStyle {
         public Drawable stateWaypoint, stateGps, stateFree, stateLock, stateCar, pressedOverdraw;

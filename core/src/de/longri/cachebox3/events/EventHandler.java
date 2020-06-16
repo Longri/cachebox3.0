@@ -407,7 +407,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         if (this.selectedCoordinate == null || !this.selectedCoordinate.equals(event.coordinate)) {
             this.selectedCoordinate = event.coordinate;
             fire(event);
-            CB.lastMapState.setMapMode(MapMode.WP);
+            CB.lastMapState.setMapMode(MapMode.WP); // or no selection
             CB.lastMapState.setPosition(selectedCoordinate);
             fireDistanceChanged(event.ID);
         }
