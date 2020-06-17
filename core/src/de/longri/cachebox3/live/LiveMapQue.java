@@ -1,15 +1,18 @@
 package de.longri.cachebox3.live;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.Descriptor;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.Category;
 import de.longri.cachebox3.types.GpxFilename;
@@ -353,8 +356,18 @@ public class LiveMapQue {
         descriptorStack.clear();
     }
 
-    public enum Live_Radius {
-        Zoom_13, Zoom_14
+    public enum Live_Radius implements SelectBoxItem {
+        Zoom_13, Zoom_14;
+
+        @Override
+        public Drawable getDrawable() {
+            return null;
+        }
+
+        @Override
+        public String getName() {
+            return Translation.get(name()).toString();
+        }
     }
 }
 

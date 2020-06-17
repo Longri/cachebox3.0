@@ -15,9 +15,12 @@
  */
 package de.longri.cachebox3.settings;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.live.LiveMapQue;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Language;
+import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.HSV_Color;
 
 import static de.longri.cachebox3.settings.types.SettingCategory.*;
@@ -163,9 +166,9 @@ public class Settings extends Settings_Skin {
     public static final SettingString quickButtonList = (SettingString) settingsList.addSetting(new SettingString("quickButtonList", QuickList, NORMAL, DefaultQuickButtons, Global, ACB));
 
     public static final SettingBool showLiveButton = (SettingBool) settingsList.addSetting(new SettingBool("ShowLiveMap", LiveMap, NEVER, true, SettingStoreType.Global, SettingUsage.ACB));
-    public static final SettingEnum<LiveMapQue.Live_Radius> liveRadius = new SettingEnum<>("LiveRadius", LiveMap, NORMAL, LiveMapQue.Live_Radius.Zoom_14,
-            Global, ACB, LiveMapQue.Live_Radius.Zoom_14); // (SettingEnum<LiveMapQue.Live_Radius>) settingsList.addSetting()
-    public static final SettingEnum<LiveCacheTime> liveCacheTime = new SettingEnum<>("LiveCacheTime", LiveMap, NORMAL, LiveCacheTime.h_6, Global, ACB, LiveCacheTime.h_6); // (SettingEnum<LiveCacheTime>) settingsList.addSetting()
+    public static final SettingEnum<LiveMapQue.Live_Radius> liveRadius = (SettingEnum<LiveMapQue.Live_Radius>) settingsList.addSetting(new SettingEnum<>("LiveRadius", LiveMap, NORMAL, LiveMapQue.Live_Radius.Zoom_14,
+            Global, ACB, LiveMapQue.Live_Radius.Zoom_14)); // (SettingEnum<LiveMapQue.Live_Radius>) settingsList.addSetting()
+    public static final SettingEnum<LiveCacheTime> liveCacheTime = (SettingEnum<LiveCacheTime>) settingsList.addSetting(new SettingEnum<>("LiveCacheTime", LiveMap, NORMAL, LiveCacheTime.h_6, Global, ACB, LiveCacheTime.h_6)); // (SettingEnum<LiveCacheTime>) settingsList.addSetting()
     public static final SettingInt liveMaxCount = (SettingInt) settingsList.addSetting(new SettingInt("LiveMaxCount", LiveMap, EXPERT, 350, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool liveExcludeFounds = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeFounds", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
     public static final SettingBool liveExcludeOwn = (SettingBool) settingsList.addSetting(new SettingBool("LiveExcludeOwn", LiveMap, NORMAL, true, SettingStoreType.Global, SettingUsage.ACB));
@@ -214,7 +217,7 @@ public class Settings extends Settings_Skin {
     //    public static final SettingBool newInstall = (SettingBool) settingsList.addSetting(new SettingBool("newInstall", Internal, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
     //    public static final SettingBool FieldnotesUploadAll = (SettingBool) settingsList.addSetting(new SettingBool("FieldnotesUploadAll", API, NEVER, false, SettingStoreType.Global, SettingUsage.ACB));
 
-    public enum LiveCacheTime {
+    public enum LiveCacheTime implements SelectBoxItem {
         min_10, min_30, min_60, h_6, h_12, h_24;
 
         public int getLifetime() {
@@ -235,6 +238,16 @@ public class Settings extends Settings_Skin {
                     return 1440;
 
             }
+        }
+
+        @Override
+        public Drawable getDrawable() {
+            return null;
+        }
+
+        @Override
+        public String getName() {
+            return Translation.get(name()).toString();
         }
     }
 

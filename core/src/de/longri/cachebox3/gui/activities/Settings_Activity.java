@@ -58,6 +58,7 @@ import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.types.*;
 import de.longri.cachebox3.translation.Translation;
+import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.utils.CharSequenceUtil;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.SoundCache;
@@ -674,7 +675,7 @@ public class Settings_Activity extends ActivityBase {
             value = setting.getValue();
             defaultValue = setting.getDefaultValue();
         }
-        final VisLabel valuelabel = new VisLabel("Value: " + value, valueStyle);
+        final VisLabel valuelabel = new VisLabel( Translation.get("value") + ": " + value, valueStyle);
         valuelabel.setWrap(true);
         valuelabel.setAlignment(Align.left);
         table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -686,12 +687,12 @@ public class Settings_Activity extends ActivityBase {
                     if (setting.equals(Config.quickButtonList)) {
                         EditQuickButtonList.getInstance(setting.getName(), null).execute(
                                 new ChangeListener() {
-                            @Override
-                            public void changed(ChangeEvent event, Actor actor) {
-                                backClick();
-                                showCategory(setting.getCategory(), true);
-                            }
-                        });
+                                    @Override
+                                    public void changed(ChangeEvent event, Actor actor) {
+                                        backClick();
+                                        showCategory(setting.getCategory(), true);
+                                    }
+                                });
                     } else {
                         // show multi line input dialog
                         PlatformConnector.getMultilineTextInput(new Input.TextInputListener() {
@@ -734,6 +735,9 @@ public class Settings_Activity extends ActivityBase {
         SelectBoxStyle style = VisUI.getSkin().get(SelectBoxStyle.class);
         style.up = null;
         style.down = null;
+        style.font = valueStyle.font;
+        style.fontColor = valueStyle.fontColor;
+
         final SelectBox selectBox = new SelectBox(style, null);
         selectBox.set(itemList);
         if (setting == Config.localization) {
@@ -754,11 +758,8 @@ public class Settings_Activity extends ActivityBase {
         });
         selectBox.setHideWithItemClick(false);
 
-        ListViewItem table = new ListViewItem(listIndex) {
-            @Override
-            public void dispose() {
-            }
-        };
+        ListViewItem table = createItem(listIndex, setting.getName());
+        table.row();
 
         table.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -776,6 +777,11 @@ public class Settings_Activity extends ActivityBase {
         });
 
         table.add(selectBox).width(new Value.Fixed(getWidth() - (CB.scaledSizes.MARGINx2 * 2))).center();
+
+        String defaultValue = Translation.get(setting.getDefaultValue()).toString();
+        if (defaultValue.startsWith("$ID")) defaultValue = setting.getDefaultValue();
+        addDescriptionAndDefaultInfo(table, setting.getName(), defaultValue);
+
         return table;
     }
 
@@ -788,7 +794,7 @@ public class Settings_Activity extends ActivityBase {
 
         // add value line
         table.row();
-        final VisLabel valuelabel = new VisLabel("Value: " + setting.getValue(), valueStyle);
+        final VisLabel valuelabel = new VisLabel(Translation.get("value") + ": " + setting.getValue(), valueStyle);
         valuelabel.setWrap(true);
         valuelabel.setAlignment(Align.left);
         table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -808,7 +814,7 @@ public class Settings_Activity extends ActivityBase {
                         fileChooser.setSelectionReturnListener(fileHandle -> {
                             if (fileHandle == null) return;
                             setting.setValue(fileHandle.path());
-                            valuelabel.setText("Value: " + setting.getValue());
+                            valuelabel.setText(Translation.get("value") + ": " + setting.getValue());
                         });
                         fileChooser.setDirectory(CB.WorkPathFileHandle, false);
                         fileChooser.show();
@@ -848,7 +854,7 @@ public class Settings_Activity extends ActivityBase {
 
         // add value line
         table.row();
-        final VisLabel valuelabel = new VisLabel("Value: " + setting.getValue(), valueStyle);
+        final VisLabel valuelabel = new VisLabel(Translation.get("value") + ": " + setting.getValue(), valueStyle);
         valuelabel.setWrap(true);
         valuelabel.setAlignment(Align.left);
         table.add(valuelabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
@@ -874,7 +880,7 @@ public class Settings_Activity extends ActivityBase {
                                 CB.viewmanager.toast(WriteProtectionMsg, ViewManager.ToastLength.EXTRA_LONG);
                             } else {
                                 setting.setValue(path);
-                                valuelabel.setText("Value: " + setting.getValue());
+                                valuelabel.setText(Translation.get("value") + ": " + setting.getValue());
                             }
                         });
                         folderChooser.setDirectory(CB.WorkPathFileHandle, true);
@@ -1026,6 +1032,8 @@ public class Settings_Activity extends ActivityBase {
         SelectBoxStyle style = VisUI.getSkin().get(SelectBoxStyle.class);
         style.up = null;
         style.down = null;
+        style.font = valueStyle.font;
+        style.fontColor = valueStyle.fontColor;
 
         final AtomicBoolean callBackClick = new AtomicBoolean(false);
         final SelectBox selectBox = new SelectBox(style, null);
@@ -1122,8 +1130,8 @@ public class Settings_Activity extends ActivityBase {
             }
         });
 
-
-        addDescriptionAndDefaultInfo(table, setting.getName(), setting.getDefaultValue().toString());
+        CompoundCharSequence defaultValue = setting.getDefaultValue() ? Translation.get("yes") : Translation.get("no");
+        addDescriptionAndDefaultInfo(table, setting.getName(), defaultValue.toString());
         table.setWidth(itemWidth);
         table.setPrefWidth(itemWidth);
         table.invalidate();
@@ -1175,7 +1183,7 @@ public class Settings_Activity extends ActivityBase {
         // add defaultValue line
         if (settingDefaultValue.length() > 0) {
             table.row();
-            VisLabel desclabel = new VisLabel("default: " + settingDefaultValue, defaultValueStyle);
+            VisLabel desclabel = new VisLabel(Translation.get("default") + ": " + settingDefaultValue, defaultValueStyle);
             desclabel.setWrap(true);
             desclabel.setAlignment(Align.left);
             table.add(desclabel).colspan(2).pad(CB.scaledSizes.MARGIN).expandX().fillX();
