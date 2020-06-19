@@ -314,7 +314,7 @@ public class Coordinate {
                 this.speed,
                 this.isGPSprovided,
                 this.date);
-        if (hash == 0) { //realy?
+        if (hash == 0) { //really?
             hash = 1;
         }
         return hash;

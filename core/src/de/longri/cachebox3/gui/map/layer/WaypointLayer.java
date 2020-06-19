@@ -426,18 +426,19 @@ public class WaypointLayer extends Layer implements GestureListener, CacheListCh
 
     @Override
     public boolean onGesture(Gesture g, MotionEvent e) {
-        if (!(e instanceof MotionHandler)) return false;
-        if (g instanceof Gesture.Tap) {
-            boolean result = activateSelectedItems(e, mActiveItemSingleTap);
-            if (!result && mapView.infoBubbleVisible()) {
-                mapView.closeInfoBubble();
+        if (e instanceof MotionHandler) {
+            if (g instanceof Gesture.Tap) {
+                boolean result = activateSelectedItems(e, mActiveItemSingleTap);
+                if (!result && mapView.infoBubbleVisible()) {
+                    mapView.closeInfoBubble();
+                }
+                return result;
             }
-            return result;
+
+            if (g instanceof Gesture.LongPress)
+                return activateSelectedItems(e, mActiveItemLongPress);
+
         }
-
-        if (g instanceof Gesture.LongPress)
-            return activateSelectedItems(e, mActiveItemLongPress);
-
         return false;
     }
 

@@ -18,27 +18,24 @@ package de.longri.cachebox3.locator.track;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.locator.Coordinate;
+import org.oscim.layers.PathLayer;
 
-public class Track {
-    private Array<Coordinate> trackPoints;
+public class Track extends Array<Coordinate> {
     private CharSequence name;
     private CharSequence fileName;
     private Color color;
     private boolean isVisible;
-    private boolean isActualTrack;
     private double trackLength;
-    private double altitudeDifference;
-
+    private double elevationDifference;
+    private PathLayer trackLayer;
 
     public Track(CharSequence _name) {
-        trackPoints = new Array<>();
         name = _name;
         color = Color.MAGENTA; // or do config?
         fileName = "";
         trackLength = 0;
         isVisible = false;
-        isActualTrack = false;
-        altitudeDifference = 0;
+        elevationDifference = 0;
     }
 
     public String getName() {
@@ -53,6 +50,10 @@ public class Track {
         return color;
     }
 
+    public int getLineColor() {
+        return 0xFF000000 | ((int)(255 * color.r) << 16) | ((int)(255 * color.g) << 8) | ((int)(255 * color.b));
+    }
+
     public void setColor(Color _color) {
         color = _color;
     }
@@ -65,24 +66,12 @@ public class Track {
         fileName = _fileName;
     }
 
-    public Array<Coordinate> getTrackPoints() {
-        return trackPoints;
-    }
-
     public boolean isVisible() {
         return isVisible;
     }
 
     public void setVisible(boolean visible) {
         isVisible = visible;
-    }
-
-    public boolean isActualTrack() {
-        return isActualTrack;
-    }
-
-    public void setActualTrack(boolean actualTrack) {
-        isActualTrack = actualTrack;
     }
 
     public double getTrackLength() {
@@ -93,12 +82,20 @@ public class Track {
         this.trackLength = trackLength;
     }
 
-    public double getAltitudeDifference() {
-        return altitudeDifference;
+    public double getElevationDifference() {
+        return elevationDifference;
     }
 
-    public void setAltitudeDifference(double altitudeDifference) {
-        this.altitudeDifference = altitudeDifference;
+    public void setElevationDifference(double altitudeDifference) {
+        this.elevationDifference = altitudeDifference;
+    }
+
+    public PathLayer getTrackLayer() {
+        return trackLayer;
+    }
+
+    public void setTrackLayer(PathLayer pathLayer) {
+        trackLayer = pathLayer;
     }
 
 }

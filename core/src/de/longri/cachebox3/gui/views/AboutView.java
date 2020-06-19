@@ -135,19 +135,17 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
     @Override
     public void positionChanged(PositionChangedEvent event) {
         pos = event.pos;
-
     }
 
     @Override
     public void distanceChanged(de.longri.cachebox3.events.DistanceChangedEvent event) {
         distance = event.distance;
-
     }
 
+    @Override
     public String toString() {
         return "AboutView";
     }
-
 
     //################### Context menu implementation ####################################
     @Override
@@ -163,8 +161,6 @@ public class AboutView extends AbstractTableView implements PositionChangedListe
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;
-        if (!(other instanceof AboutView)) return false;
-
-        return true;
+        return other instanceof AboutView;
     }
 }

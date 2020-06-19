@@ -41,7 +41,7 @@ public class MapState {
     private final Coordinate freePosition = new Coordinate(0, 0);
     private float orientation;
     private float tilt;
-    private boolean changed = false;
+    private boolean changed = false; // must be false: for first time set MapState from database
 
     public MapState() {
     }

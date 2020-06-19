@@ -64,6 +64,8 @@ import de.longri.cachebox3.gui.widgets.menu.OptionMenu;
 import de.longri.cachebox3.live.LiveButton;
 import de.longri.cachebox3.live.LiveMapQue;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.locator.track.Track;
+import de.longri.cachebox3.locator.track.TrackList;
 import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings_Const;
@@ -84,14 +86,12 @@ import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.backend.canvas.Color;
-import org.oscim.core.MapPosition;
-import org.oscim.core.MercatorProjection;
-import org.oscim.core.Point;
-import org.oscim.core.Tile;
+import org.oscim.core.*;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.layers.GroupLayer;
 import org.oscim.layers.Layer;
+import org.oscim.layers.PathLayer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
@@ -279,7 +279,7 @@ public class MapView extends AbstractView {
                 setCenterCrossLayerEnabled(false);
             } else if (lastMapMode == MapMode.CAR) {
                 log.debug("Disable Carmode! Activate last Mode:{}", CB.lastMapState);
-                restoreMapstate(CB.lastMapStateBeforeCar);
+                restoreMapState(CB.lastMapStateBeforeCar);
             } else if (mapMode == MapMode.GPS) {
                 log.debug("Activate GPS Mode");
                 storeMapstate(mapMode, null);
@@ -324,12 +324,13 @@ public class MapView extends AbstractView {
                 return super.getMenu();
             }
         };
+        addActor(mapStateButton);
+
         infoPanel = new MapInfoPanel();
         infoPanel.setBounds(10, 100, 200, 100);
-        this.addActor(infoPanel);
+        addActor(infoPanel);
 
         createCacheboxMapAdapter();
-        addActor(mapStateButton);
 
         addActor(LiveButton.getInstance());
         LiveButton.getInstance().setVisible(Config.showLiveButton.getValue());
@@ -347,8 +348,8 @@ public class MapView extends AbstractView {
             positionChangedHandler.scale(value);
             CB.lastMapState.setZoom(FastMath.log2((int) value));
         });
-        this.zoomButton.pack();
-        this.addActor(zoomButton);
+        zoomButton.pack();
+        addActor(zoomButton);
     }
 
     private void storeMapstate(MapMode mapMode, MapMode beforeCar) {
@@ -373,19 +374,20 @@ public class MapView extends AbstractView {
         Config.AcceptChanges();
     }
 
-    private void restoreMapstate(MapState mapState) {
-
-        log.debug("restore MapState: " + mapState);
-
+    private void restoreMapState(MapState mapState) {
         MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
         mapPosition.scale = 1 << mapState.getZoom();
         mapPosition.bearing = mapState.getOrientation();
         mapPosition.tilt = mapState.getTilt();
         if (mapState.getFreePosition() != null)
             mapPosition.setPosition(mapState.getFreePosition().getLatitude(), mapState.getFreePosition().getLongitude());
+
         mapStateButton.setMapMode(mapState.getMapMode(), true, selfEvent);
         infoPanel.setMapOrientationMode(mapState.getMapOrientationMode());
         cacheboxMapAdapter.setMapPosition(mapPosition);
+
+        wayPointLayer.setLastZoomLevel(Config.lastZoomLevel.getValue());
+
         cacheboxMapAdapter.updateMap(true);
     }
 
@@ -487,7 +489,7 @@ public class MapView extends AbstractView {
                 CB.lastMapState.deserialize(Config.lastMapState.getValue());
                 CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
             }
-            restoreMapstate(CB.lastMapState);
+            restoreMapState(CB.lastMapState);
         } else
             menuInShow = false;
     }
@@ -502,10 +504,13 @@ public class MapView extends AbstractView {
     @Override
     public void dispose() {
         LiveMapQue.getInstance().cancelDownloads();
-        Config.lastZoomLevel.setValue(wayPointLayer.getLastZoomLevel());
+        /*
+        // is saved in MapState
         MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
         Config.mapInitLatitude.setValue(mapPosition.getLatitude());
         Config.mapInitLongitude.setValue(mapPosition.getLongitude());
+         */
+        Config.lastZoomLevel.setValue(wayPointLayer.getLastZoomLevel());
         Config.AcceptChanges();
         log.debug("Dispose MapView");
         CacheboxMain.drawMap.set(false);
@@ -616,10 +621,6 @@ public class MapView extends AbstractView {
         directLineLayer = new DirectLineLayer(cacheboxMapAdapter);
         mapScaleBarLayer = new MapScaleBarLayer(cacheboxMapAdapter, mapScaleBar);
         wayPointLayer = new WaypointLayer(this, cacheboxMapAdapter);
-        wayPointLayer.setLastZoomLevel(Config.lastZoomLevel.getValue());
-        MapPosition mapPosition = cacheboxMapAdapter.getMapPosition();
-        mapPosition.setPosition(Config.mapInitLatitude.getValue(), Config.mapInitLongitude.getValue());
-        cacheboxMapAdapter.setMapPosition(mapPosition);
 
         MapArrowStyle style = VisUI.getSkin().get(MapArrowStyle.class);
         String bmpName = ((GetName) style.myLocation).getName();
@@ -635,15 +636,37 @@ public class MapView extends AbstractView {
 
         centerCrossLayer = new CenterCrossLayer(cacheboxMapAdapter);
 
-
         if (tileGrid)
             layerGroup.layers.add(new TileGridLayer(cacheboxMapAdapter));
-
         layerGroup.layers.add(wayPointLayer);
         layerGroup.layers.add(directLineLayer);
         layerGroup.layers.add(myLocationLayer);
         layerGroup.layers.add(mapScaleBarLayer);
         layerGroup.layers.add(centerCrossLayer);
+
+        if (TrackRecorder.getInstance().isStarted()) {
+            Track track = TrackRecorder.getInstance().getRecordingTrack();
+            PathLayer pathLayer = new PathLayer(cacheboxMapAdapter, track.getLineColor(), 5);
+            track.setTrackLayer(pathLayer);
+            cacheboxMapAdapter.layers().add(pathLayer);
+            for (int i = 0; i < track.size ; i++) {
+                pathLayer.addPoint(new GeoPoint(track.get(i).getLatitude(), track.get(i).getLongitude()));
+            }
+        }
+
+        // todo reduce no of points depending on zoom (Reduktion of Ploylines with Douglas-Peucker-Algorithmus)
+        // todo handle visibility changes in TrackListView / trackListChanged() in Tracklist
+        // todo style for track (line width, ...)
+        for (Track track : TrackList.getTrackList()) {
+            if (track.isVisible()) {
+                PathLayer pathLayer = new PathLayer(cacheboxMapAdapter, track.getLineColor(), 5);
+                track.setTrackLayer(pathLayer);
+                cacheboxMapAdapter.layers().add(pathLayer);
+                for (int i = 0; i < track.size ; i++) {
+                    pathLayer.addPoint(new GeoPoint(track.get(i).getLatitude(), track.get(i).getLongitude()));
+                }
+            }
+        }
 
         Config.ShowDirektLine.addChangedEventListener(() -> {
             if (cacheboxMapAdapter == null) return;
@@ -1200,18 +1223,32 @@ public class MapView extends AbstractView {
             }
             tdMenu.show();
         });
-        cm2.addMenuItem("start", null, () -> TrackRecorder.getInstance().startRecording()).setEnabled(!TrackRecorder.getInstance().recording);
-        if (TrackRecorder.getInstance().pauseRecording)
-            cm2.addMenuItem("continue", null, () -> TrackRecorder.getInstance().pauseRecording()).setEnabled(TrackRecorder.getInstance().recording);
+        cm2.addMenuItem("start", null, this::startTrackRecorder).setEnabled(!TrackRecorder.getInstance().isStarted());
+        if (TrackRecorder.getInstance().isPaused())
+            cm2.addMenuItem("continue", null, () -> TrackRecorder.getInstance().continueRecording()).setEnabled(TrackRecorder.getInstance().isStarted());
         else
-            cm2.addMenuItem("pause", null, () -> TrackRecorder.getInstance().pauseRecording()).setEnabled(TrackRecorder.getInstance().recording);
-        cm2.addMenuItem("stop", null, () -> TrackRecorder.getInstance().stopRecording()).setEnabled(TrackRecorder.getInstance().recording | TrackRecorder.getInstance().pauseRecording);
+            cm2.addMenuItem("pause", null, () -> TrackRecorder.getInstance().pauseRecording()).setEnabled(TrackRecorder.getInstance().isStarted());
+        cm2.addMenuItem("stop", null, this::stopTrackRecorder).setEnabled(TrackRecorder.getInstance().isStarted() || TrackRecorder.getInstance().isPaused());
         cm2.addDivider(0);
         cm2.addMenuItem("load", CB.getSkin().menuIcon.me3TrackList, new TrackListView()::selectTrackFileReadAndAddToTracks);
         //todo cm2.addMenuItem("generate", null, () -> TrackCreation.getInstance().execute());
         cm2.addDivider(1);
         cm2.addMenuItem("Tracks", CB.getSkin().menuIcon.me3TrackList, () -> CB.viewmanager.showView(new TrackListView()));
         cm2.show();
+    }
+
+    private void startTrackRecorder() {
+        TrackRecorder.getInstance().startRecording();
+        Track track = TrackRecorder.getInstance().getRecordingTrack();
+        PathLayer pathLayer = new PathLayer(cacheboxMapAdapter, track.getLineColor(), 5);
+        track.setTrackLayer(pathLayer);
+        cacheboxMapAdapter.layers().add(pathLayer);
+    }
+
+    private void stopTrackRecorder() {
+        TrackRecorder.getInstance().stopRecording();
+        Track track = TrackRecorder.getInstance().getRecordingTrack();
+        cacheboxMapAdapter.layers().remove(track.getTrackLayer());
     }
 
     public void clickOnItem(final MapWayPointItem item) {

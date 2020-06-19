@@ -40,7 +40,6 @@ import de.longri.cachebox3.gui.stages.StageManager;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.views.CacheListView;
 import de.longri.cachebox3.locator.manager.LocationHandler;
-import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.sqlite.Database;
@@ -123,13 +122,11 @@ public class CB {
     public static FileHandle WorkPathFileHandle;
     public static Color backgroundColor = new Color(0, 1, 0, 1);
     public static ScaledSizes scaledSizes;
-    public static Track currentRoute;
     public static LinkedHashMap<Object, TextureRegion> textureRegionMap;
     public static Image CB_Logo;
     public static Image backgroundImage;
     public static boolean isBackground = false;
     public static ThemeUsage currentThemeUsage = ThemeUsage.day;
-    public static int currentRouteCount = 0;
     static boolean mapScaleInitial = false;
     private static IRenderTheme actTheme;
     private static float globalScale = 1;
@@ -499,6 +496,10 @@ public class CB {
         log.debug("Read CacheList");
         DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, Database.Data.cacheList, sqlWhere, false, Config.ShowAllWaypoints.getValue());
         log.debug("Readed " + Database.Data.cacheList.size + " Caches into CacheList");
+
+        // do it here cause following code changes CB.lastMapState: so later checks for empty fail and so no restore happens
+        CB.lastMapState.deserialize(Config.lastMapState.getValue());
+        CB.lastMapStateBeforeCar.deserialize(Config.lastMapStateBeforeCar.getValue());
 
         // set selectedCache from last selected Cache
         String sGc = Config.LastSelectedCache.getValue();

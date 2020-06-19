@@ -18,6 +18,7 @@ import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.track.Track;
 import de.longri.cachebox3.locator.track.TrackList;
+import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.utils.HSV_Color;
@@ -44,10 +45,10 @@ import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
  * Created by Longri on 24.07.16.
  */
 public class TrackListView extends AbstractView {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(TrackListView.class);
+    private final static org.slf4j.Logger log = LoggerFactory.getLogger(TrackListView.class);
 
     private ListView tracksView;
-    private TrackListViewItem currentRouteItem;
+    private TrackListViewItem currentRecordingTrackItem;
 
     public TrackListView(BitStore reader) {
         super(reader);
@@ -61,19 +62,19 @@ public class TrackListView extends AbstractView {
             @Override
             public int getCount() {
                 int size = TrackList.getTrackList().getNumberOfTracks();
-                if (CB.currentRoute != null)
+                if (TrackRecorder.getInstance().isStarted())
                     size++;
                 return size;
             }
 
             @Override
             public ListViewItem getView(int viewPosition) {
-                log.info("get track item number " + viewPosition + " (" + (CB.currentRoute != null ? "with " : "without ") + "tracking." + ")");
+                log.info("get track item number " + viewPosition + " (" + (TrackRecorder.getInstance().isStarted() ? "with " : "without ") + "tracking." + ")");
                 int tracksIndex = viewPosition;
-                if (CB.currentRoute != null) {
+                if (TrackRecorder.getInstance().isStarted()) {
                     if (viewPosition == 0) {
-                        currentRouteItem = new TrackListViewItem(viewPosition, CB.currentRoute, tracksView);
-                        return currentRouteItem;
+                        currentRecordingTrackItem = new TrackListViewItem(viewPosition, TrackRecorder.getInstance().getRecordingTrack(), tracksView);
+                        return currentRecordingTrackItem;
                     }
                     tracksIndex--; // viewPosition - 1, if tracking is activated
                 }
@@ -254,11 +255,11 @@ public class TrackListView extends AbstractView {
 
                         if (line.contains("</trkseg>")) // End of the Track Segment detected?
                         {
-                            if (track.getTrackPoints().size < 2)
+                            if (track.size < 2)
                                 track.setName("no Route segment found");
                             track.setVisible(true);
                             track.setTrackLength(distance);
-                            track.setAltitudeDifference(altitudeDifference);
+                            track.setElevationDifference(altitudeDifference);
                             tracksFromGpxFile.add(track);
                             isSeg = false;
                             break;
@@ -266,11 +267,11 @@ public class TrackListView extends AbstractView {
 
                         if (line.contains("</rte>")) // End of the Route detected?
                         {
-                            if (track.getTrackPoints().size < 2)
+                            if (track.size < 2)
                                 track.setName("no Route segment found");
                             track.setVisible(true);
                             track.setTrackLength(distance);
-                            track.setAltitudeDifference(altitudeDifference);
+                            track.setElevationDifference(altitudeDifference);
                             tracksFromGpxFile.add(track);
                             isRte = false;
                             break;
@@ -348,7 +349,7 @@ public class TrackListView extends AbstractView {
                             // trkpt abgeschlossen, jetzt kann der Trackpunkt erzeugt werden
                             isTrkptOrRtept = false;
                             if (lastAcceptedCoordinate != null) {
-                                track.getTrackPoints().add(new Coordinate(lastAcceptedCoordinate.getLongitude(), lastAcceptedCoordinate.getLatitude(), lastAcceptedCoordinate.getElevation(), lastAcceptedDirection, lastAcceptedTime));
+                                track.add(new Coordinate(lastAcceptedCoordinate.getLatitude(), lastAcceptedCoordinate.getLongitude(), lastAcceptedCoordinate.getElevation(), lastAcceptedDirection, lastAcceptedTime));
 
                                 // Calculate the length of a Track
                                 if (!fromPosition.isValid()) {
@@ -434,9 +435,9 @@ public class TrackListView extends AbstractView {
                     cm.addMenuItem("unload", null, () -> unloadTrack());
 
                     // (rename, save,) delete darf nicht mit dem aktuellen Track gemacht werden....
-                    if (!track.isActualTrack()) {
+                    if (track != TrackRecorder.getInstance().getRecordingTrack()) {
                         if (track.getFileName().length() > 0) {
-                            if (!track.isActualTrack()) {
+                            if (track != TrackRecorder.getInstance().getRecordingTrack()) {
                                 FileHandle trackAbstractFile = new FileHandle(track.getFileName());
                                 if (trackAbstractFile.exists()) {
                                     cm.addMenuItem("delete", CB.getSkin().menuIcon.delete,
@@ -472,7 +473,7 @@ public class TrackListView extends AbstractView {
             addLast(trackName);
 
             trackLength = new CB_Label();
-            trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getAltitudeDifference(), true));
+            trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getElevationDifference(), true));
             trackLength.addListener(showItemMenu);
             addLast(trackLength);
 
@@ -528,7 +529,7 @@ public class TrackListView extends AbstractView {
 
         public void notifyTrackChanged() {
             if (trackLength != null)
-                trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getAltitudeDifference(), true));
+                trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getElevationDifference(), true));
         }
 
         public Track getTrack() {
@@ -600,14 +601,14 @@ public class TrackListView extends AbstractView {
             }
 
             try {
-                for (int i = 0; i < track.getTrackPoints().size; i++) {
-                    writer.append("<trkpt lat=\"").append(String.valueOf(track.getTrackPoints().get(i).getLatitude())).append("\" lon=\"").append(String.valueOf(track.getTrackPoints().get(i).getLongitude())).append("\">\n");
+                for (int i = 0; i < track.size; i++) {
+                    writer.append("<trkpt lat=\"").append(String.valueOf(track.get(i).getLatitude())).append("\" lon=\"").append(String.valueOf(track.get(i).getLongitude())).append("\">\n");
 
-                    writer.append("   <ele>").append(String.valueOf(track.getTrackPoints().get(i).getElevation())).append("</ele>\n");
+                    writer.append("   <ele>").append(String.valueOf(track.get(i).getElevation())).append("</ele>\n");
                     SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    String sDate = datFormat.format(track.getTrackPoints().get(i).getDate());
+                    String sDate = datFormat.format(track.get(i).getDate());
                     datFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
-                    sDate += "T" + datFormat.format(track.getTrackPoints().get(i).getDate()) + "Z";
+                    sDate += "T" + datFormat.format(track.get(i).getDate()) + "Z";
                     writer.append("   <time>").append(sDate).append("</time>\n");
                     writer.append("</trkpt>\n");
                 }
@@ -622,7 +623,7 @@ public class TrackListView extends AbstractView {
         }
 
         private void unloadTrack() {
-            if (track.isActualTrack()) {
+            if (track != TrackRecorder.getInstance().getRecordingTrack()) {
                 new ButtonDialog("", Translation.get("IsActualTrack"), null, MessageBoxButton.OK, MessageBoxIcon.Warning, null).show();
             } else {
                 TrackList.getTrackList().removeTrack(track);

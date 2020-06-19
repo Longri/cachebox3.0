@@ -37,7 +37,7 @@ class JsonStreamParserTest {
 
     final String apiKey = EXCLUDE_FROM_TRAVIS.GcAPI();
     final boolean isDummy = apiKey.equals(EXCLUDE_FROM_TRAVIS.DUMMY_API_KEY);
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(JsonStreamParserTest.class);
+    private final static org.slf4j.Logger log = LoggerFactory.getLogger(JsonStreamParserTest.class);
 
     final static String testString = "{\n" +
             "  \"Status\": {\n" +

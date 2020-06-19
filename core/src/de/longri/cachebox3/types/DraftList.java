@@ -31,7 +31,7 @@ import java.util.Comparator;
  * Created by Longri on 31.08.2017
  */
 public class DraftList extends Array<DraftEntry> {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(DraftList.class);
+   private final static org.slf4j.Logger log = LoggerFactory.getLogger(DraftList.class);
 
     private static final long serialVersionUID = 1L;
 

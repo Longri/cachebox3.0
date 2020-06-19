@@ -28,7 +28,7 @@ import java.util.Date;
  * Created by Longri on 02.09.2017.
  */
 public class Trackable implements Comparable<Trackable> {
-    final static org.slf4j.Logger log = LoggerFactory.getLogger(Trackable.class);
+    private final static org.slf4j.Logger log = LoggerFactory.getLogger(Trackable.class);
     private int Id = -1;
     private boolean Archived;
     private String TBCode = "";

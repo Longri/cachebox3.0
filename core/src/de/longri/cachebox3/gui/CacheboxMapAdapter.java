@@ -34,8 +34,6 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.AbstractList;
 
@@ -45,13 +43,10 @@ import java.util.AbstractList;
 public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
 
 
-    private final static Logger log = LoggerFactory.getLogger(CacheboxMapAdapter.class);
-    private final Runnable mRedrawCb = new Runnable() {
-        @Override
-        public void run() {
-            prepareFrame();
-            Gdx.graphics.requestRendering();
-        }
+    // private final static Logger log = LoggerFactory.getLogger(CacheboxMapAdapter.class);
+    private final Runnable mRedrawCb = () -> {
+        prepareFrame();
+        Gdx.graphics.requestRendering();
     };
     private boolean mRenderWait;
     private boolean mRenderRequest;
@@ -124,9 +119,11 @@ public class CacheboxMapAdapter extends Map implements Map.UpdateListener {
             mRenderRequest = true;
             if (mClearMap)
                 updateMap(false);
+            /*
             else {
                 //   Gdx.graphics.requestRendering();
             }
+             */
         }
     }
 
