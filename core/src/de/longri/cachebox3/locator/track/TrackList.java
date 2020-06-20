@@ -39,8 +39,8 @@ public class TrackList extends ArrayList<Track> {
     }
 
     public void trackListChanged() {
-        // todo
-        // todo handle visible changed
+        // handle visibility changes in TrackListView / trackListChanged() in Tracklist
+        // is not necessary, cause map is always recreated on show
     }
 
     // =================================================================================================================

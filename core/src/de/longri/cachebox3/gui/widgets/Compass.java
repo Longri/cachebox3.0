@@ -72,13 +72,7 @@ public class Compass extends Catch_WidgetGroup implements Layout {
         if (useState) {
             this.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
-                    // change state
-                    int ordinal = state.ordinal();
-                    ordinal++;
-                    if (ordinal > 2)
-                        ordinal = 0;
-
-                    setState(MapOrientationMode.values()[ordinal]);
+                    setState(MapOrientationMode.values()[(state.ordinal() + 1) % MapOrientationMode.values().length]);
                 }
             });
         }

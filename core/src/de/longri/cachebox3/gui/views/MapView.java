@@ -654,9 +654,8 @@ public class MapView extends AbstractView {
             }
         }
 
-        // todo reduce no of points depending on zoom (Reduktion of Ploylines with Douglas-Peucker-Algorithmus)
-        // todo handle visibility changes in TrackListView / trackListChanged() in Tracklist
-        // todo style for track (line width, ...)
+        // ? to do reduce no of points depending on zoom (Reduktion of Ploylines with Douglas-Peucker-Algorithmus)
+        // ? to do style for track (line width, ...)
         for (Track track : TrackList.getTrackList()) {
             if (track.isVisible()) {
                 PathLayer pathLayer = new PathLayer(cacheboxMapAdapter, track.getLineColor(), 5);
@@ -751,7 +750,7 @@ public class MapView extends AbstractView {
         }
         icm.addMenuItem("overlays", CB.getSkin().menuIcon.todo, this::showMapViewOverlaysMenu).setEnabled(false); // todo icon
         icm.addMenuItem("view", CB.getSkin().menuIcon.viewSettings, this::showMapViewElementsMenu);
-        // todo needed? nach Kompass ausrichten | setAlignToCompass
+        // to do needed? nach Kompass ausrichten | setAlignToCompass
         icm.addMenuItem("CenterWP", CB.getSkin().menuIcon.addWp, this::createWaypointAtCenter);
         icm.addMenuItem("TrackRecordMenuTitle", CB.getSkin().menuIcon.me3TrackList, this::showMenuTrackFunctions);
         return icm;

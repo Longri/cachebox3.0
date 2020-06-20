@@ -20,10 +20,9 @@ package de.longri.cachebox3.gui.map.layer;
  */
 public enum MapOrientationMode {
     NORTH, COMPASS, USER;
-
+    /*
     public static MapOrientationMode fromOrdinal(int ordinal) {
-        for (MapOrientationMode mapMode : MapOrientationMode.values())
-            if (mapMode.ordinal() == ordinal) return mapMode;
-        return null;
+        return ordinal >= 0 && ordinal < values().length ? values()[ordinal] : null;
     }
+     */
 }

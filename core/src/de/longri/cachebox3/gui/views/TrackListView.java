@@ -1,9 +1,12 @@
 package de.longri.cachebox3.gui.views;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.activities.ColorPicker;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.activities.InputString;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
@@ -451,7 +454,7 @@ public class TrackListView extends AbstractView {
                                                                 try {
                                                                     trackAbstractFile.delete();
                                                                     TrackList.getTrackList().removeTrack(track);
-                                                                    // TrackListView.getInstance().notifyDataSetChanged();
+                                                                    tracksView.dataSetChanged();
                                                                 } catch (Exception ex) {
                                                                     new ButtonDialog("", ex.toString(), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null).show();
                                                                 }
@@ -488,8 +491,12 @@ public class TrackListView extends AbstractView {
 
             colorSelection = new CB_Label("colorOnMap");
             colorSelection.setBackgroundColor(track.getColor());
+            colorSelection.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    colorIconClicked();
+                }
+            });
             addLast(colorSelection);
-            // todo colorSelection
 
             addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
@@ -499,35 +506,28 @@ public class TrackListView extends AbstractView {
         }
 
         private void positionLatLon() {
-        /*
-        if (track.getTrackPoints().size > 0) {
-            Coordinate trackpoint = track.getTrackPoints().get(0);
-            double latitude = trackpoint.getLatitude();
-            double longitude = trackpoint.getLongitude();
-            ShowMap.getInstance().execute();
-            ShowMap.getInstance().normalMapView.setBtnMapStateToFree(); // btn
-            // ShowMap.getInstance().normalMapView.setMapState(MapViewBase.MapState.FREE);
-            ShowMap.getInstance().normalMapView.setCenter(new Coordinate(latitude, longitude));
-        }
-         */
+            if (track.size > 0) {
+                Coordinate trackpoint = track.get(0);
+                CB.lastMapState.setPosition(trackpoint);
+                CB.viewmanager.getAction_Show_MapView().execute();
+            }
         }
 
         private void colorIconClicked() {
-        /*
-        GL.that.RunOnGL(() -> {
-            ColorPicker clrPick = new ColorPicker(track.getColor(), color -> {
-                if (color == null) return;
-                track.setColor(color);
-                colorReck = null;
-            });
-            clrPick.show();
-        });
-        invalidate();
-
-         */
+            ColorPicker.getInstance("ColorPickerTitle",
+                    CB.getSkin().menuIcon.showOriginalHtmlColor).execute(track.getColor(),
+                    new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            ColorPicker colorPicker = (ColorPicker) actor;
+                            track.setColor(colorPicker.getColorValue());
+                            tracksView.dataSetChanged();
+                        }
+                    });
         }
 
         public void notifyTrackChanged() {
+            // perhaps to do for current track
             if (trackLength != null)
                 trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getElevationDifference(), true));
         }
@@ -623,7 +623,7 @@ public class TrackListView extends AbstractView {
         }
 
         private void unloadTrack() {
-            if (track != TrackRecorder.getInstance().getRecordingTrack()) {
+            if (track == TrackRecorder.getInstance().getRecordingTrack()) {
                 new ButtonDialog("", Translation.get("IsActualTrack"), null, MessageBoxButton.OK, MessageBoxIcon.Warning, null).show();
             } else {
                 TrackList.getTrackList().removeTrack(track);

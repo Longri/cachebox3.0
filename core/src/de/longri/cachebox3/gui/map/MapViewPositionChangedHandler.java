@@ -27,7 +27,6 @@ import de.longri.cachebox3.gui.map.layer.DirectLineLayer;
 import de.longri.cachebox3.gui.map.layer.LocationTextureLayer;
 import de.longri.cachebox3.gui.map.layer.MapOrientationMode;
 import de.longri.cachebox3.gui.views.MapView;
-import de.longri.cachebox3.gui.widgets.Compass;
 import de.longri.cachebox3.gui.widgets.MapInfoPanel;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
@@ -65,13 +64,10 @@ public class MapViewPositionChangedHandler implements SelectedCoordChangedListen
                                          MapInfoPanel infoPanel) {
         this.map = map;
         this.infoPanel = infoPanel;
-        this.infoPanel.setStateChangedListener(new Compass.StateChanged() {
-            @Override
-            public void stateChanged(MapOrientationMode state) {
-                CB.viewmanager.toast("Change Map orientation Mode to:" + state.name());
-                log.debug("AssumeValues CompassStateChanged  eventID:{}", "EventID-1");
-                assumeValues(false, (short) (lastEventID - 1));
-            }
+        this.infoPanel.setStateChangedListener(state -> {
+            CB.viewmanager.toast("Change Map orientation Mode to:" + state.name());
+            log.debug("AssumeValues CompassStateChanged  eventID:{}", "EventID-1");
+            assumeValues(false, (short) (lastEventID - 1));
         });
         this.mapAnimator = new MapAnimator(this, map);
         this.myPositionAnimator = new MyPositionAnimator(directLineLayer, myLocationLayer);

@@ -49,7 +49,7 @@ public class MapInfoPanel extends Catch_Table implements SpeedChangedListener, D
         MapInfoPanelStyle style = VisUI.getSkin().get(MapInfoPanelStyle.class);
         CompassViewStyle compssstyle = VisUI.getSkin().get("mapCompassStyle", CompassViewStyle.class);
         this.setBackground(style.background);
-        compass = new Compass(compssstyle, true);
+        compass = new Compass(compssstyle, true, true);
 
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();

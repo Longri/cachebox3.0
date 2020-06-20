@@ -151,8 +151,7 @@ public class MapState {
     }
 
     public MapOrientationMode getMapOrientationMode() {
-        int ordinal = (value & MAP_ORIENTATION_MODE_MASK) >> 3;
-        return MapOrientationMode.fromOrdinal(ordinal);
+        return MapOrientationMode.values()[(value & MAP_ORIENTATION_MODE_MASK) >> 3];
     }
 
     public int getZoom() {
