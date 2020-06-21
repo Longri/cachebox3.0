@@ -1229,6 +1229,7 @@ public class MapView extends AbstractView {
             cm2.addMenuItem("pause", null, () -> TrackRecorder.getInstance().pauseRecording()).setEnabled(TrackRecorder.getInstance().isStarted());
         cm2.addMenuItem("stop", null, this::stopTrackRecorder).setEnabled(TrackRecorder.getInstance().isStarted() || TrackRecorder.getInstance().isPaused());
         cm2.addDivider(0);
+        // to be visible on map have to create pathlayer and add to layers
         cm2.addMenuItem("load", CB.getSkin().menuIcon.me3TrackList, new TrackListView()::selectTrackFileReadAndAddToTracks);
         //todo cm2.addMenuItem("generate", null, () -> TrackCreation.getInstance().execute());
         cm2.addDivider(1);

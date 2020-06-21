@@ -51,7 +51,7 @@ public class TrackListView extends AbstractView {
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(TrackListView.class);
 
     private ListView tracksView;
-    private TrackListViewItem currentRecordingTrackItem;
+    public TrackListViewItem currentRecordingTrackItem;
 
     public TrackListView(BitStore reader) {
         super(reader);
@@ -413,7 +413,7 @@ public class TrackListView extends AbstractView {
         return null;
     }
 
-    private static class TrackListViewItem extends ListViewItem {
+    public class TrackListViewItem extends ListViewItem {
         final org.slf4j.Logger log = LoggerFactory.getLogger(TrackListViewItem.class);
         private final Track track;
         private CB_Label trackName;
@@ -528,8 +528,10 @@ public class TrackListView extends AbstractView {
 
         public void notifyTrackChanged() {
             // perhaps to do for current track
-            if (trackLength != null)
+            if (trackLength != null) {
                 trackLength.setText(Translation.get("length") + ": " + UnitFormatter.distanceString((float) track.getTrackLength(), true) + " / " + UnitFormatter.distanceString((float) track.getElevationDifference(), true));
+                tracksView.dataSetChanged();
+            }
         }
 
         public Track getTrack() {

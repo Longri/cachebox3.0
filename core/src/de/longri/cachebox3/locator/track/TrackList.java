@@ -1,10 +1,9 @@
 package de.longri.cachebox3.locator.track;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
-
-public class TrackList extends ArrayList<Track> {
+public class TrackList extends Array<Track> {
     private static TrackList trackList;
     private Track routingTrack; // for identifying the track! has been originally from openRouteService implementation. now from BRouter
 
@@ -17,7 +16,7 @@ public class TrackList extends ArrayList<Track> {
     }
 
     public int getNumberOfTracks() {
-        return size();
+        return size;
     }
 
     public Track getTrack(int position) {
@@ -34,7 +33,7 @@ public class TrackList extends ArrayList<Track> {
         if (track == routingTrack) {
             routingTrack = null;
         }
-        remove(track);
+        removeValue(track,true);
         trackListChanged();
     }
 
@@ -54,16 +53,16 @@ public class TrackList extends ArrayList<Track> {
             track.setColor(new Color(0.85f, 0.1f, 0.2f, 1f));
         } else {
             // erst alten routingTrack löschen
-            remove(routingTrack);
+            removeValue(routingTrack, true);
             track.setColor(routingTrack.getColor());
         }
-        add(0, track);
+        insert(0, track);
         routingTrack = track;
         trackListChanged();
     }
 
     public void removeRoutingTrack() {
-        remove(routingTrack);
+        removeValue(routingTrack,true);
         routingTrack = null;
         trackListChanged();
     }

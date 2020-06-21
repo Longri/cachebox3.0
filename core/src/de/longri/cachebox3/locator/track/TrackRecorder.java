@@ -18,9 +18,11 @@ package de.longri.cachebox3.locator.track;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
+import de.longri.cachebox3.gui.views.TrackListView;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
@@ -87,16 +89,16 @@ public class TrackRecorder implements PositionChangedListener {
             gpxFile = Gdx.files.absolute(Settings.TrackFolder.getValue() + "/Track_" + sDate + ".gpx");
             gpxFile.parent().mkdirs();
             String gpxHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx version=\"1.0\" creator=\"cachebox track recorder\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.topografix.com/GPX/1/0\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\">\n";
-            gpxFile.writeString(gpxHeader + "<time>" + getDateTimeString() + "</time>\n<trk><trkseg>\n</trkseg>\n</trk>\n</gpx>\n", true);
-            insertPosition = gpxHeader.length(); // was fixed to 24 why?
+            gpxFile.writeString(gpxHeader + "<time>" + getDateTimeString() + "</time>\n<trk><trkseg>" + "\n</trkseg>\n</trk>\n</gpx>\n", true);
+            insertPosition = 24; // 24 characters from the end (before \n</trackseg>...)
             // set real bounds or basecamp (mapsource) will not import this track
             // "<bounds minlat=\"-90\" minlon=\"-180\" maxlat=\"90\" maxlon=\"180\"/>\n";
         }
 
         isPaused = false;
         isStarted = true;
-duringTrackPointWriting=false;
-duringAnnotateMediaWriting=false;
+        duringTrackPointWriting = false;
+        duringAnnotateMediaWriting = false;
         // updateRecorderButtonAccessibility();
     }
 
@@ -256,7 +258,11 @@ duringAnnotateMediaWriting=false;
                     lastElevation = newCoord.getElevation();
                 }
 
-                //TODO notify TrackListView
+                if (CB.viewmanager.getCurrentView() instanceof TrackListView) {
+                    TrackListView trackListView = (TrackListView) CB.viewmanager.getCurrentView();
+                    if (trackListView.currentRecordingTrackItem != null)
+                        trackListView.currentRecordingTrackItem.notifyTrackChanged();
+                }
 
                 recordingTrack.getTrackLayer().addPoint(new GeoPoint(event.pos.getLatitude(), event.pos.getLongitude()));
 
