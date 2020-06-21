@@ -15,21 +15,15 @@ public class TrackList extends Array<Track> {
         return trackList;
     }
 
-    public int getNumberOfTracks() {
-        return size;
-    }
-
-    public Track getTrack(int position) {
-        return get(position);
-    }
-
     public void addTrack(Track track) {
         // Dont use this for internal RoutingTrack!! Use setRoutingTrack(Track track)
         add(track);
+        track.showTrack();
         trackListChanged();
     }
 
     public void removeTrack(Track track) {
+        track.hideTrack();
         if (track == routingTrack) {
             routingTrack = null;
         }

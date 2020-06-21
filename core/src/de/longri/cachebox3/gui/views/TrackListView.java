@@ -64,7 +64,7 @@ public class TrackListView extends AbstractView {
         ListViewAdapter tracksViewAdapter = new ListViewAdapter() {
             @Override
             public int getCount() {
-                int size = TrackList.getTrackList().getNumberOfTracks();
+                int size = TrackList.getTrackList().size;
                 if (TrackRecorder.getInstance().isStarted())
                     size++;
                 return size;
@@ -81,7 +81,7 @@ public class TrackListView extends AbstractView {
                     }
                     tracksIndex--; // viewPosition - 1, if tracking is activated
                 }
-                return new TrackListViewItem(viewPosition, TrackList.getTrackList().getTrack(tracksIndex), tracksView);
+                return new TrackListViewItem(viewPosition, TrackList.getTrackList().get(tracksIndex), tracksView);
             }
 
             @Override

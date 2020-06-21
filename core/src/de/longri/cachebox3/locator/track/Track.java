@@ -17,8 +17,14 @@ package de.longri.cachebox3.locator.track;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
+import de.longri.cachebox3.CB;
+import de.longri.cachebox3.gui.CacheboxMapAdapter;
+import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.locator.Coordinate;
+import org.oscim.core.GeoPoint;
 import org.oscim.layers.PathLayer;
+
+import java.util.ArrayList;
 
 public class Track extends Array<Coordinate> {
     private CharSequence name;
@@ -94,8 +100,32 @@ public class Track extends Array<Coordinate> {
         return trackLayer;
     }
 
-    public void setTrackLayer(PathLayer pathLayer) {
-        trackLayer = pathLayer;
+    public void showTrack() {
+        // ? to do style for track (line width, ...)
+        CacheboxMapAdapter cacheboxMapAdapter = MapView.getCacheboxMapAdapter();
+        if (cacheboxMapAdapter != null) {
+            if (isVisible) {
+                PathLayer trackLayer = new PathLayer(cacheboxMapAdapter, getLineColor(), 5);
+                fillTrackLayer(CB.lastMapState.getZoom());
+                cacheboxMapAdapter.layers().add(trackLayer);
+            }
+        }
     }
 
+    public void fillTrackLayer(int zoom) {
+        // ? to do reduce no of points depending on zoom (Reduktion of Ploylines with Douglas-Peucker-Algorithmus)
+        // to do remember trackPoints
+        ArrayList<GeoPoint> trackPoints = new ArrayList<>(size);
+        for (int i = 0; i < size ; i++) {
+            trackPoints.add(new GeoPoint(get(i).getLatitude(), get(i).getLongitude()));
+        }
+        trackLayer.setPoints(trackPoints);
+    }
+
+    public void hideTrack() {
+        CacheboxMapAdapter cacheboxMapAdapter = MapView.getCacheboxMapAdapter();
+        if (cacheboxMapAdapter != null) {
+            cacheboxMapAdapter.layers().remove(trackLayer);
+        }
+    }
 }

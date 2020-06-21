@@ -86,12 +86,14 @@ import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.backend.canvas.Color;
-import org.oscim.core.*;
+import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
+import org.oscim.core.Point;
+import org.oscim.core.Tile;
 import org.oscim.event.Event;
 import org.oscim.gdx.GestureHandlerImpl;
 import org.oscim.layers.GroupLayer;
 import org.oscim.layers.Layer;
-import org.oscim.layers.PathLayer;
 import org.oscim.layers.TileGridLayer;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
@@ -131,6 +133,7 @@ public class MapView extends AbstractView {
     private final Event selfEvent = new Event();
     private final Point screenPoint = new Point();
     private final CB.ThemeUsage whichUsage;
+    private static CacheboxMapAdapter staticCacheboxMapAdapter;
     private boolean menuInShow;
     private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter cacheboxMapAdapter;
@@ -246,6 +249,10 @@ public class MapView extends AbstractView {
         TextureAtlasUtils.createTextureRegions(input, textureRegionMap, atlasList, false,
                 flipped);
         return textureRegionMap;
+    }
+
+    public static CacheboxMapAdapter getCacheboxMapAdapter() {
+        return staticCacheboxMapAdapter;
     }
 
     public MapState getCurrentMapState() {
@@ -453,6 +460,7 @@ public class MapView extends AbstractView {
 
             }
         };
+        staticCacheboxMapAdapter = cacheboxMapAdapter;
 
         ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer = new MapRenderer(cacheboxMapAdapter);
         ((CacheboxMain) Gdx.app.getApplicationListener()).mMapRenderer.onSurfaceCreated();
@@ -539,6 +547,8 @@ public class MapView extends AbstractView {
         cacheboxMapAdapter.clearMap();
         cacheboxMapAdapter.destroy();
         cacheboxMapAdapter = null;
+        staticCacheboxMapAdapter = null;
+
         CB.postOnGlThread(new NamedRunnable("MapView:dispose texture items") {
             @Override
             public void run() {
@@ -645,26 +655,11 @@ public class MapView extends AbstractView {
         layerGroup.layers.add(centerCrossLayer);
 
         if (TrackRecorder.getInstance().isStarted()) {
-            Track track = TrackRecorder.getInstance().getRecordingTrack();
-            PathLayer pathLayer = new PathLayer(cacheboxMapAdapter, track.getLineColor(), 5);
-            track.setTrackLayer(pathLayer);
-            cacheboxMapAdapter.layers().add(pathLayer);
-            for (int i = 0; i < track.size ; i++) {
-                pathLayer.addPoint(new GeoPoint(track.get(i).getLatitude(), track.get(i).getLongitude()));
-            }
+            TrackRecorder.getInstance().getRecordingTrack().showTrack();
         }
 
-        // ? to do reduce no of points depending on zoom (Reduktion of Ploylines with Douglas-Peucker-Algorithmus)
-        // ? to do style for track (line width, ...)
         for (Track track : TrackList.getTrackList()) {
-            if (track.isVisible()) {
-                PathLayer pathLayer = new PathLayer(cacheboxMapAdapter, track.getLineColor(), 5);
-                track.setTrackLayer(pathLayer);
-                cacheboxMapAdapter.layers().add(pathLayer);
-                for (int i = 0; i < track.size ; i++) {
-                    pathLayer.addPoint(new GeoPoint(track.get(i).getLatitude(), track.get(i).getLongitude()));
-                }
-            }
+            track.showTrack();
         }
 
         Config.ShowDirektLine.addChangedEventListener(() -> {
@@ -1239,16 +1234,12 @@ public class MapView extends AbstractView {
 
     private void startTrackRecorder() {
         TrackRecorder.getInstance().startRecording();
-        Track track = TrackRecorder.getInstance().getRecordingTrack();
-        PathLayer pathLayer = new PathLayer(cacheboxMapAdapter, track.getLineColor(), 5);
-        track.setTrackLayer(pathLayer);
-        cacheboxMapAdapter.layers().add(pathLayer);
+        TrackRecorder.getInstance().getRecordingTrack().showTrack();
     }
 
     private void stopTrackRecorder() {
         TrackRecorder.getInstance().stopRecording();
-        Track track = TrackRecorder.getInstance().getRecordingTrack();
-        cacheboxMapAdapter.layers().remove(track.getTrackLayer());
+        TrackRecorder.getInstance().getRecordingTrack().hideTrack();
     }
 
     public void clickOnItem(final MapWayPointItem item) {
