@@ -105,14 +105,14 @@ public class Track extends Array<Coordinate> {
         CacheboxMapAdapter cacheboxMapAdapter = MapView.getCacheboxMapAdapter();
         if (cacheboxMapAdapter != null) {
             if (isVisible) {
-                PathLayer trackLayer = new PathLayer(cacheboxMapAdapter, getLineColor(), 5);
+                trackLayer = new PathLayer(cacheboxMapAdapter, getLineColor(), 5);
                 fillTrackLayer(CB.lastMapState.getZoom());
                 cacheboxMapAdapter.layers().add(trackLayer);
             }
         }
     }
 
-    public void fillTrackLayer(int zoom) {
+    private void fillTrackLayer(int zoom) {
         // ? to do reduce no of points depending on zoom (Reduktion of Ploylines with Douglas-Peucker-Algorithmus)
         // to do remember trackPoints
         ArrayList<GeoPoint> trackPoints = new ArrayList<>(size);

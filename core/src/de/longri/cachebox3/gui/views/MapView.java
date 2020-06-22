@@ -745,7 +745,7 @@ public class MapView extends AbstractView {
         }
         icm.addMenuItem("overlays", CB.getSkin().menuIcon.todo, this::showMapViewOverlaysMenu).setEnabled(false); // todo icon
         icm.addMenuItem("view", CB.getSkin().menuIcon.viewSettings, this::showMapViewElementsMenu);
-        // to do needed? nach Kompass ausrichten | setAlignToCompass
+        // nach Kompass ausrichten | setAlignToCompass is implemented in clicking mapInfo
         icm.addMenuItem("CenterWP", CB.getSkin().menuIcon.addWp, this::createWaypointAtCenter);
         icm.addMenuItem("TrackRecordMenuTitle", CB.getSkin().menuIcon.me3TrackList, this::showMenuTrackFunctions);
         return icm;
