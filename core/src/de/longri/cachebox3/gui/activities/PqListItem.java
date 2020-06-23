@@ -80,8 +80,8 @@ public class PqListItem extends ListViewItem {
             if (pq.lastImported.after(pq.lastGenerated)) {
                 Label.LabelStyle colorLabelStyle = new Label.LabelStyle(infoLabelStyle);
                 if (style.readyFontColor != null) colorLabelStyle.fontColor = style.readyFontColor;
-                if (style.redyBackgroundColor != null)
-                    colorLabelStyle.background = new ColorDrawable(style.redyBackgroundColor);
+                if (style.readyBackgroundColor != null)
+                    colorLabelStyle.background = new ColorDrawable(style.readyBackgroundColor);
                 this.add(new AligmentLabel(Translation.get("ready"), colorLabelStyle, Align.left)).expandX().fillX();
             } else {
                 Label.LabelStyle colorLabelStyle = new Label.LabelStyle(infoLabelStyle);

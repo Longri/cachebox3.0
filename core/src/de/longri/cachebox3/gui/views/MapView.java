@@ -130,10 +130,10 @@ public class MapView extends AbstractView {
     private final static Logger log = LoggerFactory.getLogger(MapView.class);
     private static final MapState currentMapState = new MapState();
     private static double lastCenterPosLat, lastCenterPosLon;
+    private static CacheboxMapAdapter staticCacheboxMapAdapter;
     private final Event selfEvent = new Event();
     private final Point screenPoint = new Point();
     private final CB.ThemeUsage whichUsage;
-    private static CacheboxMapAdapter staticCacheboxMapAdapter;
     private boolean menuInShow;
     private InputMultiplexer mapInputHandler;
     private CacheboxMapAdapter cacheboxMapAdapter;
@@ -353,7 +353,13 @@ public class MapView extends AbstractView {
                 value = value * 0.5;
 
             positionChangedHandler.scale(value);
-            CB.lastMapState.setZoom(FastMath.log2((int) value));
+            int newZoom = FastMath.log2((int) value);
+            if (newZoom != CB.lastMapState.getZoom()) {
+                CB.lastMapState.setZoom(newZoom);
+                for (Track track : TrackList.getTrackList()) {
+                    track.updateTrackView();
+                }
+            }
         });
         zoomButton.pack();
         addActor(zoomButton);
@@ -655,11 +661,18 @@ public class MapView extends AbstractView {
         layerGroup.layers.add(centerCrossLayer);
 
         if (TrackRecorder.getInstance().isStarted()) {
-            TrackRecorder.getInstance().getRecordingTrack().showTrack();
+            TrackRecorder.getInstance().getRecordingTrack().viewTrack();
         }
 
         for (Track track : TrackList.getTrackList()) {
-            track.showTrack();
+            track.viewTrack();
+            /*
+            // todo Labeling the track on the map
+            if (track.isVisible()) {
+                // UnitFormatter.distanceString((float) track.getTrackLength(), false)
+                // Coordinate firstTrackPoint = track.get(0);
+            }
+             */
         }
 
         Config.ShowDirektLine.addChangedEventListener(() -> {
@@ -1234,7 +1247,7 @@ public class MapView extends AbstractView {
 
     private void startTrackRecorder() {
         TrackRecorder.getInstance().startRecording();
-        TrackRecorder.getInstance().getRecordingTrack().showTrack();
+        TrackRecorder.getInstance().getRecordingTrack().viewTrack();
     }
 
     private void stopTrackRecorder() {

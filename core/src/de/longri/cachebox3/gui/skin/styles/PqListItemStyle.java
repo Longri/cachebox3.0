@@ -29,7 +29,7 @@ public class PqListItemStyle {
     public Color newFontColor;
     public Color newBackgroundColor;
     public Color readyFontColor;
-    public Color redyBackgroundColor;
+    public Color readyBackgroundColor;
     public Color neverFontColor;
     public Color neverBackgroundColor;
 }

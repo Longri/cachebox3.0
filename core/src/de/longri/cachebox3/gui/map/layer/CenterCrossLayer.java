@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.map.layer;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
@@ -46,10 +47,10 @@ public class CenterCrossLayer extends GenericLayer implements Disposable {
     private static class Renderer extends BucketRenderer {
         final MapCenterCrossStyle style = VisUI.getSkin().get(MapCenterCrossStyle.class);
         final LineBucket ll = buckets.addLineBucket(0,
-                new LineStyle(style.color.toIntBits(), CB.getScaledFloat(style.width), style.cap));
+                new LineStyle(Color.argb8888(style.color), CB.getScaledFloat(style.width), style.cap));
 
         final LineBucket lc = buckets.addLineBucket(0,
-                new LineStyle(style.color.toIntBits(), CB.getScaledFloat(style.width), Paint.Cap.ROUND));
+                new LineStyle(Color.argb8888(style.color), CB.getScaledFloat(style.width), Paint.Cap.ROUND));
 
         final GeometryBuffer g1 = new GeometryBuffer(2, 1);
         final GeometryBuffer g2 = new GeometryBuffer(2, 1);

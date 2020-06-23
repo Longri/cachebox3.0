@@ -21,12 +21,17 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.locator.Coordinate;
+import org.oscim.backend.canvas.Paint;
 import org.oscim.core.GeoPoint;
 import org.oscim.layers.PathLayer;
+import org.oscim.theme.styles.LineStyle;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Track extends Array<Coordinate> {
+    private static final int MAXZOOM = 30;
+    private final HashMap<Integer, ArrayList<GeoPoint>> reduced;
     private CharSequence name;
     private CharSequence fileName;
     private Color color;
@@ -42,6 +47,7 @@ public class Track extends Array<Coordinate> {
         trackLength = 0;
         isVisible = false;
         elevationDifference = 0;
+        reduced = new HashMap<>(MAXZOOM);
     }
 
     public String getName() {
@@ -54,10 +60,6 @@ public class Track extends Array<Coordinate> {
 
     public Color getColor() {
         return color;
-    }
-
-    public int getLineColor() {
-        return 0xFF000000 | ((int)(255 * color.r) << 16) | ((int)(255 * color.g) << 8) | ((int)(255 * color.b));
     }
 
     public void setColor(Color _color) {
@@ -96,30 +98,58 @@ public class Track extends Array<Coordinate> {
         this.elevationDifference = altitudeDifference;
     }
 
+    // =================================================================================================================
+
     public PathLayer getTrackLayer() {
         return trackLayer;
     }
 
-    public void showTrack() {
-        // ? to do style for track (line width, ...)
+    public void viewTrack() {
+        // ? to do style for track
         CacheboxMapAdapter cacheboxMapAdapter = MapView.getCacheboxMapAdapter();
         if (cacheboxMapAdapter != null) {
             if (isVisible) {
-                trackLayer = new PathLayer(cacheboxMapAdapter, getLineColor(), 5);
-                fillTrackLayer(CB.lastMapState.getZoom());
+                LineStyle.LineBuilder lb = LineStyle.builder();
+                lb.color(Color.argb8888(color));
+                lb.cap(Paint.Cap.BUTT);
+                lb.strokeWidth(CB.getScaledFloat(2));
+                trackLayer = new PathLayer(cacheboxMapAdapter, lb.build());
+                fillTrackLayer();
                 cacheboxMapAdapter.layers().add(trackLayer);
             }
         }
     }
 
-    private void fillTrackLayer(int zoom) {
-        // ? to do reduce no of points depending on zoom (Reduktion of Ploylines with Douglas-Peucker-Algorithmus)
-        // to do remember trackPoints
-        ArrayList<GeoPoint> trackPoints = new ArrayList<>(size);
-        for (int i = 0; i < size ; i++) {
-            trackPoints.add(new GeoPoint(get(i).getLatitude(), get(i).getLongitude()));
+    public void updateTrackView() {
+        CacheboxMapAdapter cacheboxMapAdapter = MapView.getCacheboxMapAdapter();
+        if (cacheboxMapAdapter != null) {
+            if (isVisible) {
+                LineStyle.LineBuilder lb = LineStyle.builder();
+                lb.color(Color.argb8888(color));
+                lb.cap(Paint.Cap.BUTT);
+                lb.strokeWidth(CB.getScaledFloat(2));
+                cacheboxMapAdapter.layers().remove(trackLayer);
+                trackLayer = new PathLayer(cacheboxMapAdapter, lb.build());
+                fillTrackLayer();
+                cacheboxMapAdapter.layers().add(trackLayer);
+            }
         }
-        trackLayer.setPoints(trackPoints);
+    }
+
+    private void fillTrackLayer() {
+        int zoom = CB.lastMapState.getZoom();
+        if (reduced.get(MAXZOOM - 1) == null) {
+            ArrayList<GeoPoint> trackPoints = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                trackPoints.add(new GeoPoint(get(i).getLatitude(), get(i).getLongitude()));
+            }
+            reduced.put(MAXZOOM - 1, trackPoints);
+        }
+        if (reduced.get(zoom) == null) {
+            double tolerance = 0.01 * Math.exp(-1 * (zoom - 10));
+            reduced.put(zoom, PolylineReduction.polylineReduction(reduced.get(MAXZOOM - 1), tolerance));
+        }
+        trackLayer.setPoints(reduced.get(zoom));
     }
 
     public void hideTrack() {

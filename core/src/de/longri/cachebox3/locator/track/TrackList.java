@@ -18,7 +18,7 @@ public class TrackList extends Array<Track> {
     public void addTrack(Track track) {
         // Dont use this for internal RoutingTrack!! Use setRoutingTrack(Track track)
         add(track);
-        track.showTrack();
+        track.viewTrack();
         trackListChanged();
     }
 
