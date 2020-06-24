@@ -31,6 +31,7 @@ import java.util.HashMap;
 
 public class Track extends Array<Coordinate> {
     private static final int MAXZOOM = 30;
+    private static final int unreducedEntry = MAXZOOM - 1;
     private final HashMap<Integer, ArrayList<GeoPoint>> reduced;
     private CharSequence name;
     private CharSequence fileName;
@@ -100,62 +101,77 @@ public class Track extends Array<Coordinate> {
 
     // =================================================================================================================
 
-    public PathLayer getTrackLayer() {
-        return trackLayer;
+    public void addPointToTrackLayer(GeoPoint geoPoint) {
+        if (trackLayer != null)
+            trackLayer.addPoint(geoPoint);
     }
 
-    public void viewTrack() {
-        // ? to do style for track
+    public void createTrackLayer() {
         CacheboxMapAdapter cacheboxMapAdapter = MapView.getCacheboxMapAdapter();
         if (cacheboxMapAdapter != null) {
             if (isVisible) {
-                LineStyle.LineBuilder lb = LineStyle.builder();
-                lb.color(Color.argb8888(color));
-                lb.cap(Paint.Cap.BUTT);
-                lb.strokeWidth(CB.getScaledFloat(2));
-                trackLayer = new PathLayer(cacheboxMapAdapter, lb.build());
-                fillTrackLayer();
-                cacheboxMapAdapter.layers().add(trackLayer);
+                addTrackLayer();
             }
         }
     }
 
-    public void updateTrackView() {
+    public void updateTrackLayer() {
         CacheboxMapAdapter cacheboxMapAdapter = MapView.getCacheboxMapAdapter();
         if (cacheboxMapAdapter != null) {
             if (isVisible) {
-                LineStyle.LineBuilder lb = LineStyle.builder();
-                lb.color(Color.argb8888(color));
-                lb.cap(Paint.Cap.BUTT);
-                lb.strokeWidth(CB.getScaledFloat(2));
                 cacheboxMapAdapter.layers().remove(trackLayer);
-                trackLayer = new PathLayer(cacheboxMapAdapter, lb.build());
-                fillTrackLayer();
-                cacheboxMapAdapter.layers().add(trackLayer);
+                addTrackLayer();
             }
         }
     }
 
-    private void fillTrackLayer() {
-        int zoom = CB.lastMapState.getZoom();
-        if (reduced.get(MAXZOOM - 1) == null) {
-            ArrayList<GeoPoint> trackPoints = new ArrayList<>(size);
-            for (int i = 0; i < size; i++) {
-                trackPoints.add(new GeoPoint(get(i).getLatitude(), get(i).getLongitude()));
-            }
-            reduced.put(MAXZOOM - 1, trackPoints);
-        }
-        if (reduced.get(zoom) == null) {
-            double tolerance = 0.01 * Math.exp(-1 * (zoom - 10));
-            reduced.put(zoom, PolylineReduction.polylineReduction(reduced.get(MAXZOOM - 1), tolerance));
-        }
-        trackLayer.setPoints(reduced.get(zoom));
-    }
-
-    public void hideTrack() {
+    public void hideTrackLayer() {
         CacheboxMapAdapter cacheboxMapAdapter = MapView.getCacheboxMapAdapter();
         if (cacheboxMapAdapter != null) {
             cacheboxMapAdapter.layers().remove(trackLayer);
         }
+    }
+
+    private void addTrackLayer() {
+        CacheboxMapAdapter cacheboxMapAdapter = MapView.getCacheboxMapAdapter();
+        trackLayer = new PathLayer(cacheboxMapAdapter, buildLineStyle());
+        fillTrackLayer();
+        cacheboxMapAdapter.layers().add(trackLayer);
+    }
+
+    private LineStyle buildLineStyle() {
+        // ? to do skin's style for track
+        LineStyle.LineBuilder lb = LineStyle.builder();
+        lb.color(Color.argb8888(color));
+        lb.cap(Paint.Cap.BUTT);
+        lb.strokeWidth(CB.getScaledFloat(2));
+        return lb.build();
+    }
+
+    private void fillTrackLayer() {
+        int zoom = CB.lastMapState.getZoom();
+        if (reduced.get(unreducedEntry) == null) {
+            ArrayList<GeoPoint> trackPoints = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                trackPoints.add(new GeoPoint(get(i).getLatitude(), get(i).getLongitude()));
+            }
+            reduced.put(unreducedEntry, trackPoints);
+        } else {
+            // recalculate reduced tracks, if number of points differ more than 50 points
+            ArrayList<GeoPoint> trackPoints = reduced.get(unreducedEntry);
+            int reducedBaseSize = trackPoints.size();
+            if (size - reducedBaseSize > 50) {
+                for (int i = reducedBaseSize; i < size; i++) {
+                    trackPoints.add(new GeoPoint(get(i).getLatitude(), get(i).getLongitude()));
+                }
+            }
+            reduced.clear();
+            reduced.put(unreducedEntry, trackPoints);
+        }
+        if (reduced.get(zoom) == null) {
+            double tolerance = 0.01 * Math.exp(-1 * (zoom - 10));
+            reduced.put(zoom, PolylineReduction.polylineReduction(reduced.get(unreducedEntry), tolerance));
+        }
+        trackLayer.setPoints(reduced.get(zoom));
     }
 }

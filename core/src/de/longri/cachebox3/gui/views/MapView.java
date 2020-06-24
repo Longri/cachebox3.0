@@ -357,7 +357,7 @@ public class MapView extends AbstractView {
             if (newZoom != CB.lastMapState.getZoom()) {
                 CB.lastMapState.setZoom(newZoom);
                 for (Track track : TrackList.getTrackList()) {
-                    track.updateTrackView();
+                    track.updateTrackLayer();
                 }
             }
         });
@@ -661,11 +661,11 @@ public class MapView extends AbstractView {
         layerGroup.layers.add(centerCrossLayer);
 
         if (TrackRecorder.getInstance().isStarted()) {
-            TrackRecorder.getInstance().getRecordingTrack().viewTrack();
+            TrackRecorder.getInstance().getRecordingTrack().createTrackLayer();
         }
 
         for (Track track : TrackList.getTrackList()) {
-            track.viewTrack();
+            track.createTrackLayer();
             /*
             // todo Labeling the track on the map
             if (track.isVisible()) {
@@ -1247,12 +1247,12 @@ public class MapView extends AbstractView {
 
     private void startTrackRecorder() {
         TrackRecorder.getInstance().startRecording();
-        TrackRecorder.getInstance().getRecordingTrack().viewTrack();
+        TrackRecorder.getInstance().getRecordingTrack().createTrackLayer();
     }
 
     private void stopTrackRecorder() {
         TrackRecorder.getInstance().stopRecording();
-        TrackRecorder.getInstance().getRecordingTrack().hideTrack();
+        TrackRecorder.getInstance().getRecordingTrack().hideTrackLayer();
     }
 
     public void clickOnItem(final MapWayPointItem item) {

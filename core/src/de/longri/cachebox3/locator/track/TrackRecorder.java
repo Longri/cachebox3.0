@@ -222,6 +222,7 @@ public class TrackRecorder implements PositionChangedListener {
                         .append("</trkpt>\n");
 
                 RandomAccessFile rand;
+                // update file
                 try {
                     rand = new RandomAccessFile(gpxFile.file(), "rw");
 
@@ -247,7 +248,7 @@ public class TrackRecorder implements PositionChangedListener {
                 } catch (IOException e) {
                     log.error("Trackrecorder IOException", e);
                 }
-
+                // update Track (recordingTrack)
                 newPoint = new Coordinate(event.pos.getLatitude(), event.pos.getLongitude(), newCoord.getElevation(), newCoord.getHeading(), new Date());
                 recordingTrack.add(newPoint);
                 lastRecordedPosition = newCoord;
@@ -257,17 +258,17 @@ public class TrackRecorder implements PositionChangedListener {
                     recordingTrack.setElevationDifference(recordingTrack.getElevationDifference() + elevationDifference);
                     lastElevation = newCoord.getElevation();
                 }
-
+                // update TrackList View
                 if (CB.viewmanager.getCurrentView() instanceof TrackListView) {
                     TrackListView trackListView = (TrackListView) CB.viewmanager.getCurrentView();
                     if (trackListView.currentRecordingTrackItem != null)
                         trackListView.currentRecordingTrackItem.notifyTrackChanged();
                 }
-
-                recordingTrack.getTrackLayer().addPoint(new GeoPoint(event.pos.getLatitude(), event.pos.getLongitude()));
-
+                // update map View (even if "hidden")
+                recordingTrack.addPointToTrackLayer(new GeoPoint(event.pos.getLatitude(), event.pos.getLongitude()));
+                // ready
                 duringTrackPointWriting = false;
-
+                // may be annotate
                 if (stillHaveToAnnotateMedia) {
                     stillHaveToAnnotateMedia = false;
                     annotateMedia(annotationDataFriendlyName, annotationDataMediaPath, annotationDataMediaCoordinate, annotationDataTimestamp);

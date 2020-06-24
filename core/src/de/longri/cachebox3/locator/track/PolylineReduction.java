@@ -24,8 +24,8 @@ public class PolylineReduction {
 
         int lastPoint = points.size() - 1;
         if (points.get(0).equals(points.get(lastPoint))) {
-            // avoid closed polygon: The first and the last point cannot be the same
-            // avoid closed polygon: simplified by splitting into 2 ArrayLists of same size.
+            // avoid closed polyline: The first and the last point cannot be the same
+            // avoid closed polyline: simplified by splitting into 2 ArrayLists of same size.
             // (normally you should take the two points with the maximal distance)
             ArrayList<GeoPoint> r1 = reduce(new ArrayList<>(points.subList(0, lastPoint / 2)), tolerance);
             ArrayList<GeoPoint> r2 = reduce(new ArrayList<>(points.subList(lastPoint / 2, lastPoint)), tolerance);
@@ -58,7 +58,7 @@ public class PolylineReduction {
     }
 
     // / <summary>
-    // / Douglases the peucker reduction.
+    // / Douglas-Peucker reduction.
     // / </summary>
     // / <param name="points">The points.</param>
     // / <param name="firstPoint">The first point.</param>

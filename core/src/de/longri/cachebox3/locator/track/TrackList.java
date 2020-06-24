@@ -18,12 +18,12 @@ public class TrackList extends Array<Track> {
     public void addTrack(Track track) {
         // Dont use this for internal RoutingTrack!! Use setRoutingTrack(Track track)
         add(track);
-        track.viewTrack();
+        track.createTrackLayer();
         trackListChanged();
     }
 
     public void removeTrack(Track track) {
-        track.hideTrack();
+        track.hideTrackLayer();
         if (track == routingTrack) {
             routingTrack = null;
         }
