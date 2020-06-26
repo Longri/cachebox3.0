@@ -64,7 +64,7 @@ public class DirectLineLayer extends GenericLayer implements Disposable {
     public void redrawLine(Coordinate ownPosition) {
         if (!this.isEnabled()) return;
 
-        Coordinate selectedCoordinate = de.longri.cachebox3.events.EventHandler.getSelectedCoord();
+        Coordinate selectedCoordinate = de.longri.cachebox3.events.EventHandler.getSelectedCoordinate();
         if (selectedCoordinate == null) {
             directLineRenderer.setInvalid();
             log.debug("Direct line are invalid");

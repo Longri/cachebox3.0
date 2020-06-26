@@ -116,7 +116,6 @@ public class TrackListView extends AbstractView {
     public Menu getContextMenu() {
         Menu cm = new Menu("TrackListViewContextMenuTitle");
         cm.addMenuItem("load", null, this::selectTrackFileReadAndAddToTracks);
-        // cm.addMenuItem("generate", null, () -> TrackCreation.getInstance().execute());
         return cm;
     }
 
@@ -131,6 +130,33 @@ public class TrackListView extends AbstractView {
         fc.show();
     }
 
+    /*
+    private void genTrackP2P() {
+        Coordinate coord = EventHandler.getSelectedCoordinate();
+
+        if (coord == null)
+            coord = EventHandler.getMyPosition();
+
+        ProjectionCoordinate pC = new ProjectionCoordinate(Translation.get("fromPoint"), coord, (targetCoord, startCoord, bearing, distance) -> {
+
+            if (targetCoord == null || startCoord == null)
+                return;
+
+            float[] dist = new float[4];
+            Track track = new Track("Point 2 Point Route");
+            track.add(new Coordinate(targetCoord.getLongitude(), targetCoord.getLatitude(), 0, 0, new Date()));
+            track.add(new Coordinate(startCoord.getLongitude(), startCoord.getLatitude(), 0, 0, new Date()));
+
+            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.ACCURATE, targetCoord.getLatitude(), targetCoord.getLongitude(), startCoord.getLatitude(), startCoord.getLongitude(), dist);
+            track.setTrackLength(dist[0]);
+
+            track.setVisible(true);
+            TrackList.getTrackList().addTrack(track);
+        }, ProjectionCoordinate.ProjectionType.point2point, "");
+        pC.show();
+    }
+
+     */
     public void readFromGpxFile(FileHandle fileHandle) {
         // !!! it is possible that a gpx file contains more than 1 <trk> segments
         // they are all added to the tracks (TrackList)
@@ -607,11 +633,14 @@ public class TrackListView extends AbstractView {
                     writer.append("<trkpt lat=\"").append(String.valueOf(track.get(i).getLatitude())).append("\" lon=\"").append(String.valueOf(track.get(i).getLongitude())).append("\">\n");
 
                     writer.append("   <ele>").append(String.valueOf(track.get(i).getElevation())).append("</ele>\n");
-                    SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    String sDate = datFormat.format(track.get(i).getDate());
-                    datFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
-                    sDate += "T" + datFormat.format(track.get(i).getDate()) + "Z";
-                    writer.append("   <time>").append(sDate).append("</time>\n");
+                    Date dtmp = track.get(i).getDate();
+                    if (dtmp != null) {
+                        SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                        String sDate = datFormat.format(dtmp);
+                        datFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
+                        sDate += "T" + datFormat.format(dtmp) + "Z";
+                        writer.append("   <time>").append(sDate).append("</time>\n");
+                    }
                     writer.append("</trkpt>\n");
                 }
                 writer.append("</trkseg>\n");

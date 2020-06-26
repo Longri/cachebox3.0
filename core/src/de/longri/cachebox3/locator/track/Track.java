@@ -21,6 +21,8 @@ import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.CacheboxMapAdapter;
 import de.longri.cachebox3.gui.views.MapView;
 import de.longri.cachebox3.locator.Coordinate;
+import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.utils.MathUtils;
 import org.oscim.backend.canvas.Paint;
 import org.oscim.core.GeoPoint;
 import org.oscim.layers.PathLayer;
@@ -32,13 +34,15 @@ import java.util.HashMap;
 public class Track extends Array<Coordinate> {
     private static final int MAXZOOM = 30;
     private static final int unreducedEntry = MAXZOOM - 1;
+    private static final int deltaEntry = MAXZOOM - 2;
     private final HashMap<Integer, ArrayList<GeoPoint>> reduced;
     private CharSequence name;
     private CharSequence fileName;
     private Color color;
     private boolean isVisible;
     private double trackLength;
-    private double elevationDifference;
+    private double elevationDifference, lastUsedElevation;
+    private Coordinate lastCoordinate;
     private PathLayer trackLayer;
 
     public Track(CharSequence _name) {
@@ -99,11 +103,44 @@ public class Track extends Array<Coordinate> {
         this.elevationDifference = altitudeDifference;
     }
 
+    public boolean addPoint(Coordinate coordinate) {
+        return addPoint(coordinate, true);
+    }
+
+    public boolean addPoint(Coordinate coordinate, boolean force) {
+        // if added return true
+        if (size > 0) {
+            // update tracklength and accumulated elevation
+            float[] distanceToLastRecordedPosition = new float[1];
+            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST,
+                    lastCoordinate.getLatitude(), lastCoordinate.getLongitude(),
+                    coordinate.getLatitude(), coordinate.getLongitude(),
+                    distanceToLastRecordedPosition);
+            if (force || distanceToLastRecordedPosition[0] > Config.TrackDistance.getValue()) {
+                add(coordinate);
+                trackLength = trackLength + distanceToLastRecordedPosition[0];
+                double ed = Math.abs(lastUsedElevation - coordinate.getElevation());
+                if (ed >= 25) {
+                    elevationDifference = elevationDifference + ed;
+                    lastUsedElevation = coordinate.getElevation();
+                }
+                lastCoordinate = coordinate;
+            } else {
+                return false;
+            }
+        } else {
+            lastUsedElevation = coordinate.getElevation();
+            lastCoordinate = coordinate;
+            add(coordinate);
+        }
+        return true;
+    }
+
     // =================================================================================================================
 
-    public void addPointToTrackLayer(GeoPoint geoPoint) {
+    public void addPointToTrackLayer(Coordinate point) {
         if (trackLayer != null)
-            trackLayer.addPoint(geoPoint);
+            trackLayer.addPoint(new GeoPoint(point.getLatitude(), point.getLongitude()));
     }
 
     public void createTrackLayer() {
@@ -141,10 +178,10 @@ public class Track extends Array<Coordinate> {
 
     private LineStyle buildLineStyle() {
         // ? to do skin's style for track
-        LineStyle.LineBuilder lb = LineStyle.builder();
+        LineStyle.LineBuilder<?> lb = LineStyle.builder();
         lb.color(Color.argb8888(color));
         lb.cap(Paint.Cap.BUTT);
-        lb.strokeWidth(CB.getScaledFloat(2));
+        lb.strokeWidth(CB.getScaledFloat(3));
         return lb.build();
     }
 
@@ -157,21 +194,21 @@ public class Track extends Array<Coordinate> {
             }
             reduced.put(unreducedEntry, trackPoints);
         } else {
-            // recalculate reduced tracks, if number of points differ more than 50 points
-            ArrayList<GeoPoint> trackPoints = reduced.get(unreducedEntry);
-            int reducedBaseSize = trackPoints.size();
-            if (size - reducedBaseSize > 50) {
-                for (int i = reducedBaseSize; i < size; i++) {
-                    trackPoints.add(new GeoPoint(get(i).getLatitude(), get(i).getLongitude()));
-                }
+            // add the new Coordinates to GeoPoints
+            ArrayList<GeoPoint> unreducedGeoPoints = reduced.get(unreducedEntry);
+            int unreducedGeoPointsSize = unreducedGeoPoints.size();
+            for (int i = unreducedGeoPointsSize; i < size; i++) {
+                unreducedGeoPoints.add(new GeoPoint(get(i).getLatitude(), get(i).getLongitude()));
             }
             reduced.clear();
-            reduced.put(unreducedEntry, trackPoints);
+            reduced.put(unreducedEntry, unreducedGeoPoints);
         }
+
         if (reduced.get(zoom) == null) {
             double tolerance = 0.01 * Math.exp(-1 * (zoom - 10));
             reduced.put(zoom, PolylineReduction.polylineReduction(reduced.get(unreducedEntry), tolerance));
         }
+
         trackLayer.setPoints(reduced.get(zoom));
     }
 }

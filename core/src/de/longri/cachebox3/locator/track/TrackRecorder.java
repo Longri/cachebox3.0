@@ -24,11 +24,8 @@ import de.longri.cachebox3.events.location.PositionChangedEvent;
 import de.longri.cachebox3.events.location.PositionChangedListener;
 import de.longri.cachebox3.gui.views.TrackListView;
 import de.longri.cachebox3.locator.Coordinate;
-import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.settings.Settings;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.utils.MathUtils;
-import org.oscim.core.GeoPoint;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
@@ -50,8 +47,6 @@ public class TrackRecorder implements PositionChangedListener {
     private String annotationDataMediaPath;
     private Coordinate annotationDataMediaCoordinate;
     private String annotationDataTimestamp;
-    private Coordinate lastRecordedPosition;
-    private double lastElevation;
     private int insertPosition;
     private boolean duringTrackPointWriting;
     private boolean duringAnnotateMediaWriting;
@@ -61,8 +56,6 @@ public class TrackRecorder implements PositionChangedListener {
         isStarted = false;
         isPaused = false;
         gpxFile = null;
-        lastRecordedPosition = null;
-        lastElevation = 0;
         duringTrackPointWriting = false;
         duringAnnotateMediaWriting = false;
         stillHaveToAnnotateMedia = false;
@@ -195,86 +188,63 @@ public class TrackRecorder implements PositionChangedListener {
             return; // ignore this position change
         }
 
-        Coordinate newCoord = EventHandler.getMyPosition(); // the event possibly has no elevation
+        Coordinate newCoordinate = EventHandler.getMyPosition(); // the event parameter possibly has no elevation
+        if (newCoordinate.getDate() == null) newCoordinate.setDate(new Date());
+        if (recordingTrack.addPoint(newCoordinate, false)) {
+            // recordingTrack is updated
+            duringTrackPointWriting = true;
+            StringBuilder sb = new StringBuilder();
+            sb.append("<trkpt lat=\"").append(newCoordinate.getLatitude()).append("\" lon=\"").append(newCoordinate.getLongitude()).append("\">\n")
+                    .append("   <ele>").append(newCoordinate.getElevation()).append("</ele>\n")
+                    .append("   <time>").append(getDateTimeString()).append("</time>\n")
+                    .append("   <course>").append(newCoordinate.getHeading()).append("</course>\n")
+                    .append("   <speed>").append(newCoordinate.getSpeed()).append("</speed>\n")
+                    .append("</trkpt>\n");
 
-        if (lastRecordedPosition == null) {
-            // wait for 2 Coordinates
-            lastRecordedPosition = newCoord;
-            lastElevation = newCoord.getElevation();
-        } else {
-            Coordinate newPoint;
-            double elevationDifference = 0;
+            RandomAccessFile rand;
+            // update file
+            try {
+                rand = new RandomAccessFile(gpxFile.file(), "rw");
 
-            // wurden seit dem letzten aufgenommenen Wegpunkt mehr als x Meter zurückgelegt? Wenn nicht, dann nicht aufzeichnen.
-            float[] dist = new float[1];
+                // suche letzte "</trk>"
 
-            MathUtils.computeDistanceAndBearing(MathUtils.CalculationType.FAST, lastRecordedPosition.getLatitude(), lastRecordedPosition.getLongitude(), event.pos.getLatitude(), event.pos.getLongitude(), dist);
-            float distanceToLastRecordedPosition = dist[0];
+                int i = (int) rand.length();
+                byte[] bEnde = new byte[insertPosition];
+                rand.seek(i - insertPosition); // Seek to start point of file
 
-            if (distanceToLastRecordedPosition > Config.TrackDistance.getValue()) {
-                duringTrackPointWriting = true;
-                StringBuilder sb = new StringBuilder();
-                sb.append("<trkpt lat=\"").append(event.pos.getLatitude()).append("\" lon=\"").append(event.pos.getLongitude()).append("\">\n")
-                        .append("   <ele>").append(newCoord.getElevation()).append("</ele>\n")
-                        .append("   <time>").append(getDateTimeString()).append("</time>\n")
-                        .append("   <course>").append(newCoord.getHeading()).append("</course>\n")
-                        .append("   <speed>").append(newCoord.getSpeed()).append("</speed>\n")
-                        .append("</trkpt>\n");
-
-                RandomAccessFile rand;
-                // update file
-                try {
-                    rand = new RandomAccessFile(gpxFile.file(), "rw");
-
-                    // suche letzte "</trk>"
-
-                    int i = (int) rand.length();
-                    byte[] bEnde = new byte[insertPosition];
-                    rand.seek(i - insertPosition); // Seek to start point of file
-
-                    for (int ct = 0; ct < insertPosition; ct++) {
-                        bEnde[ct] = rand.readByte(); // read byte from the file
-                    }
-
-                    // insert point
-                    byte[] b = sb.toString().getBytes();
-                    rand.setLength(i + b.length);
-                    rand.seek(i - insertPosition);
-                    rand.write(b);
-                    rand.write(bEnde);
-                    rand.close();
-                } catch (FileNotFoundException e) {
-                    log.error("FileNotFoundException", e);
-                } catch (IOException e) {
-                    log.error("Trackrecorder IOException", e);
+                for (int ct = 0; ct < insertPosition; ct++) {
+                    bEnde[ct] = rand.readByte(); // read byte from the file
                 }
-                // update Track (recordingTrack)
-                newPoint = new Coordinate(event.pos.getLatitude(), event.pos.getLongitude(), newCoord.getElevation(), newCoord.getHeading(), new Date());
-                recordingTrack.add(newPoint);
-                lastRecordedPosition = newCoord;
-                recordingTrack.setTrackLength(recordingTrack.getTrackLength() + distanceToLastRecordedPosition);
-                elevationDifference = Math.abs(lastElevation - newCoord.getElevation());
-                if (elevationDifference >= 25) {
-                    recordingTrack.setElevationDifference(recordingTrack.getElevationDifference() + elevationDifference);
-                    lastElevation = newCoord.getElevation();
-                }
-                // update TrackList View
-                if (CB.viewmanager.getCurrentView() instanceof TrackListView) {
-                    TrackListView trackListView = (TrackListView) CB.viewmanager.getCurrentView();
-                    if (trackListView.currentRecordingTrackItem != null)
-                        trackListView.currentRecordingTrackItem.notifyTrackChanged();
-                }
-                // update map View (even if "hidden")
-                recordingTrack.addPointToTrackLayer(new GeoPoint(event.pos.getLatitude(), event.pos.getLongitude()));
-                // ready
-                duringTrackPointWriting = false;
-                // may be annotate
-                if (stillHaveToAnnotateMedia) {
-                    stillHaveToAnnotateMedia = false;
-                    annotateMedia(annotationDataFriendlyName, annotationDataMediaPath, annotationDataMediaCoordinate, annotationDataTimestamp);
-                }
+
+                // insert point
+                byte[] b = sb.toString().getBytes();
+                rand.setLength(i + b.length);
+                rand.seek(i - insertPosition);
+                rand.write(b);
+                rand.write(bEnde);
+                rand.close();
+            } catch (FileNotFoundException e) {
+                log.error("FileNotFoundException", e);
+            } catch (IOException e) {
+                log.error("Trackrecorder IOException", e);
+            }
+            // update TrackList View
+            if (CB.viewmanager.getCurrentView() instanceof TrackListView) {
+                TrackListView trackListView = (TrackListView) CB.viewmanager.getCurrentView();
+                if (trackListView.currentRecordingTrackItem != null)
+                    trackListView.currentRecordingTrackItem.notifyTrackChanged();
+            }
+            // update map View (even if "hidden"?)
+            recordingTrack.addPointToTrackLayer(newCoordinate);
+            // ready
+            duringTrackPointWriting = false;
+            // may be annotate
+            if (stillHaveToAnnotateMedia) {
+                stillHaveToAnnotateMedia = false;
+                annotateMedia(annotationDataFriendlyName, annotationDataMediaPath, annotationDataMediaCoordinate, annotationDataTimestamp);
             }
         }
+
     }
 
     public Track getRecordingTrack() {

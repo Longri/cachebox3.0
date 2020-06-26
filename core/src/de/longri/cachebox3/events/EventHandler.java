@@ -231,7 +231,7 @@ public class EventHandler implements SelectedCacheChangedListener, SelectedWayPo
         return INSTANCE.selectedWayPoint;
     }
 
-    public static Coordinate getSelectedCoord() {
+    public static Coordinate getSelectedCoordinate() {
         return INSTANCE.selectedCoordinate;
     }
 

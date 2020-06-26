@@ -332,7 +332,7 @@ public class WaypointView extends AbstractView implements PositionChangedListene
     }
 
     public void addWp() {
-        addWp(EventHandler.getSelectedCoord(), true);
+        addWp(EventHandler.getSelectedCoordinate(), true);
     }
 
     private void addWp(Coordinate coordinate, boolean firstShowEditCoords) {

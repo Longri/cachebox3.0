@@ -105,8 +105,8 @@ public class MapInfoPanel extends Catch_Table implements SpeedChangedListener, D
                 coordinateLabel1.setText(UnitFormatter.formatLatitudeDM(myPosition.getLatitude()));
                 coordinateLabel2.setText(UnitFormatter.formatLongitudeDM(myPosition.getLongitude()));
 
-                if (EventHandler.getSelectedCoord() != null) {
-                    Coordinate targetCoordinate = EventHandler.getSelectedCoord();
+                if (EventHandler.getSelectedCoordinate() != null) {
+                    Coordinate targetCoordinate = EventHandler.getSelectedCoordinate();
                     setDistance(targetCoordinate.distance(MathUtils.CalculationType.ACCURATE));
                     compass.setHeading(myPosition.bearingTo(targetCoordinate, MathUtils.CalculationType.ACCURATE) - bearing);
                 }

@@ -399,7 +399,7 @@ public class CompassView extends AbstractView implements
         }
 
         final float heading = actHeading;
-        final Coordinate dest = EventHandler.getSelectedCoord();
+        final Coordinate dest = EventHandler.getSelectedCoordinate();
         if (dest == null) {
             log.debug("No own position, return refresh Compass ");
             return;

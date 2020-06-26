@@ -351,7 +351,7 @@ public class CacheListView extends AbstractView implements CacheListChangedListe
 
     private void resort() {
         log.debug("resort cacheList");
-        Database.Data.cacheList.resort(EventHandler.getSelectedCoord(), new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWayPoint()));
+        Database.Data.cacheList.resort(EventHandler.getSelectedCoordinate(), new CacheWithWP(EventHandler.getSelectedCache(), EventHandler.getSelectedWayPoint()));
         // Database.Data.cacheList.resort(null, null);
         log.debug("Finish resort cacheList");
     }

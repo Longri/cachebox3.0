@@ -65,6 +65,7 @@ import de.longri.cachebox3.live.LiveButton;
 import de.longri.cachebox3.live.LiveMapQue;
 import de.longri.cachebox3.locator.Coordinate;
 import de.longri.cachebox3.locator.track.Track;
+import de.longri.cachebox3.locator.track.TrackCreator;
 import de.longri.cachebox3.locator.track.TrackList;
 import de.longri.cachebox3.locator.track.TrackRecorder;
 import de.longri.cachebox3.settings.Config;
@@ -300,7 +301,7 @@ public class MapView extends AbstractView {
                 setCenterCrossLayerEnabled(false);
             } else if (mapMode == MapMode.WP) {
                 storeMapstate(mapMode, null);
-                final Coordinate wpCoord = EventHandler.getSelectedCoord();
+                final Coordinate wpCoord = EventHandler.getSelectedCoordinate();
                 if (wpCoord == null) {
                     // we hav no selected WP, so switch MapMode to 'LOCK'
                     CB.postOnGlThread(new NamedRunnable("MapView") {
@@ -1237,9 +1238,13 @@ public class MapView extends AbstractView {
             cm2.addMenuItem("pause", null, () -> TrackRecorder.getInstance().pauseRecording()).setEnabled(TrackRecorder.getInstance().isStarted());
         cm2.addMenuItem("stop", null, this::stopTrackRecorder).setEnabled(TrackRecorder.getInstance().isStarted() || TrackRecorder.getInstance().isPaused());
         cm2.addDivider(0);
-        // to be visible on map have to create pathlayer and add to layers
         cm2.addMenuItem("load", CB.getSkin().menuIcon.me3TrackList, new TrackListView()::selectTrackFileReadAndAddToTracks);
-        //todo cm2.addMenuItem("generate", null, () -> TrackCreation.getInstance().execute());
+        cm2.addMenuItem("TrackListViewCreateTrackTitle", null, TrackCreator.getInstance()::createTrack);
+        cm2.addMenuItem("addWaypoint", null, TrackCreator.getInstance()::addPoint);
+        cm2.addMenuItem("Projection", null, TrackCreator.getInstance()::addProjection);
+        // cm2.addMenuItem("addTrack", null, TrackCreator.getInstance()::addTrack);
+        // cm2.addMenuItem("addRoute", null, TrackCreator.getInstance()::addRoute);
+        // cm2.addMenuItem("addCircle", null, TrackCreator.getInstance()::addCircle);
         cm2.addDivider(1);
         cm2.addMenuItem("Tracks", CB.getSkin().menuIcon.me3TrackList, () -> CB.viewmanager.showView(new TrackListView()));
         cm2.show();

@@ -184,18 +184,18 @@ public class Coordinate {
         return this.speed;
     }
 
-    public void setDate(Date date) {
-        if (date == null) {
-            if (this.date == null) return;
+    public void setDate(Date _date) {
+        if (_date == null) {
+            if (date == null) return;
         } else {
-            if (this.date != null && this.date.compareTo(date) == 0) return;
+            if (date != null && date.compareTo(_date) == 0) return;
         }
-        this.date = date;
-        this.hash = 0;
+        date = _date;
+        hash = 0;
     }
 
     public Date getDate() {
-        return this.date;
+        return date;
     }
 
 // methods

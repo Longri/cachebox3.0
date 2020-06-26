@@ -123,12 +123,9 @@ public class ProjectionCoordinate extends ActivityBase {
         Gdx.graphics.setContinuousRendering(true);
 
 
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                ProjectionCoordinate.this.getStage().setKeyboardFocus(textFieldBearing);
-                textFieldBearing.selectAll();
-            }
+        Gdx.app.postRunnable(() -> {
+            ProjectionCoordinate.this.getStage().setKeyboardFocus(textFieldBearing);
+            textFieldBearing.selectAll();
         });
     }
 
@@ -169,13 +166,13 @@ public class ProjectionCoordinate extends ActivityBase {
     };
 
     private void createInputFields() {
-        addEditLine(Translation.get("bearing"), textFieldBearing, "°");
+        addEditLine(Translation.get("Bearing"), textFieldBearing, "°");
         addEditLine(Translation.get("Distance"), textFieldDistance,
                 Config.ImperialUnits.getValue() ? "yd" : "m");
 
     }
 
-    private void addEditLine(CharSequence name, final VisTextField textField, CharSequence unity) {
+    private void addEditLine(CharSequence name, final VisTextField textField, CharSequence unit) {
         Table line = new VisTable();
         line.defaults().pad(CB.scaledSizes.MARGIN);
         line.add(name).left();
@@ -200,7 +197,7 @@ public class ProjectionCoordinate extends ActivityBase {
             }
         });
         line.add(textField).expandX().fillX();
-        line.add(unity);
+        line.add(unit);
         this.row();
         this.add(line).expandX().fillX();
     }

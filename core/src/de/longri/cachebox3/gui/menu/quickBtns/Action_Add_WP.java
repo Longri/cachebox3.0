@@ -70,7 +70,7 @@ public class Action_Add_WP extends AbstractAction {
         }
 
         if (coord == null) {
-            coord = EventHandler.getSelectedCoord();
+            coord = EventHandler.getSelectedCoordinate();
             if (coord == null)
                 coord = EventHandler.getMyPosition();
             if ((coord == null) || (!coord.isValid()))

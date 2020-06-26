@@ -60,7 +60,7 @@ public class CacheList extends Array<AbstractCache> implements DistanceChangedLi
 
     /**
      * @param selectedCoord
-     *            CB.getSelectedCoord()
+     *            CB.getSelectedCoordinate()
      * @param selected
      *            new CacheWithWp(CB.getSelectedCache(),CB.getSelectedWP())
      * @param userName

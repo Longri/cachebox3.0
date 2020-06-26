@@ -63,7 +63,7 @@ public class BackgroundTask implements Runnable {
         log.debug("create background task");
 
         approachDistance = Config.SoundApproachDistance.getValue();
-        target = EventHandler.getSelectedCoord();
+        target = EventHandler.getSelectedCoordinate();
 
         if (target != null) {
 
