@@ -1,5 +1,6 @@
 package de.longri.cachebox3.gui.activities;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.ArrayMap;
 import de.longri.cachebox3.CB;
@@ -55,7 +56,7 @@ public class SelectableImport extends Activity {
     }
 
     @Override
-    protected void runAtOk() {
+    protected void runAtOk(InputEvent event, float x, float y) {
         infoBox.open();
         CB.postAsync(new NamedRunnable("SelectableImport") {
             @Override

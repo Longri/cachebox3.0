@@ -52,7 +52,7 @@ public class CB_Button extends IconButton {
     }
 
     public void setState(int i) {
-        setChecked(i == 0 ? false : true);
+        setChecked(i != 0);
     }
 
     public void enable() { setDisabled(false);}

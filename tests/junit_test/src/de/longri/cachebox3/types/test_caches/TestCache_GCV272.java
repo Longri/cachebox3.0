@@ -398,7 +398,7 @@ public class TestCache_GCV272 extends AbstractTestCache {
         LogEntry logEntry1 = new LogEntry();
         logEntry1.cacheId = this.id;
         logEntry1.finder = "berlingser";
-        logEntry1.geoCacheLogType = LogTypes.found;
+        logEntry1.geoCacheLogType = LogType.found;
         logEntry1.logText = "Danke für die Geschichtsstunde. Den Hinweis an S4 habe ich nicht gefunden. Sonst klappte alles. Die Stationen waren gut ausgearbeitet und gut zu finden.  TFTC und Gruß vom Haarstrang.";
         logEntry1.logDate = DATE_PATTERN.parse("2011-08-17T20:20:15Z");
         logEntry1.logId = 180491712L;
@@ -407,7 +407,7 @@ public class TestCache_GCV272 extends AbstractTestCache {
         LogEntry logEntry2 = new LogEntry();
         logEntry2.cacheId = this.id;
         logEntry2.finder = "Egon0815";
-        logEntry2.geoCacheLogType = LogTypes.found;
+        logEntry2.geoCacheLogType = LogType.found;
         logEntry2.logText = "TFTC";
         logEntry2.logDate = DATE_PATTERN.parse("2011-08-08T19:00:00Z");
         logEntry2.logId = 178523602L;
@@ -416,7 +416,7 @@ public class TestCache_GCV272 extends AbstractTestCache {
         LogEntry logEntry3 = new LogEntry();
         logEntry3.cacheId = this.id;
         logEntry3.finder = "themurkel0815";
-        logEntry3.geoCacheLogType = LogTypes.found;
+        logEntry3.geoCacheLogType = LogType.found;
         logEntry3.logText = "Netter Multi, TFTC";
         logEntry3.logDate = DATE_PATTERN.parse("2011-08-08T19:00:00Z");
         logEntry3.logId = 178488480L;
@@ -425,7 +425,7 @@ public class TestCache_GCV272 extends AbstractTestCache {
         LogEntry logEntry4 = new LogEntry();
         logEntry4.cacheId = this.id;
         logEntry4.finder = "Logan Silver";
-        logEntry4.geoCacheLogType = LogTypes.found;
+        logEntry4.geoCacheLogType = LogType.found;
         logEntry4.logText = "# 372 # 21:00 #\n" +
                 "\n" +
                 "Der Letzte Cache der heutigen Runde war auch der stationenreichste. Bei zei Stationen haben sich Baldur unsd ich mächtig dumm angestellt und eine der beiden gar nicht gefunden. Durch logisches Rechnen konnten wir aber die potenziellen Finalgegenden stark eingrenzen und das nach Baldurs Vermutung wahrscheinlichere Final war es letztlich dann auch. Das Finale war dann auch unsere schnellste Station. Baldurs GPS hatte ih  selbst gerade erst eingeholt^^ da warf ich ihm schon die Dose zu. Ein wirklich schöner Multi, der uns wieder einmal die Deutsch-Deutsche Geschichte etwas näher bringen konnte.\n" +
@@ -442,7 +442,7 @@ public class TestCache_GCV272 extends AbstractTestCache {
         LogEntry logEntry5 = new LogEntry();
         logEntry5.cacheId = this.id;
         logEntry5.finder = "BaldurMorgan";
-        logEntry5.geoCacheLogType = LogTypes.found;
+        logEntry5.geoCacheLogType = LogType.found;
         logEntry5.logText = "# 644 - 21:00 Uhr\n" +
                 "\n" +
                 "Dieser feine Multi war der letzte auf meiner heutigen Tour zusammen mit LoganSilver. Die Stationen konnten allesamt gut gefunden werden, auch wenn wir bei der Station mit der Höhenangabe erst eine zeitlang Tomaten auf den Augen hatten. Wer der/die Spender/in des Kirchengebäudes war fanden wir jedoch nicht heraus, ermittelten aber mit etwas logischem Denken 2 mögliche Finalorte. Mein Gefühl sagte mir, dass wir zuerst zu dem Einen fahren sollten. Und nach kurzer Suche bewahrheitete sich meine Vorahnung, als LoganSilver die Dose aus ihrem Versteck zog. Durch die zahlreichen Vorlogs, welche von mehreren notwendigen Anläufen berichteten, hätten wir uns die Suche insgesamt etwas schwieriger vorgestellt, aber es lief doch ganz rund [;)]\n" +

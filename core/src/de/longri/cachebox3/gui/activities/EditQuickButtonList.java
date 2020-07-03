@@ -193,10 +193,9 @@ public class EditQuickButtonList extends Activity {
     }
 
     @Override
-    protected void runAtOk() {
+    protected void runAtOk(InputEvent event, float x, float y) {
         Config.quickButtonList.setValue(getCurrentlyDefinedQuickButtonList());
         if (onChange != null) onChange.changed(new ChangeListener.ChangeEvent(), this);
-        finish();
     }
 
     public void execute(ChangeListener changeListener) {

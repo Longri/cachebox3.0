@@ -30,7 +30,7 @@ import de.longri.cachebox3.gui.widgets.CacheSizeWidget;
 import de.longri.cachebox3.gui.widgets.Stars;
 import de.longri.cachebox3.types.CacheSizes;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.LogType;
 import de.longri.cachebox3.utils.NamedRunnable;
 
 /**
@@ -58,8 +58,8 @@ public class CacheItem extends VisTable implements Disposable {
 
 
     public CacheItem(CacheTypes type, CharSequence cacheName, int difficulty, int terrain,
-                     int vote, CacheSizes size, String shortSizeString, LogTypes leftLogType,
-                     LogTypes rightLogType, boolean isAvailable, boolean isFavorite, int favPoints,
+                     int vote, CacheSizes size, String shortSizeString, LogType leftLogType,
+                     LogType rightLogType, boolean isAvailable, boolean isFavorite, int favPoints,
                      int tbCount, CacheListItemStyle style) {
 
         this.difficulty = difficulty;
@@ -72,7 +72,7 @@ public class CacheItem extends VisTable implements Disposable {
         this.cacheName = cacheName;
         this.leftInfoIcon = leftLogType == null ? null : leftLogType.getDrawable(style == null ? null : style.logTypesStyle);
         this.rightInfoIcon = rightLogType == null ? null : rightLogType.getDrawable(style == null ? null : style.logTypesStyle);
-        this.rightTopIcon = isFavorite ? LogTypes.ownFavorite.getDrawable(style == null ? null : style.logTypesStyle) : null;
+        this.rightTopIcon = isFavorite ? (style == null ? null : style.ownFavorite) : null;
         this.isAvailable = isAvailable;
         this.favPoints = favPoints;
         this.tbCount = tbCount;

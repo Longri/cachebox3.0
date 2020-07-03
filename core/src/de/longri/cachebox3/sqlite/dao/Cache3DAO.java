@@ -106,10 +106,10 @@ public class Cache3DAO extends AbstractCacheDAO {
 
         Date dateHidden = abstractCache.getDateHidden();
         if (dateHidden == null) dateHidden = new Date();
-        String dateString = Database.cbDbFormat.format(dateHidden);
+        String dateString = Database.dateFormat.format(dateHidden);
 
         args.put("DateHidden", dateString);
-        args.put("FirstImported", Database.cbDbFormat.format(new Date()));
+        args.put("FirstImported", Database.dateFormat.format(new Date()));
         args.put("TourName", abstractCache.getTourName());
         args.put("GPXFilename_Id", abstractCache.getGPXFilename_ID());
         args.put("state", abstractCache.getState());

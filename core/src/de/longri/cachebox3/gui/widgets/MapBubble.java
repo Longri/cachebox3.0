@@ -29,7 +29,7 @@ import de.longri.cachebox3.gui.views.WayPointItem;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.types.AbstractCache;
 import de.longri.cachebox3.types.AbstractWaypoint;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.LogType;
 import org.oscim.core.MercatorProjection;
 
 /**
@@ -56,20 +56,20 @@ public class MapBubble extends Catch_Table {
 
         if (cache != null) {
 
-            LogTypes left = null;
-            LogTypes right = null;
+            LogType left = null;
+            LogType right = null;
             boolean isAvailable = true;
             if (cache.isFound()) {
-                left = LogTypes.found;
+                left = LogType.found;
             }
 
             if (!cache.isAvailable()) {
-                right = LogTypes.temporarily_disabled;
+                right = LogType.temporarily_disabled;
                 isAvailable = false;
             }
 
             if (cache.isArchived()) {
-                right = LogTypes.archived;
+                right = LogType.archived;
                 isAvailable = false;
             }
 

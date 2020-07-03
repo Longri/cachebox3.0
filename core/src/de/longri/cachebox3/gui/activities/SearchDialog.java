@@ -1,5 +1,6 @@
 package de.longri.cachebox3.gui.activities;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.events.CacheListChangedEvent;
@@ -62,11 +63,10 @@ public class SearchDialog extends Activity {
         mainContent.addLast(btnFilter);
     }
 
-    protected void runAtOk() {
-        finish();
+    protected void runAtOk(InputEvent event, float x, float y) {
     }
 
-    public void runAtCancel() {
+    public void runAtCancel(InputEvent event, float x, float y) {
         btnCancel.setText(Translation.get("Next"));
         searchNow();
     }

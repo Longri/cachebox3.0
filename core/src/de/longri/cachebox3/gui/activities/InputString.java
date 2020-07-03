@@ -1,5 +1,6 @@
 package de.longri.cachebox3.gui.activities;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.gui.Activity;
 import de.longri.cachebox3.gui.widgets.CB_Label;
@@ -23,17 +24,14 @@ public class InputString extends Activity {
     }
 
     @Override
-    protected void runAtOk() {
+    protected void runAtOk(InputEvent event, float x, float y) {
         btnOK.setDisabled(true);
         callBack(edtResult.getText());
-        finish();
     }
 
     @Override
-    protected void runAtCancel() {
+    protected void runAtCancel(InputEvent event, float x, float y) {
         callBack("");
-        super.runAtCancel();
-        finish();
     }
 
     public void setText(CharSequence newText) {

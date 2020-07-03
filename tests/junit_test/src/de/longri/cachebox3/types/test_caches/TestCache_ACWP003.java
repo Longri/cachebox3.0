@@ -83,7 +83,7 @@ public class TestCache_ACWP003 extends AbstractTestCache {
         LogEntry logEntry1 = new LogEntry();
         logEntry1.cacheId = this.id;
         logEntry1.finder = "GSAK";
-        logEntry1.geoCacheLogType = LogTypes.note;
+        logEntry1.geoCacheLogType = LogType.note;
         logEntry1.logText = "User Note\n    ";
         logEntry1.logDate = DATE_PATTERN2.parse("2014-07-19T08:00:00");
         logEntry1.logId = -3L;
@@ -92,7 +92,7 @@ public class TestCache_ACWP003 extends AbstractTestCache {
         LogEntry logEntry2 = new LogEntry();
         logEntry2.cacheId = this.id;
         logEntry2.finder = "GSAK";
-        logEntry2.geoCacheLogType = LogTypes.note;
+        logEntry2.geoCacheLogType = LogType.note;
         logEntry2.logText = "User Note$~Log Section\n    ";
         logEntry2.logDate = DATE_PATTERN2.parse("2014-07-19T08:00:00");
         logEntry2.logId = -2L;

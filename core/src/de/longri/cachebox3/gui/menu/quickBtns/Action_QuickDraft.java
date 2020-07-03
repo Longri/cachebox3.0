@@ -28,8 +28,8 @@ import de.longri.cachebox3.gui.views.DraftsView;
 import de.longri.cachebox3.gui.widgets.menu.Menu;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.DraftList;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.Drafts;
+import de.longri.cachebox3.types.LogType;
 
 /**
  * Created by Longri on 14.09.2016.
@@ -52,13 +52,13 @@ public class Action_QuickDraft extends AbstractAction {
             case Giga:
             case CITO:
                 cm.addMenuItem("attended", logTypesStyle.attended, () -> {
-                    DraftsView.addNewDraft(LogTypes.attended, true);
+                    DraftsView.getInstance().addNewDraft(LogType.attended, true);
                     finalHandling(true, cache);
                 });
                 break;
             case Camera:
                 cm.addMenuItem("webCamFotoTaken", logTypesStyle.webcam_photo_taken, () -> {
-                    DraftsView.addNewDraft(LogTypes.webcam_photo_taken, true);
+                    DraftsView.getInstance().addNewDraft(LogType.webcam_photo_taken, true);
                     finalHandling(true, cache);
                 });
                 cm.addMenuItem("DNF", logTypesStyle.didnt_find, () -> {
@@ -67,11 +67,11 @@ public class Action_QuickDraft extends AbstractAction {
                 break;
             default:
                 cm.addMenuItem("found", logTypesStyle.found, () -> {
-                    DraftsView.addNewDraft(LogTypes.found, true);
+                    DraftsView.getInstance().addNewDraft(LogType.found, true);
                     finalHandling(true, cache);
                 });
                 cm.addMenuItem("DNF", logTypesStyle.didnt_find, () -> {
-                    DraftsView.addNewDraft(LogTypes.didnt_find, true);
+                    DraftsView.getInstance().addNewDraft(LogType.didnt_find, true);
                     finalHandling(false, cache);
                 });
                 break;
@@ -102,7 +102,7 @@ public class Action_QuickDraft extends AbstractAction {
 
         PlatformConnector.vibrate();
          */
-        DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
+        Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
     }
 
 }

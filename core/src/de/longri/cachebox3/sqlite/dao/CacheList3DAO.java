@@ -291,8 +291,8 @@ public class CacheList3DAO extends AbstractCacheListDAO {
 
                 REPLACE_INFO.bind(
                         ca.getId(),
-                        Database.cbDbFormat.format(ca.getDateHidden() == null ? new Date() : ca.getDateHidden()),
-                        Database.cbDbFormat.format(new Date()),
+                        Database.dateFormat.format(ca.getDateHidden() == null ? new Date() : ca.getDateHidden()),
+                        Database.dateFormat.format(new Date()),
                         ca.getTourName(),
                         ca.getGPXFilename_ID(),
                         null, //todo handle listing checksum

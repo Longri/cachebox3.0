@@ -42,7 +42,7 @@ public class TrackableDao {
                         entry.CacheId(),
                         entry.getCurrentGoal(),
                         entry.getCurrentOwnerName(),
-                        Database.cbDbFormat.format(entry.getDateCreated() == null ? new Date() : entry.getDateCreated()),
+                        Database.dateFormat.format(entry.getDateCreated() == null ? new Date() : entry.getDateCreated()),
                         entry.getDescription(),
                         entry.getIconUrl(),
                         entry.getImageUrl(),

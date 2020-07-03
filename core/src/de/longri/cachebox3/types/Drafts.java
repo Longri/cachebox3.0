@@ -30,8 +30,8 @@ import java.util.Comparator;
 /**
  * Created by Longri on 31.08.2017
  */
-public class DraftList extends Array<DraftEntry> {
-   private final static org.slf4j.Logger log = LoggerFactory.getLogger(DraftList.class);
+public class Drafts extends Array<Draft> {
+   private final static org.slf4j.Logger log = LoggerFactory.getLogger(Drafts.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +42,7 @@ public class DraftList extends Array<DraftEntry> {
     private boolean croppedList = false;
     private int actCroppedLength = -1;
 
-    public DraftList() {
+    public Drafts() {
 
     }
 
@@ -109,9 +109,9 @@ public class DraftList extends Array<DraftEntry> {
 
             reader.moveToFirst();
             while (!reader.isAfterLast()) {
-                DraftEntry fne = new DraftEntry(reader);
-                if (!this.contains(fne)) {
-                    this.add(fne);
+                Draft fne = new Draft(reader); // the new created object will never be in the list so compare elements
+                if (!contains(fne, false)) {
+                    add(fne);
                 }
 
                 reader.moveToNext();
@@ -130,9 +130,9 @@ public class DraftList extends Array<DraftEntry> {
             }
 
             //sort by Date/time
-            this.sort(new Comparator<DraftEntry>() {
+            this.sort(new Comparator<Draft>() {
                 @Override
-                public int compare(DraftEntry o1, DraftEntry o2) {
+                public int compare(Draft o1, Draft o2) {
                     return o2.timestamp.compareTo(o1.timestamp);
                 }
             });
@@ -143,7 +143,7 @@ public class DraftList extends Array<DraftEntry> {
      * @param dirFileName Config.settings.DraftsGarminPath.getValue()
      */
     public static void createVisitsTxt(String dirFileName) {
-        DraftList lDrafts = new DraftList();
+        Drafts lDrafts = new Drafts();
         lDrafts.loadDrafts("", "Timestamp ASC", LoadingType.LOAD_ALL);
 
         FileHandle txtFile = Gdx.files.absolute(dirFileName);
@@ -155,7 +155,7 @@ public class DraftList extends Array<DraftEntry> {
             byte[] bom = {(byte) 239, (byte) 187, (byte) 191};
             writer.write(bom);
 
-            for (DraftEntry fieldNote : lDrafts) {
+            for (Draft fieldNote : lDrafts) {
                 String log = fieldNote.gcCode + "," + fieldNote.getDateTimeString() + "," + fieldNote.type.toString() + ",\"" + fieldNote.comment + "\"\n";
                 writer.write((log + "\n").getBytes("UTF-8"));
             }
@@ -167,18 +167,18 @@ public class DraftList extends Array<DraftEntry> {
         }
     }
 
-    public void deleteDraftByCacheId(long cacheId, LogTypes type) {
+    public void deleteDraftByCacheId(long cacheId, LogType type) {
         synchronized (this) {
             int foundNumber = 0;
-            DraftEntry fne = null;
+            Draft fne = null;
             // deletes a possible existing Draft of type for the Cache with cacheId
-            for (DraftEntry fn : this) {
+            for (Draft fn : this) {
                 if ((fn.CacheId == cacheId) && (fn.type == type)) {
                     fne = fn;
                 }
             }
             if (fne != null) {
-                if (fne.type == LogTypes.found)
+                if (fne.type == LogType.found)
                     foundNumber = fne.foundNumber;
                 this.removeValue(fne, true);
                 fne.deleteFromDatabase();
@@ -187,20 +187,20 @@ public class DraftList extends Array<DraftEntry> {
         }
     }
 
-    public void deleteDraft(long fieldNoteID, LogTypes type) {
+    public void deleteDraftById(long fieldNoteID) {
         synchronized (this) {
             int foundNumber = 0;
-            DraftEntry fne = null;
+            Draft fne = null;
             // deletes a possible existing Draft of type for the Cache with fieldNoteID
-            for (DraftEntry fn : this) {
+            for (Draft fn : this) {
                 if (fn.Id == fieldNoteID) {
                     fne = fn;
                 }
             }
             if (fne != null) {
-                if (fne.type == LogTypes.found)
+                if (fne.type == LogType.found)
                     foundNumber = fne.foundNumber;
-                this.removeValue(fne, true);
+                removeValue(fne, true);
                 fne.deleteFromDatabase();
             }
             decreaseFoundNumber(foundNumber);
@@ -210,25 +210,15 @@ public class DraftList extends Array<DraftEntry> {
     public void decreaseFoundNumber(int deletedFoundNumber) {
         if (deletedFoundNumber > 0) {
             // Customize all FoundNumbers that are larger
-            for (DraftEntry fn : this) {
-                if ((fn.type == LogTypes.found) && (fn.foundNumber > deletedFoundNumber)) {
+            for (Draft fn : this) {
+                if ((fn.type == LogType.found) && (fn.foundNumber > deletedFoundNumber)) {
                     int oldFoundNumber = fn.foundNumber;
                     fn.foundNumber--;
                     fn.comment = fn.comment.replaceAll("#" + oldFoundNumber, "#" + fn.foundNumber);
-                    fn.fillType();
                     fn.updateDatabase();
                 }
             }
         }
     }
 
-    public boolean contains(DraftEntry fne) {
-        synchronized (this) {
-            for (DraftEntry item : this) {
-                if (fne.equals(item))
-                    return true;
-            }
-            return false;
-        }
-    }
 }

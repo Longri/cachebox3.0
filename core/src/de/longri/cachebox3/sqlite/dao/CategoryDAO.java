@@ -88,7 +88,7 @@ public class CategoryDAO {
         Parameters args = new Parameters();
         args.put("GPXFilename", filename);
         args.put("CategoryId", category.Id);
-        String stimestamp = Database.cbDbFormat.format(new Date());
+        String stimestamp = Database.dateFormat.format(new Date());
         args.put("Imported", stimestamp);
         try {
             Database.Data.insert("GpxFilenames", args);

@@ -273,7 +273,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                logType = LogTypes.parseString(new String(data, offset, length));
+                logType = LogType.parseString(new String(data, offset, length));
             }
         });
 
@@ -594,7 +594,7 @@ public class GroundspeakGpxStreamImporter extends AbstractGpxStreamImporter {
         this.registerDataHandler("/gpx/wpt/extensions/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type", new DataHandler() {
             @Override
             protected void handleData(char[] data, int offset, int length) {
-                logType = LogTypes.parseString(new String(data, offset, length));
+                logType = LogType.parseString(new String(data, offset, length));
             }
         });
 

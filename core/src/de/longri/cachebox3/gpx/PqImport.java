@@ -279,7 +279,7 @@ public class PqImport {
                 }
 
                 int idx = existMap.size + 1;
-                String dateStringNow = Database.cbDbFormat.format(new Date());
+                String dateStringNow = Database.dateFormat.format(new Date());
                 for (ListViewItemInterface item : selectedItems) {
                     String pqName = ((PqListItem) item).getPocketQuery().name;
 

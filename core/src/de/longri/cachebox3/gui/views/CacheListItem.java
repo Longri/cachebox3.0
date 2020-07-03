@@ -27,7 +27,7 @@ import de.longri.cachebox3.gui.utils.ClickLongClickListener;
 import de.longri.cachebox3.gui.widgets.list_view.ListViewItem;
 import de.longri.cachebox3.settings.Config;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.LogType;
 
 /**
  * Created by Longri on 05.09.2016.
@@ -40,20 +40,20 @@ public class CacheListItem extends ListViewItem implements Disposable {
     CacheListItem(int listIndex, final AbstractCache _geoCache, final float targetWidth) {
         super(listIndex);
         geoCache = _geoCache;
-        LogTypes leftLogType = null;
-        LogTypes rightLogType = null;
+        LogType leftLogType = null;
+        LogType rightLogType = null;
         boolean isAvailable = true;
         if (_geoCache.isFound()) {
-            leftLogType = LogTypes.found;
+            leftLogType = LogType.found;
         }
 
         if (!_geoCache.isAvailable()) {
-            rightLogType = LogTypes.temporarily_disabled;
+            rightLogType = LogType.temporarily_disabled;
             isAvailable = false;
         }
 
         if (_geoCache.isArchived()) {
-            rightLogType = LogTypes.archived;
+            rightLogType = LogType.archived;
             isAvailable = false;
         }
         CacheListItemStyle style = VisUI.getSkin().get(CacheListItemStyle.class);

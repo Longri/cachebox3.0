@@ -30,6 +30,9 @@ import de.longri.cachebox3.events.CacheListChangedEvent;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.gpx.PqImport;
 import de.longri.cachebox3.gui.BlockGpsActivityBase;
+import de.longri.cachebox3.gui.dialogs.MessageBox;
+import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
+import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.skin.styles.PqListItemStyle;
 import de.longri.cachebox3.gui.stages.ViewManager;
 import de.longri.cachebox3.gui.widgets.AligmentLabel;
@@ -46,6 +49,8 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
 
 
 /**
@@ -233,34 +238,41 @@ public class ImportPQActivity extends BlockGpsActivityBase {
 
                 int idx = 0;
                 Array<GroundspeakAPI.PQ> pqList = GroundspeakAPI.getInstance().fetchPocketQueryList();
-                pqList.sort();
-                for (GroundspeakAPI.PQ pq : pqList) {
-                    //Check last import
-                    if (ImportPQActivity.this.database.myDB!=null) {
-                        GdxSqliteCursor cursor = ImportPQActivity.this.database.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
-                        if (cursor != null) {
-                            cursor.moveToFirst();
-                            String dateTimeString = cursor.getString(2);
-                            try {
-                                pq.lastImported = Database.cbDbFormat.parse(dateTimeString);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                if (GroundspeakAPI.getInstance().APIError == OK) {
+                    pqList.sort();
+                    for (GroundspeakAPI.PQ pq : pqList) {
+                        //Check last import
+                        if (ImportPQActivity.this.database.myDB!=null) {
+                            GdxSqliteCursor cursor = ImportPQActivity.this.database.myDB.rawQuery("SELECT * FROM PocketQueries WHERE PQName=\"" + pq.name + "\"");
+                            if (cursor != null) {
+                                cursor.moveToFirst();
+                                String dateTimeString = cursor.getString(2);
+                                try {
+                                    pq.lastImported = Database.dateFormat.parse(dateTimeString);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
+
+                        // add only PocketQuery's their download available
+                        // if (pq.downloadAvailable) // later compare last imported with last generated
+                        pqListViewItemArray.add(new PqListItem(idx++, pq, itemStyle));
                     }
 
-                    // add only PocketQuery's their download available
-                    // if (pq.downloadAvailable) // later compare last imported with last generated
-                    pqListViewItemArray.add(new PqListItem(idx++, pq, itemStyle));
+                    CB.postOnGlThread(new NamedRunnable("SetAdapter") {
+                        @Override
+                        public void run() {
+                            if (canceled.get()) return;
+                            pqListView.setAdapter(pqListViewItemArray);
+                        }
+                    });
                 }
-
-                CB.postOnGlThread(new NamedRunnable("SetAdapter") {
-                    @Override
-                    public void run() {
-                        if (canceled.get()) return;
-                        pqListView.setAdapter(pqListViewItemArray);
-                    }
-                });
+                else {
+                    MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("ImportPQActivity"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
+                    canceled.set(true);
+                    ImportPQActivity.this.finish();
+                }
             }
         });
     }

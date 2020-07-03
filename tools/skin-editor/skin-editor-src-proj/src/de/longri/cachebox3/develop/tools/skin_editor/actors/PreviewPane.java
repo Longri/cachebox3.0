@@ -43,9 +43,9 @@ import de.longri.cachebox3.gui.widgets.CB_Label;
 import de.longri.cachebox3.gui.widgets.CircularProgressWidget;
 import de.longri.cachebox3.gui.widgets.catch_exception_widgets.Catch_Table;
 import de.longri.cachebox3.types.CacheTypes;
-import de.longri.cachebox3.types.DraftEntry;
+import de.longri.cachebox3.types.Draft;
 import de.longri.cachebox3.types.IntProperty;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.LogType;
 import de.longri.cachebox3.utils.ScaledSizes;
 import org.oscim.backend.canvas.Bitmap;
 import org.slf4j.Logger;
@@ -67,7 +67,7 @@ public class PreviewPane extends Table {
 
     final private SkinEditorGame game;
     final private MainScreen mainScreen;
-    DraftEntry entry = new DraftEntry(LogTypes.found);
+    Draft entry = new Draft(LogType.found);
 
 
     // An input listener to use on items inside a scroll pane, thanks to Tomski for the hint.

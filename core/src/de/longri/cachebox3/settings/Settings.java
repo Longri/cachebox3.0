@@ -70,8 +70,6 @@ public class Settings extends Settings_Skin {
     public static final SettingDouble ParkingLongitude = (SettingDouble) settingsList.addSetting(new SettingDouble("ParkingLongitude", Positions, NEVER, 0, Global, ACB));
     public static final SettingString friends = (SettingString) settingsList.addSetting(new SettingString("Friends", Login, SettingMode.Normal, "", Global, ACB));
 
-    public static final SettingBool DirectOnlineLog = (SettingBool) settingsList.addSetting(new SettingBool("DirectOnlineLog", Drafts, NEVER, false, Global, ACB));
-
     public static final SettingInt memberChipType = (SettingInt) settingsList.addSetting(new SettingInt("memberChipType", API, NEVER, -1, Global, ACB, true));
     public static final SettingInt apiCallLimit = (SettingInt) settingsList.addSetting(new SettingInt("apiCallLimit", API, NEVER, 30, Global, ACB, true));
 

@@ -32,7 +32,7 @@ public class LogEntry {
     /**
      * Logtyp, z.B. "Found it!"
      */
-    public LogTypes geoCacheLogType = LogTypes.unknown;
+    public LogType geoCacheLogType = LogType.unknown;
 
 
     /**
@@ -60,13 +60,13 @@ public class LogEntry {
         this.cacheId = cursor.getLong(1);
 
         try {
-            this.logDate = Database.cbDbFormat.parse(cursor.getString(2));
+            this.logDate = Database.dateFormat.parse(cursor.getString(2));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         this.finder = cursor.getString(3);
-        this.geoCacheLogType = LogTypes.values()[cursor.getInt(4)];
+        this.geoCacheLogType = LogType.values()[cursor.getInt(4)];
         this.logText = cursor.getString(5);
     }
 

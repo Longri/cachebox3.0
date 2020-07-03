@@ -25,14 +25,15 @@ import org.slf4j.LoggerFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
  * Created by Longri on 31.08.2017
  */
-public class DraftEntry {
+public class Draft {
 
-    private final static Logger log = LoggerFactory.getLogger(DraftEntry.class);
+    private final static Logger log = LoggerFactory.getLogger(Draft.class);
 
 
     public long Id;
@@ -40,14 +41,12 @@ public class DraftEntry {
     public String gcCode = "";
     public String GcId = ""; // (mis)used for LogId (or ReferenceCode)
     public Date timestamp;
-    public String typeString = "";
-    public LogTypes type;
+    public LogType type;
     public CacheTypes cacheType;
     public String comment = "";
     public int foundNumber;
     public CharSequence CacheName = "";
     public String CacheUrl = "";
-    public int typeIcon;
     public boolean uploaded;
     public int gc_Vote;
     public boolean isTbDraft = false;
@@ -55,22 +54,20 @@ public class DraftEntry {
     public String TbIconUrl = "";
     public String TravelBugCode = "";
     public String TrackingNumber = "";
-    public boolean isDirectLog = false;
+    public boolean isDirectLog = false; // is obsolete (in CB2)
 
-    private DraftEntry(DraftEntry fne) {
+    private Draft(Draft fne) {
         this.Id = fne.Id;
         this.CacheId = fne.CacheId;
         this.gcCode = fne.gcCode;
         GcId=fne.GcId;
         this.timestamp = fne.timestamp;
-        this.typeString = fne.typeString;
         this.type = fne.type;
         this.cacheType = fne.cacheType;
         this.comment = fne.comment;
         this.foundNumber = fne.foundNumber;
         this.CacheName = fne.CacheName;
         this.CacheUrl = fne.CacheUrl;
-        this.typeIcon = fne.typeIcon;
         this.uploaded = fne.uploaded;
         this.gc_Vote = fne.gc_Vote;
         this.isTbDraft = fne.isTbDraft;
@@ -81,25 +78,24 @@ public class DraftEntry {
         this.isDirectLog = fne.isDirectLog;
     }
 
-    public DraftEntry(LogTypes Type) {
+    public Draft(LogType logType) {
         Id = -1;
-        this.type = Type;
-        fillType();
+        this.type = logType;
     }
 
-    DraftEntry(GdxSqliteCursor reader) {
+    Draft(GdxSqliteCursor reader) {
         CacheId = reader.getLong(0);
         gcCode = reader.getString(1).trim();
         CacheName = reader.getString(2);
         cacheType = CacheTypes.get(reader.getInt(3));
         String sDate = reader.getString(4);
         try {
-            timestamp = Database.cbDbFormat.parse(sDate);
-        } catch (ParseException e) {
+            timestamp = Database.dateFormat.parse(sDate);
+        } catch (ParseException ignored) {
         }
         if (timestamp == null)
             timestamp = new Date();
-        type = LogTypes.GC2CB_LogType(reader.getInt(5));
+        type = LogType.GC2CB_LogType(reader.getInt(5));
         foundNumber = reader.getInt(6);
         comment = reader.getString(7);
         Id = reader.getLong(8);
@@ -112,44 +108,34 @@ public class DraftEntry {
         TravelBugCode = reader.getString(15);
         TrackingNumber = reader.getString(16);
         isDirectLog = reader.getInt(17) != 0;
-        fillType();
         GcId = reader.getString("GcId");
         if (GcId == null) GcId = "";
     }
 
-    public void fillType() {
-        typeIcon = type.getIconID();
-
-        if (type == LogTypes.found || type == LogTypes.attended || type == LogTypes.webcam_photo_taken) {
-            typeString = "#" + foundNumber + " - Found it!";
-            if (cacheType == CacheTypes.Event
-                    || cacheType == CacheTypes.MegaEvent
-                    || cacheType == CacheTypes.Giga
-                    || cacheType == CacheTypes.CITO)
-                typeString = "Attended";
-            if (cacheType == CacheTypes.Camera)
-                typeString = "Webcam Photo Taken";
+    public String getTypeString() {
+        switch (type) {
+            case found:
+                return "#" + foundNumber + " - Found it!";
+            case attended:
+                return "Attended";
+            case webcam_photo_taken:
+                return "Webcam Photo Taken";
+            case didnt_find:
+                return "Did not find!";
+            case needs_maintenance:
+                return "Needs Maintenance";
+            case note:
+                return "Write Note";
         }
-
-        if (type == LogTypes.didnt_find) {
-            typeString = "Did not find!";
-        }
-
-        if (type == LogTypes.needs_maintenance) {
-            typeString = "Needs Maintenance";
-        }
-
-        if (type == LogTypes.note) {
-            typeString = "Write Note";
-        }
+        return "";
     }
 
     public String getDateTimeString() {
-        SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat datFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         datFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         String sDate = datFormat.format(timestamp) + "T";
 
-        datFormat = new SimpleDateFormat("HH:mm:ss");
+        datFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
         datFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         sDate += datFormat.format(timestamp) + "Z";
 
@@ -164,7 +150,7 @@ public class DraftEntry {
         args.put("gccode", gcCode);
         args.put("GcId", GcId);
         args.put("name", CacheName);
-        String stimestamp = Database.cbDbFormat.format(timestamp);
+        String stimestamp = Database.dateFormat.format(timestamp);
         args.put("timestamp", stimestamp);
         args.put("type", type.getGcLogTypeId());
         args.put("foundnumber", foundNumber);
@@ -197,7 +183,7 @@ public class DraftEntry {
 
         reader.moveToFirst();
         while (!reader.isAfterLast()) {
-            DraftEntry fne = new DraftEntry(reader);
+            Draft fne = new Draft(reader);
             this.Id = fne.Id;
             reader.moveToNext();
         }
@@ -212,7 +198,7 @@ public class DraftEntry {
         args.put("gccode", gcCode);
         args.put("GcId", GcId);
         args.put("name", CacheName);
-        String stimestamp = Database.cbDbFormat.format(timestamp);
+        String stimestamp = Database.dateFormat.format(timestamp);
         args.put("timestamp", stimestamp);
         args.put("type", type.getGcLogTypeId());
         args.put("foundnumber", foundNumber);
@@ -228,12 +214,9 @@ public class DraftEntry {
         args.put("TrackingNumber", TrackingNumber);
         args.put("directLog", isDirectLog);
         try {
-            long count = Database.Drafts.update("FieldNotes", args, "id=" + Id, null);
+            Database.Drafts.update("FieldNotes", args, "id=" + Id, null);
             Database.Drafts.endTransaction();
-            if (count > 0)
-                return;
-        } catch (Exception exc) {
-            return;
+        } catch (Exception ignored) {
         }
     }
 
@@ -241,12 +224,11 @@ public class DraftEntry {
         try {
             Database.Drafts.delete("FieldNotes", "Id=" + Id);
             Database.Drafts.endTransaction();
-        } catch (Exception exc) {
-            return;
+        } catch (Exception ignored) {
         }
     }
 
-    public boolean equals(DraftEntry fne) {
+    public boolean equals(Draft fne) {
         if (!GcId.equals(fne.GcId))
             return false;
         if (this.Id != fne.Id)
@@ -256,8 +238,6 @@ public class DraftEntry {
         if (!this.gcCode.equals(fne.gcCode))
             return false;
         if (!Utils.equalsDate(this.timestamp, fne.timestamp))
-            return false;
-        if (!this.typeString.equals(fne.typeString))
             return false;
         if (this.type != fne.type)
             return false;
@@ -271,8 +251,6 @@ public class DraftEntry {
             return false;
         if (!this.CacheUrl.equals(fne.CacheUrl))
             return false;
-        if (this.typeIcon != fne.typeIcon)
-            return false;
         if (this.uploaded != fne.uploaded)
             return false;
         if (this.gc_Vote != fne.gc_Vote)
@@ -281,16 +259,11 @@ public class DraftEntry {
             return false;
         if (!this.TravelBugCode.equals(fne.TravelBugCode))
             return false;
-        if (!this.TrackingNumber.equals(fne.TrackingNumber))
-            return false;
-        if (this.isDirectLog != fne.isDirectLog)
-            return false;
-
-        return true;
+        return this.TrackingNumber.equals(fne.TrackingNumber);
     }
 
-    public DraftEntry copy() {
-        return new DraftEntry(this);
+    public Draft copy() {
+        return new Draft(this);
     }
 
 }

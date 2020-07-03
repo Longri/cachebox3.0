@@ -19,9 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.gui.interfaces.SelectBoxItem;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
-import de.longri.cachebox3.settings.Config;
 
-public enum LogTypes implements SelectBoxItem {
+public enum LogType implements SelectBoxItem {
     found, // 0
     didnt_find, // 1
     note, // 2
@@ -48,7 +47,7 @@ public enum LogTypes implements SelectBoxItem {
     move_to_inventory, // 23
     announcement, // 24
     visited, // 25
-    ownFavorite,
+    Submit_for_Review, //
     unknown;
 
     /**
@@ -68,24 +67,7 @@ public enum LogTypes implements SelectBoxItem {
                 ;
     }
 
-    /**
-     * Returns True if the log type possible to direct online Log
-     *
-     * @return ?
-     */
-    public boolean isDirectLogType() {
-        if (Config.DirectOnlineLog.getValue())
-            return true;
-        return this == enabled //
-                || this == needs_maintenance //
-                || this == temporarily_disabled //
-                || this == owner_maintenance //
-                || this == will_attend //
-                || isTbLog()
-                ;
-    }
-
-    public static LogTypes parseString(String text) {
+    public static LogType parseString(String text) {
         if (text.equalsIgnoreCase("found it")) {
             return found;
         }
@@ -155,67 +137,7 @@ public enum LogTypes implements SelectBoxItem {
         return note;
     }
 
-    public int getIconID() {
-        switch (this) {
-            case found:
-                return 0; // Found
-            case didnt_find:
-                return 1; // DNF
-            case note:
-                return 2; // Note
-            case published:
-                return 3; // Publish
-            case enabled:
-                return 4; // Enable
-            case needs_maintenance:
-                return 5; // needs maintains
-            case temporarily_disabled:
-                return 6; // Disable
-            case owner_maintenance:
-                return 7; // Owner Maintains
-            case will_attend:
-                return 8; // Will attend
-            case attended:
-                return 9; // Attended
-            case webcam_photo_taken:
-                return 10; // Photo
-            case archived:
-                return 11; // Archive
-            case reviewer_note:
-                return 12; // Reviewer Note
-            case needs_archived:
-                return 13; // needs maintains
-            case unarchive:
-                return 11; // Unarchive
-            case retract:
-                return 14; // Retract
-            case update_coord:
-                return 16; // Update Coords
-            case retrieve:
-                return 17; // Retrive
-            case dropped_off:
-                return 18; // Dropped
-            case mark_missing:
-                return 2; // Mark missing
-            case grab_it:
-                return 19; // Grab It
-            case discovered:
-                return 20; // Discover
-            case move_to_collection:
-                return 2; // Move to Collection
-            case move_to_inventory:
-                return 2; // Move to Inventory
-            case announcement:
-                return 15; // Announcement
-            case visited:
-                return 21; // Visited
-
-        }
-
-        return -1; // Note
-    }
-
-    public static LogTypes GC2CB_LogType(int value) {
+    public static LogType GC2CB_LogType(int value) {
         switch (value) {
             case 1:
             case 12:
@@ -285,7 +207,7 @@ public enum LogTypes implements SelectBoxItem {
      * @param value ?
      * @return ?
      */
-    public static int CB_LogType2GC(LogTypes value) {
+    public static int CB_LogType2GC(LogType value) {
         switch (value) {
             case unarchive:
                 return 1;
@@ -428,7 +350,6 @@ public enum LogTypes implements SelectBoxItem {
 
     @Override
     public Drawable getDrawable() {
-        // for select Box interface, use 'cacheList' style
         if (logTypesStyle == null) logTypesStyle = VisUI.getSkin().get("LogTypesSize24", LogTypesStyle.class);
         return getDrawable(logTypesStyle);
     }
@@ -488,8 +409,6 @@ public enum LogTypes implements SelectBoxItem {
                 return style.announcement;
             case visited:
                 return style.visited;
-            case ownFavorite:
-                return style.ownFavorite;
         }
         return null;
     }

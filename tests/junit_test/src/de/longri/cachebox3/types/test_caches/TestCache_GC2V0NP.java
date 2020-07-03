@@ -107,7 +107,7 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
         LogEntry logEntry1 = new LogEntry();
         logEntry1.cacheId = this.id;
         logEntry1.finder = "Vlad_Tepes";
-        logEntry1.geoCacheLogType = LogTypes.found;
+        logEntry1.geoCacheLogType = LogType.found;
         logEntry1.logText = "#2283 | 19.10.2017 | 14:37 Uhr\n" +
                 "\n" +
                 "Während sich ein Teil unserer Familie im Miramar austobte, zogen ZALE5KA und ich es vor Weinheim zu erkunden. Wir wählten zuerst diesen Cache aus. Wir genossen einen tollen Rundgang entlang der einzelnen Stationen. Zwischendurch gönnten wir uns noch eine kurze Pause in einem der zahlreichen Cafes.\n" +
@@ -121,7 +121,7 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
         LogEntry logEntry2 = new LogEntry();
         logEntry2.cacheId = this.id;
         logEntry2.finder = "ZALE5KA";
-        logEntry2.geoCacheLogType = LogTypes.found;
+        logEntry2.geoCacheLogType = LogType.found;
         logEntry2.logText = "#0907 | 19.10.2017 | 14:37 Uhr\n" +
                 "\n" +
                 "Während R9D3 mitsamt Freund im nahem Schwimmbad waren, haben der weibliche Teil von Vlad_Tepes und ich uns Weinheim angeschaut.\n" +
@@ -137,7 +137,7 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
         LogEntry logEntry3 = new LogEntry();
         logEntry3.cacheId = this.id;
         logEntry3.finder = "Die Breakers";
-        logEntry3.geoCacheLogType = LogTypes.found;
+        logEntry3.geoCacheLogType = LogType.found;
         logEntry3.logText = "Bei tollem Sonnenschein, ging es auf eine kleine Runde hier in Weinheim um die Tore, Türme und Pforten kennen zu lernen.\n" +
                 "Die Wegführung fanden wir beide etwas merkwürdig an einer Stelle, aber wir haben alles gut gefunden.\n" +
                 "Das Finale ist dann wieder schön etwas weg vom Trubel, was uns auch gut gefallen hat.\n" +
@@ -156,7 +156,7 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
         LogEntry logEntry4 = new LogEntry();
         logEntry4.cacheId = this.id;
         logEntry4.finder = "Blue two";
-        logEntry4.geoCacheLogType = LogTypes.found;
+        logEntry4.geoCacheLogType = LogType.found;
         logEntry4.logText = "Trotz der großen Hitze in der Stadt, haben wir uns das historische Weinheim angeschaut und diesen Cache schnell gefunden! Leider ist ja nicht mehr viel von den Objekten erhalten, und dann dieses Final soweit abseits?! Trotzdem haben wir viel gelernt! TFTC";
         logEntry4.logDate = DATE_PATTERN.parse("2017-08-26T23:55:01Z");
         logEntry4.logId = 715278765L;
@@ -165,7 +165,7 @@ public class TestCache_GC2V0NP extends AbstractTestCache {
         LogEntry logEntry5 = new LogEntry();
         logEntry5.cacheId = this.id;
         logEntry5.finder = "Maus229";
-        logEntry5.geoCacheLogType = LogTypes.found;
+        logEntry5.geoCacheLogType = LogType.found;
         logEntry5.logText = "heut gings mit Frau zwee hoggemer bei bestem Cacherwetterchen nach Weinheim. Schon laaange standen die beiden Multis aufm Programm. \n" +
                 "\n" +
                 "Weinheim ist einfach schön! Und es macht Spaß, wohlbekannte Ecken immer wieder anzuschauen. \n" +

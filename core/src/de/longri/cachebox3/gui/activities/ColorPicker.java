@@ -1,6 +1,7 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -87,8 +88,7 @@ public class ColorPicker extends Activity {
     }
 
     @Override
-    protected void runAtOk() {
+    protected void runAtOk(InputEvent event, float x, float y) {
         if (onChange != null) onChange.changed(new ChangeListener.ChangeEvent(), this);
-        finish();
     }
 }

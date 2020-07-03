@@ -1432,7 +1432,7 @@ public class GroundspeakAPI {
         } catch (Exception e) {
             logEntry.logDate = new Date();
         }
-        logEntry.geoCacheLogType = LogTypes.parseString(geocacheLog.optString("type", ""));
+        logEntry.geoCacheLogType = LogType.parseString(geocacheLog.optString("type", ""));
         String referenceCode = geocacheLog.optString("referenceCode", "");
         logEntry.logId = generateLogId(referenceCode);
         return logEntry;

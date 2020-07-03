@@ -44,7 +44,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Database {
 
 
-    public final static DateFormat cbDbFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     private final AtomicInteger EXCLUSIVE_ID = new AtomicInteger(-1);
     private Logger log;
@@ -135,11 +135,11 @@ public class Database {
         retLogEntry.cacheId = reader.getLong(0);
         String sDate = reader.getString(1);
         try {
-            retLogEntry.logDate = Database.cbDbFormat.parse(sDate);
+            retLogEntry.logDate = Database.dateFormat.parse(sDate);
         } catch (ParseException e) {
         }
         retLogEntry.finder = reader.getString(2);
-        retLogEntry.geoCacheLogType = LogTypes.values()[reader.getInt(3)];
+        retLogEntry.geoCacheLogType = LogType.values()[reader.getInt(3)];
         // retLogEntry.TypeIcon = reader.getInt(3);
         retLogEntry.logText = reader.getString(4);
         retLogEntry.logId = reader.getLong(5);
@@ -1352,7 +1352,7 @@ public class Database {
         if (dateString == null || dateString.isEmpty()) return new Date();
 
         try {
-            return Database.cbDbFormat.parse(dateString);
+            return Database.dateFormat.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }

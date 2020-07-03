@@ -50,7 +50,7 @@ public class Category extends ArrayList<GpxFilename> implements Comparable<Categ
         Database.Parameters args = new Database.Parameters();
         args.put("GPXFilename", filename);
         args.put("CategoryId", this.Id);
-        String stimestamp = Database.cbDbFormat.format(new Date());
+        String stimestamp = Database.dateFormat.format(new Date());
         args.put("Imported", stimestamp);
         try {
             this.database.insert("GpxFilenames", args);

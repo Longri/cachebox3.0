@@ -35,7 +35,7 @@ public class LogDAO {
         args.put("Finder", logEntry.finder);
         args.put("Type", logEntry.geoCacheLogType.ordinal());
         args.put("Comment", logEntry.logText);
-        String stimestamp = Database.cbDbFormat.format(logEntry.logDate);
+        String stimestamp = Database.dateFormat.format(logEntry.logDate);
         args.put("Timestamp", stimestamp);
         args.put("CacheId", logEntry.cacheId);
         try {
@@ -88,7 +88,7 @@ public class LogDAO {
                 REPLACE_LOGS.bind(
                         entry.logId,
                         entry.cacheId,
-                        Database.cbDbFormat.format(entry.logDate == null ? new Date() : entry.logDate),
+                        Database.dateFormat.format(entry.logDate == null ? new Date() : entry.logDate),
                         entry.finder,
                         entry.geoCacheLogType,
                         entry.logText
@@ -102,7 +102,7 @@ public class LogDAO {
                         "Type:{}\n" +
                         "Comment:{}\n\n\n",
                         entry.logId,entry.cacheId,
-                        Database.cbDbFormat.format(entry.logDate == null ? new Date() : entry.logDate),
+                        Database.dateFormat.format(entry.logDate == null ? new Date() : entry.logDate),
                         entry.finder,
                         entry.geoCacheLogType,
                         entry.logText

@@ -27,10 +27,9 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.PlatformConnector;
-import de.longri.cachebox3.apis.GCVote;
 import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.EventHandler;
-import de.longri.cachebox3.gui.activities.EditDrafts;
+import de.longri.cachebox3.gui.activities.EditDraft;
 import de.longri.cachebox3.gui.activities.FileChooser;
 import de.longri.cachebox3.gui.activities.InputString;
 import de.longri.cachebox3.gui.dialogs.ButtonDialog;
@@ -57,61 +56,61 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
-import static de.longri.cachebox3.gui.views.DraftsView.draftEntries;
+import static de.longri.cachebox3.gui.views.DraftsView.drafts;
 
 /**
  * Created by Longri on 31.08.2017.
  */
 public class DraftsViewItem extends ListViewItem {
     private static final Logger log = LoggerFactory.getLogger(DraftsViewItem.class);
-    private final static SimpleDateFormat postFormatter = new SimpleDateFormat("dd.MMM.yy (HH:mm)", Locale.getDefault());
+    private final static SimpleDateFormat postFormatter = new SimpleDateFormat("dd.MMM.yy (HH:mm)", Locale.US);
 
     final private DraftListItemStyle draftListItemStyle;
 
     private boolean needsLayout = true;
-    private DraftEntry entry;
+    private final Draft draft;
     private VisTable headerTable;
 
-    public DraftsViewItem(int listIndex, DraftEntry entry, DraftListItemStyle draftListItemStyle) {
+    public DraftsViewItem(int listIndex, Draft fromDraft, DraftListItemStyle _draftListItemStyle) {
         super(listIndex);
-        this.entry = entry;
-        this.draftListItemStyle = draftListItemStyle;
+        draft = fromDraft;
+        draftListItemStyle = _draftListItemStyle;
     }
 
     @Override
     public synchronized void layout() {
-        // this.setDebug(true, true);
+        // setDebug(true, true);
         if (!needsLayout) {
             super.layout();
             return;
         }
 
-        this.clear();
+        clear();
 
         Label.LabelStyle headerLabelStyle = new Label.LabelStyle();
-        headerLabelStyle.font = this.draftListItemStyle.headerFont;
-        headerLabelStyle.fontColor = this.draftListItemStyle.headerFontColor;
+        headerLabelStyle.font = draftListItemStyle.headerFont;
+        headerLabelStyle.fontColor = draftListItemStyle.headerFontColor;
 
         Label.LabelStyle commentLabelStyle = new Label.LabelStyle();
-        commentLabelStyle.font = this.draftListItemStyle.descriptionFont;
-        commentLabelStyle.fontColor = this.draftListItemStyle.descriptionFontColor;
+        commentLabelStyle.font = draftListItemStyle.descriptionFont;
+        commentLabelStyle.fontColor = draftListItemStyle.descriptionFontColor;
 
         headerTable = new VisTable();
-        headerTable.add(new Image(this.entry.type.getDrawable(draftListItemStyle.logTypesStyle))).left();
-        if (entry.uploaded) headerTable.add(new Image(draftListItemStyle.uploadedIcon)).left();
+        headerTable.add(new Image(draft.type.getDrawable(draftListItemStyle.logTypesStyle))).left();
+        if (draft.uploaded) headerTable.add(new Image(draftListItemStyle.uploadedIcon)).left();
         // headerTable.add((Actor) null).left().padLeft(CB.scaledSizes.MARGINx2).expandX().fillX();
 
         String foundNumber = "";
-        if (entry.foundNumber > 0) {
-            foundNumber = "#" + entry.foundNumber + " @ ";
+        if (draft.foundNumber > 0) {
+            foundNumber = "#" + draft.foundNumber + " @ ";
         }
 
-        VisLabel dateLabel = new VisLabel(foundNumber + postFormatter.format(entry.timestamp), headerLabelStyle);
+        VisLabel dateLabel = new VisLabel(foundNumber + postFormatter.format(draft.timestamp), headerLabelStyle);
         dateLabel.setAlignment(Align.right);
         headerTable.add(dateLabel).expandX().fillX(); // .padRight(CB.scaledSizes.MARGINx2).right()
         // headerTable.pack();
         // headerTable.layout();
-        this.add(headerTable).left().expandX().fillX();
+        add(headerTable).left().expandX().fillX();
 
         headerTable.addListener(new ClickLongClickListener() {
             @Override
@@ -125,7 +124,7 @@ public class DraftsViewItem extends ListViewItem {
             }
         });
 
-        this.row().padTop(CB.scaledSizes.MARGINx2);
+        row().padTop(CB.scaledSizes.MARGINx2);
 
         VisTable entryTable = new VisTable();
 
@@ -133,13 +132,13 @@ public class DraftsViewItem extends ListViewItem {
         VisTable cacheTable = new VisTable();
 
         VisTable iconTable = new VisTable();
-        iconTable.add(entry.cacheType.getCacheWidget(draftListItemStyle.cacheTypeStyle, null, null, null, null));
+        iconTable.add(draft.cacheType.getCacheWidget(draftListItemStyle.cacheTypeStyle, null, null, null, null));
         iconTable.pack();
         iconTable.layout();
 
         cacheTable.add(iconTable).left().padRight(CB.scaledSizes.MARGINx2);
 
-        VisLabel nameLabel = new VisLabel(entry.CacheName, headerLabelStyle);
+        VisLabel nameLabel = new VisLabel(draft.CacheName, headerLabelStyle);
         nameLabel.setWrap(true);
         cacheTable.add(nameLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
 
@@ -147,7 +146,7 @@ public class DraftsViewItem extends ListViewItem {
 
         cacheTable.add((Actor) null).left().padRight(CB.scaledSizes.MARGINx2);
 
-        VisLabel gcLabel = new VisLabel(entry.gcCode, headerLabelStyle);
+        VisLabel gcLabel = new VisLabel(draft.gcCode, headerLabelStyle);
         gcLabel.setWrap(true);
         cacheTable.add(gcLabel).padRight(CB.scaledSizes.MARGIN).expandX().fillX();
 
@@ -156,15 +155,15 @@ public class DraftsViewItem extends ListViewItem {
         entryTable.row().padTop(CB.scaledSizes.MARGINx2);
 
 
-        VisLabel commentLabel = new VisLabel(entry.comment, commentLabelStyle);
+        VisLabel commentLabel = new VisLabel(draft.comment, commentLabelStyle);
         commentLabel.setWrap(true);
         entryTable.add(commentLabel).expand().fill();
 
 
-        if (entry.uploaded) entryTable.setColor(new Color(1, 1, 1, 0.4f));
+        if (draft.uploaded) entryTable.setColor(new Color(1, 1, 1, 0.4f));
 
 
-        this.add(entryTable).expand().fill();
+        add(entryTable).expand().fill();
         entryTable.addListener(new ClickLongClickListener() {
             @Override
             public boolean clicked(InputEvent event, float x, float y) {
@@ -184,14 +183,14 @@ public class DraftsViewItem extends ListViewItem {
 
     private boolean onHeaderClicked() {
         Menu cm = new Menu("DraftItemMenuTitle");
-        cm.addMenuItem("SelectCache", ":\n" + entry.CacheName, entry.cacheType.getDrawable(CB.getSkin().get("Size48", CacheTypeStyle.class)), this::selectCacheFromDraft);
+        cm.addMenuItem("SelectCache", ":\n" + draft.CacheName, draft.cacheType.getDrawable(CB.getSkin().get("Size48", CacheTypeStyle.class)), this::selectCacheFromDraft);
         cm.addMenuItem("edit", CB.getSkin().menuIcon.editDraft, this::editDraft);
-        if (entry.GcId.startsWith("GL")) {
+        if (draft.GcId.startsWith("GL")) {
             cm.addMenuItem("uploadLogImage", CB.getSkin().menuIcon.uploadDraft, this::uploadLogImage);
-            cm.addMenuItem("BrowseLog", null, () -> PlatformConnector.callUrl("https://coord.info/" + entry.GcId));
+            cm.addMenuItem("BrowseLog", null, () -> PlatformConnector.callUrl("https://coord.info/" + draft.GcId));
         }
-        cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, () -> logOnline(false));
-        cm.addMenuItem("directLog", CB.getSkin().menuIcon.me2Logbook, () -> logOnline(true));
+        cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, () -> DraftsView.getInstance().logOnline(draft, false));
+        cm.addMenuItem("directLog", CB.getSkin().menuIcon.me2Logbook, () -> DraftsView.getInstance().logOnline(draft, true));
         cm.addMenuItem("delete", CB.getSkin().menuIcon.delete, this::deleteDraft);
         cm.show();
         return true;
@@ -201,26 +200,26 @@ public class DraftsViewItem extends ListViewItem {
         // suche den Cache aus der DB.
         // Nicht aus der aktuellen cacheList, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
-        String statement = "SELECT * FROM CacheCoreInfo core WHERE Id = " + entry.CacheId;
+        String statement = "SELECT * FROM CacheCoreInfo core WHERE Id = " + draft.CacheId;
         DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, lCaches, statement, false, false);
         AbstractCache tmpCache = null;
         if (lCaches.size > 0)
             tmpCache = lCaches.get(0);
         AbstractCache cache = tmpCache;
         if (cache == null) {
-            String message = Translation.get("cacheOtherDb", entry.CacheName.toString()).toString();
+            String message = Translation.get("cacheOtherDb", draft.CacheName.toString()).toString();
             message += "\n" + Translation.get("DraftNoSelect");
             MessageBox.show(message, Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
             return;
         }
 
         synchronized (Database.Data.cacheList) {
-            cache = Database.Data.cacheList.getCacheByGcCode(entry.gcCode);
+            cache = Database.Data.cacheList.getCacheByGcCode(draft.gcCode);
         }
 
         if (cache == null) {
             Database.Data.cacheList.add(tmpCache);
-            cache = Database.Data.cacheList.getCacheByGcCode(entry.gcCode);
+            cache = Database.Data.cacheList.getCacheByGcCode(draft.gcCode);
         }
 
         AbstractWaypoint finalWp = null;
@@ -251,7 +250,7 @@ public class DraftsViewItem extends ListViewItem {
                                 Config.AcceptChanges();
                                 try {
                                     String image = Base64.encodeBytes(fileHandle.readBytes());
-                                    GroundspeakAPI.getInstance().uploadLogImage(entry.GcId, image, description);
+                                    GroundspeakAPI.getInstance().uploadLogImage(draft.GcId, image, description);
                                     if (GroundspeakAPI.getInstance().APIError == OK) {
                                         MessageBox.show(Translation.get("ok") + ":\n", Translation.get("uploadLogImage"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
                                     } else {
@@ -272,57 +271,9 @@ public class DraftsViewItem extends ListViewItem {
     }
 
     private void editDraft() {
-        EditDrafts efnActivity = EditDrafts.getInstance();
-        efnActivity.setDraft(entry, DraftsView::addOrChangeDraft, false);
+        EditDraft efnActivity = EditDraft.getInstance();
+        efnActivity.setDraft(draft, DraftsView.getInstance()::addOrChangeDraft, false);
         efnActivity.show();
-    }
-
-    private void logOnline(final boolean directLog) {
-
-        if (!entry.isTbDraft) {
-            if (entry.gc_Vote > 0) {
-                // Stimme abgeben
-                try {
-                    GCVote gcVote = new GCVote(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue());
-                    if (gcVote.isPossible()) {
-                        if (!gcVote.sendVote(entry.gc_Vote, entry.CacheUrl, entry.gcCode)) {
-                            log.error(entry.gcCode + " GC-Vote");
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error(entry.gcCode + " GC-Vote");
-                }
-            }
-        }
-
-        String logReferenceCode = GroundspeakAPI.getInstance().UploadDraftOrLog(entry.gcCode, entry.type.getGcLogTypeId(), entry.timestamp, entry.comment, directLog);
-        if (GroundspeakAPI.getInstance().APIError == OK) {
-            // after direct Log change state to uploaded
-            entry.uploaded = true;
-            if (directLog && !entry.isTbDraft) {
-                entry.GcId = logReferenceCode;
-                // LogListView.notifyDataSetChanged(); // getInstance().resetInitial(); // if own log is written !
-            }
-            DraftsView.addOrChangeDraft(entry, false);
-        } else {
-            // Error handling
-            MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButton.YesNoRetry, MessageBoxIcon.Question, (which, data) -> {
-                switch (which) {
-                    case ButtonDialog.BUTTON_NEGATIVE:
-                        logOnline(true);// try again create log at gc
-                        break;
-                    case ButtonDialog.BUTTON_NEUTRAL:
-                        break;
-                    case ButtonDialog.BUTTON_POSITIVE:
-                        logOnline(false); // create draft at gc
-                }
-                return true;
-            });
-        }
-        if (GroundspeakAPI.getInstance().LastAPIError.length() > 0) {
-            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
-        }
-
     }
 
     private void deleteDraft() {
@@ -332,15 +283,15 @@ public class DraftsViewItem extends ListViewItem {
         // Nicht aus der aktuellen cacheList, da dieser herausgefiltert sein könnte
         CacheList lCaches = new CacheList();
 
-        String statement = "SELECT * FROM CacheCoreInfo core WHERE Id = " + entry.CacheId;
+        String statement = "SELECT * FROM CacheCoreInfo core WHERE Id = " + draft.CacheId;
 
         DaoFactory.CACHE_LIST_DAO.readCacheList(Database.Data, lCaches, statement, false, false);
         if (lCaches.size > 0)
             tmpAbstractCache = lCaches.get(0);
         final AbstractCache abstractCache = tmpAbstractCache;
 
-        if (abstractCache == null && !entry.isTbDraft) {
-            CharSequence message = new CompoundCharSequence(Translation.get("cacheOtherDb", entry.CacheName.toString())
+        if (abstractCache == null && !draft.isTbDraft) {
+            CharSequence message = new CompoundCharSequence(Translation.get("cacheOtherDb", draft.CacheName.toString())
                     , "\n", Translation.get("draftNoDelete"));
 
             MessageBox.show(message, null, MessageBoxButton.OK, MessageBoxIcon.Exclamation, null);
@@ -348,10 +299,10 @@ public class DraftsViewItem extends ListViewItem {
         }
 
         CharSequence message;
-        if (entry.isTbDraft) {
-            message = Translation.get("confirmDraftDeletionTB", entry.typeString, entry.TbName);
+        if (draft.isTbDraft) {
+            message = Translation.get("confirmDraftDeletionTB", draft.getTypeString(), draft.TbName);
         } else {
-            message = Translation.get("confirmDraftDeletion", entry.typeString, entry.CacheName.toString());
+            message = Translation.get("confirmDraftDeletion", draft.getTypeString(), draft.CacheName.toString());
         }
 
         MessageBox.show(message, Translation.get("deleteDraft"), MessageBoxButton.YesNo, MessageBoxIcon.Question, (which, data) -> {
@@ -377,9 +328,9 @@ public class DraftsViewItem extends ListViewItem {
                             }
                         }
                     }
-                    draftEntries.deleteDraft(entry.Id, entry.type);
+                    drafts.deleteDraftById(draft.Id);
                     DraftsView.notifyDataSetChanged();
-                    DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
+                    Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
                     break;
                 case ButtonDialog.BUTTON_NEGATIVE:
                     // No button clicked
@@ -396,7 +347,7 @@ public class DraftsViewItem extends ListViewItem {
         super.drawBackground(batch, parentAlpha, x, y);
         super.drawBackground(batch, 0.4f, x, y);
         if (draftListItemStyle.headerBackground != null && headerTable != null) {
-            float height = headerTable.getHeight() + this.getPadTop() + this.getPadBottom();
+            float height = headerTable.getHeight() + getPadTop() + getPadBottom();
             batch.setColor(1, 1, 1, 1);
             draftListItemStyle.headerBackground.draw(batch, x, y + (getHeight() - height), getWidth(), height);
         }
@@ -406,7 +357,7 @@ public class DraftsViewItem extends ListViewItem {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        if (entry.uploaded && draftListItemStyle.uploadedOverlay != null) {
+        if (draft.uploaded && draftListItemStyle.uploadedOverlay != null) {
             //draw uploaded overlay
             draftListItemStyle.uploadedOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
         }

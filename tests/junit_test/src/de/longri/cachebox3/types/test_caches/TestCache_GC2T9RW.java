@@ -149,7 +149,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry1 = new LogEntry();
         logEntry1.cacheId = this.id;
         logEntry1.finder = "SaarFuchs";
-        logEntry1.geoCacheLogType = LogTypes.found;
+        logEntry1.geoCacheLogType = LogType.found;
         logEntry1.logText = "Heute auf dem Rückweg vom Business-Meeting in Darmstadt gesucht, gefunden und geloggt... [:D]\n" +
                 "\n" +
                 "So ein Cache nach der Arbeit kann den Feierabend doch immer etwas auflockern! [8D]\n" +
@@ -170,7 +170,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry2 = new LogEntry();
         logEntry2.cacheId = this.id;
         logEntry2.finder = "Vespa6";
-        logEntry2.geoCacheLogType = LogTypes.found;
+        logEntry2.geoCacheLogType = LogType.found;
         logEntry2.logText = "heute auf dem weg nach frankfurt hier kurz gehalten, umgedreht, geparkt und das bäumchen erklommen, wirklich schön angelegtes döslein.TFTC";
         logEntry2.logDate = DATE_PATTERN.parse("2011-06-07T19:00:00Z");
         logEntry2.logId = 165483338L;
@@ -179,7 +179,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry3 = new LogEntry();
         logEntry3.cacheId = this.id;
         logEntry3.finder = "ascona2";
-        logEntry3.geoCacheLogType = LogTypes.found;
+        logEntry3.geoCacheLogType = LogType.found;
         logEntry3.logText = "So hat ide heutige Fahrt von Wuppertal nach Karlsruhe doch mal Spass gemacht. Der Cache war allererste Sahne!!!!!!Wenn doch jeder Autobahncache so wäre. Das Seil war schnell eingebaut und dann ging es auch schon zu der tollen Dose. Hat echt Spass gemacht.\n" +
                 "\n" +
                 "out: Coin\n" +
@@ -192,7 +192,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry4 = new LogEntry();
         logEntry4.cacheId = this.id;
         logEntry4.finder = "Goline";
-        logEntry4.geoCacheLogType = LogTypes.found;
+        logEntry4.geoCacheLogType = LogType.found;
         logEntry4.logText = "Als das Listing erschien freute ich mich sofort über den neuen Kletter-T5er in der Nähe.\n" +
                 "Beim lesen des Listings stieg dann leise aber stetig die Angst in mir hoch.....nachdem ich mich dann mehrere Nächte lang schlaflos in meinem Bett hin- und hergewältzt habe war klar, dass hier nur eine Therapie helfen kann.....also bei der Krankenkasse angefragt....und als die mir grünes Licht gegeben hatte, konnte es mit der Behandlung losgehen. Heute nun stand dann zum erfolgreichen Abschluß der Therapie der Besuch beim Hampir auf dem Programm. Mit jedem Höhenmeter wurden meine Beine wackeliger....und oben angekommen nahm ich dann all meinen übrig gebliebenen Mut zusammen....[;)]\n" +
                 "\n" +
@@ -212,7 +212,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry5 = new LogEntry();
         logEntry5.cacheId = this.id;
         logEntry5.finder = "Biene97";
-        logEntry5.geoCacheLogType = LogTypes.found;
+        logEntry5.geoCacheLogType = LogType.found;
         logEntry5.logText = "Heute bei schönem Wetter zusammen mit Goline diesen T-5er angegangen.\n" +
                 "Der Hampir konnte mich nicht daran hindern, mich ins Logbuch einzutragen [:D]\n" +
                 "\n" +
@@ -233,7 +233,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry6 = new LogEntry();
         logEntry6.cacheId = this.id;
         logEntry6.finder = "Shadows0001";
-        logEntry6.geoCacheLogType = LogTypes.found;
+        logEntry6.geoCacheLogType = LogType.found;
         logEntry6.logText = "Hi,\n" +
                 "\n" +
                 "heute ging es zusammen mit der OPWG zum Hampir :-)\n" +
@@ -251,7 +251,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry7 = new LogEntry();
         logEntry7.cacheId = this.id;
         logEntry7.finder = "DdaA";
-        logEntry7.geoCacheLogType = LogTypes.found;
+        logEntry7.geoCacheLogType = LogType.found;
         logEntry7.logText = "found on 30.05.2011 @ 20:20, Cache #420\n" +
                 "\n" +
                 "So... Es war mal wieder so weit.\n" +
@@ -270,7 +270,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry8 = new LogEntry();
         logEntry8.cacheId = this.id;
         logEntry8.finder = "Wotan1";
-        logEntry8.geoCacheLogType = LogTypes.found;
+        logEntry8.geoCacheLogType = LogType.found;
         logEntry8.logText = "Found on 30.05.2011 @ 19:57, Cache #609\n" +
                 "\n" +
                 "Bei 2 T5er so nah bei einander...\n" +
@@ -287,7 +287,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry9 = new LogEntry();
         logEntry9.cacheId = this.id;
         logEntry9.finder = "Casiopya";
-        logEntry9.geoCacheLogType = LogTypes.found;
+        logEntry9.geoCacheLogType = LogType.found;
         logEntry9.logText = "Mit einem Grossteil der OPWG endlich seit langem mal wieder auf Klettertour gewesen.\n" +
                 "Hat mich ein wenig Ueberwindung gekostet, aber dank der fuersorglichen Hilfestellung war alles kein Problem [:D]";
         logEntry9.logDate = DATE_PATTERN.parse("2011-05-30T19:00:00Z");
@@ -297,7 +297,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry10 = new LogEntry();
         logEntry10.cacheId = this.id;
         logEntry10.finder = "Fanta_2";
-        logEntry10.geoCacheLogType = LogTypes.found;
+        logEntry10.geoCacheLogType = LogType.found;
         logEntry10.logText = "Mal wieder zusammen mit einem Großteil der OPWG auf einer kleinen T5 Tour gewesen.\n" +
                 "Bei den Temperaturen war das zwar ziemlich schweißtreibend[:P], hat aber trotzdem jede Menge Spass gemacht [:D] und die Dose da oben ist ja mal genial.[8D]\n" +
                 "\n" +
@@ -312,7 +312,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry11 = new LogEntry();
         logEntry11.cacheId = this.id;
         logEntry11.finder = "Greenmaya";
-        logEntry11.geoCacheLogType = LogTypes.found;
+        logEntry11.geoCacheLogType = LogType.found;
         logEntry11.logText = "Zusammen mit der OPWG\n" +
                 "heute auch diesen T5er besucht, welcher mir noch besser gefallen hat als der Erste :-)\n" +
                 "\n" +
@@ -325,7 +325,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry12 = new LogEntry();
         logEntry12.cacheId = this.id;
         logEntry12.finder = "jotriweil";
-        logEntry12.geoCacheLogType = LogTypes.found;
+        logEntry12.geoCacheLogType = LogType.found;
         logEntry12.logText = "Sehr interessante T5er Ecke: 2 Caches dicht beieinander und von der Autobahnraststätte schnell erreichbar.\n" +
                 "Heute bei genialen Wetter (25°C und sehr trocken) hat der Seileinbau nicht so recht funktioniert. Die Astgabel zu treffen ist nicht ganz einfach, daher oben mal einen Seilumbau vornehmen müssen, um auf den nächsten Stock zu kommen.\n" +
                 "Der Hampir funktioniert hervorragend und hat mich nett verabschiedet.\n" +
@@ -339,7 +339,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry13 = new LogEntry();
         logEntry13.cacheId = this.id;
         logEntry13.finder = "Zwerga";
-        logEntry13.geoCacheLogType = LogTypes.found;
+        logEntry13.geoCacheLogType = LogType.found;
         logEntry13.logText = "Der zweite Streich auf der heutigen Tour!\n" +
                 "Klasse Idee, superschönes Final,bei dem wir auf uns gut bekannte Cacher trafen. \n" +
                 "Katie Eagle sagte noch verwundert:Mensch, das sieht von unten ja aus wie ein....Klar, ist ja auch ein...., wo sollen denn Hampire sonst schlafen[:o)] Herzliche Grüße an die owner.\n" +
@@ -353,7 +353,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry14 = new LogEntry();
         logEntry14.cacheId = this.id;
         logEntry14.finder = "Katie Eagle";
-        logEntry14.geoCacheLogType = LogTypes.note;
+        logEntry14.geoCacheLogType = LogType.note;
         logEntry14.logText = "Ach ja, TB abgelegt [8D]";
         logEntry14.logDate = DATE_PATTERN.parse("2011-05-28T19:00:00Z");
         logEntry14.logId = 163338659L;
@@ -362,7 +362,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry15 = new LogEntry();
         logEntry15.cacheId = this.id;
         logEntry15.finder = "Katie Eagle";
-        logEntry15.geoCacheLogType = LogTypes.found;
+        logEntry15.geoCacheLogType = LogType.found;
         logEntry15.logText = "Auf dem Weg zu diesem Baum hörten wir vertraute Stimmen im Wald und sahen den Mechaniker, sowie Staubfinger und seinen Sohn Oskar, die gerade fertig wurden. Sie waren so nett und nahmen unsere Pilotleine auf den Baum - An dieser Stelle vielen Dank dafür [:)] Die Cache \"Box\" ist klasse! Erstaunlich, dass der Hampyr nicht zu Staub wurde, als ich am helligten Tag die Tür öffnete [;)]\n" +
                 "Vielen Dank an die Owner für die Idee und den Cache\n" +
                 "[b][red]Katie Eagle[/red][/b]";
@@ -373,7 +373,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry16 = new LogEntry();
         logEntry16.cacheId = this.id;
         logEntry16.finder = "Dolphiner";
-        logEntry16.geoCacheLogType = LogTypes.found;
+        logEntry16.geoCacheLogType = LogType.found;
         logEntry16.logText = "Wow! Der ist ja mal richtig gut gemacht! \n" +
                 "\n" +
                 "Schöne Arbeit, netter Audioeffekt. [:D]\n" +
@@ -393,7 +393,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry17 = new LogEntry();
         logEntry17.cacheId = this.id;
         logEntry17.finder = "manic.mechanic";
-        logEntry17.geoCacheLogType = LogTypes.found;
+        logEntry17.geoCacheLogType = LogType.found;
         logEntry17.logText = "Schöne kleiner T5er zum Aufwärmen. Besonders begeistert war ich neben der tollen Dose von den vielen Facilities die es in unmittelbarer Nähe gibt [;)]...\n" +
                 "\n" +
                 "TNLNSL\n" +
@@ -406,7 +406,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry18 = new LogEntry();
         logEntry18.cacheId = this.id;
         logEntry18.finder = "staubfinger0702";
-        logEntry18.geoCacheLogType = LogTypes.found;
+        logEntry18.geoCacheLogType = LogType.found;
         logEntry18.logText = "Nachdem ich gestern die ersten T5 Versuche gemacht hatte, sind heute manic.mechanic und ich mit meinem Sohn Oskar auf eine T5 Tour los gezogen.\n" +
                 "Dabei sind wir sogar noch auf hiesige Cacher gestoßen.\n" +
                 "Danke fürs Verstecken.";
@@ -417,7 +417,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry19 = new LogEntry();
         logEntry19.cacheId = this.id;
         logEntry19.finder = "BlindEagle";
-        logEntry19.geoCacheLogType = LogTypes.found;
+        logEntry19.geoCacheLogType = LogType.found;
         logEntry19.logText = "Gut, dass Biene Maya und ich das T5-Grödel im Auto hatten, denn dieses skurile Kerlchen entdeckten wir mehr zufällig auf der Anfahrt zu unserer heutigen Spontantour. Nachdem wir den Wurfsack aus dem Nachbarbaum geborgen hatten, gab es kein Halten mehr und wir öffneten den knarzenden Sargdeckel........welch ein Schock........erst auf den zweiten Blick erkannte ich, wie ausbruchsicher das Verlies gestaltet ist. So konnten wir uns den seltenen Hampir in aller Ruhe ansehen, prompt fiel mir dazu eine Geschichte ein, die sich angeblich ganz in der Nähe zugetragen haben soll:\n" +
                 "\n" +
                 "Hoppelt ein Häschen durch den Wald. Begegnet es einem sehr zottigen Hund. \"Was bist Du denn für ein Tier?\" \"Ich bin ein Wolfshund. Meine Mutter war ein Wolf, mein Vater ein Hund.\" Häschen hoppelt weiter und begegnet einem Muli. \"Was bist Du denn für ein Tier?\" \"Ich bin ein Maultier. Mutter Esel, Vater Pferd.\" Häschen wundert sich, was es alles gibt und hoppelt weiter. Begenet es einem ganz unbekannten Tier. \"Was bist Du denn für ein Tier?\" \"Ich bin ein Ameisenbär.\" Häschen entsetzt: \"Ne ne ne ne, das kannst Du mir nicht erzählen!\"\n" +
@@ -434,7 +434,7 @@ public class TestCache_GC2T9RW extends AbstractTestCache {
         LogEntry logEntry20 = new LogEntry();
         logEntry20.cacheId = this.id;
         logEntry20.finder = "Biene Maya";
-        logEntry20.geoCacheLogType = LogTypes.found;
+        logEntry20.geoCacheLogType = LogType.found;
         logEntry20.logText = "Das hat man nun davon, da möchte man nett sein und dem Hampier einen Besuch abstatten und was macht er, versucht alles um es zu verhindern. [:(!] Nach den ersten Versuchen mit der Pilotleine hat er doch glatt das Wurfsäckchen im Nachbarbaum verankert \t[:O] und so dauerte es eine ganze Weile ehe es dank BlindEagle wieder befreit war. Und dann gings ganz flott,BlindEagle hatte das Seil gelegt und ehe ich mich versah war er auch schon beim Hampier um ihm das Logbuch zu entlocken. Am Boden wurde dann geloggt und ich durfte es dann dem Hampier zurückgeben. Letztendlich war er dann aber doch sehr gastfreundlich. [;)]\n" +
                 "Danke!\n" +
                 "\n" +

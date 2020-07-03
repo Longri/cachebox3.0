@@ -15,6 +15,7 @@
  */
 package de.longri.cachebox3.gui.activities;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Array;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.GroundspeakAPI;
@@ -132,7 +133,7 @@ public class ImportGCPosition extends Activity {
     }
 
     @Override
-    protected void runAtOk() {
+    protected void runAtOk(InputEvent event, float x, float y) {
         final InfoBox infoBox = new InfoBox(InfoBox.Infotype.PROGRESS, "Import").open();
         CB.postAsync(new NamedRunnable("ImportGCPosition") {
             @Override
@@ -140,7 +141,6 @@ public class ImportGCPosition extends Activity {
                 ImportNow(infoBox);
             }
         });
-        // finish() or not
     }
 
     private void initClickHandlersAndContent() {

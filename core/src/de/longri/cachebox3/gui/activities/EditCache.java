@@ -1,6 +1,7 @@
 package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.longri.cachebox3.CB;
@@ -174,7 +175,7 @@ public class EditCache extends Activity {
     }
 
     @Override
-    protected void runAtOk() {
+    protected void runAtOk(InputEvent event, float x, float y) {
         boolean update = false;
         String gcc = cacheCode.getText().toUpperCase();
         cache.setId(AbstractCache.generateCacheId(gcc));
@@ -210,6 +211,5 @@ public class EditCache extends Activity {
             dao.writeToDatabase(database, cache, true);
             EventHandler.updateSelectedCache(cache);
         }
-        finish();
     }
 }

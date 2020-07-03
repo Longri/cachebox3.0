@@ -23,7 +23,7 @@ import de.longri.cachebox3.apis.GCVote;
 import de.longri.cachebox3.apis.GroundspeakAPI;
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.events.SelectedCacheChangedEvent;
-import de.longri.cachebox3.gui.activities.EditDrafts;
+import de.longri.cachebox3.gui.activities.EditDraft;
 import de.longri.cachebox3.gui.dialogs.*;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.LogTypesStyle;
@@ -38,9 +38,9 @@ import de.longri.cachebox3.sqlite.Database;
 import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
 import de.longri.cachebox3.types.AbstractCache;
-import de.longri.cachebox3.types.DraftEntry;
-import de.longri.cachebox3.types.DraftList;
-import de.longri.cachebox3.types.LogTypes;
+import de.longri.cachebox3.types.Draft;
+import de.longri.cachebox3.types.Drafts;
+import de.longri.cachebox3.types.LogType;
 import de.longri.cachebox3.utils.ICancel;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.serializable.BitStore;
@@ -49,6 +49,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
+import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
+import static de.longri.cachebox3.gui.activities.EditDraft.SaveMode.LocalUpdate;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
@@ -57,13 +59,13 @@ import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 public class DraftsView extends AbstractView {
 
     private static final Logger log = LoggerFactory.getLogger(DraftsView.class);
-    static DraftList draftEntries;
-    private static DraftsView that;
-    private static DraftEntry aktDraft;
-    private static EditDrafts efnActivity;
+    static Drafts drafts;
+    private static DraftsView draftsView;
+    private static Draft currentDraft;
+    private static EditDraft editDraft;
     private ListView listView = new ListView(VERTICAL);
     private DraftListItemStyle draftListItemStyle;
-    private LogTypesStyle logTypesStyle;
+    private LogTypesStyle logTypesStyleForMenu;
     private Array<ListViewItem> items;
     private ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
@@ -92,21 +94,21 @@ public class DraftsView extends AbstractView {
     }
 
     private static boolean isInstanceCreated() {
-        return that != null;
+        return draftsView != null;
     }
 
     public static DraftsView getInstance() {
-        if (that == null) {
-            that = new DraftsView();
+        if (draftsView == null) {
+            draftsView = new DraftsView();
         }
-        return that;
+        return draftsView;
     }
 
-    public static void addNewDraft(LogTypes type) {
+    public void addNewDraft(LogType type) {
         addNewDraft(type, false);
     }
 
-    public static void addNewDraft(LogTypes type, boolean withoutShowEdit) {
+    public void addNewDraft(LogType type, boolean withoutShowEdit) {
         AbstractCache abstractCache = EventHandler.getSelectedCache();
 
         if (abstractCache == null) {
@@ -116,9 +118,9 @@ public class DraftsView extends AbstractView {
 
         // chk car found?
         if (abstractCache.getGeoCacheCode().toString().equalsIgnoreCase("CBPark")) {
-            if (type == LogTypes.found) {
+            if (type == LogType.found) {
                 MessageBox.show(Translation.get("My_Parking_Area_Found"), Translation.get("thisNotWork"), MessageBoxButton.OK, MessageBoxIcon.Information, null);
-            } else if (type == LogTypes.didnt_find) {
+            } else if (type == LogType.didnt_find) {
                 MessageBox.show(Translation.get("My_Parking_Area_DNF"), Translation.get("thisNotWork"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
             }
             return;
@@ -127,7 +129,7 @@ public class DraftsView extends AbstractView {
         // kein GC Cache
         if (!abstractCache.getGeoCacheCode().toString().toLowerCase().startsWith("gc")) {
 
-            if (type == LogTypes.found || type == LogTypes.attended || type == LogTypes.webcam_photo_taken) {
+            if (type == LogType.found || type == LogType.attended || type == LogType.webcam_photo_taken) {
                 // Found it! -> fremden Cache als gefunden markieren
                 if (!EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(true);
@@ -137,7 +139,7 @@ public class DraftsView extends AbstractView {
                     QuickDraftFeedbackPopUp pop = new QuickDraftFeedbackPopUp(true);
                     pop.show();
                 }
-            } else if (type == LogTypes.didnt_find) {
+            } else if (type == LogType.didnt_find) {
                 // DidNotFound -> fremden Cache als nicht gefunden markieren
                 if (EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(false);
@@ -153,31 +155,31 @@ public class DraftsView extends AbstractView {
             return;
         }
 
-        DraftList tmpDrafts = new DraftList();
-        tmpDrafts.loadDrafts("", DraftList.LoadingType.LOAD_ALL);
+        Drafts tmpDrafts = new Drafts();
+        tmpDrafts.loadDrafts("", Drafts.LoadingType.LOAD_ALL);
 
-        DraftEntry newDraft = null;
-        if ((type == LogTypes.found) //
-                || (type == LogTypes.attended) //
-                || (type == LogTypes.webcam_photo_taken) //
-                || (type == LogTypes.didnt_find)) {
+        Draft newDraft = null;
+        if ((type == LogType.found) //
+                || (type == LogType.attended) //
+                || (type == LogType.webcam_photo_taken) //
+                || (type == LogType.didnt_find)) {
             // nachsehen, ob für diesen Cache bereits eine Draft des Types angelegt wurde
             // und gegebenenfalls diese ändern und keine neue anlegen
             // gilt nur für Found It! und DNF.
             // needMaintance oder Note können zusätzlich angelegt werden
 
-            for (DraftEntry nfne : tmpDrafts) {
+            for (Draft nfne : tmpDrafts) {
                 if ((nfne.CacheId == abstractCache.getId()) && (nfne.type == type)) {
                     newDraft = nfne;
                     newDraft.deleteFromDatabase();
                     newDraft.timestamp = new Date();
-                    aktDraft = newDraft;
+                    currentDraft = newDraft;
                 }
             }
         }
 
         if (newDraft == null) {
-            newDraft = new DraftEntry(type);
+            newDraft = new Draft(type);
             newDraft.CacheName = abstractCache.getGeoCacheName();
             newDraft.gcCode = abstractCache.getGeoCacheCode().toString();
             newDraft.foundNumber = Config.FoundOffset.getValue();
@@ -187,9 +189,8 @@ public class DraftsView extends AbstractView {
             CharSequence url = abstractCache.getUrl();
             newDraft.CacheUrl = url == null ? null : url.toString();
             newDraft.cacheType = abstractCache.getType();
-            newDraft.fillType();
             // aktDraftIndex = -1;
-            aktDraft = newDraft;
+            currentDraft = newDraft;
         } else {
             tmpDrafts.removeValue(newDraft, false);
         }
@@ -198,7 +199,6 @@ public class DraftsView extends AbstractView {
             case found:
                 if (!abstractCache.isFound())
                     newDraft.foundNumber++; //
-                newDraft.fillType();
                 if (newDraft.comment.equals(""))
                     newDraft.comment = TemplateFormatter.ReplaceTemplate(Config.FoundTemplate.getValue(), newDraft);
                 // wenn eine Draft Found erzeugt werden soll und der Cache noch
@@ -207,7 +207,6 @@ public class DraftsView extends AbstractView {
             case attended:
                 if (!abstractCache.isFound())
                     newDraft.foundNumber++; //
-                newDraft.fillType();
                 if (newDraft.comment.equals(""))
                     newDraft.comment = TemplateFormatter.ReplaceTemplate(Config.AttendedTemplate.getValue(), newDraft);
                 // wenn eine Draft Found erzeugt werden soll und der Cache noch
@@ -216,7 +215,6 @@ public class DraftsView extends AbstractView {
             case webcam_photo_taken:
                 if (!abstractCache.isFound())
                     newDraft.foundNumber++; //
-                newDraft.fillType();
                 if (newDraft.comment.equals(""))
                     newDraft.comment = TemplateFormatter.ReplaceTemplate(Config.WebcamTemplate.getValue(), newDraft);
                 // wenn eine Draft Found erzeugt werden soll und der Cache noch
@@ -242,20 +240,20 @@ public class DraftsView extends AbstractView {
             // new Draft
             tmpDrafts.add(newDraft);
             newDraft.writeToDatabase();
-            aktDraft = newDraft;
-            if (newDraft.type == LogTypes.found || newDraft.type == LogTypes.attended || newDraft.type == LogTypes.webcam_photo_taken) {
+            currentDraft = newDraft;
+            if (newDraft.type == LogType.found || newDraft.type == LogType.attended || newDraft.type == LogType.webcam_photo_taken) {
                 // Found it! -> Cache als gefunden markieren
                 if (!EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(true);
                     EventHandler.getSelectedCache().updateBooleanStore();
                     AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
                     EventHandler.fire(new SelectedCacheChangedEvent(newCache));
-                    Config.FoundOffset.setValue(aktDraft.foundNumber);
+                    Config.FoundOffset.setValue(currentDraft.foundNumber);
                     Config.AcceptChanges();
                 }
                 // und eine evtl. vorhandene Draft DNF löschen
-                tmpDrafts.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.didnt_find);
-            } else if (newDraft.type == LogTypes.didnt_find) {
+                tmpDrafts.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogType.didnt_find);
+            } else if (newDraft.type == LogType.didnt_find) {
                 // DidNotFound -> Cache als nicht gefunden markieren
                 if (EventHandler.getSelectedCache().isFound()) {
                     EventHandler.getSelectedCache().setFound(false);
@@ -266,59 +264,59 @@ public class DraftsView extends AbstractView {
                     Config.AcceptChanges();
                 }
                 // und eine evtl. vorhandene Draft FoundIt löschen
-                tmpDrafts.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.found);
+                tmpDrafts.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogType.found);
             }
 
-            DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
+            Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
 
             notifyDataSetChanged();
 
         } else {
-            efnActivity = EditDrafts.getInstance();
-            efnActivity.setDraft(newDraft, DraftsView::addOrChangeDraft, true);
-            efnActivity.show();
+            editDraft = EditDraft.getInstance();
+            editDraft.setDraft(newDraft, DraftsView.this::addOrChangeDraft, true);
+            editDraft.show();
         }
     }
 
-    static void addOrChangeDraft(DraftEntry draftEntry, boolean isNewDraft) {
+    void addOrChangeDraft(Draft draft, boolean isNewDraft, EditDraft.SaveMode saveMode) {
 
-        if (draftEntry != null) {
+        if (draft != null) {
 
             if (isNewDraft) {
                 // nur, wenn eine Draft neu angelegt wurde
                 // new Draft
-                draftEntries.add(draftEntry);
+                drafts.add(draft);
 
                 // eine evtl. vorhandene Draft /DNF löschen
-                if (draftEntry.type == LogTypes.attended //
-                        || draftEntry.type == LogTypes.found //
-                        || draftEntry.type == LogTypes.webcam_photo_taken //
-                        || draftEntry.type == LogTypes.didnt_find) {
-                    draftEntries.deleteDraftByCacheId(draftEntry.CacheId, LogTypes.found);
-                    draftEntries.deleteDraftByCacheId(draftEntry.CacheId, LogTypes.didnt_find);
+                if (draft.type == LogType.attended //
+                        || draft.type == LogType.found //
+                        || draft.type == LogType.webcam_photo_taken //
+                        || draft.type == LogType.didnt_find) {
+                    drafts.deleteDraftByCacheId(draft.CacheId, LogType.found);
+                    drafts.deleteDraftByCacheId(draft.CacheId, LogType.didnt_find);
                 }
             }
 
-            draftEntry.writeToDatabase();
-            aktDraft = draftEntry;
+            draft.writeToDatabase();
+            currentDraft = draft;
 
             if (isNewDraft) {
                 // nur, wenn eine Draft neu angelegt wurde
                 // wenn eine Draft neu angelegt werden soll dann kann hier auf SelectedCache zugegriffen werden, da nur für den
                 // SelectedCache eine fieldNote angelegt wird
-                if (draftEntry.type == LogTypes.found //
-                        || draftEntry.type == LogTypes.attended //
-                        || draftEntry.type == LogTypes.webcam_photo_taken) {
+                if (draft.type == LogType.found //
+                        || draft.type == LogType.attended //
+                        || draft.type == LogType.webcam_photo_taken) {
                     // Found it! -> Cache als gefunden markieren
                     if (!EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(true);
                         EventHandler.getSelectedCache().updateBooleanStore();
                         DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
-                        Config.FoundOffset.setValue(aktDraft.foundNumber);
+                        Config.FoundOffset.setValue(currentDraft.foundNumber);
                         Config.AcceptChanges();
                     }
 
-                } else if (draftEntry.type == LogTypes.didnt_find) { // DidNotFound -> Cache als nicht gefunden markieren
+                } else if (draft.type == LogType.didnt_find) { // DidNotFound -> Cache als nicht gefunden markieren
                     if (EventHandler.getSelectedCache().isFound()) {
                         EventHandler.getSelectedCache().setFound(false);
                         EventHandler.getSelectedCache().updateBooleanStore();
@@ -327,19 +325,72 @@ public class DraftsView extends AbstractView {
                         Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
                         Config.AcceptChanges();
                     } // und eine evtl. vorhandene Draft FoundIt löschen
-                    draftEntries.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogTypes.found);
+                    drafts.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogType.found);
                 }
             }
-            DraftList.createVisitsTxt(Config.DraftsGarminPath.getValue());
+            Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
+
+            if (saveMode == EditDraft.SaveMode.Log)
+                logOnline(currentDraft, true);
+            else if (saveMode == EditDraft.SaveMode.Draft)
+                logOnline(currentDraft, false);
 
             // Reload List
             if (isNewDraft) {
-                draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW);
+                drafts.loadDrafts("", Drafts.LoadingType.LOAD_NEW);
             } else {
-                draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                drafts.loadDrafts("", Drafts.LoadingType.LOAD_NEW_LAST_LENGTH);
             }
         }
         notifyDataSetChanged();
+    }
+
+    void logOnline(Draft draft, final boolean directLog) {
+
+        if (!draft.isTbDraft) {
+            if (draft.gc_Vote > 0) {
+                // Stimme abgeben
+                try {
+                    GCVote gcVote = new GCVote(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue());
+                    if (gcVote.isPossible()) {
+                        if (!gcVote.sendVote(draft.gc_Vote, draft.CacheUrl, draft.gcCode)) {
+                            log.error(draft.gcCode + " GC-Vote");
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error(draft.gcCode + " GC-Vote");
+                }
+            }
+        }
+
+        String logReferenceCode = GroundspeakAPI.getInstance().UploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, directLog);
+        if (GroundspeakAPI.getInstance().APIError == OK) {
+            // after direct Log change state to uploaded
+            draft.uploaded = true;
+            if (directLog && !draft.isTbDraft) {
+                draft.GcId = logReferenceCode;
+                // LogListView.notifyDataSetChanged(); // getInstance().resetInitial(); // if own log is written !
+            }
+            addOrChangeDraft(draft, false, LocalUpdate);
+        } else {
+            // Error handling
+            MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButton.YesNoRetry, MessageBoxIcon.Question, (which, data) -> {
+                switch (which) {
+                    case ButtonDialog.BUTTON_NEGATIVE:
+                        logOnline(draft,true);// try again create log at gc
+                        break;
+                    case ButtonDialog.BUTTON_NEUTRAL:
+                        break;
+                    case ButtonDialog.BUTTON_POSITIVE:
+                        logOnline(draft,false); // create draft at gc
+                }
+                return true;
+            });
+        }
+        if (GroundspeakAPI.getInstance().LastAPIError.length() > 0) {
+            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
+        }
+
     }
 
     public static void notifyDataSetChanged() {
@@ -347,7 +398,7 @@ public class DraftsView extends AbstractView {
             CB.postOnGlThread(new NamedRunnable("DraftsView") {
                 @Override
                 public void run() {
-                    DraftsView.getInstance().loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                    DraftsView.getInstance().loadDrafts(Drafts.LoadingType.LOAD_NEW_LAST_LENGTH);
                 }
             });
         }
@@ -356,10 +407,10 @@ public class DraftsView extends AbstractView {
     @Override
     protected void create() {
         draftListItemStyle = VisUI.getSkin().get(DraftListItemStyle.class);
-        logTypesStyle = VisUI.getSkin().get("LogTypesSize48", LogTypesStyle.class);
+        logTypesStyleForMenu = VisUI.getSkin().get("LogTypesSize48", LogTypesStyle.class);
 
-        draftEntries = new DraftList();
-        loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+        drafts = new Drafts();
+        loadDrafts(Drafts.LoadingType.LOAD_NEW_LAST_LENGTH);
 
         listView.setEmptyString(Translation.get("EmptyDrafts"));
         this.addActor(listView);
@@ -392,10 +443,10 @@ public class DraftsView extends AbstractView {
     @Override
     public void dispose() {
         EventHandler.remove(this);
-        if (draftEntries != null) draftEntries.clear();
-        draftEntries = null;
-        aktDraft = null;
-        that = null;
+        if (drafts != null) drafts.clear();
+        drafts = null;
+        currentDraft = null;
+        draftsView = null;
         if (listView != null) listView.dispose();
         listView = null;
         if (items != null) {
@@ -407,8 +458,8 @@ public class DraftsView extends AbstractView {
         items = null;
     }
 
-    void loadDrafts(DraftList.LoadingType type) {
-        draftEntries.loadDrafts("", type);
+    void loadDrafts(Drafts.LoadingType type) {
+        drafts.loadDrafts("", type);
 
         if (items == null) {
             items = new Array<>();
@@ -416,7 +467,7 @@ public class DraftsView extends AbstractView {
         items.clear();
 
         int idx = 0;
-        for (DraftEntry entry : draftEntries) {
+        for (Draft entry : drafts) {
             items.add(new DraftsViewItem(idx++, entry, draftListItemStyle));
         }
         CB.postOnNextGlThread(() -> listView.setAdapter(listViewAdapter));
@@ -443,12 +494,12 @@ public class DraftsView extends AbstractView {
 
                     @Override
                     public void run() {
-                        DraftList drafts = new DraftList();
-                        drafts.loadDrafts("(Uploaded=0 or Uploaded is null)", DraftList.LoadingType.LOAD_ALL);
+                        Drafts drafts = new Drafts();
+                        drafts.loadDrafts("(Uploaded=0 or Uploaded is null)", Drafts.LoadingType.LOAD_ALL);
 
                         int count = 0;
                         int anzahl = 0;
-                        for (DraftEntry draft : drafts) {
+                        for (Draft draft : drafts) {
                             if (!draft.uploaded)
                                 anzahl++;
                         }
@@ -458,7 +509,7 @@ public class DraftsView extends AbstractView {
                         StringBuilder UploadMeldung = new StringBuilder();
                         if (anzahl > 0) {
 
-                            for (DraftEntry draft : drafts) {
+                            for (Draft draft : drafts) {
                                 if (isCanceled())
                                     break;
 
@@ -483,7 +534,7 @@ public class DraftsView extends AbstractView {
                                 int result;
 
                                 if (draft.isTbDraft) {
-                                    result = GroundspeakAPI.getInstance().uploadTrackableLog(draft.TravelBugCode, draft.TrackingNumber, draft.gcCode, LogTypes.CB_LogType2GC(draft.type), draft.timestamp, draft.comment);
+                                    result = GroundspeakAPI.getInstance().uploadTrackableLog(draft.TravelBugCode, draft.TrackingNumber, draft.gcCode, LogType.CB_LogType2GC(draft.type), draft.timestamp, draft.comment);
                                 } else {
                                     String logReferenceCode = GroundspeakAPI.getInstance().UploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, uploadLog);
                                     draft.GcId = logReferenceCode;
@@ -531,10 +582,10 @@ public class DraftsView extends AbstractView {
     private Menu getSecondMenu() {
         Menu sm = new Menu("OwnerLogTypesTitle");
         boolean IM_owner = EventHandler.getSelectedCache().iAmTheOwner();
-        sm.addMenuItem("enabled", logTypesStyle.enabled, () -> addNewDraft(LogTypes.enabled)).setEnabled(IM_owner);
-        sm.addMenuItem("temporarilyDisabled", logTypesStyle.temporarily_disabled, () -> addNewDraft(LogTypes.temporarily_disabled)).setEnabled(IM_owner);
-        sm.addMenuItem("ownerMaintenance", logTypesStyle.owner_maintenance, () -> addNewDraft(LogTypes.owner_maintenance)).setEnabled(IM_owner);
-        // todo check if needed: addNewFieldnote(LogTypes.reviewer_note)
+        sm.addMenuItem("enabled", logTypesStyleForMenu.enabled, () -> addNewDraft(LogType.enabled)).setEnabled(IM_owner);
+        sm.addMenuItem("temporarilyDisabled", logTypesStyleForMenu.temporarily_disabled, () -> addNewDraft(LogType.temporarily_disabled)).setEnabled(IM_owner);
+        sm.addMenuItem("ownerMaintenance", logTypesStyleForMenu.owner_maintenance, () -> addNewDraft(LogType.owner_maintenance)).setEnabled(IM_owner);
+        // todo check if needed: addNewFieldnote(LogType.reviewer_note)
         return sm;
     }
 
@@ -545,17 +596,17 @@ public class DraftsView extends AbstractView {
                     // Yes button clicked
                     // delete all Drafts
                     // reload all Drafts!
-                    draftEntries.loadDrafts("", DraftList.LoadingType.LOAD_ALL);
+                    drafts.loadDrafts("", Drafts.LoadingType.LOAD_ALL);
 
-                    for (DraftEntry entry : draftEntries) {
+                    for (Draft entry : drafts) {
                         entry.deleteFromDatabase();
 
                     }
 
-                    draftEntries.clear();
-                    aktDraft = null;
+                    drafts.clear();
+                    currentDraft = null;
 
-                    loadDrafts(DraftList.LoadingType.LOAD_NEW_LAST_LENGTH);
+                    loadDrafts(Drafts.LoadingType.LOAD_NEW_LAST_LENGTH);
                     break;
 
                 case ButtonDialog.BUTTON_NEGATIVE:
@@ -593,24 +644,24 @@ public class DraftsView extends AbstractView {
                 case MegaEvent:
                 case Event:
                 case CITO:
-                    cm.addMenuItem("will-attended", logTypesStyle.will_attend, () -> addNewDraft(LogTypes.will_attend));
-                    cm.addMenuItem("attended", logTypesStyle.attended, () -> addNewDraft(LogTypes.attended));
+                    cm.addMenuItem("will-attended", logTypesStyleForMenu.will_attend, () -> addNewDraft(LogType.will_attend));
+                    cm.addMenuItem("attended", logTypesStyleForMenu.attended, () -> addNewDraft(LogType.attended));
                     break;
                 case Camera:
-                    cm.addMenuItem("webCamFotoTaken", logTypesStyle.webcam_photo_taken, () -> addNewDraft(LogTypes.webcam_photo_taken));
+                    cm.addMenuItem("webCamFotoTaken", logTypesStyleForMenu.webcam_photo_taken, () -> addNewDraft(LogType.webcam_photo_taken));
                     break;
                 default:
-                    cm.addMenuItem("found", logTypesStyle.found, () -> addNewDraft(LogTypes.found));
+                    cm.addMenuItem("found", logTypesStyleForMenu.found, () -> addNewDraft(LogType.found));
                     break;
             }
 
-            cm.addMenuItem("DNF", logTypesStyle.didnt_find, () -> addNewDraft(LogTypes.didnt_find));
+            cm.addMenuItem("DNF", logTypesStyleForMenu.didnt_find, () -> addNewDraft(LogType.didnt_find));
         }
 
         // Aktueller Cache ist von geocaching.com
         if (abstractCache != null && abstractCache.getGeoCacheCode().toString().toLowerCase().startsWith("gc")) {
-            cm.addMenuItem("maintenance", logTypesStyle.needs_maintenance, () -> addNewDraft(LogTypes.needs_maintenance));
-            cm.addMenuItem("writenote", logTypesStyle.note, () -> addNewDraft(LogTypes.note));
+            cm.addMenuItem("maintenance", logTypesStyleForMenu.needs_maintenance, () -> addNewDraft(LogType.needs_maintenance));
+            cm.addMenuItem("writenote", logTypesStyleForMenu.note, () -> addNewDraft(LogType.note));
         }
 
         // Owner logs

@@ -18,7 +18,7 @@ package de.longri.cachebox3.gui.utils;
 
 import de.longri.cachebox3.events.EventHandler;
 import de.longri.cachebox3.settings.Config;
-import de.longri.cachebox3.types.DraftEntry;
+import de.longri.cachebox3.types.Draft;
 import de.longri.cachebox3.types.Trackable;
 
 import java.text.DateFormat;
@@ -29,7 +29,7 @@ import java.util.Date;
  * Created by Longri on 02.09.2017.
  */
 public class TemplateFormatter {
-    public static String ReplaceTemplate(String template, DraftEntry fieldNote) {
+    public static String ReplaceTemplate(String template, Draft fieldNote) {
         template = template.replace("##finds##", String.valueOf(fieldNote.foundNumber));
         return ReplaceTemplate(template, fieldNote.timestamp);
     }

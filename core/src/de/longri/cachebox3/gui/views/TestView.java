@@ -649,7 +649,7 @@ public class TestView extends AbstractView {
 
 
             contentTable.row();
-            //LogTypes
+            //LogType
             VisLabel label2 = new VisLabel("Log Type Icons");
             lineTable = new Table();
             lineTable.defaults().left().pad(CB.scaledSizes.MARGIN);
@@ -657,10 +657,10 @@ public class TestView extends AbstractView {
             contentTable.add(lineTable).left().expandX().fillX();
             contentTable.row();
             iconWidth = 0;
-            LogTypes[] logTypes = LogTypes.values();
+            LogType[] logTypes = LogType.values();
             LogTypesStyle logTypesStyle = VisUI.getSkin().get("LogTypesSize24", LogTypesStyle.class);
             for (int i = 0, n = logTypes.length; i < n; i++) {
-                LogTypes logType = logTypes[i];
+                LogType logType = logTypes[i];
 
                 Drawable drawable = logType.getDrawable(logTypesStyle);
 

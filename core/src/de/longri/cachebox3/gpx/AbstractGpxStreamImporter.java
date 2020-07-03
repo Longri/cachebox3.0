@@ -98,7 +98,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
     protected Date logDate;
     protected String logFinder;
     protected String logComment;
-    protected LogTypes logType;
+    protected LogType logType;
     protected boolean hasCorrectedCoord;
     protected double correctedLatitude;
     protected double correctedLongitude;
@@ -244,7 +244,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
         logDate = null;
         logFinder = null;
         logComment = null;
-        logType = LogTypes.unknown;
+        logType = LogType.unknown;
     }
 
 
@@ -454,13 +454,13 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
 
                             Date dateHidden = cache.getDateHidden();
                             if (dateHidden == null) dateHidden = new Date();
-                            String dateString = Database.cbDbFormat.format(dateHidden);
+                            String dateString = Database.dateFormat.format(dateHidden);
 
                             try {
                                 REPLACE_CACHE_INFO.bind(
                                         cache.getId(),
                                         dateString,
-                                        Database.cbDbFormat.format(new Date()),
+                                        Database.dateFormat.format(new Date()),
                                         cache.getTourName(),
                                         cache.getGPXFilename_ID(),
                                         0,// TODO handle Listing CheckSum
@@ -592,7 +592,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                 REPLACE_LOGS.bind(
                                         entry.logId,
                                         entry.cacheId,
-                                        Database.cbDbFormat.format(entry.logDate == null ? new Date() : entry.logDate),
+                                        Database.dateFormat.format(entry.logDate == null ? new Date() : entry.logDate),
                                         entry.finder,
                                         entry.geoCacheLogType,
                                         entry.logText
@@ -606,7 +606,7 @@ public abstract class AbstractGpxStreamImporter extends XmlStreamParser {
                                                 "Type:{}\n" +
                                                 "Comment:{}\n\n\n",
                                         entry.logId, entry.cacheId,
-                                        Database.cbDbFormat.format(entry.logDate == null ? new Date() : entry.logDate),
+                                        Database.dateFormat.format(entry.logDate == null ? new Date() : entry.logDate),
                                         entry.finder,
                                         entry.geoCacheLogType,
                                         entry.logText

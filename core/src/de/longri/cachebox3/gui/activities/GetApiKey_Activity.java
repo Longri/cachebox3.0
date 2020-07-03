@@ -2,6 +2,7 @@ package de.longri.cachebox3.gui.activities;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.kotcrab.vis.ui.VisUI;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.apis.CB_Api;
@@ -81,7 +82,7 @@ public class GetApiKey_Activity extends Activity {
 
 
     @Override
-    protected void runAtOk() {
+    protected void runAtOk(InputEvent event, float x, float y) {
         log.debug("runAtOk()");
         // save api key and close
         log.debug("save ApiKey: {}", accessToken.get());
@@ -142,9 +143,8 @@ public class GetApiKey_Activity extends Activity {
     }
 
     @Override
-    protected void runAtCancel() {
+    protected void runAtCancel(InputEvent event, float x, float y) {
         log.debug("runAtCancel()");
-        super.runAtCancel();
     }
 
     @Override
