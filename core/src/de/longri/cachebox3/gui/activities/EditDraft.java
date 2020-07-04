@@ -23,30 +23,42 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
+import de.longri.cachebox3.apis.GCVote;
+import de.longri.cachebox3.apis.GroundspeakAPI;
+import de.longri.cachebox3.events.EventHandler;
+import de.longri.cachebox3.events.SelectedCacheChangedEvent;
 import de.longri.cachebox3.gui.Activity;
+import de.longri.cachebox3.gui.dialogs.ButtonDialog;
 import de.longri.cachebox3.gui.dialogs.MessageBox;
 import de.longri.cachebox3.gui.dialogs.MessageBoxButton;
 import de.longri.cachebox3.gui.dialogs.MessageBoxIcon;
 import de.longri.cachebox3.gui.skin.styles.DraftListItemStyle;
 import de.longri.cachebox3.gui.skin.styles.ListViewStyle;
+import de.longri.cachebox3.gui.views.DraftsView;
 import de.longri.cachebox3.gui.widgets.AdjustableStarWidget;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.EditTextField;
 import de.longri.cachebox3.settings.Config;
+import de.longri.cachebox3.sqlite.Database;
+import de.longri.cachebox3.sqlite.dao.DaoFactory;
 import de.longri.cachebox3.translation.Translation;
-import de.longri.cachebox3.types.Draft;
-import de.longri.cachebox3.types.Drafts;
-import de.longri.cachebox3.types.IntProperty;
+import de.longri.cachebox3.types.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
+import static de.longri.cachebox3.gui.activities.EditDraft.SaveMode.LocalUpdate;
+
 /**
  * Created by Longri on 02.09.2017.
  */
 public class EditDraft extends Activity {
+    private static final Logger log = LoggerFactory.getLogger(EditDraft.class);
 
     private final static DateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.US);
     private final static DateFormat iso8601FormatDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -58,7 +70,6 @@ public class EditDraft extends Activity {
     private final VisLabel foundLabel, dateLabel, timeLabel;
     private final EditTextField dateTextArea, timeTextArea, commentTextArea;
     private boolean isNewDraft;
-    private IDraftsView draftsView;
     private Draft currentDraft;
     private Draft originalDraft;
     private AdjustableStarWidget gcVoteWidget;
@@ -102,9 +113,8 @@ public class EditDraft extends Activity {
         return editDraft;
     }
 
-    public void setDraft(Draft _note, IDraftsView _listener, boolean _isNewDraft) {
+    public void setDraft(Draft _note, boolean _isNewDraft) {
         isNewDraft = _isNewDraft;
-        draftsView = _listener;
         currentDraft = _note;
         originalDraft = _note.copy();
         invalidate();
@@ -180,53 +190,160 @@ public class EditDraft extends Activity {
 
     @Override
     protected void runAtOk(InputEvent event, float x, float y) {
-        if (draftsView != null) {
-            SaveMode clickedBy = SaveMode.OnlyLocal;
-            if (event.getListenerActor() == btnLog) clickedBy = SaveMode.Log;
-            else if (event.getListenerActor() == btnDraft) clickedBy = SaveMode.Draft;
+        SaveMode clickedBy = SaveMode.OnlyLocal;
+        if (event.getListenerActor() == btnLog) clickedBy = SaveMode.Log;
+        else if (event.getListenerActor() == btnDraft) clickedBy = SaveMode.Draft;
 
-            currentDraft.isDirectLog = false;
+        currentDraft.isDirectLog = false;
 
-            currentDraft.comment = commentTextArea.getText();
-            if (gcVoteWidget != null) {
-                currentDraft.gc_Vote = gcVoteWidget.getValue() * 100;
-            }
-
-            //parse Date and Time
-            String date = dateTextArea.getText();
-            String time = timeTextArea.getText();
-
-            date = date.replace("-", ".");
-            time = time.replace(":", ".");
-
-            try {
-                currentDraft.timestamp = dateFormatter.parse(date + "." + time + ".00");
-            } catch (ParseException e) {
-                MessageBox.show(Translation.get("wrongDate"), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
-                return;
-            }
-
-            // check of changes
-            if (!originalDraft.equals(currentDraft)) {
-                currentDraft.uploaded = false;
-                currentDraft.updateDatabase();
-                Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
-            }
-            draftsView.addOrChangeDraft(currentDraft, isNewDraft, clickedBy);
+        currentDraft.comment = commentTextArea.getText();
+        if (gcVoteWidget != null) {
+            currentDraft.gc_Vote = gcVoteWidget.getValue() * 100;
         }
+
+        //parse Date and Time
+        String date = dateTextArea.getText();
+        String time = timeTextArea.getText();
+
+        date = date.replace("-", ".");
+        time = time.replace(":", ".");
+
+        try {
+            currentDraft.timestamp = dateFormatter.parse(date + "." + time + ".00");
+        } catch (ParseException e) {
+            MessageBox.show(Translation.get("wrongDate"), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
+            return;
+        }
+
+        // check of changes
+        if (!originalDraft.equals(currentDraft)) {
+            currentDraft.uploaded = false;
+            currentDraft.updateDatabase();
+            Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
+        }
+        addOrChangeDraft(currentDraft, isNewDraft, clickedBy);
     }
 
     @Override
     protected void runAtCancel(InputEvent event, float x, float y) {
-        if (draftsView != null)
-            draftsView.addOrChangeDraft(null, false, SaveMode.Cancel);
+            addOrChangeDraft(null, false, SaveMode.Cancel);
+    }
+
+    void addOrChangeDraft(Draft draft, boolean isNewDraft, EditDraft.SaveMode saveMode) {
+
+        if (draft != null) {
+
+            if (isNewDraft) {
+                // nur, wenn eine Draft neu angelegt wurde
+                // new Draft
+                DraftsView.getInstance().drafts.add(draft);
+
+                // eine evtl. vorhandene Draft /DNF löschen
+                if (draft.type == LogType.attended //
+                        || draft.type == LogType.found //
+                        || draft.type == LogType.webcam_photo_taken //
+                        || draft.type == LogType.didnt_find) {
+                    DraftsView.getInstance().drafts.deleteDraftByCacheId(draft.CacheId, LogType.found);
+                    DraftsView.getInstance().drafts.deleteDraftByCacheId(draft.CacheId, LogType.didnt_find);
+                }
+            }
+
+            draft.writeToDatabase();
+            currentDraft = draft;
+
+            if (isNewDraft) {
+                // nur, wenn eine Draft neu angelegt wurde
+                // wenn eine Draft neu angelegt werden soll dann kann hier auf SelectedCache zugegriffen werden, da nur für den
+                // SelectedCache eine fieldNote angelegt wird
+                if (draft.type == LogType.found //
+                        || draft.type == LogType.attended //
+                        || draft.type == LogType.webcam_photo_taken) {
+                    // Found it! -> Cache als gefunden markieren
+                    if (!EventHandler.getSelectedCache().isFound()) {
+                        EventHandler.getSelectedCache().setFound(true);
+                        EventHandler.getSelectedCache().updateBooleanStore();
+                        DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
+                        Config.FoundOffset.setValue(currentDraft.foundNumber);
+                        Config.AcceptChanges();
+                    }
+
+                } else if (draft.type == LogType.didnt_find) { // DidNotFound -> Cache als nicht gefunden markieren
+                    if (EventHandler.getSelectedCache().isFound()) {
+                        EventHandler.getSelectedCache().setFound(false);
+                        EventHandler.getSelectedCache().updateBooleanStore();
+                        AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
+                        EventHandler.fire(new SelectedCacheChangedEvent(newCache));
+                        Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
+                        Config.AcceptChanges();
+                    } // und eine evtl. vorhandene Draft FoundIt löschen
+                    DraftsView.getInstance().drafts.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogType.found);
+                }
+            }
+            Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
+
+            if (saveMode == EditDraft.SaveMode.Log)
+                logOnline(currentDraft, true);
+            else if (saveMode == EditDraft.SaveMode.Draft)
+                logOnline(currentDraft, false);
+
+            // Reload List
+            if (isNewDraft) {
+                DraftsView.getInstance().drafts.loadDrafts("", Drafts.LoadingType.LOAD_NEW);
+            } else {
+                DraftsView.getInstance().drafts.loadDrafts("", Drafts.LoadingType.LOAD_NEW_LAST_LENGTH);
+            }
+        }
+        DraftsView.getInstance().notifyDataSetChanged();
+    }
+
+    public void logOnline(Draft draft, final boolean directLog) {
+
+        if (!draft.isTbDraft) {
+            if (draft.gc_Vote > 0) {
+                // Stimme abgeben
+                try {
+                    GCVote gcVote = new GCVote(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue());
+                    if (gcVote.isPossible()) {
+                        if (!gcVote.sendVote(draft.gc_Vote, draft.CacheUrl, draft.gcCode)) {
+                            log.error(draft.gcCode + " GC-Vote");
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error(draft.gcCode + " GC-Vote");
+                }
+            }
+        }
+
+        String logReferenceCode = GroundspeakAPI.getInstance().UploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, directLog);
+        if (GroundspeakAPI.getInstance().APIError == OK) {
+            // after direct Log change state to uploaded
+            draft.uploaded = true;
+            if (directLog && !draft.isTbDraft) {
+                draft.GcId = logReferenceCode;
+                // LogListView.notifyDataSetChanged(); // getInstance().resetInitial(); // if own log is written !
+            }
+            addOrChangeDraft(draft, false, LocalUpdate);
+        } else {
+            // Error handling
+            MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButton.YesNoRetry, MessageBoxIcon.Question, (which, data) -> {
+                switch (which) {
+                    case ButtonDialog.BUTTON_NEGATIVE:
+                        logOnline(draft,true);// try again create log at gc
+                        break;
+                    case ButtonDialog.BUTTON_NEUTRAL:
+                        break;
+                    case ButtonDialog.BUTTON_POSITIVE:
+                        logOnline(draft,false); // create draft at gc
+                }
+                return true;
+            });
+        }
+        if (GroundspeakAPI.getInstance().LastAPIError.length() > 0) {
+            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
+        }
+
     }
 
     public enum SaveMode {Cancel, OnlyLocal, Draft, Log, LocalUpdate}
-
-    public interface IDraftsView {
-        void addOrChangeDraft(Draft fn, boolean isNewDraft, SaveMode saveMode);
-    }
-
 
 }

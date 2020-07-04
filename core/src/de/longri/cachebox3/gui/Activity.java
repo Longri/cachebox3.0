@@ -1,13 +1,10 @@
 package de.longri.cachebox3.gui;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.SnapshotArray;
 import de.longri.cachebox3.CB;
 import de.longri.cachebox3.gui.widgets.CB_Button;
 import de.longri.cachebox3.gui.widgets.CB_Label;
@@ -16,12 +13,12 @@ import de.longri.cachebox3.translation.Translation;
 
 public abstract class Activity extends ActivityBase {
     protected static Activity activity;
+    private final ClickListener cancelListener;
+    private final ClickListener okListener;
     protected Catch_Table mainContent;
     protected CB_Button btnOK, btnCancel;
     protected CB_Label lblTitle;
     protected Image imgTitle;
-    private ClickListener cancelListener;
-    private ClickListener okListener;
 
     public Activity(String title, Drawable icon) {
         super(title);
@@ -55,18 +52,18 @@ public abstract class Activity extends ActivityBase {
             super.layout();
             return;
         }
-        SnapshotArray<Actor> actors = getChildren();
-        for (Actor actor : actors)
-            removeActor(actor);
+        getChildren().clear();
         setFillParent(true);
         addNext(imgTitle, -1.2f).padBottom(0);
         addLast(lblTitle, -0.8f).padBottom(0);
         createMainContent();
+        // hack to make the widget area bigger, to have ok and cancel at the bottom
+        for (int i = 0; i < 25; i++) {
+            mainContent.addLast(new CB_Label(""));
+        }
         addLast(new ScrollPane(mainContent)).pad(0);
-        newLine().bottom(); // todo make ok+cancel to bottom of page
         addNext(btnOK).padTop(0);
         addLast(btnCancel).padTop(0);
-
         super.layout();
         needLayout = false;
     }
@@ -83,17 +80,8 @@ public abstract class Activity extends ActivityBase {
         CB.stageManager.unRegisterForBackKey(cancelListener);
         btnOK.removeListener(okListener);
         btnCancel.removeListener(cancelListener);
-
         activity = null;
-
-        //dispose all actors
-        SnapshotArray<Actor> children = getChildren();
-        for (Actor child : children) {
-            if (child instanceof Disposable) {
-                ((Disposable) child).dispose();
-            }
-            this.removeActor(child);
-        }
+        getChildren().clear();
         super.dispose();
     }
 

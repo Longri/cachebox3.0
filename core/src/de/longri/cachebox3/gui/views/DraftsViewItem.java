@@ -49,26 +49,22 @@ import de.longri.cachebox3.translation.word.CompoundCharSequence;
 import de.longri.cachebox3.types.*;
 import de.longri.cachebox3.utils.NamedRunnable;
 import de.longri.cachebox3.utils.converter.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
-import static de.longri.cachebox3.gui.views.DraftsView.drafts;
 
 /**
  * Created by Longri on 31.08.2017.
  */
 public class DraftsViewItem extends ListViewItem {
-    private static final Logger log = LoggerFactory.getLogger(DraftsViewItem.class);
+    // private static final Logger log = LoggerFactory.getLogger(DraftsViewItem.class);
     private final static SimpleDateFormat postFormatter = new SimpleDateFormat("dd.MMM.yy (HH:mm)", Locale.US);
 
     final private DraftListItemStyle draftListItemStyle;
-
-    private boolean needsLayout = true;
     private final Draft draft;
+    private boolean needsLayout = true;
     private VisTable headerTable;
 
     public DraftsViewItem(int listIndex, Draft fromDraft, DraftListItemStyle _draftListItemStyle) {
@@ -189,8 +185,8 @@ public class DraftsViewItem extends ListViewItem {
             cm.addMenuItem("uploadLogImage", CB.getSkin().menuIcon.uploadDraft, this::uploadLogImage);
             cm.addMenuItem("BrowseLog", null, () -> PlatformConnector.callUrl("https://coord.info/" + draft.GcId));
         }
-        cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, () -> DraftsView.getInstance().logOnline(draft, false));
-        cm.addMenuItem("directLog", CB.getSkin().menuIcon.me2Logbook, () -> DraftsView.getInstance().logOnline(draft, true));
+        cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, () -> EditDraft.getInstance().logOnline(draft, false));
+        cm.addMenuItem("directLog", CB.getSkin().menuIcon.me2Logbook, () -> EditDraft.getInstance().logOnline(draft, true));
         cm.addMenuItem("delete", CB.getSkin().menuIcon.delete, this::deleteDraft);
         cm.show();
         return true;
@@ -272,7 +268,7 @@ public class DraftsViewItem extends ListViewItem {
 
     private void editDraft() {
         EditDraft efnActivity = EditDraft.getInstance();
-        efnActivity.setDraft(draft, DraftsView.getInstance()::addOrChangeDraft, false);
+        efnActivity.setDraft(draft, false);
         efnActivity.show();
     }
 
@@ -328,8 +324,8 @@ public class DraftsViewItem extends ListViewItem {
                             }
                         }
                     }
-                    drafts.deleteDraftById(draft.Id);
-                    DraftsView.notifyDataSetChanged();
+                    DraftsView.getInstance().drafts.deleteDraftById(draft.Id);
+                    DraftsView.getInstance().notifyDataSetChanged();
                     Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
                     break;
                 case ButtonDialog.BUTTON_NEGATIVE:

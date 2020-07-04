@@ -100,7 +100,7 @@ public class CreateNightSkinButton extends TextButton {
     private void convertAllColorResources() {
         ObjectMap<String, SkinColor> resourceColors = this.newSkin.getAll(SkinColor.class);
 
-        ObjectMap<String, SkinColor> newColors = new ObjectMap<String, SkinColor>();
+        ObjectMap<String, SkinColor> newColors = new ObjectMap<>();
 
         for (ObjectMap.Entry<String, SkinColor> entry : resourceColors) {
             String name = entry.key;

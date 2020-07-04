@@ -49,8 +49,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-import static de.longri.cachebox3.apis.GroundspeakAPI.OK;
-import static de.longri.cachebox3.gui.activities.EditDraft.SaveMode.LocalUpdate;
 import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 
 /**
@@ -59,15 +57,14 @@ import static de.longri.cachebox3.gui.widgets.list_view.ListViewType.VERTICAL;
 public class DraftsView extends AbstractView {
 
     private static final Logger log = LoggerFactory.getLogger(DraftsView.class);
-    static Drafts drafts;
+    public Drafts drafts;
     private static DraftsView draftsView;
     private static Draft currentDraft;
-    private static EditDraft editDraft;
     private ListView listView = new ListView(VERTICAL);
     private DraftListItemStyle draftListItemStyle;
     private LogTypesStyle logTypesStyleForMenu;
     private Array<ListViewItem> items;
-    private ListViewAdapter listViewAdapter = new ListViewAdapter() {
+    private final ListViewAdapter listViewAdapter = new ListViewAdapter() {
 
         @Override
         public int getCount() {
@@ -272,128 +269,13 @@ public class DraftsView extends AbstractView {
             notifyDataSetChanged();
 
         } else {
-            editDraft = EditDraft.getInstance();
-            editDraft.setDraft(newDraft, DraftsView.this::addOrChangeDraft, true);
+            EditDraft editDraft = EditDraft.getInstance();
+            editDraft.setDraft(newDraft, true);
             editDraft.show();
         }
     }
 
-    void addOrChangeDraft(Draft draft, boolean isNewDraft, EditDraft.SaveMode saveMode) {
-
-        if (draft != null) {
-
-            if (isNewDraft) {
-                // nur, wenn eine Draft neu angelegt wurde
-                // new Draft
-                drafts.add(draft);
-
-                // eine evtl. vorhandene Draft /DNF löschen
-                if (draft.type == LogType.attended //
-                        || draft.type == LogType.found //
-                        || draft.type == LogType.webcam_photo_taken //
-                        || draft.type == LogType.didnt_find) {
-                    drafts.deleteDraftByCacheId(draft.CacheId, LogType.found);
-                    drafts.deleteDraftByCacheId(draft.CacheId, LogType.didnt_find);
-                }
-            }
-
-            draft.writeToDatabase();
-            currentDraft = draft;
-
-            if (isNewDraft) {
-                // nur, wenn eine Draft neu angelegt wurde
-                // wenn eine Draft neu angelegt werden soll dann kann hier auf SelectedCache zugegriffen werden, da nur für den
-                // SelectedCache eine fieldNote angelegt wird
-                if (draft.type == LogType.found //
-                        || draft.type == LogType.attended //
-                        || draft.type == LogType.webcam_photo_taken) {
-                    // Found it! -> Cache als gefunden markieren
-                    if (!EventHandler.getSelectedCache().isFound()) {
-                        EventHandler.getSelectedCache().setFound(true);
-                        EventHandler.getSelectedCache().updateBooleanStore();
-                        DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
-                        Config.FoundOffset.setValue(currentDraft.foundNumber);
-                        Config.AcceptChanges();
-                    }
-
-                } else if (draft.type == LogType.didnt_find) { // DidNotFound -> Cache als nicht gefunden markieren
-                    if (EventHandler.getSelectedCache().isFound()) {
-                        EventHandler.getSelectedCache().setFound(false);
-                        EventHandler.getSelectedCache().updateBooleanStore();
-                        AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
-                        EventHandler.fire(new SelectedCacheChangedEvent(newCache));
-                        Config.FoundOffset.setValue(Config.FoundOffset.getValue() - 1);
-                        Config.AcceptChanges();
-                    } // und eine evtl. vorhandene Draft FoundIt löschen
-                    drafts.deleteDraftByCacheId(EventHandler.getSelectedCache().getId(), LogType.found);
-                }
-            }
-            Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
-
-            if (saveMode == EditDraft.SaveMode.Log)
-                logOnline(currentDraft, true);
-            else if (saveMode == EditDraft.SaveMode.Draft)
-                logOnline(currentDraft, false);
-
-            // Reload List
-            if (isNewDraft) {
-                drafts.loadDrafts("", Drafts.LoadingType.LOAD_NEW);
-            } else {
-                drafts.loadDrafts("", Drafts.LoadingType.LOAD_NEW_LAST_LENGTH);
-            }
-        }
-        notifyDataSetChanged();
-    }
-
-    void logOnline(Draft draft, final boolean directLog) {
-
-        if (!draft.isTbDraft) {
-            if (draft.gc_Vote > 0) {
-                // Stimme abgeben
-                try {
-                    GCVote gcVote = new GCVote(Database.Data, Config.GcLogin.getValue(), Config.GcVotePassword.getValue());
-                    if (gcVote.isPossible()) {
-                        if (!gcVote.sendVote(draft.gc_Vote, draft.CacheUrl, draft.gcCode)) {
-                            log.error(draft.gcCode + " GC-Vote");
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error(draft.gcCode + " GC-Vote");
-                }
-            }
-        }
-
-        String logReferenceCode = GroundspeakAPI.getInstance().UploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, directLog);
-        if (GroundspeakAPI.getInstance().APIError == OK) {
-            // after direct Log change state to uploaded
-            draft.uploaded = true;
-            if (directLog && !draft.isTbDraft) {
-                draft.GcId = logReferenceCode;
-                // LogListView.notifyDataSetChanged(); // getInstance().resetInitial(); // if own log is written !
-            }
-            addOrChangeDraft(draft, false, LocalUpdate);
-        } else {
-            // Error handling
-            MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButton.YesNoRetry, MessageBoxIcon.Question, (which, data) -> {
-                switch (which) {
-                    case ButtonDialog.BUTTON_NEGATIVE:
-                        logOnline(draft,true);// try again create log at gc
-                        break;
-                    case ButtonDialog.BUTTON_NEUTRAL:
-                        break;
-                    case ButtonDialog.BUTTON_POSITIVE:
-                        logOnline(draft,false); // create draft at gc
-                }
-                return true;
-            });
-        }
-        if (GroundspeakAPI.getInstance().LastAPIError.length() > 0) {
-            MessageBox.show(GroundspeakAPI.getInstance().LastAPIError, Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
-        }
-
-    }
-
-    public static void notifyDataSetChanged() {
+    public void notifyDataSetChanged() {
         if (isInstanceCreated()) {
             CB.postOnGlThread(new NamedRunnable("DraftsView") {
                 @Override

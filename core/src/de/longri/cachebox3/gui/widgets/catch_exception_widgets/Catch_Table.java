@@ -76,10 +76,10 @@ public class Catch_Table extends VisTable {
             setTableAndCellDefaults();
     }
 
-    public Cell setTableAndCellDefaults() {
+    public void setTableAndCellDefaults() {
         top().left();
         defaults().padTop(0).padBottom(0).padLeft(CB.scaledSizes.MARGIN).padRight(CB.scaledSizes.MARGIN);
-        return defaults().expandX().fill().colspan((int) sizingMax);
+        defaults().expandX().fill().colspan((int) sizingMax);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class Catch_Table extends VisTable {
         }
     }
 
-    public Catch_Table newLine() {
+    public Catch_Table newRow() {
         row();
         currentRow = new Catch_Table(true);
         currentRow.setDebug(this.getDebug());
@@ -106,7 +106,7 @@ public class Catch_Table extends VisTable {
 
     public <T extends Actor> Cell<T> addNext(T actor) {
         if (currentRow == null)
-            newLine();
+            newRow();
         Cell<T> cell = currentRow.add(actor);
         cell.setActorX(1f);
         return cell;
@@ -114,7 +114,7 @@ public class Catch_Table extends VisTable {
 
     public <T extends Actor> Cell<T> addNext(T actor, float sizing) {
         if (currentRow == null)
-            newLine();
+            newRow();
         Cell<T> cell = currentRow.add(actor);
         cell.setActorX(sizing);
         return cell;
@@ -122,7 +122,7 @@ public class Catch_Table extends VisTable {
 
     public <T extends Actor> Cell<T> addLast(T actor) {
         if (currentRow == null)
-            newLine();
+            newRow();
         Cell<T> cell = currentRow.add(actor);
         cell.setActorX(1f);
         currentRow.prepareLayout();
@@ -132,7 +132,7 @@ public class Catch_Table extends VisTable {
 
     public <T extends Actor> Cell<T> addLast(T actor, float sizing) {
         if (currentRow == null)
-            newLine();
+            newRow();
         Cell<T> cell = currentRow.add(actor);
         cell.setActorX(sizing);
         currentRow.prepareLayout();
@@ -151,7 +151,7 @@ public class Catch_Table extends VisTable {
         row();
         float remainingSize = sizingMax;
         float sizingSum = 0;
-        for (Cell c : getCells()) {
+        for (Cell<?> c : getCells()) {
             float sizing = c.getActorX();
             if (sizing < 0) {
                 sizing = sizing - (int) sizing;
@@ -162,20 +162,20 @@ public class Catch_Table extends VisTable {
                 // c.setActorX(0f);
             }
         }
-        for (Cell c : getCells()) {
+        for (Cell<?> c : getCells()) {
             if (c.getActorX() <= FIXED) {
                 c.left().fill(false);
             }
         }
 
         if (remainingSize > 0) {
-            for (Cell c : getCells()) {
+            for (Cell<?> c : getCells()) {
                 if (c.getActorX() > 0) {
                     sizingSum = sizingSum + c.getActorX();
                 }
             }
             float sizingBase = remainingSize / sizingSum;
-            for (Cell c : getCells()) {
+            for (Cell<?> c : getCells()) {
                 if (c.getActorX() > 0) {
                     c.colspan((int) (c.getActorX() * sizingBase));
                     // c.setActorX(0f);
@@ -204,7 +204,7 @@ public class Catch_Table extends VisTable {
             if (drawCount.incrementAndGet() > 10) {
                 drawException.set(false);
             } else {
-                CB.postOnNextGlThread(() -> CB.requestRendering());
+                CB.postOnNextGlThread(CB::requestRendering);
             }
             shapes.set(ShapeRenderer.ShapeType.Filled);
             shapes.setColor(CB.EXCEPTION_COLOR_DRAWING);

@@ -506,7 +506,7 @@ public class PreviewPane extends Table {
                                     getCacheTypeItem(tbl, cacheType, cacheTypeStyle, count % newLineAt == 0);
                                 }
                             }
-                            tbl.newLine();
+                            tbl.newRow();
                             count = 0;
                             for (CacheTypes cacheType : CacheTypes.values()) {
                                 if (!cacheType.isCache()) {
@@ -514,7 +514,7 @@ public class PreviewPane extends Table {
                                     getCacheTypeItem(tbl, cacheType, cacheTypeStyle, count % newLineAt == 0);
                                 }
                             }
-                            tbl.newLine();
+                            tbl.newRow();
                             add(tbl).width(getWidth()).row();
                             break;
                         }
