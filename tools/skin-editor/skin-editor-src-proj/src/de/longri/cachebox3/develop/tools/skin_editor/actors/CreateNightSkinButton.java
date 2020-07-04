@@ -83,8 +83,8 @@ public class CreateNightSkinButton extends TextButton {
 
         //copy font folder
         FileHandle fontFolder = game.skinProject.skinFolder.child("fonts");
-        FileHandle newFontFolder = projectFolder.child("fonts");
-        fontFolder.copyTo(newFontFolder);
+        // FileHandle newFontFolder = projectFolder.child("fonts");
+        fontFolder.copyTo(projectFolder);
 
         convertAllColorResources();
         convertAllSvgResources();
@@ -144,23 +144,29 @@ public class CreateNightSkinButton extends TextButton {
         int length = svgSourceString.length();
 
         while (pos < length) {
-            pos = svgSourceString.indexOf("\"#", pos) + 2;
-            if (pos == 1) break;
-            int endPos = svgSourceString.indexOf("\"", pos);
-            String colorString = svgSourceString.substring(pos, endPos);
-            try {
-                HSV_Color hsv_color = new HSV_Color(colorString);
-                SkinColor convertedColor = convertColor(hsv_color);
-                String newColorhexString = convertedColor.toString();
-                if (colorString.length() == 6) {
-                    // without alpha
-                    newColorhexString = newColorhexString.substring(0, 6);
+            pos = svgSourceString.indexOf("#", pos) + 2;
+            if (pos == 1) break; // -1 + 2 nothing found
+            String charAtPosMinus1 = svgSourceString.substring(pos - 3, pos - 2);
+            if (charAtPosMinus1.equals(":") || charAtPosMinus1.equals("\"")) {
+                int endPos1 = svgSourceString.indexOf("\"", pos);
+                int endPos2 = svgSourceString.indexOf(";", pos);
+                int endPos = Math.min(endPos1, endPos2);
+                if (endPos == -1) endPos = Math.max(endPos1, endPos2);
+                String colorString = svgSourceString.substring(pos - 1, endPos);
+                try {
+                    HSV_Color hsv_color = new HSV_Color(colorString);
+                    SkinColor convertedColor = convertColor(hsv_color);
+                    String newColorhexString = convertedColor.toString();
+                    if (colorString.length() == 6) {
+                        // without alpha
+                        newColorhexString = newColorhexString.substring(0, 6);
+                    }
+                    svgSourceString = svgSourceString.substring(0, pos - 1) + newColorhexString + svgSourceString.substring(endPos);
+                } catch (Exception e) {
+                    // no hex color value
                 }
-                svgSourceString = svgSourceString.substring(0, pos) + newColorhexString + svgSourceString.substring(endPos);
-            } catch (Exception e) {
-                // no hex color value
+                pos = endPos;
             }
-            pos = endPos;
         }
 
 

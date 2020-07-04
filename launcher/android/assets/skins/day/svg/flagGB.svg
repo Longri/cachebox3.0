@@ -1,15 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="480" width="640" viewBox="0 0 640 480">
-  <defs>
-    <clipPath id="a">
-      <path fill-opacity=".67" d="M-85.333 0h682.67v512h-682.67z"/>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg x="0" y="0" width="640" height="480" overflow="hidden" viewBox="0, 0, 640, 480" preserveAspectRatio="xMidYMid"
+     font-size="0" id="svg" xml:space="default" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1">
+  <defs id="def1" xml:space="default">
+    <clipPath id="a" xml:space="default">
+      <path d="M-85.333 0 L597.337 0 L597.337 512 L-85.33301 512 z" fill-opacity="0.67" id="path2" xml:space="default" connector-curvature="0" />
     </clipPath>
   </defs>
-  <g clip-path="url(#a)" transform="translate(80) scale(.94)">
-    <g stroke-width="1pt">
-      <path fill="#006" d="M-256 0H768.02v512.01H-256z"/>
-      <path d="M-256 0v57.244l909.535 454.768H768.02V454.77L-141.515 0H-256zM768.02 0v57.243L-141.515 512.01H-256v-57.243L653.535 0H768.02z" fill="#fff"/>
-      <path d="M170.675 0v512.01h170.67V0h-170.67zM-256 170.67v170.67H768.02V170.67H-256z" fill="#fff"/>
-      <path d="M-256 204.804v102.402H768.02V204.804H-256zM204.81 0v512.01h102.4V0h-102.4zM-256 512.01L85.34 341.34h76.324l-341.34 170.67H-256zM-256 0L85.34 170.67H9.016L-256 38.164V0zm606.356 170.67L691.696 0h76.324L426.68 170.67h-76.324zM768.02 512.01L426.68 341.34h76.324L768.02 473.848v38.162z" fill="#c00"/>
-    </g>
-  </g>
+  <path d="M-4.24E-06 0 L640 0 L640 479.9981 L-4.24E-06 479.9981 z" stroke-width="0.7654491pt" id="path7" xml:space="default" style="fill:#000066;" />
+  <path d="M-4.24E-06 0 L-4.24E-06 53.66499 L568.4482 480 L639.9999 480 L639.9999 426.3369 L71.55172 0 z M640 0 L640 53.66405 L71.55172 479.9981 L-4.24E-06 479.9981 L-4.24E-06 426.3341 L568.4482 0 z" stroke-width="0.7654491pt" id="path9" xml:space="default" style="fill:#FFFFFF;" />
+  <path d="M266.6667 0 L266.6667 479.9981 L373.3333 479.9981 L373.3333 0 z M-4.24E-06 159.9994 L-4.24E-06 319.9987 L640 319.9987 L640 159.9994 z" stroke-width="0.7654491pt" id="path11" xml:space="default" style="fill:#FFFFFF;" />
+  <path d="M-4.24E-06 191.9993 L-4.24E-06 287.9989 L640 287.9989 L640 191.9993 z M288.0006 0 L288.0006 479.9981 L351.9994 479.9981 L351.9994 0 z M-4.24E-06 479.9981 L213.3333 319.9987 L261.0349 319.9987 L47.70156 479.9981 z M-4.24E-06 0 L213.3333 159.9994 L165.6318 159.9994 L-4.24E-06 35.77791 z M378.9651 159.9994 L592.2984 0 L640 0 L426.6667 159.9994 z M640 479.9981 L426.6667 319.9987 L474.3682 319.9987 L640 444.2221 z" stroke-width="0.7654491pt" id="path13" xml:space="default" style="fill:#CC0000;" />
 </svg>
