@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import de.longri.cachebox3.CB;
@@ -51,10 +51,10 @@ public class EditDraft extends Activity {
     private final static DateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.US);
     private final static DateFormat iso8601FormatDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     private final static DateFormat iso8601FormatTime = new SimpleDateFormat("HH:mm", Locale.US);
+    private final DraftListItemStyle draftListItemStyle;
     private static EditDraft editDraft;
     private final CB_Button btnLog;
     private final CB_Button btnDraft;
-    private final DraftListItemStyle draftListItemStyle;
     private final VisLabel foundLabel, dateLabel, timeLabel;
     private final EditTextField dateTextArea, timeTextArea, commentTextArea;
     private boolean isNewDraft;
@@ -65,53 +65,13 @@ public class EditDraft extends Activity {
 
     private EditDraft() {
         super("EditDraft", CB.getSkin().menuIcon.editDraft);
-        draftListItemStyle = CB.getSkin().get(DraftListItemStyle.class);
+        draftListItemStyle = VisUI.getSkin().get(DraftListItemStyle.class);
 
-        setOKText(Translation.get("save"));
+        btnOK.setText(Translation.get("save"));
         btnLog = new CB_Button(Translation.get("GCLog"));
         btnDraft = new CB_Button(Translation.get("GCDraft"));
-        ClickListener saveClickListener = new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (draftsView != null) {
-                    SaveMode clickedBy = SaveMode.OnlyLocal;
-                    if (event.getListenerActor() == btnLog) clickedBy = SaveMode.Log;
-                    else if (event.getListenerActor() == btnDraft) clickedBy = SaveMode.Draft;
-
-                    currentDraft.isDirectLog = false;
-
-                    currentDraft.comment = commentTextArea.getText();
-                    if (gcVoteWidget != null) {
-                        currentDraft.gc_Vote = gcVoteWidget.getValue() * 100;
-                    }
-
-                    //parse Date and Time
-                    String date = dateTextArea.getText();
-                    String time = timeTextArea.getText();
-
-                    date = date.replace("-", ".");
-                    time = time.replace(":", ".");
-
-                    try {
-                        currentDraft.timestamp = dateFormatter.parse(date + "." + time + ".00");
-                    } catch (ParseException e) {
-                        MessageBox.show(Translation.get("wrongDate"), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
-                        return;
-                    }
-
-                    // check of changes
-                    if (!originalDraft.equals(currentDraft)) {
-                        currentDraft.uploaded = false;
-                        currentDraft.updateDatabase();
-                        Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
-                    }
-                    draftsView.addOrChangeDraft(currentDraft, isNewDraft, clickedBy);
-                }
-                finish();
-            }
-        };
-        setOkListener(saveClickListener);
-        btnDraft.addListener(saveClickListener);
-        btnLog.addListener(saveClickListener);
+        btnDraft.addListener(btnOK.getClickListener());
+        btnLog.addListener(btnOK.getClickListener());
 
         if (!Config.GcVotePassword.getEncryptedValue().equalsIgnoreCase("")) {
             gcVoteWidget = new AdjustableStarWidget(AdjustableStarWidget.Type.STAR, Translation.get("maxRating"),
@@ -161,19 +121,6 @@ public class EditDraft extends Activity {
         dateTextArea.setText(iso8601FormatDate.format(currentDraft.timestamp));
         timeTextArea.setText(iso8601FormatTime.format(currentDraft.timestamp));
         commentTextArea.setText(currentDraft.comment);
-
-        /*
-        float x = Gdx.graphics.getWidth() - (CB.scaledSizes.MARGIN + btnCancel.getWidth());
-        float y = CB.scaledSizes.MARGIN;
-
-        btnCancel.setPosition(x, y);
-        x -= CB.scaledSizes.MARGIN + btnOk.getWidth();
-        btnOk.setPosition(x, y);
-
-        x = CB.scaledSizes.MARGIN;
-        y += CB.scaledSizes.MARGIN + btnCancel.getHeight();
-
-         */
 
         Label.LabelStyle headerLabelStyle = new Label.LabelStyle();
         headerLabelStyle.font = draftListItemStyle.headerFont;
@@ -233,6 +180,40 @@ public class EditDraft extends Activity {
 
     @Override
     protected void runAtOk(InputEvent event, float x, float y) {
+        if (draftsView != null) {
+            SaveMode clickedBy = SaveMode.OnlyLocal;
+            if (event.getListenerActor() == btnLog) clickedBy = SaveMode.Log;
+            else if (event.getListenerActor() == btnDraft) clickedBy = SaveMode.Draft;
+
+            currentDraft.isDirectLog = false;
+
+            currentDraft.comment = commentTextArea.getText();
+            if (gcVoteWidget != null) {
+                currentDraft.gc_Vote = gcVoteWidget.getValue() * 100;
+            }
+
+            //parse Date and Time
+            String date = dateTextArea.getText();
+            String time = timeTextArea.getText();
+
+            date = date.replace("-", ".");
+            time = time.replace(":", ".");
+
+            try {
+                currentDraft.timestamp = dateFormatter.parse(date + "." + time + ".00");
+            } catch (ParseException e) {
+                MessageBox.show(Translation.get("wrongDate"), Translation.get("Error"), MessageBoxButton.OK, MessageBoxIcon.Error, null);
+                return;
+            }
+
+            // check of changes
+            if (!originalDraft.equals(currentDraft)) {
+                currentDraft.uploaded = false;
+                currentDraft.updateDatabase();
+                Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
+            }
+            draftsView.addOrChangeDraft(currentDraft, isNewDraft, clickedBy);
+        }
     }
 
     @Override

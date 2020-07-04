@@ -37,7 +37,6 @@ public class SelectableImport extends Activity {
     public static SelectableImport getInstance(String title, Drawable icon) {
         if (activity == null) {
             activity = new SelectableImport(title, icon);
-            activity.top();
         }
         return (SelectableImport) activity;
     }

@@ -73,7 +73,6 @@ public class EditCache extends Activity {
     public static EditCache getInstance(Database database, String title, Drawable icon) {
         if (activity == null) {
             activity = new EditCache(database, title, icon);
-            activity.top();
         }
         return (EditCache) activity;
     }

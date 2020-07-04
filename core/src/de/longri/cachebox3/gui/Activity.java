@@ -20,7 +20,7 @@ public abstract class Activity extends ActivityBase {
     protected CB_Button btnOK, btnCancel;
     protected CB_Label lblTitle;
     protected Image imgTitle;
-    private ClickListener cancelClickListener;
+    private ClickListener cancelListener;
     private ClickListener okListener;
 
     public Activity(String title, Drawable icon) {
@@ -31,8 +31,22 @@ public abstract class Activity extends ActivityBase {
         btnOK = new CB_Button(Translation.get("ok"));
         btnCancel = new CB_Button(Translation.get("cancel"));
         setTableAndCellDefaults();
-        center();
-        init();
+        top().left();
+        okListener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                runAtOk(event, x, y);
+                finish();
+            }
+        };
+        btnOK.addListener(okListener);
+        cancelListener = new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                runAtCancel(event, x, y);
+                finish();
+            }
+        };
+        btnCancel.addListener(cancelListener);
+        CB.stageManager.registerForBackKey(cancelListener);
     }
 
     @Override
@@ -49,21 +63,12 @@ public abstract class Activity extends ActivityBase {
         addLast(lblTitle, -0.8f).padBottom(0);
         createMainContent();
         addLast(new ScrollPane(mainContent)).pad(0);
+        newLine().bottom(); // todo make ok+cancel to bottom of page
         addNext(btnOK).padTop(0);
         addLast(btnCancel).padTop(0);
 
         super.layout();
         needLayout = false;
-    }
-
-    protected void setOKText(CharSequence okText) {
-        btnOK.setText(okText);
-    }
-
-    protected void setOkListener(ClickListener clickListener) {
-        btnOK.removeListener(okListener);
-        okListener = clickListener;
-        btnOK.addListener(okListener);
     }
 
     protected abstract void createMainContent();
@@ -73,31 +78,11 @@ public abstract class Activity extends ActivityBase {
     protected void runAtCancel(InputEvent event, float x, float y) {
     }
 
-    private void init() {
-        if (okListener == null) {
-            okListener = new ClickListener() {
-                public void clicked(InputEvent event, float x, float y) {
-                    runAtOk(event, x, y);
-                    finish();
-                }
-            };
-        }
-        btnOK.addListener(okListener);
-        cancelClickListener = new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                runAtCancel(event, x, y);
-                finish();
-            }
-        };
-        btnCancel.addListener(cancelClickListener);
-        CB.stageManager.registerForBackKey(cancelClickListener);
-    }
-
     @Override
     public void dispose() {
-        CB.stageManager.unRegisterForBackKey(cancelClickListener);
+        CB.stageManager.unRegisterForBackKey(cancelListener);
         btnOK.removeListener(okListener);
-        btnCancel.removeListener(cancelClickListener);
+        btnCancel.removeListener(cancelListener);
 
         activity = null;
 

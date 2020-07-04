@@ -48,7 +48,6 @@ public class SearchDialog extends Activity {
     public static Activity getInstance(String title, Drawable icon) {
         if (activity == null) {
             activity = new SearchDialog(title, icon);
-            activity.top();
         }
         return activity;
     }

@@ -47,15 +47,12 @@ public class GetApiKey_Activity extends Activity {
 
     @Override
     protected void createMainContent() {
-        CB.postOnNextGlThread(new Runnable() {
-            @Override
-            public void run() {
-                mainContent.invalidateHierarchy();
-                mainContent.layout();
-            }
+        CB.postOnNextGlThread(() -> {
+            mainContent.invalidateHierarchy();
+            mainContent.layout();
         });
         mainContent.add(webView);
-        mainContent.setDebug(true, true);
+        // mainContent.setDebug(true, true);
     }
 
     @Override

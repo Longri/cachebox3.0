@@ -13,6 +13,7 @@ public class InputString extends Activity {
 
     public InputString(String titleTranslationId, Drawable icon) {
         super(titleTranslationId, icon);
+        center();
         lblResult = new CB_Label(Translation.get(titleTranslationId));
         edtResult = new EditTextField(true, "");
     }

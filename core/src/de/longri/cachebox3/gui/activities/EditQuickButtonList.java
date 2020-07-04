@@ -162,7 +162,6 @@ public class EditQuickButtonList extends Activity {
     public static EditQuickButtonList getInstance(String title, Drawable icon) {
         if (activity == null) {
             activity = new EditQuickButtonList(title, icon);
-            activity.top().left();
         }
         return (EditQuickButtonList) activity;
     }

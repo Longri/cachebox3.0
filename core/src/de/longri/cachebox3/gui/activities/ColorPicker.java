@@ -53,7 +53,6 @@ public class ColorPicker extends Activity {
     public static ColorPicker getInstance(String title, Drawable icon) {
         if (activity == null) {
             activity = new ColorPicker(title, icon);
-            activity.top().left();
         }
         return (ColorPicker) activity;
     }
