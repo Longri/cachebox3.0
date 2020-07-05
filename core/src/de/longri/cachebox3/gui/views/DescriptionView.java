@@ -402,12 +402,14 @@ public class DescriptionView extends AbstractView implements SelectedCacheChange
             CB.postOnMainThread(new NamedRunnable("DescriptionView:hide view") {
                 @Override
                 public void run() {
-                    lastCacheId = selectedCache.getId();
-                    lastX = platformWebView.getScrollPositionX();
-                    lastY = platformWebView.getScrollPositionY();
-                    lastScale = platformWebView.getScale();
-                    log.debug("store last X: {} Y: {} scale: {}", lastX, lastY, lastScale);
-                    platformWebView.close();
+                    if (platformWebView != null) {
+                        lastCacheId = selectedCache.getId();
+                        lastX = platformWebView.getScrollPositionX();
+                        lastY = platformWebView.getScrollPositionY();
+                        lastScale = platformWebView.getScale();
+                        log.debug("store last X: {} Y: {} scale: {}", lastX, lastY, lastScale);
+                        platformWebView.close();
+                    }
                 }
             });
         }
