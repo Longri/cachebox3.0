@@ -89,8 +89,15 @@ public enum Attributes {
     Tree_Climbing, // 64
     Front_Yard, // 65
     Teamwork_Required, // 66
-    GeoTour // 67
+    GeoTour, // 67
+    Challenge,
+    Bonus,
+    Powertrail,
+    Solutionchecker,
     ;
+
+    private static HashMap<Attributes, Integer> attributeLookup;
+    private boolean negative = false;
 
     public static DLong GetAttributeDlong(Attributes attrib) {
         return DLong.shift(GetAttributeID(attrib));
@@ -102,221 +109,232 @@ public enum Attributes {
         return attributeLookup.get(attrib);
     }
 
-    private boolean negative = false;
-
     public static Attributes getAttributeEnumByGcComId(int id) {
         switch (id) {
             case 1:
-                return Attributes.Dogs;
+                return Dogs;
             case 2:
-                return Attributes.Access_or_parking_fee;
+                return Access_or_parking_fee;
             case 3:
-                return Attributes.Climbing_gear;
+                return Climbing_gear;
             case 4:
-                return Attributes.Boat;
+                return Boat;
             case 5:
-                return Attributes.Scuba_gear;
+                return Scuba_gear;
             case 6:
-                return Attributes.Recommended_for_kids;
+                return Recommended_for_kids;
             case 7:
-                return Attributes.Takes_less_than_an_hour;
+                return Takes_less_than_an_hour;
             case 8:
-                return Attributes.Scenic_view;
+                return Scenic_view;
             case 9:
-                return Attributes.Significant_Hike;
+                return Significant_Hike;
             case 10:
-                return Attributes.Difficult_climbing;
+                return Difficult_climbing;
             case 11:
-                return Attributes.May_require_wading;
+                return May_require_wading;
             case 12:
-                return Attributes.May_require_swimming;
+                return May_require_swimming;
             case 13:
-                return Attributes.Available_at_all_times;
+                return Available_at_all_times;
             case 14:
-                return Attributes.Recommended_at_night;
+                return Recommended_at_night;
             case 15:
-                return Attributes.Available_during_winter;
+                return Available_during_winter;
             case 16:
-                return Attributes.Cactus;
+                return Cactus;
             case 17:
-                return Attributes.Poison_plants;
+                return Poison_plants;
             case 18:
-                return Attributes.Dangerous_Animals;
+                return Dangerous_Animals;
             case 19:
-                return Attributes.Ticks;
+                return Ticks;
             case 20:
-                return Attributes.Abandoned_mines;
+                return Abandoned_mines;
             case 21:
-                return Attributes.Cliff_falling_rocks;
+                return Cliff_falling_rocks;
             case 22:
-                return Attributes.Hunting;
+                return Hunting;
             case 23:
-                return Attributes.Dangerous_area;
+                return Dangerous_area;
             case 24:
-                return Attributes.Wheelchair_accessible;
+                return Wheelchair_accessible;
             case 25:
-                return Attributes.Parking_available;
+                return Parking_available;
             case 26:
-                return Attributes.Public_transportation;
+                return Public_transportation;
             case 27:
-                return Attributes.Drinking_water_nearby;
+                return Drinking_water_nearby;
             case 28:
-                return Attributes.Public_restrooms_nearby;
+                return Public_restrooms_nearby;
             case 29:
-                return Attributes.Telephone_nearby;
+                return Telephone_nearby;
             case 30:
-                return Attributes.Picnic_tables_nearby;
+                return Picnic_tables_nearby;
             case 31:
-                return Attributes.Camping_available;
+                return Camping_available;
             case 32:
-                return Attributes.Bicycles;
+                return Bicycles;
             case 33:
-                return Attributes.Motorcycles;
+                return Motorcycles;
             case 34:
-                return Attributes.Quads;
+                return Quads;
             case 35:
-                return Attributes.Off_road_vehicles;
+                return Off_road_vehicles;
             case 36:
-                return Attributes.Snowmobiles;
+                return Snowmobiles;
             case 37:
-                return Attributes.Horses;
+                return Horses;
             case 38:
-                return Attributes.Campfires;
+                return Campfires;
             case 39:
-                return Attributes.Thorns;
+                return Thorns;
             case 40:
-                return Attributes.Stealth_required;
+                return Stealth_required;
             case 41:
-                return Attributes.Stroller_accessible;
+                return Stroller_accessible;
             case 42:
-                return Attributes.Needs_maintenance;
+                return Needs_maintenance;
             case 43:
-                return Attributes.Watch_for_livestock;
+                return Watch_for_livestock;
             case 44:
-                return Attributes.Flashlight_required;
+                return Flashlight_required;
             case 45:
-                return Attributes.Lost_And_Found_Tour;
+                return Lost_And_Found_Tour;
             case 46:
-                return Attributes.Truck_Driver;
+                return Truck_Driver;
             case 47:
-                return Attributes.Field_Puzzle;
+                return Field_Puzzle;
             case 48:
-                return Attributes.UV_Light_Required;
+                return UV_Light_Required;
             case 49:
-                return Attributes.Snowshoes;
+                return Snowshoes;
             case 50:
-                return Attributes.Cross_Country_Skis;
+                return Cross_Country_Skis;
             case 51:
-                return Attributes.Special_Tool_Required;
+                return Special_Tool_Required;
             case 52:
-                return Attributes.Night_Cache;
+                return Night_Cache;
             case 53:
-                return Attributes.Park_and_Grab;
+                return Park_and_Grab;
             case 54:
-                return Attributes.Abandoned_Structure;
+                return Abandoned_Structure;
             case 55:
-                return Attributes.Short_hike;
+                return Short_hike;
             case 56:
-                return Attributes.Medium_hike;
+                return Medium_hike;
             case 57:
-                return Attributes.Long_Hike;
+                return Long_Hike;
             case 58:
-                return Attributes.Fuel_Nearby;
+                return Fuel_Nearby;
             case 59:
-                return Attributes.Food_Nearby;
+                return Food_Nearby;
             case 60:
-                return Attributes.Wireless_Beacon;
+                return Wireless_Beacon;
             case 61:
-                return Attributes.Partnership_Cache;
+                return Partnership_Cache;
             case 62:
-                return Attributes.Seasonal_Access;
+                return Seasonal_Access;
             case 63:
-                return Attributes.Tourist_Friendly;
+                return Tourist_Friendly;
             case 64:
-                return Attributes.Tree_Climbing;
+                return Tree_Climbing;
             case 65:
-                return Attributes.Front_Yard;
+                return Front_Yard;
             case 66:
-                return Attributes.Teamwork_Required;
+                return Teamwork_Required;
             case 67:
-                return Attributes.GeoTour;
+                return GeoTour;
+            case 68:
+                return Default; // nicht bekannt
+            case 69:
+                return Bonus;
+            case 70:
+                return Powertrail;
+            case 71:
+                return Challenge;
+            case 72:
+                return Solutionchecker;
         }
 
         return Attributes.Default;
     }
 
-    private static HashMap<Attributes, Integer> attributeLookup;
-
     private static void ini() {
         attributeLookup = new HashMap<Attributes, Integer>();
-        attributeLookup.put(Attributes.Default, 0);
-        attributeLookup.put(Attributes.Dogs, 1);
-        attributeLookup.put(Attributes.Access_or_parking_fee, 2);
-        attributeLookup.put(Attributes.Climbing_gear, 3);
-        attributeLookup.put(Attributes.Boat, 4);
-        attributeLookup.put(Attributes.Scuba_gear, 5);
-        attributeLookup.put(Attributes.Recommended_for_kids, 6);
-        attributeLookup.put(Attributes.Takes_less_than_an_hour, 7);
-        attributeLookup.put(Attributes.Scenic_view, 8);
-        attributeLookup.put(Attributes.Significant_Hike, 9);
-        attributeLookup.put(Attributes.Difficult_climbing, 10);
-        attributeLookup.put(Attributes.May_require_wading, 11);
-        attributeLookup.put(Attributes.May_require_swimming, 12);
-        attributeLookup.put(Attributes.Available_at_all_times, 13);
-        attributeLookup.put(Attributes.Recommended_at_night, 14);
-        attributeLookup.put(Attributes.Available_during_winter, 15);
-        attributeLookup.put(Attributes.Cactus, 16);
-        attributeLookup.put(Attributes.Poison_plants, 17);
-        attributeLookup.put(Attributes.Dangerous_Animals, 18);
-        attributeLookup.put(Attributes.Ticks, 19);
-        attributeLookup.put(Attributes.Abandoned_mines, 20);
-        attributeLookup.put(Attributes.Cliff_falling_rocks, 21);
-        attributeLookup.put(Attributes.Hunting, 22);
-        attributeLookup.put(Attributes.Dangerous_area, 23);
-        attributeLookup.put(Attributes.Wheelchair_accessible, 24);
-        attributeLookup.put(Attributes.Parking_available, 25);
-        attributeLookup.put(Attributes.Public_transportation, 26);
-        attributeLookup.put(Attributes.Drinking_water_nearby, 27);
-        attributeLookup.put(Attributes.Public_restrooms_nearby, 28);
-        attributeLookup.put(Attributes.Telephone_nearby, 29);
-        attributeLookup.put(Attributes.Picnic_tables_nearby, 30);
-        attributeLookup.put(Attributes.Camping_available, 31);
-        attributeLookup.put(Attributes.Bicycles, 32);
-        attributeLookup.put(Attributes.Motorcycles, 33);
-        attributeLookup.put(Attributes.Quads, 34);
-        attributeLookup.put(Attributes.Off_road_vehicles, 35);
-        attributeLookup.put(Attributes.Snowmobiles, 36);
-        attributeLookup.put(Attributes.Horses, 37);
-        attributeLookup.put(Attributes.Campfires, 38);
-        attributeLookup.put(Attributes.Thorns, 39);
-        attributeLookup.put(Attributes.Stealth_required, 40);
-        attributeLookup.put(Attributes.Stroller_accessible, 41);
-        attributeLookup.put(Attributes.Needs_maintenance, 42);
-        attributeLookup.put(Attributes.Watch_for_livestock, 43);
-        attributeLookup.put(Attributes.Flashlight_required, 44);
-        attributeLookup.put(Attributes.Lost_And_Found_Tour, 45);
-        attributeLookup.put(Attributes.Truck_Driver, 46);
-        attributeLookup.put(Attributes.Field_Puzzle, 47);
-        attributeLookup.put(Attributes.UV_Light_Required, 48);
-        attributeLookup.put(Attributes.Snowshoes, 49);
-        attributeLookup.put(Attributes.Cross_Country_Skis, 50);
-        attributeLookup.put(Attributes.Special_Tool_Required, 51);
-        attributeLookup.put(Attributes.Night_Cache, 52);
-        attributeLookup.put(Attributes.Park_and_Grab, 53);
-        attributeLookup.put(Attributes.Abandoned_Structure, 54);
-        attributeLookup.put(Attributes.Short_hike, 55);
-        attributeLookup.put(Attributes.Medium_hike, 56);
-        attributeLookup.put(Attributes.Long_Hike, 57);
-        attributeLookup.put(Attributes.Fuel_Nearby, 58);
-        attributeLookup.put(Attributes.Food_Nearby, 59);
-        attributeLookup.put(Attributes.Wireless_Beacon, 60);
-        attributeLookup.put(Attributes.Partnership_Cache, 61);
-        attributeLookup.put(Attributes.Seasonal_Access, 62);
-        attributeLookup.put(Attributes.Tourist_Friendly, 63);
-        attributeLookup.put(Attributes.Tree_Climbing, 64);
-        attributeLookup.put(Attributes.Front_Yard, 65);
-        attributeLookup.put(Attributes.Teamwork_Required, 66);
-        attributeLookup.put(Attributes.GeoTour, 67);
+        attributeLookup.put(Default, 0);
+        attributeLookup.put(Dogs, 1);
+        attributeLookup.put(Access_or_parking_fee, 2);
+        attributeLookup.put(Climbing_gear, 3);
+        attributeLookup.put(Boat, 4);
+        attributeLookup.put(Scuba_gear, 5);
+        attributeLookup.put(Recommended_for_kids, 6);
+        attributeLookup.put(Takes_less_than_an_hour, 7);
+        attributeLookup.put(Scenic_view, 8);
+        attributeLookup.put(Significant_Hike, 9);
+        attributeLookup.put(Difficult_climbing, 10);
+        attributeLookup.put(May_require_wading, 11);
+        attributeLookup.put(May_require_swimming, 12);
+        attributeLookup.put(Available_at_all_times, 13);
+        attributeLookup.put(Recommended_at_night, 14);
+        attributeLookup.put(Available_during_winter, 15);
+        attributeLookup.put(Cactus, 16);
+        attributeLookup.put(Poison_plants, 17);
+        attributeLookup.put(Dangerous_Animals, 18);
+        attributeLookup.put(Ticks, 19);
+        attributeLookup.put(Abandoned_mines, 20);
+        attributeLookup.put(Cliff_falling_rocks, 21);
+        attributeLookup.put(Hunting, 22);
+        attributeLookup.put(Dangerous_area, 23);
+        attributeLookup.put(Wheelchair_accessible, 24);
+        attributeLookup.put(Parking_available, 25);
+        attributeLookup.put(Public_transportation, 26);
+        attributeLookup.put(Drinking_water_nearby, 27);
+        attributeLookup.put(Public_restrooms_nearby, 28);
+        attributeLookup.put(Telephone_nearby, 29);
+        attributeLookup.put(Picnic_tables_nearby, 30);
+        attributeLookup.put(Camping_available, 31);
+        attributeLookup.put(Bicycles, 32);
+        attributeLookup.put(Motorcycles, 33);
+        attributeLookup.put(Quads, 34);
+        attributeLookup.put(Off_road_vehicles, 35);
+        attributeLookup.put(Snowmobiles, 36);
+        attributeLookup.put(Horses, 37);
+        attributeLookup.put(Campfires, 38);
+        attributeLookup.put(Thorns, 39);
+        attributeLookup.put(Stealth_required, 40);
+        attributeLookup.put(Stroller_accessible, 41);
+        attributeLookup.put(Needs_maintenance, 42);
+        attributeLookup.put(Watch_for_livestock, 43);
+        attributeLookup.put(Flashlight_required, 44);
+        attributeLookup.put(Lost_And_Found_Tour, 45);
+        attributeLookup.put(Truck_Driver, 46);
+        attributeLookup.put(Field_Puzzle, 47);
+        attributeLookup.put(UV_Light_Required, 48);
+        attributeLookup.put(Snowshoes, 49);
+        attributeLookup.put(Cross_Country_Skis, 50);
+        attributeLookup.put(Special_Tool_Required, 51);
+        attributeLookup.put(Night_Cache, 52);
+        attributeLookup.put(Park_and_Grab, 53);
+        attributeLookup.put(Abandoned_Structure, 54);
+        attributeLookup.put(Short_hike, 55);
+        attributeLookup.put(Medium_hike, 56);
+        attributeLookup.put(Long_Hike, 57);
+        attributeLookup.put(Fuel_Nearby, 58);
+        attributeLookup.put(Food_Nearby, 59);
+        attributeLookup.put(Wireless_Beacon, 60);
+        attributeLookup.put(Partnership_Cache, 61);
+        attributeLookup.put(Seasonal_Access, 62);
+        attributeLookup.put(Tourist_Friendly, 63);
+        attributeLookup.put(Tree_Climbing, 64);
+        attributeLookup.put(Front_Yard, 65);
+        attributeLookup.put(Teamwork_Required, 66);
+        attributeLookup.put(GeoTour, 67);
+        // no longer == geocaching.com
+        attributeLookup.put(Challenge, 68);
+        attributeLookup.put(Bonus, 69);
+        attributeLookup.put(Powertrail, 70);
+        attributeLookup.put(Solutionchecker, 71);
     }
 
     public static Array<Attributes> getAttributes(DLong attributesPositive, DLong attributesNegative) {
@@ -494,6 +512,14 @@ public enum Attributes {
                 return "Wheelchair accessible";
             case Wireless_Beacon:
                 return "Wireless Beacon";
+            case Challenge:
+                return "Challenge cache";
+            case Bonus:
+                return "Bonus cache";
+            case Powertrail:
+                return "Power trail";
+            case Solutionchecker:
+                return "Geocaching.com solution checker";
             default:
                 break;
 
@@ -641,6 +667,14 @@ public enum Attributes {
                     return attStyle.att_Teamwork_Required_0;
                 case GeoTour:
                     return attStyle.att_GeoTour_0;
+                case Challenge:
+                    return attStyle.att_Challenge_0;
+                case Bonus:
+                    return attStyle.att_Bonus_0;
+                case Powertrail:
+                    return attStyle.att_Powertrail_0;
+                case Solutionchecker:
+                    return attStyle.att_Solutionchecker_0;
             }
         } else {
             switch (this) {
@@ -780,6 +814,14 @@ public enum Attributes {
                     return attStyle.att_Teamwork_Required_1;
                 case GeoTour:
                     return attStyle.att_GeoTour_1;
+                case Challenge:
+                    return attStyle.att_Challenge_1;
+                case Bonus:
+                    return attStyle.att_Bonus_1;
+                case Powertrail:
+                    return attStyle.att_Powertrail_1;
+                case Solutionchecker:
+                    return attStyle.att_Solutionchecker_1;
             }
         }
         return null;

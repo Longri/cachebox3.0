@@ -90,6 +90,10 @@ public class AttributesStyle {
             att_Front_Yard_0, // 65
             att_Teamwork_Required_0, // 66
             att_GeoTour_0, // 67
+            att_Challenge_0,
+            att_Bonus_0,
+            att_Powertrail_0,
+            att_Solutionchecker_0,
             att_Default_1, // 0
             att_Dogs_1, // 1
             att_Access_or_parking_fee_1, // 2
@@ -157,7 +161,11 @@ public class AttributesStyle {
             att_Tree_Climbing_1, // 64
             att_Front_Yard_1, // 65
             att_Teamwork_Required_1, // 66
-            att_GeoTour_1 // 67
-                    ;
+            att_GeoTour_1, // 67
+            att_Challenge_1,
+            att_Bonus_1,
+            att_Powertrail_1,
+            att_Solutionchecker_1
+    ;
 
 }

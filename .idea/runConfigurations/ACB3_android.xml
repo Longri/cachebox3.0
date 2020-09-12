@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="android" type="AndroidRunConfigurationType" activateToolWindowBeforeRun="false">
-    <module name="android" />
+  <configuration default="false" name="ACB3.android" type="AndroidRunConfigurationType" factoryName="Android App" singleton="true">
+    <module name="ACB3.android" />
     <option name="DEPLOY" value="true" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
     <option name="DEPLOY_AS_INSTANT" value="false" />
@@ -13,9 +13,7 @@
     <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
     <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
     <option name="FORCE_STOP_RUNNING_APP" value="true" />
-    <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-    <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-    <option name="PREFERRED_AVD" value="" />
+    <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
     <option name="DEBUGGER_TYPE" value="Java" />
     <Java />
     <Profilers>

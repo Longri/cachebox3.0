@@ -90,10 +90,6 @@ public class DraftsView extends AbstractView {
         create();
     }
 
-    private static boolean isInstanceCreated() {
-        return draftsView != null;
-    }
-
     public static DraftsView getInstance() {
         if (draftsView == null) {
             draftsView = new DraftsView();
@@ -133,8 +129,7 @@ public class DraftsView extends AbstractView {
                     EventHandler.getSelectedCache().updateBooleanStore();
                     AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
                     EventHandler.fire(new SelectedCacheChangedEvent(newCache));
-                    QuickDraftFeedbackPopUp pop = new QuickDraftFeedbackPopUp(true);
-                    pop.show();
+                    new QuickDraftFeedbackPopUp(true).show();
                 }
             } else if (type == LogType.didnt_find) {
                 // DidNotFound -> fremden Cache als nicht gefunden markieren
@@ -143,8 +138,7 @@ public class DraftsView extends AbstractView {
                     EventHandler.getSelectedCache().updateBooleanStore();
                     AbstractCache newCache = DaoFactory.CACHE_LIST_DAO.reloadCache(Database.Data, Database.Data.cacheList, EventHandler.getSelectedCache());
                     EventHandler.fire(new SelectedCacheChangedEvent(newCache));
-                    QuickDraftFeedbackPopUp pop2 = new QuickDraftFeedbackPopUp(false);
-                    pop2.show();
+                    new QuickDraftFeedbackPopUp(false).show();
                 }
             }
 
@@ -276,14 +270,12 @@ public class DraftsView extends AbstractView {
     }
 
     public void notifyDataSetChanged() {
-        if (isInstanceCreated()) {
-            CB.postOnGlThread(new NamedRunnable("DraftsView") {
-                @Override
-                public void run() {
-                    DraftsView.getInstance().loadDrafts(Drafts.LoadingType.LOAD_NEW_LAST_LENGTH);
-                }
-            });
-        }
+        CB.postOnGlThread(new NamedRunnable("DraftsView") {
+            @Override
+            public void run() {
+                loadDrafts(Drafts.LoadingType.LOAD_NEW_LAST_LENGTH);
+            }
+        });
     }
 
     @Override
@@ -418,7 +410,7 @@ public class DraftsView extends AbstractView {
                                 if (draft.isTbDraft) {
                                     result = GroundspeakAPI.getInstance().uploadTrackableLog(draft.TravelBugCode, draft.TrackingNumber, draft.gcCode, LogType.CB_LogType2GC(draft.type), draft.timestamp, draft.comment);
                                 } else {
-                                    String logReferenceCode = GroundspeakAPI.getInstance().UploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, uploadLog);
+                                    String logReferenceCode = GroundspeakAPI.getInstance().uploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, uploadLog);
                                     draft.GcId = logReferenceCode;
                                     result = GroundspeakAPI.getInstance().APIError;
                                 }

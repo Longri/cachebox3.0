@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2020 team-cachebox.de
  *
  * Licensed under the : GNU General Public License (GPL);
@@ -31,19 +31,41 @@ import java.util.Comparator;
  * Created by Longri on 31.08.2017
  */
 public class Drafts extends Array<Draft> {
-   private final static org.slf4j.Logger log = LoggerFactory.getLogger(Drafts.class);
+    private final static org.slf4j.Logger log = LoggerFactory.getLogger(Drafts.class);
 
     private static final long serialVersionUID = 1L;
-
-    public enum LoadingType {
-        LOAD_ALL, LOAD_NEW, LOAD_MORE, LOAD_NEW_LAST_LENGTH
-    }
-
     private boolean croppedList = false;
     private int actCroppedLength = -1;
-
     public Drafts() {
 
+    }
+
+    /**
+     * @param dirFileName Config.settings.DraftsGarminPath.getValue()
+     */
+    public static void createVisitsTxt(String dirFileName) {
+        Drafts lDrafts = new Drafts();
+        lDrafts.loadDrafts("", "Timestamp ASC", LoadingType.LOAD_ALL);
+
+        FileHandle txtFile = Gdx.files.absolute(dirFileName);
+        OutputStream writer;
+        try {
+            writer = txtFile.write(false);
+
+            // write utf8 bom EF BB BF
+            byte[] bom = {(byte) 239, (byte) 187, (byte) 191};
+            writer.write(bom);
+
+            for (Draft fieldNote : lDrafts) {
+                String log = fieldNote.gcCode + "," + fieldNote.getDateTimeString() + "," + fieldNote.type.toString() + ",\"" + fieldNote.comment + "\"\n";
+                writer.write((log + "\n").getBytes("UTF-8"));
+            }
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            log.error("can't create visit.txt", e);
+            e.printStackTrace();
+        }
     }
 
     public boolean isCropped() {
@@ -139,34 +161,6 @@ public class Drafts extends Array<Draft> {
         }
     }
 
-    /**
-     * @param dirFileName Config.settings.DraftsGarminPath.getValue()
-     */
-    public static void createVisitsTxt(String dirFileName) {
-        Drafts lDrafts = new Drafts();
-        lDrafts.loadDrafts("", "Timestamp ASC", LoadingType.LOAD_ALL);
-
-        FileHandle txtFile = Gdx.files.absolute(dirFileName);
-        OutputStream writer;
-        try {
-            writer = txtFile.write(false);
-
-            // write utf8 bom EF BB BF
-            byte[] bom = {(byte) 239, (byte) 187, (byte) 191};
-            writer.write(bom);
-
-            for (Draft fieldNote : lDrafts) {
-                String log = fieldNote.gcCode + "," + fieldNote.getDateTimeString() + "," + fieldNote.type.toString() + ",\"" + fieldNote.comment + "\"\n";
-                writer.write((log + "\n").getBytes("UTF-8"));
-            }
-            writer.flush();
-            writer.close();
-        } catch (Exception e) {
-            log.error("can't create visit.txt", e);
-            e.printStackTrace();
-        }
-    }
-
     public void deleteDraftByCacheId(long cacheId, LogType type) {
         synchronized (this) {
             int foundNumber = 0;
@@ -219,6 +213,10 @@ public class Drafts extends Array<Draft> {
                 }
             }
         }
+    }
+
+    public enum LoadingType {
+        LOAD_ALL, LOAD_NEW, LOAD_MORE, LOAD_NEW_LAST_LENGTH
     }
 
 }

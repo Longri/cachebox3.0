@@ -185,8 +185,8 @@ public class DraftsViewItem extends ListViewItem {
             cm.addMenuItem("uploadLogImage", CB.getSkin().menuIcon.uploadDraft, this::uploadLogImage);
             cm.addMenuItem("BrowseLog", null, () -> PlatformConnector.callUrl("https://coord.info/" + draft.GcId));
         }
-        cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, () -> EditDraft.getInstance().logOnline(draft, false));
-        cm.addMenuItem("directLog", CB.getSkin().menuIcon.me2Logbook, () -> EditDraft.getInstance().logOnline(draft, true));
+        cm.addMenuItem("uploadDrafts", CB.getSkin().menuIcon.uploadDraft, () -> EditDraft.getInstance().uploadDraftOrLog(draft, false));
+        cm.addMenuItem("directLog", CB.getSkin().menuIcon.me2Logbook, () -> EditDraft.getInstance().uploadDraftOrLog(draft, true));
         cm.addMenuItem("delete", CB.getSkin().menuIcon.delete, this::deleteDraft);
         cm.show();
         return true;

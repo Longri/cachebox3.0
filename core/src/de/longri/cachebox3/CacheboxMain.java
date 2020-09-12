@@ -179,7 +179,7 @@ public class CacheboxMain extends ApplicationAdapter {
         mapDrawY = y;
         mapDrawWidth = width;
         mapDrawHeight = height;
-        mMapRenderer.onSurfaceChanged(width, height);
+        if (mMapRenderer != null) mMapRenderer.onSurfaceChanged(width, height);
     }
 
 

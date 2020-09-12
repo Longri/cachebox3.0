@@ -510,8 +510,8 @@ public class GroundspeakAPI {
         }
     }
 
-    public String UploadDraftOrLog(String gcCode, int wptLogTypeId, Date dateLogged, String logText, boolean directLog) {
-        log.info("UploadDraftOrLog");
+    public String uploadDraftOrLog(String gcCode, int wptLogTypeId, Date dateLogged, String logText, boolean directLog) {
+        log.info("uploadDraftOrLog");
 
         if (isAccessTokenInvalid()) {
             LastAPIError = Translation.get("apiKeyInvalid").toString();
@@ -560,11 +560,11 @@ public class GroundspeakAPI {
                         .asVoid();
             }
             LastAPIError = "";
-            log.info("UploadDraftOrLog done");
+            log.info("uploadDraftOrLog done");
             return logReferenceCode;
         } catch (Exception e) {
             retry(e);
-            log.error("UploadDraftOrLog geocacheCode: " + gcCode + " logType: " + wptLogTypeId + ".\n" + LastAPIError, e);
+            log.error("uploadDraftOrLog geocacheCode: " + gcCode + " logType: " + wptLogTypeId + ".\n" + LastAPIError, e);
             return "";
         }
     }

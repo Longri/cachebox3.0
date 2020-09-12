@@ -282,9 +282,9 @@ public class EditDraft extends Activity {
             Drafts.createVisitsTxt(Config.DraftsGarminPath.getValue());
 
             if (saveMode == EditDraft.SaveMode.Log)
-                logOnline(currentDraft, true);
+                uploadDraftOrLog(currentDraft, true);
             else if (saveMode == EditDraft.SaveMode.Draft)
-                logOnline(currentDraft, false);
+                uploadDraftOrLog(currentDraft, false);
 
             // Reload List
             if (isNewDraft) {
@@ -296,7 +296,7 @@ public class EditDraft extends Activity {
         DraftsView.getInstance().notifyDataSetChanged();
     }
 
-    public void logOnline(Draft draft, final boolean directLog) {
+    public void uploadDraftOrLog(Draft draft, final boolean directLog) {
 
         if (!draft.isTbDraft) {
             if (draft.gc_Vote > 0) {
@@ -314,7 +314,7 @@ public class EditDraft extends Activity {
             }
         }
 
-        String logReferenceCode = GroundspeakAPI.getInstance().UploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, directLog);
+        String logReferenceCode = GroundspeakAPI.getInstance().uploadDraftOrLog(draft.gcCode, draft.type.getGcLogTypeId(), draft.timestamp, draft.comment, directLog);
         if (GroundspeakAPI.getInstance().APIError == OK) {
             // after direct Log change state to uploaded
             draft.uploaded = true;
@@ -328,12 +328,12 @@ public class EditDraft extends Activity {
             MessageBox.show(Translation.get("CreateFieldnoteInstead"), Translation.get("UploadFailed"), MessageBoxButton.YesNoRetry, MessageBoxIcon.Question, (which, data) -> {
                 switch (which) {
                     case ButtonDialog.BUTTON_NEGATIVE:
-                        logOnline(draft,true);// try again create log at gc
+                        uploadDraftOrLog(draft,true);// try again create log at gc
                         break;
                     case ButtonDialog.BUTTON_NEUTRAL:
                         break;
                     case ButtonDialog.BUTTON_POSITIVE:
-                        logOnline(draft,false); // create draft at gc
+                        uploadDraftOrLog(draft,false); // create draft at gc
                 }
                 return true;
             });

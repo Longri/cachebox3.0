@@ -132,20 +132,17 @@ public final class SkinLoaderTask extends AbstractInitTask {
         final SvgSkin.StorageType finalType = storageType;
         final FileHandle finalSkinFileHandle = skinFileHandle;
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                CB.setActSkin(new SvgSkin(false, finalSkinName, finalType, finalSkinFileHandle));
-                CB.backgroundColor = CB.getColor("background");
-                wait.set(false);
-            }
+        Thread thread = new Thread(() -> {
+            CB.setActSkin(new SvgSkin(false, finalSkinName, finalType, finalSkinFileHandle));
+            CB.backgroundColor = CB.getColor("background");
+            wait.set(false);
         });
         thread.start();
 
         while (wait.get()) {
             try {
                 Thread.sleep(20);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
         }
 
